@@ -3,6 +3,7 @@
     package="com.sogukj.pe">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -24,7 +25,9 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysVisible" />
-        <activity android:name=".ui.NewsDetailActivity"></activity>
+        <activity android:name=".ui.NewsDetailActivity" />
+        <activity android:name=".ui.UserActivity" />
+        <activity android:name=".ui.UserEditActivity"></activity>
     </application>
 
 </manifest>

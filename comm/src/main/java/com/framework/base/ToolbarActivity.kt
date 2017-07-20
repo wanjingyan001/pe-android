@@ -37,7 +37,8 @@ abstract class ToolbarActivity : BaseActivity() {
             return
         }
 
-        (findViewById(R.id.toolbar) as Toolbar?)?.apply {
+        toolbar = findViewById(R.id.toolbar) as Toolbar?
+        toolbar?.apply {
             val title = this.findViewById(R.id.toolbar_title) as TextView?
             if (title != null && titleId != 0)
                 title.setText(titleId)

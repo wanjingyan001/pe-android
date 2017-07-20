@@ -1,5 +1,6 @@
 package com.sogukj.service
 
+import com.sogukj.pe.bean.UserInfo
 import com.sogukj.pe.service.Payload
 import io.reactivex.Observable
 import retrofit2.http.Field
@@ -21,6 +22,6 @@ interface SoguService {
     @FormUrlEncoded
     @POST("/api/index/verify_code")
     fun login(@Field("phone") phone: String,
-              @Field("code") code: String): Observable<Payload<Object>>
+              @Field("code") code: String): Observable<Payload<UserInfo>>
 
 }

@@ -5,12 +5,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.text.TextUtils
+import com.framework.base.ActivityHelper
 import com.framework.base.BaseActivity
 import com.framework.util.Utils
 import com.framework.util.ViewUtil
 import com.sogukj.pe.R
 import com.sogukj.pe.util.LoginTimer
 import com.sogukj.service.SoguApi
+import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_login.*
@@ -75,13 +77,22 @@ class LoginActivity : BaseActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
-                    if (payload.isOk)
+                    if (payload.isOk) {
                         showToast("登录成功")
-                    else
+                        payload?.payload?.apply {
+                            Store.store.setUserInfo(this@LoginActivity, this)
+                        }
+                        finish()
+                    } else
                         showToast(payload.message)
                 }, { e ->
                     showToast("登录失败")
                 })
+    }
+
+    override fun onBackPressed() {
+        ActivityHelper.exit()
+        super.onBackPressed()
     }
 
     companion object {

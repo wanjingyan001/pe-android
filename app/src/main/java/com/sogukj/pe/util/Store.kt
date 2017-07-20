@@ -11,31 +11,29 @@ import java.util.*
  * 小数据存取工具类
  */
 class Store private constructor() {
-    private var userInfo: UserInfo? = null
+    private var user: UserInfo? = null
 
     fun checkLogin(ctx: Context): Boolean {
-        return null != getUserInfo(ctx) && !TextUtils.isEmpty(userInfo!!.token)
+        return null != getUserInfo(ctx) && !TextUtils.isEmpty(user?.uid)
     }
 
-    fun getUserInfo(ctx: Context): UserInfo {
+    fun getUserInfo(ctx: Context): UserInfo? {
         try {
-            if (null == userInfo) {
-                val jsonUser = XmlDb.open(ctx)[UserInfo::class.java.simpleName]
+            if (null == user) {
+                val jsonUser = XmlDb.open(ctx).getString(UserInfo::class.java.simpleName)
                 if (!TextUtils.isEmpty(jsonUser)) {
-                    this.userInfo = GSON.fromJson(jsonUser, UserInfo::class.java)
+                    this.user = GSON.fromJson(jsonUser, UserInfo::class.java)
                 }
             }
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
-        if (null == userInfo) userInfo = UserInfo()
-        return userInfo!!
+        return user
     }
 
     fun setUserInfo(ctx: Context, user: UserInfo) {
-        this.userInfo = user
-        XmlDb.open(ctx).save(UserInfo::class.java.simpleName, GSON.toJson(user))
+        this.user = user
+        XmlDb.open(ctx).set(UserInfo::class.java.simpleName, GSON.toJson(user))
     }
 
 

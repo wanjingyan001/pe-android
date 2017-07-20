@@ -31,7 +31,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ActivityManager.add(this)
+        ActivityHelper.add(this)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         //        initStatusBar(getStatusBarTintRes());
     }
@@ -123,7 +123,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        ActivityManager.curActivity = this
+        ActivityHelper.curActivity = this
     }
 
     override fun onPause() {
@@ -131,7 +131,7 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        ActivityManager.remove(this)
+        ActivityHelper.remove(this)
         hideProgress()
         super.onDestroy()
     }
