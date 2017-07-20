@@ -10,6 +10,7 @@ import com.framework.adapter.RecyclerAdapter
 import com.framework.base.BaseFragment
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
+import com.lcodecore.tkrefreshlayout.footer.BallPulseView
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
@@ -25,7 +26,6 @@ class NewsListFragment : BaseFragment() {
     override val containerViewId: Int
         get() = R.layout.fragment_list_news //To change initializer of created properties use File | Settings | File Templates.
 
-
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val adapter = RecyclerAdapter<NewsBean>(baseActivity!!, { _adapter, parent, type ->
@@ -40,10 +40,13 @@ class NewsListFragment : BaseFragment() {
         val header = ProgressLayout(baseActivity)
         header.setColorSchemeColors(ContextCompat.getColor(baseActivity, R.color.color_main))
         refresh.setHeaderView(header)
+        val footer = BallPulseView(baseActivity)
+        footer.setAnimatingColor(ContextCompat.getColor(baseActivity, R.color.color_main))
+        refresh.setBottomView(footer)
         refresh.setOverScrollRefreshShow(false)
         refresh.setOnRefreshListener(object : RefreshListenerAdapter() {
             override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
-                refresh.postDelayed({
+                handler.postDelayed({
                     adapter.dataList.apply {
                         clear()
                         for (i in 0..10) {
@@ -51,26 +54,26 @@ class NewsListFragment : BaseFragment() {
                         }
                     }
                     adapter.notifyDataSetChanged()
-                    refresh.finishRefreshing()
+                    refresh?.finishRefreshing()
                 }, 1000)
             }
 
             override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
-                refresh.postDelayed({
+                handler.postDelayed({
                     adapter.dataList.apply {
                         for (i in 0..10) {
                             add(NewsBean())
                         }
                     }
                     adapter.notifyDataSetChanged()
-                    refresh.finishLoadmore()
+                    refresh?.finishLoadmore()
                 }, 1000)
             }
 
         })
         refresh.setAutoLoadMore(true)
-        refresh.postDelayed({
-            refresh.startRefresh()
+        handler.postDelayed({
+            refresh?.startRefresh()
         }, 200)
     }
 

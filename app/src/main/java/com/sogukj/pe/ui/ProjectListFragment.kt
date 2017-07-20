@@ -10,6 +10,7 @@ import com.framework.adapter.RecyclerAdapter
 import com.framework.base.BaseFragment
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
+import com.lcodecore.tkrefreshlayout.footer.BallPulseView
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
@@ -24,16 +25,13 @@ import java.text.SimpleDateFormat
 
 class ProjectListFragment : BaseFragment() {
     override val containerViewId: Int
-        get() = R.layout.fragment_list_news//To change initializer of created properties use File | Settings | File Templates.
-
-    val creator = RecyclerAdapter.Creator<NewsBean> { adapter, parent, type ->
-
-        NewsHolder(adapter.getView(R.layout.item_main_news, parent))
-    }
+        get() = R.layout.fragment_list_project//To change initializer of created properties use File | Settings | File Templates.
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val adapter = RecyclerAdapter<NewsBean>(baseActivity!!, creator)
+        val adapter = RecyclerAdapter<NewsBean>(baseActivity!!, { _adapter, parent, type ->
+            NewsHolder(_adapter.getView(R.layout.item_main_project, parent))
+        })
         val layoutManager = LinearLayoutManager(baseActivity)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         recycler_view.addItemDecoration(DividerItemDecoration(baseActivity, DividerItemDecoration.VERTICAL))
@@ -43,10 +41,13 @@ class ProjectListFragment : BaseFragment() {
         val header = ProgressLayout(baseActivity)
         header.setColorSchemeColors(ContextCompat.getColor(baseActivity, R.color.color_main))
         refresh.setHeaderView(header)
+        val footer = BallPulseView(baseActivity)
+        footer.setAnimatingColor(ContextCompat.getColor(baseActivity, R.color.color_main))
+        refresh.setBottomView(footer)
         refresh.setOverScrollRefreshShow(false)
         refresh.setOnRefreshListener(object : RefreshListenerAdapter() {
             override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
-                refresh.postDelayed({
+                handler.postDelayed({
                     adapter.dataList.apply {
                         clear()
                         for (i in 0..10) {
@@ -54,45 +55,47 @@ class ProjectListFragment : BaseFragment() {
                         }
                     }
                     adapter.notifyDataSetChanged()
-                    refresh.finishRefreshing()
+                    refresh?.finishRefreshing()
                 }, 1000)
             }
 
             override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
-                refresh.postDelayed({
+                handler.postDelayed({
                     adapter.dataList.apply {
                         for (i in 0..10) {
                             add(NewsBean())
                         }
                     }
                     adapter.notifyDataSetChanged()
-                    refresh.finishLoadmore()
+                    refresh?.finishLoadmore()
                 }, 1000)
             }
 
         })
         refresh.setAutoLoadMore(true)
-        refresh.postDelayed({
-            refresh.startRefresh()
+        handler.postDelayed({
+            refresh?.startRefresh()
         }, 200)
     }
 
-    val fmt = SimpleDateFormat("yyyy/MM/dd HH:mm")
+    val fmt = SimpleDateFormat("MM/dd HH:mm")
 
     inner class NewsHolder(view: View)
         : RecyclerAdapter.SimpleViewHolder<NewsBean>(view) {
-        val tv_summary: TextView
-        val tv_time: TextView
+        val tv1: TextView
+        val tv2: TextView
+        val tv3: TextView
 
         init {
-            tv_summary = view.find(R.id.tv_summary)
-            tv_time = view.find(R.id.tv_time)
+            tv1 = view.find(R.id.tv1)
+            tv2 = view.find(R.id.tv2)
+            tv3 = view.find(R.id.tv3)
         }
 
         override fun setData(view: View, data: NewsBean, position: Int) {
-            tv_summary.setText("summary")
-            tv_time.text = fmt.format(System.currentTimeMillis())
-            tv_fro
+            tv1.text = "搜股(北京)科技有限公司"
+            tv2.text = "A轮"
+            tv3.text = fmt.format(System.currentTimeMillis())
         }
 
     }

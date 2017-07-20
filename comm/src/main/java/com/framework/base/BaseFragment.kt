@@ -1,6 +1,7 @@
 package com.framework.base
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +11,7 @@ import org.greenrobot.eventbus.Subscribe
 abstract class BaseFragment : android.support.v4.app.Fragment() {
 
     abstract val containerViewId: Int
-
+    val handler = Handler();
     var baseActivity: BaseActivity? = null
         private set
 

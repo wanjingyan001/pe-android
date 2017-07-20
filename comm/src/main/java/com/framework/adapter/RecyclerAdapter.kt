@@ -12,7 +12,7 @@ import java.util.*
 /**
  * Created by qinfei on 16/10/19.
  */
-class RecyclerAdapter<T>(val context: Context, val creator: Creator<T>)
+class RecyclerAdapter<T>(val context: Context, val creator: (adapter: RecyclerAdapter<T>, parent: ViewGroup, type: Int) -> SimpleViewHolder<T>)
     : RecyclerView.Adapter<RecyclerAdapter.SimpleViewHolder<T>>() {
 
     var dataList = mutableListOf<T>()
@@ -36,7 +36,7 @@ class RecyclerAdapter<T>(val context: Context, val creator: Creator<T>)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, type: Int): SimpleViewHolder<T> {
-        return creator.create(this, parent, type)
+        return creator(this, parent, type)
     }
 
 
@@ -181,9 +181,6 @@ class RecyclerAdapter<T>(val context: Context, val creator: Creator<T>)
         fun onItemClick(v: View, position: Int)
     }
 
-    interface Creator<T> {
-        fun create(adapter: RecyclerAdapter<T>, parent: ViewGroup, type: Int): SimpleViewHolder<T>
-    }
     companion object {
         val TAG = RecyclerAdapter::class.java.simpleName
 
