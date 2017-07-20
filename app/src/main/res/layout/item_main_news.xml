@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/bg_item_list"
     android:orientation="vertical"
     android:padding="10dp">
 
@@ -12,7 +13,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/text_1"
         android:textSize="14sp"
-        tools:text="与大师 换个股应该好讲话稿哈哈戹 换个换个各怀鬼胎 规范换个撒旦地方地方" />
+        tools:text="@string/tools_text_long_content" />
 
     <LinearLayout
         android:layout_width="match_parent"

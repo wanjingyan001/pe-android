@@ -82,11 +82,11 @@ object Trace {
     //    public static void d(String tag, Object msg) {
     //        if (DEBUG) Log.d(TAG, format(tag, gson.toJson(msg)));
     //    }
-    fun d(tag: String, msg: String) {
+    fun d(tag: String, msg: String?) {
         if (isDebug) Log.i(TAG, format(tag, msg))
     }
 
-    fun w(tag: String, msg: String) {
+    fun w(tag: String, msg: String?) {
         if (isDebug) Log.e(TAG, format(tag, msg))
     }
 
@@ -94,15 +94,15 @@ object Trace {
         if (isDebug) Log.e(TAG, format(tag, msg), tr)
     }
 
-    fun i(tag: String, msg: String) {
+    fun i(tag: String, msg: String?) {
         log(Level.INFO, tag, msg, null)
     }
 
-    fun e(tr: Throwable) {
+    fun e(tr: Throwable?) {
         log(Level.SEVERE, "", "", tr)
     }
 
-    fun e(tag: String, msg: String) {
+    fun e(tag: String, msg: String?) {
         log(Level.SEVERE, tag, msg, null)
     }
 
@@ -110,14 +110,14 @@ object Trace {
         log(Level.SEVERE, tag, msg, tr)
     }
 
-    private fun log(level: Level, tag: String, msg: String, tr: Throwable?) {
+    private fun log(level: Level, tag: String, msg: String?, tr: Throwable?) {
         val record = LogRecord(level, format(tag, msg))
         record.thrown = tr
         if (isDebug)
             log.log(record)
     }
 
-    private fun format(tag: String, msg: String): String {
+    private fun format(tag: String, msg: String?): String {
         return "<$tag> $msg "
     }
 

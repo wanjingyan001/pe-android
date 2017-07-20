@@ -3,13 +3,14 @@ package com.framework.util;
 import android.app.Activity;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 
 import java.io.UnsupportedEncodingException;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -96,7 +97,7 @@ public class Utils {
     /**
      * 实现文本复制功能
      */
-    public static void copy(Context context ,String content) {
+    public static void copy(Context context, String content) {
         ClipboardManager cmb = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         cmb.setText(content.trim());
     }
@@ -107,5 +108,11 @@ public class Utils {
     public static String paste(Context context) {
         ClipboardManager cmb = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         return cmb.getText().toString().trim();
+    }
+
+    public static boolean isMobile(final CharSequence str) {
+        Pattern p = Pattern.compile("^[1][0-9]{10}$");
+        Matcher m = p.matcher(str);
+        return m.matches();
     }
 }

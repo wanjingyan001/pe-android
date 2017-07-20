@@ -15,10 +15,11 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1px"
+        android:layout_height="1dp"
         android:background="@color/divider" />
 
-    <RadioGroup android:id="@+id/rg_tab_main"
+    <RadioGroup
+        android:id="@+id/rg_tab_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"

@@ -31,6 +31,9 @@ class NewsListFragment : BaseFragment() {
         val adapter = RecyclerAdapter<NewsBean>(baseActivity!!, { _adapter, parent, type ->
             NewsHolder(_adapter.getView(R.layout.item_main_news, parent))
         })
+        adapter.onItemClick = { v, p ->
+            NewsDetailActivity.start(baseActivity)
+        }
         val layoutManager = LinearLayoutManager(baseActivity)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         recycler_view.addItemDecoration(DividerItemDecoration(baseActivity, DividerItemDecoration.VERTICAL))
@@ -55,7 +58,7 @@ class NewsListFragment : BaseFragment() {
                     }
                     adapter.notifyDataSetChanged()
                     refresh?.finishRefreshing()
-                }, 1000)
+                }, 500)
             }
 
             override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
@@ -67,7 +70,7 @@ class NewsListFragment : BaseFragment() {
                     }
                     adapter.notifyDataSetChanged()
                     refresh?.finishLoadmore()
-                }, 1000)
+                }, 500)
             }
 
         })

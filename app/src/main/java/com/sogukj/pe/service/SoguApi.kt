@@ -5,7 +5,7 @@ import com.sogukj.pe.Consts
 import com.sogukj.util.Store
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
@@ -38,7 +38,7 @@ class SoguApi {
         val retrofit = Retrofit.Builder()
                 .baseUrl(Consts.HTTP_HOST)
                 .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(client)
                 .build()
 
@@ -66,14 +66,12 @@ class SoguApi {
 
         private var sApi: SoguApi? = null
 
-        @Synchronized fun getApi(ctx: Application?): SoguApi {
-            if (null == ctx) throw NullPointerException("context can't be null")
+        @Synchronized fun getApi(ctx: Application): SoguApi {
             if (null == sApi) sApi = SoguApi(ctx)
             return sApi!!
         }
 
-        fun getService(ctx: Application?): SoguService {
-            if (null == ctx) throw NullPointerException("context can't be null")
+        fun getService(ctx: Application): SoguService {
             return getApi(ctx).apiService
         }
     }

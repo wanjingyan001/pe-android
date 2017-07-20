@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.WindowManager
 import android.widget.Toast
+import com.framework.util.Trace
 import org.greenrobot.eventbus.Subscribe
 
 
@@ -135,7 +136,8 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
-    fun showToast(text: CharSequence) {
+    fun showToast(text: CharSequence?) {
+        Trace.d(TAG, text?.toString())
         Toast.makeText(this, text, Toast.LENGTH_LONG).show()
     }
 
@@ -146,6 +148,7 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     companion object {
+        val TAG = BaseActivity::class.java.simpleName
         var activeCount = 0
     }
 }
