@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="colorPrimary">#4e7eef</color>
+    <color name="colorPrimaryDark">#4e7eef</color>
+    <color name="colorAccent">#fe5931</color>
+    <color name="divider">#e5e5e5</color>
+    <color name="ripple_color">#44000000</color>
+
+    <color name="color_main">#5785f3</color>
+    <color name="color_main_light">#b7c9fe</color>
+    <color name="color_gray">#c7cbd5</color>
+    <color name="color_gray_light">#f5f5f5</color>
+
+
+    <color name="windowBackground">#ffffff</color>
+    <color name="text_more">#3a5a95</color>
+    <color name="bg_toolbar_stock">#073d91</color>
+
+    <color name="line_gray">#c7cbd5</color>
+
+    <!-- Text 主色 -->
+    <color name="textColorPrimary">@android:color/white</color>
+    <color name="textColorRed">#ce1d31</color>
+    <color name="textColorGreen">#00b326</color>
+    <color name="textColorBlack">#242424</color>
+    <color name="textColorYellow">@color/colorPrimaryOrange</color>
+    <color name="textColorGray">#9e9e9e</color>
+    <color name="white">#ffffff</color>
+    <color name="white2">#dddddd</color>
+
+    <color name="colorGray">#9e9e9e</color>
+    <color name="colorRed">@color/colorPrimaryRed</color>
+    <color name="colorGreen">#00b326</color>
+    <color name="colorWhiteDep">#20ffffff</color>
+    <color name="colorFill">#105a96ff</color>
+    <color name="colorYellow">#fe942d</color>
+    <color name="text_1">#282828</color>
+    <color name="text_2">#666666</color>
+    <color name="text_3">#9d9d9d</color>
+
+    <color name="chart_highLight_color">#666</color>
+    <color name="chart_kline_color">#4fcee9</color>
+    <color name="chart_line_color">#c0c0c0</color>
+    <color name="chart_line_effect">#ffb966</color>
+    <color name="chart_line_effect2">#ff8700</color>
+    <color name="chart_gridline_color">@color/colorWhiteDep</color>
+    <color name="chart_color_red">#e9573f</color>
+    <color name="chart_color_green">#8cc152</color>
+    <color name="chart_color_blue">#48cfae</color>
+    <color name="chart_text_color">#999999</color>
+    <color name="chart_ma5_color">#9e9e9e</color>
+    <color name="chart_ma10_color">#fe942d</color>
+    <color name="chart_ma20_color">#bc62ff</color>
+    <color name="chart_ma30_color">#00a000</color>
+
+    <integer-array name="color_pie">
+        <item>@color/pie_color1</item>
+        <item>@color/pie_color2</item>
+        <item>@color/pie_color3</item>
+        <item>@color/pie_color4</item>
+        <item>@color/pie_color5</item>
+        <item>@color/pie_color6</item>
+    </integer-array>
+    <color name="pie_color1">#e9573f</color>
+    <color name="pie_color2">#f6bb42</color>
+    <color name="pie_color3">#d770ad</color>
+    <color name="pie_color4">#3bafda</color>
+    <color name="pie_color5">#4a89dc</color>
+    <color name="pie_color6">#967adc</color>
+
+    <color name="colorPrimaryRed">#ef454b</color>
+
+    <color name="colorPrimaryOrange">#fe942d</color>
+
+    <color name="colorKlineBlack">#4b53bd</color>
+</resources>

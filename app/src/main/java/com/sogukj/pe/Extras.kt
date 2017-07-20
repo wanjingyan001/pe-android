@@ -1,0 +1,13 @@
+package com.sogukj.pe
+
+/**
+ * Created by qinfei on 17/3/28.
+ */
+
+object Extras {
+    val TYPE = "ext.type"
+    val NAME = "ext.name"
+    val CODE = "ext.code"
+    val INDEX = "ext.index"
+    val STOCK_CODES = "ext.stockCodes"
+}

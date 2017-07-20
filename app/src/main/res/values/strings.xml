@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">PE</string>
+    <string name="get_code">点击获取</string>
+    <string name="get_code_disable">剩余%s秒</string>
+</resources>
