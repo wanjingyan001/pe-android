@@ -7,7 +7,9 @@ import android.view.View
 import android.widget.TextView
 import com.framework.R
 
-
+/**
+ * Created by qinfei on 17/7/18.
+ */
 abstract class ToolbarActivity : BaseActivity() {
 
     val titleId: Int

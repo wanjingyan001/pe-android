@@ -1,7 +1,6 @@
 package com.framework.base
 
 import android.app.ProgressDialog
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.WindowManager
@@ -9,7 +8,9 @@ import android.widget.Toast
 import com.framework.util.Trace
 import org.greenrobot.eventbus.Subscribe
 
-
+/**
+ * Created by qinfei on 17/7/17.
+ */
 abstract class BaseActivity : AppCompatActivity() {
 
     private var prDialog: ProgressDialog? = null
@@ -39,37 +40,17 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         activeCount++
-        val intent = Intent()
-        intent.setClassName(baseContext, "cn.sogukj.stockalert.webservice.DzhClient")
-        startService(intent)
     }
 
     override fun onStop() {
         super.onStop()
         activeCount--
         if (activeCount == 0) {
-            val intent = Intent()
-            intent.setClassName(baseContext, "cn.sogukj.stockalert.webservice.DzhClient")
-            stopService(intent)
         }
 
     }
 
-    //    //初始化statusbar
-    //    protected void initStatusBar(int statusbar) {
-    //        if (statusbar != 0) {
-    //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-    //                setTranslucentStatus(true, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-    //            }
-    //
-    //            SystemBarTintManager tintManager = new SystemBarTintManager(this);
-    //            tintManager.setStatusBarTintEnabled(true);
-    //            tintManager.setStatusBarTintColor(statusbar);
-    //        }
-    //    }
 
-
-    //获取statusbar高度
     val statusBarSize: Int
         get() {
             var result = 0
@@ -81,7 +62,6 @@ abstract class BaseActivity : AppCompatActivity() {
         }
 
 
-    //获取screen高度
     val screenHeight: Int
         get() = windowManager.defaultDisplay.height
 
@@ -89,35 +69,12 @@ abstract class BaseActivity : AppCompatActivity() {
         get() = windowManager.defaultDisplay.width
 
     fun showProgress(msg: String) {
-        // TODO Auto-generated method stub
-        if (prDialog == null) {
-            prDialog = MsgDialog.progress(this, msg)
-            prDialog!!.setCancelable(false)
-        } else {
-            prDialog!!.setMessage(msg)
-        }
-        prDialog!!.show()
     }
 
     fun showProgress(msg: String, theme: Int) {
-        // TODO Auto-generated method stub
-        if (prDialog == null) {
-            prDialog = MsgDialog.progress(this, msg, theme)
-            prDialog!!.setCancelable(false)
-        } else {
-            prDialog!!.setMessage(msg)
-        }
-        prDialog!!.show()
     }
 
     fun hideProgress() {
-        // TODO Auto-generated method stub
-        if (prDialog != null) {
-            if (prDialog!!.isShowing) {
-                prDialog!!.dismiss()
-                prDialog = null
-            }
-        }
     }
 
 

@@ -2,6 +2,9 @@ package com.framework.base
 
 import java.util.*
 
+/**
+ * Created by qinfei on 17/7/18.
+ */
 
 object ActivityHelper {
     private val activities = ArrayList<BaseActivity>()

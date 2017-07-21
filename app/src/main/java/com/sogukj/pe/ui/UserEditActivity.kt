@@ -4,6 +4,9 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 
 import com.sogukj.pe.R
+/**
+ * Created by qinfei on 17/7/18.
+ */
 
 class UserEditActivity : AppCompatActivity() {
 
