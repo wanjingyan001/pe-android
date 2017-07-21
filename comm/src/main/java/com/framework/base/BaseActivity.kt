@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity
 import android.view.WindowManager
 import android.widget.Toast
 import com.framework.util.Trace
-import org.greenrobot.eventbus.Subscribe
 
 /**
  * Created by qinfei on 17/7/17.
@@ -96,12 +95,6 @@ abstract class BaseActivity : AppCompatActivity() {
     fun showToast(text: CharSequence?) {
         Trace.d(TAG, text?.toString())
         Toast.makeText(this, text, Toast.LENGTH_LONG).show()
-    }
-
-
-    @Subscribe
-    internal fun onEmptyEvent() {
-
     }
 
     companion object {

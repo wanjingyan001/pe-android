@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import org.greenrobot.eventbus.Subscribe
 /**
  * Created by qinfei on 17/7/18.
  */
@@ -58,10 +57,5 @@ abstract class BaseFragment : android.support.v4.app.Fragment() {
             toast!!.setText(text)
         }
         toast!!.show()
-    }
-
-    @Subscribe
-    internal fun onEmptyEvent() {
-
     }
 }
