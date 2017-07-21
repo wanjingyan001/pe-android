@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
+import android.util.TypedValue;
 
 import java.io.UnsupportedEncodingException;
 import java.util.UUID;
@@ -21,6 +22,14 @@ import java.util.regex.Pattern;
 public class Utils {
 
     public static final String TAG = Utils.class.getSimpleName();
+
+    public static int dpToPx(Context context, int dp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
+    }
+
+    public static float pxToDp(Context context, int dp) {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, dp, context.getResources().getDisplayMetrics());
+    }
 
     /**
      * 获取版本号(内部识别号)
