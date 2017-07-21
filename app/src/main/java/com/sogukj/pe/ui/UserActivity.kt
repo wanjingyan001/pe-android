@@ -11,6 +11,8 @@ class UserActivity : ToolbarActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user)
+        setTitle("个人信息")
+        setBack(true)
     }
 
     companion object {

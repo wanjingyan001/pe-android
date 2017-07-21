@@ -22,7 +22,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:inputType="textPersonName"
         android:textColor="@color/text_1"
         android:textSize="14sp"
         android:textStyle="bold"
@@ -47,11 +46,11 @@
 
         <TextView
             android:id="@+id/tv_job"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="10dp"
-            android:layout_marginTop="33dp"
+            android:layout_weight="1"
             android:drawablePadding="3dp"
             android:drawableTop="@drawable/ic_user"
             android:gravity="center"
@@ -61,10 +60,11 @@
 
         <TextView
             android:id="@+id/tv_mail"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:layout_marginTop="33dp"
+            android:layout_weight="1"
             android:drawablePadding="3dp"
             android:drawableTop="@drawable/ic_mail"
             android:textColor="@color/text_1"
@@ -82,9 +82,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
-
-            <include layout="@layout/item_row_user_jobs" />
+            <!--<include layout="@layout/item_row_user_jobs" />-->
         </LinearLayout>
     </ScrollView>
 
