@@ -22,11 +22,11 @@ class XmlDb private constructor(ctx: Context) {
         return pref.edit().putBoolean(key, `val`).commit()
     }
 
-    fun bool(key: String): Boolean {
+    fun get(key: String): Boolean {
         return pref.getBoolean(key, false)
     }
 
-    fun getString(key: String, defValue: String=""): String {
+    fun get(key: String, defValue: String): String {
         return pref.getString(key, defValue)
     }
 

@@ -20,7 +20,7 @@ class Store private constructor() {
     fun getUserInfo(ctx: Context): UserInfo? {
         try {
             if (null == user) {
-                val jsonUser = XmlDb.open(ctx).getString(UserInfo::class.java.simpleName)
+                val jsonUser = XmlDb.open(ctx).get(UserInfo::class.java.simpleName,"")
                 if (!TextUtils.isEmpty(jsonUser)) {
                     this.user = GSON.fromJson(jsonUser, UserInfo::class.java)
                 }

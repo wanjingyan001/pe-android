@@ -6,12 +6,11 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <View
-        android:id="@+id/divider"
+    <view
         android:layout_width="match_parent"
-        android:layout_height="8dp"
-        android:layout_marginTop="15dp"
-        android:background="@color/divider" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/divider2" />
 
     <include layout="@layout/item_row_header_user_jobs" />
 

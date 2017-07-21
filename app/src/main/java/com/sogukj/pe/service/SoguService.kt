@@ -21,7 +21,6 @@ interface SoguService {
     //登录
     @FormUrlEncoded
     @POST("/api/index/verify_code")
-    fun login(@Field("phone") phone: String,
-              @Field("code") code: String): Observable<Payload<UserInfo>>
+    fun login(@Field("phone") phone: String,@Field("code") code: String): Observable<Payload<UserInfo>>
 
 }

@@ -26,7 +26,7 @@ class MainNewsFragment : BaseFragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         iv_user.setOnClickListener {
-            LoginActivity.start(baseActivity);
+            UserActivity.start(baseActivity);
         }
         var adapter = ArrayPagerAdapter(childFragmentManager, fragments)
         view_pager.adapter = adapter
