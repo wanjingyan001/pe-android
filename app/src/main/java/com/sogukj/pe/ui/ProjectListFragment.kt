@@ -32,6 +32,9 @@ class ProjectListFragment : BaseFragment() {
         val adapter = RecyclerAdapter<NewsBean>(baseActivity!!, { _adapter, parent, type ->
             NewsHolder(_adapter.getView(R.layout.item_main_project, parent))
         })
+        adapter.onItemClick = { v, p ->
+            ProjectActivity.start(baseActivity)
+        }
         val layoutManager = LinearLayoutManager(baseActivity)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         recycler_view.addItemDecoration(DividerItemDecoration(baseActivity, DividerItemDecoration.VERTICAL))
