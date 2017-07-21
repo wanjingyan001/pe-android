@@ -6,7 +6,9 @@ import android.view.*
 import android.widget.TextView
 import com.framework.R
 
-
+/**
+ * Created by qinfei on 17/7/18.
+ */
 abstract class ToolbarFragment : BaseFragment() {
     val menuId: Int
         get() = 0

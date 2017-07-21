@@ -5,6 +5,9 @@ import android.content.Intent
 import android.os.Bundle
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.R
+/**
+ * Created by qinfei on 17/7/18.
+ */
 
 class UserActivity : ToolbarActivity() {
 
