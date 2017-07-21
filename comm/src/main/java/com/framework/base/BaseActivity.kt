@@ -1,6 +1,5 @@
 package com.framework.base
 
-import android.app.ProgressDialog
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.WindowManager
@@ -11,16 +10,6 @@ import com.framework.util.Trace
  * Created by qinfei on 17/7/17.
  */
 abstract class BaseActivity : AppCompatActivity() {
-
-    private var prDialog: ProgressDialog? = null
-
-    enum class Animat {
-        NONE,
-        SLDE,
-        FADE,
-        SLDE_UP
-    }
-
     val context: BaseActivity
         get() = this
 

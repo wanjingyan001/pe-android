@@ -5,25 +5,19 @@ import android.content.Intent
 import android.os.Bundle
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.R
-import kotlinx.android.synthetic.main.activity_project.*
 
-/**
- * Created by qinfei on 17/7/18.
- */
-class ProjectActivity : ToolbarActivity() {
+class NegativeNewsActivity : ToolbarActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_project)
+        setContentView(R.layout.activity_negative_news)
+        setTitle("负面信息")
         setBack(true)
-        tv_more.setOnClickListener {
-            NegativeNewsActivity.start(this)
-        }
     }
 
     companion object {
         fun start(ctx: Activity?) {
-            ctx?.startActivity(Intent(ctx, ProjectActivity::class.java))
+            ctx?.startActivity(Intent(ctx, NegativeNewsActivity::class.java))
         }
     }
 }
