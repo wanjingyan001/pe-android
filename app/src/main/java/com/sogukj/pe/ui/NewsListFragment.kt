@@ -58,7 +58,7 @@ class NewsListFragment : BaseFragment() {
                     }
                     adapter.notifyDataSetChanged()
                     refresh?.finishRefreshing()
-                }, 500)
+                }, 100)
             }
 
             override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
@@ -70,14 +70,14 @@ class NewsListFragment : BaseFragment() {
                     }
                     adapter.notifyDataSetChanged()
                     refresh?.finishLoadmore()
-                }, 500)
+                }, 100)
             }
 
         })
         refresh.setAutoLoadMore(true)
         handler.postDelayed({
             refresh?.startRefresh()
-        }, 200)
+        }, 100)
     }
 
     val fmt = SimpleDateFormat("yyyy/MM/dd HH:mm")
