@@ -56,7 +56,7 @@ class ProjectListFragment : BaseFragment() {
                     }
                     adapter.notifyDataSetChanged()
                     refresh?.finishRefreshing()
-                }, 1000)
+                }, 500)
             }
 
             override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
@@ -68,7 +68,7 @@ class ProjectListFragment : BaseFragment() {
                     }
                     adapter.notifyDataSetChanged()
                     refresh?.finishLoadmore()
-                }, 1000)
+                }, 500)
             }
 
         })

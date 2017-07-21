@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/bg_item_list"
     android:orientation="horizontal"
     android:padding="10dp">
 
@@ -14,7 +15,7 @@
         android:gravity="center"
         android:textColor="@color/text_1"
         android:textSize="14sp"
-        tools:text="搜股(北京)科技有限公司" />
+        tools:text="@string/tools_text_title" />
 
 
     <TextView

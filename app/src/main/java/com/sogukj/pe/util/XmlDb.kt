@@ -14,23 +14,19 @@ class XmlDb private constructor(ctx: Context) {
         pref = PreferenceManager.getDefaultSharedPreferences(ctx)
     }
 
-    fun save(key: String, `val`: String): Boolean {
+    fun set(key: String, `val`: String): Boolean {
         return pref.edit().putString(key, `val`).commit()
     }
 
-    fun save(key: String, `val`: Boolean): Boolean {
+    fun set(key: String, `val`: Boolean): Boolean {
         return pref.edit().putBoolean(key, `val`).commit()
     }
 
-    fun getBoolean(key: String): Boolean {
+    fun get(key: String): Boolean {
         return pref.getBoolean(key, false)
     }
 
-    operator fun get(key: String): String {
-        return pref.getString(key, "")
-    }
-
-    operator fun get(key: String, defValue: String): String {
+    fun get(key: String, defValue: String): String {
         return pref.getString(key, defValue)
     }
 

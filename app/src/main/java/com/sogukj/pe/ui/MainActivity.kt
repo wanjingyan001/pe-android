@@ -3,7 +3,9 @@ package com.sogukj.pe.ui
 import android.os.Bundle
 import com.framework.base.BaseActivity
 import com.sogukj.pe.R
+import com.sogukj.util.Store
 import kotlinx.android.synthetic.main.activity_main.*
+
 /**
  * Created by qinfei on 17/7/18.
  */
@@ -32,5 +34,8 @@ class MainActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
+        if (!Store.store.checkLogin(this)) {
+            LoginActivity.start(this)
+        }
     }
 }

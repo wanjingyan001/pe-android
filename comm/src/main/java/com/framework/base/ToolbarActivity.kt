@@ -22,22 +22,32 @@ abstract class ToolbarActivity : BaseActivity() {
     var toolbar: Toolbar? = null
         private set
 
+    fun setBack(visible: Boolean) {
+        toolbar?.apply {
+            val back = this.findViewById(R.id.toolbar_back) as View?
+            back?.setVisibility(if (visible) View.VISIBLE else View.INVISIBLE)
+            back?.setOnClickListener {
+                onBackPressed()
+            }
+        }
+    }
+
     fun initToolbar() {
         if (findViewById(R.id.toolbar) == null) {
             return
         }
 
-        toolbar = findViewById(R.id.toolbar) as Toolbar
-        if (toolbar != null) {
-            val title = toolbar!!.findViewById(R.id.toolbar_title) as TextView?
+        toolbar = findViewById(R.id.toolbar) as Toolbar?
+        toolbar?.apply {
+            val title = this.findViewById(R.id.toolbar_title) as TextView?
             if (title != null && titleId != 0)
                 title.setText(titleId)
-            setSupportActionBar(toolbar)
-            supportActionBar!!.setDisplayShowTitleEnabled(false)
-            supportActionBar!!.setDisplayHomeAsUpEnabled(displayHomeAsUpEnabled)
+            setSupportActionBar(this)
+            supportActionBar?.setDisplayShowTitleEnabled(false)
+//            supportActionBar?.setDisplayHomeAsUpEnabled(displayHomeAsUpEnabled)
 
-            toolbar!!.background.alpha = 255
-            toolbar!!.setBackgroundColor(resources.getColor(R.color.colorPrimary))
+            this.background.alpha = 255
+            this.setBackgroundColor(resources.getColor(R.color.colorPrimary))
         }
     }
 
@@ -53,10 +63,10 @@ abstract class ToolbarActivity : BaseActivity() {
         }
 
     override fun setTitle(resId: Int) {
-        if (toolbar != null) {
-            if (toolbar!!.findViewById(R.id.toolbar_title) != null) {
+        toolbar?.apply {
+            if (toolbar?.findViewById(R.id.toolbar_title) != null) {
                 if (resId != 0) {
-                    (toolbar!!.findViewById(R.id.toolbar_title) as TextView).setText(resId)
+                    (toolbar?.findViewById(R.id.toolbar_title) as TextView).setText(resId)
                 }
             }
         }
@@ -64,9 +74,9 @@ abstract class ToolbarActivity : BaseActivity() {
 
     override fun setTitle(titleRes: CharSequence?) {
         if (toolbar != null) {
-            if (toolbar!!.findViewById(R.id.toolbar_title) != null) {
+            if (toolbar?.findViewById(R.id.toolbar_title) != null) {
                 if (titleRes != null) {
-                    (toolbar!!.findViewById(R.id.toolbar_title) as TextView).text = titleRes
+                    (toolbar?.findViewById(R.id.toolbar_title) as TextView).text = titleRes
                 }
             }
         }

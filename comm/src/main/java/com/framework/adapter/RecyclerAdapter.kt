@@ -18,7 +18,7 @@ class RecyclerAdapter<T>(val context: Context, val creator: (adapter: RecyclerAd
     var dataList = mutableListOf<T>()
     val inflater: LayoutInflater
     var comparator: Comparator<T>? = null
-    var onItemClickListener: OnItemClickListener? = null
+    var onItemClick: ((v: View, position: Int) -> Unit)? = null
     var selectedItems = ArrayList<Int>()
         private set
     var mode: Int = 0
@@ -61,8 +61,8 @@ class RecyclerAdapter<T>(val context: Context, val creator: (adapter: RecyclerAd
     override fun onBindViewHolder(holder: SimpleViewHolder<T>, position: Int, payloads: List<Any>?) {
         holder.itemView.setOnClickListener { v ->
             selectedPosition = position
-            if (null != onItemClickListener)
-                onItemClickListener!!.onItemClick(v, position)
+            if (null != onItemClick)
+                onItemClick!!(v, position)
         }
         super.onBindViewHolder(holder, position, payloads)
     }

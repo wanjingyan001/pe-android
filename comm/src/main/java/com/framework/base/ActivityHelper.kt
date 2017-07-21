@@ -3,7 +3,7 @@ package com.framework.base
 import java.util.*
 
 
-object ActivityManager {
+object ActivityHelper {
     private val activities = ArrayList<BaseActivity>()
     var curActivity: BaseActivity? = null
 

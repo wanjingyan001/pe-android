@@ -2,10 +2,9 @@ package com.sogukj.service
 
 import android.app.Application
 import com.sogukj.pe.Consts
-import com.sogukj.util.Store
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
@@ -19,16 +18,16 @@ class SoguApi {
         this.context = context
         val client = OkHttpClient.Builder()
                 .addInterceptor { chain ->
-                    val userInfo = Store.store.getUserInfo(context)
-                    val token = if (null != userInfo) userInfo.token else ""
+                    //                    val userInfo = Store.store.getUserInfo(context)
+//                    val token = if (null != userInfo) userInfo.token else ""
                     val newRequest = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token)
+//                            .addHeader("Authorization", "Bearer " + token)
                             .build()
                     val response = chain.proceed(newRequest)
-                    if (response.code() == 401) {
-                        userInfo!!.token = ""
-                        Store.store.setUserInfo(context, userInfo)
-                    }
+//                    if (response.code() == 401) {
+//                        userInfo!!.token = ""
+//                        Store.store.setUserInfo(context, userInfo)
+//                    }
                     response
                 }
                 .readTimeout(10, TimeUnit.SECONDS)
@@ -38,7 +37,7 @@ class SoguApi {
         val retrofit = Retrofit.Builder()
                 .baseUrl(Consts.HTTP_HOST)
                 .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(client)
                 .build()
 
@@ -66,14 +65,12 @@ class SoguApi {
 
         private var sApi: SoguApi? = null
 
-        @Synchronized fun getApi(ctx: Application?): SoguApi {
-            if (null == ctx) throw NullPointerException("context can't be null")
+        @Synchronized fun getApi(ctx: Application): SoguApi {
             if (null == sApi) sApi = SoguApi(ctx)
             return sApi!!
         }
 
-        fun getService(ctx: Application?): SoguService {
-            if (null == ctx) throw NullPointerException("context can't be null")
+        fun getService(ctx: Application): SoguService {
             return getApi(ctx).apiService
         }
     }
