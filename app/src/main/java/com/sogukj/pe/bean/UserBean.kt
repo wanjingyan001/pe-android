@@ -2,7 +2,7 @@ package com.sogukj.pe.bean
 
 import java.io.Serializable
 
-class UserInfo() : Serializable {
+class UserBean() : Serializable {
     var uid: String? = null//用户主键ID
     var name: String? = null
     var phone: String? = null

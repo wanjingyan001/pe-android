@@ -28,7 +28,8 @@
         <activity android:name=".ui.NewsDetailActivity" />
         <activity android:name=".ui.UserActivity" />
         <activity android:name=".ui.UserEditActivity" />
-        <activity android:name=".ui.AddProjectActivity"></activity>
+        <activity android:name=".ui.AddProjectActivity" />
+        <activity android:name=".ui.ProjectActivity"></activity>
     </application>
 
 </manifest>

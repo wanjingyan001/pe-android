@@ -23,7 +23,7 @@ class UserActivity : ToolbarActivity() {
 
     override fun onStart() {
         super.onStart()
-        val user = Store.store.getUserInfo(this)
+        val user = Store.store.getUser(this)
         user?.apply {
             tv_name?.text = "用户$uid"
             tv_mobile?.text = phone

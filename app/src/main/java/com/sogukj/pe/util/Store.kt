@@ -3,7 +3,7 @@ package com.sogukj.util
 import android.content.Context
 import android.text.TextUtils
 import com.google.gson.Gson
-import com.sogukj.pe.bean.UserInfo
+import com.sogukj.pe.bean.UserBean
 import java.util.*
 
 /**
@@ -11,29 +11,29 @@ import java.util.*
  * 小数据存取工具类
  */
 class Store private constructor() {
-    private var user: UserInfo? = null
+    private var _user: UserBean? = null
 
     fun checkLogin(ctx: Context): Boolean {
-        return null != getUserInfo(ctx) && !TextUtils.isEmpty(user?.uid)
+        return null != getUser(ctx) && !TextUtils.isEmpty(_user?.uid)
     }
 
-    fun getUserInfo(ctx: Context): UserInfo? {
+    fun getUser(ctx: Context): UserBean? {
         try {
-            if (null == user) {
-                val jsonUser = XmlDb.open(ctx).get(UserInfo::class.java.simpleName,"")
+            if (null == _user) {
+                val jsonUser = XmlDb.open(ctx).get(UserBean::class.java.simpleName, "")
                 if (!TextUtils.isEmpty(jsonUser)) {
-                    this.user = GSON.fromJson(jsonUser, UserInfo::class.java)
+                    this._user = GSON.fromJson(jsonUser, UserBean::class.java)
                 }
             }
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        return user
+        return _user
     }
 
-    fun setUserInfo(ctx: Context, user: UserInfo) {
-        this.user = user
-        XmlDb.open(ctx).set(UserInfo::class.java.simpleName, GSON.toJson(user))
+    fun setUser(ctx: Context, user: UserBean) {
+        this._user = user
+        XmlDb.open(ctx).set(UserBean::class.java.simpleName, GSON.toJson(user))
     }
 
 

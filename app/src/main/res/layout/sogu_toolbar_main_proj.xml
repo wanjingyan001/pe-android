@@ -59,8 +59,8 @@
 
         <ImageView
             android:id="@+id/iv_add"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="right|center"
             android:layout_marginRight="10dp"
             android:gravity="center"
