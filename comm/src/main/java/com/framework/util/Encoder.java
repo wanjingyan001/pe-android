@@ -1,9 +1,11 @@
-package com.sogukj.pe.util;
+package com.framework.util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-
+/**
+ * Created by qinfei on 16/10/19.
+ */
 public class Encoder {
 
     public final static String get32MD5(String s) {
@@ -42,9 +44,6 @@ public class Encoder {
                     buf.append("0");
                 buf.append(Integer.toHexString(i));
             }
-            // Log.e("555","result: " + buf.toString());//32位的加密
-            //Log.e("555","result: " + buf.toString().substring(8,24));//16位的加密
-
         } catch (NoSuchAlgorithmException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -66,10 +65,7 @@ public class Encoder {
                     buf.append("0");
                 buf.append(Integer.toHexString(i));
             }
-            // Log.e("555","result: " + buf.toString());//32位的加密
-            //Log.e("555","result: " + buf.toString().substring(8,24));//16位的加密
-
-        } catch (NoSuchAlgorithmException e) {
+        } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }

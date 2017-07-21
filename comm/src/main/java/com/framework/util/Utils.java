@@ -91,7 +91,7 @@ public class Utils {
             throw new RuntimeException(e);
         }
 
-        return MD5.get32MD5(uuid);
+        return Encoder.get32MD5(uuid);
     }
 
     /**

@@ -8,7 +8,8 @@ import com.framework.base.BaseFragment
 import com.sogukj.pe.R
 import com.sogukj.pe.adapter.ArrayPagerAdapter
 import kotlinx.android.synthetic.main.fragment_main_news.*
-import kotlinx.android.synthetic.main.sogu_toolbar_main_news.*
+import kotlinx.android.synthetic.main.sogu_toolbar_main_proj.*
+import org.jetbrains.anko.sdk25.coroutines.onClick
 
 /**
  * Created by qinfei on 17/7/18.
@@ -25,8 +26,11 @@ class MainProjectFragment : BaseFragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        iv_user.setOnClickListener {
+        iv_user.onClick {
             UserActivity.start(baseActivity);
+        }
+        iv_add.onClick {
+            AddProjectActivity.start(baseActivity)
         }
         var adapter = ArrayPagerAdapter(childFragmentManager, fragments)
         view_pager.adapter = adapter
@@ -53,6 +57,7 @@ class MainProjectFragment : BaseFragment() {
 
             override fun onPageSelected(position: Int) {
                 tabs?.getTabAt(position)?.select()
+                iv_add?.visibility = if (position == 2) View.VISIBLE else View.GONE
             }
 
         })

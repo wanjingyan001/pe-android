@@ -56,6 +56,16 @@
                 android:layout_height="match_parent"
                 android:text="拟投" />
         </android.support.design.widget.TabLayout>
+
+        <ImageView
+            android:id="@+id/iv_add"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_gravity="right|center"
+            android:layout_marginRight="10dp"
+            android:gravity="center"
+            android:src="@drawable/ic_action_add"
+            android:visibility="gone" />
     </FrameLayout>
 
 </android.support.v7.widget.Toolbar>

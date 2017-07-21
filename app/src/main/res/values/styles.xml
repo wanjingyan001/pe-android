@@ -68,23 +68,26 @@
         <item name="android:textSize">@dimen/text_size_samll</item>
         <item name="android:textColor">@color/text_1</item>
     </style>
-
+    <style name="SoguTextNormal">
+        <item name="android:textSize">@dimen/text_size_medium</item>
+        <item name="android:textColor">@color/text_1</item>
+    </style>
     <style name="SoguTextSamll">
         <item name="android:alpha">1.0</item>
         <item name="android:textSize">@dimen/text_size_samll</item>
-        <item name="android:textColor">@color/textColorPrimary</item>
+        <item name="android:textColor">@color/text_1</item>
     </style>
 
     <style name="SoguTextMedium">
         <item name="android:alpha">1.0</item>
         <item name="android:textSize">@dimen/text_size_medium</item>
-        <item name="android:textColor">@color/textColorPrimary</item>
+        <item name="android:textColor">@color/text_1</item>
     </style>
 
     <style name="SoguTextLarge">
         <item name="android:alpha">1.0</item>
         <item name="android:textSize">@dimen/text_size_large</item>
-        <item name="android:textColor">@color/textColorPrimary</item>
+        <item name="android:textColor">@color/text_1</item>
     </style>
 
     <style name="activityAnimation" parent="@android:style/Animation">
