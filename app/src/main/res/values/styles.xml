@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools">
 
     <style name="AppTheme" parent="AppTheme.Base">
         <item name="windowActionBar">false</item>
@@ -68,10 +68,12 @@
         <item name="android:textSize">@dimen/text_size_samll</item>
         <item name="android:textColor">@color/text_1</item>
     </style>
+
     <style name="SoguTextNormal">
         <item name="android:textSize">@dimen/text_size_medium</item>
         <item name="android:textColor">@color/text_1</item>
     </style>
+
     <style name="SoguTextSamll">
         <item name="android:alpha">1.0</item>
         <item name="android:textSize">@dimen/text_size_samll</item>
@@ -88,6 +90,15 @@
         <item name="android:alpha">1.0</item>
         <item name="android:textSize">@dimen/text_size_large</item>
         <item name="android:textColor">@color/text_1</item>
+    </style>
+
+    <style name="ItemGridProject">
+        <item name="android:textSize">@dimen/text_size_medium</item>
+        <item name="android:textColor">@color/text_1</item>
+        <item name="android:layout_columnWeight" tools:ignore="NewApi">1</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:drawablePadding">3dp</item>
     </style>
 
     <style name="activityAnimation" parent="@android:style/Animation">

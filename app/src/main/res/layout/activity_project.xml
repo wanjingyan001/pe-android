@@ -10,4 +10,517 @@
 
     <include layout="@layout/toolbar" />
 
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <View
+                    android:layout_width="5dp"
+                    android:layout_height="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@color/color_main" />
+
+                <TextView
+                    style="@style/SoguTextNormal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="负面信息" />
+            </LinearLayout>
+
+            <com.framework.view.ListViewCompat
+                android:id="@+id/list_negative"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:divider="@color/divider"
+                android:dividerHeight="1px"
+                android:listSelector="@drawable/bg_item_list"
+                tools:listitem="@layout/item_main_news" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/divider" />
+
+            <TextView
+                android:id="@+id/tv_more"
+                style="@style/SoguTextNormal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_item_list"
+                android:gravity="center"
+                android:paddingBottom="13dp"
+                android:paddingTop="12dp"
+                android:text="查看更多"
+                android:textColor="@color/text_more"
+                android:textSize="15sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="@color/divider" />
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <View
+                    android:layout_width="5dp"
+                    android:layout_height="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@color/color_main" />
+
+                <TextView
+                    style="@style/SoguTextNormal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="企业舆情" />
+            </LinearLayout>
+
+            <com.framework.view.ListViewCompat
+                android:id="@+id/list_yuqin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:divider="@color/divider"
+                android:dividerHeight="1px"
+                android:listSelector="@drawable/bg_item_list"
+                tools:listitem="@layout/item_main_news" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="@color/divider" />
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <View
+                    android:layout_width="5dp"
+                    android:layout_height="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@color/color_main" />
+
+                <TextView
+                    style="@style/SoguTextNormal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="上市信息" />
+            </LinearLayout>
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:columnCount="4"
+                android:padding="10dp"
+                android:rowCount="3">
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_stock_quote"
+                    android:text="股票信息" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_company_desc"
+                    android:text="企业简介" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_gaoguan"
+                    android:text="高管信息" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_cangu"
+                    android:text="参股控股" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_notice"
+                    android:text="上市公告" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_shidagudong"
+                    android:text="十大股东" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_shidaliutong"
+                    android:text="十大流通" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_faxinjiguan"
+                    android:text="发行相关" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_gubenjiegou"
+                    android:text="股本结构" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_gubenbiandong"
+                    android:text="股本变动" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_fenhong"
+                    android:text="分红情况" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_peigu"
+                    android:text="配股情况" />
+
+            </GridLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="@color/divider" />
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <View
+                    android:layout_width="5dp"
+                    android:layout_height="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@color/color_main" />
+
+                <TextView
+                    style="@style/SoguTextNormal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="企业背景" />
+            </LinearLayout>
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:columnCount="4"
+                android:padding="10dp"
+                android:rowCount="3">
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_stock_quote"
+                    android:text="股票信息" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_company_desc"
+                    android:text="企业简介" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_gaoguan"
+                    android:text="高管信息" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_cangu"
+                    android:text="参股控股" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_notice"
+                    android:text="上市公告" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_shidagudong"
+                    android:text="十大股东" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_shidaliutong"
+                    android:text="十大流通" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_faxinjiguan"
+                    android:text="发行相关" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_gubenjiegou"
+                    android:text="股本结构" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_gubenbiandong"
+                    android:text="股本变动" />
+
+            </GridLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="@color/divider" />
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <View
+                    android:layout_width="5dp"
+                    android:layout_height="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@color/color_main" />
+
+                <TextView
+                    style="@style/SoguTextNormal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="企业发展" />
+            </LinearLayout>
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:columnCount="4"
+                android:padding="10dp"
+                android:rowCount="2">
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_stock_quote"
+                    android:text="股票信息" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_company_desc"
+                    android:text="企业简介" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_gaoguan"
+                    android:text="高管信息" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_cangu"
+                    android:text="参股控股" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_peigu"
+                    android:text="配股情况" />
+
+            </GridLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="@color/divider" />
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <View
+                    android:layout_width="5dp"
+                    android:layout_height="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@color/color_main" />
+
+                <TextView
+                    style="@style/SoguTextNormal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="经营状况" />
+            </LinearLayout>
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:columnCount="4"
+                android:padding="10dp"
+                android:rowCount="4">
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_stock_quote"
+                    android:text="股票信息" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_company_desc"
+                    android:text="企业简介" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_gaoguan"
+                    android:text="高管信息" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_cangu"
+                    android:text="参股控股" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_stock_quote"
+                    android:text="股票信息" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_company_desc"
+                    android:text="企业简介" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_gaoguan"
+                    android:text="高管信息" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_cangu"
+                    android:text="参股控股" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_stock_quote"
+                    android:text="股票信息" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_company_desc"
+                    android:text="企业简介" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_gaoguan"
+                    android:text="高管信息" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_cangu"
+                    android:text="参股控股" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_stock_quote"
+                    android:text="股票信息" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_company_desc"
+                    android:text="企业简介" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_gaoguan"
+                    android:text="高管信息" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_cangu"
+                    android:text="参股控股" />
+
+            </GridLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="@color/divider" />
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <View
+                    android:layout_width="5dp"
+                    android:layout_height="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@color/color_main" />
+
+                <TextView
+                    style="@style/SoguTextNormal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="知识产权" />
+            </LinearLayout>
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:columnCount="4"
+                android:padding="10dp"
+                android:rowCount="2">
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_stock_quote"
+                    android:text="股票信息" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_company_desc"
+                    android:text="企业简介" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_gaoguan"
+                    android:text="高管信息" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_cangu"
+                    android:text="参股控股" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_peigu"
+                    android:text="配股情况" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_peigu"
+                    android:text="配股情况" />
+            </GridLayout>
+        </LinearLayout>
+    </ScrollView>
+
 </LinearLayout>
