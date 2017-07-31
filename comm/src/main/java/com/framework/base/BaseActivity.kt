@@ -81,9 +81,18 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
+
+    private var toast: Toast? = null
     fun showToast(text: CharSequence?) {
         Trace.d(TAG, text?.toString())
-        Toast.makeText(this, text, Toast.LENGTH_LONG).show()
+        if (toast == null) {
+            toast = Toast.makeText(this,
+                    text?.toString(),
+                    Toast.LENGTH_SHORT)
+        } else {
+            toast!!.setText(text)
+        }
+        toast!!.show()
     }
 
     companion object {

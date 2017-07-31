@@ -15,6 +15,10 @@ import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.NewsBean
+import com.sogukj.pe.view.FlowLayout
+import com.sogukj.service.SoguApi
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_list_news.*
 import org.jetbrains.anko.find
 import java.text.SimpleDateFormat
@@ -26,9 +30,10 @@ class NewsListFragment : BaseFragment() {
     override val containerViewId: Int
         get() = R.layout.fragment_list_news //To change initializer of created properties use File | Settings | File Templates.
 
+    lateinit var adapter: RecyclerAdapter<NewsBean>
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val adapter = RecyclerAdapter<NewsBean>(baseActivity!!, { _adapter, parent, type ->
+        adapter = RecyclerAdapter<NewsBean>(baseActivity!!, { _adapter, parent, type ->
             NewsHolder(_adapter.getView(R.layout.item_main_news, parent))
         })
         adapter.onItemClick = { v, p ->
@@ -49,28 +54,13 @@ class NewsListFragment : BaseFragment() {
         refresh.setOverScrollRefreshShow(false)
         refresh.setOnRefreshListener(object : RefreshListenerAdapter() {
             override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
-                handler.postDelayed({
-                    adapter.dataList.apply {
-                        clear()
-                        for (i in 0..10) {
-                            add(NewsBean())
-                        }
-                    }
-                    adapter.notifyDataSetChanged()
-                    refresh?.finishRefreshing()
-                }, 100)
+                page = 1
+                doRequest()
             }
 
             override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
-                handler.postDelayed({
-                    adapter.dataList.apply {
-                        for (i in 0..10) {
-                            add(NewsBean())
-                        }
-                    }
-                    adapter.notifyDataSetChanged()
-                    refresh?.finishLoadmore()
-                }, 100)
+                ++page
+                doRequest()
             }
 
         })
@@ -80,21 +70,53 @@ class NewsListFragment : BaseFragment() {
         }, 100)
     }
 
+    var page = 1
+    fun doRequest() {
+        SoguApi.getService(baseActivity!!.application)
+                .newsList(page)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        if (page == 1)
+                            adapter.dataList.clear()
+                        payload.payload?.apply {
+                            adapter.dataList.addAll(this)
+                        }
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    showToast("暂无可用数据")
+                }, {
+                    refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
+                    adapter.notifyDataSetChanged()
+                    if (page == 1)
+                        refresh?.finishRefreshing()
+                    else
+                        refresh?.finishLoadmore()
+                })
+    }
+
     val fmt = SimpleDateFormat("yyyy/MM/dd HH:mm")
 
     inner class NewsHolder(view: View)
         : RecyclerAdapter.SimpleViewHolder<NewsBean>(view) {
         val tv_summary: TextView
         val tv_time: TextView
+        val tv_from: TextView
+        val tags: FlowLayout
 
         init {
             tv_summary = view.find(R.id.tv_summary)
             tv_time = view.find(R.id.tv_time)
+            tv_from = view.find(R.id.tv_from)
+            tags = view.find(R.id.tags)
         }
 
         override fun setData(view: View, data: NewsBean, position: Int) {
-            tv_summary.setText("summary")
-            tv_time.text = fmt.format(System.currentTimeMillis())
+            tv_summary.text = data.title
+            tv_time.text = data.time
+            tv_from.text = data.source
 
         }
 

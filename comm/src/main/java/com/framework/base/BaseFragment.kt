@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+
 /**
  * Created by qinfei on 17/7/18.
  */
@@ -17,7 +18,7 @@ abstract class BaseFragment : android.support.v4.app.Fragment() {
     var baseActivity: BaseActivity? = null
         private set
 
-    private var toast: Toast? = null
+
 
     val titleId: Int
         get() = 0
@@ -47,11 +48,11 @@ abstract class BaseFragment : android.support.v4.app.Fragment() {
             return super.onCreateView(inflater, container, savedInstanceState)
         }
     }
-
-    fun showToast(text: CharSequence) {
+    private var toast: Toast? = null
+    fun showToast(text: CharSequence?) {
         if (toast == null) {
             toast = Toast.makeText(activity,
-                    text,
+                    text?.toString(),
                     Toast.LENGTH_SHORT)
         } else {
             toast!!.setText(text)

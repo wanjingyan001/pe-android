@@ -1,7 +1,9 @@
 package com.sogukj.service
 
 import android.app.Application
+import com.framework.util.Encoder
 import com.sogukj.pe.Consts
+import okhttp3.FormBody
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -20,14 +22,24 @@ class SoguApi {
                 .addInterceptor { chain ->
                     //                    val userInfo = Store.store.getUserInfo(context)
 //                    val token = if (null != userInfo) userInfo.token else ""
-                    val newRequest = chain.request().newBuilder()
-//                            .addHeader("Authorization", "Bearer " + token)
-                            .build()
-                    val response = chain.proceed(newRequest)
-//                    if (response.code() == 401) {
-//                        userInfo!!.token = ""
-//                        Store.store.setUserInfo(context, userInfo)
-//                    }
+                    val request = chain.request()
+                    val requestBuilder = request.newBuilder()
+                    if (request.body() is FormBody) {
+                        val newBody = FormBody.Builder()
+                        val body = request.body() as FormBody
+                        val buff = StringBuffer()
+                        for (i in 0..body.size() - 1) {
+                            newBody.addEncoded(body.encodedName(i), body.encodedValue(i))
+                            buff.append(body.name(i)).append("=").append(body.value(i)).append("&")
+                        }
+                        newBody.addEncoded("appkey", "d5f17cafef0829b5")
+                        buff.append("appkey=d5f17cafef0829b5")
+                        buff.append("pe2017Signkey")
+                        val sign = Encoder.md5(buff.toString())
+                        newBody.add("sign", sign)
+                        requestBuilder.method(request.method(), newBody.build())
+                    }
+                    val response = chain.proceed(requestBuilder.build())
                     response
                 }
                 .readTimeout(10, TimeUnit.SECONDS)
