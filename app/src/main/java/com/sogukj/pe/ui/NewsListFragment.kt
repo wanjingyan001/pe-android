@@ -17,6 +17,7 @@ import com.sogukj.pe.R
 import com.sogukj.pe.bean.NewsBean
 import com.sogukj.pe.view.FlowLayout
 import com.sogukj.service.SoguApi
+import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_list_news.*
@@ -31,6 +32,12 @@ class NewsListFragment : BaseFragment() {
         get() = R.layout.fragment_list_news //To change initializer of created properties use File | Settings | File Templates.
 
     lateinit var adapter: RecyclerAdapter<NewsBean>
+    var index: Int = 0
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        index = arguments.getInt(Extras.INDEX)
+    }
+
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         adapter = RecyclerAdapter<NewsBean>(baseActivity!!, { _adapter, parent, type ->
@@ -72,8 +79,11 @@ class NewsListFragment : BaseFragment() {
 
     var page = 1
     fun doRequest() {
+        val user = Store.store.getUser(baseActivity!!)
+        val type = if (index == 2) 1 else 2;
+        val userId = if (index == 0) null else user?.uid;
         SoguApi.getService(baseActivity!!.application)
-                .newsList(page)
+                .newsList(page = page, type = type, user_id = userId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->

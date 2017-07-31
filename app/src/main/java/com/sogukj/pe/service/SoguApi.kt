@@ -20,8 +20,6 @@ class SoguApi {
         this.context = context
         val client = OkHttpClient.Builder()
                 .addInterceptor { chain ->
-                    //                    val userInfo = Store.store.getUserInfo(context)
-//                    val token = if (null != userInfo) userInfo.token else ""
                     val request = chain.request()
                     val requestBuilder = request.newBuilder()
                     if (request.body() is FormBody) {
