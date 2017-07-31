@@ -5,14 +5,14 @@ import java.io.Serializable
 /**
  * Created by qinfei on 17/7/19.
  */
-class NewsBean:Serializable {
-    var title:String?=null
-    var time:String?=null
-    var source:String?=null
-    var tag:String?=null
-    var company_id:Int?=null
-    var table_id:Int?=null
-    var data_id:Int?=null
+class NewsBean : Serializable, NewsType {
+    var title: String? = null
+    var time: String? = null
+    var source: String? = null
+    var tag: String? = null
+    var company_id: Int? = null
+    var table_id: Int? = null
+    var data_id: Int? = null
 }
 //[{
 //    "title":"你好",

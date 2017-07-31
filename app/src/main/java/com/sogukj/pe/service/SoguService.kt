@@ -34,7 +34,7 @@ interface SoguService {
 
     @FormUrlEncoded
     @POST("/api/news/newsInfo")
-    fun newsInfo(): Observable<Payload<Map<String, Object>>>
+    fun newsInfo(@Field("table_id")table_id:Int,@Field("data_id")data_id:Int): Observable<Payload<Map<String, Object>>>
 
 
 }

@@ -44,7 +44,8 @@ class NewsListFragment : BaseFragment() {
             NewsHolder(_adapter.getView(R.layout.item_main_news, parent))
         })
         adapter.onItemClick = { v, p ->
-            NewsDetailActivity.start(baseActivity)
+            val news = adapter.getItem(p);
+            NewsDetailActivity.start(baseActivity, news)
         }
         val layoutManager = LinearLayoutManager(baseActivity)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
@@ -76,6 +77,12 @@ class NewsListFragment : BaseFragment() {
             refresh?.startRefresh()
         }, 100)
     }
+
+//    fun onItemClick(news: NewsBean) {
+//        when (news.table_id) {
+//            else -> NewsDetailActivity.start(baseActivity)
+//        }
+//    }
 
     var page = 1
     fun doRequest() {
