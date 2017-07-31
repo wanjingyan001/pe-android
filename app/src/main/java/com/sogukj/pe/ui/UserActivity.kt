@@ -5,7 +5,11 @@ import android.content.Intent
 import android.os.Bundle
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.R
+import com.sogukj.pe.bean.DepartmentBean
+import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_user.*
 
 /**
@@ -19,6 +23,23 @@ class UserActivity : ToolbarActivity() {
         setContentView(R.layout.activity_user)
         setTitle("个人信息")
         setBack(true)
+        SoguApi.getService(application)
+                .userInfo()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        val departList = payload.payload
+                        departList?.apply { setData(this) }
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    showToast("数据获取失败")
+                })
+    }
+
+    fun setData(departList: List<DepartmentBean>) {
+
     }
 
     override fun onStart() {

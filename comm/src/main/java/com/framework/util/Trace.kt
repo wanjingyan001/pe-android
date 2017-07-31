@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Environment
 import android.util.Log
-import com.framework.BuildConfig
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -35,7 +34,7 @@ object Trace {
     var df: DateFormat = SimpleDateFormat("yyyyMMdd")
     var LOG_SAVE_DIR = SDCARD + "/trace/"
     internal var log = Logger.getLogger(TAG)
-    val isDebug = BuildConfig.DEBUG
+    val isDebug = true
 
     fun init(ctx: Context) {
         try {

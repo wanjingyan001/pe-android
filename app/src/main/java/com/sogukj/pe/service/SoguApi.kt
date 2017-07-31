@@ -2,6 +2,7 @@ package com.sogukj.service
 
 import android.app.Application
 import com.framework.util.Encoder
+import com.framework.util.Trace
 import com.sogukj.pe.Consts
 import okhttp3.FormBody
 import okhttp3.OkHttpClient
@@ -26,18 +27,28 @@ class SoguApi {
                         val newBody = FormBody.Builder()
                         val body = request.body() as FormBody
                         val buff = StringBuffer()
+                        var hasAppkey = false
                         for (i in 0..body.size() - 1) {
                             newBody.addEncoded(body.encodedName(i), body.encodedValue(i))
                             buff.append(body.name(i)).append("=").append(body.value(i)).append("&")
+                            if (body.encodedName(i) == "appkey") hasAppkey = true
                         }
-                        newBody.addEncoded("appkey", "d5f17cafef0829b5")
-                        buff.append("appkey=d5f17cafef0829b5")
+                        if (!hasAppkey) {
+                            newBody.addEncoded("appkey", "d5f17cafef0829b5")
+                            buff.append("appkey=d5f17cafef0829b5")
+                        } else {
+                            try {
+                                buff.deleteCharAt(buff.length - 1)
+                            } catch (e: Exception) {
+                            }
+                        }
                         buff.append("pe2017Signkey")
                         val sign = Encoder.md5(buff.toString())
                         newBody.add("sign", sign)
                         requestBuilder.method(request.method(), newBody.build())
                     }
                     val response = chain.proceed(requestBuilder.build())
+                    Trace.i("http", "${request.url()} => ${response.code()}:${response.message()}")
                     response
                 }
                 .readTimeout(10, TimeUnit.SECONDS)
