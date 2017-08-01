@@ -12,10 +12,10 @@ import com.framework.R
  */
 abstract class ToolbarActivity : BaseActivity() {
 
-    val titleId: Int
+    open  val titleId: Int
         get() = 0
 
-    val menuId: Int
+    open val menuId: Int
         get() = 0
 
     val displayHomeAsUpEnabled: Boolean

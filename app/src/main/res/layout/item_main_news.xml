@@ -40,7 +40,7 @@
             tools:text="人民日报" />
     </LinearLayout>
 
-    <com.sogukj.pe.view.FlowLayout
+    <com.framework.view.FlowLayout
         android:id="@+id/tags"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -53,5 +53,5 @@
 
         <include layout="@layout/item_tag_news" />
 
-    </com.sogukj.pe.view.FlowLayout>
+    </com.framework.view.FlowLayout>
 </LinearLayout>

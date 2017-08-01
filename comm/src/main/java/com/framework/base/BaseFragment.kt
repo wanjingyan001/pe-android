@@ -20,7 +20,7 @@ abstract class BaseFragment : android.support.v4.app.Fragment() {
 
 
 
-    val titleId: Int
+    open val titleId: Int
         get() = 0
 
 //    fun uiThread(task: Runnable?) {

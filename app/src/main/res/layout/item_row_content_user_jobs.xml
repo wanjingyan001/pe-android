@@ -8,7 +8,7 @@
     android:orientation="horizontal"
     android:padding="10dp">
 
-    <ImageView
+    <ImageView android:id="@+id/iv_head"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginRight="10dp"

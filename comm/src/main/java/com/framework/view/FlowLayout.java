@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.sogukj.pe.view;
+package com.framework.view;
 
 import android.annotation.TargetApi;
 import android.content.Context;

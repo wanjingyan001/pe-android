@@ -27,12 +27,6 @@
         <item name="android:textSize">@dimen/text_size_medium</item>
     </style>
 
-    <declare-styleable name="ProgressLayout">
-        <attr name="progressBackground" format="color" />
-        <attr name="progress_progress" format="boolean" />
-        <attr name="errorColor" format="color" />
-        <attr name="errorGravity" format="reference" />
-    </declare-styleable>
 
     <style name="SoguDialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowContentOverlay">@null</item>

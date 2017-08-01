@@ -10,25 +10,39 @@
 
     <include layout="@layout/toolbar" />
 
-    <include layout="@layout/item_main_news" />
+    <include
+        layout="@layout/item_main_news"
+        android:visibility="gone" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/divider" />
 
-    <ScrollView
+    <com.framework.view.ProgressLayout
+        android:id="@+id/progressLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/tv_content"
+        <WebView
+            android:id="@+id/webview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="10dp"
-            android:text="没有内容"
-            android:textColor="@color/text_1"
-            android:textSize="14sp"
-            tools:text="@string/tools_text_long_content" />
-    </ScrollView>
+            android:layout_height="match_parent" />
+
+    </com.framework.view.ProgressLayout>
+
+    <!--<ScrollView-->
+    <!--android:layout_width="match_parent" -->
+    <!--android:layout_height="wrap_content">-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/tv_content"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:padding="10dp"-->
+    <!--android:text="没有内容"-->
+    <!--android:textColor="@color/text_1"-->
+    <!--android:textSize="14sp"-->
+    <!--tools:text="@string/tools_text_long_content" />-->
+    <!--</ScrollView>-->
 </LinearLayout>
