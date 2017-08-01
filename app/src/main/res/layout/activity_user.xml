@@ -20,13 +20,13 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ImageView
+            <com.framework.view.CircleImageView
                 android:id="@+id/iv_user"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="15dp"
-                android:src="@drawable/icon_default" />
+                android:src="@drawable/img_user_default" />
 
             <TextView
                 android:id="@+id/tv_name"

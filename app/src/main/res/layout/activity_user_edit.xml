@@ -15,6 +15,8 @@
         android:layout_height="match_parent">
 
         <TableRow
+            android:id="@+id/tr_icon"
+            android:layout_height="wrap_content"
             android:background="@drawable/divider_bottom"
             android:padding="15dp">
 
@@ -24,18 +26,20 @@
                 android:layout_weight="1"
                 android:text="头像" />
 
-            <ImageView
+            <com.framework.view.CircleImageView
+                android:id="@+id/iv_user"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:layout_marginRight="10dp"
-                android:src="@drawable/icon_default" />
+                android:src="@drawable/img_user_default" />
 
             <ImageView
                 android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
                 android:src="@drawable/ic_arrow_r" />
         </TableRow>
 
         <TableRow
+            android:id="@+id/tr_name"
             android:background="@drawable/divider_bottom"
             android:padding="15dp">
 
@@ -45,14 +49,15 @@
                 android:layout_weight="1"
                 android:text="姓名" />
 
-            <TextView
+            <EditText
                 android:id="@+id/tv_name"
                 style="@style/SoguTextMedium"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
+                android:background="@color/white"
                 android:gravity="right"
-                android:text="未填写" />
+                android:hint="未填写" />
 
             <ImageView
                 android:layout_gravity="center_vertical"
@@ -60,6 +65,7 @@
         </TableRow>
 
         <TableRow
+            android:id="@+id/tr_job"
             android:background="@drawable/divider_bottom"
             android:padding="15dp">
 
@@ -69,14 +75,15 @@
                 android:layout_weight="1"
                 android:text="职务" />
 
-            <TextView
+            <EditText
                 android:id="@+id/tv_job"
                 style="@style/SoguTextMedium"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
+                android:background="@color/white"
                 android:gravity="right"
-                android:text="未填写" />
+                android:hint="未填写" />
 
             <ImageView
                 android:layout_gravity="center_vertical"
@@ -84,6 +91,7 @@
         </TableRow>
 
         <TableRow
+            android:id="@+id/tr_phone"
             android:background="@drawable/divider_bottom"
             android:padding="15dp">
 
@@ -93,14 +101,16 @@
                 android:layout_weight="1"
                 android:text="手机" />
 
-            <TextView
+            <EditText
                 android:id="@+id/tv_phone"
                 style="@style/SoguTextMedium"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
+                android:background="@color/white"
                 android:gravity="right"
-                android:text="未填写" />
+                android:hint="未填写"
+                android:inputType="phone" />
 
             <ImageView
                 android:layout_gravity="center_vertical"
@@ -108,6 +118,7 @@
         </TableRow>
 
         <TableRow
+            android:id="@+id/tr_email"
             android:background="@drawable/divider_bottom"
             android:padding="15dp">
 
@@ -117,14 +128,16 @@
                 android:layout_weight="1"
                 android:text="邮箱" />
 
-            <TextView
+            <EditText
                 android:id="@+id/tv_email"
                 style="@style/SoguTextMedium"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
+                android:background="@color/white"
                 android:gravity="right"
-                android:text="未填写" />
+                android:hint="未填写"
+                android:inputType="textEmailAddress" />
 
             <ImageView
                 android:layout_gravity="center_vertical"
