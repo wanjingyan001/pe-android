@@ -10,33 +10,39 @@
 
     <include layout="@layout/toolbar" />
 
+    <LinearLayout
+        android:id="@+id/tr_icon"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/divider_bottom"
+        android:orientation="horizontal"
+        android:padding="15dp">
+
+        <TextView
+            style="@style/SoguTextMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:text="头像" />
+
+        <com.framework.view.CircleImageView
+            android:id="@+id/iv_user"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/img_user_default" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/ic_arrow_r" />
+    </LinearLayout>
+
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <TableRow
-            android:id="@+id/tr_icon"
-            android:layout_height="wrap_content"
-            android:background="@drawable/divider_bottom"
-            android:padding="15dp">
-
-            <TextView
-                style="@style/SoguTextMedium"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:text="头像" />
-
-            <com.framework.view.CircleImageView
-                android:id="@+id/iv_user"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:src="@drawable/img_user_default" />
-
-            <ImageView
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="10dp"
-                android:src="@drawable/ic_arrow_r" />
-        </TableRow>
 
         <TableRow
             android:id="@+id/tr_name"

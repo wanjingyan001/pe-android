@@ -5,6 +5,8 @@ import com.sogukj.pe.bean.NewsBean
 import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.service.Payload
 import io.reactivex.Observable
+import okhttp3.RequestBody
+import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
@@ -25,16 +27,29 @@ interface SoguService {
 
     @FormUrlEncoded
     @POST("/api/UserFont/getDepartmentInfo")
-    fun userInfo(@Field("appkey") appkey: String = "d5f17cafef0829b5"): Observable<Payload<List<DepartmentBean>>>
+    fun userDepart(@Field("appkey") appkey: String = "d5f17cafef0829b5"): Observable<Payload<List<DepartmentBean>>>
 
     @FormUrlEncoded
     @POST("/api/news/newsLists")
-    fun newsList(@Field("page") page: Int, @Field("pageSize") pageSize: Int = 20, @Field("user_id") user_id: String? = null, @Field("type") type: Int? = null, @Field("company_id") company_id: Int? = null)
+    fun newsList(@Field("page") page: Int, @Field("pageSize") pageSize: Int = 20, @Field("user_id") user_id: Int? = null, @Field("type") type: Int? = null, @Field("company_id") company_id: Int? = null)
             : Observable<Payload<List<NewsBean>>>
 
     @FormUrlEncoded
     @POST("/api/news/newsInfo")
-    fun newsInfo(@Field("table_id")table_id:Int,@Field("data_id")data_id:Int): Observable<Payload<Map<String, Object>>>
+    fun newsInfo(@Field("table_id") table_id: Int, @Field("data_id") data_id: Int): Observable<Payload<Map<String, Object>>>
 
+    @POST("/api/Userfont/uploadImage")
+    fun uploadImg(@Body body: RequestBody): Observable<Payload<Object>>
 
+    @FormUrlEncoded
+    @POST("/api/userFont/changeMyInfo")
+    fun saveUser(@Field("uid") uid: Int
+                 , @Field("name") name: String? = null
+                 , @Field("depart_id") depart_id: Int? = null
+                 , @Field("position") position: String? = null
+                 , @Field("phone") phone: String? = null
+                 , @Field("project") project: String? = null
+                 , @Field("memo") memo: String? = null
+                 , @Field("email") email: String? = null
+    ): Observable<Payload<Object>>
 }

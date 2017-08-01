@@ -90,8 +90,6 @@ class LoginActivity : BaseActivity() {
                         showToast(payload.message)
                 }, { e ->
                     showToast("登录失败")
-                    user.uid = "$phone"
-                    Store.store.setUser(this@LoginActivity, user)
                 })
     }
 

@@ -33,7 +33,7 @@ class UserActivity : ToolbarActivity() {
         setTitle("个人信息")
         setBack(true)
         SoguApi.getService(application)
-                .userInfo()
+                .userDepart()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->

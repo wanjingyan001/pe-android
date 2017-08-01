@@ -14,7 +14,7 @@ class Store private constructor() {
     private var _user: UserBean? = null
 
     fun checkLogin(ctx: Context): Boolean {
-        return null != getUser(ctx) && !TextUtils.isEmpty(_user?.uid)
+        return null != getUser(ctx) && null != _user?.uid
     }
 
     fun getUser(ctx: Context): UserBean? {
