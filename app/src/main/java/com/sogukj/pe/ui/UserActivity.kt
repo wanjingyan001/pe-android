@@ -10,6 +10,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.framework.base.ToolbarActivity
+import com.framework.util.Trace
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.DepartmentBean
 import com.sogukj.pe.bean.UserBean
@@ -43,11 +44,47 @@ class UserActivity : ToolbarActivity() {
                     } else
                         showToast(payload.message)
                 }, { e ->
+                    Trace.e(e)
                     showToast("数据获取失败")
                 })
 
+        val user = Store.store.getUser(this)
+        updateUser(user)
+        user?.uid?.apply {
+            SoguApi.getService(application)
+                    .userInfo(this)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (payload.isOk) {
+                            val user = payload.payload
+                            user?.apply { Store.store.setUser(this@UserActivity, this) }
+                            updateUser(user)
+                        } else showToast(payload.message)
+                    }, { e ->
+                        Trace.e(e)
+                    })
+        }
+
+
         iv_user.onClick {
             UserEditActivity.start(this@UserActivity)
+        }
+    }
+
+    private fun updateUser(user: UserBean?) {
+        user?.apply {
+            tv_name?.text = name
+            tv_mobile?.text = phone
+            if (!TextUtils.isEmpty(email))
+                tv_mail?.text = email
+            if (!TextUtils.isEmpty(depart_name))
+                tv_job?.text = depart_name
+            if (!TextUtils.isEmpty(url))
+                Glide.with(this@UserActivity)
+                        .load(headImage())
+                        .error(R.drawable.img_user_default)
+                        .into(iv_user)
         }
     }
 
@@ -86,22 +123,6 @@ class UserActivity : ToolbarActivity() {
         tv_job.text = userBean.position + "\n" + userBean.email
     }
 
-    override fun onStart() {
-        super.onStart()
-        val user = Store.store.getUser(this)
-        user?.apply {
-            tv_name?.text = "用户$uid"
-            tv_mobile?.text = phone
-            if (!TextUtils.isEmpty(email))
-                tv_mail?.text = email
-            if (!TextUtils.isEmpty(depart_name))
-                tv_job?.text = depart_name
-            if (!TextUtils.isEmpty(url))
-                Glide.with(this@UserActivity)
-                        .load(url)
-                        .into(iv_user)
-        }
-    }
 
     companion object {
         fun start(ctx: Activity?) {

@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.view.ViewPager
 import android.view.View
+import com.bumptech.glide.Glide
 import com.framework.base.BaseFragment
 import com.sogukj.pe.R
 import com.sogukj.pe.adapter.ArrayPagerAdapter
+import com.sogukj.util.Store
 import kotlinx.android.synthetic.main.fragment_main_news.*
 import kotlinx.android.synthetic.main.sogu_toolbar_main_news.*
 
@@ -27,6 +29,14 @@ class MainNewsFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         iv_user.setOnClickListener {
             UserActivity.start(baseActivity);
+        }
+        Store.store.getUser(baseActivity!!)?.apply {
+            if (null != url)
+                Glide.with(baseActivity)
+                        .load(headImage())
+                        .placeholder(R.drawable.img_user_default)
+                        .error(R.drawable.img_user_default)
+                        .into(iv_user)
         }
         var adapter = ArrayPagerAdapter(childFragmentManager, fragments)
         view_pager.adapter = adapter

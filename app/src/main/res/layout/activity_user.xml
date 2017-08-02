@@ -94,7 +94,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <include layout="@layout/item_row_user_jobs" />
+                <!--<include layout="@layout/item_row_user_jobs" />-->
             </LinearLayout>
         </LinearLayout>
 

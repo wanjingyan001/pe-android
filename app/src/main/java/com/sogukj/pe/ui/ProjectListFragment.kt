@@ -8,13 +8,18 @@ import android.view.View
 import android.widget.TextView
 import com.framework.adapter.RecyclerAdapter
 import com.framework.base.BaseFragment
+import com.framework.util.Trace
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import com.lcodecore.tkrefreshlayout.footer.BallPulseView
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
-import com.sogukj.pe.bean.NewsBean
+import com.sogukj.pe.bean.ProjectBean
+import com.sogukj.service.SoguApi
+import com.sogukj.util.Store
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_list_news.*
 import org.jetbrains.anko.find
 import java.text.SimpleDateFormat
@@ -26,11 +31,21 @@ import java.text.SimpleDateFormat
 class ProjectListFragment : BaseFragment() {
     override val containerViewId: Int
         get() = R.layout.fragment_list_project//To change initializer of created properties use File | Settings | File Templates.
+    lateinit var adapter: RecyclerAdapter<ProjectBean>
+    var index: Int = 0
+    var type: Int? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        index = arguments.getInt(Extras.INDEX)
+        type = when (index) {
+            0 -> 2;2 -> 1;else -> null
+        };
+    }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val adapter = RecyclerAdapter<NewsBean>(baseActivity!!, { _adapter, parent, type ->
-            NewsHolder(_adapter.getView(R.layout.item_main_project, parent))
+        adapter = RecyclerAdapter<ProjectBean>(baseActivity!!, { _adapter, parent, type ->
+            ProjectHolder(_adapter.getView(R.layout.item_main_project, parent))
         })
         adapter.onItemClick = { v, p ->
             ProjectActivity.start(baseActivity)
@@ -50,28 +65,13 @@ class ProjectListFragment : BaseFragment() {
         refresh.setOverScrollRefreshShow(false)
         refresh.setOnRefreshListener(object : RefreshListenerAdapter() {
             override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
-                handler.postDelayed({
-                    adapter.dataList.apply {
-                        clear()
-                        for (i in 0..10) {
-                            add(NewsBean())
-                        }
-                    }
-                    adapter.notifyDataSetChanged()
-                    refresh?.finishRefreshing()
-                }, 100)
+                page = 1
+                doRequest()
             }
 
             override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
-                handler.postDelayed({
-                    adapter.dataList.apply {
-                        for (i in 0..10) {
-                            add(NewsBean())
-                        }
-                    }
-                    adapter.notifyDataSetChanged()
-                    refresh?.finishLoadmore()
-                }, 100)
+                ++page
+                doRequest()
             }
 
         })
@@ -82,9 +82,39 @@ class ProjectListFragment : BaseFragment() {
     }
 
     val fmt = SimpleDateFormat("MM/dd HH:mm")
+    var page = 1
+    fun doRequest() {
+        val user = Store.store.getUser(baseActivity!!)
+        val userId = if (index == 1) user?.uid else null
+        SoguApi.getService(baseActivity!!.application)
+                .projectList(page = page, type = type, user_id = userId)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        if (page == 1)
+                            adapter.dataList.clear()
+                        payload.payload?.apply {
+                            adapter.dataList.addAll(this)
+                        }
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    showToast("暂无可用数据")
+                }, {
+                    refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
+                    adapter.notifyDataSetChanged()
+                    if (page == 1)
+                        refresh?.finishRefreshing()
+                    else
+                        refresh?.finishLoadmore()
+                })
+    }
 
-    inner class NewsHolder(view: View)
-        : RecyclerAdapter.SimpleViewHolder<NewsBean>(view) {
+    inner class ProjectHolder(view: View)
+        : RecyclerAdapter.SimpleViewHolder<ProjectBean>(view) {
+
         val tv1: TextView
         val tv2: TextView
         val tv3: TextView
@@ -95,10 +125,10 @@ class ProjectListFragment : BaseFragment() {
             tv3 = view.find(R.id.tv3)
         }
 
-        override fun setData(view: View, data: NewsBean, position: Int) {
-            tv1.text = "搜股(北京)科技有限公司"
-            tv2.text = "A轮"
-            tv3.text = fmt.format(System.currentTimeMillis())
+        override fun setData(view: View, data: ProjectBean, position: Int) {
+            tv1.text = data.name
+            tv2.text = data.state
+            tv3.text = if (type == 2) data.update_time else data.add_time
         }
 
     }

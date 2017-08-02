@@ -11,6 +11,7 @@ import cn.finalteam.rxgalleryfinal.rxbus.RxBusResultDisposable
 import cn.finalteam.rxgalleryfinal.rxbus.event.ImageRadioResultEvent
 import com.bumptech.glide.Glide
 import com.framework.base.ToolbarActivity
+import com.framework.util.Trace
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.UserBean
 import com.sogukj.service.SoguApi
@@ -51,7 +52,9 @@ class UserEditActivity : ToolbarActivity() {
                 tv_job?.setText(depart_name)
             if (!TextUtils.isEmpty(url))
                 Glide.with(this@UserEditActivity)
-                        .load(url)
+                        .load(headImage())
+                        .placeholder(R.drawable.img_user_default)
+                        .error(R.drawable.img_user_default)
                         .into(iv_user)
         }
 
@@ -64,7 +67,8 @@ class UserEditActivity : ToolbarActivity() {
                     .with(application)
                     .image()
                     .radio()
-//                    .crop()
+//                    .cropAspectRatioOptions(0, AspectRatio("1:1", 120f, 120f))
+                    .cropMaxResultSize(120, 120)
                     .imageLoader(ImageLoaderType.GLIDE)
                     .subscribe(object : RxBusResultDisposable<ImageRadioResultEvent>() {
                         override fun onEvent(event: ImageRadioResultEvent?) {
@@ -102,7 +106,8 @@ class UserEditActivity : ToolbarActivity() {
             user.email = this.toString()
         }
         SoguApi.getService(application)
-                .saveUser(uid = user.uid!!, name = user.name, phone = user.phone, email = user.email, position = user.position)
+                .saveUser(uid = user.uid!!, name = user.name, phone = user.phone, email = user.email,
+                        position = user.position, depart_id = user.depart_id, project = user.project, memo = user.memo)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -112,7 +117,8 @@ class UserEditActivity : ToolbarActivity() {
                         finish()
                     } else
                         showToast(payload.message)
-                }, {
+                }, { e ->
+                    Trace.e(e)
                     showToast("保存失败")
                 })
     }
@@ -122,6 +128,8 @@ class UserEditActivity : ToolbarActivity() {
         user.url = url
         Glide.with(this@UserEditActivity)
                 .load(url)
+                .placeholder(R.drawable.img_user_default)
+                .error(R.drawable.img_user_default)
                 .into(iv_user)
         val file = File(user.url)
         val requestBody = MultipartBody.Builder().setType(MultipartBody.FORM)
@@ -138,7 +146,8 @@ class UserEditActivity : ToolbarActivity() {
                         Store.store.setUser(this@UserEditActivity, user)
                     } else
                         showToast(payload.message)
-                }, {
+                }, { e ->
+                    Trace.e(e)
                     showToast("头像上传失败")
                 })
     }

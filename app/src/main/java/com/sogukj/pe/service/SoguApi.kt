@@ -31,11 +31,11 @@ class SoguApi {
                         for (i in 0..body.size() - 1) {
                             newBody.addEncoded(body.encodedName(i), body.encodedValue(i))
                             buff.append(body.name(i)).append("=").append(body.value(i)).append("&")
-                            if (body.encodedName(i) == "appkey") hasAppkey = true
+                            if (body.encodedName(i) == SoguApi.APPKEY_NAME) hasAppkey = true
                         }
                         if (!hasAppkey) {
-                            newBody.addEncoded("appkey", "d5f17cafef0829b5")
-                            buff.append("appkey=d5f17cafef0829b5")
+                            newBody.addEncoded(SoguApi.APPKEY_NAME, SoguApi.APPKEY_VALUE)
+                            buff.append("${SoguApi.APPKEY_NAME}=${SoguApi.APPKEY_VALUE}")
                         } else {
                             try {
                                 buff.deleteCharAt(buff.length - 1)
@@ -82,6 +82,8 @@ class SoguApi {
 //    }
 
     companion object {
+        const val APPKEY_NAME = "appkey"
+        const val APPKEY_VALUE = "d5f17cafef0829b5"
         var TAG = SoguApi::class.java.simpleName
 
         private var sApi: SoguApi? = null

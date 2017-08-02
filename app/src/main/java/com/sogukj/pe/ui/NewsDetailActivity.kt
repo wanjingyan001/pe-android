@@ -88,7 +88,7 @@ class NewsDetailActivity : ToolbarActivity() {
         val text = map[NewsType._13.format_content.toString()] as String?
         text?.apply {
             val html = getHtmlData(this, data, 18)
-            webview.loadDataWithBaseURL("about:blank", text, "text/html", "utf-8", null)
+            webview.loadDataWithBaseURL("about:blank", html, "text/html", "utf-8", null)
         }
     }
 
@@ -112,7 +112,7 @@ class NewsDetailActivity : ToolbarActivity() {
 //        }
 
         return "<html>$head<body style='margin:0;'>" +
-                "<div style='padding:10px;'><h1 style='color:#333;font-size:21px;'>" + news.title + "</h1>" +
+                "<div style='padding:10px;'><h1 style='color:#333;font-size:18px;'>" + news.title + "</h1>" +
                 "<h5 style='color:#999;font-size:12px;'>" + news.time + "  " + news.source + "</h5>" +
                 "<span style='color:#333;font-size:16px;line-height:30px;'>" + content + "</span></div>" +
                 "</body></html>"

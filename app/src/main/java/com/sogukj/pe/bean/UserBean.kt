@@ -1,5 +1,6 @@
 package com.sogukj.pe.bean
 
+import java.io.File
 import java.io.Serializable
 
 class UserBean() : Serializable {
@@ -12,4 +13,12 @@ class UserBean() : Serializable {
     var project: String? = null
     var memo: String? = null
     var url: String? = null
+    var depart_id: Int? = null
+
+    fun headImage(): String? {
+        if (null == url) return null
+        val file = File(url)
+        if (file.exists()) return url
+        return "${url}"
+    }
 }
