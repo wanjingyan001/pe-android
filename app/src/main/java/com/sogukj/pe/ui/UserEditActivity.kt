@@ -5,14 +5,19 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.MenuItem
+import android.view.View
 import cn.finalteam.rxgalleryfinal.RxGalleryFinal
 import cn.finalteam.rxgalleryfinal.imageloader.ImageLoaderType
 import cn.finalteam.rxgalleryfinal.rxbus.RxBusResultDisposable
 import cn.finalteam.rxgalleryfinal.rxbus.event.ImageRadioResultEvent
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
 import com.framework.base.ToolbarActivity
 import com.framework.util.Trace
+import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.bean.DepartmentBean
 import com.sogukj.pe.bean.UserBean
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
@@ -40,6 +45,7 @@ class UserEditActivity : ToolbarActivity() {
         setContentView(R.layout.activity_user_edit)
         setBack(true)
         setTitle("个人信息")
+        val departList = intent.getSerializableExtra(Extras.DATA) as ArrayList<DepartmentBean>?
         Store.store.getUser(this)?.apply {
             user = this
             if (!TextUtils.isEmpty(name))
@@ -48,16 +54,42 @@ class UserEditActivity : ToolbarActivity() {
                 tv_phone?.setText(phone)
             if (!TextUtils.isEmpty(email))
                 tv_email?.setText(email)
+            if (!TextUtils.isEmpty(position))
+                tv_posotion?.setText(position)
             if (!TextUtils.isEmpty(depart_name))
-                tv_job?.setText(depart_name)
+                tv_depart?.setText(depart_name)
             if (!TextUtils.isEmpty(url))
                 Glide.with(this@UserEditActivity)
                         .load(headImage())
-                        .placeholder(R.drawable.img_user_default)
                         .error(R.drawable.img_user_default)
                         .into(iv_user)
         }
+        tv_depart.onClick {
+            val items = ArrayList<String?>()
+            departList?.forEach {
+                items.add(it.de_name)
+            }
+            MaterialDialog.Builder(this@UserEditActivity)
+                    .theme(Theme.LIGHT)
+                    .title("选择部门")
+                    .items(items)
+                    .itemsCallbackSingleChoice(-1, object : MaterialDialog.ListCallbackSingleChoice {
+                        override fun onSelection(dialog: MaterialDialog?, v: View?, p: Int, s: CharSequence?): Boolean {
+                            if (p == -1) return false
+                            val data = departList?.get(p)
+                            data?.apply {
+                                user.depart_id = depart_id
+                                user.depart_name = de_name
+                            }
+                            tv_depart.text = user.depart_name
+                            return true
+                        }
 
+                    })
+                    .positiveText("确定")
+                    .negativeText("取消")
+                    .show()
+        }
         tr_icon.onClick {
             //            val intent = Intent()
 //            intent.type = "image/*"
@@ -93,17 +125,14 @@ class UserEditActivity : ToolbarActivity() {
     }
 
     fun doSave() {
-        tv_name.text?.trim()?.apply {
-            user.name = this.toString()
+        tv_name.text?.trim()?.toString()?.apply {
+            user.name = this
         }
-        tv_job.text?.trim()?.apply {
-            user.position = this.toString()
+        tv_posotion.text?.trim()?.toString()?.apply {
+            user.position = this
         }
-        tv_phone.text?.trim()?.apply {
-            user.phone = this.toString()
-        }
-        tv_email.text?.trim()?.apply {
-            user.email = this.toString()
+        tv_email.text?.trim()?.toString()?.apply {
+            user.email = this
         }
         SoguApi.getService(application)
                 .saveUser(uid = user.uid!!, name = user.name, phone = user.phone, email = user.email,
@@ -154,8 +183,10 @@ class UserEditActivity : ToolbarActivity() {
 
 
     companion object {
-        fun start(ctx: Activity?) {
-            ctx?.startActivity(Intent(ctx, UserEditActivity::class.java))
+        fun start(ctx: Activity?, departList: ArrayList<DepartmentBean>) {
+            val intent = Intent(ctx, UserEditActivity::class.java)
+            intent.putExtra(Extras.DATA, departList)
+            ctx?.startActivity(intent)
         }
     }
 }

@@ -12,4 +12,10 @@ class ProjectBean : Serializable {
     var add_time: String? = null//	Varchar	录入时间	（type=1时取此数据）
     var status: String? = null//	Int	状态（默认1）	0禁用 1准备中  2已完成（type=1时取此数据）
 
+    //
+    var  legalPersonName: String? = null//	varchar		法人	可空
+    var  regLocation: String? = null//	varchar		注册地址	可空
+    var  creditCode: String? = null//	varchar		统一社会信用代码	可空
+    var  info: String? = null//	text		其他信息	可空
+
 }

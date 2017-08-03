@@ -48,7 +48,8 @@ class ProjectListFragment : BaseFragment() {
             ProjectHolder(_adapter.getView(R.layout.item_main_project, parent))
         })
         adapter.onItemClick = { v, p ->
-            ProjectActivity.start(baseActivity)
+            val project = adapter.getItem(p);
+            ProjectActivity.start(baseActivity,project)
         }
         val layoutManager = LinearLayoutManager(baseActivity)
         layoutManager.orientation = LinearLayoutManager.VERTICAL

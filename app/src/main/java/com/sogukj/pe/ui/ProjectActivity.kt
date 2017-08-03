@@ -4,7 +4,9 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import com.framework.base.ToolbarActivity
+import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.bean.ProjectBean
 import kotlinx.android.synthetic.main.activity_project.*
 
 /**
@@ -19,11 +21,18 @@ class ProjectActivity : ToolbarActivity() {
         tv_more.setOnClickListener {
             NegativeNewsActivity.start(this)
         }
+
+        val project = intent.getSerializableExtra(Extras.DATA) as ProjectBean?
+        project?.apply {
+            setTitle(name)
+        }
     }
 
     companion object {
-        fun start(ctx: Activity?) {
-            ctx?.startActivity(Intent(ctx, ProjectActivity::class.java))
+        fun start(ctx: Activity?, project: ProjectBean) {
+            val intent = Intent(ctx, ProjectActivity::class.java)
+            intent.putExtra(Extras.DATA, project)
+            ctx?.startActivity(intent)
         }
     }
 }

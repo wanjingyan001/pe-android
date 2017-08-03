@@ -71,7 +71,33 @@
         </TableRow>
 
         <TableRow
-            android:id="@+id/tr_job"
+            android:id="@+id/tr_depart"
+            android:background="@drawable/divider_bottom"
+            android:padding="15dp">
+
+            <TextView
+                style="@style/SoguTextMedium"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:text="部门" />
+
+            <TextView
+                android:id="@+id/tv_depart"
+                style="@style/SoguTextMedium"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:gravity="right"
+                android:hint="未填写" />
+
+            <ImageView
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_arrow_r" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tr_posotion"
             android:background="@drawable/divider_bottom"
             android:padding="15dp">
 
@@ -82,7 +108,7 @@
                 android:text="职务" />
 
             <EditText
-                android:id="@+id/tv_job"
+                android:id="@+id/tv_posotion"
                 style="@style/SoguTextMedium"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="10dp"
@@ -107,7 +133,7 @@
                 android:layout_weight="1"
                 android:text="手机" />
 
-            <EditText
+            <TextView
                 android:id="@+id/tv_phone"
                 style="@style/SoguTextMedium"
                 android:layout_gravity="center_vertical"
@@ -120,7 +146,8 @@
 
             <ImageView
                 android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_arrow_r" />
+                android:src="@drawable/ic_arrow_r"
+                android:visibility="gone" />
         </TableRow>
 
         <TableRow

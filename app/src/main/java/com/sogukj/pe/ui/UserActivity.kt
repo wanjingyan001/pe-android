@@ -28,6 +28,7 @@ import org.jetbrains.anko.sdk25.coroutines.onClick
 
 class UserActivity : ToolbarActivity() {
 
+    val departList = ArrayList<DepartmentBean>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user)
@@ -39,8 +40,11 @@ class UserActivity : ToolbarActivity() {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        val departList = payload.payload
-                        departList?.apply { setData(this) }
+                        departList.clear()
+                        payload.payload?.forEach {
+                            departList.add(it)
+                        }
+                        setData(departList)
                     } else
                         showToast(payload.message)
                 }, { e ->
@@ -68,7 +72,7 @@ class UserActivity : ToolbarActivity() {
 
 
         iv_user.onClick {
-            UserEditActivity.start(this@UserActivity)
+            UserEditActivity.start(this@UserActivity,departList)
         }
     }
 
@@ -79,7 +83,7 @@ class UserActivity : ToolbarActivity() {
             if (!TextUtils.isEmpty(email))
                 tv_mail?.text = email
             if (!TextUtils.isEmpty(depart_name))
-                tv_job?.text = depart_name
+                tv_job?.text = position
             if (!TextUtils.isEmpty(url))
                 Glide.with(this@UserActivity)
                         .load(headImage())
