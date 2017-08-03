@@ -1,10 +1,8 @@
 package com.sogukj.service
 
 import android.app.Application
-import com.framework.util.Encoder
 import com.framework.util.Trace
 import com.sogukj.pe.Consts
-import okhttp3.FormBody
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -22,32 +20,7 @@ class SoguApi {
         val client = OkHttpClient.Builder()
                 .addInterceptor { chain ->
                     val request = chain.request()
-                    val requestBuilder = request.newBuilder()
-                    if (request.body() is FormBody) {
-                        val newBody = FormBody.Builder()
-                        val body = request.body() as FormBody
-                        val buff = StringBuffer()
-                        var hasAppkey = false
-                        for (i in 0..body.size() - 1) {
-                            newBody.addEncoded(body.encodedName(i), body.encodedValue(i))
-                            buff.append(body.name(i)).append("=").append(body.value(i)).append("&")
-                            if (body.encodedName(i) == SoguApi.APPKEY_NAME) hasAppkey = true
-                        }
-                        if (!hasAppkey) {
-                            newBody.addEncoded(SoguApi.APPKEY_NAME, SoguApi.APPKEY_VALUE)
-                            buff.append("${SoguApi.APPKEY_NAME}=${SoguApi.APPKEY_VALUE}")
-                        } else {
-                            try {
-                                buff.deleteCharAt(buff.length - 1)
-                            } catch (e: Exception) {
-                            }
-                        }
-                        buff.append("pe2017Signkey")
-                        val sign = Encoder.md5(buff.toString())
-                        newBody.add("sign", sign)
-                        requestBuilder.method(request.method(), newBody.build())
-                    }
-                    val response = chain.proceed(requestBuilder.build())
+                    val response = chain.proceed(request)
                     Trace.i("http", "${request.url()} => ${response.code()}:${response.message()}")
                     response
                 }

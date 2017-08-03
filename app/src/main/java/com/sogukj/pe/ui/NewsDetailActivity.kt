@@ -74,15 +74,60 @@ class NewsDetailActivity : ToolbarActivity() {
 
     fun setContent(table_id: Int, map: Map<String, Object>, data: NewsBean) {
         when (table_id) {
+            1->set1(map,data)
+            2->set2(map,data)
+            3->set3(map,data)
+            4->set4(map,data)
+            5->set5(map,data)
+            6->set6(map,data)
+            6->set6(map,data)
+            7->set7(map,data)
+            8->set8(map,data)
+            9->set9(map,data)
+            10->set10(map,data)
+            11->set11(map,data)
+            12->set12(map,data)
             13 -> set13(map, data)
         }
     }
-
-    fun setSubview(data: NewsBean) {
-        tv_summary.text = data.title
-        tv_time.text = data.time
-        tv_from.text = data.source
+    fun set12(map: Map<String, Object>, data: NewsBean) {
+        setTitle("严重违法")
     }
+    fun set11(map: Map<String, Object>, data: NewsBean) {
+        setTitle("严重违法")
+    }
+    fun set10(map: Map<String, Object>, data: NewsBean) {
+        setTitle("严重违法")
+    }
+    fun set9(map: Map<String, Object>, data: NewsBean) {
+        setTitle("欠税公告")
+    }
+    fun set8(map: Map<String, Object>, data: NewsBean) {
+        setTitle("动产抵押")
+    }
+    fun set7(map: Map<String, Object>, data: NewsBean) {
+        setTitle("股权出质")
+    }
+    fun set6(map: Map<String, Object>, data: NewsBean) {
+        setTitle("严重违法")
+    }
+    fun set5(map: Map<String, Object>, data: NewsBean) {
+        setTitle("行政处罚")
+    }
+    fun set4(map: Map<String, Object>, data: NewsBean) {
+        setTitle("被执行人")
+    }
+    fun set3(map: Map<String, Object>, data: NewsBean) {
+        setTitle("失信人")
+    }
+     fun set2(map: Map<String, Object>, data: NewsBean) {
+        setTitle("法院公告")
+    }
+
+    fun set1(map: Map<String, Object>, data: NewsBean) {
+        setTitle("法律诉颂")
+    }
+
 
     fun set13(map: Map<String, Object>, data: NewsBean) {
         val text = map[NewsType._13.format_content.toString()] as String?
@@ -90,6 +135,11 @@ class NewsDetailActivity : ToolbarActivity() {
             val html = getHtmlData(this, data, 18)
             webview.loadDataWithBaseURL("about:blank", html, "text/html", "utf-8", null)
         }
+    }
+    fun setSubview(data: NewsBean) {
+        tv_summary.text = data.title
+        tv_time.text = data.time
+        tv_from.text = data.source
     }
 
     internal var DF = SimpleDateFormat("yyyy-MM-dd HH:mm")
