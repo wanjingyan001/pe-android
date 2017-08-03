@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.webkit.WebSettings
 import android.webkit.WebSettings.LayoutAlgorithm
 import com.framework.base.ToolbarActivity
+import com.framework.util.Trace
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.NewsBean
@@ -59,6 +60,7 @@ class NewsDetailActivity : ToolbarActivity() {
     }
 
     fun doRequest(table_id: Int, data_id: Int, data: NewsBean) {
+        Trace.i(TAG, "tableId:dataId=${table_id}:${data_id}")
         SoguApi.getService(application)
                 .newsInfo(table_id, data_id)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -100,7 +102,7 @@ class NewsDetailActivity : ToolbarActivity() {
 
     fun set13(map: Map<String, Object>, data: NewsBean) {
         val content = map[NewsType._13.format_content.toString()] as String?
-        val html = "<html>${head()}<body style='margin:0;'>" +
+        val html = "<html>${head()}<body style='margin:20;'>" +
                 "<div style='padding:10px;'>" +
                 "${title(data.title)}" +
                 "<h5 style='color:#999;font-size:12px;'>" + data.time + "  " + data.source + "</h5>" +
@@ -111,7 +113,7 @@ class NewsDetailActivity : ToolbarActivity() {
 
     fun set12(map: Map<String, Object>, data: NewsBean) {
         setTitle("司法拍卖")
-        val html = "<html>${head()}<body style='margin:0;'>" +
+        val html = "<html>${head()}<body style='margin:20;'>" +
                 "<div style='padding:10px;'>" +
                 "${title(data.title)}" +
                 row("委托法院拍卖时间", map[NewsType._12.auction_time.toString()]) +
@@ -124,7 +126,7 @@ class NewsDetailActivity : ToolbarActivity() {
 
     fun set11(map: Map<String, Object>, data: NewsBean) {
         setTitle("开庭公告")
-        val html = "<html>${head()}<body style='margin:0;'>" +
+        val html = "<html>${head()}<body style='margin:20;'>" +
                 row("案由", map[NewsType._11.case_name.toString()]) +
                 row("案号", map[NewsType._11.caseno.toString()]) +
                 row("开庭日期", map[NewsType._11.court_date.toString()]) +
@@ -142,7 +144,7 @@ class NewsDetailActivity : ToolbarActivity() {
 
     fun set10(map: Map<String, Object>, data: NewsBean) {
         setTitle("经营异常")
-        val html = "<html>${head()}<body style='margin:0;'>" +
+        val html = "<html>${head()}<body style='margin:20;'>" +
                 row("列入日期", map[NewsType._10.putDate.toString()]) +
                 row("列入经营异常名录原因", map[NewsType._10.putReason.toString()]) +
                 row("列入部门", map[NewsType._10.putDepartment.toString()]) +
@@ -155,7 +157,7 @@ class NewsDetailActivity : ToolbarActivity() {
 
     fun set9(map: Map<String, Object>, data: NewsBean) {
         setTitle("欠税公告")
-        val html = "<html>${head()}<body style='margin:0;'>" +
+        val html = "<html>${head()}<body style='margin:20;'>" +
                 row("纳税人名称", map[NewsType._9._name.toString()]) +
                 row("欠税税种", map[NewsType._9.taxCategory.toString()]) +
                 row("证件号码", map[NewsType._9.personIdNumber.toString()]) +
@@ -173,7 +175,7 @@ class NewsDetailActivity : ToolbarActivity() {
 
     fun set8(map: Map<String, Object>, data: NewsBean) {
         setTitle("动产抵押")
-        val html = "<html>${head()}<body style='margin:0;'>" +
+        val html = "<html>${head()}<body style='margin:20;'>" +
                 row("登记日期", map[NewsType._8.regDate.toString()]) +
                 row("登记编号", map[NewsType._8.regNum.toString()]) +
                 row("被担保债权种类", map[NewsType._8.type.toString()]) +
@@ -196,7 +198,7 @@ class NewsDetailActivity : ToolbarActivity() {
 
     fun set7(map: Map<String, Object>, data: NewsBean) {
         setTitle("股权出质")
-        val html = "<html>${head()}<body style='margin:0;'>" +
+        val html = "<html>${head()}<body style='margin:20;'>" +
                 row("登记编号", map[NewsType._7.regNumber.toString()]) +
                 row("出质人", map[NewsType._7.pledgor.toString()]) +
                 row("质权人", map[NewsType._7.pledgee.toString()]) +
@@ -210,7 +212,7 @@ class NewsDetailActivity : ToolbarActivity() {
 
     fun set6(map: Map<String, Object>, data: NewsBean) {
         setTitle("严重违法")
-        val html = "<html>${head()}<body style='margin:0;'>" +
+        val html = "<html>${head()}<body style='margin:20;'>" +
                 row("列入日期", map[NewsType._6.putDate.toString()]) +
                 row("列入原因", map[NewsType._6.putReason.toString()]) +
                 row("决定列入部门(作出决定机关", map[NewsType._6.putDepartment.toString()]) +
@@ -222,7 +224,7 @@ class NewsDetailActivity : ToolbarActivity() {
 
     fun set5(map: Map<String, Object>, data: NewsBean) {
         setTitle("行政处罚")
-        val html = "<html>${head()}<body style='margin:0;'>" +
+        val html = "<html>${head()}<body style='margin:20;'>" +
                 row("行政处罚日期", map[NewsType._5.decisionDate.toString()]) +
                 row("行政处罚决定书文号", map[NewsType._5.punishNumber.toString()]) +
                 row("违法行为类型", map[NewsType._5.type.toString()]) +
@@ -234,7 +236,7 @@ class NewsDetailActivity : ToolbarActivity() {
 
     fun set4(map: Map<String, Object>, data: NewsBean) {
         setTitle("被执行人")
-        val html = "<html>${head()}<body style='margin:0;'>" +
+        val html = "<html>${head()}<body style='margin:20;'>" +
                 row("立案时间", map[NewsType._4.caseCreateTime.toString()]) +
                 row("执行标的", map[NewsType._4.execMoney.toString()]) +
                 row("案号", map[NewsType._4.caseCode.toString()]) +
@@ -245,7 +247,7 @@ class NewsDetailActivity : ToolbarActivity() {
 
     fun set3(map: Map<String, Object>, data: NewsBean) {
         setTitle("失信人")
-        val html = "<html>${head()}<body style='margin:0;'>" +
+        val html = "<html>${head()}<body style='margin:20;'>" +
                 row("失信人名或公司名称", map[NewsType._3.iname.toString()]) +
                 row("执行依据文号", map[NewsType._3.casecode.toString()]) +
                 row("身份证号／组织机构代码", map[NewsType._3.cardnum.toString()]) +
@@ -263,7 +265,7 @@ class NewsDetailActivity : ToolbarActivity() {
 
     fun set2(map: Map<String, Object>, data: NewsBean) {
         setTitle("法院公告")
-        val html = "<html>${head()}<body style='margin:0;'>" +
+        val html = "<html>${head()}<body style='margin:20;'>" +
                 row("刊登日期", map[NewsType._2.publishdate.toString()]) +
                 row("原告", map[NewsType._2.party1.toString()]) +
                 row("当事人", map[NewsType._2.party2.toString()]) +
