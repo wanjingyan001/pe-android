@@ -285,7 +285,7 @@ class NewsDetailActivity : ToolbarActivity() {
                 row("案件号", map[NewsType._1.caseno.toString()]) +
                 row("法院", map[NewsType._1.court.toString()]) +
                 row("文书类型", map[NewsType._1.doctype.toString()]) +
-                row("原文链接地址", map[NewsType._1.url.toString()]) +
+                row("原文链接地址", "<a href='${map[NewsType._1.url.toString()]}'>${map[NewsType._1.url.toString()]}</a>") +
                 row("唯一标识符", map[NewsType._1.uuid.toString()]) +
                 "</body></html>"
         webview.loadDataWithBaseURL("about:blank", html, "text/html", "utf-8", null)

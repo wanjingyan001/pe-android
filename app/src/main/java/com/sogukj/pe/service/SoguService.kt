@@ -86,6 +86,19 @@ interface SoguService {
             , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
     ): Observable<Payload<Object>>
 
+    @FormUrlEncoded
+    @POST("/api/Listinformation/volatility")
+    fun companyInfo(
+            @Field("company_id") company_id: String
+            , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
+    )
+
+    @FormUrlEncoded
+    @POST("/api/news/ncFocus")
+    fun mark(@Field("uid") uid: Int
+             , @Field("company_id") company_id: Int
+             , @Field("type") type: Int = 1): Observable<Payload<Object>>
+
     companion object {
         const val APPKEY_NAME = "appkey"
         const val APPKEY_VALUE = "d5f17cafef0829b5"
