@@ -8,14 +8,14 @@ import android.view.View
 import android.widget.TextView
 import com.framework.adapter.RecyclerAdapter
 import com.framework.base.BaseFragment
-import com.framework.util.Trace
+import com.framework.view.FlowLayout
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import com.lcodecore.tkrefreshlayout.footer.BallPulseView
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
-import com.sogukj.pe.bean.ProjectBean
+import com.sogukj.pe.bean.NewsBean
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -27,29 +27,27 @@ import java.text.SimpleDateFormat
 /**
  * Created by qinfei on 17/7/18.
  */
-
-class ProjectListFragment : BaseFragment() {
+class ProjectNewsFragment : BaseFragment() {
     override val containerViewId: Int
-        get() = R.layout.fragment_list_project//To change initializer of created properties use File | Settings | File Templates.
-    lateinit var adapter: RecyclerAdapter<ProjectBean>
+        get() = R.layout.fragment_list_project_news //To change initializer of created properties use File | Settings | File Templates.
+
+    lateinit var adapter: RecyclerAdapter<NewsBean>
     var index: Int = 0
     var type: Int? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         index = arguments.getInt(Extras.INDEX)
-        type = when (index) {
-            0 -> 2;2 -> 1;else -> 3
-        };
+        type = if (index == 2) 1 else 2
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter = RecyclerAdapter<ProjectBean>(baseActivity!!, { _adapter, parent, type ->
-            ProjectHolder(_adapter.getView(R.layout.item_main_project, parent))
+        adapter = RecyclerAdapter<NewsBean>(baseActivity!!, { _adapter, parent, type ->
+            NewsHolder(_adapter.getView(R.layout.item_main_news, parent))
         })
         adapter.onItemClick = { v, p ->
-            val project = adapter.getItem(p);
-            ProjectActivity.start(baseActivity, project)
+            val news = adapter.getItem(p);
+            NewsDetailActivity.start(baseActivity, news)
         }
         val layoutManager = LinearLayoutManager(baseActivity)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
@@ -82,69 +80,71 @@ class ProjectListFragment : BaseFragment() {
         }, 100)
     }
 
-    override fun onStart() {
-        super.onStart()
-        doRequest()
-    }
+//    fun onItemClick(news: NewsBean) {
+//        when (news.table_id) {
+//            else -> NewsDetailActivity.start(baseActivity)
+//        }
+//    }
 
-    val fmt = SimpleDateFormat("MM/dd HH:mm")
     var page = 1
-
     fun doRequest() {
         val user = Store.store.getUser(baseActivity!!)
-        if (null != user)
-            SoguApi.getService(baseActivity!!.application)
-                    .projectList(page = page, type = type, user_id = user!!.uid)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe({ payload ->
-                        if (payload.isOk) {
-                            if (page == 1)
-                                adapter.dataList.clear()
-                            payload.payload?.apply {
-                                adapter.dataList.addAll(this)
-                            }
-                        } else
-                            showToast(payload.message)
-                    }, { e ->
-                        Trace.e(e)
-                        showToast("暂无可用数据")
-                    }, {
-                        refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
-                        adapter.notifyDataSetChanged()
+        val userId = if (index == 0) null else user?.uid;
+        SoguApi.getService(baseActivity!!.application)
+                .newsList(page = page, type = type, user_id = userId)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
                         if (page == 1)
-                            refresh?.finishRefreshing()
-                        else
-                            refresh?.finishLoadmore()
-                    })
+                            adapter.dataList.clear()
+                        payload.payload?.apply {
+                            adapter.dataList.addAll(this)
+                        }
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    showToast("暂无可用数据")
+                }, {
+                    refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
+                    adapter.notifyDataSetChanged()
+                    if (page == 1)
+                        refresh?.finishRefreshing()
+                    else
+                        refresh?.finishLoadmore()
+                })
     }
 
-    inner class ProjectHolder(view: View)
-        : RecyclerAdapter.SimpleViewHolder<ProjectBean>(view) {
+    val fmt = SimpleDateFormat("yyyy/MM/dd HH:mm")
 
-        val tv1: TextView
-        val tv2: TextView
-        val tv3: TextView
+    inner class NewsHolder(view: View)
+        : RecyclerAdapter.SimpleViewHolder<NewsBean>(view) {
+        val tv_summary: TextView
+        val tv_time: TextView
+        val tv_from: TextView
+        val tags: FlowLayout
 
         init {
-            tv1 = view.find(R.id.tv1)
-            tv2 = view.find(R.id.tv2)
-            tv3 = view.find(R.id.tv3)
+            tv_summary = view.find(R.id.tv_summary)
+            tv_time = view.find(R.id.tv_time)
+            tv_from = view.find(R.id.tv_from)
+            tags = view.find(R.id.tags)
         }
 
-        override fun setData(view: View, data: ProjectBean, position: Int) {
-            tv1.text = data.name
-            tv2.text = data.state
-            tv3.text = if (type == 2) data.update_time else data.add_time
+        override fun setData(view: View, data: NewsBean, position: Int) {
+            tv_summary.text = data.title
+            tv_time.text = data.time
+            tv_from.text = data.source
+
         }
 
     }
 
     companion object {
-        val TAG = ProjectListFragment::class.java.simpleName
+        val TAG = NewsListFragment::class.java.simpleName
 
-        fun newInstance(idx: Int): ProjectListFragment {
-            val fragment = ProjectListFragment()
+        fun newInstance(idx: Int): NewsListFragment {
+            val fragment = NewsListFragment()
             val intent = Bundle()
             intent.putInt(Extras.INDEX, idx)
             fragment.arguments = intent

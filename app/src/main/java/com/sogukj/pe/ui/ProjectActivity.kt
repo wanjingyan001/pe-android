@@ -3,6 +3,8 @@ package com.sogukj.pe.ui
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
@@ -27,6 +29,18 @@ class ProjectActivity : ToolbarActivity() {
             setTitle(name)
         }
     }
+
+    override val menuId: Int
+        get() = R.menu.menu_mark
+    var menuMark: MenuItem? = null
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuMark=menu.findItem(R.id.action_mark)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+//    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+//
+//    }
 
     companion object {
         fun start(ctx: Activity?, project: ProjectBean) {

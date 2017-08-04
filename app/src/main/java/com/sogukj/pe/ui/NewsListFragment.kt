@@ -86,6 +86,11 @@ class NewsListFragment : BaseFragment() {
 //        }
 //    }
 
+    override fun onStart() {
+        super.onStart()
+        doRequest()
+    }
+
     var page = 1
     fun doRequest() {
         val user = Store.store.getUser(baseActivity!!)
