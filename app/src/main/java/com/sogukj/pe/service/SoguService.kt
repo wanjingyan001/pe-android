@@ -97,7 +97,9 @@ interface SoguService {
     @POST("/api/news/ncFocus")
     fun mark(@Field("uid") uid: Int
              , @Field("company_id") company_id: Int
-             , @Field("type") type: Int = 1): Observable<Payload<Object>>
+             , @Field("type") type: Int = 1
+             , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
+    ): Observable<Payload<Object>>
 
     companion object {
         const val APPKEY_NAME = "appkey"

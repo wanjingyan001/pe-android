@@ -3,44 +3,150 @@ package com.sogukj.pe.ui
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.TextView
+import com.framework.adapter.ListAdapter
 import com.framework.base.ToolbarActivity
+import com.framework.util.Trace
+import com.framework.view.FlowLayout
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.bean.NewsBean
 import com.sogukj.pe.bean.ProjectBean
+import com.sogukj.service.SoguApi
+import com.sogukj.util.Store
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_project.*
+import org.jetbrains.anko.find
 
 /**
  * Created by qinfei on 17/7/18.
  */
 class ProjectActivity : ToolbarActivity() {
-
+    lateinit var adapterNeg: ListAdapter<NewsBean>
+    lateinit var adapterYuqin: ListAdapter<NewsBean>
+    lateinit var project: ProjectBean
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_project)
         setBack(true)
+        project = intent.getSerializableExtra(Extras.DATA) as ProjectBean
+        setTitle(project.name)
+
+        adapterNeg = ListAdapter<NewsBean> { NewsHolder() }
+        adapterYuqin = ListAdapter<NewsBean> { NewsHolder() }
+        list_negative.adapter = adapterNeg
+        list_yuqin.adapter = adapterYuqin
         tv_more.setOnClickListener {
             NegativeNewsActivity.start(this)
         }
 
-        val project = intent.getSerializableExtra(Extras.DATA) as ProjectBean?
-        project?.apply {
-            setTitle(name)
-        }
+
+
+        SoguApi.getService(application)
+                .newsList(pageSize = 3, page = 1, type = 1, company_id = project.company_id)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        adapterNeg.dataList.clear()
+                        payload.payload?.apply {
+                            adapterNeg.dataList.addAll(this)
+                        }
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    showToast("暂无可用数据")
+                })
+        SoguApi.getService(application)
+                .newsList(pageSize = 3, page = 1, type = 2, company_id = project.company_id)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        adapterYuqin.dataList.clear()
+                        payload.payload?.apply {
+                            adapterYuqin.dataList.addAll(this)
+                        }
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    showToast("暂无可用数据")
+                })
     }
 
     override val menuId: Int
         get() = R.menu.menu_mark
-    var menuMark: MenuItem? = null
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuMark=menu.findItem(R.id.action_mark)
-        return super.onCreateOptionsMenu(menu)
+        val flag = super.onCreateOptionsMenu(menu)
+        val menuMark = menu.findItem(R.id.action_mark) as MenuItem
+        if (null != project) {
+            when (project?.is_focus) {
+                1 -> menuMark?.title = ("已关注")
+                else -> menuMark?.title = ("关注")
+            }
+        }
+        return flag
     }
 
-//    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-//
-//    }
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.action_mark -> {
+                toggleMark(item!!)
+            }
+        }
+        return false
+    }
+
+    fun toggleMark(item: MenuItem) {
+        val user = Store.store.getUser(this)
+        if (null == user) return
+        val mark = if (project.is_focus == 1) 0 else 1
+        SoguApi.getService(application)
+                .mark(uid = user!!.uid!!, company_id = project.company_id!!, type = mark)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        project.is_focus = mark
+                        item.title = if (mark == 1) "已关注" else "关注"
+                    }
+                }, { e ->
+                    Trace.e(e)
+                })
+
+    }
+
+    inner class NewsHolder
+        : ListAdapter.ViewHolder<NewsBean> {
+        lateinit var tv_summary: TextView
+        lateinit var tv_time: TextView
+        lateinit var tv_from: TextView
+        lateinit var tags: FlowLayout
+        override fun createView(inflater: LayoutInflater): View {
+            val view = inflater.inflate(R.layout.item_main_news, null)
+            tv_summary = view.find(R.id.tv_summary)
+            tv_time = view.find(R.id.tv_time)
+            tv_from = view.find(R.id.tv_from)
+            tags = view.find(R.id.tags)
+            return view
+        }
+
+        override fun showData(convertView: View, position: Int, data: NewsBean?) {
+            tv_summary.text = data?.title
+            tv_time.text = data?.time
+            tv_from.text = data?.source
+
+        }
+
+    }
 
     companion object {
         fun start(ctx: Activity?, project: ProjectBean) {

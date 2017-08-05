@@ -7,21 +7,16 @@ import android.widget.BaseAdapter
 import android.widget.ListView
 import java.util.*
 
-class ListAdapter<T>(val creator: ViewHolderCreator<T>) : BaseAdapter() {
-    var dataList: List<T> = ArrayList()
+class ListAdapter<T>(val creator: () -> ViewHolder<T>) : BaseAdapter() {
+    var dataList: ArrayList<T> = ArrayList()
 
-    abstract class ViewHolderBase<T> {
-        abstract fun createView(inflater: LayoutInflater): View
-
-        abstract fun showData(convertView: View, position: Int, itemData: T?)
+    interface ViewHolder<T> {
+        fun createView(inflater: LayoutInflater): View
+        fun showData(convertView: View, position: Int, itemData: T?)
     }
 
-    interface ViewHolderCreator<T> {
-        fun createViewHolder(): ViewHolderBase<T>
-    }
-
-    private fun createViewHolder(): ViewHolderBase<T> {
-        return creator.createViewHolder()
+    private fun createViewHolder(): ViewHolder<T> {
+        return creator()
     }
 
     override fun getCount(): Int {
@@ -38,7 +33,7 @@ class ListAdapter<T>(val creator: ViewHolderCreator<T>) : BaseAdapter() {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var convertView = convertView
-        var holder: ViewHolderBase<T>? = null
+        var holder: ViewHolder<T>? = null
         val itemData = getItem(position) as T?
 
         if (convertView == null) {
@@ -48,7 +43,7 @@ class ListAdapter<T>(val creator: ViewHolderCreator<T>) : BaseAdapter() {
             convertView = holder.createView(inflater)
             convertView.tag = holder
         } else {
-            holder = convertView.tag as ViewHolderBase<T>
+            holder = convertView.tag as ViewHolder<T>
         }
 
         if (holder != null) {

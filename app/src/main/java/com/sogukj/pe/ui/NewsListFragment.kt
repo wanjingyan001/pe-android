@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.TextView
 import com.framework.adapter.RecyclerAdapter
 import com.framework.base.BaseFragment
+import com.framework.util.Trace
 import com.framework.view.FlowLayout
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
@@ -109,6 +110,7 @@ class NewsListFragment : BaseFragment() {
                     } else
                         showToast(payload.message)
                 }, { e ->
+                    Trace.e(e)
                     showToast("暂无可用数据")
                 }, {
                     refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
