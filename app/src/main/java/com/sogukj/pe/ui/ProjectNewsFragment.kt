@@ -17,6 +17,7 @@ import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.NewsBean
+import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -35,10 +36,10 @@ class ProjectNewsFragment : BaseFragment() {
     lateinit var adapter: RecyclerAdapter<NewsBean>
     var index: Int = 0
     var type: Int? = null
+    lateinit var project: ProjectBean
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        index = arguments.getInt(Extras.INDEX)
-        type = if (index == 2) 1 else 2
+        project = arguments.getSerializable(Extras.DATA) as ProjectBean
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -92,7 +93,7 @@ class ProjectNewsFragment : BaseFragment() {
         val user = Store.store.getUser(baseActivity!!)
         val userId = if (index == 0) null else user?.uid;
         SoguApi.getService(baseActivity!!.application)
-                .newsList(page = page, type = type, user_id = userId)
+                .newsList(page = page, type = 1, company_id = project.company_id)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -145,10 +146,10 @@ class ProjectNewsFragment : BaseFragment() {
     companion object {
         val TAG = NewsListFragment::class.java.simpleName
 
-        fun newInstance(idx: Int): NewsListFragment {
+        fun newInstance(project: ProjectBean): NewsListFragment {
             val fragment = NewsListFragment()
             val intent = Bundle()
-            intent.putInt(Extras.INDEX, idx)
+            intent.putSerializable(Extras.DATA, project)
             fragment.arguments = intent
             return fragment
         }

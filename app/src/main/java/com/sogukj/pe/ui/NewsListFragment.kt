@@ -92,6 +92,7 @@ class NewsListFragment : BaseFragment() {
         doRequest()
     }
 
+
     var page = 1
     fun doRequest() {
         val user = Store.store.getUser(baseActivity!!)

@@ -57,6 +57,7 @@ class ProjectActivity : ToolbarActivity() {
                         payload.payload?.apply {
                             adapterNeg.dataList.addAll(this)
                         }
+                        adapterNeg.notifyDataSetChanged()
                     } else
                         showToast(payload.message)
                 }, { e ->
@@ -73,6 +74,7 @@ class ProjectActivity : ToolbarActivity() {
                         payload.payload?.apply {
                             adapterYuqin.dataList.addAll(this)
                         }
+                        adapterYuqin.notifyDataSetChanged()
                     } else
                         showToast(payload.message)
                 }, { e ->

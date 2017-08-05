@@ -4,7 +4,9 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import com.framework.base.ToolbarActivity
+import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.bean.ProjectBean
 
 class NegativeNewsActivity : ToolbarActivity() {
 
@@ -13,6 +15,11 @@ class NegativeNewsActivity : ToolbarActivity() {
         setContentView(R.layout.activity_negative_news)
         setTitle("负面信息")
         setBack(true)
+        val project = intent.getSerializableExtra(Extras.DATA) as ProjectBean
+        supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.container, ProjectNewsFragment.newInstance(project))
+                .commit()
     }
 
     companion object {
