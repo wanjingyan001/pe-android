@@ -52,9 +52,9 @@ dependencies {
 
     // Anko SQLite
     compile "org.jetbrains.anko:anko-sqlite:$anko_version"
+
     compile 'com.lcodecorex:tkrefreshlayout:1.0.7'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
-
     compile 'cn.finalteam.rxgalleryfinal:library:1.0.9'
     compile 'com.github.bumptech.glide:glide:3.8.0'
     compile 'com.afollestad.material-dialogs:core:0.9.4.5'

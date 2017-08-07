@@ -39,7 +39,8 @@
         <activity android:name=".ui.UserEditActivity" />
         <activity android:name=".ui.AddProjectActivity" />
         <activity android:name=".ui.ProjectActivity" />
-        <activity android:name=".ui.NegativeNewsActivity"></activity>
+        <activity android:name=".ui.NegativeNewsActivity" />
+        <activity android:name=".ui.StockQuoteActivity"></activity>
     </application>
 
 </manifest>

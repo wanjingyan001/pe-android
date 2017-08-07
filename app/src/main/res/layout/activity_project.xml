@@ -135,7 +135,7 @@
                 android:padding="10dp"
                 android:rowCount="3">
 
-                <TextView
+                <TextView android:id="@+id/tv_stock"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_stock_quote"
                     android:text="股票信息" />

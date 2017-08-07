@@ -2,4 +2,5 @@
     <string name="app_name">PE</string>
     <string name="get_code">点击获取</string>
     <string name="get_code_disable">剩余%s秒</string>
+    <string name="tv_update_time">更新时间:%s</string>
 </resources>

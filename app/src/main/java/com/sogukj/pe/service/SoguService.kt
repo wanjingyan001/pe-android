@@ -1,9 +1,6 @@
 package com.sogukj.service
 
-import com.sogukj.pe.bean.DepartmentBean
-import com.sogukj.pe.bean.NewsBean
-import com.sogukj.pe.bean.ProjectBean
-import com.sogukj.pe.bean.UserBean
+import com.sogukj.pe.bean.*
 import com.sogukj.pe.service.Payload
 import io.reactivex.Observable
 import okhttp3.RequestBody
@@ -100,6 +97,13 @@ interface SoguService {
              , @Field("type") type: Int = 1
              , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
     ): Observable<Payload<Object>>
+
+    @FormUrlEncoded
+    @POST("/api/Listinformation/Volatility")
+    fun stockInfo(
+            @Field("company_id") company_id: Int
+            , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
+    ): Observable<Payload<StockBean>>
 
     companion object {
         const val APPKEY_NAME = "appkey"

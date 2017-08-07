@@ -22,6 +22,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_project.*
 import org.jetbrains.anko.find
+import org.jetbrains.anko.sdk25.coroutines.onClick
 
 /**
  * Created by qinfei on 17/7/18.
@@ -81,6 +82,8 @@ class ProjectActivity : ToolbarActivity() {
                     Trace.e(e)
                     showToast("暂无可用数据")
                 })
+
+        tv_stock.onClick { StockQuoteActivity.start(this@ProjectActivity) }
     }
 
     override val menuId: Int
