@@ -42,7 +42,7 @@ class ProjectActivity : ToolbarActivity() {
         list_negative.adapter = adapterNeg
         list_yuqin.adapter = adapterYuqin
         tv_more.setOnClickListener {
-            NegativeNewsActivity.start(this)
+            NegativeNewsActivity.start(this, project)
         }
 
 

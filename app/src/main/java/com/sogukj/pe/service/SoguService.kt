@@ -49,7 +49,7 @@ interface SoguService {
     @POST("/api/news/focusCompanyLists")
     fun projectList(@Field("page") page: Int
                     , @Field("pageSize") pageSize: Int = 20
-                    , @Field("user_id") user_id: Int? = null
+                    , @Field("uid") user_id: Int? = null
                     , @Field("type") type: Int? = null
                     , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE): Observable<Payload<List<ProjectBean>>>
 

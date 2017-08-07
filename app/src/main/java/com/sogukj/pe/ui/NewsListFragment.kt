@@ -77,7 +77,7 @@ class NewsListFragment : BaseFragment() {
         })
         refresh.setAutoLoadMore(true)
         handler.postDelayed({
-            refresh?.startRefresh()
+            doRequest()
         }, 100)
     }
 

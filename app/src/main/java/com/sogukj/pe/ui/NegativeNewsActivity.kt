@@ -23,8 +23,10 @@ class NegativeNewsActivity : ToolbarActivity() {
     }
 
     companion object {
-        fun start(ctx: Activity?) {
-            ctx?.startActivity(Intent(ctx, NegativeNewsActivity::class.java))
+        fun start(ctx: Activity?, project: ProjectBean) {
+            val intent = Intent(ctx, NegativeNewsActivity::class.java)
+            intent.putExtra(Extras.DATA, project)
+            ctx?.startActivity(intent)
         }
     }
 }

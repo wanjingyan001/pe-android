@@ -78,7 +78,7 @@ class ProjectListFragment : BaseFragment() {
         })
         refresh.setAutoLoadMore(true)
         handler.postDelayed({
-            refresh?.startRefresh()
+            doRequest()
         }, 100)
     }
 
