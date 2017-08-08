@@ -12,8 +12,20 @@ import java.util.*
 /**
  * Created by qinfei on 16/10/19.
  */
-class RecyclerAdapter<T>(val context: Context, val creator: (adapter: RecyclerAdapter<T>, parent: ViewGroup, type: Int) -> SimpleViewHolder<T>)
-    : RecyclerView.Adapter<RecyclerAdapter.SimpleViewHolder<T>>() {
+
+abstract class RecyclerHolder<T>(view: View) : RecyclerView.ViewHolder(view) {
+
+    var convertView: View
+        internal set
+
+    init {
+        this.convertView = view
+    }
+
+    abstract fun setData(view: View, data: T, position: Int)
+}
+class RecyclerAdapter<T>(val context: Context, val creator: (adapter: RecyclerAdapter<T>, parent: ViewGroup, type: Int) -> RecyclerHolder<T>)
+    : RecyclerView.Adapter<RecyclerHolder<T>>() {
 
     var dataList = mutableListOf<T>()
     val inflater: LayoutInflater
@@ -35,12 +47,12 @@ class RecyclerAdapter<T>(val context: Context, val creator: (adapter: RecyclerAd
         return inflater.inflate(layout, parent, false)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, type: Int): SimpleViewHolder<T> {
+    override fun onCreateViewHolder(parent: ViewGroup, type: Int): RecyclerHolder<T> {
         return creator(this, parent, type)
     }
 
 
-    override fun onBindViewHolder(holder: SimpleViewHolder<T>, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerHolder<T>, position: Int) {
         val data = dataList[position]
         holder.setData(holder.convertView, data, position)
     }
@@ -58,7 +70,7 @@ class RecyclerAdapter<T>(val context: Context, val creator: (adapter: RecyclerAd
     }
 
 
-    override fun onBindViewHolder(holder: SimpleViewHolder<T>, position: Int, payloads: List<Any>?) {
+    override fun onBindViewHolder(holder: RecyclerHolder<T>, position: Int, payloads: List<Any>?) {
         holder.itemView.setOnClickListener { v ->
             selectedPosition = position
             if (null != onItemClick)
@@ -71,20 +83,20 @@ class RecyclerAdapter<T>(val context: Context, val creator: (adapter: RecyclerAd
         super.setHasStableIds(hasStableIds)
     }
 
-    override fun onViewRecycled(holder: SimpleViewHolder<T>?) {
+    override fun onViewRecycled(holder: RecyclerHolder<T>?) {
         super.onViewRecycled(holder)
     }
 
-    override fun onFailedToRecycleView(holder: SimpleViewHolder<T>?): Boolean {
+    override fun onFailedToRecycleView(holder: RecyclerHolder<T>?): Boolean {
         return super.onFailedToRecycleView(holder)
     }
 
 
-    override fun onViewAttachedToWindow(holder: SimpleViewHolder<T>?) {
+    override fun onViewAttachedToWindow(holder: RecyclerHolder<T>?) {
         super.onViewAttachedToWindow(holder)
     }
 
-    override fun onViewDetachedFromWindow(holder: SimpleViewHolder<T>?) {
+    override fun onViewDetachedFromWindow(holder: RecyclerHolder<T>?) {
         super.onViewDetachedFromWindow(holder)
     }
 
@@ -162,24 +174,6 @@ class RecyclerAdapter<T>(val context: Context, val creator: (adapter: RecyclerAd
     val selectedItemCount: Int
         get() = selectedItems!!.size
 
-    abstract class SimpleViewHolder<T>(view: View) : RecyclerView.ViewHolder(view) {
-
-        var convertView: View
-            internal set
-
-        init {
-            this.convertView = view
-        }
-
-        abstract fun setData(view: View, data: T, position: Int)
-    }
-
-    /**
-     * Created by Fei on 2016/11/06.
-     */
-    interface OnItemClickListener {
-        fun onItemClick(v: View, position: Int)
-    }
 
     companion object {
         val TAG = RecyclerAdapter::class.java.simpleName

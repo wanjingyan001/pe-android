@@ -15,10 +15,6 @@ abstract class BaseActivity : AppCompatActivity() {
         get() = this
 
     val handler = Handler();
-//    fun uiThread(task: Runnable?) {
-//        if (null != task)
-//            runOnUiThread(task)
-//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

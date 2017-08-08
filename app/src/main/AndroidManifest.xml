@@ -67,7 +67,7 @@
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.GaoGuanXinXiActivity"
+            android:name=".ui.GaoGuanActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" />
         <activity

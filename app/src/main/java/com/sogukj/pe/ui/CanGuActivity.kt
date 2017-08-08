@@ -13,7 +13,6 @@ import com.framework.base.ToolbarActivity
 import com.framework.util.Trace
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
-import com.lcodecore.tkrefreshlayout.footer.BallPulseView
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
@@ -70,9 +69,9 @@ class CanGuActivity : ToolbarActivity() {
         val header = ProgressLayout(this)
         header.setColorSchemeColors(ContextCompat.getColor(this, R.color.color_main))
         refresh.setHeaderView(header)
-        val footer = BallPulseView(this)
-        footer.setAnimatingColor(ContextCompat.getColor(this, R.color.color_main))
-        refresh.setBottomView(footer)
+//        val footer = BallPulseView(this)
+//        footer.setAnimatingColor(ContextCompat.getColor(this, R.color.color_main))
+//        refresh.setBottomView(footer)
         refresh.setOverScrollRefreshShow(false)
         refresh.setEnableLoadmore(false)
         refresh.setOnRefreshListener(object : RefreshListenerAdapter() {

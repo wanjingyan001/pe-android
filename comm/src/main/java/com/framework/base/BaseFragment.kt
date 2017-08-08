@@ -23,18 +23,6 @@ abstract class BaseFragment : android.support.v4.app.Fragment() {
     open val titleId: Int
         get() = 0
 
-//    fun uiThread(task: Runnable?) {
-//        if (null != baseActivity && task != null)
-//            baseActivity!!.runOnUiThread {
-//                try {
-//                    task.run()
-//                } catch (e: Exception) {
-//                    Trace.e(javaClass.simpleName, "", e)
-//                }
-//            }
-//    }
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         baseActivity = activity as BaseActivity

@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import com.framework.adapter.ListAdapter
+import com.framework.adapter.ListHolder
 import com.framework.base.ToolbarActivity
 import com.framework.util.Trace
 import com.framework.view.FlowLayout
@@ -86,7 +87,7 @@ class ProjectActivity : ToolbarActivity() {
         when (view.id) {
             R.id.tv_stock -> StockInfoActivity.start(this@ProjectActivity, project)
             R.id.tv_company -> CompanyInfoActivity.start(this@ProjectActivity, project)
-            R.id.tv_gaoguan -> GaoGuanXinXiActivity.start(this@ProjectActivity, project)
+            R.id.tv_gaoguan -> GaoGuanActivity.start(this@ProjectActivity, project)
             R.id.tv_cangukonggu -> CanGuActivity.start(this@ProjectActivity, project)
             R.id.tv_shangshigonggao -> AnnouncementActivity.start(this@ProjectActivity, project)
             R.id.tv_shidagudong -> AnnouncementActivity.start(this@ProjectActivity, project)
@@ -138,7 +139,7 @@ class ProjectActivity : ToolbarActivity() {
     }
 
     inner class NewsHolder
-        : ListAdapter.ViewHolder<NewsBean> {
+        : ListHolder<NewsBean> {
         lateinit var tv_summary: TextView
         lateinit var tv_time: TextView
         lateinit var tv_from: TextView
