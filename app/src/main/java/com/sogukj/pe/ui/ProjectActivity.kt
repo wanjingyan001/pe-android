@@ -87,10 +87,10 @@ class ProjectActivity : ToolbarActivity() {
             R.id.tv_stock -> StockInfoActivity.start(this@ProjectActivity, project)
             R.id.tv_company -> CompanyInfoActivity.start(this@ProjectActivity, project)
             R.id.tv_gaoguan -> GaoGuanXinXiActivity.start(this@ProjectActivity, project)
-            R.id.tv_cangukonggu -> CanGuKongGuActivity.start(this@ProjectActivity, project)
-            R.id.tv_shangshigonggao -> ShangShiGongGaoActivity.start(this@ProjectActivity, project)
-            R.id.tv_shidagudong -> ShangShiGongGaoActivity.start(this@ProjectActivity, project)
-            R.id.tv_shidaliutong -> ShangShiGongGaoActivity.start(this@ProjectActivity, project)
+            R.id.tv_cangukonggu -> CanGuActivity.start(this@ProjectActivity, project)
+            R.id.tv_shangshigonggao -> AnnouncementActivity.start(this@ProjectActivity, project)
+            R.id.tv_shidagudong -> AnnouncementActivity.start(this@ProjectActivity, project)
+            R.id.tv_shidaliutong -> AnnouncementActivity.start(this@ProjectActivity, project)
         }
     }
 
