@@ -17,7 +17,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="20dp"
+            android:paddingTop="20dp">
 
             <TextView
                 android:id="@+id/tv_name"
@@ -27,7 +29,7 @@
                 android:paddingBottom="5dp"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
-                android:paddingTop="10dp"
+                android:paddingTop="5dp"
                 android:textSize="18sp"
                 tools:text="中国工商银行股份有限公司" />
 

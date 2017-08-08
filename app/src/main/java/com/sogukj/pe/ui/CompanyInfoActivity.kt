@@ -5,11 +5,9 @@ import android.content.Intent
 import android.os.Bundle
 import com.framework.base.ToolbarActivity
 import com.framework.util.Trace
-import com.github.salomonbrys.kotson.fromJson
 import com.google.gson.Gson
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
-import com.sogukj.pe.bean.Data
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -42,24 +40,30 @@ class CompanyInfoActivity : ToolbarActivity() {
                             tv_name_short.text = usedName
                             tv_bis.text = mainBusiness
 
-                            chairman?.apply {
-                                val list = gson.fromJson<List<Data>>(this)
-                                list.firstOrNull()?.apply {
-                                    tv_dongshi.text = name
-                                }
-                            }
-                            secretaries?.apply {
-                                val list = gson.fromJson<List<Data>>(this)
-                                list.firstOrNull()?.apply {
-                                    tv_dongmi.text = name
-                                }
-                            }
-                            legal?.apply {
-                                val list = gson.fromJson<List<Data>>(this)
-                                list.firstOrNull()?.apply {
-                                    tv_faren.text = name
-                                }
-                            }
+                            tv_dongshi.text = chairman
+                            tv_dongmi.text = secretaries
+                            tv_faren.text = legal
+                            tv_manager.text=generalManager
+                            tv_zhuceziben.text=registeredCapital
+
+//                            chairman?.apply {
+//                                val list = gson.fromJson<List<Data>>(this)
+//                                list.firstOrNull()?.apply {
+//                                    tv_dongshi.text = name
+//                                }
+//                            }
+//                            secretaries?.apply {
+//                                val list = gson.fromJson<List<Data>>(this)
+//                                list.firstOrNull()?.apply {
+//                                    tv_dongmi.text = name
+//                                }
+//                            }
+//                            legal?.apply {
+//                                val list = gson.fromJson<List<Data>>(this)
+//                                list.firstOrNull()?.apply {
+//                                    tv_faren.text = name
+//                                }
+//                            }
                             tv_employees.text = employeesNum?.toString()
                             tv_shareholder.text = controllingShareholder
                             tv_owner.text = actualController

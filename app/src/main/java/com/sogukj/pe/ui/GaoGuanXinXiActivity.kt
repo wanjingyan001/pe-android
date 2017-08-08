@@ -82,7 +82,7 @@ class GaoGuanXinXiActivity : ToolbarActivity() {
 
     fun doRequest() {
         SoguApi.getService(application)
-                .gaoguanInfo(project.company_id!!)
+                .gaoguan(project.company_id!!)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
