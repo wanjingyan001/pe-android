@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.TextView
 import com.framework.adapter.RecyclerAdapter
+import com.framework.adapter.RecyclerHolder
 import com.framework.base.ToolbarActivity
 import com.framework.util.Trace
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
@@ -36,7 +37,7 @@ class GaoGuanActivity : ToolbarActivity() {
         setTitle("高管信息")
         adapter = RecyclerAdapter<GaoGuanBean>(this, { _adapter, parent, type ->
             val convertView = _adapter.getView(R.layout.item_project_gaoguan, parent) as View
-            object : RecyclerAdapter.SimpleViewHolder<GaoGuanBean>(convertView) {
+            object : RecyclerHolder<GaoGuanBean>(convertView) {
 
                 var tvName = convertView.findViewById(R.id.tv_name) as TextView
                 var tvPosotion = convertView.findViewById(R.id.tv_posotion) as TextView
@@ -90,8 +91,9 @@ class GaoGuanActivity : ToolbarActivity() {
                         payload.payload?.apply {
                             adapter.dataList.addAll(this)
                         }
-                    } else
+                    } else {
                         showToast(payload.message)
+                    }
                 }, { e ->
                     Trace.e(e)
                 }, {

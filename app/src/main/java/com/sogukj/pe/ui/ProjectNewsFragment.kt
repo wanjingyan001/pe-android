@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.TextView
 import com.framework.adapter.RecyclerAdapter
+import com.framework.adapter.RecyclerHolder
 import com.framework.base.BaseFragment
 import com.framework.util.Trace
 import com.framework.view.FlowLayout
@@ -121,7 +122,7 @@ class ProjectNewsFragment : BaseFragment() {
     val fmt = SimpleDateFormat("yyyy/MM/dd HH:mm")
 
     inner class NewsHolder(view: View)
-        : RecyclerAdapter.SimpleViewHolder<NewsBean>(view) {
+        : RecyclerHolder<NewsBean>(view) {
         val tv_summary: TextView
         val tv_time: TextView
         val tv_from: TextView

@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.TextView
 import com.framework.adapter.RecyclerAdapter
+import com.framework.adapter.RecyclerHolder
 import com.framework.base.ToolbarActivity
 import com.framework.util.Trace
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
@@ -36,7 +37,7 @@ class AnnouncementActivity : ToolbarActivity() {
         setTitle("参股控股")
         adapter = RecyclerAdapter<AnnouncementBean>(this, { _adapter, parent, type ->
             val convertView = _adapter.getView(R.layout.item_project_shangshigonggao, parent) as View
-            object : RecyclerAdapter.SimpleViewHolder<AnnouncementBean>(convertView) {
+            object : RecyclerHolder<AnnouncementBean>(convertView) {
                 var tvTime = convertView.findViewById(R.id.tv_time) as TextView
                 var tvMsg = convertView.findViewById(R.id.tv_msg) as TextView
 
@@ -86,8 +87,9 @@ class AnnouncementActivity : ToolbarActivity() {
                         payload.payload?.apply {
                             adapter.dataList.addAll(this)
                         }
-                    } else
+                    } else {
                         showToast(payload.message)
+                    }
                 }, { e ->
                     Trace.e(e)
                 }, {

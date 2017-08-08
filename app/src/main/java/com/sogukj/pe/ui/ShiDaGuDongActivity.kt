@@ -17,16 +17,16 @@ import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
-import com.sogukj.pe.bean.CanGuBean
+import com.sogukj.pe.bean.AnnouncementBean
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_list_news.*
 
-class CanGuActivity : ToolbarActivity() {
+class ShiDaGuDongActivity : ToolbarActivity() {
 
-    lateinit var adapter: RecyclerAdapter<CanGuBean>
+    lateinit var adapter: RecyclerAdapter<AnnouncementBean>
     lateinit var project: ProjectBean
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,27 +34,16 @@ class CanGuActivity : ToolbarActivity() {
 
         project = intent.getSerializableExtra(Extras.DATA) as ProjectBean
         setBack(true)
-        setTitle("参股控股")
-        adapter = RecyclerAdapter<CanGuBean>(this, { _adapter, parent, type ->
-            val convertView = _adapter.getView(R.layout.item_project_cangukonggu, parent) as View
-            object : RecyclerHolder<CanGuBean>(convertView) {
-                var tvName = convertView.findViewById(R.id.tv_name) as TextView
-                var tvRelation = convertView.findViewById(R.id.tv_relation) as TextView
-                var tvPercent = convertView.findViewById(R.id.tv_percent) as TextView
-                var tvTouzijine = convertView.findViewById(R.id.tv_touzijine) as TextView
-                var tvJinlirun = convertView.findViewById(R.id.tv_jinlirun) as TextView
-                var tvIsMerge = convertView.findViewById(R.id.tv_is_merge) as TextView
-                var tvBis = convertView.findViewById(R.id.tv_bis) as TextView
+        setTitle("十大股东")
+        adapter = RecyclerAdapter<AnnouncementBean>(this, { _adapter, parent, type ->
+            val convertView = _adapter.getView(R.layout.item_project_shangshigonggao, parent) as View
+            object : RecyclerHolder<AnnouncementBean>(convertView) {
+                var tvTime = convertView.findViewById(R.id.tv_time) as TextView
+                var tvMsg = convertView.findViewById(R.id.tv_msg) as TextView
 
-
-                override fun setData(view: View, data: CanGuBean, position: Int) {
-                    tvName.text = data.name
-                    tvRelation.text = data.relationship
-                    tvPercent.text = data.participationRatio?.toString()
-                    tvTouzijine.text = data.investmentAmount
-                    tvJinlirun.text = data.profit
-                    tvIsMerge.text = data.reportMerge
-                    tvBis.text = data.mainBusiness
+                override fun setData(view: View, data: AnnouncementBean, position: Int) {
+                    tvTime.text = data.time
+                    tvMsg.text = "${data.companyName}: ${data.name}"
                 }
 
             }
@@ -89,7 +78,7 @@ class CanGuActivity : ToolbarActivity() {
 
     fun doRequest() {
         SoguApi.getService(application)
-                .cangu(project.company_id!!)
+                .announcement(project.company_id!!)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -98,9 +87,8 @@ class CanGuActivity : ToolbarActivity() {
                         payload.payload?.apply {
                             adapter.dataList.addAll(this)
                         }
-                    } else {
+                    } else
                         showToast(payload.message)
-                    }
                 }, { e ->
                     Trace.e(e)
                 }, {
@@ -112,7 +100,7 @@ class CanGuActivity : ToolbarActivity() {
 
     companion object {
         fun start(ctx: Activity?, project: ProjectBean) {
-            val intent = Intent(ctx, CanGuActivity::class.java)
+            val intent = Intent(ctx, AnnouncementActivity::class.java)
             intent.putExtra(Extras.DATA, project)
             ctx?.startActivity(intent)
         }

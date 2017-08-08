@@ -52,7 +52,8 @@ class LoginActivity : BaseActivity() {
                         showToast("验证码已经发送，请查收")
                     else
                         showToast(payload.message)
-                }, { e ->
+                }, {
+                    e ->
                     showToast("验证码发送失败")
                 })
 

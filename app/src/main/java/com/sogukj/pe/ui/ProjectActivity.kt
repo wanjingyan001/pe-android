@@ -90,8 +90,9 @@ class ProjectActivity : ToolbarActivity() {
             R.id.tv_gaoguan -> GaoGuanActivity.start(this@ProjectActivity, project)
             R.id.tv_cangukonggu -> CanGuActivity.start(this@ProjectActivity, project)
             R.id.tv_shangshigonggao -> AnnouncementActivity.start(this@ProjectActivity, project)
-            R.id.tv_shidagudong -> AnnouncementActivity.start(this@ProjectActivity, project)
+            R.id.tv_shidagudong -> ShiDaGuDongActivity.start(this@ProjectActivity, project)
             R.id.tv_shidaliutong -> AnnouncementActivity.start(this@ProjectActivity, project)
+            R.id.tv_faxinxiangguan -> FaXinXiangGuanActivity.start(this@ProjectActivity, project)
         }
     }
 

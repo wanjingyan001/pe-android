@@ -43,8 +43,8 @@ class CompanyInfoActivity : ToolbarActivity() {
                             tv_dongshi.text = chairman
                             tv_dongmi.text = secretaries
                             tv_faren.text = legal
-                            tv_manager.text=generalManager
-                            tv_zhuceziben.text=registeredCapital
+                            tv_manager.text = generalManager
+                            tv_zhuceziben.text = registeredCapital
 
 //                            chairman?.apply {
 //                                val list = gson.fromJson<List<Data>>(this)
@@ -70,6 +70,8 @@ class CompanyInfoActivity : ToolbarActivity() {
                             tv_owner_final.text = finalController
 
                         }
+                    } else {
+                        showToast(payload.message)
                     }
                 }, { e ->
                     Trace.e(e)

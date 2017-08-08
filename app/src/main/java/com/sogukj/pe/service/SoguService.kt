@@ -117,21 +117,28 @@ interface SoguService {
     fun gaoguan(
             @Field("company_id") company_id: Int
             , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
-    ):Observable<Payload<List<GaoGuanBean>>>
+    ): Observable<Payload<List<GaoGuanBean>>>
 
     @FormUrlEncoded
     @POST("/api/Listinformation/Holdingcompany")
     fun cangu(
             @Field("company_id") company_id: Int
             , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
-    ):Observable<Payload<List<CanGuBean>>>
+    ): Observable<Payload<List<CanGuBean>>>
 
     @FormUrlEncoded
     @POST("/api/Listinformation/Announcement")
     fun announcement(
             @Field("company_id") company_id: Int
             , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
-    ):Observable<Payload<List<AnnouncementBean>>>
+    ): Observable<Payload<List<AnnouncementBean>>>
+
+    @FormUrlEncoded
+    @POST("/api/Listinformation/Issuerelated")
+    fun faxin(
+            @Field("company_id") company_id: Int
+            , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
+    ): Observable<Payload<List<FaXinBean>>>
 
     companion object {
         const val APPKEY_NAME = "appkey"

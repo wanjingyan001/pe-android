@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.TextView
 import com.framework.adapter.RecyclerAdapter
+import com.framework.adapter.RecyclerHolder
 import com.framework.base.BaseFragment
 import com.framework.util.Trace
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
@@ -120,7 +121,7 @@ class ProjectListFragment : BaseFragment() {
     }
 
     inner class ProjectHolder(view: View)
-        : RecyclerAdapter.SimpleViewHolder<ProjectBean>(view) {
+        : RecyclerHolder<ProjectBean>(view) {
 
         val tv1: TextView
         val tv2: TextView

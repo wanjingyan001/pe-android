@@ -5,11 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import com.framework.base.ToolbarActivity
 import com.framework.util.Trace
-import com.github.salomonbrys.kotson.fromJson
-import com.google.gson.Gson
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
-import com.sogukj.pe.bean.Data
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -55,7 +52,8 @@ class StockInfoActivity : ToolbarActivity() {
                             tv_huanshou.text = tchange
 
                         }
-                    }
+                    }else
+                        showToast(payload.message)
                 }, { e ->
                     Trace.e(e)
                 })
