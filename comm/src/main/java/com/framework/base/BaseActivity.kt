@@ -1,6 +1,7 @@
 package com.framework.base
 
 import android.os.Bundle
+import android.os.Handler
 import android.support.v7.app.AppCompatActivity
 import android.view.WindowManager
 import android.widget.Toast
@@ -13,6 +14,7 @@ abstract class BaseActivity : AppCompatActivity() {
     val context: BaseActivity
         get() = this
 
+    val handler = Handler();
 //    fun uiThread(task: Runnable?) {
 //        if (null != task)
 //            runOnUiThread(task)

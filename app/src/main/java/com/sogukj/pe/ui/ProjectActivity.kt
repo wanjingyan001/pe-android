@@ -47,7 +47,6 @@ class ProjectActivity : ToolbarActivity() {
         }
 
 
-
         SoguApi.getService(application)
                 .newsList(pageSize = 3, page = 1, type = 1, company_id = project.company_id)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -83,7 +82,9 @@ class ProjectActivity : ToolbarActivity() {
                     showToast("暂无可用数据")
                 })
 
-        tv_stock.onClick { StockQuoteActivity.start(this@ProjectActivity) }
+        tv_stock.onClick { StockInfoActivity.start(this@ProjectActivity, project) }
+        tv_company_info.onClick { CompanyInfoActivity.start(this@ProjectActivity, project) }
+        tv_gaoguan.onClick { GaoGuanXinXiActivity.start(this@ProjectActivity,project) }
     }
 
     override val menuId: Int

@@ -3,7 +3,7 @@ package com.sogukj.pe.bean
 import java.io.File
 import java.io.Serializable
 
-class UserBean() : Serializable {
+open class UserBean() : Serializable {
     var uid: Int? = null//用户主键ID
     var name: String? = null
     var phone: String? = null
@@ -14,6 +14,7 @@ class UserBean() : Serializable {
     var memo: String? = null
     var url: String? = null
     var depart_id: Int? = null
+    var numberOfShares: Int = 0
 
     fun headImage(): String? {
         if (null == url) return null

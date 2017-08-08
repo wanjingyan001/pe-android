@@ -16,7 +16,7 @@ import java.util.List;
  * @create 2013-12-20 上午9:25:49
  */
 public class JsonBinder {
-    static final Gson gson = createGson();
+    public static final Gson gson = createGson();
 
     public static Gson createGson() {
         return new GsonBuilder().serializeNulls().create();

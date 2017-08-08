@@ -140,12 +140,12 @@
                     android:drawableTop="@drawable/ic_proj_stock_quote"
                     android:text="股票信息" />
 
-                <TextView
+                <TextView android:id="@+id/tv_company_info"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_company_desc"
                     android:text="企业简介" />
 
-                <TextView
+                <TextView android:id="@+id/tv_gaoguan"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_gaoguan"
                     android:text="高管信息" />

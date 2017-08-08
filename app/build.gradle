@@ -37,6 +37,8 @@ dependencies {
     })
     compile project(":comm")
 
+    compile 'com.github.salomonbrys.kotson:kotson:2.5.0'
+
 //    compile 'com.cjj.materialrefeshlayout:library:1.3.0'
     // Anko Commons
     compile "org.jetbrains.anko:anko-commons:$anko_version"

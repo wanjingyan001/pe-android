@@ -7,7 +7,7 @@ import com.google.gson.Gson
  * Created by qff on 2016/1/26.
  */
 class Payload<T>() {
-    var timestamp: Long = 0
+    var timestamp: Long = System.currentTimeMillis()
     var code: Int = 0  // 200 is success other see errorCode list
     var message: String? = null
     var payload: T? = null

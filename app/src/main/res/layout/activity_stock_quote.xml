@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.sogukj.pe.ui.StockQuoteActivity">
+    tools:context="com.sogukj.pe.ui.StockInfoActivity">
 
     <include layout="@layout/toolbar" />
 
@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         android:background="@color/divider2">
 
-        <TextView
+        <TextView android:id="@+id/tv_price"
             style="@style/SoguTextNormal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
                 tools:text="000000" />
 
             <TextView
-                android:id="@+id/tv_price"
+                android:id="@+id/tv_zhangdie"
                 style="@style/SoguTextNormal"
                 android:layout_weight="1"
                 android:gravity="center"

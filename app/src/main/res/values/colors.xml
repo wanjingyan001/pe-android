@@ -26,6 +26,7 @@
     <color name="white2">#dddddd</color>
 
     <color name="colorGray">#9e9e9e</color>
+    <color name="colorBlue">#5785f3</color>
     <color name="colorRed">@color/colorPrimaryRed</color>
     <color name="colorGreen">#00b326</color>
     <color name="colorWhiteDep">#20ffffff</color>
