@@ -83,7 +83,15 @@
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.FaXinXiangGuanActivity"
+            android:name=".ui.IssueRelatedActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.EquityChangeActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.BonusInfoActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" />
     </application>

@@ -13,17 +13,10 @@ import java.util.*
  * Created by qinfei on 16/10/19.
  */
 
-abstract class RecyclerHolder<T>(view: View) : RecyclerView.ViewHolder(view) {
-
-    var convertView: View
-        internal set
-
-    init {
-        this.convertView = view
-    }
-
+abstract class RecyclerHolder<T>(val convertView: View) : RecyclerView.ViewHolder(convertView) {
     abstract fun setData(view: View, data: T, position: Int)
 }
+
 class RecyclerAdapter<T>(val context: Context, val creator: (adapter: RecyclerAdapter<T>, parent: ViewGroup, type: Int) -> RecyclerHolder<T>)
     : RecyclerView.Adapter<RecyclerHolder<T>>() {
 

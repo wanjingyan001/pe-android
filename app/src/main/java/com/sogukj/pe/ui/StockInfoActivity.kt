@@ -29,8 +29,8 @@ class StockInfoActivity : ToolbarActivity() {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        val stock = payload.payload
-                        stock?.firstOrNull()?.apply {
+                        val data = payload.payload
+                        data?.apply {
                             tv_name.text = stockname
                             tv_obj.text = stockcode.toString()
                             tv_price.text = hexm_curPrice
@@ -50,9 +50,8 @@ class StockInfoActivity : ToolbarActivity() {
                             tv_pe.text = fvaluep
                             tv_zhenfu.text = trange
                             tv_huanshou.text = tchange
-
                         }
-                    }else
+                    } else
                         showToast(payload.message)
                 }, { e ->
                     Trace.e(e)

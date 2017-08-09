@@ -32,8 +32,8 @@ class CompanyInfoActivity : ToolbarActivity() {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        val stock = payload.payload
-                        stock?.firstOrNull()?.apply {
+                        val data = payload.payload
+                        data?.apply {
                             tv_name.text = companyName
                             tv_name_en.text = engName
                             tv_hangye.text = industry

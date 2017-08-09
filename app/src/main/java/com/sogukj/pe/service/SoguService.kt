@@ -103,14 +103,14 @@ interface SoguService {
     fun stockInfo(
             @Field("company_id") company_id: Int
             , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
-    ): Observable<Payload<List<StockBean>>>
+    ): Observable<Payload<StockBean>>
 
     @FormUrlEncoded
     @POST("/api/Listinformation/Companyinfo")
     fun companyInfo(
             @Field("company_id") company_id: Int
             , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
-    ): Observable<Payload<List<CompanyBean>>>
+    ): Observable<Payload<CompanyBean>>
 
     @FormUrlEncoded
     @POST("/api/Listinformation/Seniorexecutive")
@@ -135,10 +135,25 @@ interface SoguService {
 
     @FormUrlEncoded
     @POST("/api/Listinformation/Issuerelated")
-    fun faxin(
+    fun issueInfo(
             @Field("company_id") company_id: Int
             , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
-    ): Observable<Payload<List<FaXinBean>>>
+    ): Observable<Payload<IssueRelatedBean>>
+
+    @FormUrlEncoded
+    @POST("/api/Listinformation/Equitychange")
+    fun equityChange(
+            @Field("company_id") company_id: Int
+            , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
+    ): Observable<Payload<List<EquityChangeBean>>>
+
+    @FormUrlEncoded
+    @POST("/api/Listinformation/Bonusinfo")
+    fun bonusInfo(
+            @Field("company_id") company_id: Int
+            , @Field("page") page: Int = 1
+            , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
+    ): Observable<Payload<List<BonusBean>>>
 
     companion object {
         const val APPKEY_NAME = "appkey"

@@ -92,7 +92,9 @@ class ProjectActivity : ToolbarActivity() {
             R.id.tv_shangshigonggao -> AnnouncementActivity.start(this@ProjectActivity, project)
             R.id.tv_shidagudong -> ShiDaGuDongActivity.start(this@ProjectActivity, project)
             R.id.tv_shidaliutong -> AnnouncementActivity.start(this@ProjectActivity, project)
-            R.id.tv_faxinxiangguan -> FaXinXiangGuanActivity.start(this@ProjectActivity, project)
+            R.id.tv_faxinxiangguan -> IssueRelatedActivity.start(this@ProjectActivity, project)
+            R.id.tv_gubenbiandong -> EquityChangeActivity.start(this@ProjectActivity, project)
+            R.id.tv_fenhong -> BonusInfoActivity.start(this@ProjectActivity, project)
         }
     }
 

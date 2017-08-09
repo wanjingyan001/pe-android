@@ -15,7 +15,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_project_faxin.*
 import java.text.SimpleDateFormat
 
-class FaXinXiangGuanActivity : ToolbarActivity() {
+class IssueRelatedActivity : ToolbarActivity() {
 
     lateinit var project: ProjectBean
     val fmt = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
@@ -27,13 +27,13 @@ class FaXinXiangGuanActivity : ToolbarActivity() {
         setBack(true)
         setTitle("发行相关")
         SoguApi.getService(application)
-                .faxin(project.company_id!!)
+                .issueInfo(project.company_id!!)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        val stock = payload.payload
-                        stock?.firstOrNull()?.apply {
+                        val data = payload.payload
+                        data?.apply {
                             tv_create_date.text = issueDate
                             tv_listed_date.text = listingDate
                             tv_founds_predict.text = expectedToRaise
@@ -59,7 +59,7 @@ class FaXinXiangGuanActivity : ToolbarActivity() {
 
     companion object {
         fun start(ctx: Activity?, project: ProjectBean) {
-            val intent = Intent(ctx, FaXinXiangGuanActivity::class.java)
+            val intent = Intent(ctx, IssueRelatedActivity::class.java)
             intent.putExtra(Extras.DATA, project)
             ctx?.startActivity(intent)
         }

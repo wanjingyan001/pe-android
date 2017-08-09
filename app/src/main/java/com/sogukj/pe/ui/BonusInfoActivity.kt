@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import android.text.Html
 import android.view.View
 import android.widget.TextView
 import com.framework.adapter.RecyclerAdapter
@@ -18,44 +17,54 @@ import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
-import com.sogukj.pe.bean.CanGuBean
+import com.sogukj.pe.bean.BonusBean
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_list_news.*
+import java.text.SimpleDateFormat
 
-class CanGuActivity : ToolbarActivity() {
+class BonusInfoActivity : ToolbarActivity() {
 
-    lateinit var adapter: RecyclerAdapter<CanGuBean>
+    lateinit var adapter: RecyclerAdapter<BonusBean>
     lateinit var project: ProjectBean
+    val df = SimpleDateFormat("yyyy-MM-dd")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list_common)
 
         project = intent.getSerializableExtra(Extras.DATA) as ProjectBean
         setBack(true)
-        setTitle("参股控股")
-        adapter = RecyclerAdapter<CanGuBean>(this, { _adapter, parent, type ->
-            val convertView = _adapter.getView(R.layout.item_project_cangukonggu, parent) as View
-            object : RecyclerHolder<CanGuBean>(convertView) {
-                var tvName = convertView.findViewById(R.id.tv_name) as TextView
-                var tvRelation = convertView.findViewById(R.id.tv_relation) as TextView
-                var tvPercent = convertView.findViewById(R.id.tv_percent) as TextView
-                var tvTouzijine = convertView.findViewById(R.id.tv_touzijine) as TextView
-                var tvJinlirun = convertView.findViewById(R.id.tv_jinlirun) as TextView
-                var tvIsMerge = convertView.findViewById(R.id.tv_is_merge) as TextView
-                var tvBis = convertView.findViewById(R.id.tv_bis) as TextView
+        setTitle("分红情况")
+
+        adapter = RecyclerAdapter<BonusBean>(this, { _adapter, parent, type ->
+            val convertView = _adapter.getView(R.layout.item_project_bonus_info, parent) as View
+            object : RecyclerHolder<BonusBean>(convertView) {
 
 
-                override fun setData(view: View, data: CanGuBean, position: Int) {
-                    tvName.text = data.name
-                    tvRelation.text = Html.fromHtml(getString(R.string.tv_project_cangu_relation, data.relationship))
-                    tvPercent.text = Html.fromHtml(getString(R.string.tv_project_cangu_percent, data.participationRatio?.toString()))
-                    tvTouzijine.text = Html.fromHtml(getString(R.string.tv_project_cangu_touzijine, data.investmentAmount))
-                    tvJinlirun.text = Html.fromHtml(getString(R.string.tv_project_cangu_jinlirun, data.profit))
-                    tvIsMerge.text = Html.fromHtml(getString(R.string.tv_project_cangu_is_merge, data.reportMerge))
-                    tvBis.text = Html.fromHtml(getString(R.string.tv_project_cangu_bis, data.mainBusiness))
+                val tvTime = convertView.findViewById(R.id.tv_time) as TextView
+                val tvBoardDate = convertView.findViewById(R.id.tv_boardDate) as TextView
+                val tvShareholderDate = convertView.findViewById(R.id.tv_shareholderDate) as TextView
+                val tvImplementationDate = convertView.findViewById(R.id.tv_implementationDate) as TextView
+                val tvIntroduction = convertView.findViewById(R.id.tv_introduction) as TextView
+                val tvAsharesDate = convertView.findViewById(R.id.tv_asharesDate) as TextView
+                val tvAcuxiDate = convertView.findViewById(R.id.tv_acuxiDate) as TextView
+                val tvAdividendDate = convertView.findViewById(R.id.tv_adividendDate) as TextView
+                val tvProgress = convertView.findViewById(R.id.tv_progress) as TextView
+                val tvDividendRate = convertView.findViewById(R.id.tv_dividendRate) as TextView
+
+
+                override fun setData(view: View, data: BonusBean, position: Int) {
+                    tvBoardDate.text = data.boardDate
+                    tvShareholderDate.text = data.shareholderDate
+                    tvImplementationDate.text = data.implementationDate
+                    tvIntroduction.text = data.introduction
+                    tvAsharesDate.text = data.asharesDate
+                    tvAcuxiDate.text = data.acuxiDate
+                    tvAdividendDate.text = data.adividendDate
+                    tvProgress.text = data.progress
+                    tvDividendRate.text = data.dividendRate
                 }
 
             }
@@ -90,7 +99,7 @@ class CanGuActivity : ToolbarActivity() {
 
     fun doRequest() {
         SoguApi.getService(application)
-                .cangu(project.company_id!!)
+                .bonusInfo(project.company_id!!)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -110,10 +119,9 @@ class CanGuActivity : ToolbarActivity() {
                 })
     }
 
-
     companion object {
         fun start(ctx: Activity?, project: ProjectBean) {
-            val intent = Intent(ctx, CanGuActivity::class.java)
+            val intent = Intent(ctx, EquityChangeActivity::class.java)
             intent.putExtra(Extras.DATA, project)
             ctx?.startActivity(intent)
         }

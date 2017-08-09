@@ -5,7 +5,7 @@ import java.io.Serializable
 /**
  * Created by qinfei on 17/8/8.
  */
-class FaXinBean : Serializable {
+class IssueRelatedBean : Serializable {
     var issueDate: String? = null//	Date	成立日期
     var listingDate: String? = null//	Date	上市日期
     var expectedToRaise: String? = null//	Varchar	预计募资
