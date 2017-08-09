@@ -121,7 +121,7 @@ class BonusInfoActivity : ToolbarActivity() {
 
     companion object {
         fun start(ctx: Activity?, project: ProjectBean) {
-            val intent = Intent(ctx, EquityChangeActivity::class.java)
+            val intent = Intent(ctx, BonusInfoActivity::class.java)
             intent.putExtra(Extras.DATA, project)
             ctx?.startActivity(intent)
         }

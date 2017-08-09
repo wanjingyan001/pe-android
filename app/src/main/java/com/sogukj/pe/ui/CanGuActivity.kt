@@ -51,7 +51,7 @@ class CanGuActivity : ToolbarActivity() {
                 override fun setData(view: View, data: CanGuBean, position: Int) {
                     tvName.text = data.name
                     tvRelation.text = Html.fromHtml(getString(R.string.tv_project_cangu_relation, data.relationship))
-                    tvPercent.text = Html.fromHtml(getString(R.string.tv_project_cangu_percent, data.participationRatio?.toString()))
+                    tvPercent.text = Html.fromHtml(getString(R.string.tv_project_cangu_percent, data.participationRatio))
                     tvTouzijine.text = Html.fromHtml(getString(R.string.tv_project_cangu_touzijine, data.investmentAmount))
                     tvJinlirun.text = Html.fromHtml(getString(R.string.tv_project_cangu_jinlirun, data.profit))
                     tvIsMerge.text = Html.fromHtml(getString(R.string.tv_project_cangu_is_merge, data.reportMerge))
