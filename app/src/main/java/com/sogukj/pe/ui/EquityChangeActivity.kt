@@ -75,11 +75,15 @@ class EquityChangeActivity : ToolbarActivity() {
         refresh.setEnableLoadmore(false)
         refresh.setOnRefreshListener(object : RefreshListenerAdapter() {
             override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
+                doRequest()
+            }
 
+            override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
+                super.onLoadMore(refreshLayout)
             }
 
         })
-        refresh.setAutoLoadMore(true)
+        refresh.setAutoLoadMore(false)
         handler.postDelayed({
             doRequest()
         }, 100)

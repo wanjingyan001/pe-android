@@ -155,6 +155,30 @@ interface SoguService {
             , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
     ): Observable<Payload<List<BonusBean>>>
 
+    @FormUrlEncoded
+    @POST("/api/Listinformation/Allotmen")
+    fun allotment(
+            @Field("company_id") company_id: Int
+            , @Field("page") page: Int = 1
+            , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
+    ): Observable<Payload<List<AllotmentBean>>>
+
+    @FormUrlEncoded
+    @POST("/api/Listinformation/tenShareHolder")
+    fun shareHolder(
+            @Field("company_id") company_id: Int
+            , @Field("shareholder_type") shareholder_type: Int = 1
+            , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
+    ): Observable<Payload<List<TimeGroupedShareHolderBean>>>
+
+    @FormUrlEncoded
+    @POST("/api/Listinformation/tenShareHolder")
+    fun gubenjiegou(
+            @Field("company_id") company_id: Int
+            , @Field("shareholder_type") shareholder_type: Int = 3
+            , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
+    ): Observable<Payload<List<TimeGroupedShareHolderBean>>>
+
     companion object {
         const val APPKEY_NAME = "appkey"
         const val APPKEY_VALUE = "d5f17cafef0829b5"

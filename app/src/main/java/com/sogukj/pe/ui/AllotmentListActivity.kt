@@ -17,7 +17,7 @@ import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
-import com.sogukj.pe.bean.BonusBean
+import com.sogukj.pe.bean.AllotmentBean
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -25,9 +25,9 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_list_news.*
 import java.text.SimpleDateFormat
 
-class BonusInfoActivity : ToolbarActivity() {
+class AllotmentListActivity : ToolbarActivity() {
 
-    lateinit var adapter: RecyclerAdapter<BonusBean>
+    lateinit var adapter: RecyclerAdapter<AllotmentBean>
     lateinit var project: ProjectBean
     val df = SimpleDateFormat("yyyy-MM-dd")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,40 +36,28 @@ class BonusInfoActivity : ToolbarActivity() {
 
         project = intent.getSerializableExtra(Extras.DATA) as ProjectBean
         setBack(true)
-        setTitle("分红情况")
+        setTitle("配股情况")
 
-        adapter = RecyclerAdapter<BonusBean>(this, { _adapter, parent, type ->
-            val convertView = _adapter.getView(R.layout.item_project_bonus_info, parent) as View
-            object : RecyclerHolder<BonusBean>(convertView) {
+        adapter = RecyclerAdapter<AllotmentBean>(this, { _adapter, parent, type ->
+            val convertView = _adapter.getView(R.layout.item_project_allotment, parent) as View
+            object : RecyclerHolder<AllotmentBean>(convertView) {
 
-
-                val tvTime = convertView.findViewById(R.id.tv_time) as TextView
-                val tvBoardDate = convertView.findViewById(R.id.tv_boardDate) as TextView
-                val tvShareholderDate = convertView.findViewById(R.id.tv_shareholderDate) as TextView
-                val tvImplementationDate = convertView.findViewById(R.id.tv_implementationDate) as TextView
-                val tvIntroduction = convertView.findViewById(R.id.tv_introduction) as TextView
-                val tvAsharesDate = convertView.findViewById(R.id.tv_asharesDate) as TextView
-                val tvAcuxiDate = convertView.findViewById(R.id.tv_acuxiDate) as TextView
-                val tvAdividendDate = convertView.findViewById(R.id.tv_adividendDate) as TextView
-                val tvProgress = convertView.findViewById(R.id.tv_progress) as TextView
-                val tvDividendRate = convertView.findViewById(R.id.tv_dividendRate) as TextView
+                var tvIssueDate = convertView.findViewById(R.id.tv_issueDate) as TextView
+                var tvName = convertView.findViewById(R.id.tv_name) as TextView
+                var tvProgress = convertView.findViewById(R.id.tv_progress) as TextView
 
 
-                override fun setData(view: View, data: BonusBean, position: Int) {
-                    tvBoardDate.text = data.boardDate
-                    tvShareholderDate.text = data.shareholderDate
-                    tvImplementationDate.text = data.implementationDate
-                    tvIntroduction.text = data.introduction
-                    tvAsharesDate.text = data.asharesDate
-                    tvAcuxiDate.text = data.acuxiDate
-                    tvAdividendDate.text = data.adividendDate
+                override fun setData(view: View, data: AllotmentBean, position: Int) {
+                    tvIssueDate.text = data.issueDate
+                    tvName.text = data.name
                     tvProgress.text = data.progress
-                    tvDividendRate.text = data.dividendRate
                 }
 
             }
         })
         adapter.onItemClick = { v, p ->
+            val data=adapter.dataList[p];
+            AllotmentActivity.start(this@AllotmentListActivity,project,data)
         }
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
@@ -103,7 +91,7 @@ class BonusInfoActivity : ToolbarActivity() {
 
     fun doRequest() {
         SoguApi.getService(application)
-                .bonusInfo(project.company_id!!)
+                .allotment(project.company_id!!)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -125,7 +113,7 @@ class BonusInfoActivity : ToolbarActivity() {
 
     companion object {
         fun start(ctx: Activity?, project: ProjectBean) {
-            val intent = Intent(ctx, BonusInfoActivity::class.java)
+            val intent = Intent(ctx, AllotmentListActivity::class.java)
             intent.putExtra(Extras.DATA, project)
             ctx?.startActivity(intent)
         }
