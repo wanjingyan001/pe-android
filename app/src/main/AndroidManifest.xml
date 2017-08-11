@@ -103,6 +103,14 @@
             android:name=".ui.AllotmentActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.ShiDaLiuTongGuDongActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.GuBenJieGouActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

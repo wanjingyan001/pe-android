@@ -177,7 +177,7 @@ interface SoguService {
             @Field("company_id") company_id: Int
             , @Field("shareholder_type") shareholder_type: Int = 3
             , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
-    ): Observable<Payload<List<TimeGroupedShareHolderBean>>>
+    ): Observable<Payload<List<TimeGroupedCapitalStructureBean>>>
 
     companion object {
         const val APPKEY_NAME = "appkey"

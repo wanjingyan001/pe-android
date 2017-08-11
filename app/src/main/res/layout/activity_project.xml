@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:orientation="vertical"
-    tools:context="com.sogukj.pe.ui.ProjectActivity">
+    android:orientation="vertical">
 
     <include layout="@layout/toolbar" />
 
@@ -138,77 +137,78 @@
                 <TextView
                     android:id="@+id/tv_stock"
                     style="@style/ItemGridProject"
-                    android:onClick="onClick"
                     android:drawableTop="@drawable/ic_proj_stock_quote"
+                    android:onClick="onClick"
                     android:text="股票信息" />
 
                 <TextView
                     android:id="@+id/tv_company"
                     style="@style/ItemGridProject"
-                    android:onClick="onClick"
                     android:drawableTop="@drawable/ic_proj_company_desc"
+                    android:onClick="onClick"
                     android:text="企业简介" />
 
                 <TextView
                     android:id="@+id/tv_gaoguan"
                     style="@style/ItemGridProject"
-                    android:onClick="onClick"
                     android:drawableTop="@drawable/ic_proj_gaoguan"
+                    android:onClick="onClick"
                     android:text="高管信息" />
 
                 <TextView
                     android:id="@+id/tv_cangukonggu"
                     style="@style/ItemGridProject"
-                    android:onClick="onClick"
                     android:drawableTop="@drawable/ic_proj_cangu"
+                    android:onClick="onClick"
                     android:text="参股控股" />
 
                 <TextView
                     android:id="@+id/tv_shangshigonggao"
                     style="@style/ItemGridProject"
-                    android:onClick="onClick"
                     android:drawableTop="@drawable/ic_proj_notice"
+                    android:onClick="onClick"
                     android:text="上市公告" />
 
                 <TextView
                     android:id="@+id/tv_shidagudong"
                     style="@style/ItemGridProject"
-                    android:onClick="onClick"
                     android:drawableTop="@drawable/ic_proj_shidagudong"
+                    android:onClick="onClick"
                     android:text="十大股东" />
 
                 <TextView
                     android:id="@+id/tv_shidaliutong"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_shidaliutong"
+                    android:onClick="onClick"
                     android:text="十大流通" />
 
                 <TextView
                     android:id="@+id/tv_faxinxiangguan"
                     style="@style/ItemGridProject"
-                    android:onClick="onClick"
                     android:drawableTop="@drawable/ic_proj_faxinjiguan"
+                    android:onClick="onClick"
                     android:text="发行相关" />
 
                 <TextView
                     android:id="@+id/tv_gubenjiegou"
                     style="@style/ItemGridProject"
-                    android:onClick="onClick"
                     android:drawableTop="@drawable/ic_proj_gubenjiegou"
+                    android:onClick="onClick"
                     android:text="股本结构" />
 
                 <TextView
                     android:id="@+id/tv_gubenbiandong"
-                    android:onClick="onClick"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_gubenbiandong"
+                    android:onClick="onClick"
                     android:text="股本变动" />
 
                 <TextView
                     android:id="@+id/tv_fenhong"
                     style="@style/ItemGridProject"
-                    android:onClick="onClick"
                     android:drawableTop="@drawable/ic_proj_fenhong"
+                    android:onClick="onClick"
                     android:text="分红情况" />
 
                 <TextView

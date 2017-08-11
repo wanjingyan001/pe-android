@@ -12,28 +12,26 @@ import com.framework.base.ToolbarActivity
 import com.framework.util.Trace
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
-import com.sogukj.pe.bean.ProjectBean
-import com.sogukj.pe.bean.ShareHolderBean
-import com.sogukj.pe.bean.TimeGroupedShareHolderBean
+import com.sogukj.pe.bean.*
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_project_share_holder.*
+import kotlinx.android.synthetic.main.activity_project_gubenjiegou.*
 
-open class ShiDaGuDongActivity : ToolbarActivity() {
+class GuBenJieGouActivity : ToolbarActivity() {
 
-    open val type: Int
-        get() = 1
-    val adapter = ListAdapter { LocalHolder() }
+    val type: Int
+        get() = 3
+
     val adapterSelector = ListAdapter {
-        object : ListHolder<TimeGroupedShareHolderBean> {
+        object : ListHolder<TimeGroupedCapitalStructureBean> {
             lateinit var text: TextView
             override fun createView(inflater: LayoutInflater): View {
                 text = inflater.inflate(R.layout.item_textview_selector, null) as TextView
                 return text
             }
 
-            override fun showData(convertView: View, position: Int, data: TimeGroupedShareHolderBean?) {
+            override fun showData(convertView: View, position: Int, data: TimeGroupedCapitalStructureBean?) {
                 text.text = data?.time
                 if (position != selectedIndex)
                     text.setTextColor(R.color.colorBlue)
@@ -43,18 +41,18 @@ open class ShiDaGuDongActivity : ToolbarActivity() {
 
         }
     }
+
     lateinit var project: ProjectBean
     var selectedIndex = -1;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_project_share_holder)
+        setContentView(R.layout.activity_project_gubenjiegou)
 
         project = intent.getSerializableExtra(Extras.DATA) as ProjectBean
         setBack(true)
-        setTitle("十大股东")
+        setTitle("股本结构")
 
         lv_dropdown.adapter = adapterSelector
-        list_view.adapter = adapter
 
         lv_dropdown.setOnItemClickListener { parent, view, position, id ->
             val group = adapterSelector.dataList[position]
@@ -93,23 +91,27 @@ open class ShiDaGuDongActivity : ToolbarActivity() {
         if (selectedIndex > 0)
             tv_previous.isEnabled = true
         group.apply {
-            isSelected = true
             tv_select.text = time
-            tv_tenTotal.text = tenTotal
-            tv_tenPercent.text = tenPercent
-            tv_holdingChange.text = holdingChange
             adapterSelector.notifyDataSetChanged()
-            data?.apply {
-                adapter.dataList.clear()
-                adapter.dataList.addAll(this)
-                adapter.notifyDataSetChanged()
+            data?.firstOrNull()?.apply {
+                tv_shareAll.text = shareAll
+                tv_ashareAll.text = ashareAll
+                tv_noLimitShare.text = noLimitShare
+                tv_limitShare.text = limitShare
+                tv_changeReason.text = changeReason
+            }
+            data?.lastOrNull()?.apply {
+                tv_ashareAll_h.text = ashareAll
+                tv_noLimitShare_h.text = noLimitShare
+                tv_limitShare_h.text = limitShare
+                tv_changeReason_h.text = changeReason
             }
         }
     }
 
     fun doRequest() {
         SoguApi.getService(application)
-                .shareHolder(project.company_id!!,shareholder_type = type)
+                .gubenjiegou(10, shareholder_type = type)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -129,34 +131,9 @@ open class ShiDaGuDongActivity : ToolbarActivity() {
     }
 
 
-    class LocalHolder : ListHolder<ShareHolderBean> {
-
-        lateinit var tvName: TextView
-        lateinit var tvProportion: TextView
-        lateinit var tvHoldingNum: TextView
-        lateinit var tvShareType: TextView
-        override fun createView(inflater: LayoutInflater): View {
-            val view = inflater.inflate(R.layout.item_project_share_holder, null)
-
-            tvName = view.findViewById(R.id.tv_name) as TextView
-            tvProportion = view.findViewById(R.id.tv_proportion) as TextView
-            tvHoldingNum = view.findViewById(R.id.tv_holdingNum) as TextView
-            tvShareType = view.findViewById(R.id.tv_shareType) as TextView
-            return view
-        }
-
-        override fun showData(convertView: View, position: Int, data: ShareHolderBean?) {
-            tvName.text = data?.name
-            tvProportion.text = data?.proportion
-            tvHoldingNum.text = data?.holdingNum
-            tvShareType.text = data?.shareType
-        }
-
-    }
-
     companion object {
         fun start(ctx: Activity?, project: ProjectBean) {
-            val intent = Intent(ctx, ShiDaGuDongActivity::class.java)
+            val intent = Intent(ctx, GuBenJieGouActivity::class.java)
             intent.putExtra(Extras.DATA, project)
             ctx?.startActivity(intent)
         }

@@ -14,8 +14,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:textColor="@color/text_2"
-        android:text="--" />
+        android:text="--"
+        android:textColor="@color/text_2" />
 
 
     <LinearLayout
@@ -117,6 +117,7 @@
             android:text="--"
             android:textColor="@color/text_2" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -141,6 +142,7 @@
             android:text="--"
             android:textColor="@color/text_2" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -165,6 +167,7 @@
             android:text="--"
             android:textColor="@color/text_2" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -189,6 +192,7 @@
             android:text="--"
             android:textColor="@color/text_2" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -213,6 +217,7 @@
             android:text="--"
             android:textColor="@color/text_2" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
