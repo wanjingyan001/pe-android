@@ -179,6 +179,13 @@ interface SoguService {
             , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
     ): Observable<Payload<List<TimeGroupedCapitalStructureBean>>>
 
+    @FormUrlEncoded
+    @POST("/api/Listinformation/tenShareHolder")
+    fun bizinfo(
+            @Field("company_id") company_id: Int
+            , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
+    ): Observable<Payload<BizInfoBean>>
+
     companion object {
         const val APPKEY_NAME = "appkey"
         const val APPKEY_VALUE = "d5f17cafef0829b5"

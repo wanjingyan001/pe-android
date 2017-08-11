@@ -12,7 +12,8 @@ import com.framework.base.ToolbarActivity
 import com.framework.util.Trace
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
-import com.sogukj.pe.bean.*
+import com.sogukj.pe.bean.ProjectBean
+import com.sogukj.pe.bean.TimeGroupedCapitalStructureBean
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -111,7 +112,7 @@ class GuBenJieGouActivity : ToolbarActivity() {
 
     fun doRequest() {
         SoguApi.getService(application)
-                .gubenjiegou(10, shareholder_type = type)
+                .gubenjiegou(company_id = project.company_id!!, shareholder_type = type)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->

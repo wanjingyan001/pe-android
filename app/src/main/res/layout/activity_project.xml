@@ -45,8 +45,7 @@
                 android:background="@color/white"
                 android:divider="@color/divider"
                 android:dividerHeight="1px"
-                android:listSelector="@drawable/bg_item_list"
-                tools:listitem="@layout/item_main_news" />
+                android:listSelector="@drawable/bg_item_list" />
 
             <View
                 android:layout_width="match_parent"
@@ -98,8 +97,7 @@
                 android:background="@color/white"
                 android:divider="@color/divider"
                 android:dividerHeight="1px"
-                android:listSelector="@drawable/bg_item_list"
-                tools:listitem="@layout/item_main_news" />
+                android:listSelector="@drawable/bg_item_list" />
 
             <View
                 android:layout_width="match_parent"
@@ -253,55 +251,56 @@
                 android:padding="10dp"
                 android:rowCount="3">
 
-                <TextView
+                <TextView android:id="@+id/tv_bizinfo"
                     style="@style/ItemGridProject"
-                    android:drawableTop="@drawable/ic_proj_stock_quote"
-                    android:text="股票信息" />
+                    android:drawableTop="@drawable/ic_proj_gongshangxinxi"
+                    android:text="工商信息" />
 
                 <TextView
                     style="@style/ItemGridProject"
-                    android:drawableTop="@drawable/ic_proj_company_desc"
-                    android:text="企业简介" />
+                    android:drawableTop="@drawable/ic_proj_qiyeguanxi"
+                    android:text="企业关系" />
 
                 <TextView
                     style="@style/ItemGridProject"
-                    android:drawableTop="@drawable/ic_proj_gaoguan"
-                    android:text="高管信息" />
+                    android:drawableTop="@drawable/ic_proj_gudongxinxi"
+                    android:text="股东信息" />
 
                 <TextView
                     style="@style/ItemGridProject"
-                    android:drawableTop="@drawable/ic_proj_cangu"
-                    android:text="参股控股" />
+                    android:drawableTop="@drawable/ic_proj_guquanjiegou"
+                    android:text="股权结构" />
 
                 <TextView
                     style="@style/ItemGridProject"
-                    android:drawableTop="@drawable/ic_proj_notice"
-                    android:text="上市公告" />
+                    android:drawableTop="@drawable/ic_proj_important_people"
+                    android:text="主要人员" />
 
                 <TextView
                     style="@style/ItemGridProject"
-                    android:drawableTop="@drawable/ic_proj_shidagudong"
-                    android:text="十大股东" />
+                    android:drawableTop="@drawable/ic_proj_duiwaitouzi"
+                    android:text="对外投资" />
 
                 <TextView
                     style="@style/ItemGridProject"
-                    android:drawableTop="@drawable/ic_proj_shidaliutong"
-                    android:text="十大流通" />
+                    android:drawableTop="@drawable/ic_proj_biangen_jilu"
+                    android:text="变更记录" />
 
                 <TextView
                     style="@style/ItemGridProject"
-                    android:drawableTop="@drawable/ic_proj_faxinjiguan"
-                    android:text="发行相关" />
+                    android:drawableTop="@drawable/ic_proj_company_year_report"
+                    android:text="企业年报" />
 
                 <TextView
                     style="@style/ItemGridProject"
-                    android:drawableTop="@drawable/ic_proj_gubenjiegou"
-                    android:text="股本结构" />
+                    android:drawableTop="@drawable/ic_proj_branch"
+                    android:text="分支机构" />
 
                 <TextView
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_gubenbiandong"
-                    android:text="股本变动" />
+                    android:text="公司简介"
+                    android:visibility="gone" />
 
             </GridLayout>
 

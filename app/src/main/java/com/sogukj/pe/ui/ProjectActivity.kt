@@ -97,6 +97,8 @@ class ProjectActivity : ToolbarActivity() {
             R.id.tv_fenhong -> BonusInfoActivity.start(this@ProjectActivity, project)
             R.id.tv_peigu -> AllotmentListActivity.start(this@ProjectActivity, project)
             R.id.tv_gubenjiegou -> GuBenJieGouActivity.start(this@ProjectActivity, project)
+
+            R.id.tv_bizinfo -> BizInfoActivity.start(this@ProjectActivity, project)
         }
     }
 
