@@ -11,4 +11,9 @@ class EquityChangeBean : Serializable {
     var afterNoLimit: String? = null//	Varchar	变动后流通A股	(万股)
     var afterLimit: String? = null//	Varchar	变动后限售A股	(万股)
     var changeReason: String? = null//	Varchar	变动原因
+
+    var investorName: String? = null//String	股东（发起人）
+    var ratioBefore: String? = null//String	变更前股权比例
+    var ratioAfter: String? = null//String	变更后股权比例
+    var changeTime: String? = null//String	股权变更日期
 }

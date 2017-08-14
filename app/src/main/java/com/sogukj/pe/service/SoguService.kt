@@ -164,15 +164,15 @@ interface SoguService {
     ): Observable<Payload<List<AllotmentBean>>>
 
     @FormUrlEncoded
-    @POST("/api/Listinformation/tenShareHolder")
-    fun shareHolder(
+    @POST("/api/Stockinfo/tenShareHolder")
+    fun shareHolders(
             @Field("company_id") company_id: Int
             , @Field("shareholder_type") shareholder_type: Int = 1
             , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
     ): Observable<Payload<List<TimeGroupedShareHolderBean>>>
 
     @FormUrlEncoded
-    @POST("/api/Listinformation/tenShareHolder")
+    @POST("/api/Stockinfo/tenShareHolder")
     fun gubenjiegou(
             @Field("company_id") company_id: Int
             , @Field("shareholder_type") shareholder_type: Int = 3
@@ -180,11 +180,28 @@ interface SoguService {
     ): Observable<Payload<List<TimeGroupedCapitalStructureBean>>>
 
     @FormUrlEncoded
-    @POST("/api/Listinformation/tenShareHolder")
+    @POST("/api/Listinformation/Sgcompanyinfo")
     fun bizinfo(
             @Field("company_id") company_id: Int
             , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
     ): Observable<Payload<BizInfoBean>>
+
+    @FormUrlEncoded
+    @POST("/api/Listinformation/Holder")
+    fun shareholderInfo(
+            @Field("company_id") company_id: Int
+            , @Field("page") page: Int = 1
+            , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
+    ): Observable<Payload<List<ShareHolderBean>>>
+
+    @FormUrlEncoded
+    @POST("/api/Listinformation/Annualreport")
+    fun annualReport(
+            @Field("company_id") company_id: Int
+            , @Field("page") page: Int = 1
+            , @Field("pageSize") pageSize: Int = 50
+            , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
+    ): Observable<Payload<List<AnnualReportBean>>>
 
     companion object {
         const val APPKEY_NAME = "appkey"

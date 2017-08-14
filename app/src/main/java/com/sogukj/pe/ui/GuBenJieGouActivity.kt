@@ -58,13 +58,12 @@ class GuBenJieGouActivity : ToolbarActivity() {
         lv_dropdown.setOnItemClickListener { parent, view, position, id ->
             val group = adapterSelector.dataList[position]
             group?.apply { setGroup(position) }
-            lv_dropdown.visibility = View.GONE
+            tv_select.isChecked = false
         }
-
-        tv_select.setOnClickListener {
-            lv_dropdown.visibility = when (lv_dropdown.visibility) {
-                View.VISIBLE -> View.GONE
-                else -> View.VISIBLE
+        tv_select.setOnCheckedChangeListener { buttonView, isChecked ->
+            lv_dropdown.visibility = when (isChecked) {
+                true -> View.VISIBLE
+                else -> View.GONE
             }
         }
         tv_previous.setOnClickListener {

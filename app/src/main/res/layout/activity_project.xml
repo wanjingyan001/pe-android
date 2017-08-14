@@ -251,54 +251,67 @@
                 android:padding="10dp"
                 android:rowCount="3">
 
-                <TextView android:id="@+id/tv_bizinfo"
+                <TextView
+                    android:id="@+id/tv_bizinfo"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_gongshangxinxi"
+                    android:onClick="onClick"
                     android:text="工商信息" />
 
                 <TextView
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_qiyeguanxi"
+                    android:onClick="onClick"
                     android:text="企业关系" />
 
                 <TextView
+                    android:id="@+id/tv_shareholder_info"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_gudongxinxi"
+                    android:onClick="onClick"
                     android:text="股东信息" />
 
                 <TextView
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_guquanjiegou"
+                    android:onClick="onClick"
                     android:text="股权结构" />
 
                 <TextView
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_important_people"
+                    android:onClick="onClick"
                     android:text="主要人员" />
 
                 <TextView
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_duiwaitouzi"
+                    android:onClick="onClick"
                     android:text="对外投资" />
 
                 <TextView
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_biangen_jilu"
+                    android:onClick="onClick"
                     android:text="变更记录" />
 
                 <TextView
+                    android:id="@+id/tv_qiyelianbao"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_company_year_report"
+                    android:onClick="onClick"
                     android:text="企业年报" />
 
                 <TextView
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_branch"
+                    android:onClick="onClick"
                     android:text="分支机构" />
 
                 <TextView
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_gubenbiandong"
+                    android:onClick="onClick"
                     android:text="公司简介"
                     android:visibility="gone" />
 

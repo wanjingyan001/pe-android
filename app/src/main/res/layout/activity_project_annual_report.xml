@@ -22,19 +22,21 @@
             android:enabled="false"
             android:gravity="center"
             android:padding="8dp"
-            android:text="上一季度"
+            android:text="上一年"
             android:textColor="@color/tx_color_white" />
 
         <CheckBox
             android:id="@+id/tv_select"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:button="@null"
             android:drawableRight="@drawable/ic_dropdown_arrow"
             android:gravity="center"
-            android:padding="8dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
+            android:paddingBottom="8dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="8dp"
             android:textColor="@color/tx_color_white"
             tools:text="2016-09-30" />
 
@@ -46,7 +48,7 @@
             android:enabled="false"
             android:gravity="center"
             android:padding="8dp"
-            android:text="下一季度"
+            android:text="下一年"
             android:textColor="@color/tx_color_white" />
 
     </LinearLayout>

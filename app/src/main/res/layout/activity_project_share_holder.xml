@@ -26,14 +26,16 @@
             android:text="上一季度"
             android:textColor="@color/tx_color_white" />
 
-        <TextView
+        <CheckBox
             android:id="@+id/tv_select"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/bg_rect_white"
+            android:button="@null"
+            android:drawableRight="@drawable/ic_dropdown_arrow"
             android:gravity="center"
             android:padding="8dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:textColor="@color/tx_color_white"
             tools:text="2016-09-30" />
 
