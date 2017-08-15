@@ -40,7 +40,7 @@ class InvestmentActivity : ToolbarActivity() {
         setTitle("对外投资")
 
         adapter = RecyclerAdapter<InvestmentBean>(this, { _adapter, parent, type ->
-            val convertView = _adapter.getView(R.layout.item_project_change_record, parent) as View
+            val convertView = _adapter.getView(R.layout.item_project_investment, parent) as View
             object : RecyclerHolder<InvestmentBean>(convertView) {
 
                 val tvName = convertView.findViewById(R.id.tv_name) as TextView
