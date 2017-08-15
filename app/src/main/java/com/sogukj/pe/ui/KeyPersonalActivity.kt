@@ -51,7 +51,7 @@ class KeyPersonalActivity : ToolbarActivity() {
 
                 override fun setData(view: View, data: KeyPersonalBean, position: Int) {
                     tvName.text = data.name
-                    tvPosotion.text = data.typeJoin
+                    tvPosotion.text = data.typeJoin?.joinToString()
                     Glide.with(this@KeyPersonalActivity)
                             .load(data.logo)
                             .error(R.drawable.img_user_default)

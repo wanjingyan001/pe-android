@@ -258,11 +258,6 @@
                     android:onClick="onClick"
                     android:text="工商信息" />
 
-                <TextView
-                    style="@style/ItemGridProject"
-                    android:drawableTop="@drawable/ic_proj_qiyeguanxi"
-                    android:onClick="onClick"
-                    android:text="企业关系" />
 
                 <TextView
                     android:id="@+id/tv_shareholder_info"
@@ -277,13 +272,15 @@
                     android:onClick="onClick"
                     android:text="股权结构" />
 
-                <TextView android:id="@+id/tv_key_personal"
+                <TextView
+                    android:id="@+id/tv_key_personal"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_important_people"
                     android:onClick="onClick"
                     android:text="主要人员" />
 
-                <TextView android:id="@+id/tv_investment"
+                <TextView
+                    android:id="@+id/tv_investment"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_duiwaitouzi"
                     android:onClick="onClick"
@@ -304,11 +301,19 @@
                     android:text="企业年报" />
 
                 <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_qiyeguanxi"
+                    android:onClick="onClick"
+                    android:text="企业关系"
+                    android:visibility="gone" />
+
+                <TextView
                     android:id="@+id/tv_branch"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_branch"
                     android:onClick="onClick"
-                    android:text="分支机构" />
+                    android:text="分支机构"
+                    android:visibility="gone" />
 
                 <TextView
                     style="@style/ItemGridProject"

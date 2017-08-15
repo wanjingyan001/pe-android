@@ -5,24 +5,21 @@
     android:layout_height="wrap_content"
     android:background="@drawable/divider_bottom"
     android:orientation="horizontal"
-    android:padding="10dp"
-    android:paddingBottom="10dp"
-    android:paddingTop="10dp">
+    android:padding="10dp">
 
     <ImageView
         android:id="@+id/iv_user"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_gravity="center"
-        android:layout_marginRight="10dp"
+        android:layout_marginRight="20dp"
         android:src="@drawable/img_user_default" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:orientation="vertical"
-        android:padding="10dp">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/tv_name"
