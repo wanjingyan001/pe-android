@@ -283,7 +283,7 @@
                     android:onClick="onClick"
                     android:text="主要人员" />
 
-                <TextView
+                <TextView android:id="@+id/tv_investment"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_duiwaitouzi"
                     android:onClick="onClick"
