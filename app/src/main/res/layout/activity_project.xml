@@ -277,7 +277,7 @@
                     android:onClick="onClick"
                     android:text="股权结构" />
 
-                <TextView
+                <TextView android:id="@+id/tv_key_personal"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_important_people"
                     android:onClick="onClick"
