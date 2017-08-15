@@ -68,6 +68,14 @@
                 android:background="@color/divider2"
                 android:orientation="vertical">
 
+                <TextView
+                    style="@style/SoguTextNormal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/divider2"
+                    android:padding="10dp"
+                    android:text="基本信息" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -252,6 +260,14 @@
                         android:text="--"
                         android:textColor="@color/text_2" />
                 </LinearLayout>
+
+                <TextView
+                    style="@style/SoguTextNormal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/divider2"
+                    android:padding="10dp"
+                    android:text="资产状况" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -469,11 +485,193 @@
                         android:textColor="@color/text_2" />
                 </LinearLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="8dp"
-                    android:background="@drawable/divider2" />
+                <TextView
+                    style="@style/SoguTextNormal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/divider2"
+                    android:padding="10dp"
+                    android:text="网站信息" />
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/divider_bottom"
+                    android:padding="10dp">
+
+                    <TextView
+                        style="@style/SoguTextMedium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:text="类型" />
+
+                    <TextView
+                        android:id="@+id/tv_webType"
+                        style="@style/SoguTextMedium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:text="--"
+                        android:textColor="@color/text_2" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/divider_bottom"
+                    android:padding="10dp">
+
+                    <TextView
+                        style="@style/SoguTextMedium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:text="名称" />
+
+                    <TextView
+                        android:id="@+id/tv_website_name"
+                        style="@style/SoguTextMedium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:text="--"
+                        android:textColor="@color/text_2" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/divider_bottom"
+                    android:padding="10dp">
+
+                    <TextView
+                        style="@style/SoguTextMedium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:text="网址" />
+
+                    <TextView
+                        android:id="@+id/tv_website"
+                        style="@style/SoguTextMedium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:text="--"
+                        android:textColor="@color/text_2" />
+                </LinearLayout>
+
+                <TextView
+                    style="@style/SoguTextNormal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/divider2"
+                    android:padding="10dp"
+                    android:text="股东及出资信息" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white">
+
+                    <TextView
+                        style="@style/SoguTextNormal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:text="暂无信息" />
+
+                    <com.framework.view.ListViewCompat
+                        android:id="@+id/lv_shareholders"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white" />
+                </FrameLayout>
+
+                <TextView
+                    style="@style/SoguTextNormal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/divider2"
+                    android:padding="10dp"
+                    android:text="对外提供保证担保信息" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white">
+
+                    <TextView
+                        style="@style/SoguTextNormal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:text="暂无信息" />
+
+                    <com.framework.view.ListViewCompat
+                        android:id="@+id/lv_guarantee_info"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white" />
+                </FrameLayout>
+
+                <TextView
+                    style="@style/SoguTextNormal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/divider2"
+                    android:padding="10dp"
+                    android:text="对外投资信息" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white">
+
+                    <TextView
+                        style="@style/SoguTextNormal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:text="暂无信息" />
+
+                    <com.framework.view.ListViewCompat
+                        android:id="@+id/lv_investment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white" />
+                </FrameLayout>
+
+                <TextView
+                    style="@style/SoguTextNormal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/divider2"
+                    android:padding="10dp"
+                    android:text="变更记录" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white">
+
+                    <TextView
+                        style="@style/SoguTextNormal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:text="暂无信息" />
+
+                    <com.framework.view.ListViewCompat
+                        android:id="@+id/lv_change_record"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white" />
+                </FrameLayout>
             </LinearLayout>
         </ScrollView>
 

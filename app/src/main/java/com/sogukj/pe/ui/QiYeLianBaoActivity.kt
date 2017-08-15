@@ -13,7 +13,9 @@ import com.framework.util.Trace
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.AnnualReportBean
+import com.sogukj.pe.bean.ChangeRecordBean
 import com.sogukj.pe.bean.ProjectBean
+import com.sogukj.pe.bean.ShareHolderBean
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -40,6 +42,117 @@ open class QiYeLianBaoActivity : ToolbarActivity() {
         }
     }
 
+    val adapterChangeRecord = ListAdapter {
+        object : ListHolder<ChangeRecordBean> {
+            lateinit var tvName: TextView
+            lateinit var tvTime: TextView
+            lateinit var tvBefore: TextView
+            lateinit var tvAfter: TextView
+
+            override fun createView(inflater: LayoutInflater): View {
+                val convertView = inflater.inflate(R.layout.item_project_change_record, null)
+                tvName = convertView.findViewById(R.id.tv_name) as TextView
+                tvTime = convertView.findViewById(R.id.tv_time) as TextView
+                tvBefore = convertView.findViewById(R.id.tv_before) as TextView
+                tvAfter = convertView.findViewById(R.id.tv_after) as TextView
+                return convertView
+            }
+
+            override fun showData(convertView: View, position: Int, data: ChangeRecordBean?) {
+                tvName.text = data?.changeItem
+                tvTime.text = data?.changeTime
+                tvBefore.text = data?.contentBefore
+                tvAfter.text = data?.contentAfter
+            }
+
+        }
+    }
+    val adapterInvestment = ListAdapter {
+        object : ListHolder<ChangeRecordBean> {
+            lateinit var tvName: TextView
+            lateinit var tvTime: TextView
+            lateinit var tvBefore: TextView
+            lateinit var tvAfter: TextView
+
+            override fun createView(inflater: LayoutInflater): View {
+                val convertView = inflater.inflate(R.layout.item_project_change_record, null)
+                tvName = convertView.findViewById(R.id.tv_name) as TextView
+                tvTime = convertView.findViewById(R.id.tv_time) as TextView
+                tvBefore = convertView.findViewById(R.id.tv_before) as TextView
+                tvAfter = convertView.findViewById(R.id.tv_after) as TextView
+                return convertView
+            }
+
+            override fun showData(convertView: View, position: Int, data: ChangeRecordBean?) {
+                tvName.text = data?.changeItem
+                tvTime.text = data?.changeTime
+                tvBefore.text = data?.contentBefore
+                tvAfter.text = data?.contentAfter
+            }
+
+        }
+    }
+    val adapterGuarentee = ListAdapter {
+        object : ListHolder<ChangeRecordBean> {
+            lateinit var tvName: TextView
+            lateinit var tvTime: TextView
+            lateinit var tvBefore: TextView
+            lateinit var tvAfter: TextView
+
+            override fun createView(inflater: LayoutInflater): View {
+                val convertView = inflater.inflate(R.layout.item_project_change_record, null)
+                tvName = convertView.findViewById(R.id.tv_name) as TextView
+                tvTime = convertView.findViewById(R.id.tv_time) as TextView
+                tvBefore = convertView.findViewById(R.id.tv_before) as TextView
+                tvAfter = convertView.findViewById(R.id.tv_after) as TextView
+                return convertView
+            }
+
+            override fun showData(convertView: View, position: Int, data: ChangeRecordBean?) {
+                tvName.text = data?.changeItem
+                tvTime.text = data?.changeTime
+                tvBefore.text = data?.contentBefore
+                tvAfter.text = data?.contentAfter
+            }
+
+        }
+    }
+    val adapterShareHolders = ListAdapter {
+        object : ListHolder<ShareHolderBean> {
+            lateinit var tvName: TextView
+            lateinit var tvSubscribeAmount: TextView
+            lateinit var tvSubscribeTime: TextView
+            lateinit var tvSubscribeType: TextView
+            lateinit var tvPaidAmount: TextView
+            lateinit var tvPaidTime: TextView
+            lateinit var tvPaidType: TextView
+
+            override fun createView(inflater: LayoutInflater): View {
+                val convertView = inflater.inflate(R.layout.item_project_report_shareholder, null)
+                tvName = convertView.findViewById(R.id.tv_name) as TextView
+                tvSubscribeAmount = convertView.findViewById(R.id.tv_subscribeAmount) as TextView
+                tvSubscribeTime = convertView.findViewById(R.id.tv_subscribeTime) as TextView
+                tvSubscribeType = convertView.findViewById(R.id.tv_subscribeType) as TextView
+                tvPaidAmount = convertView.findViewById(R.id.tv_paidAmount) as TextView
+                tvPaidTime = convertView.findViewById(R.id.tv_paidTime) as TextView
+                tvPaidType = convertView.findViewById(R.id.tv_paidType) as TextView
+
+                return convertView
+            }
+
+            override fun showData(convertView: View, position: Int, data: ShareHolderBean?) {
+                tvName.text = data?.investorName
+                tvSubscribeAmount.text = data?.subscribeAmount
+                tvSubscribeTime.text = data?.subscribeTime
+                tvSubscribeType.text = data?.subscribeType
+                tvPaidAmount.text = data?.paidAmount
+                tvPaidTime.text = data?.paidTime
+                tvPaidType.text = data?.paidType
+            }
+
+        }
+    }
+
     lateinit var project: ProjectBean
     var selectedIndex = -1;
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,6 +164,10 @@ open class QiYeLianBaoActivity : ToolbarActivity() {
         setTitle("企业年报")
 
         lv_dropdown.adapter = adapterSelector
+        lv_change_record.adapter = adapterChangeRecord
+        lv_investment.adapter = adapterInvestment
+        lv_guarantee_info.adapter = adapterGuarentee
+        lv_shareholders.adapter = adapterShareHolders
 
         lv_dropdown.setOnItemClickListener { parent, view, position, id ->
             val group = adapterSelector.dataList[position]
@@ -92,20 +209,39 @@ open class QiYeLianBaoActivity : ToolbarActivity() {
             tv_select.text = reportYear
             tv_regNumber.text = regNumber
             tv_manageState.text = manageState
-            tv_employeeNum.text=employeeNum
-            tv_phoneNumber.text=phoneNumber
-            tv_email.text=email
-            tv_postcode.text=postcode
-            tv_postalAddress.text=postalAddress
-            tv_totalAssets.text=totalAssets
-            tv_totalEquity.text=totalEquity
-            tv_totalSales.text=totalSales
-            tv_totalProfit.text=totalProfit
-            tv_primeBusProfit.text=primeBusProfit
-            tv_totalTax.text=totalTax
-            tv_totalLiability.text=totalLiability
-            tv_have_onlineStore.text=have_onlineStore
-            tv_have_boundInvest.text=have_boundInvest
+            tv_employeeNum.text = employeeNum
+            tv_phoneNumber.text = phoneNumber
+            tv_email.text = email
+            tv_postcode.text = postcode
+            tv_postalAddress.text = postalAddress
+            tv_totalAssets.text = totalAssets
+            tv_totalEquity.text = totalEquity
+            tv_totalSales.text = totalSales
+            tv_totalProfit.text = totalProfit
+            tv_primeBusProfit.text = primeBusProfit
+            tv_totalTax.text = totalTax
+            tv_totalLiability.text = totalLiability
+            tv_have_onlineStore.text = have_onlineStore
+            tv_have_boundInvest.text = have_boundInvest
+
+            webInfoList?.firstOrNull()?.apply {
+                tv_website_name.text = name
+                tv_webType.text = webType
+                tv_website.text = website
+            }
+
+            changeRecordList?.apply {
+                adapterChangeRecord.dataList.clear()
+                adapterChangeRecord.dataList.addAll(this)
+                adapterChangeRecord.notifyDataSetChanged()
+            }
+
+            shareholderList?.apply {
+                adapterShareHolders.dataList.clear()
+                adapterShareHolders.dataList.addAll(this)
+                adapterShareHolders.notifyDataSetChanged()
+            }
+
 
         }
     }
