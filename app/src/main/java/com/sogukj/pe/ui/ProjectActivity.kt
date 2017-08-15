@@ -48,7 +48,7 @@ class ProjectActivity : ToolbarActivity() {
 
 
         SoguApi.getService(application)
-                .newsList(pageSize = 3, page = 1, type = 1, company_id = project.company_id)
+                .listNews(pageSize = 3, page = 1, type = 1, company_id = project.company_id)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -65,7 +65,7 @@ class ProjectActivity : ToolbarActivity() {
                     showToast("暂无可用数据")
                 })
         SoguApi.getService(application)
-                .newsList(pageSize = 3, page = 1, type = 2, company_id = project.company_id)
+                .listNews(pageSize = 3, page = 1, type = 2, company_id = project.company_id)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -101,6 +101,7 @@ class ProjectActivity : ToolbarActivity() {
             R.id.tv_bizinfo -> BizInfoActivity.start(this@ProjectActivity, project)
             R.id.tv_shareholder_info -> ShareHolderInfoActivity.start(this@ProjectActivity, project)
             R.id.tv_qiyelianbao -> QiYeLianBaoActivity.start(this@ProjectActivity, project)
+            R.id.tv_change_record -> ChangeRecordActivity.start(this@ProjectActivity, project)
         }
     }
 

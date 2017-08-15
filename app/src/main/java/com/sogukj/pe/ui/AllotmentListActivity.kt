@@ -93,7 +93,7 @@ class AllotmentListActivity : ToolbarActivity() {
     var page = 1
     fun doRequest() {
         SoguApi.getService(application)
-                .allotment(project.company_id!!,page = page)
+                .listAllotment(project.company_id!!,page = page)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->

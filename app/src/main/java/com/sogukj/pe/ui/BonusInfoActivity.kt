@@ -103,7 +103,7 @@ class BonusInfoActivity : ToolbarActivity() {
 
     fun doRequest() {
         SoguApi.getService(application)
-                .bonusInfo(project.company_id!!)
+                .listBonusInfo(project.company_id!!)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->

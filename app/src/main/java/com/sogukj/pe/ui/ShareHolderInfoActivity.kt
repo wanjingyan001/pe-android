@@ -99,7 +99,7 @@ class ShareHolderInfoActivity : ToolbarActivity() {
 
     fun doRequest() {
         SoguApi.getService(application)
-                .shareholderInfo(company_id = project.company_id!!, page = page)
+                .listShareholderInfo(company_id = project.company_id!!, page = page)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->

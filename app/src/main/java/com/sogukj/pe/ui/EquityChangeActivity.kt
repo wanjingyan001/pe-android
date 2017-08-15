@@ -91,7 +91,7 @@ class EquityChangeActivity : ToolbarActivity() {
 
     fun doRequest() {
         SoguApi.getService(application)
-                .equityChange(project.company_id!!)
+                .listEquityChange(project.company_id!!)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->

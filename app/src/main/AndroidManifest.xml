@@ -98,7 +98,6 @@
             android:name=".ui.AllotmentListActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.AllotmentActivity"
             android:configChanges="orientation|screenSize"
@@ -121,6 +120,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.QiYeLianBaoActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.ChangeRecordActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" />
     </application>

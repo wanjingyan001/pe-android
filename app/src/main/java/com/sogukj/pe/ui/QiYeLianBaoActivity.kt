@@ -17,7 +17,7 @@ import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_project_share_holder.*
+import kotlinx.android.synthetic.main.activity_project_annual_report.*
 
 open class QiYeLianBaoActivity : ToolbarActivity() {
 
@@ -89,12 +89,30 @@ open class QiYeLianBaoActivity : ToolbarActivity() {
             tv_previous.isEnabled = true
         adapterSelector.notifyDataSetChanged()
         group.apply {
+            tv_select.text = reportYear
+            tv_regNumber.text = regNumber
+            tv_manageState.text = manageState
+            tv_employeeNum.text=employeeNum
+            tv_phoneNumber.text=phoneNumber
+            tv_email.text=email
+            tv_postcode.text=postcode
+            tv_postalAddress.text=postalAddress
+            tv_totalAssets.text=totalAssets
+            tv_totalEquity.text=totalEquity
+            tv_totalSales.text=totalSales
+            tv_totalProfit.text=totalProfit
+            tv_primeBusProfit.text=primeBusProfit
+            tv_totalTax.text=totalTax
+            tv_totalLiability.text=totalLiability
+            tv_have_onlineStore.text=have_onlineStore
+            tv_have_boundInvest.text=have_boundInvest
+
         }
     }
 
     fun doRequest() {
         SoguApi.getService(application)
-                .annualReport(project.company_id!!, page = 1)
+                .listAnnualReport(project.company_id!!, page = 1)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->

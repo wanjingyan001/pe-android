@@ -108,7 +108,7 @@ open class ShiDaGuDongActivity : ToolbarActivity() {
 
     fun doRequest() {
         SoguApi.getService(application)
-                .shareHolders(project.company_id!!, shareholder_type = type)
+                .listTenShareHolders(project.company_id!!, shareholder_type = type)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->

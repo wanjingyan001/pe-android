@@ -35,7 +35,7 @@ interface SoguService {
 
     @FormUrlEncoded
     @POST("/api/news/newsLists")
-    fun newsList(@Field("page") page: Int, @Field("pageSize") pageSize: Int = 20
+    fun listNews(@Field("page") page: Int, @Field("pageSize") pageSize: Int = 20
                  , @Field("user_id") user_id: Int? = null
                  , @Field("type") type: Int? = null
                  , @Field("company_id") company_id: Int? = null
@@ -44,7 +44,7 @@ interface SoguService {
 
     @FormUrlEncoded
     @POST("/api/news/focusCompanyLists")
-    fun projectList(@Field("page") page: Int
+    fun listProject(@Field("page") page: Int
                     , @Field("pageSize") pageSize: Int = 20
                     , @Field("uid") user_id: Int? = null
                     , @Field("type") type: Int? = null
@@ -114,7 +114,7 @@ interface SoguService {
 
     @FormUrlEncoded
     @POST("/api/Listinformation/Seniorexecutive")
-    fun gaoguan(
+    fun listSeniorExecutive(
             @Field("company_id") company_id: Int
             , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
     ): Observable<Payload<List<GaoGuanBean>>>
@@ -128,7 +128,7 @@ interface SoguService {
 
     @FormUrlEncoded
     @POST("/api/Listinformation/Announcement")
-    fun announcement(
+    fun listAnnouncement(
             @Field("company_id") company_id: Int
             , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
     ): Observable<Payload<List<AnnouncementBean>>>
@@ -142,30 +142,32 @@ interface SoguService {
 
     @FormUrlEncoded
     @POST("/api/Listinformation/Equitychange")
-    fun equityChange(
+    fun listEquityChange(
             @Field("company_id") company_id: Int
             , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
     ): Observable<Payload<List<EquityChangeBean>>>
 
     @FormUrlEncoded
     @POST("/api/Listinformation/Bonusinfo")
-    fun bonusInfo(
+    fun listBonusInfo(
             @Field("company_id") company_id: Int
             , @Field("page") page: Int = 1
+            , @Field("pageSize") pageSize: Int = 20
             , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
     ): Observable<Payload<List<BonusBean>>>
 
     @FormUrlEncoded
     @POST("/api/Listinformation/Allotmen")
-    fun allotment(
+    fun listAllotment(
             @Field("company_id") company_id: Int
             , @Field("page") page: Int = 1
+            , @Field("pageSize") pageSize: Int = 20
             , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
     ): Observable<Payload<List<AllotmentBean>>>
 
     @FormUrlEncoded
     @POST("/api/Stockinfo/tenShareHolder")
-    fun shareHolders(
+    fun listTenShareHolders(
             @Field("company_id") company_id: Int
             , @Field("shareholder_type") shareholder_type: Int = 1
             , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
@@ -188,20 +190,30 @@ interface SoguService {
 
     @FormUrlEncoded
     @POST("/api/Listinformation/Holder")
-    fun shareholderInfo(
+    fun listShareholderInfo(
             @Field("company_id") company_id: Int
             , @Field("page") page: Int = 1
+            , @Field("pageSize") pageSize: Int = 20
             , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
     ): Observable<Payload<List<ShareHolderBean>>>
 
     @FormUrlEncoded
     @POST("/api/Listinformation/Annualreport")
-    fun annualReport(
+    fun listAnnualReport(
             @Field("company_id") company_id: Int
             , @Field("page") page: Int = 1
             , @Field("pageSize") pageSize: Int = 50
             , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
     ): Observable<Payload<List<AnnualReportBean>>>
+
+    @FormUrlEncoded
+    @POST("/api/Listinformation/Changeinfo")
+    fun listChangeRecord(
+            @Field("company_id") company_id: Int
+            , @Field("page") page: Int = 1
+            , @Field("pageSize") pageSize: Int = 20
+            , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
+    ): Observable<Payload<List<ChangeRecordBean>>>
 
     companion object {
         const val APPKEY_NAME = "appkey"

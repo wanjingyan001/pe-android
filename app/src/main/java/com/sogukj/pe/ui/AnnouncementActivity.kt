@@ -82,7 +82,7 @@ class AnnouncementActivity : ToolbarActivity() {
 
     fun doRequest() {
         SoguApi.getService(application)
-                .announcement(project.company_id!!)
+                .listAnnouncement(project.company_id!!)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->

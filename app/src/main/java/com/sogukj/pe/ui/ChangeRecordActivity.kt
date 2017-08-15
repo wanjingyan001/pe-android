@@ -14,40 +14,47 @@ import com.framework.base.ToolbarActivity
 import com.framework.util.Trace
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
+import com.lcodecore.tkrefreshlayout.footer.BallPulseView
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
-import com.sogukj.pe.bean.GaoGuanBean
+import com.sogukj.pe.bean.ChangeRecordBean
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_list_news.*
+import java.text.SimpleDateFormat
 
-class GaoGuanActivity : ToolbarActivity() {
+class ChangeRecordActivity : ToolbarActivity() {
 
-    lateinit var adapter: RecyclerAdapter<GaoGuanBean>
+    lateinit var adapter: RecyclerAdapter<ChangeRecordBean>
     lateinit var project: ProjectBean
+    val df = SimpleDateFormat("yyyy-MM-dd")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list_common)
 
         project = intent.getSerializableExtra(Extras.DATA) as ProjectBean
         setBack(true)
-        setTitle("高管信息")
-        adapter = RecyclerAdapter<GaoGuanBean>(this, { _adapter, parent, type ->
-            val convertView = _adapter.getView(R.layout.item_project_gaoguan, parent) as View
-            object : RecyclerHolder<GaoGuanBean>(convertView) {
+        setTitle("变更记录")
 
-                var tvName = convertView.findViewById(R.id.tv_name) as TextView
-                var tvPosotion = convertView.findViewById(R.id.tv_posotion) as TextView
-                var tvStockCount = convertView.findViewById(R.id.tv_stock_count) as TextView
+        adapter = RecyclerAdapter<ChangeRecordBean>(this, { _adapter, parent, type ->
+            val convertView = _adapter.getView(R.layout.item_project_change_record, parent) as View
+            object : RecyclerHolder<ChangeRecordBean>(convertView) {
+
+                val tvName = convertView.findViewById(R.id.tv_name) as TextView
+                val tvTime = convertView.findViewById(R.id.tv_time) as TextView
+                val tvBefore = convertView.findViewById(R.id.tv_before) as TextView
+                val tvAfter = convertView.findViewById(R.id.tv_after) as TextView
 
 
-                override fun setData(view: View, data: GaoGuanBean, position: Int) {
-                    tvName.text = data.name
-                    tvPosotion.text = data.position
-                    tvStockCount.text = data.numberOfShares?.toString()
+                override fun setData(view: View, data: ChangeRecordBean, position: Int) {
+                    tvName.text = data.changeItem
+                    tvTime.text = data.changeTime
+                    tvBefore.text = data.contentBefore
+                    tvAfter.text = data.contentAfter
+
                 }
 
             }
@@ -63,53 +70,60 @@ class GaoGuanActivity : ToolbarActivity() {
         val header = ProgressLayout(this)
         header.setColorSchemeColors(ContextCompat.getColor(this, R.color.color_main))
         refresh.setHeaderView(header)
-//        val footer = BallPulseView(this)
-//        footer.setAnimatingColor(ContextCompat.getColor(this, R.color.color_main))
-//        refresh.setBottomView(footer)
+        val footer = BallPulseView(this)
+        footer.setAnimatingColor(ContextCompat.getColor(this, R.color.color_main))
+        refresh.setBottomView(footer)
         refresh.setOverScrollRefreshShow(false)
-        refresh.setEnableLoadmore(false)
+        refresh.setEnableLoadmore(true)
         refresh.setOnRefreshListener(object : RefreshListenerAdapter() {
             override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
+                page = 1
                 doRequest()
             }
 
             override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
-                super.onLoadMore(refreshLayout)
+                ++page
+                doRequest()
             }
 
         })
-        refresh.setAutoLoadMore(false)
+        refresh.setAutoLoadMore(true)
         handler.postDelayed({
             doRequest()
         }, 100)
     }
 
+    var page = 1
     fun doRequest() {
         SoguApi.getService(application)
-                .listSeniorExecutive(project.company_id!!)
+                .listChangeRecord(project.company_id!!, page = page)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
-                    adapter.dataList.clear()
                     if (payload.isOk) {
+                        if (page == 1)
+                            adapter.dataList.clear()
                         payload.payload?.apply {
                             adapter.dataList.addAll(this)
                         }
-                    } else {
+                    } else
                         showToast(payload.message)
-                    }
                 }, { e ->
                     Trace.e(e)
+                    showToast("暂无可用数据")
                 }, {
+                    refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
                     adapter.notifyDataSetChanged()
-                    refresh?.finishRefreshing()
+                    if (page == 1)
+                        refresh?.finishRefreshing()
+                    else
+                        refresh?.finishLoadmore()
                 })
     }
 
-
     companion object {
         fun start(ctx: Activity?, project: ProjectBean) {
-            val intent = Intent(ctx, GaoGuanActivity::class.java)
+            val intent = Intent(ctx, ChangeRecordActivity::class.java)
             intent.putExtra(Extras.DATA, project)
             ctx?.startActivity(intent)
         }

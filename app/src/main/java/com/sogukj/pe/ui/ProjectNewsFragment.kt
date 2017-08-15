@@ -94,7 +94,7 @@ class ProjectNewsFragment : BaseFragment() {
         val user = Store.store.getUser(baseActivity!!)
         val userId = if (index == 0) null else user?.uid;
         SoguApi.getService(baseActivity!!.application)
-                .newsList(page = page, type = 1, company_id = project.company_id)
+                .listNews(page = page, type = 1, company_id = project.company_id)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->

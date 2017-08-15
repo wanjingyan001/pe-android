@@ -99,7 +99,7 @@ class NewsListFragment : BaseFragment() {
         val user = Store.store.getUser(baseActivity!!)
         val userId = if (index == 0) null else user?.uid;
         SoguApi.getService(baseActivity!!.application)
-                .newsList(page = page, type = type, user_id = userId)
+                .listNews(page = page, type = type, user_id = userId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
