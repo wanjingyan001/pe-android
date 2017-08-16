@@ -142,6 +142,10 @@
             android:name=".ui.FinanceHistoryActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.CoreTeamActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

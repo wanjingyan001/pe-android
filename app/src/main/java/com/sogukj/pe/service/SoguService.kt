@@ -247,9 +247,36 @@ interface SoguService {
     fun listFinanceHistory(
             @Field("company_id") company_id: Int
             , @Field("page") page: Int = 1
-            , @Field("pageSize") pageSize: Int = 1000
+            , @Field("pageSize") pageSize: Int = 20
             , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
     ): Observable<Payload<List<FinanceHistoryBean>>>
+
+    @FormUrlEncoded
+    @POST("/api/Listinformation/Findtzanli")
+    fun listInvestEvent(
+            @Field("company_id") company_id: Int
+            , @Field("page") page: Int = 1
+            , @Field("pageSize") pageSize: Int = 20
+            , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
+    ): Observable<Payload<List<InvestEventBean>>>
+
+    @FormUrlEncoded
+    @POST("/api/Listinformation/Findtzanli")
+    fun listInvestDistribute(
+            @Field("company_id") company_id: Int
+            , @Field("page") page: Int = 1
+            , @Field("pageSize") pageSize: Int = 20
+            , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
+    ): Observable<Payload<List<InvestEventBean>>>
+
+    @FormUrlEncoded
+    @POST("/api/Listinformation/Findteammember")
+    fun listCoreTeam(
+            @Field("company_id") company_id: Int
+            , @Field("page") page: Int = 1
+            , @Field("pageSize") pageSize: Int = 20
+            , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
+    ): Observable<Payload<List<TeamMemberBean>>>
 
     companion object {
         const val APPKEY_NAME = "appkey"
