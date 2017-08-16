@@ -104,6 +104,7 @@ class ProjectActivity : ToolbarActivity() {
             R.id.tv_change_record -> ChangeRecordActivity.start(this@ProjectActivity, project)
             R.id.tv_investment -> InvestmentActivity.start(this@ProjectActivity, project)
             R.id.tv_key_personal -> KeyPersonalActivity.start(this@ProjectActivity, project)
+            R.id.tv_equity_structure->EquityStructureActivity.start(this@ProjectActivity, project)
         }
     }
 
