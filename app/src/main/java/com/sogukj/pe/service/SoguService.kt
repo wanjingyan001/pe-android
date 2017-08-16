@@ -242,6 +242,15 @@ interface SoguService {
             , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
     ): Observable<Payload<EquityStructureBean>>
 
+    @FormUrlEncoded
+    @POST("/api/Listinformation/Findhistoryrongzi")
+    fun listFinanceHistory(
+            @Field("company_id") company_id: Int
+            , @Field("page") page: Int = 1
+            , @Field("pageSize") pageSize: Int = 1000
+            , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
+    ): Observable<Payload<List<FinanceHistoryBean>>>
+
     companion object {
         const val APPKEY_NAME = "appkey"
         const val APPKEY_VALUE = "d5f17cafef0829b5"

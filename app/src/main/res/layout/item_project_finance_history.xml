@@ -20,6 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
+            android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingLeft="10dp"
             android:paddingRight="10dp">
@@ -40,6 +41,7 @@
                 style="@style/SoguTextSamll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="3dp"
                 android:background="@drawable/bg_border_blue"
                 android:paddingBottom="3dp"
                 android:paddingLeft="10dp"

@@ -17,7 +17,7 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.adapter.RecyclerAdapter
 import com.sogukj.pe.adapter.RecyclerHolder
-import com.sogukj.pe.bean.InvestmentBean
+import com.sogukj.pe.bean.FinanceHistoryBean
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
@@ -28,7 +28,7 @@ import java.text.SimpleDateFormat
 
 class FinanceHistoryActivity : ToolbarActivity() {
 
-    lateinit var adapter: RecyclerAdapter<InvestmentBean>
+    lateinit var adapter: RecyclerAdapter<FinanceHistoryBean>
     lateinit var project: ProjectBean
     val df = SimpleDateFormat("yyyy-MM-dd")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,24 +39,20 @@ class FinanceHistoryActivity : ToolbarActivity() {
         setBack(true)
         setTitle("融资历史")
 
-        adapter = RecyclerAdapter<InvestmentBean>(this, { _adapter, parent, type ->
-            val convertView = _adapter.getView(R.layout.item_project_investment, parent) as View
-            object : RecyclerHolder<InvestmentBean>(convertView) {
+        adapter = RecyclerAdapter<FinanceHistoryBean>(this, { _adapter, parent, type ->
+            val convertView = _adapter.getView(R.layout.item_project_finance_history, parent) as View
+            object : RecyclerHolder<FinanceHistoryBean>(convertView) {
 
-                val tvName = convertView.findViewById(R.id.tv_name) as TextView
-                val tvPencertileScore = convertView.findViewById(R.id.tv_pencertileScore) as TextView
-                val tvRegStatus = convertView.findViewById(R.id.tv_regStatus) as TextView
-                val tvLegalPersonName = convertView.findViewById(R.id.tv_legalPersonName) as TextView
-                val tvRegCapital = convertView.findViewById(R.id.tv_regCapital) as TextView
-                val tvAmount = convertView.findViewById(R.id.tv_amount) as TextView
+                val tvDate = convertView.findViewById(R.id.tv_date) as TextView
+                val tvRound = convertView.findViewById(R.id.tv_round) as TextView
+                val tvValue = convertView.findViewById(R.id.tv_value) as TextView
+                val tvOrganizationName = convertView.findViewById(R.id.tv_organizationName) as TextView
 
-                override fun setData(view: View, data: InvestmentBean, position: Int) {
-                    tvName.text = data.name
-                    tvPencertileScore.text = "${data.pencertileScore}评分"
-                    tvLegalPersonName.text = data.legalPersonName
-                    tvRegCapital.text = data.regCapital
-                    tvAmount.text = "${data.amount}"
-                    tvRegStatus.text = data.regStatus
+                override fun setData(view: View, data: FinanceHistoryBean, position: Int) {
+                    tvDate.text = data.date
+                    tvRound.text = data.round
+                    tvValue.text = data.value
+                    tvOrganizationName.text = data.organizationName
                 }
 
             }
@@ -98,7 +94,7 @@ class FinanceHistoryActivity : ToolbarActivity() {
     var page = 1
     fun doRequest() {
         SoguApi.getService(application)
-                .listInvestment(project.company_id!!, page = page)
+                .listFinanceHistory(project.company_id!!, page = page)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
