@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.webkit.WebSettings
 import android.webkit.WebSettings.LayoutAlgorithm
 import com.framework.base.ToolbarActivity
-import com.framework.util.Trace
+import com.sogukj.pe.util.Trace
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.NewsBean

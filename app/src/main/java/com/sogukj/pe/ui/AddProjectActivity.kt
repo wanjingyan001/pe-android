@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import com.framework.base.ToolbarActivity
-import com.framework.util.Trace
+import com.sogukj.pe.util.Trace
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.service.SoguApi

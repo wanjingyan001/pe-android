@@ -10,10 +10,10 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
-import com.framework.adapter.RecyclerAdapter
-import com.framework.adapter.RecyclerHolder
+import com.sogukj.pe.adapter.RecyclerAdapter
+import com.sogukj.pe.adapter.RecyclerHolder
 import com.framework.base.ToolbarActivity
-import com.framework.util.Trace
+import com.sogukj.pe.util.Trace
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import com.lcodecore.tkrefreshlayout.footer.BallPulseView

@@ -1,9 +1,8 @@
 package com.sogukj.service
 
 import android.app.Application
-import com.framework.util.Trace
+import com.sogukj.pe.util.Trace
 import com.sogukj.pe.Consts
-import okhttp3.FormBody
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory

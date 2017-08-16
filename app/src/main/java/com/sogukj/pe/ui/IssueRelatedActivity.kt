@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import com.framework.base.ToolbarActivity
-import com.framework.util.Trace
+import com.sogukj.pe.util.Trace
 import com.google.gson.Gson
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R

@@ -6,16 +6,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
-import com.framework.adapter.ListAdapter
-import com.framework.adapter.ListHolder
+import com.sogukj.pe.adapter.ListAdapter
+import com.sogukj.pe.adapter.ListHolder
 import com.framework.base.ToolbarActivity
-import com.framework.util.Trace
+import com.sogukj.pe.util.Trace
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
-import com.sogukj.pe.bean.AnnualReportBean
-import com.sogukj.pe.bean.ChangeRecordBean
-import com.sogukj.pe.bean.ProjectBean
-import com.sogukj.pe.bean.ShareHolderBean
+import com.sogukj.pe.bean.*
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -68,26 +65,25 @@ open class QiYeLianBaoActivity : ToolbarActivity() {
         }
     }
     val adapterInvestment = ListAdapter {
-        object : ListHolder<ChangeRecordBean> {
+        object : ListHolder<InvestmentBean> {
             lateinit var tvName: TextView
-            lateinit var tvTime: TextView
-            lateinit var tvBefore: TextView
-            lateinit var tvAfter: TextView
+            lateinit var tvRegNum: TextView
+            lateinit var tvCreditCode: TextView
 
             override fun createView(inflater: LayoutInflater): View {
-                val convertView = inflater.inflate(R.layout.item_project_change_record, null)
+                val convertView = inflater.inflate(R.layout.item_project_report_investment, null)
+
                 tvName = convertView.findViewById(R.id.tv_name) as TextView
-                tvTime = convertView.findViewById(R.id.tv_time) as TextView
-                tvBefore = convertView.findViewById(R.id.tv_before) as TextView
-                tvAfter = convertView.findViewById(R.id.tv_after) as TextView
+                tvRegNum = convertView.findViewById(R.id.tv_regNum) as TextView
+                tvCreditCode = convertView.findViewById(R.id.tv_creditCode) as TextView
+
                 return convertView
             }
 
-            override fun showData(convertView: View, position: Int, data: ChangeRecordBean?) {
-                tvName.text = data?.changeItem
-                tvTime.text = data?.changeTime
-                tvBefore.text = data?.contentBefore
-                tvAfter.text = data?.contentAfter
+            override fun showData(convertView: View, position: Int, data: InvestmentBean?) {
+                tvName.text = data?.outcompanyName
+                tvRegNum.text = data?.regNum
+                tvCreditCode.text = data?.creditCode
             }
 
         }
@@ -242,6 +238,11 @@ open class QiYeLianBaoActivity : ToolbarActivity() {
                 adapterShareHolders.notifyDataSetChanged()
             }
 
+            outboundInvestmentList?.apply {
+                adapterInvestment.dataList.clear()
+                adapterInvestment.dataList.addAll(this)
+                adapterInvestment.notifyDataSetChanged()
+            }
 
         }
     }

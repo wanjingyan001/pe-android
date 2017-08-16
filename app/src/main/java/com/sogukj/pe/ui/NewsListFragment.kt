@@ -6,10 +6,10 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.TextView
-import com.framework.adapter.RecyclerAdapter
-import com.framework.adapter.RecyclerHolder
+import com.sogukj.pe.adapter.RecyclerAdapter
+import com.sogukj.pe.adapter.RecyclerHolder
 import com.framework.base.BaseFragment
-import com.framework.util.Trace
+import com.sogukj.pe.util.Trace
 import com.framework.view.FlowLayout
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout

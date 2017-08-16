@@ -13,7 +13,7 @@
 
     <include layout="@layout/item_row_header_user_jobs" />
 
-    <!--<com.framework.view.ListViewCompat android:id="@+id/list_view"-->
+    <!--<com.ListViewCompat android:id="@+id/list_view"-->
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="wrap_content"-->
         <!--android:divider="@color/divider"-->
