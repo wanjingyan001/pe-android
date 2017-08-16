@@ -90,25 +90,13 @@ open class QiYeLianBaoActivity : ToolbarActivity() {
     }
     val adapterGuarentee = ListAdapter {
         object : ListHolder<ChangeRecordBean> {
-            lateinit var tvName: TextView
-            lateinit var tvTime: TextView
-            lateinit var tvBefore: TextView
-            lateinit var tvAfter: TextView
 
             override fun createView(inflater: LayoutInflater): View {
                 val convertView = inflater.inflate(R.layout.item_project_change_record, null)
-                tvName = convertView.findViewById(R.id.tv_name) as TextView
-                tvTime = convertView.findViewById(R.id.tv_time) as TextView
-                tvBefore = convertView.findViewById(R.id.tv_before) as TextView
-                tvAfter = convertView.findViewById(R.id.tv_after) as TextView
                 return convertView
             }
 
             override fun showData(convertView: View, position: Int, data: ChangeRecordBean?) {
-                tvName.text = data?.changeItem
-                tvTime.text = data?.changeTime
-                tvBefore.text = data?.contentBefore
-                tvAfter.text = data?.contentAfter
             }
 
         }
