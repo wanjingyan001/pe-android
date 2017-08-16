@@ -5,7 +5,7 @@ import android.util.TypedValue
 import android.view.Menu
 import android.view.View
 import android.widget.TextView
-import com.framework.R
+import com.sogukj.pe.R
 
 /**
  * Created by qinfei on 17/7/18.

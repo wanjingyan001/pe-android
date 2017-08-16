@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.view.*
 import android.widget.TextView
-import com.framework.R
+import com.sogukj.pe.R
 
 /**
  * Created by qinfei on 17/7/18.
