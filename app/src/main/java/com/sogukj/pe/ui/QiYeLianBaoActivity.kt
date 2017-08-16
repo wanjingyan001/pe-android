@@ -6,13 +6,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
-import com.sogukj.pe.adapter.ListAdapter
-import com.sogukj.pe.adapter.ListHolder
 import com.framework.base.ToolbarActivity
-import com.sogukj.pe.util.Trace
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.adapter.ListAdapter
+import com.sogukj.pe.adapter.ListHolder
 import com.sogukj.pe.bean.*
+import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -150,7 +150,7 @@ open class QiYeLianBaoActivity : ToolbarActivity() {
     }
 
     lateinit var project: ProjectBean
-    var selectedIndex = -1;
+    var selectedIndex = -1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_project_annual_report)

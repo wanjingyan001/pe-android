@@ -8,20 +8,21 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
-import com.sogukj.pe.adapter.ListAdapter
-import com.sogukj.pe.adapter.ListHolder
 import com.framework.base.ToolbarActivity
-import com.sogukj.pe.util.Trace
-import com.framework.view.FlowLayout
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.adapter.ListAdapter
+import com.sogukj.pe.adapter.ListHolder
 import com.sogukj.pe.bean.NewsBean
 import com.sogukj.pe.bean.ProjectBean
+import com.sogukj.pe.util.Trace
+import com.sogukj.pe.view.FlowLayout
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_project.*
+import org.jetbrains.anko.find
 
 /**
  * Created by qinfei on 17/7/18.

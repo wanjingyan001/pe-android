@@ -19,7 +19,7 @@
         android:layout_height="1dp"
         android:background="@color/divider" />
 
-    <com.framework.view.ProgressLayout
+    <com.sogukj.pe.view.ProgressLayout
         android:id="@+id/progressLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-    </com.framework.view.ProgressLayout>
+    </com.sogukj.pe.view.ProgressLayout>
 
     <!--<ScrollView-->
     <!--android:layout_width="match_parent" -->

@@ -144,7 +144,7 @@
                     android:layout_height="8dp"
                     android:background="@drawable/divider2" />
 
-                <com.framework.view.ListViewCompat
+                <com.sogukj.pe.view.ListViewCompat
                     android:id="@+id/list_view"
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
@@ -157,7 +157,7 @@
         </ScrollView>
 
 
-        <com.framework.view.ListViewCompat
+        <com.sogukj.pe.view.ListViewCompat
             android:id="@+id/lv_dropdown"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

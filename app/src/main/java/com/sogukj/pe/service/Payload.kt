@@ -1,7 +1,7 @@
 package com.sogukj.pe.service
 
-import com.framework.util.Errors
 import com.google.gson.Gson
+import com.sogukj.pe.util.Errors
 
 /**
  * Created by qff on 2016/1/26.

@@ -7,10 +7,10 @@ import android.os.Handler
 import android.text.TextUtils
 import com.framework.base.ActivityHelper
 import com.framework.base.BaseActivity
-import com.framework.util.Utils
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.util.LoginTimer
+import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
