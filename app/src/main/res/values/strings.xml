@@ -11,4 +11,7 @@
     <string name="tv_project_cangu_bis" formatted="false">被参股公司主营业务：&lt;font color="#666666"> %s &lt;/font></string>
     <string name="tv_proj_product_type">类型：</string>
     <string name="tv_proj_product_desc">描述：</string>
+    <string name="tv_proj_product_biz">业务：</string>
+    <string name="tv_proj_product_create_date">成立日期：</string>
+    <string name="tv_proj_product_company" formatted="false">关联公司：&lt;font color="#5785f3"> %s &lt;/font></string>
 </resources>

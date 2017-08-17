@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
+import android.text.Html
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -27,7 +28,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_list_news.*
 import java.text.SimpleDateFormat
 
-class BusinessEventsActivity : ToolbarActivity() {
+class ProductInfoActivity : ToolbarActivity() {
 
     lateinit var adapter: RecyclerAdapter<ProductBean>
     lateinit var project: ProjectBean
@@ -38,23 +39,25 @@ class BusinessEventsActivity : ToolbarActivity() {
 
         project = intent.getSerializableExtra(Extras.DATA) as ProjectBean
         setBack(true)
-        setTitle("企业业务")
+        setTitle("竟品信息")
 
         adapter = RecyclerAdapter<ProductBean>(this, { _adapter, parent, type ->
-            val convertView = _adapter.getView(R.layout.item_project_business_event, parent) as View
+            val convertView = _adapter.getView(R.layout.item_project_product_info, parent) as View
             object : RecyclerHolder<ProductBean>(convertView) {
 
                 val ivUser = convertView.findViewById(R.id.iv_user) as ImageView
                 val tvProduct = convertView.findViewById(R.id.tv_product) as TextView
                 val tvYewu = convertView.findViewById(R.id.tv_yewu) as TextView
-                val tvDesc = convertView.findViewById(R.id.tv_desc) as TextView
+                val tvDate = convertView.findViewById(R.id.tv_create_date) as TextView
+                val tvCompany = convertView.findViewById(R.id.tv_company) as TextView
 
                 override fun setData(view: View, data: ProductBean, position: Int) {
 
-                    tvProduct.text = data.product
+                    tvProduct.text = data.jingpinProduct
                     tvYewu.text = "${getString(R.string.tv_proj_product_biz)}${data.yewu}"
-                    tvDesc.text = "${getString(R.string.tv_proj_product_type)}${data.hangye}"
-                    Glide.with(this@BusinessEventsActivity)
+                    tvDate.text = "${getString(R.string.tv_proj_product_create_date)}${data.date}"
+                    tvCompany.text = Html.fromHtml(getString(R.string.tv_proj_product_company, data.companyName))
+                    Glide.with(this@ProductInfoActivity)
                             .load(data.logo)
                             .error(R.drawable.img_user_default)
                             .into(ivUser)
@@ -127,7 +130,7 @@ class BusinessEventsActivity : ToolbarActivity() {
 
     companion object {
         fun start(ctx: Activity?, project: ProjectBean) {
-            val intent = Intent(ctx, BusinessEventsActivity::class.java)
+            val intent = Intent(ctx, ProductInfoActivity::class.java)
             intent.putExtra(Extras.DATA, project)
             ctx?.startActivity(intent)
         }
