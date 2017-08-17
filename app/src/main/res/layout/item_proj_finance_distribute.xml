@@ -3,22 +3,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center_vertical"
     android:orientation="horizontal"
     android:padding="5dp">
 
     <TextView
-        android:id="@+id/tag"
-        style="@style/SoguTextMedium"
-        android:layout_width="100dp"
+        android:id="@+id/tv_tag"
+        style="@style/SoguTextSamll"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:layout_marginRight="10dp"
         android:gravity="right"
         android:textColor="@color/text_2"
+        android:textSize="13sp"
         tools:text="定向增发" />
 
     <View
         android:id="@+id/bar"
-        android:layout_width="0dp"
+        android:layout_width="100dp"
         android:layout_height="15dp"
         android:background="@color/colorBlue" />
+
+    <TextView
+        android:id="@+id/v_value"
+        style="@style/SoguTextSamll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:gravity="right"
+        android:textColor="@color/colorBlue"
+        tools:text="12345" />
 </LinearLayout>

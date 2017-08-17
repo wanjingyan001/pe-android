@@ -7,17 +7,13 @@ import android.widget.TextView
 import com.framework.base.BaseFragment
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
-import com.sogukj.pe.adapter.RecyclerHolder
-import com.sogukj.pe.bean.NewsBean
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
-import com.sogukj.pe.view.FlowLayout
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_proj_finance_distribute.*
-import org.jetbrains.anko.find
 
 
 /**
@@ -51,9 +47,9 @@ class FinanceDistributeListFragment : BaseFragment() {
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         payload.payload?.apply {
-                            val lunci = this["lunci"] as Map<String, Int>
+                            val lunci = this["lunci"] as Map<String, Double>
                             lunci?.apply { setData(tab1, this) }
-                            val hangye = this["hangye"] as Map<String, Int>
+                            val hangye = this["hangye"] as Map<String, Double>
                             hangye?.apply { setData(tab2, this) }
                         }
                     } else
@@ -64,48 +60,28 @@ class FinanceDistributeListFragment : BaseFragment() {
                 })
     }
 
-    fun setData(tab1: TableLayout, map: Map<String, Int>) {
+    fun setData(tab1: TableLayout, map: Map<String, Double>) {
         val max = map.values.max()
         tab1.removeAllViews()
         val width = tab1
-                .width - Utils.dpToPx(baseActivity, 120)
-        val pw = width.toFloat() / max!!.toFloat()
+                .width - Utils.dpToPx(baseActivity, 160)
+        val pw = width.toDouble() / max!!.toDouble()
         for ((k, v) in map) {
             val convertView = View.inflate(baseActivity, R.layout.item_proj_finance_distribute, null)
             tab1.addView(convertView)
 
-            val tag = convertView.findViewById(R.id.tag) as TextView
+
+            val tvTag = convertView.findViewById(R.id.tv_tag) as TextView
             val bar = convertView.findViewById(R.id.bar)
-            tag.text = k
+            val vValue = convertView.findViewById(R.id.v_value) as TextView
+
+            tvTag.text = k
+            vValue.text = v.toInt().toString()
             val lp = bar.layoutParams
             lp.width = (v * pw).toInt()
             bar.layoutParams = lp
 
         }
-    }
-
-
-    inner class NewsHolder(view: View)
-        : RecyclerHolder<NewsBean>(view) {
-        val tv_summary: TextView
-        val tv_time: TextView
-        val tv_from: TextView
-        val tags: FlowLayout
-
-        init {
-            tv_summary = view.find(R.id.tv_summary)
-            tv_time = view.find(R.id.tv_time)
-            tv_from = view.find(R.id.tv_from)
-            tags = view.find(R.id.tags)
-        }
-
-        override fun setData(view: View, data: NewsBean, position: Int) {
-            tv_summary.text = data.title
-            tv_time.text = data.time
-            tv_from.text = data.source
-
-        }
-
     }
 
     companion object {
