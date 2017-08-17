@@ -25,7 +25,7 @@ import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragment_list_news.*
+import kotlinx.android.synthetic.main.activity_list_common.*
 import java.text.SimpleDateFormat
 
 class ProductInfoActivity : ToolbarActivity() {
@@ -47,21 +47,28 @@ class ProductInfoActivity : ToolbarActivity() {
 
                 val ivUser = convertView.findViewById(R.id.iv_user) as ImageView
                 val tvProduct = convertView.findViewById(R.id.tv_product) as TextView
+                val tvRound = convertView.findViewById(R.id.tv_round) as TextView
                 val tvYewu = convertView.findViewById(R.id.tv_yewu) as TextView
-                val tvDate = convertView.findViewById(R.id.tv_create_date) as TextView
+                val tvDate = convertView.findViewById(R.id.tv_date) as TextView
                 val tvCompany = convertView.findViewById(R.id.tv_company) as TextView
 
                 override fun setData(view: View, data: ProductBean, position: Int) {
 
                     tvProduct.text = data.jingpinProduct
-                    tvYewu.text = "${getString(R.string.tv_proj_product_biz)}${data.yewu}"
-                    tvDate.text = "${getString(R.string.tv_proj_product_create_date)}${data.date}"
-                    tvCompany.text = Html.fromHtml(getString(R.string.tv_proj_product_company, data.companyName))
+                        tvYewu.text = "${getString(R.string.tv_proj_product_biz)}${data.yewu}"
+                        tvDate.text = "${getString(R.string.tv_proj_product_create_date)}${data.date}"
+                        tvCompany.text = Html.fromHtml(getString(R.string.tv_proj_product_company, data.companyName))
                     Glide.with(this@ProductInfoActivity)
-                            .load(data.logo)
+                            .load(data.icon)
                             .error(R.drawable.img_user_default)
                             .into(ivUser)
-
+                    tvRound.visibility = View.GONE
+                    data.round?.trim()?.takeIf {
+                        it.length == 0
+                    }.apply {
+                        tvRound.visibility = View.VISIBLE
+                        tvRound.text = this
+                    }
                 }
 
             }
