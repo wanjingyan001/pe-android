@@ -70,7 +70,6 @@ class FinanceDistributeListFragment : BaseFragment() {
             val convertView = View.inflate(baseActivity, R.layout.item_proj_finance_distribute, null)
             tab1.addView(convertView)
 
-
             val tvTag = convertView.findViewById(R.id.tv_tag) as TextView
             val bar = convertView.findViewById(R.id.bar)
             val vValue = convertView.findViewById(R.id.v_value) as TextView
