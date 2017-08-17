@@ -11,6 +11,7 @@ import com.sogukj.pe.adapter.RecyclerHolder
 import com.sogukj.pe.bean.NewsBean
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.util.Trace
+import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.FlowLayout
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -64,7 +65,11 @@ class FinanceDistributeListFragment : BaseFragment() {
     }
 
     fun setData(tab1: TableLayout, map: Map<String, Int>) {
+        val max = map.values.max()
         tab1.removeAllViews()
+        val width = tab1
+                .width - Utils.dpToPx(baseActivity, 120)
+        val pw = width.toFloat() / max!!.toFloat()
         for ((k, v) in map) {
             val convertView = View.inflate(baseActivity, R.layout.item_proj_finance_distribute, null)
             tab1.addView(convertView)
@@ -73,7 +78,7 @@ class FinanceDistributeListFragment : BaseFragment() {
             val bar = convertView.findViewById(R.id.bar)
             tag.text = k
             val lp = bar.layoutParams
-            lp.width = v
+            lp.width = (v * pw).toInt()
             bar.layoutParams = lp
 
         }
