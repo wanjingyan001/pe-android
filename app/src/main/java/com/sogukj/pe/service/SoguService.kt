@@ -261,13 +261,13 @@ interface SoguService {
     ): Observable<Payload<List<InvestEventBean>>>
 
     @FormUrlEncoded
-    @POST("/api/Listinformation/Findtzanli")
+    @POST("/api/Stockinfo/InvestDistribute")
     fun listInvestDistribute(
             @Field("company_id") company_id: Int
             , @Field("page") page: Int = 1
             , @Field("pageSize") pageSize: Int = 20
             , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
-    ): Observable<Payload<List<InvestEventBean>>>
+    ): Observable<Payload<Map<String, Any>>>
 
     @FormUrlEncoded
     @POST("/api/Listinformation/Findteammember")
@@ -277,6 +277,24 @@ interface SoguService {
             , @Field("pageSize") pageSize: Int = 20
             , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
     ): Observable<Payload<List<TeamMemberBean>>>
+
+    @FormUrlEncoded
+    @POST("/api/Listinformation/Getproductinfo")
+    fun listBizInfo(
+            @Field("company_id") company_id: Int
+            , @Field("page") page: Int = 1
+            , @Field("pageSize") pageSize: Int = 20
+            , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
+    ): Observable<Payload<List<ProductBean>>>
+
+    @FormUrlEncoded
+    @POST("/api/Listinformation/Findjingpin")
+    fun listProductInfo(
+            @Field("company_id") company_id: Int
+            , @Field("page") page: Int = 1
+            , @Field("pageSize") pageSize: Int = 20
+            , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
+    ): Observable<Payload<List<ProductBean>>>
 
     companion object {
         const val APPKEY_NAME = "appkey"

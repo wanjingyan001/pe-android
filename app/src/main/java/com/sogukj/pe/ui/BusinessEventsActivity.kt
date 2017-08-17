@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.ImageView
@@ -19,8 +18,8 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.adapter.RecyclerAdapter
 import com.sogukj.pe.adapter.RecyclerHolder
+import com.sogukj.pe.bean.ProductBean
 import com.sogukj.pe.bean.ProjectBean
-import com.sogukj.pe.bean.TeamMemberBean
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -28,9 +27,9 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_list_news.*
 import java.text.SimpleDateFormat
 
-class CoreTeamActivity : ToolbarActivity() {
+class BusinessEventsActivity : ToolbarActivity() {
 
-    lateinit var adapter: RecyclerAdapter<TeamMemberBean>
+    lateinit var adapter: RecyclerAdapter<ProductBean>
     lateinit var project: ProjectBean
     val df = SimpleDateFormat("yyyy-MM-dd")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,22 +38,23 @@ class CoreTeamActivity : ToolbarActivity() {
 
         project = intent.getSerializableExtra(Extras.DATA) as ProjectBean
         setBack(true)
-        setTitle("核心团队")
+        setTitle("企业业务")
 
-        adapter = RecyclerAdapter<TeamMemberBean>(this, { _adapter, parent, type ->
-            val convertView = _adapter.getView(R.layout.item_project_team_member, parent) as View
-            object : RecyclerHolder<TeamMemberBean>(convertView) {
+        adapter = RecyclerAdapter<ProductBean>(this, { _adapter, parent, type ->
+            val convertView = _adapter.getView(R.layout.item_project_business_event, parent) as View
+            object : RecyclerHolder<ProductBean>(convertView) {
 
                 val ivUser = convertView.findViewById(R.id.iv_user) as ImageView
-                val tvName = convertView.findViewById(R.id.tv_name) as TextView
-                val tvTitle = convertView.findViewById(R.id.tv_title) as TextView
+                val tvProduct = convertView.findViewById(R.id.tv_product) as TextView
+                val tvYewu = convertView.findViewById(R.id.tv_yewu) as TextView
                 val tvDesc = convertView.findViewById(R.id.tv_desc) as TextView
 
-                override fun setData(view: View, data: TeamMemberBean, position: Int) {
-                    tvName.text = data.name
-                    tvTitle.text = data.title
-                    tvDesc.text = data.desc
-                    Glide.with(this@CoreTeamActivity)
+                override fun setData(view: View, data: ProductBean, position: Int) {
+
+                    tvProduct.text = data.product
+                    tvYewu.text = data.yewu
+                    tvDesc.text = data.hangye
+                    Glide.with(this@BusinessEventsActivity)
                             .load(data.icon)
                             .error(R.drawable.img_user_default)
                             .into(ivUser)
@@ -100,7 +100,7 @@ class CoreTeamActivity : ToolbarActivity() {
     var page = 1
     fun doRequest() {
         SoguApi.getService(application)
-                .listCoreTeam(project.company_id!!, page = page)
+                .listBizInfo(project.company_id!!, page = page)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -127,7 +127,7 @@ class CoreTeamActivity : ToolbarActivity() {
 
     companion object {
         fun start(ctx: Activity?, project: ProjectBean) {
-            val intent = Intent(ctx, CoreTeamActivity::class.java)
+            val intent = Intent(ctx, BusinessEventsActivity::class.java)
             intent.putExtra(Extras.DATA, project)
             ctx?.startActivity(intent)
         }

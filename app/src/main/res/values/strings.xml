@@ -9,4 +9,6 @@
     <string name="tv_project_cangu_jinlirun" formatted="false">被参股公司净利润(元)：&lt;font color="#666666"> %s &lt;/font></string>
     <string name="tv_project_cangu_is_merge" formatted="false">是否报表合并：&lt;font color="#666666"> %s &lt;/font></string>
     <string name="tv_project_cangu_bis" formatted="false">被参股公司主营业务：&lt;font color="#666666"> %s &lt;/font></string>
+    <string name="tv_proj_product_type">类型：</string>
+    <string name="tv_proj_product_desc">描述：</string>
 </resources>

@@ -22,41 +22,33 @@
         android:orientation="vertical"
         android:padding="10dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tv_product"
+            style="@style/SoguTextNormal"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="vertical">
+            android:layout_marginRight="20dp"
+            android:gravity="left"
+            android:text="--"
+            android:textColor="@color/colorBlue"
+            tools:text="搜股(北京)" />
 
-            <TextView
-                android:id="@+id/tv_name"
-                style="@style/SoguTextNormal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="20dp"
-                android:gravity="left"
-                android:text="--"
-                android:textColor="@color/text_1"
-                tools:text="搜股(北京)" />
-
-            <TextView
-                android:id="@+id/tv_title"
-                style="@style/SoguTextMedium"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="--"
-                android:textColor="@color/text_2"
-                tools:text="注销" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/tv_yewu"
+            style="@style/SoguTextMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/tv_proj_product_type" />
 
         <TextView
             android:id="@+id/tv_desc"
             style="@style/SoguTextMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:text="--"
-            android:textColor="@color/text_2" />
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:text="@string/tv_proj_product_desc" />
     </LinearLayout>
 </LinearLayout>
