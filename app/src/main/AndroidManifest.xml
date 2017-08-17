@@ -143,6 +143,10 @@
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.InvestEventActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.CoreTeamActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" />

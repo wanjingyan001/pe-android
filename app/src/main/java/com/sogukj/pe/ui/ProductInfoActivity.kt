@@ -110,7 +110,7 @@ class ProductInfoActivity : ToolbarActivity() {
     var page = 1
     fun doRequest() {
         SoguApi.getService(application)
-                .listBizInfo(project.company_id!!, page = page)
+                .listProductInfo(project.company_id!!, page = page)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->

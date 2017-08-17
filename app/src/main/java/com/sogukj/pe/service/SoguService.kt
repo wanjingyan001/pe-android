@@ -264,8 +264,6 @@ interface SoguService {
     @POST("/api/Stockinfo/InvestDistribute")
     fun listInvestDistribute(
             @Field("company_id") company_id: Int
-            , @Field("page") page: Int = 1
-            , @Field("pageSize") pageSize: Int = 20
             , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
     ): Observable<Payload<Map<String, Any>>>
 
