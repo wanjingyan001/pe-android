@@ -429,84 +429,116 @@
                 android:rowCount="4">
 
                 <TextView
+                    android:id="@+id/tv_zhaopinxinxi"
                     style="@style/ItemGridProject"
-                    android:drawableTop="@drawable/ic_proj_stock_quote"
-                    android:text="股票信息" />
+                    android:drawableTop="@drawable/ic_proj_zhaopinxinxi"
+                    android:onClick="onClick"
+                    android:text="招聘信息" />
 
                 <TextView
+                    android:id="@+id/tv_zhaiquanxinxi"
                     style="@style/ItemGridProject"
-                    android:drawableTop="@drawable/ic_proj_company_desc"
-                    android:text="企业简介" />
+                    android:drawableTop="@drawable/ic_proj_zhaiwuxinxi"
+                    android:onClick="onClick"
+                    android:text="债券信息" />
 
                 <TextView
+                    android:id="@+id/tv_shuiwupinji"
                     style="@style/ItemGridProject"
-                    android:drawableTop="@drawable/ic_proj_gaoguan"
-                    android:text="高管信息" />
+                    android:drawableTop="@drawable/ic_proj_shuiwupinji"
+                    android:onClick="onClick"
+                    android:text="税务评级" />
 
                 <TextView
+                    android:id="@+id/tv_goudixinxi"
                     style="@style/ItemGridProject"
-                    android:drawableTop="@drawable/ic_proj_cangu"
-                    android:text="参股控股" />
+                    android:drawableTop="@drawable/ic_proj_goudixinxi"
+                    android:onClick="onClick"
+                    android:text="购地信息" />
 
                 <TextView
+                    android:id="@+id/tv_zhaotoubiao"
                     style="@style/ItemGridProject"
-                    android:drawableTop="@drawable/ic_proj_stock_quote"
-                    android:text="股票信息" />
+                    android:drawableTop="@drawable/ic_proj_zhaotoubiao"
+                    android:onClick="onClick"
+                    android:text="招投标" />
 
                 <TextView
+                    android:id="@+id/tv_zizhizhenshu"
                     style="@style/ItemGridProject"
-                    android:drawableTop="@drawable/ic_proj_company_desc"
-                    android:text="企业简介" />
+                    android:drawableTop="@drawable/ic_proj_zizhizhenshu"
+                    android:onClick="onClick"
+                    android:text="资质证书" />
 
                 <TextView
+                    android:id="@+id/tv_chouchajiancha"
                     style="@style/ItemGridProject"
-                    android:drawableTop="@drawable/ic_proj_gaoguan"
-                    android:text="高管信息" />
+                    android:drawableTop="@drawable/ic_proj_chouchajiancha"
+                    android:onClick="onClick"
+                    android:text="抽查检查" />
 
                 <TextView
+                    android:id="@+id/tv_chanpinxinxi"
                     style="@style/ItemGridProject"
-                    android:drawableTop="@drawable/ic_proj_cangu"
-                    android:text="参股控股" />
-
-                <TextView
-                    style="@style/ItemGridProject"
-                    android:drawableTop="@drawable/ic_proj_stock_quote"
-                    android:text="股票信息" />
-
-                <TextView
-                    style="@style/ItemGridProject"
-                    android:drawableTop="@drawable/ic_proj_company_desc"
-                    android:text="企业简介" />
-
-                <TextView
-                    style="@style/ItemGridProject"
-                    android:drawableTop="@drawable/ic_proj_gaoguan"
-                    android:text="高管信息" />
-
-                <TextView
-                    style="@style/ItemGridProject"
-                    android:drawableTop="@drawable/ic_proj_cangu"
-                    android:text="参股控股" />
+                    android:drawableTop="@drawable/ic_proj_chanpinxinxi"
+                    android:onClick="onClick"
+                    android:text="产品信息" />
 
                 <TextView
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_stock_quote"
-                    android:text="股票信息" />
+                    android:onClick="onClick"
+                    android:text="股票信息"
+                    android:visibility="gone" />
 
                 <TextView
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_company_desc"
-                    android:text="企业简介" />
+                    android:onClick="onClick"
+                    android:text="企业简介"
+                    android:visibility="gone" />
 
                 <TextView
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_gaoguan"
-                    android:text="高管信息" />
+                    android:onClick="onClick"
+                    android:text="高管信息"
+                    android:visibility="gone" />
 
                 <TextView
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_cangu"
-                    android:text="参股控股" />
+                    android:onClick="onClick"
+                    android:text="参股控股"
+                    android:visibility="gone" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_stock_quote"
+                    android:onClick="onClick"
+                    android:text="股票信息"
+                    android:visibility="gone" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_company_desc"
+                    android:onClick="onClick"
+                    android:text="企业简介"
+                    android:visibility="gone" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_gaoguan"
+                    android:onClick="onClick"
+                    android:text="高管信息"
+                    android:visibility="gone" />
+
+                <TextView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_cangu"
+                    android:onClick="onClick"
+                    android:text="参股控股"
+                    android:visibility="gone" />
 
             </GridLayout>
 
@@ -546,31 +578,37 @@
                 <TextView
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_stock_quote"
+                    android:onClick="onClick"
                     android:text="股票信息" />
 
                 <TextView
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_company_desc"
+                    android:onClick="onClick"
                     android:text="企业简介" />
 
                 <TextView
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_gaoguan"
+                    android:onClick="onClick"
                     android:text="高管信息" />
 
                 <TextView
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_cangu"
+                    android:onClick="onClick"
                     android:text="参股控股" />
 
                 <TextView
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_peigu"
+                    android:onClick="onClick"
                     android:text="配股情况" />
 
                 <TextView
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_peigu"
+                    android:onClick="onClick"
                     android:text="配股情况" />
             </GridLayout>
         </LinearLayout>
