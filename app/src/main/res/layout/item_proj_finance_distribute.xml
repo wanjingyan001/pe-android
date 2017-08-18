@@ -25,7 +25,7 @@
         android:background="@color/colorBlue" />
 
     <TextView
-        android:id="@+id/v_value"
+        android:id="@+id/tv_value"
         style="@style/SoguTextSamll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

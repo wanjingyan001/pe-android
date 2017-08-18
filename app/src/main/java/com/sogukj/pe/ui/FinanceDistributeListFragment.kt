@@ -72,10 +72,10 @@ class FinanceDistributeListFragment : BaseFragment() {
 
             val tvTag = convertView.findViewById(R.id.tv_tag) as TextView
             val bar = convertView.findViewById(R.id.bar)
-            val vValue = convertView.findViewById(R.id.v_value) as TextView
+            val tvValue = convertView.findViewById(R.id.tv_value) as TextView
 
             tvTag.text = k
-            vValue.text = v.toInt().toString()
+            tvValue.text = v.toInt().toString()
             val lp = bar.layoutParams
             lp.width = (v * pw).toInt()
             bar.layoutParams = lp
