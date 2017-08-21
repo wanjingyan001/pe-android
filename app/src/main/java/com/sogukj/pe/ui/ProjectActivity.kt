@@ -113,6 +113,8 @@ class ProjectActivity : ToolbarActivity() {
             R.id.tv_qiyeyewu -> BusinessEventsActivity.start(this@ProjectActivity, project)
             R.id.tv_jinpinxinxi -> ProductInfoActivity.start(this@ProjectActivity, project)
             R.id.tv_zhaopinxinxi -> RecruitActivity.start(this@ProjectActivity, project)
+
+            R.id.tv_zhaopinxinxi -> RecruitActivity.start(this@ProjectActivity, project)
         }
     }
 
