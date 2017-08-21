@@ -321,6 +321,15 @@ interface SoguService {
             , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
     ): Observable<Payload<List<TaxRateBean>>>
 
+    @FormUrlEncoded
+    @POST("/api/Listinformation/Purchaseland")
+    fun listLandPurchase(
+            @Field("company_id") company_id: Int
+            , @Field("page") page: Int = 1
+            , @Field("pageSize") pageSize: Int = 20
+            , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
+    ): Observable<Payload<List<LandPurchaseBean>>>
+
     companion object {
         const val APPKEY_NAME = "appkey"
         const val APPKEY_VALUE = "d5f17cafef0829b5"
