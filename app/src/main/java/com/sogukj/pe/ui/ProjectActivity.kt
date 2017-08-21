@@ -115,6 +115,7 @@ class ProjectActivity : ToolbarActivity() {
             R.id.tv_zhaopinxinxi -> RecruitActivity.start(this@ProjectActivity, project)
 
             R.id.tv_zhaopinxinxi -> RecruitActivity.start(this@ProjectActivity, project)
+            R.id.tv_zhaiquanxinxi -> BondActivity.start(this@ProjectActivity, project)
         }
     }
 

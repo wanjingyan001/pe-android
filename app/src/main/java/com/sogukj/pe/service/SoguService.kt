@@ -309,7 +309,7 @@ interface SoguService {
             , @Field("page") page: Int = 1
             , @Field("pageSize") pageSize: Int = 20
             , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
-    ): Observable<Payload<List<RecruitBean>>>
+    ): Observable<Payload<List<BondBean>>>
 
     companion object {
         const val APPKEY_NAME = "appkey"
