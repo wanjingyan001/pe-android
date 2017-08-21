@@ -22,7 +22,7 @@ import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragment_list_news.*
+import kotlinx.android.synthetic.main.activity_list_common.*
 import java.text.SimpleDateFormat
 
 class LandPurchaseActivity : ToolbarActivity() {
