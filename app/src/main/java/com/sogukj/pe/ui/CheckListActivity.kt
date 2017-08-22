@@ -59,7 +59,7 @@ class CheckListActivity : ToolbarActivity() {
         })
         adapter.onItemClick = { v, p ->
             val data = adapter.dataList.get(p)
-            QualificationActivity.start(this@QualificationListActivity, project, data)
+            QualificationActivity.start(this@CheckListActivity, project, data)
         }
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
