@@ -21,7 +21,7 @@ class BidInfoActivity : ToolbarActivity() {
         super.onCreate(savedInstanceState)
         project = intent.getSerializableExtra(Extras.DATA) as ProjectBean
         data = intent.getSerializableExtra(BidBean::class.java.simpleName) as BidBean
-        setContentView(R.layout.activity_bid_indo)
+        setContentView(R.layout.activity_bid_info)
         setBack(true)
         setTitle("招投标")
         data.apply {

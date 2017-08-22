@@ -17,8 +17,8 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.adapter.RecyclerAdapter
 import com.sogukj.pe.adapter.RecyclerHolder
+import com.sogukj.pe.bean.CheckBean
 import com.sogukj.pe.bean.ProjectBean
-import com.sogukj.pe.bean.QualificationBean
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -29,7 +29,7 @@ import java.text.SimpleDateFormat
 
 class CheckListActivity : ToolbarActivity() {
 
-    lateinit var adapter: RecyclerAdapter<QualificationBean>
+    lateinit var adapter: RecyclerAdapter<CheckBean>
     lateinit var project: ProjectBean
     val df = SimpleDateFormat("yyyy-MM-dd")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,26 +40,27 @@ class CheckListActivity : ToolbarActivity() {
         setBack(true)
         setTitle("抽查检查")
 
-        adapter = RecyclerAdapter<QualificationBean>(this, { _adapter, parent, type ->
-            val convertView = _adapter.getView(R.layout.item_project_qualification, parent) as View
-            object : RecyclerHolder<QualificationBean>(convertView) {
-                val tvDeviceName = convertView.findViewById(R.id.tv_deviceName) as TextView
-                val tvLicenceNum = convertView.findViewById(R.id.tv_licenceNum) as TextView
-                val tvIssueDate = convertView.findViewById(R.id.tv_issueDate) as TextView
-                val tvToDate = convertView.findViewById(R.id.tv_toDate) as TextView
-                override fun setData(view: View, data: QualificationBean, position: Int) {
-                    tvDeviceName.text = data.deviceName
-                    tvLicenceNum.text = "许可证编号:${data.licenceNum}"
-                    tvIssueDate.text = "有效期至:${data.issueDate}"
-                    tvToDate.text = "有效期至:${data.toDate}"
-
+        adapter = RecyclerAdapter<CheckBean>(this, { _adapter, parent, type ->
+            val convertView = _adapter.getView(R.layout.item_project_check, parent) as View
+            object : RecyclerHolder<CheckBean>(convertView) {
+                val tvCheckDate = convertView.findViewById(R.id.tv_checkDate) as TextView
+                val tvCheckOrg = convertView.findViewById(R.id.tv_checkOrg) as TextView
+                val tvCheckResult = convertView.findViewById(R.id.tv_checkResult) as TextView
+                val tvCheckType = convertView.findViewById(R.id.tv_checkType) as TextView
+                override fun setData(view: View, data: CheckBean, position: Int) {
+                    tvCheckDate.text = data.checkDate
+                    tvCheckOrg.text = data.checkOrg
+                    tvCheckResult.text = data.checkResult
+                    tvCheckType.visibility = View.GONE
+                    data.checkType?.apply {
+                        tvCheckType.text = data.checkType
+                        tvCheckType.visibility = View.VISIBLE
+                    }
                 }
 
             }
         })
         adapter.onItemClick = { v, p ->
-            val data = adapter.dataList.get(p)
-            QualificationActivity.start(this@CheckListActivity, project, data)
         }
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
@@ -96,7 +97,7 @@ class CheckListActivity : ToolbarActivity() {
     var page = 1
     fun doRequest() {
         SoguApi.getService(application)
-                .listQualification(project.company_id!!, page = page)
+                .listCheck(project.company_id!!, page = page)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
