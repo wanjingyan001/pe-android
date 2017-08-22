@@ -329,6 +329,7 @@ interface SoguService {
             , @Field("pageSize") pageSize: Int = 20
             , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
     ): Observable<Payload<List<LandPurchaseBean>>>
+
     @FormUrlEncoded
     @POST("/api/Listinformation/Bids")
     fun listBids(
@@ -364,6 +365,15 @@ interface SoguService {
             , @Field("pageSize") pageSize: Int = 20
             , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
     ): Observable<Payload<List<AppBean>>>
+
+    @FormUrlEncoded
+    @POST("/api/Listinformation/Tm")
+    fun listBrand(
+            @Field("company_id") company_id: Int
+            , @Field("page") page: Int = 1
+            , @Field("pageSize") pageSize: Int = 20
+            , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
+    ): Observable<Payload<List<BrandBean>>>
 
     companion object {
         const val APPKEY_NAME = "appkey"
