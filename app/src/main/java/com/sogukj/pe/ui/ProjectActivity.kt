@@ -106,7 +106,6 @@ class ProjectActivity : ToolbarActivity() {
             R.id.tv_key_personal -> KeyPersonalActivity.start(this@ProjectActivity, project)
             R.id.tv_equity_structure -> EquityStructureActivity.start(this@ProjectActivity, project)
 
-
             R.id.tv_rongzilishi -> FinanceHistoryActivity.start(this@ProjectActivity, project)
             R.id.tv_touzishijian -> InvestEventActivity.start(this@ProjectActivity, project)
             R.id.tv_hexintuandui -> CoreTeamActivity.start(this@ProjectActivity, project)
@@ -118,6 +117,8 @@ class ProjectActivity : ToolbarActivity() {
             R.id.tv_zhaiquanxinxi -> BondActivity.start(this@ProjectActivity, project)
             R.id.tv_shuiwupinji -> TaxRateActivity.start(this@ProjectActivity, project)
             R.id.tv_goudixinxi -> LandPurchaseActivity.start(this@ProjectActivity, project)
+            R.id.tv_zhaotoubiao -> BidsActivity.start(this@ProjectActivity, project)
+            R.id.tv_zizhizhenshu -> QualificationListActivity.start(this@ProjectActivity, project)
         }
     }
 
