@@ -20,7 +20,6 @@ import com.sogukj.pe.R
 import com.sogukj.pe.adapter.RecyclerAdapter
 import com.sogukj.pe.adapter.RecyclerHolder
 import com.sogukj.pe.bean.AppBean
-import com.sogukj.pe.bean.CheckBean
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
@@ -55,11 +54,8 @@ class AppListActivity : ToolbarActivity() {
                             .load(data.icon)
                             .error(R.drawable.img_user_default)
                             .into(ivLogo)
-                    tvBrief.text = getString(R.string.tv_proj_app_brif, "")
-                    data.brief?.apply {
-                        tvBrief.text = getString(R.string.tv_proj_app_brif, this)
-                    }
-                    tvClasses.text = data.classes
+                    tvBrief.text = getString(R.string.tv_proj_app_brif, this)
+                    tvClasses.text = "类型：${data.classes}"
                     tvFilterName.text = data.filterName
                 }
 
