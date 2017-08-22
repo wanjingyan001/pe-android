@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.text.Html
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -54,7 +55,7 @@ class AppListActivity : ToolbarActivity() {
                             .load(data.icon)
                             .error(R.drawable.img_user_default)
                             .into(ivLogo)
-                    tvBrief.text = getString(R.string.tv_proj_app_brif, this)
+                    tvBrief.text = getString(R.string.tv_proj_app_brif, Html.fromHtml(data.brief))
                     tvClasses.text = "类型：${data.classes}"
                     tvFilterName.text = data.filterName
                 }

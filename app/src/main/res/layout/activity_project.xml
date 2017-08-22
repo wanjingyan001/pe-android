@@ -576,40 +576,39 @@
                 android:rowCount="2">
 
                 <TextView
+                    android:id="@+id/tv_shangbiao"
                     style="@style/ItemGridProject"
-                    android:drawableTop="@drawable/ic_proj_stock_quote"
+                    android:drawableTop="@drawable/ic_proj_shangbiao"
                     android:onClick="onClick"
-                    android:text="股票信息" />
+                    android:text="商标信息" />
 
                 <TextView
+                    android:id="@+id/tv_zhuanli"
                     style="@style/ItemGridProject"
-                    android:drawableTop="@drawable/ic_proj_company_desc"
+                    android:drawableTop="@drawable/ic_proj_zhuanli"
                     android:onClick="onClick"
-                    android:text="企业简介" />
+                    android:text="专利信息" />
 
                 <TextView
+                    android:id="@+id/tv_zhuzuoquan"
                     style="@style/ItemGridProject"
-                    android:drawableTop="@drawable/ic_proj_gaoguan"
+                    android:drawableTop="@drawable/ic_proj_ranzhuquan"
                     android:onClick="onClick"
-                    android:text="高管信息" />
+                    android:text="著作权" />
 
                 <TextView
+                    android:id="@+id/tv_ranzhuquan"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_cangu"
                     android:onClick="onClick"
-                    android:text="参股控股" />
+                    android:text="软著权" />
 
                 <TextView
+                    android:id="@+id/tv_wangzhanbeian"
                     style="@style/ItemGridProject"
-                    android:drawableTop="@drawable/ic_proj_peigu"
+                    android:drawableTop="@drawable/ic_proj_wangzhanbeian"
                     android:onClick="onClick"
-                    android:text="配股情况" />
-
-                <TextView
-                    style="@style/ItemGridProject"
-                    android:drawableTop="@drawable/ic_proj_peigu"
-                    android:onClick="onClick"
-                    android:text="配股情况" />
+                    android:text="网站备案" />
             </GridLayout>
         </LinearLayout>
     </ScrollView>
