@@ -120,6 +120,7 @@ class ProjectActivity : ToolbarActivity() {
             R.id.tv_zhaotoubiao -> BidsActivity.start(this@ProjectActivity, project)
             R.id.tv_zizhizhenshu -> QualificationListActivity.start(this@ProjectActivity, project)
             R.id.tv_chouchajiancha -> CheckListActivity.start(this@ProjectActivity, project)
+            R.id.tv_chanpinxinxi -> AppListActivity.start(this@ProjectActivity, project)
         }
     }
 
