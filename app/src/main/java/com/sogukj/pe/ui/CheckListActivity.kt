@@ -49,7 +49,10 @@ class CheckListActivity : ToolbarActivity() {
                 val tvCheckType = convertView.findViewById(R.id.tv_checkType) as TextView
                 override fun setData(view: View, data: CheckBean, position: Int) {
                     tvCheckDate.text = data.checkDate
-                    tvCheckOrg.text = data.checkOrg
+                    tvCheckOrg.text = "未公开"
+                    data.checkOrg?.apply {
+                        tvCheckOrg.text = this
+                    }
                     tvCheckResult.text = data.checkResult
                     tvCheckType.visibility = View.GONE
                     data.checkType?.apply {
