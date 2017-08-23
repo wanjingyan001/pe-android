@@ -384,6 +384,16 @@ interface SoguService {
             , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
     ): Observable<Payload<List<PatentBean>>>
 
+    @FormUrlEncoded
+    @POST("/api/Stockinfo/Copyreg")
+    fun listCopyright(
+            @Field("company_id") company_id: Int
+            , @Field("type") type: Int = 1
+            , @Field("page") page: Int = 1
+            , @Field("pageSize") pageSize: Int = 20
+            , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
+    ): Observable<Payload<List<CopyRightBean>>>
+
     companion object {
         const val APPKEY_NAME = "appkey"
         const val APPKEY_VALUE = "d5f17cafef0829b5"

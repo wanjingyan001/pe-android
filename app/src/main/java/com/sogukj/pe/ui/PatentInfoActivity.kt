@@ -3,11 +3,13 @@ package com.sogukj.pe.ui
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.text.Html
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.PatentBean
 import com.sogukj.pe.bean.ProjectBean
+import kotlinx.android.synthetic.main.activity_patent_info.*
 import java.text.SimpleDateFormat
 
 /**
@@ -21,11 +23,36 @@ class PatentInfoActivity : ToolbarActivity() {
         super.onCreate(savedInstanceState)
         project = intent.getSerializableExtra(Extras.DATA) as ProjectBean
         data = intent.getSerializableExtra(PatentBean::class.java.simpleName) as PatentBean
-        setContentView(R.layout.activity_bond_info)
+        setContentView(R.layout.activity_patent_info)
         setBack(true)
         setTitle("专利信息详情")
         data.apply {
+            tv_title.text = patentName
+            val buff = StringBuffer()
+            appendLine(buff, "申请公布号", applicationPublishNum)
+            appendLine(buff, "申请日", applicationTime)
+            appendLine(buff, "申请公布日", applicationPublishTime)
+            appendLine(buff, "申请号/专利号", patentNum)
+            buff.append("\n")
+            appendLine(buff, "发明人", inventor)
+            buff.append("\n")
+            appendLine(buff, "申请人", applicantName)
+            buff.append("\n")
+            appendLine(buff, "代理机构", agency)
+            buff.append("\n")
+            appendLine(buff, "地址", address)
+            buff.append("\n")
+            appendLine(buff, "代理人", agent)
+            buff.append("\n")
+            appendLine(buff, "摘要", abstracts)
+            tv_content.text = buff.toString()
         }
+    }
+
+    fun appendLine(buff: StringBuffer, key: String, value: String? = "") {
+        val hval = Html.fromHtml("<span style='color:#666;'>${value}</span>")
+        val hkey = Html.fromHtml("<span style='color:#000;'>${key}</span>")
+        buff.append("$hkey:  $hval\n")
     }
 
     companion object {

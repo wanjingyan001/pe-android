@@ -7,11 +7,11 @@ import android.os.Bundle
 import android.webkit.WebSettings
 import android.webkit.WebSettings.LayoutAlgorithm
 import com.framework.base.ToolbarActivity
-import com.sogukj.pe.util.Trace
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.NewsBean
 import com.sogukj.pe.bean.NewsType
+import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -300,7 +300,7 @@ class NewsDetailActivity : ToolbarActivity() {
 
     fun label(label: String): String = "${label}:"
     fun value(value: Any?): String = if (null == value) "" else "<span style='color:#666;'>${value as String}</span>"
-    fun row(label: String, value: Any?) = "<p style='color:#000;font-size:16px;line-height:30px;'>${label(label)}  ${value(value)}</p>"
+    fun row(label: String, value: Any?) = "<p style='color:#000;font-size:15px;line-height:20px;'>${label(label)}  ${value(value)}</p>"
     fun title(title: String?): String = if (null == title) "" else "<h1 style='color:#333;font-size:18px;'>${title}</h1>"
 
 
