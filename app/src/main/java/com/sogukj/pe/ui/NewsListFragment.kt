@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.text.TextUtils
 import android.view.View
 import android.widget.TextView
 import com.framework.base.BaseFragment
@@ -144,6 +145,15 @@ class NewsListFragment : BaseFragment() {
             tv_summary.text = data.title
             tv_time.text = data.time
             tv_from.text = data.source
+            tags.removeAllViews()
+            data.tag?.split("#")
+                    ?.forEach { str ->
+                        if (!TextUtils.isEmpty(str)) {
+                            val itemTag = View.inflate(view.context, R.layout.item_tag_news, null) as TextView
+                            itemTag.text = str
+                            tags.addView(itemTag)
+                        }
+                    }
 
         }
 

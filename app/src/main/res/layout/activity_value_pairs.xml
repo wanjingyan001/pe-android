@@ -19,12 +19,22 @@
             android:orientation="vertical"
             android:padding="10dp">
 
+            <include
+                android:id="@+id/item_sub"
+                layout="@layout/item_main_news" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/divider" />
+
             <TextView
                 android:id="@+id/tv_title"
                 style="@style/SoguTextNormal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="--"
+                android:text=""
+                android:visibility="gone"
                 tools:text="新闻标题" />
 
             <TextView
@@ -32,9 +42,10 @@
                 style="@style/SoguTextMedium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:lineSpacingMultiplier="1.2"
-                tools:text="--" />
+                android:lineSpacingMultiplier="1.5"
+                android:padding="10dp"
+                android:textSize="14sp"
+                tools:text="abc\nabc" />
         </LinearLayout>
 
     </ScrollView>

@@ -104,8 +104,7 @@ class NewsDetailActivity : ToolbarActivity() {
     fun set13(map: Map<String, Object>, data: NewsBean) {
         val content = map[NewsType._13.format_content.toString()] as String?
         val html = "<html>${head()}<body style='margin:10px;'>" +
-                "<div style='padding:10px;'>" +
-                "${title(data.title)}" +
+                "<div style='padding:10px;'>${title(data.title)}" +
                 "<h5 style='color:#999;font-size:12px;'>" + data.time + "  " + data.source + "</h5>" +
                 "<span style='color:#333;font-size:16px;line-height:30px;'>" + content + "</span></div>" +
                 "</body></html>"
@@ -286,8 +285,8 @@ class NewsDetailActivity : ToolbarActivity() {
                 row("案件号", map[NewsType._1.caseno.toString()]) +
                 row("法院", map[NewsType._1.court.toString()]) +
                 row("文书类型", map[NewsType._1.doctype.toString()]) +
-                row("原文链接地址", "<a href='${map[NewsType._1.url.toString()]}'>${map[NewsType._1.url.toString()]}</a>") +
-                row("唯一标识符", map[NewsType._1.uuid.toString()]) +
+                rowLink("原文链接地址", map[NewsType._1.url.toString()].toString()) +
+                //                row("唯一标识符", map[NewsType._1.uuid.toString()]) +
                 "</body></html>"
         webview.loadDataWithBaseURL("about:blank", html, "text/html", "utf-8", null)
     }
@@ -298,6 +297,7 @@ class NewsDetailActivity : ToolbarActivity() {
             "<style>img{max-width: 100%; height:auto;} .reduce-font p{font-size:" + fontSize + "px!important;}</style>" +
             "</head>"
 
+    fun rowLink(label: String, value: String?) = row(label, if (TextUtils.isEmpty(value)) "" else value("<a href='${value}'>${value}</a>"))
     fun label(label: String): String = "${label}:"
     fun value(value: Any?): String = if (null == value) "" else "<span style='color:#666;'>${value as String}</span>"
     fun row(label: String, value: Any?) = "<p style='color:#000;font-size:15px;line-height:20px;'>${label(label)}  ${value(value)}</p>"
@@ -306,6 +306,11 @@ class NewsDetailActivity : ToolbarActivity() {
 
     companion object {
         fun start(ctx: Activity?, news: NewsBean) {
+
+            if (news.table_id != 13) {
+                NewsDetailPlainActivity.start(ctx, news)
+                return
+            }
             val intent = Intent(ctx, NewsDetailActivity::class.java)
             intent.putExtra(Extras.DATA, news)
             ctx?.startActivity(intent)

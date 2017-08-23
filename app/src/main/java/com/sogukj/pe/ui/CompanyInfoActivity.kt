@@ -4,16 +4,18 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import com.framework.base.ToolbarActivity
-import com.sogukj.pe.util.Trace
 import com.google.gson.Gson
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.ProjectBean
+import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_company_info.*
 import java.text.SimpleDateFormat
+
+
 
 class CompanyInfoActivity : ToolbarActivity() {
 
@@ -26,6 +28,7 @@ class CompanyInfoActivity : ToolbarActivity() {
         setContentView(R.layout.activity_company_info)
         setBack(true)
         setTitle("企业简介")
+
         SoguApi.getService(application)
                 .companyInfo(project.company_id!!)
                 .observeOn(AndroidSchedulers.mainThread())
