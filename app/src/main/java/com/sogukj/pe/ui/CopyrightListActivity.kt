@@ -61,6 +61,8 @@ class CopyrightListActivity : ToolbarActivity() {
 
                 }
             })
+            adapter.onItemClick = { v, p ->
+            }
         } else {
             setTitle("软著权")
             adapter = RecyclerAdapter<CopyRightBean>(this, { _adapter, parent, type ->
@@ -76,8 +78,8 @@ class CopyrightListActivity : ToolbarActivity() {
 
                 }
             })
-        }
-        adapter.onItemClick = { v, p ->
+            adapter.onItemClick = { v, p ->
+            }
         }
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
