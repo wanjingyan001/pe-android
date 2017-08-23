@@ -126,6 +126,7 @@ class ProjectActivity : ToolbarActivity() {
             R.id.tv_zhuanli -> PatentListActivity.start(this@ProjectActivity, project)
             R.id.tv_ranzhuquan -> CopyrightListActivity.start(this@ProjectActivity, project, 1)
             R.id.tv_zhuzuoquan -> CopyrightListActivity.start(this@ProjectActivity, project, 2)
+            R.id.tv_wangzhanbeian -> ICPListActivity.start(this@ProjectActivity, project)
         }
     }
 
