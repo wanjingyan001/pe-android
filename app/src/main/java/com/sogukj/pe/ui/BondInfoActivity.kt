@@ -16,16 +16,16 @@ import java.text.SimpleDateFormat
  */
 class BondInfoActivity : ToolbarActivity() {
     lateinit var project: ProjectBean
-    lateinit var bond: BondBean
+    lateinit var data: BondBean
     val fmt = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         project = intent.getSerializableExtra(Extras.DATA) as ProjectBean
-        bond = intent.getSerializableExtra(BondBean::class.java.simpleName) as BondBean
+        data = intent.getSerializableExtra(BondBean::class.java.simpleName) as BondBean
         setContentView(R.layout.activity_bond_info)
         setBack(true)
         setTitle("债券信息")
-        bond.apply {
+        data.apply {
             tv_bondName.text = bondName
             tv_bondNum.text = bondNum
             tv_publisherName.text = publisherName
@@ -55,10 +55,10 @@ class BondInfoActivity : ToolbarActivity() {
     }
 
     companion object {
-        fun start(ctx: Activity?, project: ProjectBean, bond: BondBean) {
+        fun start(ctx: Activity?, project: ProjectBean, data: BondBean) {
             val intent = Intent(ctx, BondInfoActivity::class.java)
             intent.putExtra(Extras.DATA, project)
-            intent.putExtra(BondBean::class.java.simpleName, bond)
+            intent.putExtra(BondBean::class.java.simpleName, data)
             ctx?.startActivity(intent)
         }
     }

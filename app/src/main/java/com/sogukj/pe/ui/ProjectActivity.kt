@@ -122,8 +122,8 @@ class ProjectActivity : ToolbarActivity() {
             R.id.tv_chouchajiancha -> CheckListActivity.start(this@ProjectActivity, project)
             R.id.tv_chanpinxinxi -> AppListActivity.start(this@ProjectActivity, project)
 
-
             R.id.tv_shangbiao -> BrandListActivity.start(this@ProjectActivity, project)
+            R.id.tv_zhuanli -> PatentListActivity.start(this@ProjectActivity, project)
         }
     }
 

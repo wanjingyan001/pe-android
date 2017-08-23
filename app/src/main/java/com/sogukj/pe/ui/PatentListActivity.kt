@@ -7,9 +7,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
-import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.Glide
 import com.framework.base.ToolbarActivity
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
@@ -19,7 +17,7 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.adapter.RecyclerAdapter
 import com.sogukj.pe.adapter.RecyclerHolder
-import com.sogukj.pe.bean.BrandBean
+import com.sogukj.pe.bean.PatentBean
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
@@ -28,10 +26,9 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_list_common.*
 import java.text.SimpleDateFormat
 
+class PatentListActivity : ToolbarActivity() {
 
-class BrandListActivity : ToolbarActivity() {
-
-    lateinit var adapter: RecyclerAdapter<BrandBean>
+    lateinit var adapter: RecyclerAdapter<PatentBean>
     lateinit var project: ProjectBean
     val df = SimpleDateFormat("yyyy-MM-dd")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,33 +37,25 @@ class BrandListActivity : ToolbarActivity() {
 
         project = intent.getSerializableExtra(Extras.DATA) as ProjectBean
         setBack(true)
-        setTitle("商标信息")
+        setTitle("专利信息")
 
-        adapter = RecyclerAdapter<BrandBean>(this, { _adapter, parent, type ->
-            val convertView = _adapter.getView(R.layout.item_project_brand, parent) as View
-            object : RecyclerHolder<BrandBean>(convertView) {
-
-                val ivLogo = convertView.findViewById(R.id.iv_logo) as ImageView
-                val tvTmName = convertView.findViewById(R.id.tv_tmName) as TextView
-                val tvRegNo = convertView.findViewById(R.id.tv_regNo) as TextView
-                val tvAppdate = convertView.findViewById(R.id.tv_appdate) as TextView
-                val tvStatus = convertView.findViewById(R.id.tv_status) as TextView
-                val tvIntCls = convertView.findViewById(R.id.tv_intCls) as TextView
-                override fun setData(view: View, data: BrandBean, position: Int) {
-                    tvTmName.text = "${data.tmName}"
-                    tvRegNo.text = "注册号:${data.regNo}"
-                    tvAppdate.text = "申请时间:${data.appdate}"
-                    tvStatus.text = "申请状态:${data.status}"
-                    tvIntCls.text = "类别:${data.intCls}"
-                    Glide.with(this@BrandListActivity)
-                            .load(data.tmPic)
-                            .error(R.drawable.img_user_default)
-                            .into(ivLogo)
+        adapter = RecyclerAdapter<PatentBean>(this, { _adapter, parent, type ->
+            val convertView = _adapter.getView(R.layout.item_project_patent, parent) as View
+            object : RecyclerHolder<PatentBean>(convertView) {
+                val tvPatentName = convertView.findViewById(R.id.tv_patentName) as TextView
+                val tvApplicationPublishNum = convertView.findViewById(R.id.tv_applicationPublishNum) as TextView
+                val tvPatentNum = convertView.findViewById(R.id.tv_patentNum) as TextView
+                override fun setData(view: View, data: PatentBean, position: Int) {
+                    tvPatentName.text = data.patentName
+                    tvApplicationPublishNum.text = "申请公布号:${data.applicationPublishNum}"
+                    tvPatentNum.text = "申请号/专利号:${data.patentNum}"
                 }
 
             }
         })
         adapter.onItemClick = { v, p ->
+            val data = adapter.dataList[p]
+            PatentInfoActivity.start(this@PatentListActivity, project, data)
         }
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
@@ -103,7 +92,7 @@ class BrandListActivity : ToolbarActivity() {
     var page = 1
     fun doRequest() {
         SoguApi.getService(application)
-                .listBrand(project.company_id!!, page = page)
+                .listPatent(project.company_id!!, page = page)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -130,7 +119,7 @@ class BrandListActivity : ToolbarActivity() {
 
     companion object {
         fun start(ctx: Activity?, project: ProjectBean) {
-            val intent = Intent(ctx, BrandListActivity::class.java)
+            val intent = Intent(ctx, PatentListActivity::class.java)
             intent.putExtra(Extras.DATA, project)
             ctx?.startActivity(intent)
         }
