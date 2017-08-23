@@ -64,21 +64,14 @@ class CopyrightListActivity : ToolbarActivity() {
         } else {
             setTitle("软著权")
             adapter = RecyclerAdapter<CopyRightBean>(this, { _adapter, parent, type ->
-                val convertView = _adapter.getView(R.layout.item_project_copyright_2, parent) as View
+                val convertView = _adapter.getView(R.layout.item_project_copyright_1, parent) as View
                 object : RecyclerHolder<CopyRightBean>(convertView) {
-                    val tvSimplename = convertView.findViewById(R.id.tv_simplename) as TextView
-                    val tvCategory = convertView.findViewById(R.id.tv_category) as TextView
+                    val tvFullname = convertView.findViewById(R.id.tv_fullname) as TextView
                     val tvRegnum = convertView.findViewById(R.id.tv_regnum) as TextView
-                    val tvRegtime = convertView.findViewById(R.id.tv_regtime) as TextView
-                    val tvFinishTime = convertView.findViewById(R.id.tv_finishTime) as TextView
-                    val tvPublishtime = convertView.findViewById(R.id.tv_publishtime) as TextView
                     override fun setData(view: View, data: CopyRightBean, position: Int) {
-                        tvSimplename.text = data.simplename
-                        tvCategory.text = "类型：${data.category}"
+
+                        tvFullname.text = data.fullname
                         tvRegnum.text = "登记号：${data.regnum}"
-                        tvRegtime.text = "登记日期：${data.regtime}"
-                        tvFinishTime.text = "完成日期：${data.finishTime}"
-                        tvPublishtime.text = "首次发表日期：${data.publishtime}"
                     }
 
                 }

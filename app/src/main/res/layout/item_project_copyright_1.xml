@@ -19,7 +19,7 @@
         android:paddingBottom="10dp">
 
         <TextView
-            android:id="@+id/tv_tmName"
+            android:id="@+id/tv_fullname"
             style="@style/SoguTextNormal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -30,37 +30,7 @@
             tools:text="搜股(北京)" />
 
         <TextView
-            android:id="@+id/tv_regNo"
-            style="@style/SoguTextMedium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="6dp"
-            android:text="--"
-            android:textColor="@color/text_2" />
-
-        <TextView
-            android:id="@+id/tv_appdate"
-            style="@style/SoguTextMedium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="6dp"
-            android:text="--"
-            android:textColor="@color/text_2" />
-
-        <TextView
-            android:id="@+id/tv_status"
-            style="@style/SoguTextMedium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="6dp"
-            android:text="--"
-            android:textColor="@color/text_2" />
-
-        <TextView
-            android:id="@+id/tv_intCls"
+            android:id="@+id/tv_regnum"
             style="@style/SoguTextMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
