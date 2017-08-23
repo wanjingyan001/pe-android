@@ -1,13 +1,16 @@
 package com.sogukj.pe.ui
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.webkit.WebSettings
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.BidBean
 import com.sogukj.pe.bean.ProjectBean
+import kotlinx.android.synthetic.main.activity_news_detail.*
 import java.text.SimpleDateFormat
 
 /**
@@ -24,9 +27,45 @@ class BidInfoActivity : ToolbarActivity() {
         setContentView(R.layout.activity_bid_info)
         setBack(true)
         setTitle("招投标")
-        data.apply {
 
-        }
+        val webSettings = webview.settings
+        webSettings.savePassword = false
+        webSettings.javaScriptEnabled = true;
+        webSettings.displayZoomControls = false;
+        webSettings.builtInZoomControls = false;
+        webSettings.setSupportZoom(false);
+        webSettings.domStorageEnabled = true;
+
+        val appCacheDir = this.getApplicationContext().getDir("cache", Context.MODE_PRIVATE).getPath();
+        webSettings.setAppCachePath(appCacheDir);
+        webSettings.setAllowFileAccess(true);
+        webSettings.setAppCacheEnabled(true);
+        webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
+        webSettings.setDefaultTextEncodingName("utf-8");
+
+        webSettings.setLoadsImagesAutomatically(true)
+//        webSettings.setBlockNetworkImage(true)
+//      webSettings.setUseWideViewPort(true);
+//      webSettings.setLoadWithOverviewMode(true);
+//        webSettings.setLayoutAlgorithm(LayoutAlgorithm.NARROW_COLUMNS)
+        webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+        set(data)
+    }
+
+    internal val fontSize = 18
+    fun head(): String = "<head>" +
+            "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\"> " +
+            "<style>img{max-width: 100%; height:auto;} .reduce-font p{font-size:" + fontSize + "px!important;}</style>" +
+            "</head>"
+
+    fun set(data: BidBean) {
+        val content = data.content
+        val html = "<html>${head()}<body style='margin:10px;'>" +
+                "<div style='padding:10px;'>${data.title}" +
+                "<h5 style='color:#999;font-size:12px;'>发布日期:${data.publishTime}  </h5>" +
+                "<span style='color:#333;font-size:16px;line-height:30px;'>" + content + "</span></div>" +
+                "</body></html>"
+        webview.loadDataWithBaseURL("about:blank", html, "text/html", "utf-8", null)
     }
 
     companion object {
