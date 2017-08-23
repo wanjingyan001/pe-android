@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.ImageView
@@ -43,13 +42,21 @@ class BrandListActivity : ToolbarActivity() {
         setTitle("商标信息")
 
         adapter = RecyclerAdapter<BrandBean>(this, { _adapter, parent, type ->
-            val convertView = _adapter.getView(R.layout.item_project_app, parent) as View
+            val convertView = _adapter.getView(R.layout.item_project_brand, parent) as View
             object : RecyclerHolder<BrandBean>(convertView) {
+
                 val ivLogo = convertView.findViewById(R.id.iv_logo) as ImageView
-                val tvFilterName = convertView.findViewById(R.id.tv_filterName) as TextView
-                val tvClasses = convertView.findViewById(R.id.tv_classes) as TextView
-                val tvBrief = convertView.findViewById(R.id.tv_brief) as TextView
+                val tvTmName = convertView.findViewById(R.id.tv_tmName) as TextView
+                val tvRegNo = convertView.findViewById(R.id.tv_regNo) as TextView
+                val tvAppdate = convertView.findViewById(R.id.tv_appdate) as TextView
+                val tvStatus = convertView.findViewById(R.id.tv_status) as TextView
+                val tvIntCls = convertView.findViewById(R.id.tv_intCls) as TextView
                 override fun setData(view: View, data: BrandBean, position: Int) {
+                    tvTmName.text = data.tmName
+                    tvRegNo.text = data.regNo.toString()
+                    tvAppdate.text = data.appdate
+                    tvStatus.text = data.status
+                    tvIntCls.text = data.intCls
                     Glide.with(this@BrandListActivity)
                             .load(data.tmPic)
                             .error(R.drawable.img_user_default)
@@ -62,7 +69,7 @@ class BrandListActivity : ToolbarActivity() {
         }
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
-        recycler_view.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+//        recycler_view.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         recycler_view.layoutManager = layoutManager
         recycler_view.adapter = adapter
 
