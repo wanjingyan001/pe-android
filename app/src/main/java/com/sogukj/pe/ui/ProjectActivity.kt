@@ -46,7 +46,14 @@ class ProjectActivity : ToolbarActivity() {
             NegativeNewsActivity.start(this, project)
         }
 
-
+        list_negative.setOnItemClickListener { parent, view, position, id ->
+            val data = adapterNeg.dataList[position]
+            NewsDetailActivity.start(this, data)
+        }
+        list_yuqin.setOnItemClickListener { parent, view, position, id ->
+            val data = adapterYuqin.dataList[position]
+            NewsDetailActivity.start(this, data)
+        }
         SoguApi.getService(application)
                 .listNews(pageSize = 3, page = 1, type = 1, company_id = project.company_id)
                 .observeOn(AndroidSchedulers.mainThread())

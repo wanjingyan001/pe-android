@@ -54,7 +54,7 @@ interface SoguService {
     @POST("/api/news/newsInfo")
     fun newsInfo(@Field("table_id") table_id: Int
                  , @Field("data_id") data_id: Int
-                 , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE): Observable<Payload<Map<String, Object>>>
+                 , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE): Observable<Payload<Map<String, Object?>>>
 
     @POST("/api/Userfont/uploadImage")
     fun uploadImg(@Body body: RequestBody): Observable<Payload<Object>>

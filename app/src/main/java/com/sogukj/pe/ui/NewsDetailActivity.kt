@@ -104,7 +104,7 @@ class NewsDetailActivity : ToolbarActivity() {
 
 
     val buff = StringBuffer()
-    fun setContent(table_id: Int, map: Map<String, Object>, data: NewsBean) {
+    fun setContent(table_id: Int, map: Map<String, Object?>, data: NewsBean) {
         buff.setLength(0)
         when (table_id) {
             1 -> set1(map, data)
@@ -128,7 +128,7 @@ class NewsDetailActivity : ToolbarActivity() {
 
     internal val fontSize = 18
 
-    fun set13(map: Map<String, Object>, data: NewsBean) {
+    fun set13(map: Map<String, Object?>, data: NewsBean) {
         val title = if (TextUtils.isEmpty(data.title)) "" else "<h1 style='color:#333;font-size:18px;'>${data.title}</h1>"
         val head = "<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\"> " +
                 "<style>img{max-width: 100%; height:auto;} .reduce-font p{font-size:" + fontSize + "px!important;}</style>" +
@@ -142,7 +142,7 @@ class NewsDetailActivity : ToolbarActivity() {
         webview.loadDataWithBaseURL("about:blank", html, "text/html", "utf-8", null)
     }
 
-    fun set12(map: Map<String, Object>, data: NewsBean) {
+    fun set12(map: Map<String, Object?>, data: NewsBean) {
         setTitle("司法拍卖")
         tv_title.text = "${data.title}"
         tv_title.visibility = View.VISIBLE
@@ -151,7 +151,7 @@ class NewsDetailActivity : ToolbarActivity() {
         appendLine("内容", map[NewsType._12.content.toString()])
     }
 
-    fun set11(map: Map<String, Object>, data: NewsBean) {
+    fun set11(map: Map<String, Object?>, data: NewsBean) {
         setTitle("开庭公告")
 
         tv_title.visibility = View.GONE
@@ -168,7 +168,7 @@ class NewsDetailActivity : ToolbarActivity() {
         appendLine("地区", map[NewsType._11.area.toString()])
     }
 
-    fun set10(map: Map<String, Object>, data: NewsBean) {
+    fun set10(map: Map<String, Object?>, data: NewsBean) {
         setTitle("经营异常")
         appendLine("列入日期", map[NewsType._10.putDate.toString()])
         appendLine("列入经营异常名录原因", map[NewsType._10.putReason.toString()])
@@ -178,7 +178,7 @@ class NewsDetailActivity : ToolbarActivity() {
         appendLine("移出部门", map[NewsType._10.removeDepartment.toString()])
     }
 
-    fun set9(map: Map<String, Object>, data: NewsBean) {
+    fun set9(map: Map<String, Object?>, data: NewsBean) {
         setTitle("欠税公告")
         appendLine("纳税人名称", map[NewsType._9._name.toString()])
         appendLine("欠税税种", map[NewsType._9.taxCategory.toString()])
@@ -193,7 +193,7 @@ class NewsDetailActivity : ToolbarActivity() {
         appendLine("税务机关", map[NewsType._9.tax_authority.toString()])
     }
 
-    fun set8(map: Map<String, Object>, data: NewsBean) {
+    fun set8(map: Map<String, Object?>, data: NewsBean) {
         setTitle("动产抵押")
         appendLine("登记日期", map[NewsType._8.regDate.toString()])
         appendLine("登记编号", map[NewsType._8.regNum.toString()])
@@ -213,7 +213,7 @@ class NewsDetailActivity : ToolbarActivity() {
         appendLine("抵押人信息json数据", map[NewsType._8.peopleInfoList.toString()])
     }
 
-    fun set7(map: Map<String, Object>, data: NewsBean) {
+    fun set7(map: Map<String, Object?>, data: NewsBean) {
         setTitle("股权出质")
         appendLine("登记编号", map[NewsType._7.regNumber.toString()])
         appendLine("出质人", map[NewsType._7.pledgor.toString()])
@@ -224,7 +224,7 @@ class NewsDetailActivity : ToolbarActivity() {
         appendLine("股权出质设立登记日期", map[NewsType._7.regDate.toString()])
     }
 
-    fun set6(map: Map<String, Object>, data: NewsBean) {
+    fun set6(map: Map<String, Object?>, data: NewsBean) {
         setTitle("严重违法")
         appendLine("列入日期", map[NewsType._6.putDate.toString()])
         appendLine("列入原因", map[NewsType._6.putReason.toString()])
@@ -233,7 +233,7 @@ class NewsDetailActivity : ToolbarActivity() {
         appendLine("决定移除部门", map[NewsType._6.removeDepartment.toString()])
     }
 
-    fun set5(map: Map<String, Object>, data: NewsBean) {
+    fun set5(map: Map<String, Object?>, data: NewsBean) {
         setTitle("行政处罚")
         appendLine("行政处罚日期", map[NewsType._5.decisionDate.toString()])
         appendLine("行政处罚决定书文号", map[NewsType._5.punishNumber.toString()])
@@ -242,7 +242,7 @@ class NewsDetailActivity : ToolbarActivity() {
         appendLine("行政处罚内容", map[NewsType._5.content.toString()])
     }
 
-    fun set4(map: Map<String, Object>, data: NewsBean) {
+    fun set4(map: Map<String, Object?>, data: NewsBean) {
         setTitle("被执行人")
         appendLine("立案时间", map[NewsType._4.caseCreateTime.toString()])
         appendLine("执行标的", map[NewsType._4.execMoney.toString()])
@@ -250,7 +250,7 @@ class NewsDetailActivity : ToolbarActivity() {
         appendLine("执行法院", map[NewsType._4.execCourtName.toString()])
     }
 
-    fun set3(map: Map<String, Object>, data: NewsBean) {
+    fun set3(map: Map<String, Object?>, data: NewsBean) {
         setTitle("失信人")
         appendLine("失信人名或公司名称", map[NewsType._3.iname.toString()])
         appendLine("执行依据文号", map[NewsType._3.casecode.toString()])
@@ -265,7 +265,7 @@ class NewsDetailActivity : ToolbarActivity() {
         appendLine("发布时间", map[NewsType._3.publishdate.toString()])
     }
 
-    fun set2(map: Map<String, Object>, data: NewsBean) {
+    fun set2(map: Map<String, Object?>, data: NewsBean) {
         setTitle("法院公告")
         appendLine("刊登日期", map[NewsType._2.publishdate.toString()])
         appendLine("原告", map[NewsType._2.party1.toString()])
@@ -275,7 +275,7 @@ class NewsDetailActivity : ToolbarActivity() {
         appendLine("案件内容", map[NewsType._2.content.toString()])
     }
 
-    fun set1(map: Map<String, Object>, data: NewsBean) {
+    fun set1(map: Map<String, Object?>, data: NewsBean) {
         setTitle("法律诉颂")
         appendLine("提交时间", map[NewsType._1.submittime.toString()])
         appendLine("标题", map[NewsType._1.title.toString()])
@@ -283,7 +283,7 @@ class NewsDetailActivity : ToolbarActivity() {
         appendLine("案件号", map[NewsType._1.caseno.toString()])
         appendLine("法院", map[NewsType._1.court.toString()])
         appendLine("文书类型", map[NewsType._1.doctype.toString()])
-        appendLine("原文链接地址", map[NewsType._1.url.toString()].toString())
+        appendLine("原文链接地址", map[NewsType._1.url.toString()])
         //                appendLine("唯一标识符", map[NewsType._1.uuid.toString()])
     }
 
