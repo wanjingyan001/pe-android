@@ -35,7 +35,6 @@ class ProjectNewsFragment : BaseFragment() {
         get() = R.layout.fragment_list_project_news //To change initializer of created properties use File | Settings | File Templates.
 
     lateinit var adapter: RecyclerAdapter<NewsBean>
-    var index: Int = 0
     var type: Int = 1
     lateinit var project: ProjectBean
     override fun onCreate(savedInstanceState: Bundle?) {

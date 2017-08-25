@@ -71,6 +71,7 @@ class ProjectActivity : ToolbarActivity() {
                         showToast(payload.message)
                 }, { e ->
                     Trace.e(e)
+                    tv_more.visibility = View.GONE
                     showToast("暂无可用数据")
                 }, {
                     if (adapterNeg.dataList.size < 3)
@@ -93,6 +94,7 @@ class ProjectActivity : ToolbarActivity() {
                         showToast(payload.message)
                 }, { e ->
                     Trace.e(e)
+                    tv_more_yq.visibility = View.GONE
                     showToast("暂无可用数据")
                 }, {
                     if (adapterYuqin.dataList.size < 3)

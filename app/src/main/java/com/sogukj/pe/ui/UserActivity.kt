@@ -10,10 +10,10 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.framework.base.ToolbarActivity
-import com.sogukj.pe.util.Trace
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.DepartmentBean
 import com.sogukj.pe.bean.UserBean
+import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -72,7 +72,7 @@ class UserActivity : ToolbarActivity() {
 
 
         iv_user.onClick {
-            UserEditActivity.start(this@UserActivity,departList)
+            UserEditActivity.start(this@UserActivity, departList)
         }
     }
 
@@ -125,6 +125,10 @@ class UserActivity : ToolbarActivity() {
         val tv_job = item_content.find<TextView>(R.id.tv_job)
         tv_name.text = userBean.name + "\n" + userBean.phone
         tv_job.text = userBean.position + "\n" + userBean.email
+        Glide.with(this)
+                .load(userBean.headImage())
+                .error(R.drawable.img_user_default)
+                .into(iv_head)
     }
 
 
