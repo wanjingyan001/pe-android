@@ -21,6 +21,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_news_detail.*
 import kotlinx.android.synthetic.main.item_main_news.*
+import org.jetbrains.anko.find
 
 
 class NewsDetailActivity : ToolbarActivity() {
@@ -95,8 +96,9 @@ class NewsDetailActivity : ToolbarActivity() {
         data.tag?.split("#")
                 ?.forEach { str ->
                     if (!TextUtils.isEmpty(str)) {
-                        val itemTag = View.inflate(this, R.layout.item_tag_news, null) as TextView
-                        itemTag.text = str
+                        val itemTag = View.inflate(this, R.layout.item_tag_news, null)
+                        val tvTag = itemTag.find<TextView>(R.id.tv_tag)
+                        tvTag.text = str
                         tags.addView(itemTag)
                     }
                 }
