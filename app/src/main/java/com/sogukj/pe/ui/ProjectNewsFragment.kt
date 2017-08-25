@@ -4,20 +4,21 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.text.TextUtils
 import android.view.View
 import android.widget.TextView
-import com.sogukj.pe.adapter.RecyclerAdapter
-import com.sogukj.pe.adapter.RecyclerHolder
 import com.framework.base.BaseFragment
-import com.sogukj.pe.util.Trace
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import com.lcodecore.tkrefreshlayout.footer.BallPulseView
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.adapter.RecyclerAdapter
+import com.sogukj.pe.adapter.RecyclerHolder
 import com.sogukj.pe.bean.NewsBean
 import com.sogukj.pe.bean.ProjectBean
+import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.FlowLayout
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
@@ -41,6 +42,7 @@ class ProjectNewsFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         project = arguments.getSerializable(Extras.DATA) as ProjectBean
+        type = arguments.getInt(Extras.TYPE)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -94,7 +96,7 @@ class ProjectNewsFragment : BaseFragment() {
         val user = Store.store.getUser(baseActivity!!)
         val userId = if (index == 0) null else user?.uid;
         SoguApi.getService(baseActivity!!.application)
-                .listNews(page = page, type = 1, company_id = project.company_id)
+                .listNews(page = page, type = type, company_id = project.company_id)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -140,6 +142,16 @@ class ProjectNewsFragment : BaseFragment() {
             tv_time.text = data.time
             tv_from.text = data.source
 
+            tags.removeAllViews()
+            data.tag?.split("#")
+                    ?.forEach { str ->
+                        if (!TextUtils.isEmpty(str)) {
+                            val itemTag = View.inflate(view.context, R.layout.item_tag_news, null)
+                            val tvTag = itemTag.find<TextView>(R.id.tv_tag)
+                            tvTag.text = str
+                            tags.addView(itemTag)
+                        }
+                    }
         }
 
     }
@@ -147,10 +159,11 @@ class ProjectNewsFragment : BaseFragment() {
     companion object {
         val TAG = NewsListFragment::class.java.simpleName
 
-        fun newInstance(project: ProjectBean): NewsListFragment {
+        fun newInstance(project: ProjectBean, type: Int = 1): NewsListFragment {
             val fragment = NewsListFragment()
             val intent = Bundle()
             intent.putSerializable(Extras.DATA, project)
+            intent.putInt(Extras.TYPE, type)
             fragment.arguments = intent
             return fragment
         }

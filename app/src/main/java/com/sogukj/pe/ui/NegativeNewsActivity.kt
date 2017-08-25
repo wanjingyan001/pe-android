@@ -13,19 +13,22 @@ class NegativeNewsActivity : ToolbarActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_negative_news)
-        setTitle("负面信息")
-        setBack(true)
         val project = intent.getSerializableExtra(Extras.DATA) as ProjectBean
+        val type = intent.getIntExtra(Extras.TYPE, 1)
+        if (type == 1) setTitle("负面信息")
+        else setTitle("企业舆情")
+        setBack(true)
         supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.container, ProjectNewsFragment.newInstance(project))
+                .replace(R.id.container, ProjectNewsFragment.newInstance(project,type))
                 .commit()
     }
 
     companion object {
-        fun start(ctx: Activity?, project: ProjectBean) {
+        fun start(ctx: Activity?, project: ProjectBean, type: Int = 1) {
             val intent = Intent(ctx, NegativeNewsActivity::class.java)
             intent.putExtra(Extras.DATA, project)
+            intent.putExtra(Extras.TYPE, type)
             ctx?.startActivity(intent)
         }
     }

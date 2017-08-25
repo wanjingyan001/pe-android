@@ -45,7 +45,9 @@ class ProjectActivity : ToolbarActivity() {
         tv_more.setOnClickListener {
             NegativeNewsActivity.start(this, project)
         }
-
+        tv_more_yq.setOnClickListener {
+            NegativeNewsActivity.start(this, project)
+        }
         list_negative.setOnItemClickListener { parent, view, position, id ->
             val data = adapterNeg.dataList[position]
             NewsDetailActivity.start(this, data)

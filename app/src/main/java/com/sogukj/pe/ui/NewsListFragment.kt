@@ -40,7 +40,11 @@ class NewsListFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         index = arguments.getInt(Extras.INDEX)
-        type = if (index == 2) 1 else 2
+        type = when(index){
+            2-> 1
+            1->2
+            else-> null
+        }
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -149,8 +153,9 @@ class NewsListFragment : BaseFragment() {
             data.tag?.split("#")
                     ?.forEach { str ->
                         if (!TextUtils.isEmpty(str)) {
-                            val itemTag = View.inflate(view.context, R.layout.item_tag_news, null) as TextView
-                            itemTag.text = str
+                            val itemTag = View.inflate(view.context, R.layout.item_tag_news, null)
+                            val tvTag = itemTag.find<TextView>(R.id.tv_tag)
+                            tvTag.text = str
                             tags.addView(itemTag)
                         }
                     }
