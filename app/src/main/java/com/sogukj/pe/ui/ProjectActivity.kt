@@ -43,10 +43,10 @@ class ProjectActivity : ToolbarActivity() {
         list_negative.adapter = adapterNeg
         list_yuqin.adapter = adapterYuqin
         tv_more.setOnClickListener {
-            NegativeNewsActivity.start(this, project)
+            NegativeNewsActivity.start(this, project, 1)
         }
         tv_more_yq.setOnClickListener {
-            NegativeNewsActivity.start(this, project)
+            NegativeNewsActivity.start(this, project, 2)
         }
         list_negative.setOnItemClickListener { parent, view, position, id ->
             val data = adapterNeg.dataList[position]
@@ -72,6 +72,11 @@ class ProjectActivity : ToolbarActivity() {
                 }, { e ->
                     Trace.e(e)
                     showToast("暂无可用数据")
+                }, {
+                    if (adapterNeg.dataList.size == 0)
+                        tv_more.visibility = View.GONE
+                    else
+                        tv_more.visibility = View.VISIBLE
                 })
         SoguApi.getService(application)
                 .listNews(pageSize = 3, page = 1, type = 2, company_id = project.company_id)
@@ -89,6 +94,11 @@ class ProjectActivity : ToolbarActivity() {
                 }, { e ->
                     Trace.e(e)
                     showToast("暂无可用数据")
+                }, {
+                    if (adapterYuqin.dataList.size == 0)
+                        tv_more_yq.visibility = View.GONE
+                    else
+                        tv_more_yq.visibility = View.VISIBLE
                 })
     }
 

@@ -21,7 +21,6 @@ import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.FlowLayout
 import com.sogukj.service.SoguApi
-import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_list_news.*
@@ -37,7 +36,7 @@ class ProjectNewsFragment : BaseFragment() {
 
     lateinit var adapter: RecyclerAdapter<NewsBean>
     var index: Int = 0
-    var type: Int? = null
+    var type: Int = 1
     lateinit var project: ProjectBean
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,8 +92,6 @@ class ProjectNewsFragment : BaseFragment() {
 
     var page = 1
     fun doRequest() {
-        val user = Store.store.getUser(baseActivity!!)
-        val userId = if (index == 0) null else user?.uid;
         SoguApi.getService(baseActivity!!.application)
                 .listNews(page = page, type = type, company_id = project.company_id)
                 .observeOn(AndroidSchedulers.mainThread())

@@ -47,10 +47,6 @@
                 android:dividerHeight="1px"
                 android:listSelector="@drawable/bg_item_list" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/divider" />
 
             <TextView
                 android:id="@+id/tv_more"
@@ -99,11 +95,6 @@
                 android:divider="@color/divider"
                 android:dividerHeight="1px"
                 android:listSelector="@drawable/bg_item_list" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/divider" />
 
             <TextView
                 android:id="@+id/tv_more_yq"
