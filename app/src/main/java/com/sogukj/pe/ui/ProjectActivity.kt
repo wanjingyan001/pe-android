@@ -2,11 +2,14 @@ package com.sogukj.pe.ui
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.GridLayout
 import android.widget.TextView
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
@@ -17,6 +20,7 @@ import com.sogukj.pe.bean.NewsBean
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.FlowLayout
+import com.sogukj.pe.view.TipsView
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -102,8 +106,62 @@ class ProjectActivity : ToolbarActivity() {
                     else
                         tv_more_yq.visibility = View.VISIBLE
                 })
+        SoguApi.getService(application)
+                .projectPage(pageSize = 3, page = 1, company_id = project.company_id!!)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        payload.payload
+                                ?.counts
+                                ?.apply {
+                                    refresh(gl_shangshi, this)
+                                    refresh(gl_qiyebeijin, this)
+                                    refresh(gl_jinyinzhuankuang, this)
+                                    refresh(gl_qiyefazhan, this)
+                                    refresh(gl_zhishichanquan, this)
+                                }
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    tv_more_yq.visibility = View.GONE
+                })
     }
 
+    fun refresh(grid: GridLayout, data: Map<String, Int?>) {
+        val size = grid.childCount
+        for (i in 0..size - 1) {
+            val child = grid.getChildAt(i) as TipsView
+            val icon = child.compoundDrawables[1]
+            val tag = child.getTag()
+            if (null != tag && tag is String) {
+                val count = data[tag as String]
+                if (count != null && count > 0) {
+                    child.setOnClickListener(this::onClick)
+                    child.display(count)
+                } else {
+                    icon?.setColorFilter(colorGray, PorterDuff.Mode.SRC_ATOP)
+                    child.setOnClickListener(null)
+                }
+            } else {
+                icon?.setColorFilter(colorGray, PorterDuff.Mode.SRC_ATOP)
+                child.setOnClickListener(null)
+            }
+        }
+    }
+
+    fun colorIcon(view: TextView, count: Int = 0) {
+        val icon = view.compoundDrawables[1]
+        icon?.apply {
+            if (count == 0)
+                setColorFilter(colorGray, PorterDuff.Mode.SRC_ATOP)
+            else
+                clearColorFilter()
+        }
+    }
+
+    val colorGray = Color.parseColor("#D9D9D9")
     fun onClick(view: View) {
         when (view.id) {
             R.id.tv_stock -> StockInfoActivity.start(this@ProjectActivity, project)
