@@ -6,17 +6,17 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.TextView
-import com.sogukj.pe.adapter.RecyclerAdapter
-import com.sogukj.pe.adapter.RecyclerHolder
 import com.framework.base.BaseFragment
-import com.sogukj.pe.util.Trace
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import com.lcodecore.tkrefreshlayout.footer.BallPulseView
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.adapter.RecyclerAdapter
+import com.sogukj.pe.adapter.RecyclerHolder
 import com.sogukj.pe.bean.ProjectBean
+import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -46,7 +46,10 @@ class ProjectListFragment : BaseFragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         adapter = RecyclerAdapter<ProjectBean>(baseActivity!!, { _adapter, parent, type ->
-            ProjectHolder(_adapter.getView(R.layout.item_main_project, parent))
+            if (index != 2)
+                ProjectHolder(_adapter.getView(R.layout.item_main_project, parent))
+            else
+                ProjectHolder(_adapter.getView(R.layout.item_main_project_2, parent))
         })
         adapter.onItemClick = { v, p ->
             val project = adapter.getItem(p);
@@ -135,8 +138,8 @@ class ProjectListFragment : BaseFragment() {
 
         override fun setData(view: View, data: ProjectBean, position: Int) {
             tv1.text = data.name
-            tv2.text = data.state
-            tv3.text = if (type == 2) data.update_time else data.add_time
+            tv2.text = if (type == 2) data.status else data.state
+            tv3.text = data.add_time
         }
 
     }

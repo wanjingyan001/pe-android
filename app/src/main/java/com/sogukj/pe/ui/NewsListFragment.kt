@@ -40,15 +40,16 @@ class NewsListFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         index = arguments.getInt(Extras.INDEX)
-        type = when(index){
-            2-> 1
-            1->2
-            else-> null
+        type = when (index) {
+            2 -> 1
+            1 -> 3
+            else -> 2
         }
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         adapter = RecyclerAdapter<NewsBean>(baseActivity!!, { _adapter, parent, type ->
             NewsHolder(_adapter.getView(R.layout.item_main_news, parent))
         })
@@ -102,7 +103,7 @@ class NewsListFragment : BaseFragment() {
     var page = 1
     fun doRequest() {
         val user = Store.store.getUser(baseActivity!!)
-        val userId = if (index == 0) null else user?.uid;
+        val userId = user?.uid
         SoguApi.getService(baseActivity!!.application)
                 .listNews(page = page, type = type, user_id = userId)
                 .observeOn(AndroidSchedulers.mainThread())

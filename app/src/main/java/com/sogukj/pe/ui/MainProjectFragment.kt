@@ -9,6 +9,7 @@ import com.framework.base.BaseFragment
 import com.sogukj.pe.R
 import com.sogukj.pe.adapter.ArrayPagerAdapter
 import com.sogukj.util.Store
+import kotlinx.android.synthetic.main.fragment_list_project.*
 import kotlinx.android.synthetic.main.fragment_main_project.*
 import kotlinx.android.synthetic.main.sogu_toolbar_main_proj.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
@@ -68,6 +69,8 @@ class MainProjectFragment : BaseFragment() {
             override fun onPageSelected(position: Int) {
                 tabs?.getTabAt(position)?.select()
                 iv_add?.visibility = if (position == 2) View.VISIBLE else View.GONE
+                ll_header2.visibility = if (position == 2) View.VISIBLE else View.GONE
+                ll_header.visibility = if (position != 2) View.VISIBLE else View.GONE
             }
 
         })
