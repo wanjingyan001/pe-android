@@ -42,6 +42,7 @@ class ProjectActivity : ToolbarActivity() {
         project = intent.getSerializableExtra(Extras.DATA) as ProjectBean
         setTitle(project.name)
 
+        ll_shangshi.visibility = if (project.is_volatility == 0) View.GONE else View.VISIBLE
         adapterNeg = ListAdapter<NewsBean> { NewsHolder() }
         adapterYuqin = ListAdapter<NewsBean> { NewsHolder() }
         list_negative.adapter = adapterNeg

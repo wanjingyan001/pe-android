@@ -18,5 +18,5 @@ class ProjectBean : Serializable {
     var regLocation: String? = null//	varchar		注册地址	可空
     var creditCode: String? = null//	varchar		统一社会信用代码	可空
     var info: String? = null//	text		其他信息	可空
-
+    var is_volatility = 0
 }
