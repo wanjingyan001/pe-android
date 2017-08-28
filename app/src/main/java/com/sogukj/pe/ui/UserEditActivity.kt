@@ -2,7 +2,12 @@ package com.sogukj.pe.ui
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Matrix
+import android.media.ExifInterface
 import android.os.Bundle
+import android.os.Environment
 import android.text.TextUtils
 import android.view.MenuItem
 import android.view.View
@@ -14,11 +19,11 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
 import com.framework.base.ToolbarActivity
-import com.sogukj.pe.util.Trace
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.DepartmentBean
 import com.sogukj.pe.bean.UserBean
+import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -28,7 +33,7 @@ import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import org.jetbrains.anko.sdk25.coroutines.onClick
-import java.io.File
+import java.io.*
 
 
 /**
@@ -91,16 +96,18 @@ class UserEditActivity : ToolbarActivity() {
                     .show()
         }
         tr_icon.onClick {
-            //            val intent = Intent()
+            //            //            val intent = Intent()
 //            intent.type = "image/*"
 //            intent.action = Intent.ACTION_GET_CONTENT
 //            startActivityForResult(intent, REQ_PHOTO)
             RxGalleryFinal
-                    .with(application)
+                    .with(this@UserEditActivity)
                     .image()
                     .radio()
-//                    .cropAspectRatioOptions(0, AspectRatio("1:1", 120f, 120f))
-                    .cropMaxResultSize(120, 120)
+//                    .cropMaxBitmapSize(1024 * 1024)
+////                    .cropAspectRatioOptions(0, AspectRatio("1:1", 120f, 120f))
+//                    .cropMaxResultSize(120, 120)
+//                    .crop()
                     .imageLoader(ImageLoaderType.GLIDE)
                     .subscribe(object : RxBusResultDisposable<ImageRadioResultEvent>() {
                         override fun onEvent(event: ImageRadioResultEvent?) {
@@ -122,6 +129,141 @@ class UserEditActivity : ToolbarActivity() {
             }
         }
         return false
+    }
+
+    fun compressImage(srcImagePath: String, outWidth: Int, outHeight: Int, maxFileSize: Int): String? {
+        val options = BitmapFactory.Options()
+        options.inJustDecodeBounds = true
+        BitmapFactory.decodeFile(srcImagePath, options)
+        val srcWidth = options.outWidth.toFloat()
+        val srcHeight = options.outHeight.toFloat()
+        val maxWidth = outWidth.toFloat()
+        val maxHeight = outHeight.toFloat()
+        val srcRatio = srcWidth / srcHeight
+        val outRatio = maxWidth / maxHeight
+        var actualOutWidth = srcWidth
+        var actualOutHeight = srcHeight
+
+        if (srcWidth > maxWidth || srcHeight > maxHeight) {
+            if (srcRatio < outRatio) {
+                actualOutHeight = maxHeight
+                actualOutWidth = actualOutHeight * srcRatio
+            } else if (srcRatio > outRatio) {
+                actualOutWidth = maxWidth
+                actualOutHeight = actualOutWidth / srcRatio
+            } else {
+                actualOutWidth = maxWidth
+                actualOutHeight = maxHeight
+            }
+        }
+        options.inSampleSize = computSampleSize(options, actualOutWidth, actualOutHeight)
+        options.inJustDecodeBounds = false
+        var scaledBitmap: Bitmap? = null
+        try {
+            scaledBitmap = BitmapFactory.decodeFile(srcImagePath, options)
+        } catch (e: OutOfMemoryError) {
+            e.printStackTrace()
+        }
+
+        if (scaledBitmap == null) {
+            return null//压缩失败
+        }
+        //生成最终输出的bitmap
+        var actualOutBitmap = Bitmap.createScaledBitmap(scaledBitmap, actualOutWidth.toInt(), actualOutHeight.toInt(), true)
+        if (actualOutBitmap != scaledBitmap)
+            scaledBitmap.recycle()
+
+        var exif: ExifInterface? = null
+        try {
+            exif = ExifInterface(srcImagePath)
+            val orientation = exif.getAttributeInt(
+                    ExifInterface.TAG_ORIENTATION, 0)
+            val matrix = Matrix()
+            if (orientation == ExifInterface.ORIENTATION_ROTATE_90) {
+                matrix.postRotate(90f)
+            } else if (orientation == ExifInterface.ORIENTATION_ROTATE_180) {
+                matrix.postRotate(180f)
+            } else if (orientation == ExifInterface.ORIENTATION_ROTATE_270) {
+                matrix.postRotate(270f)
+            }
+            actualOutBitmap = Bitmap.createBitmap(actualOutBitmap, 0, 0,
+                    actualOutBitmap.width, actualOutBitmap.height, matrix, true)
+        } catch (e: IOException) {
+            e.printStackTrace()
+            return null
+        }
+
+        //进行有损压缩
+        val baos = ByteArrayOutputStream()
+        var options_ = 100
+        actualOutBitmap.compress(Bitmap.CompressFormat.JPEG, options_, baos)//质量压缩方法，把压缩后的数据存放到baos中 (100表示不压缩，0表示压缩到最小)
+
+        var baosLength = baos.toByteArray().size
+
+        while (baosLength / 1024 > maxFileSize) {
+            baos.reset()
+            options_ = Math.max(0, options_ - 10)
+            actualOutBitmap.compress(Bitmap.CompressFormat.JPEG, options_, baos)
+            baosLength = baos.toByteArray().size
+            if (options_ == 0)
+                break
+        }
+        actualOutBitmap.recycle()
+
+        //将bitmap保存到指定路径
+        var fos: FileOutputStream? = null
+        val filePath = getOutputFileName(srcImagePath)
+        try {
+            fos = FileOutputStream(filePath)
+            //包装缓冲流,提高写入速度
+            val bufferedOutputStream = BufferedOutputStream(fos)
+            bufferedOutputStream.write(baos.toByteArray())
+            bufferedOutputStream.flush()
+        } catch (e: FileNotFoundException) {
+            return null
+        } catch (e: IOException) {
+            return null
+        } finally {
+            if (baos != null) {
+                try {
+                    baos.close()
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+
+            }
+            if (fos != null) {
+                try {
+                    fos.close()
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+
+            }
+        }
+
+        return filePath
+    }
+
+    private fun computSampleSize(options: BitmapFactory.Options, reqWidth: Float, reqHeight: Float): Int {
+        val srcWidth = options.outWidth.toFloat()//20
+        val srcHeight = options.outHeight.toFloat()//10
+        var sampleSize = 1
+        if (srcWidth > reqWidth || srcHeight > reqHeight) {
+            val withRatio = Math.round(srcWidth / reqWidth)
+            val heightRatio = Math.round(srcHeight / reqHeight)
+            sampleSize = Math.min(withRatio, heightRatio)
+        }
+        return sampleSize
+    }
+
+    private fun getOutputFileName(srcFilePath: String): String {
+        val srcFile = File(srcFilePath)
+        val file = File(Environment.getExternalStorageDirectory().path, "imgs")
+        if (!file.exists()) {
+            file.mkdirs()
+        }
+        return file.absolutePath + File.separator + srcFile.name
     }
 
     fun doSave() {
@@ -157,17 +299,15 @@ class UserEditActivity : ToolbarActivity() {
         user.url = url
         Glide.with(this@UserEditActivity)
                 .load(url)
-                .placeholder(R.drawable.img_user_default)
                 .error(R.drawable.img_user_default)
                 .into(iv_user)
-        val file = File(user.url)
-        val requestBody = MultipartBody.Builder().setType(MultipartBody.FORM)
-                .addFormDataPart("uid", user.uid!!.toString())
-                .addFormDataPart("image", file.getName(), RequestBody.create(MediaType.parse("image/*"), file))
-                .build();
+        val imgPath = compressImage(url, 160, 160, 1024 * 1024)
+        val file = File(imgPath)
         SoguApi.getService(application)
-                .uploadImg(requestBody)
-                .observeOn(AndroidSchedulers.mainThread())
+                .uploadImg(MultipartBody.Builder().setType(MultipartBody.FORM)
+                        .addFormDataPart("uid", user.uid!!.toString())
+                        .addFormDataPart("image", file.getName(), RequestBody.create(MediaType.parse("image/*"), file))
+                        .build()).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {

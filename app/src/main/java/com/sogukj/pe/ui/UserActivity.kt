@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -27,6 +28,20 @@ import org.jetbrains.anko.sdk25.coroutines.onClick
  */
 
 class UserActivity : ToolbarActivity() {
+
+    override val menuId: Int
+        get() = R.menu.menu_logout
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.action_logout -> {
+                Store.store.clearUser(this)
+                LoginActivity.start(this)
+                return true;
+            }
+        }
+        return false
+    }
 
     val departList = ArrayList<DepartmentBean>()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,6 +89,12 @@ class UserActivity : ToolbarActivity() {
         iv_user.onClick {
             UserEditActivity.start(this@UserActivity, departList)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val user = Store.store.getUser(this)
+        updateUser(user)
     }
 
     private fun updateUser(user: UserBean?) {
