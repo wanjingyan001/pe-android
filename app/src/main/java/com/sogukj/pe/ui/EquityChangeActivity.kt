@@ -48,7 +48,7 @@ class EquityChangeActivity : ToolbarActivity() {
                 var tvReason = convertView.findViewById(R.id.tv_reason) as TextView
 
                 override fun setData(view: View, data: EquityChangeBean, position: Int) {
-                    tvTime.text = df.format(data.changeDate)
+                    tvTime.text = data.changeDate
                     tvTotal.text = data.afterAll
                     tvCirculate.text = data.afterNoLimit
                     tvLimitSales.text = data.afterLimit
