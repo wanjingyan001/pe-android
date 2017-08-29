@@ -226,7 +226,7 @@
                         style="@style/ItemGridProject"
                         android:drawableTop="@drawable/ic_proj_gbbd"
                         android:onClick="onClick"
-                        android:tag="equityChange"
+                        android:tag="equitychange"
                         android:text="股本变动" />
 
                     <com.sogukj.pe.view.TipsView

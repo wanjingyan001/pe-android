@@ -34,7 +34,7 @@ class AnnouncementActivity : ToolbarActivity() {
 
         project = intent.getSerializableExtra(Extras.DATA) as ProjectBean
         setBack(true)
-        setTitle("参股控股")
+        setTitle("上市公告")
         adapter = RecyclerAdapter<AnnouncementBean>(this, { _adapter, parent, type ->
             val convertView = _adapter.getView(R.layout.item_project_shangshigonggao, parent) as View
             object : RecyclerHolder<AnnouncementBean>(convertView) {
@@ -88,14 +88,14 @@ class AnnouncementActivity : ToolbarActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
-                    adapter.dataList.clear()
                     if (payload.isOk) {
+                        if (page == 1)
+                            adapter.dataList.clear()
                         payload.payload?.apply {
                             adapter.dataList.addAll(this)
                         }
-                    } else {
+                    } else
                         showToast(payload.message)
-                    }
                 }, { e ->
                     Trace.e(e)
                     showToast("暂无可用数据")

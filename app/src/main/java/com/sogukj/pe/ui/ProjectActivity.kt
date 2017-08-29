@@ -140,9 +140,9 @@ class ProjectActivity : ToolbarActivity() {
             if (null != tag && tag is String) {
                 val count = data[tag as String]
                 if (count != null && count > 0) {
-                    icon?.setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
-                    child.setOnClickListener(this::onClick)
+                    icon?.clearColorFilter()
                     child.display(count, color)
+                    child.setOnClickListener(this::onClick)
                 } else {
                     icon?.setColorFilter(colorGray, PorterDuff.Mode.SRC_ATOP)
                     child.setOnClickListener(null)
