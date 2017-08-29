@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
@@ -116,11 +117,11 @@ class ProjectActivity : ToolbarActivity() {
                         payload.payload
                                 ?.counts
                                 ?.apply {
-                                    refresh(gl_shangshi, this)
-                                    refresh(gl_qiyebeijin, this)
-                                    refresh(gl_jinyinzhuankuang, this)
-                                    refresh(gl_qiyefazhan, this)
-                                    refresh(gl_zhishichanquan, this)
+                                    refresh(gl_shangshi, this, Color.parseColor("#5785f3"))
+                                    refresh(gl_qiyebeijin, this, Color.parseColor("#fe5f39"))
+                                    refresh(gl_qiyefazhan, this, Color.parseColor("#5785f3"))
+                                    refresh(gl_jinyinzhuankuang, this, Color.parseColor("#fe5f39"))
+                                    refresh(gl_zhishichanquan, this, Color.parseColor("#5785f3"))
                                 }
                     } else
                         showToast(payload.message)
@@ -130,7 +131,7 @@ class ProjectActivity : ToolbarActivity() {
                 })
     }
 
-    fun refresh(grid: GridLayout, data: Map<String, Int?>) {
+    fun refresh(grid: GridLayout, data: Map<String, Int?>, color: Int = Color.RED) {
         val size = grid.childCount
         for (i in 0..size - 1) {
             val child = grid.getChildAt(i) as TipsView
@@ -139,8 +140,9 @@ class ProjectActivity : ToolbarActivity() {
             if (null != tag && tag is String) {
                 val count = data[tag as String]
                 if (count != null && count > 0) {
+                    icon?.setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
                     child.setOnClickListener(this::onClick)
-                    child.display(count)
+                    child.display(count, color)
                 } else {
                     icon?.setColorFilter(colorGray, PorterDuff.Mode.SRC_ATOP)
                     child.setOnClickListener(null)
@@ -149,16 +151,6 @@ class ProjectActivity : ToolbarActivity() {
                 icon?.setColorFilter(colorGray, PorterDuff.Mode.SRC_ATOP)
                 child.setOnClickListener(null)
             }
-        }
-    }
-
-    fun colorIcon(view: TextView, count: Int = 0) {
-        val icon = view.compoundDrawables[1]
-        icon?.apply {
-            if (count == 0)
-                setColorFilter(colorGray, PorterDuff.Mode.SRC_ATOP)
-            else
-                clearColorFilter()
         }
     }
 
@@ -272,7 +264,16 @@ class ProjectActivity : ToolbarActivity() {
             tv_summary.text = data?.title
             tv_time.text = data?.time
             tv_from.text = data?.source
-
+            tags.removeAllViews()
+            data?.tag?.split("#")
+                    ?.forEach { str ->
+                        if (!TextUtils.isEmpty(str)) {
+                            val itemTag = View.inflate(convertView.context, R.layout.item_tag_news, null)
+                            val tvTag = itemTag.find<TextView>(R.id.tv_tag)
+                            tvTag.text = str
+                            tags.addView(itemTag)
+                        }
+                    }
         }
 
     }

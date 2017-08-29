@@ -8,17 +8,17 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.TextView
-import com.sogukj.pe.adapter.RecyclerAdapter
-import com.sogukj.pe.adapter.RecyclerHolder
 import com.framework.base.ToolbarActivity
-import com.sogukj.pe.util.Trace
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.adapter.RecyclerAdapter
+import com.sogukj.pe.adapter.RecyclerHolder
 import com.sogukj.pe.bean.AnnouncementBean
 import com.sogukj.pe.bean.ProjectBean
+import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -43,7 +43,7 @@ class AnnouncementActivity : ToolbarActivity() {
 
                 override fun setData(view: View, data: AnnouncementBean, position: Int) {
                     tvTime.text = data.time
-                    tvMsg.text = "${data.companyName}: ${data.name}"
+                    tvMsg.text = "${data.companyName}: ${data.title}"
                 }
 
             }
@@ -66,20 +66,22 @@ class AnnouncementActivity : ToolbarActivity() {
         refresh.setEnableLoadmore(false)
         refresh.setOnRefreshListener(object : RefreshListenerAdapter() {
             override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
+                page = 1
                 doRequest()
             }
 
             override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
-                super.onLoadMore(refreshLayout)
+                ++page
+                doRequest()
             }
 
         })
-        refresh.setAutoLoadMore(false)
+        refresh.setAutoLoadMore(true)
         handler.postDelayed({
             doRequest()
         }, 100)
     }
-
+    var page = 1
     fun doRequest() {
         SoguApi.getService(application)
                 .listAnnouncement(project.company_id!!)
@@ -96,9 +98,14 @@ class AnnouncementActivity : ToolbarActivity() {
                     }
                 }, { e ->
                     Trace.e(e)
+                    showToast("暂无可用数据")
                 }, {
+                    refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
                     adapter.notifyDataSetChanged()
-                    refresh?.finishRefreshing()
+                    if (page == 1)
+                        refresh?.finishRefreshing()
+                    else
+                        refresh?.finishLoadmore()
                 })
     }
 

@@ -9,7 +9,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 
@@ -18,6 +17,7 @@ import com.sogukj.pe.util.Utils;
 
 public class TipsView extends android.support.v7.widget.AppCompatTextView {
     private int number = 0;
+    private int color = Color.RED;
 
     public TipsView(Context context) {
         super(context);
@@ -37,28 +37,21 @@ public class TipsView extends android.support.v7.widget.AppCompatTextView {
         if (number > 0) {
             Paint textPaint = new Paint();
             Rect textRect = new Rect();
-            String text = number > 9 ? "9+" : number + "";
-            textPaint.setColor(Color.WHITE);
+            String text = number + "";
+            textPaint.setColor(color);
             textPaint.setAntiAlias(true);
             textPaint.setTextSize(Utils.dpToPx(getContext(), text.length() == 1 ? 10 : text.length() == 2 ? 9 : 8));
             textPaint.setTypeface(Typeface.SANS_SERIF);
             textPaint.getTextBounds(text, 0, text.length(), textRect);
             textPaint.setTextAlign(Paint.Align.CENTER);
-            Paint.FontMetrics fontMetrics = textPaint.getFontMetrics();
-            int width = Utils.dpToPx(getContext(), 15);
-            Paint paint = new Paint();
-            paint.setAntiAlias(true);
-            paint.setColor(Color.RED);
-            RectF rect = new RectF(getWidth() / 2, getHeight() / 4, getWidth() / 2 + width, getHeight() / 4 + width);
-            canvas.drawOval(rect, paint);
-            canvas.drawText(text, rect.right - rect.width() / 2f, rect.bottom - rect.height() / 2f - fontMetrics.descent + (fontMetrics.descent - fontMetrics.ascent) / 2, textPaint);
+            canvas.drawText(text, (float) (getWidth() - textRect.width()), textRect.height(), textPaint);
         }
-
     }
 
 
-    public void display(int number) {
+    public void display(int number, int color) {
         this.number = number;
+        this.color = color;
         invalidate();
     }
 }

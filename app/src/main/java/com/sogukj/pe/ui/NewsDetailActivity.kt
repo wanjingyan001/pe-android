@@ -26,7 +26,7 @@ import org.jetbrains.anko.find
 
 class NewsDetailActivity : ToolbarActivity() {
     fun appendLine(k: String, v: Any?) {
-        buff.append("$k: <font color='#666666'>${if (v == null) "" else v}</font><br/>")
+        buff.append("$k：<font color='#666666'>${if (v == null) "" else v}</font><br/>")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -136,7 +136,7 @@ class NewsDetailActivity : ToolbarActivity() {
                 "<style>img{max-width: 100%; height:auto;} .reduce-font p{font-size:" + fontSize + "px!important;}</style>" +
                 "</head>"
         val content = map[NewsType._13.format_content.toString()] as String?
-        val html = "<html>${head}<body style='margin:10px;'>" +
+        val html = "<html>${head}<body style='margin:0px;'>" +
                 "<div style='padding:10px;'>${title}" +
                 "<h5 style='color:#999;font-size:12px;'>${data.time}    ${data.source}</h5>" +
                 "<span style='color:#333;font-size:16px;line-height:30px;'>$content</span></div>" +
