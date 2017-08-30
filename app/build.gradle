@@ -9,7 +9,7 @@ android {
         applicationId "com.sogukj.pe"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 7
+        versionCode 8
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -75,7 +75,7 @@ dependencies {
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.github.salomonbrys.kotson:kotson:2.5.0'
     compile 'com.lcodecorex:tkrefreshlayout:1.0.7'
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'cn.finalteam.rxgalleryfinal:library:1.0.9'
     compile 'com.github.bumptech.glide:glide:3.8.0'
     compile 'com.afollestad.material-dialogs:core:0.9.4.5'
