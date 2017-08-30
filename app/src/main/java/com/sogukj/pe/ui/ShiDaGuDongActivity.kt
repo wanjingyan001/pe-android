@@ -6,15 +6,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
-import com.sogukj.pe.adapter.ListAdapter
-import com.sogukj.pe.adapter.ListHolder
 import com.framework.base.ToolbarActivity
-import com.sogukj.pe.util.Trace
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.adapter.ListAdapter
+import com.sogukj.pe.adapter.ListHolder
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.bean.ShareHolderBean
 import com.sogukj.pe.bean.TimeGroupedShareHolderBean
+import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -73,7 +73,9 @@ open class ShiDaGuDongActivity : ToolbarActivity() {
         tv_next.setOnClickListener {
             setGroup(selectedIndex + 1)
         }
-
+        fl_content.setOnClickListener {
+            tv_select.isChecked = false
+        }
         handler.postDelayed({
             doRequest()
         }, 100)

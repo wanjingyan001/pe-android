@@ -24,6 +24,7 @@ class RecyclerAdapter<T>(val context: Context, val creator: (adapter: RecyclerAd
     val inflater: LayoutInflater
     var comparator: Comparator<T>? = null
     var onItemClick: ((v: View, position: Int) -> Unit)? = null
+    var onItemLongClick: ((v: View, position: Int) -> Boolean)? = null
     var selectedItems = ArrayList<Int>()
         private set
     var mode: Int = 0
@@ -68,6 +69,12 @@ class RecyclerAdapter<T>(val context: Context, val creator: (adapter: RecyclerAd
             selectedPosition = position
             if (null != onItemClick)
                 onItemClick!!(v, position)
+        }
+        if (null != onItemLongClick) {
+            holder.itemView.isLongClickable = true
+            holder.itemView.setOnLongClickListener { v ->
+                 onItemLongClick!!(v, position)
+            }
         }
         super.onBindViewHolder(holder, position, payloads)
     }
@@ -121,7 +128,8 @@ class RecyclerAdapter<T>(val context: Context, val creator: (adapter: RecyclerAd
     }
 
 
-    @JvmOverloads fun toggleSelection(position: Int, invalidate: Boolean = false) {
+    @JvmOverloads
+    fun toggleSelection(position: Int, invalidate: Boolean = false) {
         if (position < 0) return
         if (mode == MODE_SINGLE) clearSelection()
 
@@ -141,7 +149,8 @@ class RecyclerAdapter<T>(val context: Context, val creator: (adapter: RecyclerAd
     }
 
 
-    @JvmOverloads fun selectAll(skipViewType: Int = -1) {
+    @JvmOverloads
+    fun selectAll(skipViewType: Int = -1) {
         Trace.d(TAG, "selectAll")
         selectedItems = ArrayList<Int>(itemCount)
         for (i in 0..itemCount - 1) {

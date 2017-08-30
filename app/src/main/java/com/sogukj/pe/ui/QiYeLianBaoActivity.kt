@@ -146,7 +146,7 @@ open class QiYeLianBaoActivity : ToolbarActivity() {
         project = intent.getSerializableExtra(Extras.DATA) as ProjectBean
         setBack(true)
         setTitle("企业年报")
-
+        tv_name.text=project.name
         lv_dropdown.adapter = adapterSelector
         lv_change_record.adapter = adapterChangeRecord
         lv_investment.adapter = adapterInvestment

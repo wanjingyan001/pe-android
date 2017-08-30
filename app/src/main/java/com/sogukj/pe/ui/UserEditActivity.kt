@@ -32,7 +32,6 @@ import kotlinx.android.synthetic.main.activity_user_edit.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import org.jetbrains.anko.sdk25.coroutines.onClick
 import java.io.*
 
 
@@ -63,13 +62,17 @@ class UserEditActivity : ToolbarActivity() {
                 tv_posotion?.setText(position)
             if (!TextUtils.isEmpty(depart_name))
                 tv_depart?.setText(depart_name)
+            if (!TextUtils.isEmpty(project))
+                tv_project?.setText(project)
+            if (!TextUtils.isEmpty(memo))
+                tv_note?.setText(memo)
             if (!TextUtils.isEmpty(url))
                 Glide.with(this@UserEditActivity)
                         .load(headImage())
                         .error(R.drawable.img_user_default)
                         .into(iv_user)
         }
-        tv_depart.onClick {
+        tv_depart.setOnClickListener {
             val items = ArrayList<String?>()
             departList?.forEach {
                 items.add(it.de_name)
@@ -95,7 +98,7 @@ class UserEditActivity : ToolbarActivity() {
                     .negativeText("取消")
                     .show()
         }
-        tr_icon.onClick {
+        tr_icon.setOnClickListener {
             //            //            val intent = Intent()
 //            intent.type = "image/*"
 //            intent.action = Intent.ACTION_GET_CONTENT
@@ -275,6 +278,12 @@ class UserEditActivity : ToolbarActivity() {
         }
         tv_email.text?.trim()?.toString()?.apply {
             user.email = this
+        }
+        tv_project.text?.trim()?.toString()?.apply {
+            user.project = this
+        }
+        tv_note.text?.trim()?.toString()?.apply {
+            user.memo = this
         }
         SoguApi.getService(application)
                 .saveUser(uid = user.uid!!, name = user.name, phone = user.phone, email = user.email,

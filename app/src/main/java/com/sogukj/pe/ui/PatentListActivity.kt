@@ -47,8 +47,8 @@ class PatentListActivity : ToolbarActivity() {
                 val tvPatentNum = convertView.findViewById(R.id.tv_patentNum) as TextView
                 override fun setData(view: View, data: PatentBean, position: Int) {
                     tvPatentName.text = data.patentName
-                    tvApplicationPublishNum.text = "申请公布号:${data.applicationPublishNum}"
-                    tvPatentNum.text = "申请号/专利号:${data.patentNum}"
+                    tvApplicationPublishNum.text = "申请公布号：${data.applicationPublishNum}"
+                    tvPatentNum.text = "申请号/专利号：${data.patentNum}"
                 }
 
             }

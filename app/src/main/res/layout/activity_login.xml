@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:text="PE管理系统"
+        android:text="海通创新"
         android:textColor="@color/text_1"
         android:textSize="18sp" />
 
@@ -27,7 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_gravity="center"
-        android:layout_marginLeft="40dp"
+        android:layout_marginLeft="40dp" android:ems="11"
         android:layout_marginRight="40dp"
         android:layout_marginTop="50dp"
         android:background="@drawable/bg_edit_login"

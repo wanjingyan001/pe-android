@@ -50,6 +50,7 @@ class BizInfoActivity : ToolbarActivity() {
                             tv_regLocation.text = regLocation
                             tv_approvedTime.text = approvedTime
                             tv_regInstitute.text = regInstitute
+                            tv_businessScope.text=businessScope
                             copySupport(tv_legalPersonName, legalPersonName)
                             copySupport(tv_estiblishTime, estiblishTime)
                             copySupport(tv_regCapital, regCapital)

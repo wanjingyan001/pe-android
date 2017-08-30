@@ -20,4 +20,5 @@ class BizInfoBean : Serializable {
     var regLocation: String? = null//  Varchar    注册地址
     var approvedTime: String? = null//   Datetime    核准日期
     var regInstitute: String? = null//  Varchar
+    var businessScope: String? = null
 }

@@ -39,6 +39,7 @@ class LoginActivity : BaseActivity() {
         if (TextUtils.isEmpty(et_name.text) || !Utils.isMobile(et_name.text.trim())) {
             et_name.setText("")
             et_name.requestFocus()
+            showToast("请输入正确的手机号")
             return
         }
         Timer().scheduleAtFixedRate(LoginTimer(60, Handler(), tv_code), 0, 1000);
@@ -67,11 +68,13 @@ class LoginActivity : BaseActivity() {
         if (TextUtils.isEmpty(et_name.text) || !Utils.isMobile(et_name.text.trim())) {
             et_name.setText("")
             et_name.requestFocus()
+            showToast("请输入正确的手机号")
             return
         }
         if (TextUtils.isEmpty(et_pwd.text) || et_pwd.text.trim().length < 4) {
             et_pwd.setText("")
             et_pwd.requestFocus()
+            showToast("请输入正确的验证码")
             return
         }
         val phone = et_name.text.toString()

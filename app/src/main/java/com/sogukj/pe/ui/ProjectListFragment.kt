@@ -1,10 +1,15 @@
 package com.sogukj.pe.ui
 
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.view.Gravity
 import android.view.View
+import android.view.WindowManager
+import android.widget.PopupWindow
 import android.widget.TextView
 import com.framework.base.BaseFragment
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
@@ -39,7 +44,10 @@ class ProjectListFragment : BaseFragment() {
         super.onCreate(savedInstanceState)
         index = arguments.getInt(Extras.INDEX)
         type = when (index) {
-            0 -> 2;2 -> 1;else -> 3
+            0 -> 2;
+            1 -> 3;
+            3 -> 1;
+            else -> 1
         };
     }
 
@@ -56,6 +64,11 @@ class ProjectListFragment : BaseFragment() {
         adapter.onItemClick = { v, p ->
             val project = adapter.getItem(p);
             ProjectActivity.start(baseActivity, project)
+        }
+        adapter.onItemLongClick = { v, p ->
+            val project = adapter.getItem(p);
+            editOptions(v, p)
+            true
         }
         val layoutManager = LinearLayoutManager(baseActivity)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
@@ -125,6 +138,41 @@ class ProjectListFragment : BaseFragment() {
                     })
     }
 
+    fun editOptions(view: View, position: Int) {
+        val popupView = View.inflate(baseActivity, R.layout.pop_edit_project, null)
+        val tvAdd = popupView.findViewById(R.id.tv_add) as TextView
+        val tvDel = popupView.findViewById(R.id.tv_del) as TextView
+        val pop = PopupWindow(popupView, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT, true)
+        tvAdd.setOnClickListener { view1 ->
+            doAdd(position)
+            pop.dismiss()
+        }
+        tvDel.setOnClickListener { view12 ->
+            doDel(position)
+            pop.dismiss()
+        }
+
+        pop.isTouchable = true
+        pop.isFocusable = true
+        pop.isOutsideTouchable = true
+        pop.setBackgroundDrawable(BitmapDrawable(resources, null as Bitmap?))
+        val location = IntArray(2)
+        val view = view.find<View>(R.id.tv1)
+        view.getLocationInWindow(location)
+        val x = location[0]
+        val y = location[1]
+        pop.showAtLocation(view, Gravity.CENTER_HORIZONTAL or Gravity.TOP, 0, y - view.getMeasuredHeight())
+    }
+
+    fun doDel(position: Int) {
+
+    }
+
+    fun doAdd(position: Int) {
+
+
+    }
+
     inner class ProjectHolder(view: View)
         : RecyclerHolder<ProjectBean>(view) {
 
@@ -140,7 +188,14 @@ class ProjectListFragment : BaseFragment() {
 
         override fun setData(view: View, data: ProjectBean, position: Int) {
             tv1.text = data.name
-            tv2.text = if (type == 2) data.status else data.state
+            tv2.text = if (type == 2)
+                data.state
+            else when (data.status) {
+                0 -> "禁用";
+                1 -> "准备中";
+                2 -> "已完成"
+                else -> "准备中"
+            }
             tv3.text = data.add_time
         }
 

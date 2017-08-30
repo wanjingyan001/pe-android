@@ -36,7 +36,7 @@ class ICPListActivity : ToolbarActivity() {
 
         project = intent.getSerializableExtra(Extras.DATA) as ProjectBean
         setBack(true)
-        setTitle("网站务案")
+        setTitle("网站备案")
 
         adapter = RecyclerAdapter<IcpBean>(this, { _adapter, parent, type ->
             val convertView = _adapter.getView(R.layout.item_project_icp, parent) as View

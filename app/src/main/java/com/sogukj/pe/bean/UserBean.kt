@@ -5,11 +5,11 @@ import java.io.Serializable
 
 open class UserBean() : Serializable {
     var uid: Int? = null//用户主键ID
-    var name: String? = null
+    var name: String = ""
     var phone: String? = null
     var depart_name: String? = null
-    var position: String? = null
-    var email: String? = null
+    var position: String = ""
+    var email: String = ""
     var project: String? = null
     var memo: String? = null
     var url: String? = null

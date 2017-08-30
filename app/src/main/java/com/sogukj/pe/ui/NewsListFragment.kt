@@ -43,7 +43,7 @@ class NewsListFragment : BaseFragment() {
         type = when (index) {
             2 -> 1
             1 -> 3
-            else -> 2
+            else -> null
         }
     }
 
@@ -103,7 +103,7 @@ class NewsListFragment : BaseFragment() {
     var page = 1
     fun doRequest() {
         val user = Store.store.getUser(baseActivity!!)
-        val userId = user?.uid
+        val userId = if (index == 0) null else user?.uid
         SoguApi.getService(baseActivity!!.application)
                 .listNews(page = page, type = type, user_id = userId)
                 .observeOn(AndroidSchedulers.mainThread())

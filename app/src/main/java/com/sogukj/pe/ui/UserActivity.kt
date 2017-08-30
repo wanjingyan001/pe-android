@@ -9,6 +9,8 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.R
@@ -35,8 +37,18 @@ class UserActivity : ToolbarActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.action_logout -> {
-                Store.store.clearUser(this)
-                LoginActivity.start(this)
+                MaterialDialog.Builder(this@UserActivity)
+                        .theme(Theme.LIGHT)
+                        .title("提示")
+                        .content("确定要退出此帐号?")
+                        .onPositive { materialDialog, dialogAction ->
+                            Store.store.clearUser(this)
+                            LoginActivity.start(this)
+                            finish()
+                        }
+                        .positiveText("确定")
+                        .negativeText("取消")
+                        .show()
                 return true;
             }
         }
