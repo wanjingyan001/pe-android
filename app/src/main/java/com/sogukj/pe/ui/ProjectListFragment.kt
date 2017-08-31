@@ -33,8 +33,7 @@ import java.text.SimpleDateFormat
 /**
  * Created by qinfei on 17/7/18.
  */
-
-class ProjectListFragment : BaseFragment() {
+class ProjectListFragment : BaseFragment(), SupportEmptyView {
     override val containerViewId: Int
         get() = R.layout.fragment_list_project//To change initializer of created properties use File | Settings | File Templates.
     lateinit var adapter: RecyclerAdapter<ProjectBean>
@@ -65,11 +64,11 @@ class ProjectListFragment : BaseFragment() {
             val project = adapter.getItem(p);
             ProjectActivity.start(baseActivity, project)
         }
-        adapter.onItemLongClick = { v, p ->
-            val project = adapter.getItem(p);
-            editOptions(v, p)
-            true
-        }
+        if (index != 1)
+            adapter.onItemLongClick = { v, p ->
+                editOptions(v, p)
+                true
+            }
         val layoutManager = LinearLayoutManager(baseActivity)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         recycler_view.addItemDecoration(DividerItemDecoration(baseActivity, DividerItemDecoration.VERTICAL))
@@ -85,12 +84,12 @@ class ProjectListFragment : BaseFragment() {
         refresh.setOverScrollRefreshShow(false)
         refresh.setOnRefreshListener(object : RefreshListenerAdapter() {
             override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
-                page = 1
+                offset = 0
                 doRequest()
             }
 
             override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
-                ++page
+                offset = adapter.dataList.size
                 doRequest()
             }
 
@@ -107,18 +106,18 @@ class ProjectListFragment : BaseFragment() {
     }
 
     val fmt = SimpleDateFormat("MM/dd HH:mm")
-    var page = 1
+    var offset = 0
 
     fun doRequest() {
         val user = Store.store.getUser(baseActivity!!)
         if (null != user)
             SoguApi.getService(baseActivity!!.application)
-                    .listProject(page = page, type = type, user_id = user!!.uid)
+                    .listProject(offset = offset, type = type, user_id = user!!.uid)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe({ payload ->
                         if (payload.isOk) {
-                            if (page == 1)
+                            if (offset == 0)
                                 adapter.dataList.clear()
                             payload.payload?.apply {
                                 adapter.dataList.addAll(this)
@@ -129,9 +128,10 @@ class ProjectListFragment : BaseFragment() {
                         Trace.e(e)
                         showToast("暂无可用数据")
                     }, {
-                        refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
+                        SupportEmptyView.checkEmpty(this,adapter)
+                        refresh?.setEnableLoadmore(adapter.dataList.size >= offset + 20)
                         adapter.notifyDataSetChanged()
-                        if (page == 1)
+                        if (offset == 0)
                             refresh?.finishRefreshing()
                         else
                             refresh?.finishLoadmore()
@@ -151,7 +151,7 @@ class ProjectListFragment : BaseFragment() {
             doDel(position)
             pop.dismiss()
         }
-
+        if (index == 0) tvAdd.visibility = View.GONE
         pop.isTouchable = true
         pop.isFocusable = true
         pop.isOutsideTouchable = true
@@ -165,11 +165,41 @@ class ProjectListFragment : BaseFragment() {
     }
 
     fun doDel(position: Int) {
-
+        val project = adapter.dataList[position]
+        SoguApi.getService(baseActivity!!.application)
+                .delProject(project.company_id!!)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        showToast("删除成功")
+                        adapter.dataList.removeAt(position)
+                        adapter.notifyDataSetChanged()
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    showToast("删除失败")
+                })
     }
 
     fun doAdd(position: Int) {
-
+        val project = adapter.dataList[position]
+        SoguApi.getService(baseActivity!!.application)
+                .editProject(project.company_id!!)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        showToast("添加拟投成功")
+                        adapter.dataList.removeAt(position)
+                        adapter.notifyDataSetChanged()
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    showToast("添加拟投失败")
+                })
 
     }
 

@@ -28,7 +28,7 @@ import kotlinx.android.synthetic.main.fragment_list_news.*
 /**
  * Created by qinfei on 17/7/18.
  */
-class FinanceEventListFragment : BaseFragment() {
+class FinanceEventListFragment : BaseFragment(),SupportEmptyView {
     override val containerViewId: Int
         get() = R.layout.fragment_list_news //To change initializer of created properties use File | Settings | File Templates.
 
@@ -119,6 +119,7 @@ class FinanceEventListFragment : BaseFragment() {
                     Trace.e(e)
                     showToast("暂无可用数据")
                 }, {
+                    SupportEmptyView.checkEmpty(this,adapter)
                     refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
                     adapter.notifyDataSetChanged()
                     if (page == 1)

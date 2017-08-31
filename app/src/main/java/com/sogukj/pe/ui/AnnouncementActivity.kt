@@ -18,13 +18,14 @@ import com.sogukj.pe.adapter.RecyclerAdapter
 import com.sogukj.pe.adapter.RecyclerHolder
 import com.sogukj.pe.bean.AnnouncementBean
 import com.sogukj.pe.bean.ProjectBean
+import com.sogukj.pe.util.PdfUtil
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragment_list_news.*
+import kotlinx.android.synthetic.main.activity_list_common.*
 
-class AnnouncementActivity : ToolbarActivity() {
+class AnnouncementActivity : ToolbarActivity(),SupportEmptyView {
 
     lateinit var adapter: RecyclerAdapter<AnnouncementBean>
     lateinit var project: ProjectBean
@@ -49,6 +50,9 @@ class AnnouncementActivity : ToolbarActivity() {
             }
         })
         adapter.onItemClick = { v, p ->
+            val bean = adapter.dataList[p]
+            if (null != bean.url)
+                PdfUtil.loadPdf(this, bean.url)
         }
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
@@ -81,6 +85,7 @@ class AnnouncementActivity : ToolbarActivity() {
             doRequest()
         }, 100)
     }
+
     var page = 1
     fun doRequest() {
         SoguApi.getService(application)
@@ -100,6 +105,7 @@ class AnnouncementActivity : ToolbarActivity() {
                     Trace.e(e)
                     showToast("暂无可用数据")
                 }, {
+                    SupportEmptyView.checkEmpty(this,adapter)
                     refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
                     adapter.notifyDataSetChanged()
                     if (page == 1)

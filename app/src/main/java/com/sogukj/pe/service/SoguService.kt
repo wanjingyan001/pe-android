@@ -44,7 +44,7 @@ interface SoguService {
 
     @FormUrlEncoded
     @POST("/api/news/focusCompanyLists")
-    fun listProject(@Field("page") page: Int
+    fun listProject(@Field("offset") offset: Int
                     , @Field("pageSize") pageSize: Int = 20
                     , @Field("uid") user_id: Int? = null
                     , @Field("type") type: Int? = null
@@ -413,6 +413,20 @@ interface SoguService {
             , @Field("pageSize") pageSize: Int = 3
             , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
     ): Observable<Payload<ProjectDetailBean>>
+
+    @FormUrlEncoded
+    @POST("/api/news/changeStatus")
+    fun editProject(
+            @Field("company_id") company_id: Int
+            , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
+    ): Observable<Payload<Object>>
+
+    @FormUrlEncoded
+    @POST("/api/news/deleteProject")
+    fun delProject(
+            @Field("company_id") company_id: Int
+            , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
+    ): Observable<Payload<Object>>
 
     companion object {
         const val APPKEY_NAME = "appkey"

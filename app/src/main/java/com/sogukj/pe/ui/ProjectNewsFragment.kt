@@ -23,14 +23,14 @@ import com.sogukj.pe.view.FlowLayout
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragment_list_news.*
+import kotlinx.android.synthetic.main.fragment_list_project_news.*
 import org.jetbrains.anko.find
 import java.text.SimpleDateFormat
 
 /**
  * Created by qinfei on 17/7/18.
  */
-class ProjectNewsFragment : BaseFragment() {
+class ProjectNewsFragment : BaseFragment(), SupportEmptyView {
     override val containerViewId: Int
         get() = R.layout.fragment_list_project_news //To change initializer of created properties use File | Settings | File Templates.
 
@@ -92,7 +92,7 @@ class ProjectNewsFragment : BaseFragment() {
     var page = 1
     fun doRequest() {
         SoguApi.getService(baseActivity!!.application)
-                .listNews(page = page, type = type, company_id = project.company_id)
+                .listNews(pageSize = 20, page = 1, type = type, company_id = project.company_id)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -108,6 +108,7 @@ class ProjectNewsFragment : BaseFragment() {
                     Trace.e(e)
                     showToast("暂无可用数据")
                 }, {
+                    SupportEmptyView.checkEmpty(this,adapter)
                     refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
                     adapter.notifyDataSetChanged()
                     if (page == 1)
@@ -155,8 +156,8 @@ class ProjectNewsFragment : BaseFragment() {
     companion object {
         val TAG = NewsListFragment::class.java.simpleName
 
-        fun newInstance(project: ProjectBean, type: Int = 1): NewsListFragment {
-            val fragment = NewsListFragment()
+        fun newInstance(project: ProjectBean, type: Int = 1): ProjectNewsFragment {
+            val fragment = ProjectNewsFragment()
             val intent = Bundle()
             intent.putSerializable(Extras.DATA, project)
             intent.putInt(Extras.TYPE, type)

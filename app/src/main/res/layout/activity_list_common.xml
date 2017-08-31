@@ -24,6 +24,8 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             app:layoutManager="LinearLayoutManager" />
+
+        <include layout="@layout/layout_empty" />
     </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
 
 

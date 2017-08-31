@@ -29,7 +29,7 @@ import kotlinx.android.synthetic.main.activity_list_common.*
 import java.text.SimpleDateFormat
 
 
-class BrandListActivity : ToolbarActivity() {
+class BrandListActivity : ToolbarActivity(),SupportEmptyView {
 
     lateinit var adapter: RecyclerAdapter<BrandBean>
     lateinit var project: ProjectBean
@@ -119,6 +119,7 @@ class BrandListActivity : ToolbarActivity() {
                     Trace.e(e)
                     showToast("暂无可用数据")
                 }, {
+                    SupportEmptyView.checkEmpty(this,adapter)
                     refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
                     adapter.notifyDataSetChanged()
                     if (page == 1)

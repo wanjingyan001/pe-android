@@ -48,11 +48,12 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/ll_header2"
-        android:layout_width="match_parent" android:visibility="gone"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/color_gray_light"
         android:orientation="horizontal"
-        android:padding="8dp">
+        android:padding="8dp"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/tv4"
@@ -104,5 +105,8 @@
             android:paddingRight="10dp"
             app:layoutManager="LinearLayoutManager"
             tools:listitem="@layout/item_main_project" />
+
+
+        <include layout="@layout/layout_empty" />
     </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
 </LinearLayout>

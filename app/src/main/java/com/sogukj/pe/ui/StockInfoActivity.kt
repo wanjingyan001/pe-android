@@ -4,10 +4,10 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import com.framework.base.ToolbarActivity
-import com.sogukj.pe.util.Trace
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.ProjectBean
+import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -35,7 +35,7 @@ class StockInfoActivity : ToolbarActivity() {
                             tv_obj.text = stockcode.toString()
                             tv_price.text = hexm_curPrice
                             tv_zhangdie.text = "$hexm_float_price $hexm_float_rate"
-                            tv_update_time.text = fmt.format(payload.timestamp)
+                            tv_update_time.text = "更新时间:${timeshow}"
                             tv_zhangting.text = tmaxprice
                             tv_dieting.text = tminprice
                             tv_open.text = topenprice

@@ -27,7 +27,7 @@ import kotlinx.android.synthetic.main.activity_list_common.*
 import java.text.SimpleDateFormat
 
 
-class CheckListActivity : ToolbarActivity() {
+class CheckListActivity : ToolbarActivity(),SupportEmptyView {
 
     lateinit var adapter: RecyclerAdapter<CheckBean>
     lateinit var project: ProjectBean
@@ -116,6 +116,7 @@ class CheckListActivity : ToolbarActivity() {
                     Trace.e(e)
                     showToast("暂无可用数据")
                 }, {
+                    SupportEmptyView.checkEmpty(this,adapter)
                     refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
                     adapter.notifyDataSetChanged()
                     if (page == 1)

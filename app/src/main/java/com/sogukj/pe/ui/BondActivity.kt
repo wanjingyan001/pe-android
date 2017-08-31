@@ -26,7 +26,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_list_common.*
 import java.text.SimpleDateFormat
 
-class BondActivity : ToolbarActivity() {
+class BondActivity : ToolbarActivity() ,SupportEmptyView{
 
     lateinit var adapter: RecyclerAdapter<BondBean>
     lateinit var project: ProjectBean
@@ -108,6 +108,7 @@ class BondActivity : ToolbarActivity() {
                     Trace.e(e)
                     showToast("暂无可用数据")
                 }, {
+                    SupportEmptyView.checkEmpty(this,adapter)
                     refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
                     adapter.notifyDataSetChanged()
                     if (page == 1)

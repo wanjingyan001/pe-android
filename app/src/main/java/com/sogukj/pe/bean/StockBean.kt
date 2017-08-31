@@ -9,7 +9,7 @@ class StockBean : Serializable {
     var stockcode: Int? = null// 1,
     var stockname: String? = null// "平安银行",
     var stockType: Int? = null// 1,
-    var timeshow: String? = null//"2017-08-02 15:50:04",
+    var timeshow: String = ""//"2017-08-02 15:50:04",
     var fvaluep: String? = null//"6.321",
     var tvalue: String? = null//"0.84",
     var flowvalue: String? = null//"1548.00亿",

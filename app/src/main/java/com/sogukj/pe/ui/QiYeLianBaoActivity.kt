@@ -245,7 +245,7 @@ open class QiYeLianBaoActivity : ToolbarActivity() {
                     if (payload.isOk) {
                         payload.payload?.apply {
                             adapterSelector.dataList.clear()
-                            adapterSelector.dataList.addAll(this)
+                            adapterSelector.dataList.addAll(this.reversed())
                         }
                     } else
                         showToast(payload.message)
