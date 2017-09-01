@@ -46,7 +46,6 @@ class AnnouncementActivity : ToolbarActivity(), SupportEmptyView {
                     tvTime.text = data.time
                     tvMsg.text = data.title
                 }
-
             }
         })
         adapter.onItemClick = { v, p ->
