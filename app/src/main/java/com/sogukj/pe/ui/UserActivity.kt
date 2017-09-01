@@ -158,10 +158,12 @@ class UserActivity : ToolbarActivity() {
         val tv_job = item_content.find<TextView>(R.id.tv_job)
         tv_name.text = userBean.name + "\n" + userBean.phone
         tv_job.text = userBean.position + "\n" + userBean.email
+//        val text = TextShape("大", Color.RED)
         Glide.with(this)
                 .load(userBean.headImage())
                 .error(R.drawable.img_user_default)
                 .into(iv_user)
+//        iv_user.setImageDrawable(text)
     }
 
 
