@@ -110,32 +110,31 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
 
     fun doRequest() {
         val user = Store.store.getUser(baseActivity!!)
-        if (null != user)
-            SoguApi.getService(baseActivity!!.application)
-                    .listProject(offset = offset, type = type, uid = user!!.uid)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe({ payload ->
-                        if (payload.isOk) {
-                            if (offset == 0)
-                                adapter.dataList.clear()
-                            payload.payload?.apply {
-                                adapter.dataList.addAll(this)
-                            }
-                        } else
-                            showToast(payload.message)
-                    }, { e ->
-                        Trace.e(e)
-                        showToast("暂无可用数据")
-                    }, {
-                        SupportEmptyView.checkEmpty(this, adapter)
-                        refresh?.setEnableLoadmore(adapter.dataList.size >= offset + 20)
-                        adapter.notifyDataSetChanged()
+        SoguApi.getService(baseActivity!!.application)
+                .listProject(offset = offset, type = type, uid = user!!.uid)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
                         if (offset == 0)
-                            refresh?.finishRefreshing()
-                        else
-                            refresh?.finishLoadmore()
-                    })
+                            adapter.dataList.clear()
+                        payload.payload?.apply {
+                            adapter.dataList.addAll(this)
+                        }
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    showToast("暂无可用数据")
+                }, {
+                    SupportEmptyView.checkEmpty(this, adapter)
+//                    refresh?.setEnableLoadmore(adapter.dataList.size >= offset + 20)
+                    adapter.notifyDataSetChanged()
+                    if (offset == 0)
+                        refresh?.finishRefreshing()
+                    else
+                        refresh?.finishLoadmore()
+                })
     }
 
     fun editOptions(view: View, position: Int) {

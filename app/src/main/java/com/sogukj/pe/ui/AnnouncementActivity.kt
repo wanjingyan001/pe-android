@@ -25,7 +25,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_list_common.*
 
-class AnnouncementActivity : ToolbarActivity(),SupportEmptyView {
+class AnnouncementActivity : ToolbarActivity(), SupportEmptyView {
 
     lateinit var adapter: RecyclerAdapter<AnnouncementBean>
     lateinit var project: ProjectBean
@@ -44,7 +44,7 @@ class AnnouncementActivity : ToolbarActivity(),SupportEmptyView {
 
                 override fun setData(view: View, data: AnnouncementBean, position: Int) {
                     tvTime.text = data.time
-                    tvMsg.text = "${data.companyName}: ${data.title}"
+                    tvMsg.text = data.title
                 }
 
             }
@@ -105,7 +105,7 @@ class AnnouncementActivity : ToolbarActivity(),SupportEmptyView {
                     Trace.e(e)
                     showToast("暂无可用数据")
                 }, {
-                    SupportEmptyView.checkEmpty(this,adapter)
+                    SupportEmptyView.checkEmpty(this, adapter)
                     refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
                     adapter.notifyDataSetChanged()
                     if (page == 1)
