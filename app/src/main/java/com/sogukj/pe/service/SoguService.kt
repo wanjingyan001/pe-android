@@ -36,7 +36,7 @@ interface SoguService {
     @FormUrlEncoded
     @POST("/api/news/newsLists")
     fun listNews(@Field("page") page: Int, @Field("pageSize") pageSize: Int = 20
-                 , @Field("user_id") user_id: Int? = null
+                 , @Field("uid") uid: Int? = null
                  , @Field("type") type: Int? = null
                  , @Field("company_id") company_id: Int? = null
                  , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE)
@@ -46,7 +46,7 @@ interface SoguService {
     @POST("/api/news/focusCompanyLists")
     fun listProject(@Field("offset") offset: Int
                     , @Field("pageSize") pageSize: Int = 20
-                    , @Field("uid") user_id: Int? = null
+                    , @Field("uid") uid: Int? = null
                     , @Field("type") type: Int? = null
                     , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE): Observable<Payload<List<ProjectBean>>>
 
@@ -427,6 +427,24 @@ interface SoguService {
             @Field("company_id") company_id: Int
             , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
     ): Observable<Payload<Object>>
+
+    @FormUrlEncoded
+    @POST("/api/Listinformation/Branch")
+    fun listBranch(
+            @Field("company_id") company_id: Int
+            , @Field("page") page: Int = 1
+            , @Field("pageSize") pageSize: Int = 20
+            , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
+    ): Observable<Payload<List<BranchBean>>>
+
+    @FormUrlEncoded
+    @POST("/api/Stockinfo/Companyintro")
+    fun companyInfo2(
+            @Field("company_id") company_id: Int
+            , @Field("page") page: Int = 1
+            , @Field("pageSize") pageSize: Int = 20
+            , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
+    ): Observable<Payload<String>>
 
     companion object {
         const val APPKEY_NAME = "appkey"

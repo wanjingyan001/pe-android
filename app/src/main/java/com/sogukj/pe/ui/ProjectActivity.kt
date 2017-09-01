@@ -138,7 +138,7 @@ class ProjectActivity : ToolbarActivity() {
             val icon = child.compoundDrawables[1]
             val tag = child.getTag()
             if (null != tag && tag is String) {
-                val count = data[tag as String]
+                val count = data[tag]
                 if (count != null && count > 0) {
                     icon?.clearColorFilter()
                     child.display(count, color)
@@ -177,6 +177,8 @@ class ProjectActivity : ToolbarActivity() {
             R.id.tv_investment -> InvestmentActivity.start(this@ProjectActivity, project)
             R.id.tv_key_personal -> KeyPersonalActivity.start(this@ProjectActivity, project)
             R.id.tv_equity_structure -> EquityStructureActivity.start(this@ProjectActivity, project)
+            R.id.tv_branch -> BranchListActivity.start(this@ProjectActivity, project)
+            R.id.tv_gsjj -> CompanyInfo2Activity.start(this@ProjectActivity, project)
 
             R.id.tv_rongzilishi -> FinanceHistoryActivity.start(this@ProjectActivity, project)
             R.id.tv_touzishijian -> InvestEventActivity.start(this@ProjectActivity, project)

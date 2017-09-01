@@ -41,8 +41,9 @@ class NewsListFragment : BaseFragment(), SupportEmptyView {
         super.onCreate(savedInstanceState)
         index = arguments.getInt(Extras.INDEX)
         type = when (index) {
-            2 -> 1
+            0 -> null
             1 -> 3
+            2 -> 1
             else -> null
         }
     }
@@ -105,7 +106,7 @@ class NewsListFragment : BaseFragment(), SupportEmptyView {
         val user = Store.store.getUser(baseActivity!!)
         val userId = if (index == 0) null else user?.uid
         SoguApi.getService(baseActivity!!.application)
-                .listNews(page = page, type = type, user_id = userId)
+                .listNews(page = page, type = type, uid = userId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -121,7 +122,7 @@ class NewsListFragment : BaseFragment(), SupportEmptyView {
                     Trace.e(e)
                     showToast("暂无可用数据")
                 }, {
-                    SupportEmptyView.checkEmpty(this,adapter)
+                    SupportEmptyView.checkEmpty(this, adapter)
                     refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
                     adapter.notifyDataSetChanged()
                     if (page == 1)

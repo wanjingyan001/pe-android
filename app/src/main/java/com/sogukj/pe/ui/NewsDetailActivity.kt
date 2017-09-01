@@ -210,9 +210,19 @@ class NewsDetailActivity : ToolbarActivity() {
         appendLine("概况担保的范围", map[NewsType._8.overviewScope.toString()])
         appendLine("概况债务人履行债务的期限", map[NewsType._8.overviewTerm.toString()])
         appendLine("概况备注", map[NewsType._8.overviewRemark.toString()])
-        appendLine("总抵押变更 json数据", map[NewsType._8.changeInfoList.toString()])
-        appendLine("json数据", map[NewsType._8.pawnInfoList.toString()])
-        appendLine("抵押人信息json数据", map[NewsType._8.peopleInfoList.toString()])
+//        appendLine("总抵押变更 json数据", map[NewsType._8.changeInfoList.toString()])
+//        appendLine("抵押物信息", map[NewsType._8.pawnInfoList.toString()])
+//        appendLine("抵押人信息", map[NewsType._8.peopleInfoList.toString()])
+        appendLine("抵押物信息", "")
+        val json1 = map[NewsType._8.pawnInfoList.toString()]
+        json1?.apply {
+
+        }
+        appendLine("抵押人信息", "")
+        val json2 = map[NewsType._8.peopleInfoList.toString()]
+        json2.apply {
+
+        }
     }
 
     fun set7(map: Map<String, Object?>, data: NewsBean) {

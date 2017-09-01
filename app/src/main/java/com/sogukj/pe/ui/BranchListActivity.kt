@@ -17,8 +17,8 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.adapter.RecyclerAdapter
 import com.sogukj.pe.adapter.RecyclerHolder
+import com.sogukj.pe.bean.BranchBean
 import com.sogukj.pe.bean.ProjectBean
-import com.sogukj.pe.bean.RecruitBean
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -26,9 +26,9 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_list_common.*
 import java.text.SimpleDateFormat
 
-class RecruitActivity : ToolbarActivity() {
+class BranchListActivity : ToolbarActivity(), SupportEmptyView {
 
-    lateinit var adapter: RecyclerAdapter<RecruitBean>
+    lateinit var adapter: RecyclerAdapter<BranchBean>
     lateinit var project: ProjectBean
     val df = SimpleDateFormat("yyyy-MM-dd")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,22 +37,14 @@ class RecruitActivity : ToolbarActivity() {
 
         project = intent.getSerializableExtra(Extras.DATA) as ProjectBean
         setBack(true)
-        setTitle("招聘信息")
+        setTitle("分支机构")
 
-        adapter = RecyclerAdapter<RecruitBean>(this, { _adapter, parent, type ->
-            val convertView = _adapter.getView(R.layout.item_project_recruit, parent) as View
-            object : RecyclerHolder<RecruitBean>(convertView) {
-
-                val tvTitle = convertView.findViewById(R.id.tv_title) as TextView
-                val tvOriSalary = convertView.findViewById(R.id.tv_oriSalary) as TextView
-                val tvCity = convertView.findViewById(R.id.tv_city) as TextView
-                val tvCreateTime = convertView.findViewById(R.id.tv_createTime) as TextView
-
-                override fun setData(view: View, data: RecruitBean, position: Int) {
-                    tvTitle.text = data.title
-                    tvOriSalary.text = data.oriSalary
-                    tvCity.text = "${data.city}   ${data.district}  ${data.experience}"
-                    tvCreateTime.text = data.createTime
+        adapter = RecyclerAdapter<BranchBean>(this, { _adapter, parent, type ->
+            val convertView = _adapter.getView(R.layout.item_project_branch, parent) as View
+            object : RecyclerHolder<BranchBean>(convertView) {
+                val tvName = convertView.findViewById(R.id.tv_name) as TextView
+                override fun setData(view: View, data: BranchBean, position: Int) {
+                    tvName.text = data.name
                 }
 
             }
@@ -94,7 +86,7 @@ class RecruitActivity : ToolbarActivity() {
     var page = 1
     fun doRequest() {
         SoguApi.getService(application)
-                .listRecruit(project.company_id!!, page = page)
+                .listBranch(project.company_id!!, page = page)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -122,7 +114,7 @@ class RecruitActivity : ToolbarActivity() {
 
     companion object {
         fun start(ctx: Activity?, project: ProjectBean) {
-            val intent = Intent(ctx, RecruitActivity::class.java)
+            val intent = Intent(ctx, BranchListActivity::class.java)
             intent.putExtra(Extras.DATA, project)
             ctx?.startActivity(intent)
         }

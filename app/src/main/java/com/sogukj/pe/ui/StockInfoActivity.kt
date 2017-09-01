@@ -3,6 +3,8 @@ package com.sogukj.pe.ui
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
+import android.text.TextUtils
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
@@ -12,6 +14,7 @@ import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_stock_quote.*
+import org.jetbrains.anko.textColor
 import java.text.SimpleDateFormat
 
 class StockInfoActivity : ToolbarActivity() {
@@ -23,6 +26,9 @@ class StockInfoActivity : ToolbarActivity() {
         setContentView(R.layout.activity_stock_quote)
         setBack(true)
         setTitle("股票行情")
+        val red = ContextCompat.getColor(this, R.color.colorRed)
+        val green = ContextCompat.getColor(this, R.color.colorGreen)
+        val gray = ContextCompat.getColor(this, R.color.colorGray)
         SoguApi.getService(application)
                 .stockInfo(project.company_id!!)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -31,10 +37,28 @@ class StockInfoActivity : ToolbarActivity() {
                     if (payload.isOk) {
                         val data = payload.payload
                         data?.apply {
+                            if (null != hexm_float_price && !TextUtils.isEmpty(hexm_float_price?.trim())) {
+                                val zhangdie = hexm_float_price!!.toFloat()
+                                if (zhangdie > 0) {
+                                    tv_price.textColor = red
+                                    tv_zhangdie.textColor = red
+                                    tv_zhangfu.textColor = red
+                                } else if (zhangdie < 0) {
+                                    tv_price.textColor = green
+                                    tv_zhangdie.textColor = green
+                                    tv_zhangfu.textColor = green
+                                } else {
+                                    tv_price.textColor = gray
+                                    tv_zhangdie.textColor = gray
+                                    tv_zhangfu.textColor = gray
+                                }
+                            }
+
                             tv_name.text = stockname
                             tv_obj.text = stockcode.toString()
                             tv_price.text = hexm_curPrice
-                            tv_zhangdie.text = "$hexm_float_price $hexm_float_rate"
+                            tv_zhangdie.text = "$hexm_float_price"
+                            tv_zhangfu.text = "$hexm_float_rate"
                             tv_update_time.text = "更新时间:${timeshow}"
                             tv_zhangting.text = tmaxprice
                             tv_dieting.text = tminprice

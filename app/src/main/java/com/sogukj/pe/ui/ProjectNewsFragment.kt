@@ -92,7 +92,7 @@ class ProjectNewsFragment : BaseFragment(), SupportEmptyView {
     var page = 1
     fun doRequest() {
         SoguApi.getService(baseActivity!!.application)
-                .listNews(pageSize = 20, page = 1, type = type, company_id = project.company_id)
+                .listNews(pageSize = 20, page = page, type = type, company_id = project.company_id)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -108,7 +108,7 @@ class ProjectNewsFragment : BaseFragment(), SupportEmptyView {
                     Trace.e(e)
                     showToast("暂无可用数据")
                 }, {
-                    SupportEmptyView.checkEmpty(this,adapter)
+                    SupportEmptyView.checkEmpty(this, adapter)
                     refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
                     adapter.notifyDataSetChanged()
                     if (page == 1)

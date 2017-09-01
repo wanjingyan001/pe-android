@@ -28,8 +28,9 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"/>
+                android:resource="@xml/file_paths" />
         </provider>
+
         <activity
             android:name=".ui.MainActivity"
             android:configChanges="orientation|screenSize"
@@ -243,6 +244,14 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.ICPListActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.BranchListActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.CompanyInfo2Activity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" />
     </application>

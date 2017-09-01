@@ -112,7 +112,7 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
         val user = Store.store.getUser(baseActivity!!)
         if (null != user)
             SoguApi.getService(baseActivity!!.application)
-                    .listProject(offset = offset, type = type, user_id = user!!.uid)
+                    .listProject(offset = offset, type = type, uid = user!!.uid)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe({ payload ->
@@ -128,7 +128,7 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                         Trace.e(e)
                         showToast("暂无可用数据")
                     }, {
-                        SupportEmptyView.checkEmpty(this,adapter)
+                        SupportEmptyView.checkEmpty(this, adapter)
                         refresh?.setEnableLoadmore(adapter.dataList.size >= offset + 20)
                         adapter.notifyDataSetChanged()
                         if (offset == 0)
@@ -221,12 +221,13 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
             tv2.text = if (type == 2)
                 data.state
             else when (data.status) {
-                0 -> "禁用";
-                1 -> "准备中";
                 2 -> "已完成"
                 else -> "准备中"
             }
-            tv3.text = data.add_time
+            tv3.text = when (type) {
+                1 -> data.add_time
+                else -> data.update_time
+            }
         }
 
     }
