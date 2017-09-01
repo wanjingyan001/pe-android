@@ -6,14 +6,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
-import com.sogukj.pe.adapter.ListAdapter
-import com.sogukj.pe.adapter.ListHolder
 import com.framework.base.ToolbarActivity
-import com.sogukj.pe.util.Trace
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.adapter.ListAdapter
+import com.sogukj.pe.adapter.ListHolder
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.bean.TimeGroupedCapitalStructureBean
+import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -119,7 +119,7 @@ class GuBenJieGouActivity : ToolbarActivity() {
                     if (payload.isOk) {
                         payload.payload?.apply {
                             adapterSelector.dataList.clear()
-                            adapterSelector.dataList.addAll(this)
+                            adapterSelector.dataList.addAll(this.reversed())
                         }
                     } else
                         showToast(payload.message)

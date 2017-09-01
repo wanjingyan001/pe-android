@@ -153,7 +153,7 @@ class UserActivity : ToolbarActivity() {
     fun addItem(userBean: UserBean, tab_info: LinearLayout) {
         val item_content = View.inflate(this, R.layout.item_row_content_user_jobs, null)
         tab_info.addView(item_content)
-        val iv_head = item_content.find<ImageView>(R.id.iv_head)
+        val iv_user = item_content.find<ImageView>(R.id.iv_user)
         val tv_name = item_content.find<TextView>(R.id.tv_name)
         val tv_job = item_content.find<TextView>(R.id.tv_job)
         tv_name.text = userBean.name + "\n" + userBean.phone
@@ -161,7 +161,7 @@ class UserActivity : ToolbarActivity() {
         Glide.with(this)
                 .load(userBean.headImage())
                 .error(R.drawable.img_user_default)
-                .into(iv_head)
+                .into(iv_user)
     }
 
 
