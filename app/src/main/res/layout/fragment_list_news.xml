@@ -17,4 +17,6 @@
         android:paddingRight="10dp"
         app:layoutManager="LinearLayoutManager"
         tools:listitem="@layout/item_main_news" />
+
+    <include layout="@layout/layout_empty" />
 </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>

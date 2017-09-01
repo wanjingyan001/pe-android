@@ -17,18 +17,18 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.adapter.RecyclerAdapter
 import com.sogukj.pe.adapter.RecyclerHolder
+import com.sogukj.pe.bean.BondBean
 import com.sogukj.pe.bean.ProjectBean
-import com.sogukj.pe.bean.RecruitBean
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragment_list_news.*
+import kotlinx.android.synthetic.main.activity_list_common.*
 import java.text.SimpleDateFormat
 
-class BondActivity : ToolbarActivity() {
+class BondActivity : ToolbarActivity() ,SupportEmptyView{
 
-    lateinit var adapter: RecyclerAdapter<RecruitBean>
+    lateinit var adapter: RecyclerAdapter<BondBean>
     lateinit var project: ProjectBean
     val df = SimpleDateFormat("yyyy-MM-dd")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,29 +39,23 @@ class BondActivity : ToolbarActivity() {
         setBack(true)
         setTitle("招聘信息")
 
-        adapter = RecyclerAdapter<RecruitBean>(this, { _adapter, parent, type ->
-            val convertView = _adapter.getView(R.layout.item_project_recruit, parent) as View
-            object : RecyclerHolder<RecruitBean>(convertView) {
+        adapter = RecyclerAdapter<BondBean>(this, { _adapter, parent, type ->
+            val convertView = _adapter.getView(R.layout.item_project_bond, parent) as View
+            object : RecyclerHolder<BondBean>(convertView) {
 
-                val tvTitle = convertView.findViewById(R.id.tv_title) as TextView
-                val tvOriSalary = convertView.findViewById(R.id.tv_oriSalary) as TextView
-                val tvCity = convertView.findViewById(R.id.tv_city) as TextView
-                val tvDistrict = convertView.findViewById(R.id.tv_district) as TextView
-                val tvExperience = convertView.findViewById(R.id.tv_experience) as TextView
-                val tvCreateTime = convertView.findViewById(R.id.tv_createTime) as TextView
+                val tvName = convertView.findViewById(R.id.tv_name) as TextView
+                val tvPublisher = convertView.findViewById(R.id.tv_publisherName) as TextView
 
-                override fun setData(view: View, data: RecruitBean, position: Int) {
-                    tvTitle.text = data.title
-                    tvOriSalary.text = data.oriSalary
-                    tvCity.text = data.city
-                    tvDistrict.text = data.district
-                    tvExperience.text = data.experience
-                    tvCreateTime.text = data.createTime
+                override fun setData(view: View, data: BondBean, position: Int) {
+                    tvName.text = data.bondName
+                    tvPublisher.text = "发行人：${data.publisherName ?: ""}"
                 }
 
             }
         })
         adapter.onItemClick = { v, p ->
+            val bond = adapter.dataList.get(p)
+            BondInfoActivity.start(this@BondActivity, project, bond)
         }
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
@@ -98,7 +92,7 @@ class BondActivity : ToolbarActivity() {
     var page = 1
     fun doRequest() {
         SoguApi.getService(application)
-                .listRecruit(project.company_id!!, page = page)
+                .listBond(project.company_id!!, page = page)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -114,6 +108,7 @@ class BondActivity : ToolbarActivity() {
                     Trace.e(e)
                     showToast("暂无可用数据")
                 }, {
+                    SupportEmptyView.checkEmpty(this,adapter)
                     refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
                     adapter.notifyDataSetChanged()
                     if (page == 1)

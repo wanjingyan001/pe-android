@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.text.TextUtils
 import android.view.View
 import android.widget.TextView
 import com.framework.base.BaseFragment
@@ -29,7 +30,7 @@ import java.text.SimpleDateFormat
 /**
  * Created by qinfei on 17/7/18.
  */
-class NewsListFragment : BaseFragment() {
+class NewsListFragment : BaseFragment(), SupportEmptyView {
     override val containerViewId: Int
         get() = R.layout.fragment_list_news //To change initializer of created properties use File | Settings | File Templates.
 
@@ -39,11 +40,17 @@ class NewsListFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         index = arguments.getInt(Extras.INDEX)
-        type = if (index == 2) 1 else 2
+        type = when (index) {
+            0 -> null
+            1 -> 3
+            2 -> 1
+            else -> null
+        }
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         adapter = RecyclerAdapter<NewsBean>(baseActivity!!, { _adapter, parent, type ->
             NewsHolder(_adapter.getView(R.layout.item_main_news, parent))
         })
@@ -97,9 +104,9 @@ class NewsListFragment : BaseFragment() {
     var page = 1
     fun doRequest() {
         val user = Store.store.getUser(baseActivity!!)
-        val userId = if (index == 0) null else user?.uid;
+        val userId = if (index == 0) null else user?.uid
         SoguApi.getService(baseActivity!!.application)
-                .listNews(page = page, type = type, user_id = userId)
+                .listNews(page = page, type = type, uid = userId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -115,6 +122,7 @@ class NewsListFragment : BaseFragment() {
                     Trace.e(e)
                     showToast("暂无可用数据")
                 }, {
+                    SupportEmptyView.checkEmpty(this, adapter)
                     refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
                     adapter.notifyDataSetChanged()
                     if (page == 1)
@@ -144,6 +152,30 @@ class NewsListFragment : BaseFragment() {
             tv_summary.text = data.title
             tv_time.text = data.time
             tv_from.text = data.source
+            tags.removeAllViews()
+            data.tag?.split("#")
+                    ?.forEach { str ->
+                        if (!TextUtils.isEmpty(str)) {
+                            val itemRes = when (str!!) {
+                                "财务风险", "坏账增加", "经营风险",
+                                "法律风险", "财务造假", "诉讼判决",
+                                "违规违法"
+                                -> R.layout.item_tag_news_1
+                                "负面", "业绩不佳", "市场份额下降",
+                                "企业风险", "系统风险", "操作风险",
+                                "技术风险"
+                                -> R.layout.item_tag_news_2
+                                "股权转让", "人事变动", "内部重组"
+                                    , "股权出售", "质押担保", "行业企业重大事件"
+                                -> R.layout.item_tag_news_3
+                                else -> R.layout.item_tag_news_4
+                            }
+                            val itemTag = View.inflate(baseActivity, itemRes, null)
+                            val tvTag = itemTag.find<TextView>(R.id.tv_tag)
+                            tvTag.text = str
+                            tags.addView(itemTag)
+                        }
+                    }
 
         }
 

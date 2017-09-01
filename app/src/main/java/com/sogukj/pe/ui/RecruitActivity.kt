@@ -23,7 +23,7 @@ import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragment_list_news.*
+import kotlinx.android.synthetic.main.activity_list_common.*
 import java.text.SimpleDateFormat
 
 class RecruitActivity : ToolbarActivity() {
@@ -46,16 +46,12 @@ class RecruitActivity : ToolbarActivity() {
                 val tvTitle = convertView.findViewById(R.id.tv_title) as TextView
                 val tvOriSalary = convertView.findViewById(R.id.tv_oriSalary) as TextView
                 val tvCity = convertView.findViewById(R.id.tv_city) as TextView
-                val tvDistrict = convertView.findViewById(R.id.tv_district) as TextView
-                val tvExperience = convertView.findViewById(R.id.tv_experience) as TextView
                 val tvCreateTime = convertView.findViewById(R.id.tv_createTime) as TextView
 
                 override fun setData(view: View, data: RecruitBean, position: Int) {
                     tvTitle.text = data.title
                     tvOriSalary.text = data.oriSalary
-                    tvCity.text = data.city
-                    tvDistrict.text = data.district
-                    tvExperience.text = data.experience
+                    tvCity.text = "${data.city}   ${data.district}  ${data.experience}"
                     tvCreateTime.text = data.createTime
                 }
 
@@ -114,6 +110,7 @@ class RecruitActivity : ToolbarActivity() {
                     Trace.e(e)
                     showToast("暂无可用数据")
                 }, {
+                    SupportEmptyView.checkEmpty(this, adapter)
                     refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
                     adapter.notifyDataSetChanged()
                     if (page == 1)

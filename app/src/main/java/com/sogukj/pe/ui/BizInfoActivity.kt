@@ -3,11 +3,13 @@ package com.sogukj.pe.ui
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.widget.TextView
 import com.framework.base.ToolbarActivity
-import com.sogukj.pe.util.Trace
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.ProjectBean
+import com.sogukj.pe.util.Trace
+import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -48,12 +50,28 @@ class BizInfoActivity : ToolbarActivity() {
                             tv_regLocation.text = regLocation
                             tv_approvedTime.text = approvedTime
                             tv_regInstitute.text = regInstitute
+                            tv_businessScope.text=businessScope
+                            copySupport(tv_legalPersonName, legalPersonName)
+                            copySupport(tv_estiblishTime, estiblishTime)
+                            copySupport(tv_regCapital, regCapital)
+                            copySupport(tv_regNumber, regNumber)
+                            copySupport(tv_orgNumber, orgNumber)
+                            copySupport(tv_idNumber, idNumber)
+                            copySupport(tv_creditCode, creditCode)
                         }
                     } else
                         showToast(payload.message)
                 }, { e ->
                     Trace.e(e)
                 })
+    }
+
+    fun copySupport(v: TextView, text: String?) {
+        v.setOnLongClickListener {
+            Utils.copy(this@BizInfoActivity, "" + text)
+            showToast("已复制")
+            true
+        }
     }
 
     companion object {

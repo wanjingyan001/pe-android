@@ -4,16 +4,19 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
 import com.framework.base.ToolbarActivity
-import com.sogukj.pe.util.Trace
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.DepartmentBean
 import com.sogukj.pe.bean.UserBean
+import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -27,6 +30,30 @@ import org.jetbrains.anko.sdk25.coroutines.onClick
  */
 
 class UserActivity : ToolbarActivity() {
+
+    override val menuId: Int
+        get() = R.menu.menu_logout
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.action_logout -> {
+                MaterialDialog.Builder(this@UserActivity)
+                        .theme(Theme.LIGHT)
+                        .title("提示")
+                        .content("确定要退出此帐号?")
+                        .onPositive { materialDialog, dialogAction ->
+                            Store.store.clearUser(this)
+                            LoginActivity.start(this)
+                            finish()
+                        }
+                        .positiveText("确定")
+                        .negativeText("取消")
+                        .show()
+                return true;
+            }
+        }
+        return false
+    }
 
     val departList = ArrayList<DepartmentBean>()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,8 +99,14 @@ class UserActivity : ToolbarActivity() {
 
 
         iv_user.onClick {
-            UserEditActivity.start(this@UserActivity,departList)
+            UserEditActivity.start(this@UserActivity, departList)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val user = Store.store.getUser(this)
+        updateUser(user)
     }
 
     private fun updateUser(user: UserBean?) {
@@ -120,11 +153,17 @@ class UserActivity : ToolbarActivity() {
     fun addItem(userBean: UserBean, tab_info: LinearLayout) {
         val item_content = View.inflate(this, R.layout.item_row_content_user_jobs, null)
         tab_info.addView(item_content)
-        val iv_head = item_content.find<ImageView>(R.id.iv_head)
+        val iv_user = item_content.find<ImageView>(R.id.iv_user)
         val tv_name = item_content.find<TextView>(R.id.tv_name)
         val tv_job = item_content.find<TextView>(R.id.tv_job)
         tv_name.text = userBean.name + "\n" + userBean.phone
         tv_job.text = userBean.position + "\n" + userBean.email
+//        val text = TextShape("大", Color.RED)
+        Glide.with(this)
+                .load(userBean.headImage())
+                .error(R.drawable.img_user_default)
+                .into(iv_user)
+//        iv_user.setImageDrawable(text)
     }
 
 

@@ -43,7 +43,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="认缴出资额" />
+            android:text="认缴出资额(万元)" />
 
         <TextView
             style="@style/SoguTextMedium"
@@ -98,7 +98,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="实缴出资额" />
+            android:text="实缴出资额(万元)" />
     </LinearLayout>
 
     <LinearLayout

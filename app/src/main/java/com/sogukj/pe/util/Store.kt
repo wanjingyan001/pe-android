@@ -36,6 +36,10 @@ class Store private constructor() {
         XmlDb.open(ctx).set(UserBean::class.java.simpleName, GSON.toJson(user))
     }
 
+    fun clearUser(ctx: Context) {
+        this._user = null
+        XmlDb.open(ctx).set(UserBean::class.java.simpleName, "{}")
+    }
 
     class SizeList<E> : LinkedList<E>() {
 

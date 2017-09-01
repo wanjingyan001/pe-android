@@ -9,23 +9,23 @@ import android.support.v7.widget.LinearLayoutManager
 import android.text.Html
 import android.view.View
 import android.widget.TextView
-import com.sogukj.pe.adapter.RecyclerAdapter
-import com.sogukj.pe.adapter.RecyclerHolder
 import com.framework.base.ToolbarActivity
-import com.sogukj.pe.util.Trace
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.adapter.RecyclerAdapter
+import com.sogukj.pe.adapter.RecyclerHolder
 import com.sogukj.pe.bean.CanGuBean
 import com.sogukj.pe.bean.ProjectBean
+import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragment_list_news.*
+import kotlinx.android.synthetic.main.activity_list_common.*
 
-class CanGuActivity : ToolbarActivity() {
+class CanGuActivity : ToolbarActivity(),SupportEmptyView {
 
     lateinit var adapter: RecyclerAdapter<CanGuBean>
     lateinit var project: ProjectBean
@@ -109,6 +109,7 @@ class CanGuActivity : ToolbarActivity() {
                 }, { e ->
                     Trace.e(e)
                 }, {
+                    SupportEmptyView.checkEmpty(this,adapter)
                     adapter.notifyDataSetChanged()
                     refresh?.finishRefreshing()
                 })

@@ -10,21 +10,21 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
-import com.sogukj.pe.adapter.RecyclerAdapter
-import com.sogukj.pe.adapter.RecyclerHolder
 import com.framework.base.ToolbarActivity
-import com.sogukj.pe.util.Trace
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.adapter.RecyclerAdapter
+import com.sogukj.pe.adapter.RecyclerHolder
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.bean.ShareHolderBean
+import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragment_list_news.*
+import kotlinx.android.synthetic.main.activity_list_common.*
 import java.text.SimpleDateFormat
 
 class ShareHolderInfoActivity : ToolbarActivity() {
@@ -56,6 +56,7 @@ class ShareHolderInfoActivity : ToolbarActivity() {
                     tvName.text = data.name
                     Glide.with(this@ShareHolderInfoActivity)
                             .load(data.logo)
+                            .error(R.drawable.img_user_default)
                             .into(ivUser)
                 }
 
@@ -121,6 +122,7 @@ class ShareHolderInfoActivity : ToolbarActivity() {
                     else
                         refresh?.finishLoadmore()
                 }, {
+                    SupportEmptyView.checkEmpty(this,adapter)
                     refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
                     adapter.notifyDataSetChanged()
                     if (page == 1)

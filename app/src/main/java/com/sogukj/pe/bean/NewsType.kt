@@ -4,7 +4,7 @@ package com.sogukj.pe.bean
  * Created by qinfei on 17/7/31.
  */
 interface NewsType {
-    enum class _1 {
+    enum class _1 :NewsType{
         submittime, //:2017-07-26 19:34:22,
         title, //:111,
         casetype, //:民事案件,
@@ -23,7 +23,7 @@ interface NewsType {
 //    	uuid	Varchar	唯一标识符
     }
 
-    enum class _2 {
+    enum class _2 :NewsType{
         publishdate, //	Datatime	刊登日期
         party1, //	Varchar	原告
         party2, //	Varchar	当事人
@@ -32,7 +32,7 @@ interface NewsType {
         content, //	Text	案件内容
     }
 
-    enum class _3 {
+    enum class _3 :NewsType{
         iname, //	Varchar	失信人名或公司名称
         casecode, //	Varchar	执行依据文号
         cardnum, //	Varchar	身份证号／组织机构代码
@@ -46,14 +46,14 @@ interface NewsType {
         publishdate, //	Datetime	发布时间
     }
 
-    enum class _4 {
+    enum class _4 :NewsType{
         caseCreateTime, //	Datetime	立案时间
         execMoney, //	Varchar	执行标的
         caseCode, //	Varchar	案号
         execCourtName, //	Varchar	执行法院
     }
 
-    enum class _5 {
+    enum class _5 :NewsType{
         decisionDate, //	Datetime	行政处罚日期
         punishNumber, //	Varchar	行政处罚决定书文号
         type, //	Varchar	违法行为类型
@@ -61,7 +61,7 @@ interface NewsType {
         content, //	Text	行政处罚内容
     }
 
-    enum class _6 {
+    enum class _6 :NewsType{
         putDate, //	Datetime	列入日期
         putReason, //	Text	列入原因
         putDepartment, //	Varchar	决定列入部门(作出决定机关
@@ -69,7 +69,7 @@ interface NewsType {
         removeDepartment, //	Varchar	决定移除部门
     }
 
-    enum class _7 {
+    enum class _7 :NewsType{
         regNumber, //	Varchar	登记编号
         pledgor, //	Varchar	出质人
         pledgee, //	Varchar	质权人
@@ -79,7 +79,7 @@ interface NewsType {
         regDate, //	Datetime	股权出质设立登记日期
     }
 
-    enum class _8 {
+    enum class _8 :NewsType{
         regDate, //	Datetme	登记日期
         regNum, //	Varchar	登记编号
         type, //	Varchar	被担保债权种类
@@ -98,7 +98,7 @@ interface NewsType {
         peopleInfoList, //	Text	抵押人信息json数据
     }
 
-    enum class _9(val key: String? = null) {
+    enum class _9(val key: String? = null) :NewsType{
         _name("name"), // Varchar  纳税人名称
         taxCategory, // Varchar  欠税税种
         personIdNumber, // Varchar  证件号码
@@ -116,7 +116,7 @@ interface NewsType {
         }
     }
 
-    enum class _10 {
+    enum class _10 :NewsType{
         putDate, //       Datetime  列入日期
         putReason, // Varchar  列入经营异常名录原因
         putDepartment, // Varchar  列入部门
@@ -125,7 +125,7 @@ interface NewsType {
         removeDepartment, // Varchar  移出部门
     }
 
-    enum class _11 {
+    enum class _11 :NewsType{
         case_name, // Varchar  案由
         caseno, // Varchar  案号
         court_date, //     Datetime  开庭日期
@@ -139,14 +139,14 @@ interface NewsType {
         area, // Varchar  地区
     }
 
-    enum class _12 {
+    enum class _12 :NewsType{
         title, // Varchar   标题
         auction_time, //    Datetime  委托法院拍卖时间
         entrusted_court, // Varchar   委托法院内容
         content, //      Text      内容
     }
 
-    enum class _13 {
+    enum class _13 :NewsType{
         format_content
     }
 }

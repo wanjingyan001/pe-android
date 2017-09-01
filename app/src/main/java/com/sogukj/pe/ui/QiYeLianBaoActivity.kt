@@ -146,7 +146,7 @@ open class QiYeLianBaoActivity : ToolbarActivity() {
         project = intent.getSerializableExtra(Extras.DATA) as ProjectBean
         setBack(true)
         setTitle("企业年报")
-
+        tv_name.text=project.name
         lv_dropdown.adapter = adapterSelector
         lv_change_record.adapter = adapterChangeRecord
         lv_investment.adapter = adapterInvestment
@@ -245,7 +245,7 @@ open class QiYeLianBaoActivity : ToolbarActivity() {
                     if (payload.isOk) {
                         payload.payload?.apply {
                             adapterSelector.dataList.clear()
-                            adapterSelector.dataList.addAll(this)
+                            adapterSelector.dataList.addAll(this.reversed())
                         }
                     } else
                         showToast(payload.message)

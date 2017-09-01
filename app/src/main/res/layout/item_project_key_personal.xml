@@ -7,12 +7,12 @@
     android:orientation="horizontal"
     android:padding="10dp">
 
-    <ImageView
+    <com.sogukj.pe.view.CircleImageView
         android:id="@+id/iv_user"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_gravity="center"
-        android:layout_marginRight="20dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center"
         android:src="@drawable/img_user_default" />
 
     <LinearLayout
