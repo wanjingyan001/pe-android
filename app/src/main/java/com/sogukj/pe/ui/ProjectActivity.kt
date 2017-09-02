@@ -108,8 +108,9 @@ class ProjectActivity : ToolbarActivity() {
                     else
                         tv_more_yq.visibility = View.VISIBLE
                 })
+        val user = Store.store.getUser(this)
         SoguApi.getService(application)
-                .projectPage(pageSize = 3, page = 1, company_id = project.company_id!!)
+                .projectPage(pageSize = 3, page = 1, company_id = project.company_id!!, uid = user?.uid)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -138,7 +139,12 @@ class ProjectActivity : ToolbarActivity() {
             val icon = child.compoundDrawables[1]
             val tag = child.getTag()
             if (null != tag && tag is String) {
-                val count = data[tag.toLowerCase()]
+                var count: Int? = null
+                if (data.containsKey(tag.toLowerCase())) {
+                    count = data[tag.toLowerCase()]
+                } else {
+                    count = data[tag]
+                }
                 if (count != null && count > 0) {
                     icon?.clearColorFilter()
                     child.display(count, color)

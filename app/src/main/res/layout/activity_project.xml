@@ -169,7 +169,6 @@
                         android:id="@+id/tv_gaoguan"
                         style="@style/ItemGridProject"
                         android:drawableTop="@drawable/ic_proj_ggxx"
-
                         android:tag="seniorExecutive"
                         android:text="高管信息" />
 
@@ -177,7 +176,6 @@
                         android:id="@+id/tv_cangukonggu"
                         style="@style/ItemGridProject"
                         android:drawableTop="@drawable/ic_proj_cgkg"
-
                         android:tag="holdingCompany"
                         android:text="参股控股" />
 
@@ -185,7 +183,6 @@
                         android:id="@+id/tv_shangshigonggao"
                         style="@style/ItemGridProject"
                         android:drawableTop="@drawable/ic_proj_ssgg"
-
                         android:tag="announcement"
                         android:text="上市公告" />
 
@@ -201,7 +198,6 @@
                         android:id="@+id/tv_shidaliutong"
                         style="@style/ItemGridProject"
                         android:drawableTop="@drawable/ic_proj_sdlt"
-
                         android:tag="shareholder2"
                         android:text="十大流通" />
 
@@ -209,7 +205,6 @@
                         android:id="@+id/tv_faxinxiangguan"
                         style="@style/ItemGridProject"
                         android:drawableTop="@drawable/ic_proj_fxxg"
-
                         android:tag="issueRelated"
                         android:text="发行相关" />
 
@@ -217,7 +212,6 @@
                         android:id="@+id/tv_gubenjiegou"
                         style="@style/ItemGridProject"
                         android:drawableTop="@drawable/ic_proj_gbjg"
-
                         android:tag="shareStructure"
                         android:text="股本结构" />
 
@@ -225,7 +219,6 @@
                         android:id="@+id/tv_gubenbiandong"
                         style="@style/ItemGridProject"
                         android:drawableTop="@drawable/ic_proj_gbbd"
-
                         android:tag="equitychange"
                         android:text="股本变动" />
 
@@ -233,7 +226,6 @@
                         android:id="@+id/tv_fenhong"
                         style="@style/ItemGridProject"
                         android:drawableTop="@drawable/ic_proj_fhqk"
-
                         android:tag="bonusInfo"
                         android:text="分红情况" />
 
@@ -241,7 +233,6 @@
                         android:id="@+id/tv_peigu"
                         style="@style/ItemGridProject"
                         android:drawableTop="@drawable/ic_proj_pgqk"
-
                         android:tag="allotmen"
                         android:text="配股情况" />
 
@@ -286,7 +277,6 @@
                     android:id="@+id/tv_bizinfo"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_gsxx"
-
                     android:tag="sgcompanyinfo"
                     android:text="工商信息" />
 
@@ -301,7 +291,6 @@
                     android:id="@+id/tv_shareholder_info"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_gudong"
-
                     android:tag="holder"
                     android:text="股东信息" />
 
@@ -309,15 +298,13 @@
                     android:id="@+id/tv_equity_structure"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_gqjg"
-
-                    android:tag="holder2"
+                    android:tag="equityRatio"
                     android:text="股权结构" />
 
                 <com.sogukj.pe.view.TipsView
                     android:id="@+id/tv_key_personal"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_zyry"
-
                     android:tag="staff"
                     android:text="主要人员" />
 
@@ -325,7 +312,6 @@
                     android:id="@+id/tv_investment"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_dwtz"
-
                     android:tag="inverst"
                     android:text="对外投资" />
 
@@ -333,7 +319,6 @@
                     android:id="@+id/tv_change_record"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_bgjl"
-
                     android:tag="changeinfo"
                     android:text="变更记录" />
 
@@ -341,7 +326,6 @@
                     android:id="@+id/tv_qiyelianbao"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_qynb"
-
                     android:tag="annualreport"
                     android:text="企业年报" />
 
@@ -349,7 +333,6 @@
                     android:id="@+id/tv_branch"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_fzjg"
-
                     android:tag="branch"
                     android:text="分支机构" />
 
@@ -357,7 +340,6 @@
                     android:id="@+id/tv_gsjj"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_gsjj"
-
                     android:tag="sgcompanyinfo2"
                     android:text="公司简介" />
 
@@ -401,7 +383,6 @@
                     android:id="@+id/tv_rongzilishi"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_rzls"
-
                     android:tag="findHistoryRongzi"
                     android:text="融资历史" />
 
@@ -409,7 +390,6 @@
                     android:id="@+id/tv_touzishijian"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_tzsj"
-
                     android:tag="findTzanli"
                     android:text="投资事件" />
 
@@ -417,7 +397,6 @@
                     android:id="@+id/tv_hexintuandui"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_hxtd"
-
                     android:tag="findTeamMember"
                     android:text="核心团队" />
 
@@ -425,7 +404,6 @@
                     android:id="@+id/tv_qiyeyewu"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_qyyw"
-
                     android:tag="getProductInfo"
                     android:text="企业业务" />
 
@@ -433,7 +411,6 @@
                     android:id="@+id/tv_jinpinxinxi"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_jpxx"
-
                     android:tag="findJingpin"
                     android:text="竞品信息" />
 
@@ -477,7 +454,6 @@
                     android:id="@+id/tv_zhaopinxinxi"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_zpxx"
-
                     android:tag="employments"
                     android:text="招聘信息" />
 
@@ -485,7 +461,6 @@
                     android:id="@+id/tv_zhaiquanxinxi"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_zqxx"
-
                     android:tag="bond"
                     android:text="债券信息" />
 
@@ -493,7 +468,6 @@
                     android:id="@+id/tv_shuiwupinji"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_swpj"
-
                     android:tag="taxCredit"
                     android:text="税务评级" />
 
@@ -501,7 +475,6 @@
                     android:id="@+id/tv_goudixinxi"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_gdxx"
-
                     android:tag="purchaseLand"
                     android:text="购地信息" />
 
@@ -509,7 +482,6 @@
                     android:id="@+id/tv_zhaotoubiao"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_ztb"
-
                     android:tag="bids"
                     android:text="招投标" />
 
@@ -517,7 +489,6 @@
                     android:id="@+id/tv_zizhizhenshu"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_zzzs"
-
                     android:tag="qualification"
                     android:text="资质证书" />
 
@@ -525,7 +496,6 @@
                     android:id="@+id/tv_chouchajiancha"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_ccjc"
-
                     android:tag="checkInfo"
                     android:text="抽查检查" />
 
@@ -533,63 +503,48 @@
                     android:id="@+id/tv_chanpinxinxi"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_cpxx"
-
                     android:tag="appbkInfo"
                     android:text="产品信息" />
 
                 <com.sogukj.pe.view.TipsView
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_xzxk"
-
                     android:text="行政许可" />
 
                 <com.sogukj.pe.view.TipsView
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_qsxx"
-
                     android:text="清算信息" />
 
                 <com.sogukj.pe.view.TipsView
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_gsyg"
-
-                    android:text="公司员工"
-                    android:visibility="gone" />
+                    android:text="公司员工" />
 
                 <com.sogukj.pe.view.TipsView
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_cwzl"
-
-                    android:text="财务总览"
-                    android:visibility="gone" />
+                    android:text="财务总览" />
 
                 <com.sogukj.pe.view.TipsView
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_lrb"
-
-                    android:text="利润表"
-                    android:visibility="gone" />
+                    android:text="利润表" />
 
                 <com.sogukj.pe.view.TipsView
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_zcfzb"
-
-                    android:text="资产负债表"
-                    android:visibility="gone" />
+                    android:text="资产负债表" />
 
                 <com.sogukj.pe.view.TipsView
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_xjllb"
-
-                    android:text="现金流量表"
-                    android:visibility="gone" />
+                    android:text="现金流量表" />
 
                 <com.sogukj.pe.view.TipsView
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_jckxyxx"
-
-                    android:text="进出口信用信息"
-                    android:visibility="gone" />
+                    android:text="进出口信用信息" />
 
             </GridLayout>
 
@@ -631,7 +586,6 @@
                     android:id="@+id/tv_shangbiao"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_sbxx"
-
                     android:tag="tm"
                     android:text="商标信息" />
 
@@ -639,7 +593,6 @@
                     android:id="@+id/tv_zhuanli"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_zlxx"
-
                     android:tag="patents"
                     android:text="专利信息" />
 
@@ -647,7 +600,6 @@
                     android:id="@+id/tv_zhuzuoquan"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_zzq"
-
                     android:tag="copyReg2"
                     android:text="著作权" />
 
@@ -655,7 +607,6 @@
                     android:id="@+id/tv_ranzhuquan"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_rzq"
-
                     android:tag="copyReg"
                     android:text="软著权" />
 
@@ -663,7 +614,6 @@
                     android:id="@+id/tv_wangzhanbeian"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_wzba"
-
                     android:tag="icp"
                     android:text="网站备案" />
 
@@ -671,7 +621,6 @@
                     android:id="@+id/tv_zhengshu"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_qyzs"
-
                     android:text="企业证书" />
             </GridLayout>
         </LinearLayout>

@@ -52,9 +52,13 @@ class KeyPersonalActivity : ToolbarActivity() {
                 override fun setData(view: View, data: KeyPersonalBean, position: Int) {
                     tvName.text = data.name
                     tvPosotion.text = data.typeJoin?.joinToString()
+                    var text = ContextCompat.getDrawable(this@KeyPersonalActivity, R.drawable.img_user_default)
+//                    data.name?.trim()?.getOrNull(0)?.apply {
+//                        text = TextShape(this)
+//                    }
                     Glide.with(this@KeyPersonalActivity)
                             .load(data.logo)
-                            .error(R.drawable.img_user_default)
+                            .error(text)
                             .into(ivUser)
                 }
 
@@ -113,7 +117,7 @@ class KeyPersonalActivity : ToolbarActivity() {
                     Trace.e(e)
                     showToast("暂无可用数据")
                 }, {
-                    SupportEmptyView.checkEmpty(this,adapter)
+                    SupportEmptyView.checkEmpty(this, adapter)
                     refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
                     adapter.notifyDataSetChanged()
                     if (page == 1)

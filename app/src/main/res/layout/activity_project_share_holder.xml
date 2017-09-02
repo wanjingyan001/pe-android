@@ -23,7 +23,7 @@
             android:enabled="false"
             android:gravity="center"
             android:padding="8dp"
-            android:text="上一季度"
+            android:text="上一时刻"
             android:textColor="@color/tx_color_white" />
 
         <CheckBox
@@ -47,7 +47,7 @@
             android:enabled="false"
             android:gravity="center"
             android:padding="8dp"
-            android:text="下一季度"
+            android:text="下一时刻"
             android:textColor="@color/tx_color_white" />
 
     </LinearLayout>

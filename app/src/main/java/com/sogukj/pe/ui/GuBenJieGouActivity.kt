@@ -124,12 +124,12 @@ class GuBenJieGouActivity : ToolbarActivity() {
                 tv_limitShare.text = limitShare
                 tv_changeReason.text = changeReason
             }
-            data?.lastOrNull()?.apply {
-                tv_ashareAll_h.text = ashareAll
-                tv_noLimitShare_h.text = noLimitShare
-                tv_limitShare_h.text = limitShare
-                tv_changeReason_h.text = changeReason
-            }
+//            data?.lastOrNull()?.apply {
+//                tv_ashareAll_h.text = ashareAll
+//                tv_noLimitShare_h.text = noLimitShare
+//                tv_limitShare_h.text = limitShare
+//                tv_changeReason_h.text = changeReason
+//            }
         }
     }
 
