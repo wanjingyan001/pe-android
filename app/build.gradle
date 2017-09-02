@@ -9,7 +9,7 @@ android {
         applicationId "com.sogukj.pe"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 15
+        versionCode 16
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -77,7 +77,6 @@ dependencies {
 
     // Anko SQLite
     compile "org.jetbrains.anko:anko-sqlite:$anko_version"
-
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
     compile 'io.reactivex.rxjava2:rxjava:2.1.0'
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
