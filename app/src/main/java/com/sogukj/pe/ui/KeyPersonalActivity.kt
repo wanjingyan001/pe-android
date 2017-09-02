@@ -23,7 +23,6 @@ import com.sogukj.pe.bean.KeyPersonalBean
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
-import com.sogukj.ui.TextShape
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_list_common.*
@@ -53,10 +52,9 @@ class KeyPersonalActivity : ToolbarActivity() {
                 override fun setData(view: View, data: KeyPersonalBean, position: Int) {
                     tvName.text = data.name
                     tvPosotion.text = data.typeJoin?.joinToString()
-//                    var text = ContextCompat.getDrawable(this@KeyPersonalActivity, R.drawable.img_user_default)
                     Glide.with(this@KeyPersonalActivity)
                             .load(data.logo)
-                            .error(TextShape(if (null != data.name && data.name!!.length > 0) data.name!!.substring(0, 1) else ""))
+                            .error(R.drawable.img_user_default)
                             .into(ivUser)
                 }
 
