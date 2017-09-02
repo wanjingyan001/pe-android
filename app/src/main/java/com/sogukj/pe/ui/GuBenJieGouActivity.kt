@@ -2,9 +2,15 @@ package com.sogukj.pe.ui
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
+import android.view.WindowManager
+import android.widget.ListView
+import android.widget.PopupWindow
 import android.widget.TextView
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
@@ -14,10 +20,12 @@ import com.sogukj.pe.adapter.ListHolder
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.bean.TimeGroupedCapitalStructureBean
 import com.sogukj.pe.util.Trace
+import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_project_gubenjiegou.*
+import org.jetbrains.anko.find
 
 class GuBenJieGouActivity : ToolbarActivity() {
 
@@ -53,29 +61,45 @@ class GuBenJieGouActivity : ToolbarActivity() {
         setBack(true)
         setTitle("股本结构")
 
-        lv_dropdown.adapter = adapterSelector
 
-        lv_dropdown.setOnItemClickListener { parent, view, position, id ->
-            val group = adapterSelector.dataList[position]
-            group?.apply { setGroup(position) }
-            tv_select.isChecked = false
-        }
-        tv_select.setOnCheckedChangeListener { buttonView, isChecked ->
-            lv_dropdown.visibility = when (isChecked) {
-                true -> View.VISIBLE
-                else -> View.GONE
-            }
-        }
         tv_previous.setOnClickListener {
             setGroup(selectedIndex - 1)
         }
         tv_next.setOnClickListener {
             setGroup(selectedIndex + 1)
         }
-
+        tv_select.setOnClickListener { v ->
+            showDropdown()
+        }
         handler.postDelayed({
             doRequest()
         }, 100)
+    }
+
+    internal var popSelector: PopupWindow? = null
+    fun showDropdown() {
+        if (null == popSelector) {
+            val popupView = View.inflate(this, R.layout.drop_down_selector, null)
+            val lv_dropdown = popupView.find<ListView>(R.id.lv_dropdown)
+            popSelector = PopupWindow(popupView, WindowManager.LayoutParams.MATCH_PARENT, Utils.dpToPx(this, 160), true)
+            popSelector?.isTouchable = true
+            popSelector?.isFocusable = true
+            popSelector?.isOutsideTouchable = true
+            popSelector?.setBackgroundDrawable(BitmapDrawable(resources, null as Bitmap?))
+
+            lv_dropdown.adapter = adapterSelector
+            lv_dropdown.setOnItemClickListener { parent, view, position, id ->
+                val group = adapterSelector.dataList[position]
+                group?.apply { setGroup(position) }
+                tv_select.isChecked = false
+                popSelector?.dismiss()
+            }
+        }
+        val location = IntArray(2)
+        fl_content.getLocationInWindow(location)
+        val x = location[0]
+        val y = location[1]
+        popSelector?.showAtLocation(fl_content, Gravity.NO_GRAVITY, location[0], location[1]);
     }
 
     fun setGroup(index: Int = 0) {
@@ -119,7 +143,7 @@ class GuBenJieGouActivity : ToolbarActivity() {
                     if (payload.isOk) {
                         payload.payload?.apply {
                             adapterSelector.dataList.clear()
-                            adapterSelector.dataList.addAll(this.reversed())
+                            adapterSelector.dataList.addAll(this)
                         }
                     } else
                         showToast(payload.message)
