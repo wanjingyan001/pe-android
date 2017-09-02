@@ -138,7 +138,7 @@ class ProjectActivity : ToolbarActivity() {
             val icon = child.compoundDrawables[1]
             val tag = child.getTag()
             if (null != tag && tag is String) {
-                val count = data[tag]
+                val count = data[tag.toLowerCase()]
                 if (count != null && count > 0) {
                     icon?.clearColorFilter()
                     child.display(count, color)

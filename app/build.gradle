@@ -9,14 +9,33 @@ android {
         applicationId "com.sogukj.pe"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 13
+        versionCode 14
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    signingConfigs {
+        release {
+            keyAlias 'stockalert'
+            keyPassword 'ddx2016'
+            storeFile file('keystore.jks')
+            storePassword 'ddx2016'
+        }
+    }
     buildTypes {
+
         release {
             minifyEnabled false
+//            shrinkResources true  // 移除无用资源
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            minifyEnabled false
+//            shrinkResources true  // 移除无用资源
+            debuggable true
+            jniDebuggable true
+            signingConfig signingConfigs.release
+
         }
     }
     lintOptions {

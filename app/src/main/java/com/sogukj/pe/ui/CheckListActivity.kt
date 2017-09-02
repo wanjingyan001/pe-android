@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.text.TextUtils
 import android.view.View
 import android.widget.TextView
 import com.framework.base.ToolbarActivity
@@ -27,7 +28,7 @@ import kotlinx.android.synthetic.main.activity_list_common.*
 import java.text.SimpleDateFormat
 
 
-class CheckListActivity : ToolbarActivity(),SupportEmptyView {
+class CheckListActivity : ToolbarActivity(), SupportEmptyView {
 
     lateinit var adapter: RecyclerAdapter<CheckBean>
     lateinit var project: ProjectBean
@@ -50,12 +51,12 @@ class CheckListActivity : ToolbarActivity(),SupportEmptyView {
                 override fun setData(view: View, data: CheckBean, position: Int) {
                     tvCheckDate.text = data.checkDate
                     tvCheckOrg.text = "未公开"
-                    data.checkOrg?.apply {
-                        tvCheckOrg.text = this
+                    if (!TextUtils.isEmpty(data.checkOrg)) {
+                        tvCheckOrg.text = data.checkOrg
                     }
                     tvCheckResult.text = data.checkResult
                     tvCheckType.visibility = View.GONE
-                    data.checkType?.apply {
+                    if (!TextUtils.isEmpty(data.checkType)) {
                         tvCheckType.text = data.checkType
                         tvCheckType.visibility = View.VISIBLE
                     }
@@ -116,7 +117,7 @@ class CheckListActivity : ToolbarActivity(),SupportEmptyView {
                     Trace.e(e)
                     showToast("暂无可用数据")
                 }, {
-                    SupportEmptyView.checkEmpty(this,adapter)
+                    SupportEmptyView.checkEmpty(this, adapter)
                     refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
                     adapter.notifyDataSetChanged()
                     if (page == 1)

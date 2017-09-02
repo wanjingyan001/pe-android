@@ -8,7 +8,7 @@
     android:orientation="horizontal"
     android:padding="10dp">
 
-    <com.sogukj.pe.view.CircleImageView
+    <ImageView
         android:id="@+id/iv_user"
         android:layout_width="80dp"
         android:layout_height="80dp"

@@ -218,12 +218,12 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
         override fun setData(view: View, data: ProjectBean, position: Int) {
             tv1.text = data.name
             tv2.text = if (type == 1)
-                data.state
-            else
                 when (data.status) {
                     2 -> "已完成"
                     else -> "准备中"
                 }
+            else
+                data.state
             tv3.text = when (type) {
                 1 -> data.add_time
                 else -> data.update_time
