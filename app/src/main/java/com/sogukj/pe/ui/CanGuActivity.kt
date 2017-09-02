@@ -7,6 +7,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Html
+import android.text.TextUtils
 import android.view.View
 import android.widget.TextView
 import com.framework.base.ToolbarActivity
@@ -25,7 +26,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_list_common.*
 
-class CanGuActivity : ToolbarActivity(),SupportEmptyView {
+class CanGuActivity : ToolbarActivity(), SupportEmptyView {
 
     lateinit var adapter: RecyclerAdapter<CanGuBean>
     lateinit var project: ProjectBean
@@ -51,11 +52,11 @@ class CanGuActivity : ToolbarActivity(),SupportEmptyView {
                 override fun setData(view: View, data: CanGuBean, position: Int) {
                     tvName.text = data.name
                     tvRelation.text = Html.fromHtml(getString(R.string.tv_project_cangu_relation, data.relationship))
-                    tvPercent.text = Html.fromHtml(getString(R.string.tv_project_cangu_percent, String.format("%.2f", data.participationRatio)))
+                    tvPercent.text = Html.fromHtml(getString(R.string.tv_project_cangu_percent, data.participationRatio))
                     tvTouzijine.text = Html.fromHtml(getString(R.string.tv_project_cangu_touzijine, data.investmentAmount))
                     tvJinlirun.text = Html.fromHtml(getString(R.string.tv_project_cangu_jinlirun, data.profit))
                     tvIsMerge.text = Html.fromHtml(getString(R.string.tv_project_cangu_is_merge, data.reportMerge))
-                    tvBis.text = Html.fromHtml(getString(R.string.tv_project_cangu_bis, data.mainBusiness))
+                    tvBis.text = Html.fromHtml(getString(R.string.tv_project_cangu_bis, if (!TextUtils.isEmpty(data.mainBusiness)) data.mainBusiness else ""))
                 }
 
             }
@@ -109,7 +110,7 @@ class CanGuActivity : ToolbarActivity(),SupportEmptyView {
                 }, { e ->
                     Trace.e(e)
                 }, {
-                    SupportEmptyView.checkEmpty(this,adapter)
+                    SupportEmptyView.checkEmpty(this, adapter)
                     adapter.notifyDataSetChanged()
                     refresh?.finishRefreshing()
                 })

@@ -312,7 +312,7 @@
                     android:id="@+id/tv_investment"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_dwtz"
-                    android:tag="inverst"
+                    android:tag="invest"
                     android:text="对外投资" />
 
                 <com.sogukj.pe.view.TipsView
