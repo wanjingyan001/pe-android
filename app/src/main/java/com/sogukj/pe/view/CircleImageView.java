@@ -1,9 +1,5 @@
 package com.sogukj.pe.view;
 
-/**
- * Created by root on 15-9-2.
- */
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -22,14 +18,24 @@ import android.net.Uri;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
+import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.widget.ImageView;
 
 import com.sogukj.pe.R;
 
 
+/**
+ * @author qinfei
+ */
 public class CircleImageView extends android.support.v7.widget.AppCompatImageView {
 
+    public static final int[] COLORS =
+            {0xff44bb66,
+                    0xff55ccdd,
+                    0xffbb7733,
+                    0xffff6655,
+                    0xffffbb44,
+                    0xff44aaff};
     private static final ScaleType SCALE_TYPE = ScaleType.CENTER;
 
     private static final Bitmap.Config BITMAP_CONFIG = Bitmap.Config.ARGB_8888;
@@ -94,7 +100,7 @@ public class CircleImageView extends android.support.v7.widget.AppCompatImageVie
     private void init() {
         super.setScaleType(SCALE_TYPE);
         mReady = true;
-
+        textPaint.setTextAlign(Paint.Align.CENTER);
         if (mSetupPending) {
             setup();
             mSetupPending = false;
@@ -120,9 +126,21 @@ public class CircleImageView extends android.support.v7.widget.AppCompatImageVie
         }
     }
 
+
     @Override
     protected void onDraw(Canvas canvas) {
         if (mBitmap == null) {
+            String str = String.valueOf(mChar);
+            int color = COLORS[0];
+            if (!TextUtils.isEmpty(str)) {
+                color = COLORS[Math.abs(str.hashCode() % COLORS.length)];
+            }
+            textPaint.setColor(color);
+            int fontSize = Math.min(getWidth(), getHeight()) / 2;
+            textPaint.setTextSize(fontSize);
+            canvas.drawCircle(getWidth() / 2.0f, getHeight() / 2.0f, fontSize, textPaint);
+            textPaint.setColor(Color.WHITE);
+            canvas.drawText(String.valueOf(mChar), (getWidth() / 2), getHeight() / 2 - (textPaint.descent() + textPaint.ascent()) / 2, textPaint);
             return;
         }
 
@@ -229,6 +247,15 @@ public class CircleImageView extends android.support.v7.widget.AppCompatImageVie
         super.setImageURI(uri);
         mBitmap = uri != null ? getBitmapFromDrawable(getDrawable()) : null;
         setup();
+    }
+
+
+    char mChar = ' ';
+    Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+    public void setChar(char ch) {
+        this.mChar = ch;
+        this.mBitmap = null;
     }
 
     @Override

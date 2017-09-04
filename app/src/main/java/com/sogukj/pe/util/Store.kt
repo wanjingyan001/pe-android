@@ -5,6 +5,7 @@ import android.text.TextUtils
 import com.google.gson.Gson
 import com.sogukj.pe.bean.UserBean
 import java.util.*
+import kotlin.collections.HashSet
 
 /**
  * Created by qinff on 2016/5/20.
@@ -15,6 +16,27 @@ class Store private constructor() {
 
     fun checkLogin(ctx: Context): Boolean {
         return null != getUser(ctx) && null != _user?.uid
+    }
+
+    var readList = HashSet<String>();
+    fun getRead(ctx: Context): HashSet<String> {
+        try {
+            val strJson = XmlDb.open(ctx).get("isRead", "")
+            if (!TextUtils.isEmpty(strJson)) {
+                this.readList.clear()
+                val tmp = GSON.fromJson<Array<String>>(strJson, Array<String>::class.java)
+                this.readList.addAll(Arrays.asList<String>(*tmp))
+            }
+        } catch (e: Exception) {
+        }
+        return readList
+    }
+
+    fun setRead(ctx: Context, readList: HashSet<String>): HashSet<String> {
+        this.readList.clear()
+        this.readList.addAll(readList)
+        XmlDb.open(ctx).set("isRead", GSON.toJson(this.readList.toArray()))
+        return readList;
     }
 
     fun getUser(ctx: Context): UserBean? {

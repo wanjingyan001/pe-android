@@ -223,10 +223,10 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                     else -> "准备中"
                 }
             else
-                data.state
+                data.state?:"--"
             tv3.text = when (type) {
-                1 -> data.add_time
-                else -> data.update_time
+                1 -> data.add_time?:"--"
+                else -> data.update_time?:"--"
             }
         }
 

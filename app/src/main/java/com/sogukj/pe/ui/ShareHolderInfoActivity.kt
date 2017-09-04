@@ -54,6 +54,10 @@ class ShareHolderInfoActivity : ToolbarActivity() {
                     tvAmomon.text = data.amount
                     tvPercent.text = data.percent
                     tvName.text = data.name
+//                    if (null != data.name && data.name!!.length > 0) {
+//                        val ch = data.name!!.substring(0, 1);
+//                        ivUser.setText(ch)
+//                    }
                     Glide.with(this@ShareHolderInfoActivity)
                             .load(data.logo)
                             .error(R.drawable.img_user_default)
