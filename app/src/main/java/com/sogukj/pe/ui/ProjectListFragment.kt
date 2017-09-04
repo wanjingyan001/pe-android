@@ -228,6 +228,8 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                 1 -> data.add_time
                 else -> data.update_time
             }
+            if (tv2.text.isNullOrEmpty()) tv2.text = "--"
+            if (tv3.text.isNullOrEmpty()) tv3.text = "--"
         }
 
     }
