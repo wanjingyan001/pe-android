@@ -25,7 +25,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_list_news.*
 import org.jetbrains.anko.find
+import org.jetbrains.anko.textColor
 import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Created by qinfei on 17/7/18.
@@ -46,6 +48,17 @@ class NewsListFragment : BaseFragment(), SupportEmptyView {
             2 -> 1
             else -> null
         }
+        Store.store.getRead(baseActivity!!)
+    }
+
+    fun isRead(data: NewsBean)
+            = (Store.store.readList.contains("${KEY_NEWS}${data.data_id}"))
+
+    fun read(data: NewsBean) {
+        var readList = HashSet<String>();
+        readList.addAll(Store.store.readList)
+        readList.add("${KEY_NEWS}${data.data_id}")
+        Store.store.setRead(baseActivity!!, readList)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -57,6 +70,7 @@ class NewsListFragment : BaseFragment(), SupportEmptyView {
         adapter.onItemClick = { v, p ->
             val news = adapter.getItem(p);
             NewsDetailActivity.start(baseActivity, news)
+            read(news)
         }
         val layoutManager = LinearLayoutManager(baseActivity)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
@@ -133,6 +147,7 @@ class NewsListFragment : BaseFragment(), SupportEmptyView {
     }
 
     val fmt = SimpleDateFormat("yyyy/MM/dd HH:mm")
+    val KEY_NEWS = "news"
 
     inner class NewsHolder(view: View)
         : RecyclerHolder<NewsBean>(view) {
@@ -176,6 +191,17 @@ class NewsListFragment : BaseFragment(), SupportEmptyView {
                             tags.addView(itemTag)
                         }
                     }
+
+            var isRead = isRead(data)
+            if (isRead) {
+                tv_summary.textColor = resources.getColor(R.color.text_3)
+                tv_time.textColor = resources.getColor(R.color.text_3)
+                tv_from.textColor = resources.getColor(R.color.text_3)
+            } else {
+                tv_summary.textColor = resources.getColor(R.color.text_1)
+                tv_time.textColor = resources.getColor(R.color.text_2)
+                tv_from.textColor = resources.getColor(R.color.text_2)
+            }
 
         }
 
