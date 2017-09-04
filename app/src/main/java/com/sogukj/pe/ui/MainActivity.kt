@@ -16,26 +16,30 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        supportFragmentManager.beginTransaction()
-                .replace(R.id.container, fragmentNews)
-                .commit()
-        rg_tab_main.setOnCheckedChangeListener { group, checkedId ->
-            val fragment = when (checkedId) {
-                R.id.rb_project -> fragmentProject
-                else -> fragmentNews
-            }
-            supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, fragment)
-                    .commit()
-        }
-
     }
 
-    override fun onResume() {
-        super.onResume()
+    var checkId = R.id.rb_news;
+
+    fun doCheck(checkedId: Int) {
+        this.checkId = checkedId
+        val fragment = when (checkId) {
+            R.id.rb_news -> fragmentNews
+            else -> fragmentProject
+        }
+        supportFragmentManager.beginTransaction()
+                .replace(R.id.container, fragment)
+                .commit()
+    }
+
+    override fun onStart() {
+        super.onStart()
         if (!Store.store.checkLogin(this)) {
             LoginActivity.start(this)
+        } else {
+            doCheck(checkId)
+            rg_tab_main.setOnCheckedChangeListener { group, checkedId ->
+                doCheck(checkedId)
+            }
         }
     }
 }

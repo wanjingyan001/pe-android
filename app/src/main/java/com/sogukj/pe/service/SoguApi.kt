@@ -1,6 +1,7 @@
 package com.sogukj.service
 
 import android.app.Application
+import com.sogukj.pe.util.Trace
 import com.sogukj.pe.Consts
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -18,15 +19,13 @@ class SoguApi {
         this.context = context
         val client = OkHttpClient.Builder()
                 .addInterceptor { chain ->
-                    //                    val userInfo = Store.store.getUserInfo(context)
-//                    val token = if (null != userInfo) userInfo.token else ""
-                    val newRequest = chain.request().newBuilder()
-//                            .addHeader("Authorization", "Bearer " + token)
-                            .build()
-                    val response = chain.proceed(newRequest)
-//                    if (response.code() == 401) {
-//                        userInfo!!.token = ""
-//                        Store.store.setUserInfo(context, userInfo)
+                    val request = chain.request()
+                    val response = chain.proceed(request)
+                    Trace.i("http", "${request.url()} => ${response.code()}:${response.message()}")
+//                    if (request.method() == "POST")
+//                    {
+//                        val body=request.body() as FormBody
+//                        Trace.i("http", "${body.toString()}")
 //                    }
                     response
                 }
@@ -43,22 +42,6 @@ class SoguApi {
 
         apiService = retrofit.create(SoguService::class.java)
     }
-
-//    fun checkToken(appid: String, secret: String): Observable<Result<Map<String, String>>> {
-//        val sign = Encoder.sha1(appid + "&" + secret + "sogu_")
-//        return apiService.login(appid, sign)
-//                .doOnNext { payload ->
-//                    if (payload.isOk) {
-//                        val tmp = payload.payload["token"]
-//                        var userInfo: UserInfo? = Store.store.getUserInfo(context)
-//                        if (null == userInfo) userInfo = UserInfo()
-//                        userInfo.token = tmp
-//                        Store.store.setUserInfo(context, userInfo)
-//                        Trace.d(TAG, userInfo.token)
-//                    }
-//                }
-//
-//    }
 
     companion object {
         var TAG = SoguApi::class.java.simpleName

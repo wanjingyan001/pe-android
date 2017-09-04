@@ -7,10 +7,10 @@ import android.os.Handler
 import android.text.TextUtils
 import com.framework.base.ActivityHelper
 import com.framework.base.BaseActivity
-import com.framework.util.Utils
-import com.framework.util.ViewUtil
 import com.sogukj.pe.R
+import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.util.LoginTimer
+import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -37,8 +37,9 @@ class LoginActivity : BaseActivity() {
 
     private fun doSendCode() {
         if (TextUtils.isEmpty(et_name.text) || !Utils.isMobile(et_name.text.trim())) {
+            et_name.setText("")
             et_name.requestFocus()
-            ViewUtil.showKeyboard(et_name)
+            showToast("请输入正确的手机号")
             return
         }
         Timer().scheduleAtFixedRate(LoginTimer(60, Handler(), tv_code), 0, 1000);
@@ -52,7 +53,8 @@ class LoginActivity : BaseActivity() {
                         showToast("验证码已经发送，请查收")
                     else
                         showToast(payload.message)
-                }, { e ->
+                }, {
+                    e ->
                     showToast("验证码发送失败")
                 })
 
@@ -60,14 +62,19 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun doLogin() {
+        val user = UserBean()
+        user.phone = et_name?.text?.toString()
+
         if (TextUtils.isEmpty(et_name.text) || !Utils.isMobile(et_name.text.trim())) {
+            et_name.setText("")
             et_name.requestFocus()
-            ViewUtil.showKeyboard(et_name)
+            showToast("请输入正确的手机号")
             return
         }
         if (TextUtils.isEmpty(et_pwd.text) || et_pwd.text.trim().length < 4) {
+            et_pwd.setText("")
             et_pwd.requestFocus()
-            ViewUtil.showKeyboard(et_pwd)
+            showToast("请输入正确的验证码")
             return
         }
         val phone = et_name.text.toString()
@@ -80,7 +87,7 @@ class LoginActivity : BaseActivity() {
                     if (payload.isOk) {
                         showToast("登录成功")
                         payload?.payload?.apply {
-                            Store.store.setUserInfo(this@LoginActivity, this)
+                            Store.store.setUser(this@LoginActivity, this)
                         }
                         finish()
                     } else

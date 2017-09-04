@@ -1,5 +1,20 @@
 <resources>
-    <string name="app_name">PE</string>
+    <string name="app_name">海通创新</string>
     <string name="get_code">点击获取</string>
     <string name="get_code_disable">剩余%s秒</string>
+    <string name="tv_update_time">更新时间:%s</string>
+    <string name="tv_project_cangu_relation" formatted="false">参股关系：&lt;font color="#666666"> %s &lt;/font></string>
+    <string name="tv_project_cangu_percent" formatted="false">参股比例(%%)：&lt;font color="#666666"> %s &lt;/font></string>
+    <string name="tv_project_cangu_touzijine" formatted="false">投资金额(万元)：&lt;font color="#666666"> %s &lt;/font></string>
+    <string name="tv_project_cangu_jinlirun" formatted="false">被参股公司净利润(元)：&lt;font color="#666666"> %s &lt;/font></string>
+    <string name="tv_project_cangu_is_merge" formatted="false">是否报表合并：&lt;font color="#666666"> %s &lt;/font></string>
+    <string name="tv_project_cangu_bis" formatted="false">被参股公司主营业务：&lt;font color="#666666"> %s &lt;/font></string>
+    <string name="tv_proj_product_type">类型：</string>
+    <string name="tv_proj_product_desc">描述：</string>
+    <string name="tv_proj_product_biz">业务：</string>
+    <string name="tv_proj_product_create_date">成立日期：</string>
+    <string name="tv_proj_finance_lunci">投资轮次：</string>
+    <string name="tv_proj_app_brif" formatted="false">描述：&lt;font color="#5785f3"> %s &lt;/font></string>
+    <string name="tv_proj_product_company" formatted="false">关联公司：&lt;font color="#5785f3"> %s &lt;/font></string>
+    <string name="tv_pairs_value" formatted="false">&lt;font color="#999999"> %s &lt;/font></string>
 </resources>

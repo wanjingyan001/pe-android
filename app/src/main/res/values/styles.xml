@@ -1,17 +1,27 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-
-    <style name="AppTheme" parent="AppTheme.Base">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+<resources xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools">
+    <!-- 自定义仿IOS的AlertDialog的样式 -->
+    <style name="AlertDialogStyle" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
     </style>
 
-    <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="SwipeBackLayout">
+        <item name="edge_size">50dip</item>
+        <item name="shadow_left">@drawable/shadow_left</item>
+        <item name="shadow_right">@drawable/shadow_right</item>
+        <item name="shadow_bottom">@drawable/shadow_bottom</item>
+    </style>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowTranslucentStatus" tools:targetApi="kitkat">true</item>
-        <item name="android:windowTranslucentNavigation" tools:targetApi="kitkat">true</item>
-        <item name="android:windowIsTranslucent">true</item>
+        <item name="colorAccent">@color/colorPrimary</item>
         <item name="android:statusBarColor" tools:ignore="NewApi">@color/colorPrimary</item>
         <item name="android:textColorPrimary">@color/textColorPrimary</item>
         <item name="android:windowBackground">@color/windowBackground</item>
@@ -33,12 +43,6 @@
         <item name="android:textSize">@dimen/text_size_medium</item>
     </style>
 
-    <declare-styleable name="ProgressLayout">
-        <attr name="progressBackground" format="color" />
-        <attr name="progress_progress" format="boolean" />
-        <attr name="errorColor" format="color" />
-        <attr name="errorGravity" format="reference" />
-    </declare-styleable>
 
     <style name="SoguDialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowContentOverlay">@null</item>
@@ -48,8 +52,8 @@
         <item name="android:backgroundDimEnabled">true</item><!-- //设置是否背景模糊 -->
         <item name="android:windowIsTranslucent">true</item><!-- //设置半透明 -->
         <item name="android:windowNoTitle">true</item><!-- //设置无标题 -->
-        <item name="android:windowFullscreen">false</item>//设置全屏
-        <!--  <item name="android:backgroundDimEnabled">false</item>activity不变暗 -->
+        <item name="android:windowFullscreen">false</item>
+        <!--  <item name="android:backgroundDimEnabled">false</item> -->
         <item name="android:windowIsFloating">true</item>
     </style>
 
@@ -69,22 +73,37 @@
         <item name="android:textColor">@color/text_1</item>
     </style>
 
+    <style name="SoguTextNormal">
+        <item name="android:textSize">@dimen/text_size_normal</item>
+        <item name="android:textColor">@color/text_1</item>
+    </style>
+
     <style name="SoguTextSamll">
         <item name="android:alpha">1.0</item>
         <item name="android:textSize">@dimen/text_size_samll</item>
-        <item name="android:textColor">@color/textColorPrimary</item>
+        <item name="android:textColor">@color/text_1</item>
     </style>
 
     <style name="SoguTextMedium">
         <item name="android:alpha">1.0</item>
         <item name="android:textSize">@dimen/text_size_medium</item>
-        <item name="android:textColor">@color/textColorPrimary</item>
+        <item name="android:textColor">@color/text_1</item>
     </style>
 
     <style name="SoguTextLarge">
         <item name="android:alpha">1.0</item>
         <item name="android:textSize">@dimen/text_size_large</item>
-        <item name="android:textColor">@color/textColorPrimary</item>
+        <item name="android:textColor">@color/text_1</item>
+    </style>
+
+    <style name="ItemGridProject">
+        <item name="android:textSize">@dimen/text_size_medium</item>
+        <item name="android:textColor">@color/text_1</item>
+        <item name="android:layout_columnWeight" tools:ignore="NewApi">1</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:drawablePadding">5dp</item>
     </style>
 
     <style name="activityAnimation" parent="@android:style/Animation">
