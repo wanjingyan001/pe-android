@@ -7,7 +7,6 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
-import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.framework.base.ToolbarActivity
@@ -43,7 +42,7 @@ class ShareHolderInfoActivity : ToolbarActivity() {
             val convertView = _adapter.getView(R.layout.item_project_share_holder2, parent) as View
             object : RecyclerHolder<ShareHolderBean>(convertView) {
 
-                val ivUser = convertView.findViewById(R.id.iv_user) as ImageView
+                val ivUser = convertView.findViewById(R.id.iv_user) as com.sogukj.pe.view.CircleImageView
                 val tvName = convertView.findViewById(R.id.tv_name) as TextView
                 val tvAmomon = convertView.findViewById(R.id.tv_amomon) as TextView
                 val tvTime = convertView.findViewById(R.id.tv_time) as TextView
@@ -54,13 +53,13 @@ class ShareHolderInfoActivity : ToolbarActivity() {
                     tvAmomon.text = data.amount
                     tvPercent.text = data.percent
                     tvName.text = data.name
-//                    if (null != data.name && data.name!!.length > 0) {
-//                        val ch = data.name!!.substring(0, 1);
-//                        ivUser.setText(ch)
-//                    }
+                    if (null != data.name && data.name!!.length > 0) {
+                        val ch = data.name!!.first();
+                        ivUser.setChar(ch)
+                    }
                     Glide.with(this@ShareHolderInfoActivity)
                             .load(data.logo)
-                            .error(R.drawable.img_user_default)
+//                            .error(R.drawable.img_user_default)
                             .into(ivUser)
                 }
 
