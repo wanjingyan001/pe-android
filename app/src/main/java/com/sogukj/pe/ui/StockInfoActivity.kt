@@ -55,7 +55,7 @@ class StockInfoActivity : ToolbarActivity() {
                             }
 
                             tv_name.text = stockname
-                            tv_obj.text = stockcode.toString()
+                            tv_obj.text = String.format("%06d", stockcode)
                             tv_price.text = hexm_curPrice
                             tv_zhangdie.text = "$hexm_float_price"
                             tv_zhangfu.text = "$hexm_float_rate"
