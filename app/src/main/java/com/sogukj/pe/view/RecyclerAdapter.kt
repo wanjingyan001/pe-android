@@ -1,4 +1,4 @@
-package com.sogukj.pe.adapter
+package com.sogukj.pe.view
 
 
 import android.content.Context

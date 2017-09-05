@@ -14,8 +14,8 @@ import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
-import com.sogukj.pe.adapter.RecyclerAdapter
-import com.sogukj.pe.adapter.RecyclerHolder
+import com.sogukj.pe.view.RecyclerAdapter
+import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.pe.bean.AnnouncementBean
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.util.PdfUtil
@@ -24,7 +24,9 @@ import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_list_common.*
-
+/**
+ * Created by qinfei on 17/7/18.
+ */
 class AnnouncementActivity : ToolbarActivity(), SupportEmptyView {
 
     lateinit var adapter: RecyclerAdapter<AnnouncementBean>

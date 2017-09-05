@@ -7,7 +7,7 @@ import android.view.View
 import com.bumptech.glide.Glide
 import com.framework.base.BaseFragment
 import com.sogukj.pe.R
-import com.sogukj.pe.adapter.ArrayPagerAdapter
+import com.sogukj.pe.view.ArrayPagerAdapter
 import com.sogukj.util.Store
 import kotlinx.android.synthetic.main.fragment_main_news.*
 import kotlinx.android.synthetic.main.sogu_toolbar_main_news.*

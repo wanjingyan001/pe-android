@@ -5,7 +5,9 @@ import android.os.Bundle
 import com.framework.base.BaseActivity
 import com.sogukj.pe.R
 import com.sogukj.util.Store
-
+/**
+ * Created by qinfei on 17/8/11.
+ */
 class SplashActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

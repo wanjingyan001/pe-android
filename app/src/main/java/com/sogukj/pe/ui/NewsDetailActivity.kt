@@ -22,7 +22,9 @@ import kotlinx.android.synthetic.main.activity_news_detail.*
 import kotlinx.android.synthetic.main.item_main_news.*
 import org.jetbrains.anko.find
 
-
+/**
+ * Created by qinfei on 17/8/11.
+ */
 class NewsDetailActivity : ToolbarActivity() {
     fun appendLine(k: String, v: Any?) {
         buff.append("$k：<font color='#666666'>${if (v == null) "" else v}</font><br/>")

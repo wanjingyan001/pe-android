@@ -15,8 +15,8 @@ import android.widget.TextView
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
-import com.sogukj.pe.adapter.ListAdapter
-import com.sogukj.pe.adapter.ListHolder
+import com.sogukj.pe.view.ListAdapter
+import com.sogukj.pe.view.ListHolder
 import com.sogukj.pe.bean.NewsBean
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.util.Trace

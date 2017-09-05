@@ -15,8 +15,8 @@ import android.widget.TextView
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
-import com.sogukj.pe.adapter.ListAdapter
-import com.sogukj.pe.adapter.ListHolder
+import com.sogukj.pe.view.ListAdapter
+import com.sogukj.pe.view.ListHolder
 import com.sogukj.pe.bean.*
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
@@ -25,7 +25,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_project_annual_report.*
 import org.jetbrains.anko.find
-
+/**
+ * Created by qinfei on 17/8/11.
+ */
 open class QiYeLianBaoActivity : ToolbarActivity() {
 
     val adapterSelector = ListAdapter {

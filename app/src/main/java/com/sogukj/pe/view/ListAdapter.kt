@@ -1,4 +1,4 @@
-package com.sogukj.pe.adapter
+package com.sogukj.pe.view
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,7 +6,9 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ListView
 import java.util.*
-
+/**
+ * Created by qinfei on 17/7/18.
+ */
 interface ListHolder<T> {
     fun createView(inflater: LayoutInflater): View
     fun showData(convertView: View, position: Int, itemData: T?)

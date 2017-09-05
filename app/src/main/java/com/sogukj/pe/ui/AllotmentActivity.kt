@@ -11,7 +11,9 @@ import com.sogukj.pe.bean.AllotmentBean
 import com.sogukj.pe.bean.ProjectBean
 import kotlinx.android.synthetic.main.activity_project_allotment.*
 import java.text.SimpleDateFormat
-
+/**
+ * Created by qinfei on 17/7/18.
+ */
 class AllotmentActivity : ToolbarActivity() {
 
     lateinit var project: ProjectBean
