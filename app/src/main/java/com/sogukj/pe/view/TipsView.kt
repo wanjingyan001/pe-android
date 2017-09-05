@@ -5,13 +5,8 @@ package com.sogukj.pe.view
  */
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Rect
-import android.graphics.Typeface
+import android.graphics.*
 import android.util.AttributeSet
-
 import com.sogukj.pe.util.Utils
 
 
