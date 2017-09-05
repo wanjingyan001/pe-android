@@ -303,7 +303,7 @@ class NewsDetailActivity : ToolbarActivity() {
     }
 
     fun set1(map: Map<String, Object?>, data: NewsBean) {
-        setTitle("法律诉颂")
+        setTitle("法律诉讼")
         appendLine("提交时间", map["submittime"])
         appendLine("标题", map["title"])
         appendLine("案件类型", map["casetype"])
