@@ -16,7 +16,9 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_stock_quote.*
 import org.jetbrains.anko.textColor
 import java.text.SimpleDateFormat
-
+/**
+ * Created by qinfei on 17/8/11.
+ */
 class StockInfoActivity : ToolbarActivity() {
     lateinit var project: ProjectBean
     val fmt = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")

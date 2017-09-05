@@ -16,7 +16,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_company_info2.*
 import java.text.SimpleDateFormat
-
+/**
+ * Created by qinfei on 17/8/11.
+ */
 class CompanyInfo2Activity : ToolbarActivity() {
 
     lateinit var project: ProjectBean

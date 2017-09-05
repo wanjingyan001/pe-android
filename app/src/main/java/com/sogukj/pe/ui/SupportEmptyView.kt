@@ -5,7 +5,7 @@ import com.framework.base.BaseActivity
 import com.framework.base.BaseFragment
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import com.sogukj.pe.R
-import com.sogukj.pe.adapter.RecyclerAdapter
+import com.sogukj.pe.view.RecyclerAdapter
 import org.jetbrains.anko.find
 
 /**

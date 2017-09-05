@@ -17,8 +17,8 @@ import com.lcodecore.tkrefreshlayout.footer.BallPulseView
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
-import com.sogukj.pe.adapter.RecyclerAdapter
-import com.sogukj.pe.adapter.RecyclerHolder
+import com.sogukj.pe.view.RecyclerAdapter
+import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.pe.bean.BrandBean
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.util.Trace
@@ -28,7 +28,9 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_list_common.*
 import java.text.SimpleDateFormat
 
-
+/**
+ * Created by qinfei on 17/8/11.
+ */
 class BrandListActivity : ToolbarActivity(),SupportEmptyView {
 
     lateinit var adapter: RecyclerAdapter<BrandBean>

@@ -5,7 +5,9 @@ import android.content.Intent
 import android.os.Bundle
 import com.sogukj.pe.Extras
 import com.sogukj.pe.bean.ProjectBean
-
+/**
+ * Created by qinfei on 17/8/11.
+ */
 class ShiDaLiuTongGuDongActivity : ShiDaGuDongActivity() {
 
     override val type: Int

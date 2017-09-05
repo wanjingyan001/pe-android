@@ -17,8 +17,8 @@ import com.lcodecore.tkrefreshlayout.footer.BallPulseView
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
-import com.sogukj.pe.adapter.RecyclerAdapter
-import com.sogukj.pe.adapter.RecyclerHolder
+import com.sogukj.pe.view.RecyclerAdapter
+import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.pe.bean.ProductBean
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.util.Trace
@@ -27,7 +27,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_list_common.*
 import java.text.SimpleDateFormat
-
+/**
+ * Created by qinfei on 17/8/11.
+ */
 class ProductInfoActivity : ToolbarActivity() {
 
     lateinit var adapter: RecyclerAdapter<ProductBean>
@@ -55,9 +57,9 @@ class ProductInfoActivity : ToolbarActivity() {
                 override fun setData(view: View, data: ProductBean, position: Int) {
 
                     tvProduct.text = data.jingpinProduct
-                        tvYewu.text = "${getString(R.string.tv_proj_product_biz)}${data.yewu}"
-                        tvDate.text = "${getString(R.string.tv_proj_product_create_date)}${data.date}"
-                        tvCompany.text = Html.fromHtml(getString(R.string.tv_proj_product_company, data.companyName))
+                    tvYewu.text = "${getString(R.string.tv_proj_product_biz)}${data.yewu}"
+                    tvDate.text = "${getString(R.string.tv_proj_product_create_date)}${data.date}"
+                    tvCompany.text = Html.fromHtml(getString(R.string.tv_proj_product_company, data.companyName))
                     Glide.with(this@ProductInfoActivity)
                             .load(data.icon)
                             .error(R.drawable.img_user_default)
