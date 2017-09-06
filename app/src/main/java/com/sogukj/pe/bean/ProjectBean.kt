@@ -7,6 +7,7 @@ import java.io.Serializable
  */
 class ProjectBean : Serializable {
     var name: String? = null//	Varchar	公司名称
+    var shortName: String? = null;
     var state: String? = null//	Datetime	现状	A轮  B轮  类似这些（type=2时取此数据）
     var update_time: String? = null//	Varchar	最近更新时间	（type=2时取此数据）
     var add_time: String? = null//	Varchar	录入时间	（type=1时取此数据）
