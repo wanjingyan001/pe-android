@@ -147,15 +147,14 @@ class NewsDetailActivity : ToolbarActivity() {
 
 
     fun set1(map: Map<String, Object?>, data: NewsBean) {
+        setTitle("法律诉讼")
         val content = map["content"]?.toString()
         if (!content.isNullOrEmpty()) {
             webview.visibility = View.VISIBLE
             scroll_plain.visibility = View.GONE
-
             val head = "<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\"> " +
                     "<style>img{max-width: 100%; height:auto;} .reduce-font p{font-size:" + fontSize + "px!important;}</style>" +
                     "</head>"
-            val content = map["format_content"]?.toString()
             val html = "<html>${head}<body style='margin:0px;'>" +
                     "<span style='color:#333;font-size:16px;line-height:30px;'>$content</span></div>" +
                     "</body></html>"
@@ -165,7 +164,6 @@ class NewsDetailActivity : ToolbarActivity() {
             scroll_plain.visibility = View.VISIBLE
             setSubview(data)
 
-            setTitle("法律诉讼")
             appendLine("提交时间", map["submittime"])
             appendLine("标题", map["title"])
             appendLine("案件类型", map["casetype"])
