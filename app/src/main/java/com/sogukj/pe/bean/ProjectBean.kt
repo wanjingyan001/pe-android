@@ -7,9 +7,10 @@ import java.io.Serializable
  */
 class ProjectBean : Serializable {
     var name: String? = null//	Varchar	公司名称
-    var state: String = "--"//	Datetime	现状	A轮  B轮  类似这些（type=2时取此数据）
-    var update_time: String = "--"//	Varchar	最近更新时间	（type=2时取此数据）
-    var add_time: String = "--"//	Varchar	录入时间	（type=1时取此数据）
+    var shortName: String? = null;
+    var state: String? = null//	Datetime	现状	A轮  B轮  类似这些（type=2时取此数据）
+    var update_time: String? = null//	Varchar	最近更新时间	（type=2时取此数据）
+    var add_time: String? = null//	Varchar	录入时间	（type=1时取此数据）
     var status: Int = 1//	Int	状态（默认1）	0禁用 1准备中  2已完成（type=1时取此数据）
     var company_id: Int? = null
     var is_focus: Int = 0//	Int	是否关注	is_focus=1表示关注is_focus=0表示未关注
