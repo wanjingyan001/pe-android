@@ -22,7 +22,9 @@ import kotlinx.android.synthetic.main.activity_news_detail.*
 import kotlinx.android.synthetic.main.item_main_news.*
 import org.jetbrains.anko.find
 
-
+/**
+ * Created by qinfei on 17/8/11.
+ */
 class NewsDetailActivity : ToolbarActivity() {
     fun appendLine(k: String, v: Any?) {
         buff.append("$k：<font color='#666666'>${if (v == null) "" else v}</font><br/>")
@@ -142,6 +144,36 @@ class NewsDetailActivity : ToolbarActivity() {
     }
 
     internal val fontSize = 18
+
+
+    fun set1(map: Map<String, Object?>, data: NewsBean) {
+        setTitle("法律诉讼")
+        val content = map["content"]?.toString()
+        if (!content.isNullOrEmpty()) {
+            webview.visibility = View.VISIBLE
+            scroll_plain.visibility = View.GONE
+            val head = "<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\"> " +
+                    "<style>img{max-width: 100%; height:auto;} .reduce-font p{font-size:" + fontSize + "px!important;}</style>" +
+                    "</head>"
+            val html = "<html>${head}<body style='margin:0px;'>" +
+                    "<span style='color:#333;font-size:16px;line-height:30px;'>$content</span></div>" +
+                    "</body></html>"
+            webview.loadDataWithBaseURL("about:blank", html, "text/html", "utf-8", null)
+        } else {
+            webview.visibility = View.GONE
+            scroll_plain.visibility = View.VISIBLE
+            setSubview(data)
+
+            appendLine("提交时间", map["submittime"])
+            appendLine("标题", map["title"])
+            appendLine("案件类型", map["casetype"])
+            appendLine("案件号", map["caseno"])
+            appendLine("法院", map["court"])
+            appendLine("文书类型", map["doctype"])
+            appendLine("原文链接地址", map["url"])
+        }
+        //                appendLine("唯一标识符", map["uuid"])
+    }
 
     fun set13(map: Map<String, Object?>, data: NewsBean) {
         val title = if (TextUtils.isEmpty(data.title)) "" else "<h1 style='color:#333;font-size:18px;'>${data.title}</h1>"
@@ -298,18 +330,6 @@ class NewsDetailActivity : ToolbarActivity() {
         appendLine("公告类型名称", map["bltntypename"])
         appendLine("法院名", map["courtcode"])
         appendLine("案件内容", map["content"])
-    }
-
-    fun set1(map: Map<String, Object?>, data: NewsBean) {
-        setTitle("法律诉颂")
-        appendLine("提交时间", map["submittime"])
-        appendLine("标题", map["title"])
-        appendLine("案件类型", map["casetype"])
-        appendLine("案件号", map["caseno"])
-        appendLine("法院", map["court"])
-        appendLine("文书类型", map["doctype"])
-        appendLine("原文链接地址", map["url"])
-        //                appendLine("唯一标识符", map["uuid"])
     }
 
 

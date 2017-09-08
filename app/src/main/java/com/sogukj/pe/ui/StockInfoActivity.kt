@@ -16,7 +16,9 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_stock_quote.*
 import org.jetbrains.anko.textColor
 import java.text.SimpleDateFormat
-
+/**
+ * Created by qinfei on 17/8/11.
+ */
 class StockInfoActivity : ToolbarActivity() {
     lateinit var project: ProjectBean
     val fmt = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
@@ -55,7 +57,7 @@ class StockInfoActivity : ToolbarActivity() {
                             }
 
                             tv_name.text = stockname
-                            tv_obj.text = stockcode.toString()
+                            tv_obj.text = String.format("%06d", stockcode)
                             tv_price.text = hexm_curPrice
                             tv_zhangdie.text = "$hexm_float_price"
                             tv_zhangfu.text = "$hexm_float_rate"

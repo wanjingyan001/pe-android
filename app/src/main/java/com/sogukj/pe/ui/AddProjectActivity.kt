@@ -5,14 +5,16 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import com.framework.base.ToolbarActivity
-import com.sogukj.pe.util.Trace
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.ProjectBean
+import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_add_project.*
-
+/**
+ * Created by qinfei on 17/7/18.
+ */
 class AddProjectActivity : ToolbarActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

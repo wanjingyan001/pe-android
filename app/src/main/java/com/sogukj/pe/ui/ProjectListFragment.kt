@@ -1,6 +1,7 @@
 package com.sogukj.pe.ui
 
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -18,16 +19,17 @@ import com.lcodecore.tkrefreshlayout.footer.BallPulseView
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
-import com.sogukj.pe.adapter.RecyclerAdapter
-import com.sogukj.pe.adapter.RecyclerHolder
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.util.Trace
+import com.sogukj.pe.view.RecyclerAdapter
+import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_list_project.*
 import org.jetbrains.anko.find
+import org.jetbrains.anko.textColor
 import java.text.SimpleDateFormat
 
 /**
@@ -217,17 +219,51 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
 
         override fun setData(view: View, data: ProjectBean, position: Int) {
             tv1.text = data.name
-            tv2.text = if (type == 1)
-                when (data.status) {
+            data.shortName?.apply { tv1.text = this }
+            if (type == 1) {
+                tv2.text = when (data.status) {
                     2 -> "已完成"
                     else -> "准备中"
                 }
-            else
-                data.state
+            } else {
+                tv2.text = data.state
+                when (data.state) {
+                    "初创" -> Color.parseColor("#9e9e9e")
+                    "天使轮" -> Color.parseColor("#e64a19")
+                    "A轮" -> Color.parseColor("#f57c00")
+                    "B轮" -> Color.parseColor("#ffa000")
+                    "C轮" -> Color.parseColor("#fbc02d")
+                    "D轮" -> Color.parseColor("#afb42b")
+                    "E轮" -> Color.parseColor("#689f38")
+                    "PIPE轮" -> Color.parseColor("#388e3c")
+                    "新三板" -> Color.parseColor("#00796b")
+                    "IPO" -> Color.parseColor("#0097a7")
+                    else ->null
+                }?.apply {
+                    tv2.textColor = this
+                }
+                when (data.state) {
+                    "初创" -> R.drawable.bg_border_proj1
+                    "天使轮" -> R.drawable.bg_border_proj2
+                    "A轮" -> R.drawable.bg_border_proj3
+                    "B轮" -> R.drawable.bg_border_proj4
+                    "C轮" -> R.drawable.bg_border_proj5
+                    "D轮" -> R.drawable.bg_border_proj6
+                    "E轮" -> R.drawable.bg_border_proj7
+                    "PIPE轮" -> R.drawable.bg_border_proj8
+                    "新三板" -> R.drawable.bg_border_proj9
+                    "IPO" -> R.drawable.bg_border_proj10
+                    else -> null
+                }?.apply {
+                    tv2.setBackgroundResource(this)
+                }
+
+            }
             tv3.text = when (type) {
                 1 -> data.add_time
                 else -> data.update_time
             }
+
             if (tv2.text.isNullOrEmpty()) tv2.text = "--"
             if (tv3.text.isNullOrEmpty()) tv3.text = "--"
         }

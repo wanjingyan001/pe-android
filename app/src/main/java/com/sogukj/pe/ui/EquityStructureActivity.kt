@@ -21,7 +21,9 @@ import kotlinx.android.synthetic.main.activity_equity_structure.*
 import kotlinx.android.synthetic.main.item_equity_structure.*
 import java.text.SimpleDateFormat
 
-
+/**
+ * Created by qinfei on 17/8/11.
+ */
 class EquityStructureActivity : ToolbarActivity() {
     lateinit var project: ProjectBean
     val fmt = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")

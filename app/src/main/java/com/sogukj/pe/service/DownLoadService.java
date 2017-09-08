@@ -14,9 +14,6 @@ import retrofit2.Retrofit;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 
-/**
- * Created by Mars on 2016/2/25.
- */
 public class DownLoadService {
 
     private static final String TAG = DownLoadService.class.getSimpleName();

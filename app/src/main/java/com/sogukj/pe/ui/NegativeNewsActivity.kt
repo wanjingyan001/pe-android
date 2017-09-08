@@ -7,7 +7,9 @@ import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.ProjectBean
-
+/**
+ * Created by qinfei on 17/8/11.
+ */
 class NegativeNewsActivity : ToolbarActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

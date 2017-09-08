@@ -4,17 +4,19 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import com.framework.base.ToolbarActivity
-import com.sogukj.pe.util.Trace
 import com.google.gson.Gson
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.ProjectBean
+import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_project_faxin.*
 import java.text.SimpleDateFormat
-
+/**
+ * Created by qinfei on 17/8/11.
+ */
 class IssueRelatedActivity : ToolbarActivity() {
 
     lateinit var project: ProjectBean

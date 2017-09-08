@@ -12,7 +12,9 @@ import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.text.SimpleDateFormat
-
+/**
+ * Created by qinfei on 17/8/11.
+ */
 class RecruitInfoActivity : ToolbarActivity() {
     lateinit var project: ProjectBean
     val fmt = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
