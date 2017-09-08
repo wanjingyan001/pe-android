@@ -48,6 +48,7 @@ interface SoguService {
                     , @Field("pageSize") pageSize: Int = 20
                     , @Field("uid") uid: Int? = null
                     , @Field("type") type: Int? = null
+                    , @Field("sort") sort: Int? = null
                     , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE): Observable<Payload<List<ProjectBean>>>
 
     @FormUrlEncoded
@@ -411,7 +412,7 @@ interface SoguService {
             @Field("company_id") company_id: Int
             , @Field("page") page: Int = 1
             , @Field("pageSize") pageSize: Int = 3
-            ,@Field("uid") uid: Int?
+            , @Field("uid") uid: Int?
             , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
     ): Observable<Payload<ProjectDetailBean>>
 

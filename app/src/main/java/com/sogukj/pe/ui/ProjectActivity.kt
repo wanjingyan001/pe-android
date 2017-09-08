@@ -15,12 +15,12 @@ import android.widget.TextView
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
-import com.sogukj.pe.view.ListAdapter
-import com.sogukj.pe.view.ListHolder
 import com.sogukj.pe.bean.NewsBean
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.FlowLayout
+import com.sogukj.pe.view.ListAdapter
+import com.sogukj.pe.view.ListHolder
 import com.sogukj.pe.view.TipsView
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
@@ -288,6 +288,7 @@ class ProjectActivity : ToolbarActivity() {
                                 "股权转让", "人事变动", "内部重组"
                                     , "股权出售", "质押担保", "行业企业重大事件"
                                 -> R.layout.item_tag_news_3
+                                "重大" -> R.layout.item_tag_news_5
                                 else -> R.layout.item_tag_news_4
                             }
                             val itemTag = View.inflate(this@ProjectActivity, itemRes, null)

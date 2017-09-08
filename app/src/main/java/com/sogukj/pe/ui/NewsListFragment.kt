@@ -14,11 +14,11 @@ import com.lcodecore.tkrefreshlayout.footer.BallPulseView
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
-import com.sogukj.pe.view.RecyclerAdapter
-import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.pe.bean.NewsBean
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.FlowLayout
+import com.sogukj.pe.view.RecyclerAdapter
+import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -183,6 +183,7 @@ class NewsListFragment : BaseFragment(), SupportEmptyView {
                                 "股权转让", "人事变动", "内部重组"
                                     , "股权出售", "质押担保", "行业企业重大事件"
                                 -> R.layout.item_tag_news_3
+                                "重大" -> R.layout.item_tag_news_5
                                 else -> R.layout.item_tag_news_4
                             }
                             val itemTag = View.inflate(baseActivity, itemRes, null)

@@ -97,6 +97,23 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
 
         })
         refresh.setAutoLoadMore(true)
+
+
+        ll_order_name.setOnClickListener { v ->
+            asc *= if (orderBy == 1) -1 else 1;
+            orderBy = 1
+            refresh.startRefresh()
+        }
+        ll_order_time.setOnClickListener { v ->
+            asc *= if (orderBy == 3) -1 else 1;
+            orderBy = 3
+            refresh.startRefresh()
+        }
+        ll_order_state.setOnClickListener { v ->
+            asc *= if (orderBy == 2) -1 else 1;
+            orderBy = 2
+            refresh.startRefresh()
+        }
         handler.postDelayed({
             doRequest()
         }, 100)
@@ -109,11 +126,26 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
 
     val fmt = SimpleDateFormat("MM/dd HH:mm")
     var offset = 0
+    var asc = -1;
+    var orderBy = 3;
 
     fun doRequest() {
+        iv_sort_name.visibility = View.GONE
+        iv_sort_state.visibility = View.GONE
+        iv_sort_time.visibility = View.GONE
+        val imgAsc = if (asc == -1) R.drawable.ic_down else R.drawable.ic_up
+        when (Math.abs(orderBy)) {
+            1 -> iv_sort_name
+            2 -> iv_sort_state
+            else -> iv_sort_time
+        }.apply {
+            setImageResource(imgAsc)
+            visibility = View.VISIBLE
+        }
+        val sort = orderBy * asc;
         val user = Store.store.getUser(baseActivity!!)
         SoguApi.getService(baseActivity!!.application)
-                .listProject(offset = offset, type = type, uid = user!!.uid)
+                .listProject(offset = offset, type = type, uid = user!!.uid, sort = sort)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -238,7 +270,7 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                     "PIPE轮" -> Color.parseColor("#388e3c")
                     "新三板" -> Color.parseColor("#00796b")
                     "IPO" -> Color.parseColor("#0097a7")
-                    else ->null
+                    else -> Color.parseColor("#9e9e9e")
                 }?.apply {
                     tv2.textColor = this
                 }
@@ -253,7 +285,7 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                     "PIPE轮" -> R.drawable.bg_border_proj8
                     "新三板" -> R.drawable.bg_border_proj9
                     "IPO" -> R.drawable.bg_border_proj10
-                    else -> null
+                    else -> R.drawable.bg_border_proj1
                 }?.apply {
                     tv2.setBackgroundResource(this)
                 }
