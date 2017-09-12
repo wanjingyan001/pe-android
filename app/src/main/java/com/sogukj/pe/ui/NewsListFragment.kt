@@ -134,7 +134,7 @@ class NewsListFragment : BaseFragment(), SupportEmptyView {
                         showToast(payload.message)
                 }, { e ->
                     Trace.e(e)
-                    showToast("暂无可用数据")
+//                    showToast("暂无可用数据")
                 }, {
                     SupportEmptyView.checkEmpty(this, adapter)
                     refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)

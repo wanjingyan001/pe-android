@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
@@ -14,23 +13,27 @@
     app:popupTheme="@style/AppTheme.PopupOverlay"
     app:theme="@style/AppTheme.AppBarOverlay">
 
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
 
         <com.sogukj.pe.view.CircleImageView
             android:id="@+id/iv_user"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:layout_centerVertical="true"
             android:layout_gravity="left|center"
             android:layout_marginLeft="20dp"
             android:gravity="center"
             android:src="@drawable/img_user_default" />
 
+
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
             android:layout_width="200dp"
             android:layout_height="match_parent"
+            android:layout_centerInParent="true"
             android:layout_gravity="center"
             android:gravity="center"
             app:tabGravity="fill"
@@ -56,6 +59,29 @@
                 android:layout_height="match_parent"
                 android:text="关注负面" />
         </android.support.design.widget.TabLayout>
-    </FrameLayout>
+
+        <ImageView
+            android:id="@+id/iv_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="right|center"
+            android:layout_marginRight="10dp"
+            android:gravity="center"
+            android:src="@drawable/ic_action_add"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/iv_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="right|center"
+            android:layout_marginRight="10dp"
+            android:gravity="center"
+            android:src="@drawable/ic_search" />
+    </RelativeLayout>
 
 </android.support.v7.widget.Toolbar>

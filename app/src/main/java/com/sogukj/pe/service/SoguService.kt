@@ -39,6 +39,7 @@ interface SoguService {
                  , @Field("uid") uid: Int? = null
                  , @Field("type") type: Int? = null
                  , @Field("company_id") company_id: Int? = null
+                 , @Field("fuzzyQuery") fuzzyQuery: String? = null
                  , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE)
             : Observable<Payload<List<NewsBean>>>
 
@@ -49,6 +50,7 @@ interface SoguService {
                     , @Field("uid") uid: Int? = null
                     , @Field("type") type: Int? = null
                     , @Field("sort") sort: Int? = null
+                    , @Field("fuzzyQuery") fuzzyQuery: String? = null
                     , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE): Observable<Payload<List<ProjectBean>>>
 
     @FormUrlEncoded
