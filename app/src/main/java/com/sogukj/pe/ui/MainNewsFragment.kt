@@ -2,6 +2,7 @@ package com.sogukj.pe.ui
 
 import android.os.Bundle
 import android.support.design.widget.TabLayout
+import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -11,6 +12,10 @@ import android.view.View
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.framework.base.BaseFragment
+import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
+import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
+import com.lcodecore.tkrefreshlayout.footer.BallPulseView
+import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.NewsBean
 import com.sogukj.pe.util.Trace
@@ -58,7 +63,7 @@ class MainNewsFragment : BaseFragment() {
                     if (!TextUtils.isEmpty(label) && !TextUtils.isEmpty(key)) {
                         label = label!!.replaceFirst(key, "<font color='#ff3300'>${key}</font>")
                     }
-                    tv_summary.text = label
+                    tv_summary.text = Html.fromHtml(label)
                     tv_time.text = data.time
                     tv_from.text = data.source
                     tags.removeAllViews()
@@ -159,6 +164,7 @@ class MainNewsFragment : BaseFragment() {
             if (TextUtils.isEmpty(text)) {
                 ll_history.visibility = View.VISIBLE
             } else {
+                page = 1
                 handler.removeCallbacks(searchTask)
                 handler.postDelayed(searchTask, 100)
             }
@@ -218,6 +224,28 @@ class MainNewsFragment : BaseFragment() {
         hisAdapter.dataList.addAll(Store.store.newsSearch(baseActivity!!))
         hisAdapter.notifyDataSetChanged()
         ll_history.visibility = View.VISIBLE
+
+
+        val header = ProgressLayout(baseActivity)
+        header.setColorSchemeColors(ContextCompat.getColor(baseActivity, R.color.color_main))
+        refresh.setHeaderView(header)
+        val footer = BallPulseView(baseActivity)
+        footer.setAnimatingColor(ContextCompat.getColor(baseActivity, R.color.color_main))
+        refresh.setBottomView(footer)
+        refresh.setOverScrollRefreshShow(false)
+        refresh.setOnRefreshListener(object : RefreshListenerAdapter() {
+            override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
+                page = 1
+                handler.post(searchTask)
+            }
+
+            override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
+                ++page
+                handler.post(searchTask)
+            }
+
+        })
+        refresh.setAutoLoadMore(true)
     }
 
     val searchTask = Runnable {
@@ -227,6 +255,8 @@ class MainNewsFragment : BaseFragment() {
     var key = ""
     var page = 1
     fun doSearch(text: String) {
+        this.key = text
+        if (TextUtils.isEmpty(key)) return
         val user = Store.store.getUser(baseActivity!!)
         val userId = if (tabs.selectedTabPosition == 0) null else user?.uid
         var type = when (tabs.selectedTabPosition) {
@@ -239,12 +269,16 @@ class MainNewsFragment : BaseFragment() {
         tmplist.add(text)
         Store.store.newsSearch(baseActivity!!, tmplist)
         SoguApi.getService(baseActivity!!.application)
-                .listNews(page = 1, pageSize = 50, type = type, uid = userId, fuzzyQuery = text)
+                .listNews(page = page, pageSize = 20, type = type, uid = userId, fuzzyQuery = text)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        adapter.dataList.clear()
+                        payload?.apply {
+                            tv_result_title.text = Html.fromHtml(getString(R.string.tv_title_result_news, total))
+                        }
+                        if (page == 1)
+                            adapter.dataList.clear()
                         payload.payload?.apply {
                             adapter.dataList.addAll(this)
                         }
@@ -255,7 +289,10 @@ class MainNewsFragment : BaseFragment() {
                 }, {
                     ll_history.visibility = View.GONE
                     adapter.notifyDataSetChanged()
-                    tv_result_title.text = Html.fromHtml(getString(R.string.tv_title_result_news, adapter.dataList.size))
+                    if (page == 1)
+                        refresh?.finishRefreshing()
+                    else
+                        refresh?.finishLoadmore()
 
                     hisAdapter.dataList.clear()
                     hisAdapter.dataList.addAll(Store.store.newsSearch(baseActivity!!))

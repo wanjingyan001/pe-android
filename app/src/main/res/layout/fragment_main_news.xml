@@ -54,17 +54,25 @@
                     android:textColor="@color/text_2"
                     android:textSize="14sp" />
 
-                <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+                <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
                     xmlns:tools="http://schemas.android.com/tools"
-                    android:id="@+id/recycler_result"
+                    android:id="@+id/refresh"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/white"
-                    android:orientation="vertical"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    app:layoutManager="LinearLayoutManager"
-                    tools:listitem="@layout/item_main_project" />
+                    android:layout_height="match_parent">
+
+                    <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+                        xmlns:tools="http://schemas.android.com/tools"
+                        android:id="@+id/recycler_result"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white"
+                        android:orientation="vertical"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        app:layoutManager="LinearLayoutManager"
+                        tools:listitem="@layout/item_main_project" />
+                </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
             </LinearLayout>
 
             <LinearLayout

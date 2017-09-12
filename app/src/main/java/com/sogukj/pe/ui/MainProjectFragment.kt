@@ -3,6 +3,7 @@ package com.sogukj.pe.ui
 import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.TabLayout
+import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -12,6 +13,10 @@ import android.view.View
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.framework.base.BaseFragment
+import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
+import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
+import com.lcodecore.tkrefreshlayout.footer.BallPulseView
+import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.util.Trace
@@ -53,11 +58,11 @@ class MainProjectFragment : BaseFragment() {
 
                 override fun setData(view: View, data: ProjectBean, position: Int) {
                     var label = data.name
+                    data.shortName?.apply { label = this }
                     if (!TextUtils.isEmpty(label) && !TextUtils.isEmpty(key)) {
                         label = label!!.replaceFirst(key, "<font color='#ff3300'>${key}</font>")
                     }
                     tv1.text = Html.fromHtml(label)
-                    data.shortName?.apply { tv1.text = this }
                     if (type == 1) {
                         tv2.text = when (data.status) {
                             2 -> "已完成"
@@ -165,6 +170,7 @@ class MainProjectFragment : BaseFragment() {
             if (TextUtils.isEmpty(text)) {
                 ll_history.visibility = View.VISIBLE
             } else {
+                offset = 0
                 handler.removeCallbacks(searchTask)
                 handler.postDelayed(searchTask, 100)
             }
@@ -226,6 +232,28 @@ class MainProjectFragment : BaseFragment() {
         hisAdapter.dataList.addAll(Store.store.projectSearch(baseActivity!!))
         hisAdapter.notifyDataSetChanged()
 
+
+        val header = ProgressLayout(baseActivity)
+        header.setColorSchemeColors(ContextCompat.getColor(baseActivity, R.color.color_main))
+        refresh.setHeaderView(header)
+        val footer = BallPulseView(baseActivity)
+        footer.setAnimatingColor(ContextCompat.getColor(baseActivity, R.color.color_main))
+        refresh.setBottomView(footer)
+        refresh.setOverScrollRefreshShow(false)
+        refresh.setOnRefreshListener(object : RefreshListenerAdapter() {
+            override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
+                offset = 0
+                handler.post(searchTask)
+            }
+
+            override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
+                offset = this@MainProjectFragment.adapter.dataList.size
+                handler.post(searchTask)
+            }
+
+        })
+        refresh.setAutoLoadMore(true)
+
     }
 
     val searchTask = Runnable {
@@ -247,12 +275,16 @@ class MainProjectFragment : BaseFragment() {
         tmplist.add(text)
         Store.store.projectSearch(baseActivity!!, tmplist)
         SoguApi.getService(baseActivity!!.application)
-                .listProject(offset = 0, pageSize = 50, uid = user?.uid, type = type, fuzzyQuery = text)
+                .listProject(offset = offset, pageSize = 20, uid = user?.uid, type = type, fuzzyQuery = text)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        adapter.dataList.clear()
+                        payload?.apply {
+                            tv_result_title.text = Html.fromHtml(getString(R.string.tv_title_result_project, total))
+                        }
+                        if (offset == 0)
+                            adapter.dataList.clear()
                         payload.payload?.apply {
                             adapter.dataList.addAll(this)
                         }
@@ -263,11 +295,16 @@ class MainProjectFragment : BaseFragment() {
                 }, {
                     ll_history.visibility = View.GONE
                     adapter.notifyDataSetChanged()
-                    tv_result_title.text = Html.fromHtml(getString(R.string.tv_title_result_project, adapter.dataList.size))
+                    if (offset == 0)
+                        refresh?.finishRefreshing()
+                    else
+                        refresh?.finishLoadmore()
 
                     hisAdapter.dataList.clear()
                     hisAdapter.dataList.addAll(Store.store.projectSearch(baseActivity!!))
                     hisAdapter.notifyDataSetChanged()
+
+
                 })
     }
 

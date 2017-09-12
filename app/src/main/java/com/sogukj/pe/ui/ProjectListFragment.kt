@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.text.Html
 import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
@@ -250,8 +251,9 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
         }
 
         override fun setData(view: View, data: ProjectBean, position: Int) {
-            tv1.text = data.name
-            data.shortName?.apply { tv1.text = this }
+            var label = data.name
+            data.shortName?.apply { label = this }
+            tv1.text = Html.fromHtml(label)
             if (type == 1) {
                 tv2.text = when (data.status) {
                     2 -> "已完成"
