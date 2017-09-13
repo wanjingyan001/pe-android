@@ -18,7 +18,7 @@
         android:background="@color/white"
         android:cursorVisible="true"
         android:gravity="center_vertical"
-        android:hint="公司名称或关键字"
+        android:hint="请输入搜索关键字"
         android:imeOptions="actionSearch"
         android:inputType="text"
         android:paddingBottom="8dp"

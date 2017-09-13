@@ -14,9 +14,19 @@ import kotlin.collections.HashSet
 class Store private constructor() {
     private var _user: UserBean? = null
 
+
     fun checkLogin(ctx: Context): Boolean {
         return null != getUser(ctx) && null != _user?.uid
     }
+
+    fun getUToken(ctx: Context): String {
+        return XmlDb.open(ctx).get("uToken", "")
+    }
+
+    fun setUToken(ctx: Context, token: String) {
+        XmlDb.open(ctx).set("uToken", token)
+    }
+
     private val resultNews = LinkedList<String>()
     fun newsSearch(ctx: Context): Collection<String> {
         this.resultNews.clear()

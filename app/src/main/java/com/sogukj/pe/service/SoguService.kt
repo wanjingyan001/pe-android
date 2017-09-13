@@ -72,6 +72,8 @@ interface SoguService {
                  , @Field("project") project: String? = null
                  , @Field("memo") memo: String? = null
                  , @Field("email") email: String? = null
+                 , @Field("advice_token") advice_token: String? = null
+                 , @Field("phone_type") phone_type: Int = 1
                  , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
     ): Observable<Payload<Object>>
 
