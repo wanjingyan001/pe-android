@@ -109,6 +109,7 @@ class NewsDetailActivity : ToolbarActivity() {
                             "股权转让", "人事变动", "内部重组"
                                 , "股权出售", "质押担保", "行业企业重大事件"
                             -> R.layout.item_tag_news_3
+                            "重大" -> R.layout.item_tag_news_5
                             else -> R.layout.item_tag_news_4
                         }
                         val itemTag = View.inflate(this, itemRes, null)

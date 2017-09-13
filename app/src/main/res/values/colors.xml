@@ -4,6 +4,7 @@
     <color name="tag2">#FF8500</color>
     <color name="tag3">#F7B62B</color>
     <color name="tag4">#9D9D9D</color>
+    <color name="tag5">@color/colorBlue</color>
     <color name="colorPrimary">#4e7eef</color>
     <color name="colorPrimaryDark">#4e7eef</color>
     <color name="colorAccent">#fe5931</color>

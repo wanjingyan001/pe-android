@@ -287,6 +287,7 @@ class UserEditActivity : ToolbarActivity() {
         }
         SoguApi.getService(application)
                 .saveUser(uid = user.uid!!, name = user.name, phone = user.phone, email = user.email,
+                        advice_token = Store.store.getUToken(this),
                         position = user.position, depart_id = user.depart_id, project = user.project, memo = user.memo)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())

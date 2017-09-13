@@ -7,7 +7,6 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
-import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.framework.base.ToolbarActivity
@@ -22,6 +21,7 @@ import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.pe.bean.KeyPersonalBean
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.util.Trace
+import com.sogukj.pe.view.CircleImageView
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -47,16 +47,20 @@ class KeyPersonalActivity : ToolbarActivity() {
             val convertView = _adapter.getView(R.layout.item_project_key_personal, parent) as View
             object : RecyclerHolder<KeyPersonalBean>(convertView) {
 
-                val ivUser = convertView.findViewById(R.id.iv_user) as ImageView
+                val ivUser = convertView.findViewById(R.id.iv_user) as CircleImageView
                 val tvName = convertView.findViewById(R.id.tv_name) as TextView
                 val tvPosotion = convertView.findViewById(R.id.tv_posotion) as TextView
 
                 override fun setData(view: View, data: KeyPersonalBean, position: Int) {
                     tvName.text = data.name
                     tvPosotion.text = data.typeJoin?.joinToString()
+                    if (null != data.name && data.name!!.length > 0) {
+                        val ch = data.name!!.first();
+                        ivUser.setChar(ch)
+                    }
                     Glide.with(this@KeyPersonalActivity)
                             .load(data.logo)
-                            .error(R.drawable.img_user_default)
+//                            .error(R.drawable.img_user_default)
                             .into(ivUser)
                 }
 

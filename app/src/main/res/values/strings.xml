@@ -17,4 +17,6 @@
     <string name="tv_proj_app_brif" formatted="false">描述：&lt;font color="#5785f3"> %s &lt;/font></string>
     <string name="tv_proj_product_company" formatted="false">关联公司：&lt;font color="#5785f3"> %s &lt;/font></string>
     <string name="tv_pairs_value" formatted="false">&lt;font color="#999999"> %s &lt;/font></string>
+    <string name="tv_title_result_project" formatted="false">匹配到&lt;font color="#ff3300">%d&lt;/font>家公司: </string>
+    <string name="tv_title_result_news" formatted="false">匹配到&lt;font color="#ff3300">%d&lt;/font>条资讯: </string>
 </resources>

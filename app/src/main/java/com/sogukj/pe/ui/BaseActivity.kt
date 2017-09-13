@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.WindowManager
 import android.widget.Toast
 import com.sogukj.pe.util.Trace
+import com.umeng.message.PushAgent
 
 /**
  * Created by qinfei on 17/7/17.
@@ -21,6 +22,7 @@ abstract class BaseActivity : AppCompatActivity() {
         ActivityHelper.add(this)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         //        initStatusBar(getStatusBarTintRes());
+        PushAgent.getInstance(this).onAppStart();
     }
 
     override fun onStart() {
