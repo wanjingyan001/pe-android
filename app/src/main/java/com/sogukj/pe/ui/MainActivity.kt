@@ -1,8 +1,11 @@
 package com.sogukj.pe.ui
 
+import android.app.Activity
 import android.os.Bundle
 import com.framework.base.BaseActivity
+import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.bean.NewsBean
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
@@ -20,6 +23,11 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val clazz = intent.getSerializableExtra("uPush.target") as Class<Activity>?
+        clazz?.apply {
+            val news = intent.getSerializableExtra(Extras.DATA) as NewsBean?
+            if (null != news) NewsDetailActivity.start(this@MainActivity, news)
+        }
         val user = Store.store.getUser(this)
         val uToken = Store.store.getUToken(this)
         if (user?.uid != null && uToken != null) {
