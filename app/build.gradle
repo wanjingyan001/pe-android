@@ -43,17 +43,17 @@ android {
         checkReleaseBuilds false
     }
     dexOptions {
-        incremental true
+//        incremental true
         preDexLibraries = false
         javaMaxHeapSize "4g"
         maxProcessCount 4
     }
-    applicationVariants.all { variant ->
-        variant.outputs.each { output ->
-            output.outputFile = new File(output.outputFile.parent,
-                    "pe_${variant.buildType.name}_v${defaultConfig.versionName}.${defaultConfig.versionCode}.apk".toLowerCase())
-        }
-    }
+//    applicationVariants.all { variant ->
+//        variant.outputs.each { output ->
+//            output.outputFile = new File(output.outputFile.parent,
+//                    "pe_${variant.buildType.name}_v${defaultConfig.versionName}.${defaultConfig.versionCode}.apk".toLowerCase())
+//        }
+//    }
 }
 
 dependencies {

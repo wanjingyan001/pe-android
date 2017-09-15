@@ -8,9 +8,12 @@ import com.google.gson.Gson
 import com.sogukj.pe.bean.NewsBean
 import com.sogukj.pe.ui.NewsDetailActivity
 import com.sogukj.pe.util.Trace
+import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
 import com.umeng.message.IUmengRegisterCallback
 import com.umeng.message.PushAgent
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import org.json.JSONObject
 
 
@@ -23,6 +26,7 @@ class App : MultiDexApplication() {
         INSTANCE = this
         val mPushAgent = PushAgent.getInstance(this)
         mPushAgent.setDebugMode(false)
+        mPushAgent.displayNotificationNumber = 0
         mPushAgent.register(object : IUmengRegisterCallback {
 
             override fun onSuccess(deviceToken: String) {
@@ -36,39 +40,61 @@ class App : MultiDexApplication() {
             }
         })
         PushAgent.getInstance(this).setNotificationClickHandler({ context, uMessage ->
-           try {
-               uMessage.custom?.apply {
-                   com.sogukj.pe.util.Trace.i("uPush", this)
-                   val json = JSONObject(this)
-                   val type = json.getInt("type")
-                   when (type) {
-                       else -> handle(context, json)
-                   }
-               }
-           }catch (e:Exception){
-               Trace.e(e)
-           }
+            try {
+                uMessage.custom?.apply {
+                    com.sogukj.pe.util.Trace.i("uPush", this)
+                    val json = JSONObject(this)
+                    val type = json.getInt("type")
+                    when (type) {
+                        1 -> handle(context, json)
+                        else -> {
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                Trace.e(e)
+            }
         })
     }
 
     val GSON = Gson();
     fun handle(context: Context, json: JSONObject) {
-        val dataJson = json.getJSONObject("data")
-        val data = GSON.fromJson(dataJson.toString(), NewsBean::class.java)
-        val intent: Intent = if (ActivityHelper.count === 0) {
-            val intent = packageManager.getLaunchIntentForPackage(packageName)
-            intent.`package` = packageName
-            intent.putExtra("uPush.target", NewsDetailActivity::class.java)
-            intent
-        } else {
-            val intent = Intent()
-            intent.setClass(context, NewsDetailActivity::class.java)
-            intent
-        }
+        try {
+            val dataJson = json.getJSONObject("data")
+            val data = GSON.fromJson(dataJson.toString(), NewsBean::class.java)
+            val intent: Intent = if (ActivityHelper.count === 0) {
+                val intent = packageManager.getLaunchIntentForPackage(packageName)
+                intent.`package` = packageName
+                intent.putExtra("uPush.target", NewsDetailActivity::class.java)
+                intent
+            } else {
+                val intent = Intent()
+                intent.setClass(context, NewsDetailActivity::class.java)
+                intent
+            }
 
-        intent.putExtra(Extras.DATA, data)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        context.startActivity(intent)
+            intent.putExtra(Extras.DATA, data)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(intent)
+
+        } catch (e: Exception) {
+            Trace.e(e)
+        }
+    }
+
+    fun resetPush(enable: Boolean) {
+        val user = Store.store.getUser(this)
+        val uToken = Store.store.getUToken(this)
+        if (user?.uid != null && uToken != null) {
+            val token = if (enable) uToken else ""
+            SoguApi.getService(this)
+                    .saveUser(uid = user.uid!!, advice_token = token)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        Trace.i("pushToken", "${payload.isOk}")
+                    }, { e -> Trace.e(e) })
+        }
     }
 
     companion object {

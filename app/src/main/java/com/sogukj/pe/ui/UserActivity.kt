@@ -13,6 +13,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
 import com.framework.base.ToolbarActivity
+import com.sogukj.pe.App
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.DepartmentBean
 import com.sogukj.pe.bean.UserBean
@@ -44,6 +45,7 @@ class UserActivity : ToolbarActivity() {
                         .onPositive { materialDialog, dialogAction ->
                             Store.store.clearUser(this)
                             LoginActivity.start(this)
+                            App.INSTANCE.resetPush(false)
                             finish()
                         }
                         .positiveText("确定")

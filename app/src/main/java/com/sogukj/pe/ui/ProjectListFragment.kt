@@ -103,17 +103,17 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
         ll_order_name.setOnClickListener { v ->
             asc *= if (orderBy == 1) -1 else 1;
             orderBy = 1
-            refresh.startRefresh()
+            doRequest()
         }
         ll_order_time.setOnClickListener { v ->
             asc *= if (orderBy == 3) -1 else 1;
             orderBy = 3
-            refresh.startRefresh()
+            doRequest()
         }
         ll_order_state.setOnClickListener { v ->
             asc *= if (orderBy == 2) -1 else 1;
             orderBy = 2
-            refresh.startRefresh()
+            doRequest()
         }
         handler.postDelayed({
             doRequest()
