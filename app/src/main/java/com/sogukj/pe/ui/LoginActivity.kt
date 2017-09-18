@@ -63,7 +63,9 @@ class LoginActivity : BaseActivity() {
 
     private fun doLogin() {
         val user = UserBean()
-        user.phone = et_name?.text?.toString()
+        et_name?.text?.toString()?.apply {
+            user.phone =this
+        }
 
         if (TextUtils.isEmpty(et_name.text) || !Utils.isMobile(et_name.text.trim())) {
             et_name.setText("")

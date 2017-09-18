@@ -18,6 +18,7 @@ import com.sogukj.pe.R
 import com.sogukj.pe.bean.DepartmentBean
 import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.util.Trace
+import com.sogukj.pe.view.CircleImageView
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -155,15 +156,30 @@ class UserActivity : ToolbarActivity() {
     fun addItem(userBean: UserBean, tab_info: LinearLayout) {
         val item_content = View.inflate(this, R.layout.item_row_content_user_jobs, null)
         tab_info.addView(item_content)
-        val iv_user = item_content.find<ImageView>(R.id.iv_user)
+        val iv_user = item_content.find<ImageView>(R.id.iv_user) as CircleImageView
         val tv_name = item_content.find<TextView>(R.id.tv_name)
         val tv_job = item_content.find<TextView>(R.id.tv_job)
+        if (TextUtils.isEmpty(userBean.name)) {
+            userBean.name = "--"
+        }
+        if (TextUtils.isEmpty(userBean.position)) {
+            userBean.position = "--"
+        }
+        if (TextUtils.isEmpty(userBean.phone)) {
+            userBean.phone = "--"
+        }
+        if (TextUtils.isEmpty(userBean.email)) {
+            userBean.email = "--"
+        }
         tv_name.text = userBean.name + "\n" + userBean.phone
         tv_job.text = userBean.position + "\n" + userBean.email
-//        val text = TextShape("大", Color.RED)
+        if (null != userBean.name && userBean.name!!.length > 0) {
+            val ch = userBean.name!!.first();
+            iv_user.setChar(ch)
+        }
         Glide.with(this)
                 .load(userBean.headImage())
-                .error(R.drawable.img_user_default)
+//                .error(R.drawable.img_user_default)
                 .into(iv_user)
 //        iv_user.setImageDrawable(text)
     }

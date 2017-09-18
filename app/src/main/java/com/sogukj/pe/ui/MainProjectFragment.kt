@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Html
+import android.text.InputType
 import android.text.TextUtils
 import android.view.View
 import android.widget.TextView
@@ -20,6 +21,7 @@ import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.util.Trace
+import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.ArrayPagerAdapter
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
@@ -28,6 +30,7 @@ import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_main_project.*
+import kotlinx.android.synthetic.main.layout_search_view.*
 import kotlinx.android.synthetic.main.sogu_toolbar_main_proj.*
 import org.jetbrains.anko.textColor
 import java.util.*
@@ -197,6 +200,13 @@ class MainProjectFragment : BaseFragment() {
         }
         iv_search.setOnClickListener {
             ll_search.visibility = View.VISIBLE
+            et_search.postDelayed({
+                et_search.inputType = InputType.TYPE_CLASS_TEXT
+                et_search.isFocusable=true
+                et_search.isFocusableInTouchMode=true
+                et_search.requestFocus()
+                Utils.toggleSoftInput(baseActivity, et_search)
+            }, 100)
         }
         var adapter = ArrayPagerAdapter(childFragmentManager, fragments)
         view_pager.adapter = adapter

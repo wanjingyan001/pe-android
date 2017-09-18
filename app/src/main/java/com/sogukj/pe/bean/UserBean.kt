@@ -6,12 +6,12 @@ import java.io.Serializable
 open class UserBean() : Serializable {
     var uid: Int? = null//用户主键ID
     var name: String = ""
-    var phone: String? = null
-    var depart_name: String? = null
+    var phone: String = ""
+    var depart_name: String = ""
     var position: String = ""
     var email: String = ""
-    var project: String? = null
-    var memo: String? = null
+    var project: String = ""
+    var memo: String = ""
     var url: String? = null
     var depart_id: Int? = null
     var numberOfShares: Int = 0

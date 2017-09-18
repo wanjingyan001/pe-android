@@ -13,6 +13,7 @@ import android.text.TextUtils
 import android.util.AttributeSet
 import android.widget.ImageView
 import com.sogukj.pe.R
+import java.util.*
 
 
 /**
@@ -91,13 +92,14 @@ class CircleImageView : android.support.v7.widget.AppCompatImageView {
         }
     }
 
+    val rand = Random()
 
     override fun onDraw(canvas: Canvas) {
         if (mBitmap == null) {
             val str = mChar.toString()
             var color = COLORS[0]
             if (!TextUtils.isEmpty(str)) {
-                color = COLORS[Math.abs(str.hashCode() % COLORS.size)]
+                color = COLORS[(Math.random() * (COLORS.size - 1)).toInt()]
             }
             textPaint.color = color
             val fontSize = Math.min(width, height) / 2
