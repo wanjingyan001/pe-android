@@ -57,7 +57,7 @@
             <android.support.design.widget.TabItem
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="拟投" />
+                android:text="立项" />
         </android.support.design.widget.TabLayout>
 
         <ImageView

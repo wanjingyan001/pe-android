@@ -3,6 +3,7 @@ package com.sogukj.pe.ui
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DividerItemDecoration
@@ -13,6 +14,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.PopupWindow
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.framework.base.BaseFragment
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
@@ -29,6 +31,7 @@ import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_list_project.*
+import kotlinx.android.synthetic.main.layout_loading.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.textColor
 import java.text.SimpleDateFormat
@@ -115,6 +118,10 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
             orderBy = 2
             doRequest()
         }
+        Glide.with(baseActivity)
+                .load(Uri.parse("file:///android_asset/img_loading.gif"))
+                .into(iv_loading)
+        iv_loading?.visibility = View.VISIBLE
         handler.postDelayed({
             doRequest()
         }, 100)
@@ -158,9 +165,12 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                         }
                     } else
                         showToast(payload.message)
+                    iv_loading?.visibility = View.GONE
                 }, { e ->
                     Trace.e(e)
-                    showToast("暂无可用数据")
+//                    showToast("暂无可用数据")
+                    iv_loading?.visibility = View.GONE
+                    SupportEmptyView.checkEmpty(this, adapter)
                 }, {
                     SupportEmptyView.checkEmpty(this, adapter)
 //                    refresh?.setEnableLoadmore(adapter.dataList.size >= offset + 20)
