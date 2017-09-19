@@ -15,11 +15,11 @@ import com.lcodecore.tkrefreshlayout.footer.BallPulseView
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
-import com.sogukj.pe.view.RecyclerAdapter
-import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.pe.bean.CopyRightBean
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.util.Trace
+import com.sogukj.pe.view.RecyclerAdapter
+import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -29,7 +29,7 @@ import java.text.SimpleDateFormat
 /**
  * Created by qinfei on 17/8/11.
  */
-class CopyrightListActivity : ToolbarActivity() ,SupportEmptyView{
+class CopyrightListActivity : ToolbarActivity(), SupportEmptyView {
 
     lateinit var adapter: RecyclerAdapter<CopyRightBean>
     lateinit var project: ProjectBean
@@ -118,7 +118,7 @@ class CopyrightListActivity : ToolbarActivity() ,SupportEmptyView{
     var page = 1
     fun doRequest() {
         SoguApi.getService(application)
-                .listCopyright(project.company_id!!, 1, page = page)
+                .listCopyright(project.company_id!!, type, page = page)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -134,7 +134,7 @@ class CopyrightListActivity : ToolbarActivity() ,SupportEmptyView{
                     Trace.e(e)
                     showToast("暂无可用数据")
                 }, {
-                    SupportEmptyView.checkEmpty(this,adapter)
+                    SupportEmptyView.checkEmpty(this, adapter)
                     refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
                     adapter.notifyDataSetChanged()
                     if (page == 1)
