@@ -11,11 +11,11 @@
         android:layout_margin="3dp"
         android:background="@drawable/bg_border_gray"
         android:gravity="center"
-        android:paddingBottom="4dp"
-        android:paddingLeft="6dp"
-        android:paddingRight="6dp"
-        android:paddingTop="4dp"
+        android:paddingBottom="2dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:paddingTop="2dp"
         android:text="司法风险"
         android:textColor="@color/textColorGray"
-        android:textSize="12sp" />
+        android:textSize="10sp" />
 </FrameLayout>

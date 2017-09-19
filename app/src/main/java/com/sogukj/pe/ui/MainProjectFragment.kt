@@ -166,6 +166,7 @@ class MainProjectFragment : BaseFragment() {
                         .error(R.drawable.img_user_default)
                         .into(iv_user)
         }
+
         iv_add.setOnClickListener {
             AddProjectActivity.start(baseActivity)
         }
@@ -202,14 +203,16 @@ class MainProjectFragment : BaseFragment() {
             ll_search.visibility = View.VISIBLE
             et_search.postDelayed({
                 et_search.inputType = InputType.TYPE_CLASS_TEXT
-                et_search.isFocusable=true
-                et_search.isFocusableInTouchMode=true
+                et_search.isFocusable = true
+                et_search.isFocusableInTouchMode = true
                 et_search.requestFocus()
                 Utils.toggleSoftInput(baseActivity, et_search)
             }, 100)
         }
         var adapter = ArrayPagerAdapter(childFragmentManager, fragments)
         view_pager.adapter = adapter
+
+        val user = Store.store.getUser(baseActivity!!)
         tabs?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab?) {
 
@@ -234,7 +237,7 @@ class MainProjectFragment : BaseFragment() {
             override fun onPageSelected(position: Int) {
                 tabs?.getTabAt(position)?.select()
                 iv_search?.visibility = if (position == 0) View.VISIBLE else View.GONE
-                iv_add?.visibility = if (position == 2) View.VISIBLE else View.GONE
+                iv_add?.visibility = if (position == 2 && user?.is_admin == 1) View.VISIBLE else View.GONE
             }
 
         })

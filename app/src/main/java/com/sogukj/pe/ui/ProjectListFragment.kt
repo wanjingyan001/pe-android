@@ -70,7 +70,9 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
             val project = adapter.getItem(p);
             ProjectActivity.start(baseActivity, project)
         }
-        if (index != 1)
+
+        val user = Store.store.getUser(baseActivity!!)
+        if (index != 1 && user?.is_admin == 1)
             adapter.onItemLongClick = { v, p ->
                 editOptions(v, p)
                 true
