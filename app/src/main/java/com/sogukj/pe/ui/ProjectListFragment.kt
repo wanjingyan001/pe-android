@@ -14,6 +14,8 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.PopupWindow
 import android.widget.TextView
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
 import com.framework.base.BaseFragment
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
@@ -194,8 +196,18 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
             pop.dismiss()
         }
         tvDel.setOnClickListener { view12 ->
-            doDel(position)
+            //            doDel(position)
             pop.dismiss()
+            MaterialDialog.Builder(baseActivity!!)
+                    .theme(Theme.LIGHT)
+                    .title("提示")
+                    .content("确定要删除这条数据?")
+                    .onPositive { materialDialog, dialogAction ->
+                        doDel(position)
+                    }
+                    .positiveText("确定")
+                    .negativeText("取消")
+                    .show()
         }
         if (index == 0) tvAdd.visibility = View.GONE
         pop.isTouchable = true

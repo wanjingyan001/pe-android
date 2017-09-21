@@ -3,7 +3,6 @@ package com.framework.base
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AppCompatActivity
-import android.view.WindowManager
 import android.widget.Toast
 import com.sogukj.pe.util.Trace
 import com.umeng.message.PushAgent
@@ -20,7 +19,7 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ActivityHelper.add(this)
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+//        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         //        initStatusBar(getStatusBarTintRes());
         PushAgent.getInstance(this).onAppStart();
     }

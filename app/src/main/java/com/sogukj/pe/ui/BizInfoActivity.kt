@@ -3,6 +3,7 @@ package com.sogukj.pe.ui
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.widget.TextView
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
@@ -67,6 +68,7 @@ class BizInfoActivity : ToolbarActivity() {
     }
 
     fun copySupport(v: TextView, text: String?) {
+        v.setTextColor(ContextCompat.getColor(this,R.color.colorBlue))
         v.setOnLongClickListener {
             Utils.copy(this@BizInfoActivity, "" + text)
             showToast("已复制")
