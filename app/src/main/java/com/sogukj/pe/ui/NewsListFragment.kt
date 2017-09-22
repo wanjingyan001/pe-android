@@ -216,7 +216,7 @@ class NewsListFragment : BaseFragment(), SupportEmptyView {
 
             var isRead = isRead(data)
             if (isRead) {
-                tv_summary.textColor = resources.getColor(R.color.text_3)
+                tv_summary.textColor = resources.getColor(R.color.text_2)
             } else {
                 tv_summary.textColor = resources.getColor(R.color.text_1)
             }

@@ -14,7 +14,7 @@
     <string name="tv_proj_product_biz">业务：</string>
     <string name="tv_proj_product_create_date">成立日期：</string>
     <string name="tv_proj_finance_lunci">投资轮次：</string>
-    <string name="tv_proj_app_brif" formatted="false">描述：&lt;font color="#5785f3"> %s &lt;/font></string>
+    <string name="tv_proj_app_brif" formatted="false">描述：%s</string>
     <string name="tv_proj_product_company" formatted="false">关联公司：&lt;font color="#5785f3"> %s &lt;/font></string>
     <string name="tv_pairs_value" formatted="false">&lt;font color="#999999"> %s &lt;/font></string>
     <string name="tv_title_result_project" formatted="false">匹配到&lt;font color="#ff3300">%d&lt;/font>家公司: </string>

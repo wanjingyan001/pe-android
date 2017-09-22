@@ -5,7 +5,10 @@
     android:layout_height="wrap_content"
     android:background="@drawable/bg_item_list"
     android:orientation="vertical"
-    android:padding="10dp">
+    android:paddingBottom="12dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="12dp">
 
     <TextView
         android:id="@+id/tv_summary"
@@ -13,14 +16,14 @@
         android:layout_height="wrap_content"
         android:maxLines="2"
         android:textColor="@color/text_1"
-        android:textSize="14sp"
+        android:textSize="16sp"
         tools:text="@string/tools_text_long_title" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="7dp"
-        android:layout_marginTop="7dp"
+        android:layout_marginBottom="6dp"
+        android:layout_marginTop="6dp"
         android:orientation="horizontal">
 
         <TextView
@@ -29,9 +32,9 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="20dp"
             android:drawableLeft="@drawable/icon_date"
-            android:drawablePadding="3sp"
+            android:drawablePadding="4dp"
             android:textColor="@color/text_3"
-            android:textSize="14sp"
+            android:textSize="12sp"
             tools:text="2017/07/07" />
 
         <TextView
@@ -39,9 +42,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/icon_time"
-            android:drawablePadding="3sp"
+            android:drawablePadding="4dp"
             android:textColor="@color/text_3"
-            android:textSize="14sp"
+            android:textSize="12sp"
             tools:text="12:00" />
 
         <TextView
@@ -51,7 +54,7 @@
             android:layout_weight="1"
             android:gravity="right"
             android:textColor="@color/text_3"
-            android:textSize="14sp"
+            android:textSize="12sp"
             tools:text="人民日报" />
     </LinearLayout>
 
