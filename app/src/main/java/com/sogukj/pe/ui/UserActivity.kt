@@ -3,6 +3,8 @@ package com.sogukj.pe.ui
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.text.Spannable
+import android.text.Spanned
 import android.text.TextUtils
 import android.view.MenuItem
 import android.view.View
@@ -19,6 +21,7 @@ import com.sogukj.pe.bean.DepartmentBean
 import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.CircleImageView
+import com.sogukj.pe.view.LinkSpan
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -171,8 +174,14 @@ class UserActivity : ToolbarActivity() {
         if (TextUtils.isEmpty(userBean.email)) {
             userBean.email = "--"
         }
+
         tv_name.text = userBean.name + "\n" + userBean.phone
         tv_job.text = userBean.position + "\n" + userBean.email
+        val link = LinkSpan();
+        if (!TextUtils.isEmpty(userBean.phone) && tv_name.text is Spannable) {
+            val s = tv_name.text as Spannable
+            s.setSpan(link, userBean.name.length, s.length, Spanned.SPAN_MARK_MARK)
+        }
         if (null != userBean.name && userBean.name!!.length > 0) {
             val ch = userBean.name!!.first();
             iv_user.setChar(ch)

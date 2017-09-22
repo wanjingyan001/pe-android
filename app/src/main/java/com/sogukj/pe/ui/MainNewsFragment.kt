@@ -59,6 +59,7 @@ class MainNewsFragment : BaseFragment() {
                 val tv_time = convertView.findViewById(R.id.tv_time) as TextView
                 val tv_from = convertView.findViewById(R.id.tv_from) as TextView
                 val tags = convertView.findViewById(R.id.tags) as FlowLayout
+                val tv_date = convertView.findViewById(R.id.tv_date) as TextView
 
 
                 override fun setData(view: View, data: NewsBean, position: Int) {
@@ -67,7 +68,18 @@ class MainNewsFragment : BaseFragment() {
                         label = label!!.replaceFirst(key, "<font color='#ff3300'>${key}</font>")
                     }
                     tv_summary.text = Html.fromHtml(label)
-                    tv_time.text = data.time
+                    val strTime = data.time
+                    tv_time.visibility = View.GONE
+                    if (!TextUtils.isEmpty(strTime)) {
+                        val strs = strTime!!.trim().split(" ")
+                        if (!TextUtils.isEmpty(strs.getOrNull(1))) {
+                            tv_time.visibility = View.VISIBLE
+                        }
+                        tv_date.text = strs
+                                .getOrNull(0)
+                        tv_time.text = strs
+                                .getOrNull(1)
+                    }
                     tv_from.text = data.source
                     tags.removeAllViews()
                     data.tag?.split("#")
@@ -196,8 +208,8 @@ class MainNewsFragment : BaseFragment() {
             ll_search.visibility = View.VISIBLE
             et_search.postDelayed({
                 et_search.inputType = InputType.TYPE_CLASS_TEXT
-                et_search.isFocusable=true
-                et_search.isFocusableInTouchMode=true
+                et_search.isFocusable = true
+                et_search.isFocusableInTouchMode = true
                 et_search.requestFocus()
                 Utils.toggleSoftInput(baseActivity, et_search)
             }, 100)

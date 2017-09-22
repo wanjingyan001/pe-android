@@ -43,7 +43,7 @@
     <color name="colorYellow">#fe942d</color>
     <color name="text_1">#282828</color>
     <color name="text_2">#666666</color>
-    <color name="text_3">#9d9d9d</color>
+    <color name="text_3">#a0a4aa</color>
 
     <color name="chart_highLight_color">#666</color>
     <color name="chart_kline_color">#4fcee9</color>

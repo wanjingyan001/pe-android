@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.text.Html
 import android.text.TextUtils
 import android.view.View
 import android.widget.TextView
@@ -161,21 +162,31 @@ class NewsListFragment : BaseFragment(), SupportEmptyView {
 
     inner class NewsHolder(view: View)
         : RecyclerHolder<NewsBean>(view) {
-        val tv_summary: TextView
-        val tv_time: TextView
-        val tv_from: TextView
-        val tags: FlowLayout
+        val tv_summary = convertView.findViewById(R.id.tv_summary) as TextView
+        val tv_time = convertView.findViewById(R.id.tv_time) as TextView
+        val tv_from = convertView.findViewById(R.id.tv_from) as TextView
+        val tags = convertView.findViewById(R.id.tags) as FlowLayout
+        val tv_date = convertView.findViewById(R.id.tv_date) as TextView
 
-        init {
-            tv_summary = view.find(R.id.tv_summary)
-            tv_time = view.find(R.id.tv_time)
-            tv_from = view.find(R.id.tv_from)
-            tags = view.find(R.id.tags)
-        }
 
         override fun setData(view: View, data: NewsBean, position: Int) {
-            tv_summary.text = data.title
-            tv_time.text = data.time
+            var label = data.title
+//            if (!TextUtils.isEmpty(label) && !TextUtils.isEmpty(key)) {
+//                label = label!!.replaceFirst(key, "<font color='#ff3300'>${key}</font>")
+//            }
+            tv_summary.text = Html.fromHtml(label)
+            val strTime = data.time
+            tv_time.visibility = View.GONE
+            if (!TextUtils.isEmpty(strTime)) {
+                val strs = strTime!!.trim().split(" ")
+                if (!TextUtils.isEmpty(strs.getOrNull(1))) {
+                    tv_time.visibility = View.VISIBLE
+                }
+                tv_date.text = strs
+                        .getOrNull(0)
+                tv_time.text = strs
+                        .getOrNull(1)
+            }
             tv_from.text = data.source
             tags.removeAllViews()
             data.tag?.split("#")
@@ -206,12 +217,8 @@ class NewsListFragment : BaseFragment(), SupportEmptyView {
             var isRead = isRead(data)
             if (isRead) {
                 tv_summary.textColor = resources.getColor(R.color.text_3)
-                tv_time.textColor = resources.getColor(R.color.text_3)
-                tv_from.textColor = resources.getColor(R.color.text_3)
             } else {
                 tv_summary.textColor = resources.getColor(R.color.text_1)
-                tv_time.textColor = resources.getColor(R.color.text_2)
-                tv_from.textColor = resources.getColor(R.color.text_2)
             }
 
         }

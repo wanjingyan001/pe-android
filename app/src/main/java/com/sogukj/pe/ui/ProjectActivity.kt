@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.text.Html
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.Menu
@@ -259,18 +260,33 @@ class ProjectActivity : ToolbarActivity() {
         lateinit var tv_time: TextView
         lateinit var tv_from: TextView
         lateinit var tags: FlowLayout
+        lateinit var tv_date: TextView
         override fun createView(inflater: LayoutInflater): View {
-            val view = inflater.inflate(R.layout.item_main_news, null)
-            tv_summary = view.find(R.id.tv_summary)
-            tv_time = view.find(R.id.tv_time)
-            tv_from = view.find(R.id.tv_from)
-            tags = view.find(R.id.tags)
-            return view
+            val convertView = inflater.inflate(R.layout.item_main_news, null)
+            tv_summary = convertView.find(R.id.tv_summary)
+            tv_time = convertView.find(R.id.tv_time)
+            tv_from = convertView.find(R.id.tv_from)
+            tags = convertView.find(R.id.tags)
+            tv_date = convertView.findViewById(R.id.tv_date) as TextView
+            return convertView
         }
 
         override fun showData(convertView: View, position: Int, data: NewsBean?) {
-            tv_summary.text = data?.title
-            tv_time.text = data?.time
+            var label = data?.title
+//                if (!TextUtils.isEmpty(label) && !TextUtils.isEmpty(key)) {
+//                    label = label!!.replaceFirst(key, "<font color='#ff3300'>${key}</font>")
+//                }
+            tv_summary.text = Html.fromHtml(label)
+            val strTime = data?.time
+            tv_time.visibility = View.GONE
+            if (!TextUtils.isEmpty(strTime)) {
+                val strs = strTime!!.trim().split(" ")
+                if (!TextUtils.isEmpty(strs.getOrNull(1))) {
+                    tv_time.visibility = View.VISIBLE
+                }
+                tv_date.text = strs.getOrNull(0)
+                tv_time.text = strs.getOrNull(1)
+            }
             tv_from.text = data?.source
             tags.removeAllViews()
             data?.tag?.split("#")
