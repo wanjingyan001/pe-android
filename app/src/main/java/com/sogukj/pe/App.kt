@@ -25,7 +25,8 @@ class App : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
         INSTANCE = this
-        MobSDK.init(this, "137b5c5ce8f55", "b28db523803b31a66b590150cb96c4fd")
+//        MobSDK.init(this, "137b5c5ce8f55", "b28db523803b31a66b590150cb96c4fd")
+        MobSDK.init(this, "214eaf8217e6c", "c1ddfcaa333020a5a06812bc745d508c")
         val mPushAgent = PushAgent.getInstance(this)
         mPushAgent.setDebugMode(false)
         mPushAgent.displayNotificationNumber = 0

@@ -13,8 +13,9 @@ class NewsBean : Serializable, NewsType {
     var company_id: Int? = null
     var table_id: Int? = null
     var data_id: Int? = null
-    var url: String = "http://mh5.stockalert.cn"
+    var url: String? = null
     var imgUrl: String? = null
+    var shareUrl: String = "http://pe.stockalert.cn"
 }
 //[{
 //    "title":"你好",

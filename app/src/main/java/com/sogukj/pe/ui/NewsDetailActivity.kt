@@ -129,7 +129,7 @@ class NewsDetailActivity : ToolbarActivity(), PlatformActionListener {
         val tvWexin = dialog.findViewById(R.id.tv_wexin) as TextView
         val tvQq = dialog.findViewById(R.id.tv_qq) as TextView
         val tvCopy = dialog.findViewById(R.id.tv_copy) as TextView
-        val shareUrl = news!!.url
+        val shareUrl = news!!.shareUrl
         val shareTitle = news!!.title
         val shareSummry = ""
         val shareImgUrl = File(Environment.getExternalStorageDirectory(), "img_logo.png").toString()
@@ -279,7 +279,10 @@ class NewsDetailActivity : ToolbarActivity(), PlatformActionListener {
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         val map = payload.payload
-                        map?.apply { setContent(table_id, this, data) }
+                        map?.apply {
+                            this.get("shareUrl")?.toString()?.apply { news?.shareUrl = this }
+                            setContent(table_id, this, data)
+                        }
                     } else
                         showToast(payload.message)
                 }, {})

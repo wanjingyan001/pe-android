@@ -281,7 +281,7 @@
                 android:value="com.sogukj.pe.wxapi.MyShareAdapter" />
 
             <intent-filter>
-                <data android:scheme="tencent1105223908" />
+                <data android:scheme="tencent1106375897" />
 
                 <action android:name="android.intent.action.VIEW" />
 
