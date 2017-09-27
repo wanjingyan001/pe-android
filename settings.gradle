@@ -1,2 +1,3 @@
 include ':app'
 include ':PushSDK'
+include ':shareSDK'

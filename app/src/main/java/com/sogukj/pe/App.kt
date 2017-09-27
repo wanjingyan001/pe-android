@@ -5,6 +5,7 @@ import android.content.Intent
 import android.support.multidex.MultiDexApplication
 import com.framework.base.ActivityHelper
 import com.google.gson.Gson
+import com.mob.MobSDK
 import com.sogukj.pe.bean.NewsBean
 import com.sogukj.pe.ui.NewsDetailActivity
 import com.sogukj.pe.util.Trace
@@ -24,6 +25,7 @@ class App : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
         INSTANCE = this
+        MobSDK.init(this, "137b5c5ce8f55", "b28db523803b31a66b590150cb96c4fd")
         val mPushAgent = PushAgent.getInstance(this)
         mPushAgent.setDebugMode(false)
         mPushAgent.displayNotificationNumber = 0

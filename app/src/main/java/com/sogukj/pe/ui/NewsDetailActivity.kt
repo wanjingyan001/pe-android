@@ -1,35 +1,229 @@
 package com.sogukj.pe.ui
 
+import android.Manifest
 import android.app.Activity
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Environment
+import android.os.Handler
+import android.os.Message
+import android.support.v4.app.ActivityCompat
 import android.text.Html
 import android.text.TextUtils
+import android.view.Gravity
+import android.view.MenuItem
 import android.view.View
+import android.view.WindowManager
 import android.webkit.WebSettings
 import android.webkit.WebSettings.LayoutAlgorithm
 import android.widget.TextView
+import android.widget.Toast
+import cn.sharesdk.framework.Platform
+import cn.sharesdk.framework.PlatformActionListener
+import cn.sharesdk.framework.ShareSDK
+import cn.sharesdk.sina.weibo.SinaWeibo
+import cn.sharesdk.system.text.ShortMessage
+import cn.sharesdk.tencent.qq.QQ
+import cn.sharesdk.tencent.qzone.QQClientNotExistException
+import cn.sharesdk.tencent.qzone.QZone
+import cn.sharesdk.wechat.friends.Wechat
+import cn.sharesdk.wechat.moments.WechatMoments
+import cn.sharesdk.wechat.utils.WechatClientNotExistException
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.NewsBean
 import com.sogukj.pe.util.Trace
+import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_news_detail.*
 import kotlinx.android.synthetic.main.item_main_news.*
 import org.jetbrains.anko.find
+import java.io.*
+import java.util.*
 
 /**
  * Created by qinfei on 17/8/11.
  */
-class NewsDetailActivity : ToolbarActivity() {
+class NewsDetailActivity : ToolbarActivity(), PlatformActionListener {
+    override fun onComplete(platform: Platform, i: Int, hashMap: HashMap<String, Any>) {
+        if (platform.name == WechatMoments.NAME) {// 判断成功的平台是不是朋友圈
+            mHandler.sendEmptyMessage(1)
+        } else if (platform.name == Wechat.NAME) {
+            mHandler.sendEmptyMessage(2)
+        } else if (platform.name == SinaWeibo.NAME) {
+            mHandler.sendEmptyMessage(3)
+        } else if (platform.name == QQ.NAME) {
+            mHandler.sendEmptyMessage(4)
+        } else if (platform.name == QZone.NAME) {
+            mHandler.sendEmptyMessage(5)
+        } else if (platform.name == ShortMessage.NAME) {
+            mHandler.sendEmptyMessage(6)
+        }
+    }
+
+    override fun onError(platform: Platform, i: Int, throwable: Throwable) {
+        throwable.printStackTrace()
+
+        if (throwable is WechatClientNotExistException) {
+            mHandler.sendEmptyMessage(8)
+        } else if (throwable is PackageManager.NameNotFoundException) {
+            mHandler.sendEmptyMessage(9)
+        } else if (throwable is QQClientNotExistException || throwable is cn.sharesdk.tencent.qq.QQClientNotExistException) {
+            mHandler.sendEmptyMessage(10)
+        } else {
+            mHandler.sendEmptyMessage(11)
+        }
+
+    }
+
+    override fun onCancel(platform: Platform, i: Int) {
+        mHandler.sendEmptyMessage(7)
+    }
+
+    var mHandler: Handler = object : Handler() {
+        override fun handleMessage(msg: Message) {
+            when (msg.what) {
+                1 -> Toast.makeText(this@NewsDetailActivity, "朋友圈分享成功", Toast.LENGTH_LONG).show()
+                2 -> Toast.makeText(this@NewsDetailActivity, "微信分享成功", Toast.LENGTH_LONG).show()
+                3 -> Toast.makeText(this@NewsDetailActivity, "新浪微博分享成功", Toast.LENGTH_LONG).show()
+                4 -> Toast.makeText(this@NewsDetailActivity, "QQ分享成功", Toast.LENGTH_LONG).show()
+                5 -> Toast.makeText(this@NewsDetailActivity, "QQ空间分享成功", Toast.LENGTH_LONG).show()
+                6 -> Toast.makeText(this@NewsDetailActivity, "短信分享成功", Toast.LENGTH_LONG).show()
+                7 -> Toast.makeText(this@NewsDetailActivity, "取消分享", Toast.LENGTH_LONG).show()
+                8 -> Toast.makeText(this@NewsDetailActivity, "请安装微信", Toast.LENGTH_LONG).show()
+                9 -> Toast.makeText(this@NewsDetailActivity, "请安装微博", Toast.LENGTH_LONG).show()
+                10 -> Toast.makeText(this@NewsDetailActivity, "请安装QQ", Toast.LENGTH_LONG).show()
+                11 -> Toast.makeText(this@NewsDetailActivity, "分享失败", Toast.LENGTH_LONG).show()
+                else -> {
+                }
+            }
+        }
+
+    }
+
     fun appendLine(k: String, v: Any?) {
         buff.append("$k：<font color='#666666'>${if (v == null) "" else v}</font><br/>")
     }
 
+    override val menuId: Int
+        get() = R.menu.menu_share
+
+    fun share() {
+        if (news == null)
+            return
+        val dialog = Dialog(this, R.style.AppTheme_Dialog)
+        dialog.setContentView(R.layout.dialog_share)
+        val lay = dialog.getWindow()!!.getAttributes()
+        lay.height = WindowManager.LayoutParams.WRAP_CONTENT
+        lay.width = WindowManager.LayoutParams.MATCH_PARENT
+        lay.gravity = Gravity.BOTTOM
+        dialog.getWindow()!!.setAttributes(lay)
+        dialog.show()
+
+        val tvWexin = dialog.findViewById(R.id.tv_wexin) as TextView
+        val tvQq = dialog.findViewById(R.id.tv_qq) as TextView
+        val tvCopy = dialog.findViewById(R.id.tv_copy) as TextView
+        val shareUrl = news!!.url
+        val shareTitle = news!!.title
+        val shareSummry = ""
+        val shareImgUrl = File(Environment.getExternalStorageDirectory(), "img_logo.png").toString()
+        tvCopy.setOnClickListener {
+            dialog.dismiss()
+            Utils.copy(this, "url")
+            showToast("已复制")
+        }
+        tvQq.setOnClickListener {
+            dialog.dismiss()
+            val sp = Platform.ShareParams()
+            sp.setTitle(shareTitle)
+//            sp.setText(shareSummry)
+            sp.setImageUrl(shareImgUrl)//网络图片rul
+            sp.setTitleUrl(shareUrl)
+            val qq = ShareSDK.getPlatform(QQ.NAME)
+            qq.platformActionListener = this
+            qq.share(sp)
+        }
+        tvWexin.setOnClickListener {
+            dialog.dismiss()
+            val sp = cn.sharesdk.framework.Platform.ShareParams()
+            sp.setShareType(cn.sharesdk.framework.Platform.SHARE_WEBPAGE)//非常重要：一定要设置分享属性
+            sp.setTitle(shareTitle)  //分享标题
+//            sp.setText(shareSummry)   //分享文本
+            if (null != news!!.imgUrl) {
+                sp.imageUrl = shareImgUrl//网络图片rul
+            } else {
+                sp.imagePath = shareImgUrl//
+            }
+            sp.setUrl(shareUrl)
+            val wechat = ShareSDK.getPlatform(Wechat.NAME)
+            wechat.platformActionListener = this
+            wechat.share(sp)
+        }
+
+    }
+
+    private fun copyAssets(filename: String) {
+        val assetManager = assets
+        var `in`: InputStream? = null
+        var out: OutputStream? = null
+        try {
+            `in` = assetManager.open(filename)
+
+            val outFile = File(Environment.getExternalStorageDirectory(), filename)
+            out = FileOutputStream(outFile)
+            copyFile(`in`, out)
+            `in`!!.close()
+            out.flush()
+            out.close()
+        } catch (e: IOException) {
+            Trace.e("tag", "Failed to copy asset file: " + filename, e)
+        }
+
+    }
+
+    @Throws(IOException::class)
+    private fun copyFile(`in`: InputStream, out: OutputStream) {
+        val buffer = ByteArray(1024)
+        var read: Int
+        while (true) {
+            read = `in`.read(buffer)
+            if (read == -1) break
+            out.write(buffer, 0, read)
+        }
+    }
+
+    private val PERMISSIONS_STORAGE = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
+    fun verifyStoragePermissions(activity: Activity) {
+        // Check if we have write permission
+        val permission = ActivityCompat.checkSelfPermission(activity,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE,
+                    1)
+
+        }
+
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.action_share -> {
+                share()
+            }
+        }
+        return false
+    }
+
+    var news: NewsBean? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_news_detail)
@@ -59,7 +253,7 @@ class NewsDetailActivity : ToolbarActivity() {
         webSettings.setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
 
 
-        val news = intent.getSerializableExtra(Extras.DATA) as NewsBean?
+        news = intent.getSerializableExtra(Extras.DATA) as NewsBean?
         news?.apply {
             if (table_id == 13) {
                 webview.visibility = View.VISIBLE
@@ -72,6 +266,8 @@ class NewsDetailActivity : ToolbarActivity() {
             if (null != table_id && null != data_id)
                 doRequest(table_id!!, data_id!!, this);
         }
+        verifyStoragePermissions(this)
+        copyAssets("img_logo.png")
     }
 
     fun doRequest(table_id: Int, data_id: Int, data: NewsBean) {
