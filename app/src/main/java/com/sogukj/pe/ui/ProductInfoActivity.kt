@@ -63,7 +63,7 @@ class ProductInfoActivity : ToolbarActivity() {
                     tvCompany.text = Html.fromHtml(getString(R.string.tv_proj_product_company, data.companyName))
                     Glide.with(this@ProductInfoActivity)
                             .load(data.icon)
-                            .error(R.drawable.img_user_default)
+                            .error(R.drawable.img_logo_user)
                             .into(ivUser)
                     tvRound.visibility = View.GONE
                     data.round?.trim()?.takeIf {

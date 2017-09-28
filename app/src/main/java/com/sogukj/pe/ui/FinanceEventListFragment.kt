@@ -60,7 +60,7 @@ class FinanceEventListFragment : BaseFragment(),SupportEmptyView {
                     tvCompany.text = Html.fromHtml(getString(R.string.tv_proj_product_company, data.organization_name))
                     Glide.with(baseActivity!!)
                             .load(data.iconOssPath)
-                            .error(R.drawable.img_user_default)
+                            .error(R.drawable.img_logo_user)
                             .into(ivUser)
                 }
 

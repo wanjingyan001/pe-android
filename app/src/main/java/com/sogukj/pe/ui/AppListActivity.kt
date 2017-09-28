@@ -55,7 +55,7 @@ class AppListActivity : ToolbarActivity() ,SupportEmptyView{
                 override fun setData(view: View, data: AppBean, position: Int) {
                     Glide.with(this@AppListActivity)
                             .load(data.icon)
-                            .error(R.drawable.img_user_default)
+                            .error(R.drawable.img_logo_user)
                             .into(ivLogo)
                     tvBrief.text = getString(R.string.tv_proj_app_brif, Html.fromHtml(data.brief))
                     tvClasses.text = "类型：${data.classes}"

@@ -69,7 +69,7 @@ class UserEditActivity : ToolbarActivity() {
             if (!TextUtils.isEmpty(url))
                 Glide.with(this@UserEditActivity)
                         .load(headImage())
-                        .error(R.drawable.img_user_default)
+                        .error(R.drawable.img_logo_user)
                         .into(iv_user)
         }
         tv_depart.setOnClickListener {
@@ -309,7 +309,7 @@ class UserEditActivity : ToolbarActivity() {
         user.url = url
         Glide.with(this@UserEditActivity)
                 .load(url)
-                .error(R.drawable.img_user_default)
+                .error(R.drawable.img_logo_user)
                 .into(iv_user)
         val imgPath = compressImage(url, 160, 160, 1024 * 1024)
         val file = File(imgPath)

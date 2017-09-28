@@ -57,7 +57,7 @@ class CoreTeamActivity : ToolbarActivity() ,SupportEmptyView{
                     tvDesc.text = data.desc
                     Glide.with(this@CoreTeamActivity)
                             .load(data.icon)
-                            .error(R.drawable.img_user_default)
+                            .error(R.drawable.img_logo_user)
                             .into(ivUser)
 
                 }

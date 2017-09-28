@@ -58,7 +58,7 @@ class BusinessEventsActivity : ToolbarActivity(),SupportEmptyView {
                     tvDesc.text = "${getString(R.string.tv_proj_product_type)}${data.hangye}"
                     Glide.with(this@BusinessEventsActivity)
                             .load(data.logo)
-                            .error(R.drawable.img_user_default)
+                            .error(R.drawable.img_logo_user)
                             .into(ivUser)
 
                 }

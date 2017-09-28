@@ -14,7 +14,7 @@
         android:layout_gravity="center"
         android:layout_marginRight="10dp"
         android:gravity="center"
-        android:src="@drawable/img_user_default" />
+        android:src="@drawable/img_logo_user" />
 
     <LinearLayout
         android:layout_width="match_parent"

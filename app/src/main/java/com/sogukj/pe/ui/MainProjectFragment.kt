@@ -163,7 +163,7 @@ class MainProjectFragment : BaseFragment() {
             if (null != url)
                 Glide.with(baseActivity)
                         .load(headImage())
-                        .error(R.drawable.img_user_default)
+                        .error(R.drawable.img_logo_user)
                         .into(iv_user)
         }
 

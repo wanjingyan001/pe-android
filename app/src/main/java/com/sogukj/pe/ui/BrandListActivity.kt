@@ -62,7 +62,7 @@ class BrandListActivity : ToolbarActivity(),SupportEmptyView {
                     tvIntCls.text = "类别:${data.intCls}"
                     Glide.with(this@BrandListActivity)
                             .load(data.tmPic)
-                            .error(R.drawable.img_user_default)
+                            .error(R.drawable.img_logo_user)
                             .into(ivLogo)
                 }
 

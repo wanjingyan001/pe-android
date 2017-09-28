@@ -126,7 +126,7 @@ class UserActivity : ToolbarActivity() {
             if (!TextUtils.isEmpty(url))
                 Glide.with(this@UserActivity)
                         .load(headImage())
-                        .error(R.drawable.img_user_default)
+                        .error(R.drawable.img_logo_user)
                         .into(iv_user)
         }
     }
