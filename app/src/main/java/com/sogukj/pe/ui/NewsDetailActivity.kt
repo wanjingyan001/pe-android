@@ -459,11 +459,31 @@ class NewsDetailActivity : ToolbarActivity(), PlatformActionListener {
 //        appendLine("抵押物信息", map["pawnInfoList"])
 //        appendLine("抵押人信息", map["peopleInfoList"])
         appendLine("抵押物信息", "")
+        try {
+            val list = map["pawnInfoList"] as List<Map<String, String>>
+            list.forEach { map ->
+                appendLine("  名称", map["pawnName"])
+                appendLine("  数量、质量、状况、所在地等情况", map["detail"])
+                appendLine("  所有权归属", map["ownership"])
+            }
+        } catch (e: Exception) {
+
+        }
+        appendLine("抵押人信息", "")
+        try {
+            val list = map["peopleInfoList"] as List<Map<String, String>>
+            list.forEach { map ->
+                appendLine("  抵押权人名称", map["peopleName"])
+                appendLine("  抵押权人证照/证件类型", map["liceseType"])
+                appendLine("  证照/证件号码", map["licenseNum"])
+            }
+        } catch (e: Exception) {
+
+        }
         val json1 = map["pawnInfoList"]
         json1?.apply {
 
         }
-        appendLine("抵押人信息", "")
         val json2 = map["peopleInfoList"]
         json2.apply {
 
