@@ -89,7 +89,7 @@
         Id="6" SortId="7" />
 
     <!-- ShareByAppClient标识是否使用微博客户端分享，默认是false -->
-    <QQ AppId="1105223908" AppKey="yxQQ17gGsP32SXN0" Enable="true" Id="7" ShareByAppClient="true"
+    <QQ AppId="1106375897" AppKey="bW40VbILxy6rqHhJ" Enable="true" Id="7" ShareByAppClient="true"
         SortId="4" />
 
     <Facebook ConsumerKey="107704292745179" ConsumerSecret="38053202e1a5fe26c80c753071f0b573" Enable="true"
