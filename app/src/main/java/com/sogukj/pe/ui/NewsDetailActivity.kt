@@ -140,7 +140,7 @@ class NewsDetailActivity : ToolbarActivity(), PlatformActionListener {
         val shareImgUrl = File(Environment.getExternalStorageDirectory(), "img_logo.png").toString()
         tvCopy.setOnClickListener {
             dialog.dismiss()
-            Utils.copy(this, shareImgUrl)
+            Utils.copy(this, shareUrl)
             showToast("已复制")
         }
         tvQq.setOnClickListener {
