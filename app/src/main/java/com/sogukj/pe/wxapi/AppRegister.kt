@@ -7,7 +7,7 @@ import com.tencent.mm.sdk.openapi.WXAPIFactory
 
 
 class AppRegister : BroadcastReceiver() {
-    var WEECHAT_ID = "wxf3a9c44cb15f4bc2"
+    var WEECHAT_ID = "wxda5922908a178f1c"
 
     override fun onReceive(context: Context, intent: Intent) {
         val msgApi = WXAPIFactory.createWXAPI(context, null)

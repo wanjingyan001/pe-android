@@ -114,6 +114,11 @@ class NewsDetailActivity : ToolbarActivity(), PlatformActionListener {
     override val menuId: Int
         get() = R.menu.menu_share
 
+    override fun setTitle(titleRes: CharSequence?) {
+        super.setTitle(titleRes)
+        news?.shareTitle = titleRes.toString()
+    }
+
     fun share() {
         if (news == null)
             return
@@ -130,8 +135,8 @@ class NewsDetailActivity : ToolbarActivity(), PlatformActionListener {
         val tvQq = dialog.findViewById(R.id.tv_qq) as TextView
         val tvCopy = dialog.findViewById(R.id.tv_copy) as TextView
         val shareUrl = news!!.shareUrl
-        val shareTitle = news!!.title
-        val shareSummry = ""
+        val shareTitle = news!!.shareTitle
+        val shareSummry = news!!.title
         val shareImgUrl = File(Environment.getExternalStorageDirectory(), "img_logo.png").toString()
         tvCopy.setOnClickListener {
             dialog.dismiss()
@@ -142,7 +147,7 @@ class NewsDetailActivity : ToolbarActivity(), PlatformActionListener {
             dialog.dismiss()
             val sp = Platform.ShareParams()
             sp.setTitle(shareTitle)
-//            sp.setText(shareSummry)
+            sp.setText(shareSummry)
             sp.setImageUrl(shareImgUrl)//网络图片rul
             sp.setTitleUrl(shareUrl)
             val qq = ShareSDK.getPlatform(QQ.NAME)
@@ -154,7 +159,7 @@ class NewsDetailActivity : ToolbarActivity(), PlatformActionListener {
             val sp = cn.sharesdk.framework.Platform.ShareParams()
             sp.setShareType(cn.sharesdk.framework.Platform.SHARE_WEBPAGE)//非常重要：一定要设置分享属性
             sp.setTitle(shareTitle)  //分享标题
-//            sp.setText(shareSummry)   //分享文本
+            sp.setText(shareSummry)   //分享文本
             if (null != news!!.imgUrl) {
                 sp.imageUrl = shareImgUrl//网络图片rul
             } else {
@@ -376,6 +381,7 @@ class NewsDetailActivity : ToolbarActivity(), PlatformActionListener {
     }
 
     fun set13(map: Map<String, Object?>, data: NewsBean) {
+        news?.shareTitle = "新闻舆情"
         val title = if (TextUtils.isEmpty(data.title)) "" else "<h1 style='color:#333;font-size:18px;'>${data.title}</h1>"
         val head = "<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\"> " +
                 "<style>img{max-width: 100%; height:auto;} .reduce-font p{font-size:" + fontSize + "px!important;}</style>" +

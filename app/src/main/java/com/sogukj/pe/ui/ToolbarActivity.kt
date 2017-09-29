@@ -12,7 +12,7 @@ import com.sogukj.pe.R
  */
 abstract class ToolbarActivity : BaseActivity() {
 
-    open  val titleId: Int
+    open val titleId: Int
         get() = 0
 
     open val menuId: Int
@@ -49,7 +49,7 @@ abstract class ToolbarActivity : BaseActivity() {
 //            supportActionBar?.setDisplayHomeAsUpEnabled(displayHomeAsUpEnabled)
 
             this.background.alpha = 255
-            this.setBackgroundColor(resources.getColor(R.color.colorPrimary))
+            this.setBackgroundColor(resogit urces.getColor(R.color.colorPrimary))
         }
     }
 
@@ -65,23 +65,21 @@ abstract class ToolbarActivity : BaseActivity() {
         }
 
     override fun setTitle(resId: Int) {
-        toolbar?.apply {
-            if (toolbar?.findViewById(R.id.toolbar_title) != null) {
+        if (null != toolbar)
+            if (toolbar!!.findViewById(R.id.toolbar_title) != null) {
                 if (resId != 0) {
                     (toolbar?.findViewById(R.id.toolbar_title) as TextView).setText(resId)
                 }
             }
-        }
     }
 
     override fun setTitle(titleRes: CharSequence?) {
-        if (toolbar != null) {
-            if (toolbar?.findViewById(R.id.toolbar_title) != null) {
+        if (null != toolbar)
+            if (toolbar!!.findViewById(R.id.toolbar_title) != null) {
                 if (titleRes != null) {
-                    (toolbar?.findViewById(R.id.toolbar_title) as TextView).text = titleRes
+                    (toolbar?.findViewById(R.id.toolbar_title) as TextView).setText(titleRes)
                 }
             }
-        }
     }
 
     override fun setContentView(layoutResID: Int) {

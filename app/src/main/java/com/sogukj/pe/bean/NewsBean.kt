@@ -16,6 +16,7 @@ class NewsBean : Serializable, NewsType {
     var url: String? = null
     var imgUrl: String? = null
     var shareUrl: String = "http://pe.stockalert.cn"
+    var shareTitle: String = "新闻舆情"
 }
 //[{
 //    "title":"你好",
