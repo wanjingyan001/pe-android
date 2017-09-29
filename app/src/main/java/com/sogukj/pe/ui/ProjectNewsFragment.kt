@@ -25,7 +25,6 @@ import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_list_project_news.*
-import org.jetbrains.anko.find
 import java.text.SimpleDateFormat
 
 /**
@@ -149,31 +148,7 @@ class ProjectNewsFragment : BaseFragment(), SupportEmptyView {
                         .getOrNull(1)
             }
             tv_from.text = data.source
-            tags.removeAllViews()
-            data.tag?.split("#")
-                    ?.forEach { str ->
-                        if (!TextUtils.isEmpty(str)) {
-                            val itemRes = when (str!!) {
-                                "财务风险", "坏账增加", "经营风险",
-                                "法律风险", "财务造假", "诉讼判决",
-                                "违规违法"
-                                -> R.layout.item_tag_news_1
-                                "负面", "业绩不佳", "市场份额下降",
-                                "企业风险", "系统风险", "操作风险",
-                                "技术风险"
-                                -> R.layout.item_tag_news_2
-                                "股权转让", "人事变动", "内部重组"
-                                    , "股权出售", "质押担保", "行业企业重大事件"
-                                -> R.layout.item_tag_news_3
-                                "重大" -> R.layout.item_tag_news_5
-                                else -> R.layout.item_tag_news_4
-                            }
-                            val itemTag = View.inflate(baseActivity, itemRes, null)
-                            val tvTag = itemTag.find<TextView>(R.id.tv_tag)
-                            tvTag.text = str
-                            tags.addView(itemTag)
-                        }
-                    }
+            data.setTags(baseActivity!!, tags)
         }
 
     }
