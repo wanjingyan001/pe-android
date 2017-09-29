@@ -49,7 +49,7 @@ abstract class ToolbarActivity : BaseActivity() {
 //            supportActionBar?.setDisplayHomeAsUpEnabled(displayHomeAsUpEnabled)
 
             this.background.alpha = 255
-            this.setBackgroundColor(resogit urces.getColor(R.color.colorPrimary))
+            this.setBackgroundColor(resources.getColor(R.color.colorPrimary))
         }
     }
 

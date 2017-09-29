@@ -140,7 +140,7 @@ class NewsDetailActivity : ToolbarActivity(), PlatformActionListener {
         val shareImgUrl = File(Environment.getExternalStorageDirectory(), "img_logo.png").toString()
         tvCopy.setOnClickListener {
             dialog.dismiss()
-            Utils.copy(this, "url")
+            Utils.copy(this, shareImgUrl)
             showToast("已复制")
         }
         tvQq.setOnClickListener {
@@ -295,7 +295,18 @@ class NewsDetailActivity : ToolbarActivity(), PlatformActionListener {
 
     fun setSubview(data: NewsBean) {
         tv_summary.text = data.title
-        tv_time.text = data.time
+        val strTime = data.time
+        tv_time.visibility = View.GONE
+        if (!TextUtils.isEmpty(strTime)) {
+            val strs = strTime!!.trim().split(" ")
+            if (!TextUtils.isEmpty(strs.getOrNull(1))) {
+                tv_time.visibility = View.VISIBLE
+            }
+            tv_date.text = strs
+                    .getOrNull(0)
+            tv_time.text = strs
+                    .getOrNull(1)
+        }
         tv_from.text = data.source
         tags.removeAllViews()
         data.tag?.split("#")
