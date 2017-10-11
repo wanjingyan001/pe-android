@@ -18,12 +18,6 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * 文件工具类
- *
- * @author Mars
- */
 public class FileUtil {
 	private static final String TAG = FileUtil.class.getSimpleName();
 

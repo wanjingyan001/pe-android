@@ -15,8 +15,10 @@ import kotlinx.android.synthetic.main.activity_main.*
  */
 class MainActivity : BaseActivity() {
 
-    val fragmentNews = MainNewsFragment.newInstance()
-    val fragmentProject = MainProjectFragment.newInstance()
+    val fgProj = MainProjectFragment.newInstance()
+    val fgMsg = MsgCenterFragment.newInstance()
+    val fgHome = HomeFragment.newInstance()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -29,13 +31,14 @@ class MainActivity : BaseActivity() {
         App.INSTANCE.resetPush(true)
     }
 
-    var checkId = R.id.rb_news;
+    var checkId = R.id.rb_home
 
     fun doCheck(checkedId: Int) {
         this.checkId = checkedId
         val fragment = when (checkId) {
-            R.id.rb_news -> fragmentNews
-            else -> fragmentProject
+            R.id.rb_msg -> fgMsg
+            R.id.rb_project -> fgProj
+            else -> fgHome
         }
         supportFragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)

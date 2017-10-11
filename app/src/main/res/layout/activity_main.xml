@@ -26,7 +26,7 @@
         android:padding="5dp">
 
         <RadioButton
-            android:id="@+id/rb_news"
+            android:id="@+id/rb_msg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -37,6 +37,21 @@
             android:drawableTop="@drawable/ic_tab_main_news"
             android:gravity="center"
             android:text="资讯"
+            android:textColor="@color/tx_checkable"
+            android:textSize="10sp" />
+
+        <RadioButton
+            android:id="@+id/rb_home"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@null"
+            android:button="@null"
+            android:checked="true"
+            android:drawableTop="@drawable/ic_tab_main_news"
+            android:gravity="center"
+            android:text="首页"
             android:textColor="@color/tx_checkable"
             android:textSize="10sp" />
 

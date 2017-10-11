@@ -21,9 +21,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * Created by Mars on 2016/3/2.
- */
 public class PdfUtil {
 
     public static void opendPdf(Context context, File file) {
