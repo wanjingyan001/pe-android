@@ -9,6 +9,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Html
+import android.text.TextUtils
 import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
@@ -45,36 +46,40 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
     override val containerViewId: Int
         get() = R.layout.fragment_list_project//To change initializer of created properties use File | Settings | File Templates.
     lateinit var adapter: RecyclerAdapter<ProjectBean>
-    var index: Int = 0
     var type: Int? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        index = arguments.getInt(Extras.INDEX)
-        type = when (index) {
-            0 -> 2;
-            1 -> 3;
-            3 -> 1;
-            else -> 1
-        };
+        type = arguments.getInt(Extras.TYPE)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        ll_header2.visibility = if (index == 2) View.VISIBLE else View.GONE
-        ll_header.visibility = if (index != 2) View.VISIBLE else View.GONE
-        adapter = RecyclerAdapter<ProjectBean>(baseActivity!!, { _adapter, parent, type ->
-            if (index != 2)
-                ProjectHolder(_adapter.getView(R.layout.item_main_project, parent))
-            else
-                ProjectHolder(_adapter.getView(R.layout.item_main_project_2, parent))
+        tv_add_cb.setOnClickListener {
+            StoreProjectAddActivity.startAdd(baseActivity)
+        }
+        tv_add_cb.visibility = if (type == TYPE_CB) View.VISIBLE else View.GONE
+        ll_header.visibility = if (type == TYPE_CB) View.VISIBLE else View.GONE
+        ll_header2.visibility = if (type == TYPE_LX) View.VISIBLE else View.GONE
+        ll_header1.visibility = if (type == TYPE_GZ || type == TYPE_YT) View.VISIBLE else View.GONE
+        adapter = RecyclerAdapter<ProjectBean>(baseActivity!!, { _adapter, parent, t ->
+            when (type) {
+                TYPE_GZ, TYPE_YT -> ProjectHolder(_adapter.getView(R.layout.item_main_project, parent))
+                TYPE_LX -> ProjectHolder(_adapter.getView(R.layout.item_main_project_2, parent))
+                TYPE_CB -> StoreProjectHolder(_adapter.getView(R.layout.item_main_project_3, parent))
+                else -> throw IllegalArgumentException()
+            }
+
         })
         adapter.onItemClick = { v, p ->
             val project = adapter.getItem(p);
-            ProjectActivity.start(baseActivity, project)
+            if (type == TYPE_CB)
+                StoreProjectAddActivity.startView(baseActivity)
+            else
+                ProjectActivity.start(baseActivity, project)
         }
 
         val user = Store.store.getUser(baseActivity!!)
-        if (index != 1 && user?.is_admin == 1)
+        if (type != TYPE_GZ && user?.is_admin == 1)
             adapter.onItemLongClick = { v, p ->
                 editOptions(v, p)
                 true
@@ -209,7 +214,7 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                     .negativeText("取消")
                     .show()
         }
-        if (index == 0) tvAdd.visibility = View.GONE
+        if (type == TYPE_YT) tvAdd.visibility = View.GONE
         pop.isTouchable = true
         pop.isFocusable = true
         pop.isOutsideTouchable = true
@@ -252,13 +257,77 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                         showToast("添加拟投成功")
                         adapter.dataList.removeAt(position)
                         adapter.notifyDataSetChanged()
-                    } else
-                        showToast(payload.message)
+                    } else showToast(payload.message)
                 }, { e ->
                     Trace.e(e)
                     showToast("添加拟投失败")
                 })
 
+    }
+
+    inner class StoreProjectHolder(convertView: View)
+        : RecyclerHolder<ProjectBean>(convertView) {
+
+
+        val tvTitle: TextView
+        val btnAdd: TextView
+        val tvDate: TextView
+        val tvTime: TextView
+        val tvEdit: TextView
+        val tvDel: TextView
+
+        init {
+            tvTitle = convertView.findViewById(R.id.tv_title) as TextView
+            btnAdd = convertView.findViewById(R.id.btn_add) as TextView
+            tvDate = convertView.findViewById(R.id.tv_date) as TextView
+            tvTime = convertView.findViewById(R.id.tv_time) as TextView
+            tvEdit = convertView.findViewById(R.id.tv_edit) as TextView
+            tvDel = convertView.findViewById(R.id.tv_del) as TextView
+
+        }
+
+        override fun setData(view: View, data: ProjectBean, position: Int) {
+            var label = data.name
+            data.shortName?.apply { label = this }
+            tvTitle.text = Html.fromHtml(label)
+            val strTime = data.add_time
+            tvTime.visibility = View.GONE
+            if (!TextUtils.isEmpty(strTime)) {
+                val strs = strTime!!.trim().split(" ")
+                if (!TextUtils.isEmpty(strs.getOrNull(1))) {
+                    tvTime.visibility = View.VISIBLE
+                }
+                tvDate.text = strs
+                        .getOrNull(0)
+                tvTime.text = strs
+                        .getOrNull(1)
+            }
+
+            btnAdd.setOnClickListener {
+                doSetUp(position, data)
+            }
+            tvEdit.setOnClickListener {
+                StoreProjectAddActivity.startEdit(baseActivity)
+            }
+            tvDel.setOnClickListener {
+                doDel(position)
+            }
+        }
+
+    }
+
+    fun doSetUp(position: Int, data: ProjectBean) {
+        SoguApi.getService(baseActivity!!.application)
+                .setUpProject(data.company_id!!)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        showToast("修改成功")
+                        adapter.dataList.removeAt(position)
+                        adapter.notifyDataSetChanged()
+                    }
+                }, { e -> Trace.e(e) })
     }
 
     inner class ProjectHolder(view: View)
@@ -330,11 +399,15 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
 
     companion object {
         val TAG = ProjectListFragment::class.java.simpleName
+        const val TYPE_CB = 4
+        const val TYPE_LX = 1
+        const val TYPE_YT = 2
+        const val TYPE_GZ = 3
 
-        fun newInstance(idx: Int): ProjectListFragment {
+        fun newInstance(type: Int): ProjectListFragment {
             val fragment = ProjectListFragment()
             val intent = Bundle()
-            intent.putInt(Extras.INDEX, idx)
+            intent.putInt(Extras.TYPE, type)
             fragment.arguments = intent
             return fragment
         }

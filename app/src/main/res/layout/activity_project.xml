@@ -623,6 +623,68 @@
                     android:drawableTop="@drawable/ic_proj_qyzs"
                     android:text="企业证书" />
             </GridLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="@color/divider" />
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <View
+                    android:layout_width="5dp"
+                    android:layout_height="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@color/color_main" />
+
+                <TextView
+                    style="@style/SoguTextNormal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="海通数据" />
+            </LinearLayout>
+
+            <GridLayout
+                android:id="@+id/gl_htdata"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:columnCount="4"
+                android:padding="10dp"
+                android:rowCount="2">
+
+                <com.sogukj.pe.view.TipsView
+                    android:id="@+id/tv_cwsj"
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_cwsj"
+                    android:tag="tv_cwsj"
+                    android:text="财务数据" />
+
+                <com.sogukj.pe.view.TipsView
+                    android:id="@+id/tv_gdzx"
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_gdzx"
+                    android:tag="tv_gdzx"
+                    android:text="股东征信" />
+
+                <com.sogukj.pe.view.TipsView
+                    android:id="@+id/tv_xmws"
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_xmws"
+                    android:tag="tv_xmws"
+                    android:text="项目文书" />
+
+                <com.sogukj.pe.view.TipsView
+                    android:id="@+id/tv_xmzy"
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_xmgy"
+                    android:tag="tv_xmzw"
+                    android:text="项目概要" />
+            </GridLayout>
         </LinearLayout>
     </ScrollView>
 

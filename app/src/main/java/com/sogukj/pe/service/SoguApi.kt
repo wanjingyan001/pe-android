@@ -3,6 +3,7 @@ package com.sogukj.service
 import android.app.Application
 import com.sogukj.pe.Consts
 import com.sogukj.pe.util.Trace
+import com.sogukj.util.Store
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -21,14 +22,15 @@ class SoguApi {
         this.context = context
         val client = OkHttpClient.Builder()
                 .addInterceptor { chain ->
-                    val request = chain.request()
+                    val builder = chain.request().newBuilder()
+                    val user = Store.store.getUser(context);
+                    if (null != user && null != user.uid) {
+                        builder.addHeader("uid", user.uid.toString())
+                    }
+                    builder.addHeader("appkey", "d5f17cafef0829b5")
+                    val request = builder.build()
                     val response = chain.proceed(request)
                     Trace.i("http", "${request.url()} => ${response.code()}:${response.message()}")
-//                    if (request.method() == "POST")
-//                    {
-//                        val body=request.body() as FormBody
-//                        Trace.i("http", "${body.toString()}")
-//                    }
                     response
                 }
                 .readTimeout(10, TimeUnit.SECONDS)
@@ -50,7 +52,8 @@ class SoguApi {
 
         private var sApi: SoguApi? = null
 
-        @Synchronized fun getApi(ctx: Application): SoguApi {
+        @Synchronized
+        fun getApi(ctx: Application): SoguApi {
             if (null == sApi) sApi = SoguApi(ctx)
             return sApi!!
         }

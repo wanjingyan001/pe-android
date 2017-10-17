@@ -15,6 +15,64 @@
         android:padding="8dp">
 
         <LinearLayout
+            android:id="@+id/ll_order_name_1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="项目名称"
+                android:textColor="@color/text_1"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/iv_sort_name_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_down"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_order_time_1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="添加日期"
+                android:textColor="@color/text_1"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/iv_sort_time_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_down" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/ll_header1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_gray_light"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:visibility="gone">
+
+        <LinearLayout
             android:id="@+id/ll_order_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -126,6 +184,20 @@
 
 
     </LinearLayout>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:background="@drawable/bg_border_round_blue"
+        android:gravity="center"
+        android:paddingBottom="10dp"
+        android:paddingLeft="30dp" android:id="@+id/tv_add_cb"
+        android:paddingRight="30dp"
+        android:paddingTop="10dp"
+        android:text="添加储备项目+" />
 
     <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"

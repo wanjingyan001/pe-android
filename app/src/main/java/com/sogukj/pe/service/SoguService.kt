@@ -452,6 +452,85 @@ interface SoguService {
             , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
     ): Observable<Payload<String>>
 
+    /*
+    name	varchar		公司名称	必传参数（非空）
+    uid	int		用户id	必传参数（非空）
+    info	text		相关概念	可空
+    estiblishTime	date		成立时间	可空(日期形式例如2017-01-01)
+    enterpriseType	varchar		企业性质	可空
+    regCapital	varchar		注册资金	可空
+    mainBusiness	varchar		主营业务	可空
+    ownershipRatio	varchar		股权比例	可空
+    lastYearIncome	varchar		去年营收	可空
+    lastYearProfit	varchar		去年利润	可空
+    ThisYearIncome	varchar		今年营收	可空
+    ThisYearProfit	varchar		今年利润	可空
+    lunci	varchar		融资轮次	可空
+    appraisement	varchar		投后估值	可空
+    financeUse	varchar		融资用途	可空
+    capitalPlan	varchar		资本规划	可空
+     */
+    @FormUrlEncoded
+    @POST("/api/news/addStoreProject")
+    fun addStoreProject(
+            @Field("name") name: String
+            , @Field("info") info: String? = null
+            , @Field("estiblishTime") estiblishTime: String? = null//yyyy-MM-dd
+            , @Field("enterpriseType") enterpriseType: String? = null
+            , @Field("regCapital") regCapital: String? = null
+            , @Field("mainBusiness") mainBusiness: String? = null
+            , @Field("ownershipRatio") ownershipRatio: String? = null
+            , @Field("lastYearIncome") lastYearIncome: String? = null
+            , @Field("lastYearProfit") lastYearProfit: String? = null
+            , @Field("thisYearIncome") thisYearIncome: String? = null
+            , @Field("thisYearProfit") thisYearProfit: String? = null
+            , @Field("lunci") lunci: String? = null
+            , @Field("appraisement") appraisement: String? = null
+            , @Field("financeUse") financeUse: String? = null
+            , @Field("capitalPlan") capitalPlan: String? = null
+            , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
+    ): Observable<Payload<Object>>
+
+    @FormUrlEncoded
+    @POST("/api/news/editStoreProject")
+    fun editStoreProject(
+            @Field("uid") uid: String
+            , @Field("name") name: String
+            , @Field("info") info: String? = null
+            , @Field("estiblishTime") estiblishTime: String? = null//yyyy-MM-dd
+            , @Field("enterpriseType") enterpriseType: String? = null
+            , @Field("regCapital") regCapital: String? = null
+            , @Field("mainBusiness") mainBusiness: String? = null
+            , @Field("ownershipRatio") ownershipRatio: String? = null
+            , @Field("lastYearIncome") lastYearIncome: String? = null
+            , @Field("lastYearProfit") lastYearProfit: String? = null
+            , @Field("thisYearIncome") ThisYearIncome: String? = null
+            , @Field("thisYearProfit") ThisYearProfit: String? = null
+            , @Field("lunci") lunci: String? = null
+            , @Field("appraisement") appraisement: String? = null
+            , @Field("financeUse") financeUse: String? = null
+            , @Field("capitalPlan") capitalPlan: String? = null
+            , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
+    ): Observable<Payload<Object>>
+
+    @FormUrlEncoded
+    @POST("/api/news/getStoreProject")
+    fun getStoreProject(@Field("company_id") company_id: Int): Observable<Payload<StoreProjectBean>>
+
+
+    @FormUrlEncoded
+    @POST("/api/news/setUpProject")
+    fun setUpProject(@Field("company_id") company_id: Int): Observable<Payload<Object>>
+
+    @FormUrlEncoded
+    @POST("/api/Listinformation/projectBook")
+    fun projectBook(@Field("company_id") company_id: Int
+                    , @Field("page") page: Int = 1
+                    , @Field("pageSize") pageSize: Int = 20
+                    , @Field("fileClass") fileClass: Int? = null
+                    , @Field("fuzzQuery") fuzzQuery: String? = null
+    ): Observable<Payload<ProjectBookRSBean>>
+
     companion object {
         const val APPKEY_NAME = "appkey"
         const val APPKEY_VALUE = "d5f17cafef0829b5"

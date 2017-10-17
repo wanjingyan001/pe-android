@@ -16,8 +16,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : BaseActivity() {
 
     val fgProj = MainProjectFragment.newInstance()
-    val fgMsg = MsgCenterFragment.newInstance()
-    val fgHome = HomeFragment.newInstance()
+    val fgMsg = MainMsgFragment.newInstance()
+    val fgHome = MainHomeFragment.newInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

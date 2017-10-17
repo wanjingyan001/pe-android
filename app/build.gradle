@@ -22,6 +22,18 @@ android {
             storePassword 'ddx2016'
         }
     }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/BCKEY.DSA'
+        exclude 'META-INF/BCKEY.SF'
+    }
     buildTypes {
 
         release {
@@ -48,10 +60,21 @@ android {
         javaMaxHeapSize "4g"
         maxProcessCount 4
     }
+//    productFlavors {
+//        ht {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "ht"]
+//        }
+//        kuake {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "kuake"]
+//        }
+//        yager {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "yager"]
+//        }
+//    }
 //    applicationVariants.all { variant ->
 //        variant.outputs.each { output ->
 //            output.outputFile = new File(output.outputFile.parent,
-//                    "pe_${variant.buildType.name}_v${defaultConfig.versionName}.${defaultConfig.versionCode}.apk".toLowerCase())
+//                    "pe-${variant.buildType.name}-v${defaultConfig.versionName}-${defaultConfig.versionCode}-${variant.productFlavors[0].name}.apk".toLowerCase())
 //        }
 //    }
 }
@@ -100,5 +123,5 @@ dependencies {
     compile project(':PushSDK')
     compile project(':shareSDK')
     compile files('libs/umeng-analytics-v5.5.3.jar')
-    implementation files('libs/libammsdk.jar')
+    compile files('libs/libammsdk.jar')
 }

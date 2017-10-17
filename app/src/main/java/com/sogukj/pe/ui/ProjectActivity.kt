@@ -39,9 +39,9 @@ class ProjectActivity : ToolbarActivity() {
     lateinit var project: ProjectBean
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        project = intent.getSerializableExtra(Extras.DATA) as ProjectBean
         setContentView(R.layout.activity_project)
         setBack(true)
-        project = intent.getSerializableExtra(Extras.DATA) as ProjectBean
         setTitle(project.name)
 
         ll_shangshi.visibility = if (project.is_volatility == 0) View.GONE else View.VISIBLE
@@ -134,6 +134,7 @@ class ProjectActivity : ToolbarActivity() {
     }
 
     fun refresh(grid: GridLayout, data: Map<String, Int?>, color: Int = Color.RED) {
+        tv_xmws.setOnClickListener(this::onClick)
         val size = grid.childCount
         for (i in 0..size - 1) {
             val child = grid.getChildAt(i) as TipsView
@@ -208,6 +209,8 @@ class ProjectActivity : ToolbarActivity() {
             R.id.tv_ranzhuquan -> CopyrightListActivity.start(this@ProjectActivity, project, 1)
             R.id.tv_zhuzuoquan -> CopyrightListActivity.start(this@ProjectActivity, project, 2)
             R.id.tv_wangzhanbeian -> ICPListActivity.start(this@ProjectActivity, project)
+
+            R.id.tv_xmws -> ProjectBookActivity.start(this@ProjectActivity, project)
         }
     }
 

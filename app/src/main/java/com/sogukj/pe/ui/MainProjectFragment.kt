@@ -43,9 +43,10 @@ class MainProjectFragment : BaseFragment() {
         get() = R.layout.fragment_main_project //To change initializer of created properties use File | Settings | File Templates.
 
     val fragments = arrayOf(
-            ProjectListFragment.newInstance(0),
-            ProjectListFragment.newInstance(1),
-            ProjectListFragment.newInstance(2)
+            ProjectListFragment.newInstance(ProjectListFragment.TYPE_CB),
+            ProjectListFragment.newInstance(ProjectListFragment.TYPE_LX),
+            ProjectListFragment.newInstance(ProjectListFragment.TYPE_YT),
+            ProjectListFragment.newInstance(ProjectListFragment.TYPE_GZ)
     )
     lateinit var adapter: RecyclerAdapter<ProjectBean>
 
@@ -236,8 +237,8 @@ class MainProjectFragment : BaseFragment() {
 
             override fun onPageSelected(position: Int) {
                 tabs?.getTabAt(position)?.select()
-                iv_search?.visibility = if (position == 0) View.VISIBLE else View.GONE
-                iv_add?.visibility = if (position == 2 && user?.is_admin == 1) View.VISIBLE else View.GONE
+                iv_search?.visibility = if (position == 2) View.VISIBLE else View.GONE
+                iv_add?.visibility = if (position == 1 && user?.is_admin == 1) View.VISIBLE else View.GONE
             }
 
         })

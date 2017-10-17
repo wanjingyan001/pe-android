@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <FrameLayout
@@ -34,7 +33,7 @@
             android:background="@null"
             android:button="@null"
             android:checked="true"
-            android:drawableTop="@drawable/ic_tab_main_news"
+            android:drawableTop="@drawable/ic_tab_main_msg"
             android:gravity="center"
             android:text="资讯"
             android:textColor="@color/tx_checkable"
@@ -49,7 +48,7 @@
             android:background="@null"
             android:button="@null"
             android:checked="true"
-            android:drawableTop="@drawable/ic_tab_main_news"
+            android:drawableTop="@drawable/ic_tab_main_home"
             android:gravity="center"
             android:text="首页"
             android:textColor="@color/tx_checkable"
