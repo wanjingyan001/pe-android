@@ -19,4 +19,5 @@
     <string name="tv_pairs_value" formatted="false">&lt;font color="#999999"> %s &lt;/font></string>
     <string name="tv_title_result_project" formatted="false">匹配到&lt;font color="#ff3300">%d&lt;/font>家公司: </string>
     <string name="tv_title_result_news" formatted="false">匹配到&lt;font color="#ff3300">%d&lt;/font>条资讯: </string>
+    <string name="tv_title_result_search" formatted="false">匹配到&lt;font color="#ff3300">%d&lt;/font>条结果: </string>
 </resources>

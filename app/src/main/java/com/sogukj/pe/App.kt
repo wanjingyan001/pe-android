@@ -7,7 +7,7 @@ import com.framework.base.ActivityHelper
 import com.google.gson.Gson
 import com.mob.MobSDK
 import com.sogukj.pe.bean.NewsBean
-import com.sogukj.pe.ui.NewsDetailActivity
+import com.sogukj.pe.ui.news.NewsDetailActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store

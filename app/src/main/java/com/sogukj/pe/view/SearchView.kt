@@ -18,7 +18,8 @@ class SearchView : LinearLayout {
 
     internal lateinit var et_search: EditText
     //    internal lateinit var tv_search: View
-    internal lateinit var tv_cancel: View
+    lateinit var tv_cancel: View
+    lateinit var iv_back: View
     //    internal lateinit var iv_back: View
     var onSearch: ((String) -> Unit)? = null
     var onTextChange: ((String) -> Unit)? = null
@@ -33,16 +34,18 @@ class SearchView : LinearLayout {
         init(context, attrs)
     }
 
+
+    fun setCancel(bool: Boolean, l: (View)->Unit) {
+        tv_cancel.visibility = if (bool) View.VISIBLE else View.GONE
+        tv_cancel.setOnClickListener{v->l(v)}
+    }
+
     fun setOnEditorActionListener(l: TextView.OnEditorActionListener) {
         et_search.setOnEditorActionListener(l)
     }
 
     fun setOnEditTouchListener(listener: View.OnTouchListener) {
         et_search.setOnTouchListener(listener)
-    }
-
-    fun setOnCancelListener(onCancel: () -> Unit) {
-        tv_cancel.setOnClickListener { onCancel() }
     }
 
     fun addTextChangedListener(watcher: TextWatcher) {
@@ -53,7 +56,7 @@ class SearchView : LinearLayout {
         val layoutInflater = LayoutInflater.from(context)
         val view = layoutInflater.inflate(R.layout.layout_search_view, null)
 
-//        iv_back = view.findViewById(R.id.iv_back)
+        iv_back = view.findViewById(R.id.iv_back)
 //        tv_search = view.findViewById(R.id.tv_search)
         tv_cancel = view.findViewById(R.id.tv_cancel)
         et_search = view.findViewById(R.id.et_search) as EditText

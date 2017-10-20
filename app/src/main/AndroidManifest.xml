@@ -51,7 +51,7 @@
         </provider>
 
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.main.MainActivity"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
@@ -70,27 +70,27 @@
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.NewsDetailActivity"
+            android:name=".ui.news.NewsDetailActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.UserActivity"
+            android:name=".ui.user.UserActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.UserEditActivity"
+            android:name=".ui.user.UserEditActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.AddProjectActivity"
+            android:name=".ui.project.ProjectAddActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.ProjectActivity"
+            android:name=".ui.project.ProjectActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.NegativeNewsActivity"
+            android:name=".ui.news.NegativeNewsActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" />
         <activity
@@ -274,15 +274,21 @@
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.StoreProjectAddActivity"
+            android:name=".ui.project.StoreProjectAddActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.htdata.ProjectBookActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.htdata.ProjectBookUploadActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.ProjectBookActivity"
-            android:configChanges="orientation|screenSize"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.ProjectBookUploadActivity"
+            android:name=".ui.news.NewsListActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" />
         <activity
@@ -336,6 +342,8 @@
         <!-- <data android:scheme="tencent100371282" /> -->
         <!-- </intent-filter> -->
         <!-- </activity> -->
+        <activity android:name=".ui.approve.ApproveActivity" />
+        <activity android:name=".ui.approve.ApproveListActivity" />
     </application>
 
 </manifest>

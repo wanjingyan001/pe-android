@@ -18,6 +18,17 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
+        <ImageView
+            android:id="@+id/toolbar_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_gravity="left|center"
+            android:gravity="center"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:src="@drawable/sogu_ic_back" />
+
         <com.sogukj.pe.view.CircleImageView
             android:id="@+id/iv_user"
             android:layout_width="30dp"
@@ -26,7 +37,8 @@
             android:layout_gravity="left|center"
             android:layout_marginLeft="20dp"
             android:gravity="center"
-            android:src="@drawable/img_logo_user" />
+            android:src="@drawable/img_logo_user"
+            android:visibility="gone" />
 
 
         <android.support.design.widget.TabLayout

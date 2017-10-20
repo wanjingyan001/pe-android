@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#f5f7fc"
     android:orientation="vertical"
-    tools:context="com.sogukj.pe.ui.ProjectBookUploadActivity">
+    tools:context="com.sogukj.pe.ui.htdata.ProjectBookUploadActivity">
 
     <include layout="@layout/toolbar" />
 
@@ -142,8 +142,8 @@
                     android:textColor="@color/text_2"
                     android:textSize="14sp" />
 
-                <EditText
-                    android:id="@+id/et_step"
+                <TextView
+                    android:id="@+id/tv_group"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -173,8 +173,8 @@
                     android:textColor="@color/text_2"
                     android:textSize="14sp" />
 
-                <EditText
-                    android:id="@+id/et_name"
+                <TextView
+                    android:id="@+id/tv_class"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -193,6 +193,7 @@
         </LinearLayout>
 
         <Button
+            android:id="@+id/btn_upload"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:background="@drawable/bg_btn_blue"
@@ -201,6 +202,7 @@
 
 
         <Button
+            android:id="@+id/btn_commit"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_marginTop="20dp"

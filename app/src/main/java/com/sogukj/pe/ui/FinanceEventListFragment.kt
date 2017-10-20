@@ -19,6 +19,7 @@ import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.pe.bean.InvestEventBean
 import com.sogukj.pe.bean.ProjectBean
+import com.sogukj.pe.ui.news.NewsListFragment
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers

@@ -494,7 +494,7 @@ interface SoguService {
     @FormUrlEncoded
     @POST("/api/news/editStoreProject")
     fun editStoreProject(
-            @Field("uid") uid: String
+            @Field("company_id") company_id: Int
             , @Field("name") name: String
             , @Field("info") info: String? = null
             , @Field("estiblishTime") estiblishTime: String? = null//yyyy-MM-dd
@@ -504,8 +504,8 @@ interface SoguService {
             , @Field("ownershipRatio") ownershipRatio: String? = null
             , @Field("lastYearIncome") lastYearIncome: String? = null
             , @Field("lastYearProfit") lastYearProfit: String? = null
-            , @Field("thisYearIncome") ThisYearIncome: String? = null
-            , @Field("thisYearProfit") ThisYearProfit: String? = null
+            , @Field("thisYearIncome") thisYearIncome: String? = null
+            , @Field("thisYearProfit") thisYearProfit: String? = null
             , @Field("lunci") lunci: String? = null
             , @Field("appraisement") appraisement: String? = null
             , @Field("financeUse") financeUse: String? = null
@@ -530,6 +530,22 @@ interface SoguService {
                     , @Field("fileClass") fileClass: Int? = null
                     , @Field("fuzzQuery") fuzzQuery: String? = null
     ): Observable<Payload<ProjectBookRSBean>>
+
+    @POST("/api/Listinformation/projectFilter")
+    fun projectFilter(): Observable<Payload<Map<Int, String>>>
+
+    @POST("/api/Listinformation/uploadBook")
+    fun uploadBook(@Body body: RequestBody): Observable<Payload<Object>>
+
+    @FormUrlEncoded
+    @POST("/api/Listinformation/projectSelect")
+    fun projectBookSearch(
+            @Field("company_id") company_id: Int
+            , @Field("page") page: Int = 1
+            , @Field("pageSize") pageSize: Int = 20
+            , @Field("fileClass") fileClass: String? = null
+            , @Field("fuzzyQuery") fuzzyQuery: String? = null
+            , @Field("status") status: Int? = null): Observable<Payload<List<ProjectBookBean>>>
 
     companion object {
         const val APPKEY_NAME = "appkey"

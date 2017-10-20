@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.framework.base.BaseActivity
 import com.sogukj.pe.R
+import com.sogukj.pe.ui.main.MainActivity
 import com.sogukj.util.Store
 /**
  * Created by qinfei on 17/8/11.

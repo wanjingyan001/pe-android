@@ -11,4 +11,6 @@ object Extras {
     val INDEX = "ext.index"
     val STOCK_CODES = "ext.stockCodes"
     val DATA = "ext.data"
+    val LIST = "ext.list"
+    val MAP = "ext.map"
 }
