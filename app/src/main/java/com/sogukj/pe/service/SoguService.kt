@@ -3,7 +3,10 @@ package com.sogukj.service
 import com.sogukj.pe.bean.*
 import com.sogukj.pe.service.Payload
 import io.reactivex.Observable
+import okhttp3.Call
 import okhttp3.RequestBody
+import okhttp3.Response
+import okhttp3.ResponseBody
 import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -546,6 +549,15 @@ interface SoguService {
             , @Field("fileClass") fileClass: String? = null
             , @Field("fuzzyQuery") fuzzyQuery: String? = null
             , @Field("status") status: Int? = null): Observable<Payload<List<ProjectBookBean>>>
+
+    @FormUrlEncoded
+    @POST("/api/Index/apply")
+    fun mainApprove(@Field("pid") pid: Int = 3): Observable<Payload<List<SpGroupBean>>>
+
+    @FormUrlEncoded
+    @POST("/api/Approve/componentInfo")
+    fun approveInfo(@Field("template_id") template_id: Int = 1
+                    , @Field("sid") sid: Int? = null): Observable<Payload<List<CustomSealBean>>>
 
     companion object {
         const val APPKEY_NAME = "appkey"

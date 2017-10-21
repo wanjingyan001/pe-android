@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/divider_bottom"
+    android:gravity="center"
+    android:padding="18dp">
+
+    <TextView
+        android:id="@+id/tv_label"
+        android:layout_marginRight="15dp"
+        tools:text="基金名称" />
+
+    <TextView
+        android:id="@+id/et_value"
+        android:layout_weight="1"
+        android:background="@color/white"
+        android:hint="--"
+        android:lines="1" />
+
+    <ImageView
+        android:layout_marginLeft="10dp"
+        android:src="@drawable/ic_arrow_r" />
+</TableRow>

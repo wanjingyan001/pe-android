@@ -344,6 +344,7 @@
         <!-- </activity> -->
         <activity android:name=".ui.approve.ApproveActivity" />
         <activity android:name=".ui.approve.ApproveListActivity" />
+        <activity android:name=".ui.approve.SealActivity"></activity>
     </application>
 
 </manifest>
