@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/divider_bottom"
     android:gravity="left"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:padding="18dp">
 
     <TextView
@@ -14,25 +14,44 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="15dp"
+        android:gravity="center"
         android:textColor="@color/text_2"
         tools:text="项目名称（必填）" />
 
-    <LinearLayout
-        android:id="@+id/ll_container_check"
+    <ImageView
+        android:id="@+id/iv_alert"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_gravity="center"
+        android:background="@drawable/ic_check_warn"
+        android:visibility="gone" />
+
+    <RadioGroup
+        android:id="@+id/rg_check"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="10dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp">
+        android:orientation="horizontal">
 
-        <include layout="@layout/cs_item_check" />
+        <RadioButton
+            android:id="@+id/rb_yes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableLeft="@drawable/ic_cs_radio"
+            android:drawablePadding="5dp"
+            android:text="是"
+            android:textColor="@color/text_1" />
 
-        <include layout="@layout/cs_item_check" />
-
-        <include layout="@layout/cs_item_check" />
-
-        <include layout="@layout/cs_item_check" />
-    </LinearLayout>
+        <RadioButton
+            android:id="@+id/rb_no"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:button="@null"
+            android:checked="true"
+            android:drawableLeft="@drawable/ic_cs_radio"
+            android:text="否"
+            android:textSize="14sp" />
+    </RadioGroup>
 </LinearLayout>

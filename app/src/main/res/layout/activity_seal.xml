@@ -22,8 +22,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TableLayout
-                    android:id="@+id/ll_sustom"
+                <LinearLayout
+                    android:id="@+id/ll_seal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -34,18 +34,62 @@
 
                     <include layout="@layout/cs_row_edit_box" />
 
+                    <include layout="@layout/cs_row_check_box" />
 
-                </TableLayout>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp"
+                    android:background="@color/divider2" />
+
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <View
+                        android:layout_width="5dp"
+                        android:layout_height="10dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@color/color_main" />
+
+                    <TextView
+                        style="@style/SoguTextNormal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="审批人" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_approver"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <include layout="@layout/cs_row_approver" />
+
+                    <include layout="@layout/cs_row_approver" />
+
+                    <include layout="@layout/cs_row_approver" />
+
+                    <include layout="@layout/cs_row_approver" />
+
+
+                </LinearLayout>
+
+                <Button android:id="@+id/btn_confirm"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_gravity="bottom"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/bg_btn_blue"
+                    android:text="提交申请"
+                    android:textSize="18sp" />
             </LinearLayout>
         </ScrollView>
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_gravity="bottom"
-            android:layout_margin="10dp"
-            android:background="@drawable/bg_btn_blue"
-            android:text="提交申请"
-            android:textSize="18sp" />
     </FrameLayout>
 </LinearLayout>

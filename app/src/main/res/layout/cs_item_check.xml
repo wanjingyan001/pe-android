@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/ll_item_check"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:padding="5dp">
 
     <CheckBox
-        android:id="@+id/cbx_seal"
+        android:id="@+id/cb_check"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:button="@null"
+        android:drawableLeft="@drawable/ic_cs_check"
+        android:drawablePadding="5dp"
         android:text="管理公司印章"
         android:textColor="@color/text_1" />
 

@@ -7,11 +7,13 @@ import java.io.Serializable
  */
 class SpGroupBean {
     var title: String? = null
+    val type: Int? = null
     var item: List<SpGroupItemBean>? = null
 }
 
-class SpGroupItemBean:Serializable {
+class SpGroupItemBean : Serializable {
     var id: Int? = null
-    var name:  String? = null
-    var icon:  String? = null
+    var type: Int? = null
+    var name: String? = null
+    var icon: String? = null
 }

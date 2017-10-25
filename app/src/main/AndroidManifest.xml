@@ -342,9 +342,26 @@
         <!-- <data android:scheme="tencent100371282" /> -->
         <!-- </intent-filter> -->
         <!-- </activity> -->
-        <activity android:name=".ui.approve.ApproveActivity" />
-        <activity android:name=".ui.approve.ApproveListActivity" />
-        <activity android:name=".ui.approve.SealActivity"></activity>
+        <activity
+            android:name=".ui.approve.ApproveActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.approve.ApproveListActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.approve.SealActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.approve.ListSelectorActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
     </application>
 
 </manifest>

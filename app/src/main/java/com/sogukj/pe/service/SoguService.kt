@@ -540,6 +540,9 @@ interface SoguService {
     @POST("/api/Listinformation/uploadBook")
     fun uploadBook(@Body body: RequestBody): Observable<Payload<Object>>
 
+    @POST("/api/Approve/uploadApprove")
+    fun uploadApprove(@Body body: RequestBody): Observable<Payload<CustomSealBean.ValueBean>>
+
     @FormUrlEncoded
     @POST("/api/Listinformation/projectSelect")
     fun projectBookSearch(
@@ -558,6 +561,21 @@ interface SoguService {
     @POST("/api/Approve/componentInfo")
     fun approveInfo(@Field("template_id") template_id: Int = 1
                     , @Field("sid") sid: Int? = null): Observable<Payload<List<CustomSealBean>>>
+
+    @FormUrlEncoded
+    @POST("/api/Approve/approveInfo")
+    fun approver(@Field("template_id") template_id: Int = 1
+                 , @Field("type") type: Int? = null): Observable<Payload<List<ApproverBean>>>
+
+    @FormUrlEncoded
+    @POST("/api/Approve/getFundOrProject")
+    fun listSelector(
+            @Field("page") page: Int = 1
+            , @Field("pageSize") pageSize: Int = 20
+            , @Field("type") type: Int): Observable<Payload<List<CustomSealBean.ValueBean>>>
+
+    @POST("/api/Approve/submitApprove")
+    fun submitApprove(@Body body: RequestBody): Observable<Payload<Object>>
 
     companion object {
         const val APPKEY_NAME = "appkey"

@@ -21,7 +21,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:background="@color/white"
-        android:drawableRight="@drawable/ic_arrow_r"
         android:gravity="center_vertical"
         android:hint="--"
         android:lines="1" />

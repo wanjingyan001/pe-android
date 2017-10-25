@@ -29,7 +29,7 @@ class ApproveActivity : ToolbarActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_approve)
         setBack(true)
-        setTitle("审批")
+        title = "审批"
         ll_custom.removeAllViews()
         SoguApi.getService(application)
                 .mainApprove(3)
@@ -65,24 +65,25 @@ class ApproveActivity : ToolbarActivity() {
                 val gridRow = inflater.inflate(R.layout.cs_grid_row3, null, false) as LinearLayout
                 groupView.addView(gridRow)
 
-                setGridItem(items!!.getOrNull(2), gridRow.getChildAt(2)!!)
-                setGridItem(items!!.getOrNull(1), gridRow.getChildAt(1)!!)
-                setGridItem(items!!.getOrNull(0), gridRow.getChildAt(0)!!)
+                setGridItem(items!!.getOrNull(2), gridRow.getChildAt(2)!!,spGroupBean)
+                setGridItem(items!!.getOrNull(1), gridRow.getChildAt(1)!!,spGroupBean)
+                setGridItem(items!!.getOrNull(0), gridRow.getChildAt(0)!!,spGroupBean)
 
             }
             if (null != items && items.size > 3) {
                 val gridRow = inflater.inflate(R.layout.cs_grid_row3, null, false) as LinearLayout
                 groupView.addView(gridRow)
 
-                setGridItem(items!!.getOrNull(5), gridRow.getChildAt(2)!!)
-                setGridItem(items!!.getOrNull(4), gridRow.getChildAt(1)!!)
-                setGridItem(items!!.getOrNull(3), gridRow.getChildAt(0)!!)
+                setGridItem(items!!.getOrNull(5), gridRow.getChildAt(2)!!,spGroupBean)
+                setGridItem(items!!.getOrNull(4), gridRow.getChildAt(1)!!,spGroupBean)
+                setGridItem(items!!.getOrNull(3), gridRow.getChildAt(0)!!,spGroupBean)
             }
         }
     }
 
-    fun setGridItem(itemBean: SpGroupItemBean?, itemView: View) {
+    fun setGridItem(itemBean: SpGroupItemBean?, itemView: View, spGroupBean: SpGroupBean) {
         if (itemBean == null) return
+        itemBean.type=spGroupBean.type
         itemView?.visibility = View.VISIBLE
         val iv_icon = itemView.findViewById(R.id.iv_icon) as ImageView
         val tv_label = itemView.findViewById(R.id.tv_label) as TextView

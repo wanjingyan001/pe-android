@@ -9,20 +9,47 @@
     android:orientation="vertical"
     android:padding="18dp">
 
-    <TextView
-        android:id="@+id/tv_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="15dp"
-        android:textColor="@color/text_2"
-        tools:text="项目名称（必填）" />
-
     <LinearLayout
-        android:id="@+id/ll_file"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp"></LinearLayout>
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:textColor="@color/text_2"
+            tools:text="项目名称（必填）" />
+
+        <ImageView
+            android:id="@+id/iv_alert"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_gravity="center"
+            android:background="@drawable/ic_check_warn"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <com.sogukj.pe.view.FlowLayout
+        android:id="@+id/ll_images"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include layout="@layout/cs_item_img" />
+
+        <include layout="@layout/cs_item_img" />
+
+        <include layout="@layout/cs_item_img" />
+
+        <include layout="@layout/cs_item_img" />
+
+        <include layout="@layout/cs_item_img" />
+
+        <include layout="@layout/cs_item_img" />
+
+        <include layout="@layout/cs_item_img" />
+
+    </com.sogukj.pe.view.FlowLayout>
 </LinearLayout>

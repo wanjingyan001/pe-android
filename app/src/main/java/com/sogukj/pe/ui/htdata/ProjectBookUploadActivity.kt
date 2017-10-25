@@ -38,7 +38,7 @@ class ProjectBookUploadActivity : ToolbarActivity() {
         filterList.putAll(map)
         setContentView(R.layout.activity_project_book_upload)
         setBack(true)
-        setTitle("项目文书上传")
+        title = "项目文书上传"
         tv_title.text = project.name
         tv_group.setOnClickListener {
             val items = ArrayList<String?>()
