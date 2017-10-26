@@ -6,6 +6,7 @@ package com.sogukj.pe
 
 object Extras {
     val TYPE = "ext.type"
+    val TITLE = "ext.title"
     val NAME = "ext.name"
     val CODE = "ext.code"
     val INDEX = "ext.index"

@@ -577,6 +577,18 @@ interface SoguService {
     @POST("/api/Approve/submitApprove")
     fun submitApprove(@Body body: RequestBody): Observable<Payload<Object>>
 
+    @FormUrlEncoded
+    @POST("/api/Approve/waitingMeApproval")
+    fun listApproval(
+            @Field("page") page: Int = 1
+            , @Field("pageSize") pageSize: Int = 20
+            , @Field("status") status: Int
+            , @Field("fuzzyQuery") fuzzyQuery: String? = null
+            , @Field("type") type: Int? = null
+            , @Field("template_id") template_id: Int? = null
+            , @Field("filter") filter: Int? = null
+            , @Field("sort") sort: Int? = null): Observable<Payload<List<ApprovalBean>>>
+
     companion object {
         const val APPKEY_NAME = "appkey"
         const val APPKEY_VALUE = "d5f17cafef0829b5"

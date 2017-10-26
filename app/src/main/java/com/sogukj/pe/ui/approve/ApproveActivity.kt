@@ -44,6 +44,13 @@ class ApproveActivity : ToolbarActivity() {
                     Trace.e(e)
                     showToast("暂无可用数据")
                 })
+
+        item_dwsp.setOnClickListener {
+            ApproveListActivity.start(this,1)
+        }
+        item_wfqd.setOnClickListener {
+            ApproveListActivity.start(this,3)
+        }
     }
 
     fun initView(payload: List<SpGroupBean>?) {

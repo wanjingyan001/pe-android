@@ -14,11 +14,11 @@ import android.widget.TextView
 import com.sogukj.pe.R
 import com.sogukj.pe.util.Utils
 
-class SearchView2 : LinearLayout {
-
+class SearchBox : LinearLayout {
     internal lateinit var et_search: EditText
     //    internal lateinit var tv_search: View
-    internal lateinit var tv_cancel: View
+    lateinit var tv_cancel: View
+    lateinit var iv_back: View
     //    internal lateinit var iv_back: View
     var onSearch: ((String) -> Unit)? = null
     var onTextChange: ((String) -> Unit)? = null
@@ -33,16 +33,18 @@ class SearchView2 : LinearLayout {
         init(context, attrs)
     }
 
+
+    fun setCancel(bool: Boolean, l: (View) -> Unit) {
+        tv_cancel.visibility = if (bool) View.VISIBLE else View.GONE
+        tv_cancel.setOnClickListener { v -> l(v) }
+    }
+
     fun setOnEditorActionListener(l: TextView.OnEditorActionListener) {
         et_search.setOnEditorActionListener(l)
     }
 
-    fun setOnEditTouchListener(listener: OnTouchListener) {
+    fun setOnEditTouchListener(listener: View.OnTouchListener) {
         et_search.setOnTouchListener(listener)
-    }
-
-    fun setOnCancelListener(onCancel: () -> Unit) {
-        tv_cancel.setOnClickListener { onCancel() }
     }
 
     fun addTextChangedListener(watcher: TextWatcher) {
@@ -51,9 +53,9 @@ class SearchView2 : LinearLayout {
 
     private fun init(context: Context, attrs: AttributeSet) {
         val layoutInflater = LayoutInflater.from(context)
-        val view = layoutInflater.inflate(R.layout.layout_search_view2, null)
+        val view = layoutInflater.inflate(R.layout.layout_search_box, null)
 
-//        iv_back = view.findViewById(R.id.iv_back)
+        iv_back = view.findViewById(R.id.iv_back)
 //        tv_search = view.findViewById(R.id.tv_search)
         tv_cancel = view.findViewById(R.id.tv_cancel)
         et_search = view.findViewById(R.id.et_search) as EditText
@@ -106,7 +108,7 @@ class SearchView2 : LinearLayout {
             else
                 Utils.closeInput(context, et_search)
         }
-        addView(view, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
+        addView(view, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT))
     }
 
     var search: String

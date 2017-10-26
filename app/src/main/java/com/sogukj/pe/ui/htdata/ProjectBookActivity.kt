@@ -54,7 +54,7 @@ class ProjectBookActivity : ToolbarActivity(), SupportEmptyView {
 
         project = intent.getSerializableExtra(Extras.DATA) as ProjectBean
         setBack(true)
-        setTitle("项目文书")
+        title = "项目文书"
         btn_upload.setOnClickListener {
             if (!filterList.isEmpty())
                 ProjectBookUploadActivity.start(this, project, filterList)
