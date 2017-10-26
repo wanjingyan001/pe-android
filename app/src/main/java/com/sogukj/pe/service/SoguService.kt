@@ -585,9 +585,13 @@ interface SoguService {
             , @Field("status") status: Int
             , @Field("fuzzyQuery") fuzzyQuery: String? = null
             , @Field("type") type: Int? = null
-            , @Field("template_id") template_id: Int? = null
-            , @Field("filter") filter: Int? = null
+            , @Field("template_id") template_id: String? = null
+            , @Field("filter") filter: String? = null
             , @Field("sort") sort: Int? = null): Observable<Payload<List<ApprovalBean>>>
+
+
+    @POST("/api/Approve/approveFilter")
+    fun approveFilter(): Observable<Payload<ApproveFilterBean>>
 
     companion object {
         const val APPKEY_NAME = "appkey"
