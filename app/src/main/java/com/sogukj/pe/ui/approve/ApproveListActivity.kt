@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.text.TextUtils
 import android.view.View
 import android.widget.TextView
 import com.framework.base.ToolbarActivity
@@ -37,14 +38,33 @@ class ApproveListActivity : ToolbarActivity() {
         setBack(true)
         setBack(true)
         adapter = RecyclerAdapter<ApprovalBean>(this, { _adapter, parent, type ->
-            val convertView = _adapter.getView(R.layout.item_main_project_search, parent) as View
+            val convertView = _adapter.getView(R.layout.item_approval, parent) as View
+
             object : RecyclerHolder<ApprovalBean>(convertView) {
-                val tv1 = convertView.findViewById(R.id.tv1) as TextView
-                val tv2 = convertView.findViewById(R.id.tv2) as TextView
-                val tv3 = convertView.findViewById(R.id.tv3) as TextView
+                val tvTitle = convertView.findViewById(R.id.tv_title) as TextView
+                val tvType = convertView.findViewById(R.id.tv_type) as TextView
+                val tvApplicant = convertView.findViewById(R.id.tv_applicant) as TextView
+                val tvDate = convertView.findViewById(R.id.tv_date) as TextView
+                val tvTime = convertView.findViewById(R.id.tv_time) as TextView
+                val tvState = convertView.findViewById(R.id.tv_state) as TextView
 
                 override fun setData(view: View, data: ApprovalBean, position: Int) {
-                    tv1.text = data.name
+                    tvTitle.text = data.title
+                    tvType.text = data.kind
+                    tvApplicant.text = data.name
+                    val strTime = data.add_time
+                    tvTime.visibility = View.GONE
+                    if (!TextUtils.isEmpty(strTime)) {
+                        val strs = strTime!!.trim().split(" ")
+                        if (!TextUtils.isEmpty(strs.getOrNull(1))) {
+                            tvTime.visibility = View.VISIBLE
+                        }
+                        tvDate.text = strs
+                                .getOrNull(0)
+                        tvTime.text = strs
+                                .getOrNull(1)
+                    }
+                    tvState.text = data.status
                 }
             }
         })
@@ -114,7 +134,7 @@ class ApproveListActivity : ToolbarActivity() {
 
     companion object {
         fun start(ctx: Activity?, type: Int) {
-            val intent = Intent(ctx, ProjectBookActivity::class.java)
+            val intent = Intent(ctx, ApproveListActivity::class.java)
             val title = when (type) {
                 1, 2 -> "待我审批"
                 3 -> "我发起的"
