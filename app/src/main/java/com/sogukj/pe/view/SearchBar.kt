@@ -14,12 +14,9 @@ import android.widget.TextView
 import com.sogukj.pe.R
 import com.sogukj.pe.util.Utils
 
-class SearchBox : LinearLayout {
+class SearchBar : LinearLayout {
     internal lateinit var et_search: EditText
-    //    internal lateinit var tv_search: View
     lateinit var tv_cancel: View
-    lateinit var iv_back: View
-    //    internal lateinit var iv_back: View
     var onSearch: ((String) -> Unit)? = null
     var onTextChange: ((String) -> Unit)? = null
 
@@ -53,20 +50,12 @@ class SearchBox : LinearLayout {
 
     private fun init(context: Context, attrs: AttributeSet) {
         val layoutInflater = LayoutInflater.from(context)
-        val view = layoutInflater.inflate(R.layout.layout_search_box, null)
+        val view = layoutInflater.inflate(R.layout.search_bar, null)
 
-        iv_back = view.findViewById(R.id.iv_back)
-//        tv_search = view.findViewById(R.id.tv_search)
         tv_cancel = view.findViewById(R.id.tv_cancel)
         et_search = view.findViewById(R.id.et_search) as EditText
         et_search.isFocusable = true
         et_search.isFocusableInTouchMode = true
-//        tv_search.setOnClickListener {
-//            val editable = et_search.text.toString()
-//            val str = Utils.stringFilter(editable.toString())
-//            if (null != onSearch && !TextUtils.isEmpty(str.trim { it <= ' ' }))
-//                onSearch!!(str)
-//        }
         et_search.setOnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 val editable = et_search.text.toString()

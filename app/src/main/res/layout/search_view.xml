@@ -30,7 +30,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_weight="1"
-        android:background="@color/white"
+        android:background="@drawable/bg_search"
         android:cursorVisible="true"
         android:gravity="center_vertical"
         android:hint="请输入搜索关键字"

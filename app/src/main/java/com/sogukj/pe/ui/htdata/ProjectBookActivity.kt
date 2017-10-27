@@ -32,7 +32,7 @@ import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_list_project_book.*
-import kotlinx.android.synthetic.main.layout_search_view.*
+import kotlinx.android.synthetic.main.search_view.*
 import java.text.SimpleDateFormat
 
 

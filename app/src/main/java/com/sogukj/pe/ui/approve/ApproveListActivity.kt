@@ -1,14 +1,17 @@
 package com.sogukj.pe.ui.approve
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.TabLayout
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import com.framework.base.ToolbarActivity
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
@@ -29,8 +32,30 @@ import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_approve_list.*
+import kotlinx.coroutines.experimental.run
 
-class ApproveListActivity : ToolbarActivity() {
+class ApproveListActivity : ToolbarActivity(), TabLayout.OnTabSelectedListener {
+    override fun onTabReselected(tab: TabLayout.Tab?) {
+
+    }
+
+    override fun onTabUnselected(tab: TabLayout.Tab?) {
+
+    }
+
+    override fun onTabSelected(tab: TabLayout.Tab?) {
+        if (tab?.position == 1) {
+            mType = 2
+        } else {
+            mType = 1
+        }
+        stateDefault()
+    }
+
+    class ItemAdapter(context: Context, creator: (adapter: RecyclerAdapter<ApprovalBean>, parent: ViewGroup, type: Int) -> RecyclerHolder<ApprovalBean>)
+        : RecyclerAdapter<ApprovalBean>(context, creator) {
+
+    }
 
     lateinit var adapter: RecyclerAdapter<ApprovalBean>
     lateinit var inflater: LayoutInflater
@@ -42,6 +67,12 @@ class ApproveListActivity : ToolbarActivity() {
         mType = intent.getIntExtra(Extras.TYPE, 1)
         title = intent.getStringExtra(Extras.TITLE)
         setBack(true)
+        if (mType == 3) {
+            tab_title.visibility = View.GONE
+        } else {
+            tab_title.visibility = View.VISIBLE
+            tab_title.addOnTabSelectedListener(this)
+        }
         adapter = RecyclerAdapter<ApprovalBean>(this, { _adapter, parent, type ->
             val convertView = _adapter.getView(R.layout.item_approval, parent) as View
 
@@ -75,6 +106,7 @@ class ApproveListActivity : ToolbarActivity() {
         })
         adapter.onItemClick = { v, p ->
             val data = adapter.dataList.get(p)
+            ViewApproveActivity.start(this,data)
         }
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
@@ -104,7 +136,8 @@ class ApproveListActivity : ToolbarActivity() {
         })
         refresh.setAutoLoadMore(true)
 
-        run {
+        ////
+        kotlin.run {
             fl_filter.setOnClickListener {
                 stateDefault()
             }
@@ -116,7 +149,10 @@ class ApproveListActivity : ToolbarActivity() {
                     stateFilter()
                 }
             }
+            search_box.setOnClickListener { ApproveSearchActivity.start(this, mType) }
         }
+        stateDefault()
+        ////
         handler.postDelayed({
             doRequest()
         }, 100)
@@ -124,9 +160,7 @@ class ApproveListActivity : ToolbarActivity() {
 
     var filterBean: ApproveFilterBean? = null
     var filterType: Int? = null
-    var key = ""
     fun stateDefault() {
-        key = ""
         page = 1
         fl_filter.visibility = View.GONE
         paramStates.clear()
@@ -142,26 +176,16 @@ class ApproveListActivity : ToolbarActivity() {
     }
 
     fun stateFilter() {
-        key = ""
         page = 1
         if (filterBean == null) return
         fl_filter.visibility = View.VISIBLE
         tag_all.setOnClickListener {
             stateDefault()
         }
+        rg_category.check(R.id.rb_all)
+        setFilterTab(R.id.rb_all)
         rg_category.setOnCheckedChangeListener { group, checkedId ->
-            if (checkedId == R.id.rb_all) {
-                filterType = null
-                ll_filter_other.visibility = View.GONE
-            } else if (checkedId == R.id.rb_seal) {
-                filterType = 2
-                ll_filter_other.visibility = View.VISIBLE
-                setFilterTags(filterBean!!.approve)
-            } else if (checkedId == R.id.rb_sign) {
-                filterType = 3
-                setFilterTags(filterBean!!.sign)
-                ll_filter_other.visibility = View.VISIBLE
-            }
+            setFilterTab(checkedId)
         }
 
         btn_reset.setOnClickListener {
@@ -180,6 +204,23 @@ class ApproveListActivity : ToolbarActivity() {
             doRequest()
         }
     }
+
+    private fun setFilterTab(checkedId: Int) {
+        if (checkedId == R.id.rb_all) {
+            filterType = null
+            ll_filter_other.visibility = View.GONE
+            setFilterTags(ApproveFilterBean.ItemBean())
+        } else if (checkedId == R.id.rb_seal) {
+            filterType = 2
+            ll_filter_other.visibility = View.VISIBLE
+            setFilterTags(filterBean!!.approve)
+        } else if (checkedId == R.id.rb_sign) {
+            filterType = 3
+            setFilterTags(filterBean!!.sign)
+            ll_filter_other.visibility = View.VISIBLE
+        }
+    }
+
 
     var paramTemplates = ArrayList<String>()
     var paramStates = ArrayList<String>()
@@ -218,10 +259,34 @@ class ApproveListActivity : ToolbarActivity() {
                 tvTag.setBackgroundResource(bgColor1)
             }
         }
+        run {
+            val itemTag = inflater.inflate(R.layout.item_tag_filter2, null)
+            val tvTag = itemTag.findViewById(R.id.tv_tag) as TextView
+            tvTag.text = "全部"
+            tvTag.setOnClickListener(onClickTemplate)
+            tags_type.addView(itemTag)
+            tvTag.setOnClickListener {
+                fl_filter.visibility = View.GONE
+                doRequest()
+            }
+        }
+
+        run {
+            val itemTag = inflater.inflate(R.layout.item_tag_filter2, null)
+            val tvTag = itemTag.findViewById(R.id.tv_tag) as TextView
+            tvTag.text = "全部"
+            tvTag.setOnClickListener(onClickTemplate)
+            tags_state.addView(itemTag)
+            tvTag.setOnClickListener {
+                fl_filter.visibility = View.GONE
+                doRequest()
+            }
+        }
         itemBean.kind?.entries?.forEach { e ->
             val itemTag = inflater.inflate(R.layout.item_tag_filter2, null)
             val tvTag = itemTag.findViewById(R.id.tv_tag) as TextView
             tvTag.text = e.value
+            tvTag.tag = e.key
             tvTag.setOnClickListener(onClickTemplate)
             tags_type.addView(itemTag)
         }
@@ -229,6 +294,7 @@ class ApproveListActivity : ToolbarActivity() {
             val itemTag = inflater.inflate(R.layout.item_tag_filter2, null)
             val tvTag = itemTag.findViewById(R.id.tv_tag) as TextView
             tvTag.text = e.value
+            tvTag.tag = e.key
             tvTag.setOnClickListener(onClickStatus)
             tags_state.addView(itemTag)
         }
@@ -236,11 +302,12 @@ class ApproveListActivity : ToolbarActivity() {
 
     var page = 1
     fun doRequest() {
-        val templates = paramTemplates.joinToString(",")
-        val status = paramStates.joinToString(",")
+        val templates = if (paramTemplates.isEmpty()) null else paramTemplates.joinToString(",")
+        val status = if (paramStates.isEmpty()) null else paramStates.joinToString(",")
+
         SoguApi.getService(application)
                 .listApproval(status = mType, page = page,
-                        fuzzyQuery = key,
+                        fuzzyQuery = null,
                         type = filterType, template_id = templates, filter = status)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())

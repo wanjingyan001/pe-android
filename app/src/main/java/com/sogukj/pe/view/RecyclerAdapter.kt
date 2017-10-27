@@ -17,21 +17,19 @@ abstract class RecyclerHolder<T>(val convertView: View) : RecyclerView.ViewHolde
     abstract fun setData(view: View, data: T, position: Int)
 }
 
-class RecyclerAdapter<T>(val context: Context, val creator: (adapter: RecyclerAdapter<T>, parent: ViewGroup, type: Int) -> RecyclerHolder<T>)
+open class RecyclerAdapter<T>(val context: Context, val creator: (RecyclerAdapter<T>, ViewGroup, Int) -> RecyclerHolder<T>)
     : RecyclerView.Adapter<RecyclerHolder<T>>() {
 
     var dataList = mutableListOf<T>()
-    val inflater: LayoutInflater
+    val inflater: LayoutInflater = LayoutInflater.from(context)
     var comparator: Comparator<T>? = null
     var onItemClick: ((v: View, position: Int) -> Unit)? = null
     var onItemLongClick: ((v: View, position: Int) -> Boolean)? = null
     var selectedItems = ArrayList<Int>()
-        private set
     var mode: Int = 0
     var selectedPosition = -1
 
     init {
-        this.inflater = LayoutInflater.from(context)
         this.selectedItems = ArrayList<Int>()
         this.mode = MODE_SINGLE
     }
@@ -73,7 +71,7 @@ class RecyclerAdapter<T>(val context: Context, val creator: (adapter: RecyclerAd
         if (null != onItemLongClick) {
             holder.itemView.isLongClickable = true
             holder.itemView.setOnLongClickListener { v ->
-                 onItemLongClick!!(v, position)
+                onItemLongClick!!(v, position)
             }
         }
         super.onBindViewHolder(holder, position, payloads)
@@ -102,7 +100,6 @@ class RecyclerAdapter<T>(val context: Context, val creator: (adapter: RecyclerAd
 
     override fun onAttachedToRecyclerView(view: RecyclerView?) {
         super.onAttachedToRecyclerView(view)
-        view!!.isNestedScrollingEnabled = false
     }
 
     override fun onDetachedFromRecyclerView(view: RecyclerView?) {
@@ -125,51 +122,6 @@ class RecyclerAdapter<T>(val context: Context, val creator: (adapter: RecyclerAd
 
     fun isSelected(position: Int): Boolean {
         return selectedItems!!.contains(Integer.valueOf(position))
-    }
-
-
-    @JvmOverloads
-    fun toggleSelection(position: Int, invalidate: Boolean = false) {
-        if (position < 0) return
-        if (mode == MODE_SINGLE) clearSelection()
-
-        val index = selectedItems!!.indexOf(position)
-        if (index != -1) {
-            Trace.d(TAG, "toggleSelection removing selection on position " + position)
-            selectedItems!!.removeAt(index)
-        } else {
-            Trace.d(TAG, "toggleSelection adding selection on position " + position)
-            selectedItems!!.add(position)
-        }
-        if (invalidate) {
-            Trace.d(TAG, "toggleSelection notifyItemChanged on position " + position)
-            notifyItemChanged(position)
-        }
-        Trace.d(TAG, "toggleSelection current selection " + selectedItems!!)
-    }
-
-
-    @JvmOverloads
-    fun selectAll(skipViewType: Int = -1) {
-        Trace.d(TAG, "selectAll")
-        selectedItems = ArrayList<Int>(itemCount)
-        for (i in 0..itemCount - 1) {
-            if (getItemViewType(i) == skipViewType) continue
-            selectedItems!!.add(i)
-            Trace.d(TAG, "selectAll notifyItemChanged on position " + i)
-            notifyItemChanged(i)
-        }
-    }
-
-
-    fun clearSelection() {
-        val iterator = selectedItems!!.iterator()
-        while (iterator.hasNext()) {
-            val i = iterator.next()
-            iterator.remove()
-            Trace.d(TAG, "clearSelection notifyItemChanged on position " + i)
-            notifyItemChanged(i)
-        }
     }
 
 

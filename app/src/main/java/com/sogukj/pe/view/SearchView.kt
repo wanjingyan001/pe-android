@@ -54,7 +54,7 @@ class SearchView : LinearLayout {
 
     private fun init(context: Context, attrs: AttributeSet) {
         val layoutInflater = LayoutInflater.from(context)
-        val view = layoutInflater.inflate(R.layout.layout_search_view, null)
+        val view = layoutInflater.inflate(R.layout.search_view, null)
 
         iv_back = view.findViewById(R.id.iv_back)
 //        tv_search = view.findViewById(R.id.tv_search)

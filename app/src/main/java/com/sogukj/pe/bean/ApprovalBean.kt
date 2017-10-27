@@ -1,9 +1,11 @@
 package com.sogukj.pe.bean
 
+import java.io.Serializable
+
 /**
  * Created by qinfei on 17/10/25.
  */
-class ApprovalBean {
+class ApprovalBean : Serializable {
     var approval_id: Int? = null//	number	审批用印id
     var title: String? = null//	string	审批标题
     var kind: String? = null//	string	用印类别

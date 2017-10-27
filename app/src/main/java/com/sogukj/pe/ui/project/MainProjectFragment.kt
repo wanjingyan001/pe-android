@@ -31,7 +31,7 @@ import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_main_project.*
-import kotlinx.android.synthetic.main.layout_search_view.*
+import kotlinx.android.synthetic.main.search_view.*
 import kotlinx.android.synthetic.main.sogu_toolbar_main_proj.*
 import org.jetbrains.anko.textColor
 import java.util.*
