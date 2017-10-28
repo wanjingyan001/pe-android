@@ -85,7 +85,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/tv_comment"
+            android:id="@+id/tv_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableRight="@drawable/ic_arrow_r"
@@ -96,6 +96,21 @@
             android:textSize="14sp"
             android:visibility="gone"
             tools:text="1、关于投资诗襄信息科技公司的第三届第五次分组立项申请书·pdf" />
+
+        <LinearLayout
+            android:id="@+id/ll_coments"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/divider_top"
+            android:orientation="vertical">
+
+            <include layout="@layout/item_approve_comment" />
+
+            <include layout="@layout/item_approve_comment" />
+
+            <include layout="@layout/item_approve_comment" />
+        </LinearLayout>
     </LinearLayout>
 
 </RelativeLayout>

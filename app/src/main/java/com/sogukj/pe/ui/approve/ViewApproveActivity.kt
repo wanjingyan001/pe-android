@@ -3,40 +3,37 @@ package com.sogukj.pe.ui.approve
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Html
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
 import com.framework.base.ToolbarActivity
-import com.lcodecore.tkrefreshlayout.header.progresslayout.CircleImageView
-import com.sogukj.pe.App
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.ApprovalBean
 import com.sogukj.pe.bean.ApproveViewBean
 import com.sogukj.pe.bean.ApproverBean
-import com.sogukj.pe.ui.LoginActivity
 import com.sogukj.pe.util.Trace
+import com.sogukj.pe.view.CircleImageView
 import com.sogukj.service.SoguApi
-import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_view_approve.*
-import org.jetbrains.anko.Android
-import org.jetbrains.anko.collections.forEachByIndex
 import org.jetbrains.anko.collections.forEachWithIndex
 
 class ViewApproveActivity : ToolbarActivity() {
 
     lateinit var paramApprove: ApprovalBean
+    lateinit var inflater: LayoutInflater
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        inflater = LayoutInflater.from(this)
         paramApprove = intent.getSerializableExtra(Extras.DATA) as ApprovalBean
         setContentView(R.layout.activity_view_approve)
         setBack(true)
@@ -156,25 +153,88 @@ class ViewApproveActivity : ToolbarActivity() {
             val tvName = convertView.findViewById(R.id.tv_name) as TextView
             val tvResult = convertView.findViewById(R.id.tv_result) as TextView
             val tvTime = convertView.findViewById(R.id.tv_time) as TextView
-            val tvComment = convertView.findViewById(R.id.tv_comment) as TextView
+            val tvContent = convertView.findViewById(R.id.tv_comment) as TextView
+            val llComments = convertView.findViewById(R.id.ll_coments) as LinearLayout
             tvPosition.text = v.position
             tvName.text = v.name
             val ch = v.name?.first()
-            iv_user.setChar(ch)
+            ivUser.setChar(ch)
             Glide.with(this)
                     .load(v.url)
                     .into(ivUser)
             tvResult.text = v.status
-            tvComment.text = v.content
+            tvContent.text = v.content
             tvTime.text = v.approval_time
             if (null != v.content || !TextUtils.isEmpty(v.content)) {
-                tvComment.visibility = View.VISIBLE
+                tvContent.visibility = View.VISIBLE
+                tvContent.setOnClickListener {
+                    doComment(v.hid!!)
+                }
             }
 
             if (null != v.approval_time || !TextUtils.isEmpty(v.approval_time)) {
                 tvTime.visibility = View.VISIBLE
             }
+            setComment(llComments, v.comment)
+        }
+    }
 
+    fun doComment(hid: Int) {
+        MaterialDialog.Builder(this)
+                .theme(Theme.LIGHT)
+                .title("评论")
+                .input("输入评论文字...", "", true) { dialog, text ->
+
+                }
+                .cancelable(true)
+                .onPositive { dialog, dialogAction ->
+                    val text = dialog.inputEditText?.text.toString()
+                    submitComment(hid, text)
+                }
+                .positiveText("确认")
+                .negativeText("取消")
+                .show()
+    }
+
+    private fun submitComment(hid: Int, text: String) {
+        SoguApi.getService(application)
+                .submitComment(hid, 0, text)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        showToast("提交成功")
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    showToast("提交失败")
+                })
+    }
+
+    private fun setComment(llComments: LinearLayout, comments: List<ApproveViewBean.CommentBean>?) {
+        llComments.removeAllViews()
+        if (null == comments || comments.isEmpty()) {
+            llComments.visibility = View.GONE
+            return
+        }
+        comments?.forEach { data ->
+            val convertView = inflater.inflate(R.layout.item_approve_comment, null)
+
+            val ivUser = convertView.findViewById(R.id.iv_user) as CircleImageView
+            val tvName = convertView.findViewById(R.id.tv_name) as TextView
+            val tvTime = convertView.findViewById(R.id.tv_time) as TextView
+            val tvComment = convertView.findViewById(R.id.tv_comment) as TextView
+
+            tvName.text = data.name
+            tvComment.text = data.content
+            tvTime.text = data.add_time
+
+            val ch = data.name?.first()
+            ivUser.setChar(ch)
+            Glide.with(this)
+                    .load(data.url)
+                    .into(ivUser)
 
         }
     }

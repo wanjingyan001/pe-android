@@ -601,11 +601,17 @@ interface SoguService {
     @POST("/api/Approve/approveResult")
     fun examineApprove(@Field("approval_id") approval_id: Int
                        , @Field("type") type: Int? = null
-                       , @Field("content") content: String): Observable<Payload<String>>
+                       , @Field("content") content: String): Observable<Payload<Object>>
 
     @FormUrlEncoded
     @POST("/api/Approve/applyUrgent")
-    fun approveUrgent(@Field("approval_id") approval_id: Int): Observable<Payload<String>>
+    fun approveUrgent(@Field("approval_id") approval_id: Int): Observable<Payload<Object>>
+
+    @FormUrlEncoded
+    @POST("/api/Approve/approveResult")
+    fun submitComment(@Field("hid") hid: Int
+                      , @Field("comment_id") comment_id: Int = 0
+                      , @Field("content") content: String): Observable<Payload<Object>>
 
 //    @FormUrlEncoded
 //    @POST("/api/Approve/applyUrgent")
