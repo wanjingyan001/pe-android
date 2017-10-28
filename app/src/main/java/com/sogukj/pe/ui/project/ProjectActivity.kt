@@ -138,9 +138,8 @@ class ProjectActivity : ToolbarActivity() {
     }
 
     fun refresh(grid: GridLayout, data: Map<String, Int?>, color: Int = Color.RED) {
-        tv_xmws.setOnClickListener(this::onClick)
         val size = grid.childCount
-        for (i in 0..size - 1) {
+        for (i in 0 until size) {
             val child = grid.getChildAt(i) as TipsView
             val icon = child.compoundDrawables[1]
             val tag = child.getTag()

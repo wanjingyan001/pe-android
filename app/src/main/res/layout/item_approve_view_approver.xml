@@ -7,10 +7,12 @@
 
     <TextView
         android:id="@+id/tv_position"
-        android:layout_width="wrap_content"
+        android:layout_width="60dp"
         android:layout_height="40dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginRight="10dp"
+        android:ellipsize="end"
         android:gravity="center_vertical"
+        android:lines="2"
         android:textColor="@color/text_1"
         tools:text="经办人" />
 
@@ -38,6 +40,22 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_1"
                 android:textSize="12sp"
+                tools:text="经办人" />
+
+            <com.sogukj.pe.view.CircleImageView
+                android:id="@+id/iv_user2"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginRight="5dp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tv_name2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_1"
+                android:textSize="12sp"
+                android:visibility="gone"
                 tools:text="经办人" />
 
             <LinearLayout

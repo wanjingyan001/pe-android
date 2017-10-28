@@ -25,7 +25,7 @@ class ApproveViewBean {
     }
 
     class FileBean {
-        var fiel_name: String? = null
+        var file_name: String? = null
         var url: String? = null
     }
 

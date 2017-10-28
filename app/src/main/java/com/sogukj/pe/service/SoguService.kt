@@ -597,6 +597,20 @@ interface SoguService {
     @POST("/api/Approve/approveShow")
     fun showApprove(@Field("approval_id") approval_id: Int, @Field("type") type: String? = null): Observable<Payload<ApproveViewBean>>
 
+    @FormUrlEncoded
+    @POST("/api/Approve/approveResult")
+    fun examineApprove(@Field("approval_id") approval_id: Int
+                       , @Field("type") type: Int? = null
+                       , @Field("content") content: String): Observable<Payload<String>>
+
+    @FormUrlEncoded
+    @POST("/api/Approve/applyUrgent")
+    fun approveUrgent(@Field("approval_id") approval_id: Int): Observable<Payload<String>>
+
+//    @FormUrlEncoded
+//    @POST("/api/Approve/applyUrgent")
+//    fun approveUrgent(@Field("approval_id") approval_id: Int): Observable<Payload<String>>
+
     companion object {
         const val APPKEY_NAME = "appkey"
         const val APPKEY_VALUE = "d5f17cafef0829b5"

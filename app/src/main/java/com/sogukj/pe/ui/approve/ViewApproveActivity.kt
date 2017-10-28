@@ -10,19 +10,25 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
 import com.framework.base.ToolbarActivity
 import com.lcodecore.tkrefreshlayout.header.progresslayout.CircleImageView
+import com.sogukj.pe.App
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.ApprovalBean
 import com.sogukj.pe.bean.ApproveViewBean
 import com.sogukj.pe.bean.ApproverBean
+import com.sogukj.pe.ui.LoginActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
+import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_view_approve.*
+import org.jetbrains.anko.Android
 import org.jetbrains.anko.collections.forEachByIndex
 import org.jetbrains.anko.collections.forEachWithIndex
 
@@ -46,6 +52,7 @@ class ViewApproveActivity : ToolbarActivity() {
                         initInfo(payload.payload?.relax)
                         initFiles(payload.payload?.file_list)
                         initApprovers(payload.payload?.approve)
+                        initButtons(payload.payload?.click)
                     } else
                         showToast(payload.message)
                 }, { e ->
@@ -53,6 +60,88 @@ class ViewApproveActivity : ToolbarActivity() {
                     showToast("暂无可用数据")
                 })
 
+    }
+
+    private fun initButtons(click: Int?) {
+        ll_single.visibility = View.VISIBLE
+        ll_twins.visibility = View.GONE
+        when (click) {
+            1 -> {
+                btn_ok.text = "申请加急"
+                btn_ok.setOnClickListener {
+                    SoguApi.getService(application)
+                            .approveUrgent(paramApprove.approval_id!!)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(Schedulers.io())
+                            .subscribe({ payload ->
+                                if (payload.isOk) {
+                                    showToast("发送成功")
+                                } else
+                                    showToast(payload.message)
+                            }, { e ->
+                                Trace.e(e)
+                                showToast("请求失败")
+                            })
+                }
+            }
+            2 -> {
+                btn_ok.text = "审批完成"
+                iv_state_agreed.visibility = View.VISIBLE
+                btn_ok.setOnClickListener {
+                    finish()
+                }
+            }
+            3 -> {
+                btn_ok.text = "重新发起审批"
+                btn_ok.setOnClickListener {
+
+                }
+            }
+            4 -> {
+                iv_state_signed.visibility = View.VISIBLE
+                ll_single.visibility = View.GONE
+                ll_twins.visibility = View.VISIBLE
+            }
+            5 -> {
+                btn_ok.text = "审批"
+                btn_ok.setOnClickListener {
+                    MaterialDialog.Builder(this)
+                            .theme(Theme.LIGHT)
+                            .title("审批意见")
+                            .input("输入意见...", "", true) { dialog, text ->
+
+                            }
+                            .cancelable(true)
+                            .onPositive { dialog, dialogAction ->
+                                val text = dialog.inputEditText?.text.toString()
+                                examineApprove(1, text)
+                            }
+                            .onNegative { dialog, which ->
+                                val text = dialog.inputEditText?.text.toString()
+                                examineApprove(2, text)
+                            }
+                            .positiveText("确认")
+                            .negativeText("否决")
+                            .show()
+                }
+            }
+        }
+    }
+
+    fun examineApprove(type: Int, text: String = "") {
+        SoguApi.getService(application)
+                .examineApprove(paramApprove.approval_id!!, type, text)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        showToast("提交成功")
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    showToast("提交失败")
+                })
     }
 
     private fun initApprovers(approveList: List<ApproverBean>?) {
@@ -69,9 +158,11 @@ class ViewApproveActivity : ToolbarActivity() {
             val tvTime = convertView.findViewById(R.id.tv_time) as TextView
             val tvComment = convertView.findViewById(R.id.tv_comment) as TextView
             tvPosition.text = v.position
-            tvName.text = v.approver
+            tvName.text = v.name
+            val ch = v.name?.first()
+            iv_user.setChar(ch)
             Glide.with(this)
-                    .load(v.name)
+                    .load(v.url)
                     .into(ivUser)
             tvResult.text = v.status
             tvComment.text = v.content
@@ -93,7 +184,7 @@ class ViewApproveActivity : ToolbarActivity() {
         val inflater = LayoutInflater.from(this)
         file_list?.forEachWithIndex { i, v ->
             val view = inflater.inflate(R.layout.item_file_single, null) as TextView
-            view.text = "${i + 1}、${v.fiel_name}"
+            view.text = "${i + 1}、${v.file_name}"
             ll_files.addView(view)
             if (!TextUtils.isEmpty(v.url))
                 view.setOnClickListener {

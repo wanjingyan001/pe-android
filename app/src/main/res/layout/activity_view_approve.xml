@@ -171,8 +171,71 @@
                         <include layout="@layout/item_approve_view_approver" />
                     </LinearLayout>
                 </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_single"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp">
+
+                    <Button
+                        android:id="@+id/btn_ok"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:background="@drawable/bg_btn_blue"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        tools:text="审批完成" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_twins"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <Button
+                        android:id="@+id/btn_left"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_rect_blue"
+                        android:text="导出审批单"
+                        android:textColor="@color/colorBlue"
+                        android:textSize="18sp" />
+
+                    <Button
+                        android:id="@+id/btn_right"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_btn_blue"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        tools:text="用印完成" />
+                </LinearLayout>
             </LinearLayout>
 
+            <ImageView
+                android:id="@+id/iv_state_agreed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|top"
+                android:layout_marginTop="30dp"
+                android:src="@drawable/ic_flow_state_agree"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/iv_state_signed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|top"
+                android:layout_marginTop="30dp"
+                android:src="@drawable/ic_flow_state_signed"
+                android:visibility="gone" />
         </FrameLayout>
     </ScrollView>
 </LinearLayout>

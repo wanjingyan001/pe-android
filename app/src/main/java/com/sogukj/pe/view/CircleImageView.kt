@@ -206,8 +206,9 @@ class CircleImageView : android.support.v7.widget.AppCompatImageView {
     internal var mChar = ' '
     internal var textPaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
-    fun setChar(ch: Char) {
-        this.mChar = ch
+    fun setChar(ch: Char?) {
+        if (null == ch) return
+        this.mChar = ch!!
         this.mBitmap = null
     }
 

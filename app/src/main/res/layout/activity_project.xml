@@ -623,6 +623,7 @@
                     android:drawableTop="@drawable/ic_proj_qyzs"
                     android:text="企业证书" />
             </GridLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
@@ -675,6 +676,7 @@
                     android:id="@+id/tv_xmws"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_xmws"
+                    android:onClick="onClick"
                     android:tag="tv_xmws"
                     android:text="项目文书" />
 
