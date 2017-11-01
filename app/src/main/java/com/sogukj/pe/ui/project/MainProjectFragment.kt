@@ -75,7 +75,7 @@ class MainProjectFragment : BaseFragment() {
                         }
                     } else {
                         tv2.text = data.state
-                        when (data.state) {
+                        tv2.textColor = when (data.state) {
                             "初创" -> Color.parseColor("#9e9e9e")
                             "天使轮" -> Color.parseColor("#e64a19")
                             "A轮" -> Color.parseColor("#f57c00")
@@ -87,10 +87,8 @@ class MainProjectFragment : BaseFragment() {
                             "新三板" -> Color.parseColor("#00796b")
                             "IPO" -> Color.parseColor("#0097a7")
                             else -> Color.parseColor("#9e9e9e")
-                        }?.apply {
-                            tv2.textColor = this
                         }
-                        when (data.state) {
+                        val bg = when (data.state) {
                             "初创" -> R.drawable.bg_border_proj1
                             "天使轮" -> R.drawable.bg_border_proj2
                             "A轮" -> R.drawable.bg_border_proj3
@@ -102,9 +100,8 @@ class MainProjectFragment : BaseFragment() {
                             "新三板" -> R.drawable.bg_border_proj9
                             "IPO" -> R.drawable.bg_border_proj10
                             else -> R.drawable.bg_border_proj1
-                        }?.apply {
-                            tv2.setBackgroundResource(this)
                         }
+                        tv2.setBackgroundResource(bg)
 
                     }
                     tv3.text = when (type) {

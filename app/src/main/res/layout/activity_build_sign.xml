@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.sogukj.pe.ui.approve.SealActivity">
+    tools:context="com.sogukj.pe.ui.approve.BuildSealActivity">
 
     <include layout="@layout/toolbar" />
 
@@ -61,7 +61,7 @@
                         style="@style/SoguTextNormal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="审批人" />
+                        android:text="审批环节" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -81,7 +81,8 @@
 
                 </LinearLayout>
 
-                <Button android:id="@+id/btn_confirm"
+                <Button
+                    android:id="@+id/btn_confirm"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:layout_gravity="bottom"

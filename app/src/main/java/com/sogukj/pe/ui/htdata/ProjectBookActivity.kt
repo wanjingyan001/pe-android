@@ -2,6 +2,7 @@ package com.sogukj.pe.ui.htdata
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
@@ -21,7 +22,6 @@ import com.sogukj.pe.R
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.bean.ProjectBookBean
 import com.sogukj.pe.ui.SupportEmptyView
-import com.sogukj.pe.ui.news.NegativeNewsActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.ListAdapter
 import com.sogukj.pe.view.ListHolder
@@ -96,7 +96,12 @@ class ProjectBookActivity : ToolbarActivity(), SupportEmptyView {
             recycler_result.adapter = adapter
 
             adapter.onItemClick = { v, p ->
-                val news = adapter.getItem(p);
+                val data = adapter.getItem(p);
+                if (!TextUtils.isEmpty(data.url)) {
+                    val intent = Intent(Intent.ACTION_VIEW)
+                    intent.data = Uri.parse(data.url)
+                    startActivity(intent)
+                }
             }
 
 
@@ -126,14 +131,38 @@ class ProjectBookActivity : ToolbarActivity(), SupportEmptyView {
         list1.adapter = adapter1
         list2.adapter = adapter2
         list3.adapter = adapter3
+        list1.setOnItemClickListener { parent, view, position, id ->
+            val data = adapter1.getItem(position);
+            if (!TextUtils.isEmpty(data?.url)) {
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = Uri.parse(data!!.url)
+                startActivity(intent)
+            }
+        }
+        list2.setOnItemClickListener { parent, view, position, id ->
+            val data = adapter2.getItem(position);
+            if (!TextUtils.isEmpty(data?.url)) {
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = Uri.parse(data!!.url)
+                startActivity(intent)
+            }
+        }
+        list3.setOnItemClickListener { parent, view, position, id ->
+            val data = adapter3.getItem(position);
+            if (!TextUtils.isEmpty(data?.url)) {
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = Uri.parse(data!!.url)
+                startActivity(intent)
+            }
+        }
         tv_more1.setOnClickListener {
-            NegativeNewsActivity.start(this, project, 1)
+            ProjectBookMoreActivity.start(this, project, 1)
         }
         tv_more2.setOnClickListener {
-            NegativeNewsActivity.start(this, project, 2)
+            ProjectBookMoreActivity.start(this, project, 2)
         }
         tv_more3.setOnClickListener {
-            NegativeNewsActivity.start(this, project, 2)
+            ProjectBookMoreActivity.start(this, project, 2)
         }
         list1.setOnItemClickListener { parent, view, position, id ->
             val data = adapter1.dataList[position]

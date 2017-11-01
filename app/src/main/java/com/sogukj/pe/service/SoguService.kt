@@ -595,7 +595,13 @@ interface SoguService {
 
     @FormUrlEncoded
     @POST("/api/Approve/approveShow")
-    fun showApprove(@Field("approval_id") approval_id: Int, @Field("type") type: String? = null): Observable<Payload<ApproveViewBean>>
+    fun showApprove(@Field("approval_id") approval_id: Int, @Field("type") type: Int? = null, @Field("classify") classify: Int? = null)
+            : Observable<Payload<ApproveViewBean>>
+
+    @FormUrlEncoded
+    @POST("/api/Approve/signShow")
+    fun showApproveSign(@Field("approval_id") approval_id: Int, @Field("type") type: String? = null): Observable<Payload<ApproveViewBean>>
+
 
     @FormUrlEncoded
     @POST("/api/Approve/approveResult")
@@ -607,11 +613,28 @@ interface SoguService {
     @POST("/api/Approve/applyUrgent")
     fun approveUrgent(@Field("approval_id") approval_id: Int): Observable<Payload<Object>>
 
+    @POST("/api/Approve/signResult")
+    fun approveSign(@Body body: RequestBody): Observable<Payload<Object>>
+
     @FormUrlEncoded
     @POST("/api/Approve/approveResult")
     fun submitComment(@Field("hid") hid: Int
                       , @Field("comment_id") comment_id: Int = 0
                       , @Field("content") content: String): Observable<Payload<Object>>
+
+    @FormUrlEncoded
+    @POST("/api/Approve/updateApprove")
+    fun resubApprove(@Field("approval_id") approval_id: Int): Observable<Payload<Object>>
+
+    @FormUrlEncoded
+    @POST("/api/Approve/derivePdf")
+    fun exportPdf(@Field("approval_id") approval_id: Int): Observable<Payload<String>>
+
+    @POST("/api/Message/getMessageIndex")
+    fun msgIndex(): Observable<Payload<MessageIndexBean>>
+
+    @POST("/api/Message/getMessageList")
+    fun msgList(): Observable<Payload<List<MessageBean>>>
 
 //    @FormUrlEncoded
 //    @POST("/api/Approve/applyUrgent")

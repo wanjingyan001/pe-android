@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import com.framework.base.BaseFragment
 import com.sogukj.pe.R
-import com.sogukj.pe.ui.approve.ApproveActivity
+import com.sogukj.pe.ui.approve.EntryApproveActivity
 import com.sogukj.pe.ui.news.NewsListActivity
 import com.sogukj.pe.ui.user.UserActivity
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -25,7 +25,7 @@ class MainHomeFragment : BaseFragment() {
             UserActivity.start(baseActivity)
         }
         tv_sp.setOnClickListener {
-            ApproveActivity.start(baseActivity)
+            EntryApproveActivity.start(baseActivity)
         }
     }
 

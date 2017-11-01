@@ -111,7 +111,16 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
 
         })
         refresh.setAutoLoadMore(true)
-
+        ll_order_name_1.setOnClickListener { v ->
+            asc *= if (orderBy == 1) -1 else 1;
+            orderBy = 1
+            doRequest()
+        }
+        ll_order_time_1.setOnClickListener { v ->
+            asc *= if (orderBy == 3) -1 else 1;
+            orderBy = 3
+            doRequest()
+        }
 
         ll_order_name.setOnClickListener { v ->
             asc *= if (orderBy == 1) -1 else 1;
@@ -148,15 +157,25 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
     var orderBy = 3;
 
     fun doRequest() {
+        iv_sort_name_1.visibility = View.GONE
+        iv_sort_time_1.visibility = View.GONE
         iv_sort_name.visibility = View.GONE
-        iv_sort_state.visibility = View.GONE
         iv_sort_time.visibility = View.GONE
+        iv_sort_state.visibility = View.GONE
         val imgAsc = if (asc == -1) R.drawable.ic_down else R.drawable.ic_up
         when (Math.abs(orderBy)) {
             1 -> iv_sort_name
             2 -> iv_sort_state
             else -> iv_sort_time
         }.apply {
+            setImageResource(imgAsc)
+            visibility = View.VISIBLE
+        }
+        when (Math.abs(orderBy)) {
+            1 -> iv_sort_name_1
+            3 -> iv_sort_time_1
+            else -> null
+        }?.apply {
             setImageResource(imgAsc)
             visibility = View.VISIBLE
         }
@@ -355,7 +374,7 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                 }
             } else {
                 tv2.text = data.state
-                when (data.state) {
+                tv2.textColor = when (data.state) {
                     "初创" -> Color.parseColor("#9e9e9e")
                     "天使轮" -> Color.parseColor("#e64a19")
                     "A轮" -> Color.parseColor("#f57c00")
@@ -367,10 +386,8 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                     "新三板" -> Color.parseColor("#00796b")
                     "IPO" -> Color.parseColor("#0097a7")
                     else -> Color.parseColor("#9e9e9e")
-                }?.apply {
-                    tv2.textColor = this
                 }
-                when (data.state) {
+                val bg = when (data.state) {
                     "初创" -> R.drawable.bg_border_proj1
                     "天使轮" -> R.drawable.bg_border_proj2
                     "A轮" -> R.drawable.bg_border_proj3
@@ -382,10 +399,8 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                     "新三板" -> R.drawable.bg_border_proj9
                     "IPO" -> R.drawable.bg_border_proj10
                     else -> R.drawable.bg_border_proj1
-                }?.apply {
-                    tv2.setBackgroundResource(this)
                 }
-
+                tv2.setBackgroundResource(bg)
             }
             tv3.text = when (type) {
                 1 -> data.add_time

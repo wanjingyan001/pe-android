@@ -52,7 +52,7 @@ public class PdfUtil {
 
         try {
             url = new URL(urls);
-        } catch (MalformedURLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -60,18 +60,18 @@ public class PdfUtil {
             return;
         }
 
-        final String filename = FileUtil.getExternalFilesDir(context) + url.getPath().hashCode() + ".pdf";
+        final String filePath = FileUtil.getExternalFilesDir(context) + url.getPath().hashCode() + ".pdf";
 
-        if (FileUtil.isFileExist(filename)) {
-            opendPdf(context, new File(filename));
+        if (FileUtil.isFileExist(filePath)) {
+            opendPdf(context, new File(filePath));
         } else {
-            Toast.makeText(context, "正在下载文件!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "正在下载文件...", Toast.LENGTH_SHORT).show();
             new DownLoadService("http://" + url.getHost()).getFile(url.getPath()).enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     try {
                         if (response.code() == 200) {
-                            File file = FileUtil.byte2File(response.body().bytes(), filename);
+                            File file = FileUtil.writeFile(response.body().byteStream(), filePath);
                             opendPdf(context, file);
                         } else {
                             Toast.makeText(context, "下载失败!", Toast.LENGTH_SHORT).show();

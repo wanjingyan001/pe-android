@@ -17,13 +17,12 @@ import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_seal.*
+import kotlinx.android.synthetic.main.activity_build_seal.*
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.sogukj.pe.view.FlowLayout
 import android.widget.TextView
 import cn.finalteam.rxgalleryfinal.RxGalleryFinal
-import cn.finalteam.rxgalleryfinal.RxGalleryFinalApi
 import cn.finalteam.rxgalleryfinal.imageloader.ImageLoaderType
 import cn.finalteam.rxgalleryfinal.rxbus.RxBusResultDisposable
 import cn.finalteam.rxgalleryfinal.rxbus.event.ImageRadioResultEvent
@@ -40,13 +39,13 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class SealActivity : ToolbarActivity() {
+class BuildSealActivity : ToolbarActivity() {
 
     val gson = Gson()
     lateinit var spGroudItemBean: SpGroupItemBean
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_seal)
+        setContentView(R.layout.activity_build_seal)
         spGroudItemBean = intent.getSerializableExtra(Extras.DATA) as SpGroupItemBean
         setBack(true)
         title = spGroudItemBean.name
@@ -105,7 +104,10 @@ class SealActivity : ToolbarActivity() {
         val builder = FormBody.Builder()
         builder.add("template_id", "${spGroudItemBean.id}")
         for ((k, v) in paramMap) {
-            builder.add(k, gson.toJson(v))
+            if (v is String) {
+                builder.add(k, v)
+            } else
+                builder.add(k, gson.toJson(v))
         }
         SoguApi.getService(application)
                 .submitApprove(builder.build())
@@ -123,7 +125,7 @@ class SealActivity : ToolbarActivity() {
                 })
     }
 
-    private fun addApprover(bean: ApproverBean, inflater: LayoutInflater) {
+    fun addApprover(bean: ApproverBean, inflater: LayoutInflater) {
         val convertView = inflater.inflate(R.layout.cs_row_approver, null);
         ll_approver.addView(convertView)
         val tvLabel = convertView.findViewById(R.id.tv_label) as TextView
@@ -132,7 +134,7 @@ class SealActivity : ToolbarActivity() {
         etValue.text = bean.approver
     }
 
-    private fun addRow(bean: CustomSealBean, inflater: LayoutInflater) {
+    fun addRow(bean: CustomSealBean, inflater: LayoutInflater) {
         when (bean.control) {
             1 -> add1(bean, inflater)
             2 -> add2(bean, inflater)
@@ -179,7 +181,7 @@ class SealActivity : ToolbarActivity() {
         }
         if (map.isNotEmpty())
             etValue.setOnClickListener {
-                MaterialDialog.Builder(this@SealActivity)
+                MaterialDialog.Builder(this@BuildSealActivity)
                         .theme(Theme.LIGHT)
                         .items(items)
                         .canceledOnTouchOutside(true)
@@ -451,7 +453,7 @@ class SealActivity : ToolbarActivity() {
             val ivAdd = convertView.findViewById(R.id.iv_add) as ImageView
             ivAdd.setOnClickListener {
                 RxGalleryFinal
-                        .with(this@SealActivity)
+                        .with(this@BuildSealActivity)
                         .image()
                         .radio()
                         .imageLoader(ImageLoaderType.GLIDE)
@@ -555,7 +557,7 @@ class SealActivity : ToolbarActivity() {
 
     companion object {
         fun start(ctx: Activity?, itemBean: SpGroupItemBean) {
-            val intent = Intent(ctx, SealActivity::class.java)
+            val intent = Intent(ctx, BuildSealActivity::class.java)
             intent.putExtra(Extras.DATA, itemBean)
             ctx?.startActivity(intent)
         }

@@ -19,34 +19,47 @@ import com.sogukj.pe.R
 import com.sogukj.pe.bean.ApprovalBean
 import com.sogukj.pe.bean.ApproveViewBean
 import com.sogukj.pe.bean.ApproverBean
+import com.sogukj.pe.bean.MessageBean
+import com.sogukj.pe.util.PdfUtil
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.CircleImageView
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_view_approve.*
+import kotlinx.android.synthetic.main.activity_seal_approve.*
 import org.jetbrains.anko.collections.forEachWithIndex
 
-class ViewApproveActivity : ToolbarActivity() {
+class SealApproveActivity : ToolbarActivity() {
 
-    lateinit var paramApprove: ApprovalBean
     lateinit var inflater: LayoutInflater
+    lateinit var paramTitle: String
+    var paramId: Int? = null
+    var paramType: Int? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         inflater = LayoutInflater.from(this)
-        paramApprove = intent.getSerializableExtra(Extras.DATA) as ApprovalBean
-        setContentView(R.layout.activity_view_approve)
+        val paramObj = intent.getSerializableExtra(Extras.DATA)
+        if (paramObj is ApprovalBean) {
+            paramTitle = paramObj.kind!!
+            paramId = paramObj.approval_id!!
+        } else if (paramObj is MessageBean) {
+            paramTitle = paramObj.type_name!!
+            paramId = paramObj.approval_id!!
+        } else {
+            finish()
+        }
+        setContentView(R.layout.activity_seal_approve)
         setBack(true)
-        title = "用印审批"
+        title = paramTitle
 
         SoguApi.getService(application)
-                .showApprove(paramApprove.approval_id!!, paramApprove.kind)
+                .showApprove(approval_id = paramId!!, classify = paramType)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         initUser(payload.payload?.fixation)
-                        initInfo(payload.payload?.relax)
+                        initInfo(payload.payload?.fixation, payload.payload?.relax)
                         initFiles(payload.payload?.file_list)
                         initApprovers(payload.payload?.approve)
                         initButtons(payload.payload?.click)
@@ -67,7 +80,7 @@ class ViewApproveActivity : ToolbarActivity() {
                 btn_ok.text = "申请加急"
                 btn_ok.setOnClickListener {
                     SoguApi.getService(application)
-                            .approveUrgent(paramApprove.approval_id!!)
+                            .approveUrgent(paramId!!)
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribeOn(Schedulers.io())
                             .subscribe({ payload ->
@@ -91,13 +104,42 @@ class ViewApproveActivity : ToolbarActivity() {
             3 -> {
                 btn_ok.text = "重新发起审批"
                 btn_ok.setOnClickListener {
-
+                    SoguApi.getService(application)
+                            .resubApprove(paramId!!)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(Schedulers.io())
+                            .subscribe({ payload ->
+                                if (payload.isOk) {
+                                    showToast("提交成功")
+                                } else
+                                    showToast(payload.message)
+                            }, { e ->
+                                Trace.e(e)
+                                showToast("请求失败")
+                            })
                 }
             }
             4 -> {
                 iv_state_signed.visibility = View.VISIBLE
                 ll_single.visibility = View.GONE
                 ll_twins.visibility = View.VISIBLE
+                btn_left.setOnClickListener {
+                    SoguApi.getService(application)
+                            .exportPdf(paramId!!)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(Schedulers.io())
+                            .subscribe({ payload ->
+                                if (payload.isOk) {
+                                    val url = payload.payload
+                                    if (!TextUtils.isEmpty(url))
+                                        PdfUtil.loadPdf(this, url!!)
+                                } else
+                                    showToast(payload.message)
+                            }, { e ->
+                                Trace.e(e)
+                                showToast("请求失败")
+                            })
+                }
             }
             5 -> {
                 btn_ok.text = "审批"
@@ -127,7 +169,7 @@ class ViewApproveActivity : ToolbarActivity() {
 
     fun examineApprove(type: Int, text: String = "") {
         SoguApi.getService(application)
-                .examineApprove(paramApprove.approval_id!!, type, text)
+                .examineApprove(paramId!!, type, text)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -145,24 +187,25 @@ class ViewApproveActivity : ToolbarActivity() {
         ll_approvers.removeAllViews()
         val inflater = LayoutInflater.from(this)
         approveList?.forEach { v ->
-            val convertView = inflater.inflate(R.layout.item_approve_view_approver, null)
+            val convertView = inflater.inflate(R.layout.item_approve_seal_approver, null)
             ll_approvers.addView(convertView)
 
             val tvPosition = convertView.findViewById(R.id.tv_position) as TextView
             val ivUser = convertView.findViewById(R.id.iv_user) as com.sogukj.pe.view.CircleImageView
             val tvName = convertView.findViewById(R.id.tv_name) as TextView
-            val tvResult = convertView.findViewById(R.id.tv_result) as TextView
+            val tvStatus = convertView.findViewById(R.id.tv_status) as TextView
             val tvTime = convertView.findViewById(R.id.tv_time) as TextView
             val tvContent = convertView.findViewById(R.id.tv_comment) as TextView
             val llComments = convertView.findViewById(R.id.ll_coments) as LinearLayout
             tvPosition.text = v.position
             tvName.text = v.name
+            tvTime.text = v.approval_time
             val ch = v.name?.first()
             ivUser.setChar(ch)
             Glide.with(this)
                     .load(v.url)
                     .into(ivUser)
-            tvResult.text = v.status
+            tvStatus.text = v.status_str
             tvContent.text = v.content
             tvTime.text = v.approval_time
             if (null != v.content || !TextUtils.isEmpty(v.content)) {
@@ -255,8 +298,12 @@ class ViewApproveActivity : ToolbarActivity() {
         }
     }
 
-    private fun initInfo(relax: List<ApproveViewBean.ValueBean>?) {
+    private fun initInfo(from: ApproveViewBean.FromBean?, relax: List<ApproveViewBean.ValueBean>?) {
         val buff = StringBuffer()
+        if (null != from) {
+            appendLine(buff, "用印类别", from.sp_type)
+            appendLine(buff, "提交时间", from.add_time)
+        }
         relax?.forEach { v ->
             appendLine(buff, v.name, v.value)
         }
@@ -279,7 +326,13 @@ class ViewApproveActivity : ToolbarActivity() {
 
     companion object {
         fun start(ctx: Activity?, bean: ApprovalBean) {
-            val intent = Intent(ctx, ViewApproveActivity::class.java)
+            val intent = Intent(ctx, SealApproveActivity::class.java)
+            intent.putExtra(Extras.DATA, bean)
+            ctx?.startActivity(intent)
+        }
+
+        fun start(ctx: Activity?, bean: MessageBean) {
+            val intent = Intent(ctx, SealApproveActivity::class.java)
             intent.putExtra(Extras.DATA, bean)
             ctx?.startActivity(intent)
         }

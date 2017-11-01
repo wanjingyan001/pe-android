@@ -22,9 +22,7 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.ApprovalBean
 import com.sogukj.pe.bean.ApproveFilterBean
-import com.sogukj.pe.bean.CustomSealBean
 import com.sogukj.pe.ui.SupportEmptyView
-import com.sogukj.pe.ui.htdata.ProjectBookActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
@@ -32,7 +30,6 @@ import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_approve_list.*
-import kotlinx.coroutines.experimental.run
 
 class ApproveListActivity : ToolbarActivity(), TabLayout.OnTabSelectedListener {
     override fun onTabReselected(tab: TabLayout.Tab?) {
@@ -86,8 +83,8 @@ class ApproveListActivity : ToolbarActivity(), TabLayout.OnTabSelectedListener {
 
                 override fun setData(view: View, data: ApprovalBean, position: Int) {
                     tvTitle.text = data.title
-                    tvType.text = data.kind
-                    tvApplicant.text = data.name
+                    tvType.text = "类别:" + data.kind
+                    tvApplicant.text = "申请人:" + data.name
                     val strTime = data.add_time
                     tvTime.visibility = View.GONE
                     if (!TextUtils.isEmpty(strTime)) {
@@ -100,13 +97,16 @@ class ApproveListActivity : ToolbarActivity(), TabLayout.OnTabSelectedListener {
                         tvTime.text = strs
                                 .getOrNull(1)
                     }
-                    tvState.text = data.status
+                    data.setColorStatus(tvState)
                 }
             }
         })
         adapter.onItemClick = { v, p ->
             val data = adapter.dataList.get(p)
-            ViewApproveActivity.start(this,data)
+            if (data.type == 2)
+                SealApproveActivity.start(this, data)
+            else if (data.type == 3)
+                SignApproveActivity.start(this, data)
         }
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = LinearLayoutManager.VERTICAL

@@ -2,7 +2,6 @@ package com.sogukj.pe.ui.approve
 
 import android.app.Activity
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DividerItemDecoration
@@ -11,7 +10,6 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
-import android.widget.Toolbar
 import com.framework.base.ToolbarActivity
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
@@ -70,13 +68,16 @@ class ApproveSearchActivity : ToolbarActivity() {
                         tvTime.text = strs
                                 .getOrNull(1)
                     }
-                    tvState.text = data.status
+                    data.setColorStatus(tvState)
                 }
             }
         })
         adapter.onItemClick = { v, p ->
             val data = adapter.dataList.get(p)
-            ViewApproveActivity.start(this,data)
+            if (data.type == 2)
+                SealApproveActivity.start(this, data)
+            else if (data.type == 3)
+                SignApproveActivity.start(this, data)
         }
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = LinearLayoutManager.VERTICAL

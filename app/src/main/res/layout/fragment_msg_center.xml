@@ -6,7 +6,9 @@
 
     <include layout="@layout/toolbar" />
 
-    <include layout="@layout/search_box" />
+    <include
+        layout="@layout/search_box"
+        android:visibility="gone" />
 
     <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -17,7 +19,7 @@
 
         <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/recycler_result"
+            android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"
@@ -25,6 +27,8 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             app:layoutManager="LinearLayoutManager"
-            tools:listitem="@layout/item_main_project" />
+            tools:listitem="@layout/item_msg_index" />
+
+        <include layout="@layout/layout_empty" />
     </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
 </LinearLayout>
