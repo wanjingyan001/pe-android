@@ -45,9 +45,11 @@ class BuildSealActivity : ToolbarActivity() {
     var paramTitle: String? = null
     var paramId: Int? = null
     var paramType: Int? = null
+    var flagEdit=false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         inflater = LayoutInflater.from(this)
+        flagEdit=intent.getBooleanExtra(Extras.FLAG,false)
         val paramObj = intent.getSerializableExtra(Extras.DATA) as Serializable?
         if (paramObj is ApprovalBean) {
             paramTitle = paramObj.kind!!
@@ -76,8 +78,9 @@ class BuildSealActivity : ToolbarActivity() {
         ll_seal.removeAllViews()
         ll_approver.removeAllViews()
         val inflater = LayoutInflater.from(this)
+
         SoguApi.getService(application)
-                .approveInfo(template_id = paramId!!)
+                .approveInfo(template_id = if (flagEdit)null else paramId!!,sid = if (!flagEdit)null else paramId!!)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -598,11 +601,12 @@ class BuildSealActivity : ToolbarActivity() {
             ctx?.startActivity(intent)
         }
 
-        fun start(ctx: Activity?, id: Int, paramType: Int?, paramTitle: String) {
+        fun start(ctx: Activity?, id: Int, paramType: Int?, paramTitle: String, edit: Boolean = false) {
             val intent = Intent(ctx, BuildSealActivity::class.java)
             intent.putExtra(Extras.ID, id)
             intent.putExtra(Extras.TYPE, paramType)
             intent.putExtra(Extras.TITLE, paramTitle)
+            intent.putExtra(Extras.FLAG,edit)
             ctx?.startActivity(intent)
         }
     }

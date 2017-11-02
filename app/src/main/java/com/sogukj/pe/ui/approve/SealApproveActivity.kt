@@ -109,19 +109,19 @@ class SealApproveActivity : ToolbarActivity() {
             3 -> {
                 btn_ok.text = "重新发起审批"
                 btn_ok.setOnClickListener {
-                    SoguApi.getService(application)
-                            .resubApprove(paramId!!)
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribeOn(Schedulers.io())
-                            .subscribe({ payload ->
-                                if (payload.isOk) {
-                                    BuildSealActivity.start(this, paramId!!, paramType, paramTitle)
-                                } else
-                                    showToast(payload.message)
-                            }, { e ->
-                                Trace.e(e)
-                                showToast("请求失败")
-                            })
+                    BuildSealActivity.start(this, paramId!!, paramType, paramTitle)
+//                    SoguApi.getService(application)
+//                            .resubApprove(paramId!!)
+//                            .observeOn(AndroidSchedulers.mainThread())
+//                            .subscribeOn(Schedulers.io())
+//                            .subscribe({ payload ->
+//                                if (payload.isOk) {
+//                                } else
+//                                    showToast(payload.message)
+//                            }, { e ->
+//                                Trace.e(e)
+//                                showToast("请求失败")
+//                            })
                 }
             }
             4 -> {

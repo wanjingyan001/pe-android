@@ -559,7 +559,7 @@ interface SoguService {
 
     @FormUrlEncoded
     @POST("/api/Approve/componentInfo")
-    fun approveInfo(@Field("template_id") template_id: Int = 1
+    fun approveInfo(@Field("template_id") template_id: Int? = null
                     , @Field("sid") sid: Int? = null): Observable<Payload<List<CustomSealBean>>>
 
     @FormUrlEncoded

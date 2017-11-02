@@ -41,7 +41,7 @@ import java.io.FileOutputStream
 
 class SignApproveActivity : ToolbarActivity() {
 
-    lateinit var inflater:LayoutInflater
+    lateinit var inflater: LayoutInflater
     lateinit var paramTitle: String
     var paramId: Int? = null
     var paramType: Int? = null
@@ -52,19 +52,19 @@ class SignApproveActivity : ToolbarActivity() {
         if (paramObj is ApprovalBean) {
             paramTitle = paramObj.kind!!
             paramId = paramObj.approval_id!!
-            paramType=paramObj.type
+            paramType = paramObj.type
         } else if (paramObj is MessageBean) {
             paramTitle = paramObj.type_name!!
             paramId = paramObj.approval_id!!
-            paramType=paramObj.type
-        }else if (paramObj is SpGroupItemBean) {
+            paramType = paramObj.type
+        } else if (paramObj is SpGroupItemBean) {
             paramTitle = paramObj.name!!
             paramId = paramObj.id!!
-            paramType=paramObj.type
-        }  else {
+            paramType = paramObj.type
+        } else {
             finish()
         }
-        setContentView(R.layout.activity_seal_approve)
+        setContentView(R.layout.activity_sign_approve)
         setBack(true)
         title = paramTitle
 

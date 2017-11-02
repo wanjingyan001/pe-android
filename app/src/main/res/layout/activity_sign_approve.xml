@@ -172,7 +172,7 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <include android:id="@+id/state_sign_confirm"
+                <include
                     layout="@layout/state_sign_confim"
                     android:visibility="gone" />
 
