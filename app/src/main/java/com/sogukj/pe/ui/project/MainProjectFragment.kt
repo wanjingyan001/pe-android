@@ -46,8 +46,7 @@ class MainProjectFragment : BaseFragment() {
     val fragments = arrayOf(
             ProjectListFragment.newInstance(ProjectListFragment.TYPE_CB),
             ProjectListFragment.newInstance(ProjectListFragment.TYPE_LX),
-            ProjectListFragment.newInstance(ProjectListFragment.TYPE_YT),
-            ProjectListFragment.newInstance(ProjectListFragment.TYPE_GZ)
+            ProjectListFragment.newInstance(ProjectListFragment.TYPE_YT)
     )
     lateinit var adapter: RecyclerAdapter<ProjectBean>
 
@@ -166,8 +165,11 @@ class MainProjectFragment : BaseFragment() {
                         .into(iv_user)
         }
 
-        iv_add.setOnClickListener {
-            ProjectAddActivity.start(baseActivity)
+//        iv_add.setOnClickListener {
+//            ProjectAddActivity.start(baseActivity)
+//        }
+        iv_focus.setOnClickListener {
+            ProjectFocusActivity.start(baseActivity)
         }
         search_view.onTextChange = { text ->
             if (TextUtils.isEmpty(text)) {
@@ -199,7 +201,12 @@ class MainProjectFragment : BaseFragment() {
             if (null != text && !TextUtils.isEmpty(text))
                 doSearch(text!!)
         }
-        iv_search.setOnClickListener {
+
+
+        fb_add.setOnClickListener {
+            StoreProjectAddActivity.startAdd(baseActivity)
+        }
+        fb_search.setOnClickListener {
             ll_search.visibility = View.VISIBLE
             et_search.postDelayed({
                 et_search.inputType = InputType.TYPE_CLASS_TEXT
@@ -236,8 +243,9 @@ class MainProjectFragment : BaseFragment() {
 
             override fun onPageSelected(position: Int) {
                 tabs?.getTabAt(position)?.select()
-                iv_search?.visibility = if (position == 2 || position == 0) View.VISIBLE else View.GONE
-                iv_add?.visibility = if (position == 1 && user?.is_admin == 1) View.VISIBLE else View.GONE
+                fb_add.visibility = if (position == 0) View.VISIBLE else View.GONE
+//                iv_search?.visibility = if (position == 2) View.VISIBLE else View.GONE
+//                iv_add?.visibility = if (position == 1 && user?.is_admin == 1) View.VISIBLE else View.GONE
             }
 
         })

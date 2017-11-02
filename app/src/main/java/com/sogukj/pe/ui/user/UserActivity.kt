@@ -66,7 +66,7 @@ class UserActivity : ToolbarActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user)
-        setTitle("个人信息")
+        title = "个人信息"
         setBack(true)
         SoguApi.getService(application)
                 .userDepart()
@@ -101,6 +101,7 @@ class UserActivity : ToolbarActivity() {
                         } else showToast(payload.message)
                     }, { e ->
                         Trace.e(e)
+                        showToast("提交失败")
                     })
         }
 

@@ -55,10 +55,6 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        fb_add.setOnClickListener {
-            StoreProjectAddActivity.startAdd(baseActivity)
-        }
-        fb_add.visibility = if (type == TYPE_CB) View.VISIBLE else View.GONE
         ll_header.visibility = if (type == TYPE_CB) View.VISIBLE else View.GONE
         ll_header2.visibility = if (type == TYPE_LX) View.VISIBLE else View.GONE
         ll_header1.visibility = if (type == TYPE_GZ || type == TYPE_YT) View.VISIBLE else View.GONE

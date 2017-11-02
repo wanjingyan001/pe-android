@@ -16,10 +16,7 @@ import com.bumptech.glide.Glide
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
-import com.sogukj.pe.bean.ApprovalBean
-import com.sogukj.pe.bean.ApproveViewBean
-import com.sogukj.pe.bean.ApproverBean
-import com.sogukj.pe.bean.MessageBean
+import com.sogukj.pe.bean.*
 import com.sogukj.pe.util.PdfUtil
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.CircleImageView
@@ -28,6 +25,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_seal_approve.*
 import org.jetbrains.anko.collections.forEachWithIndex
+import java.io.Serializable
 
 class SealApproveActivity : ToolbarActivity() {
 
@@ -42,9 +40,15 @@ class SealApproveActivity : ToolbarActivity() {
         if (paramObj is ApprovalBean) {
             paramTitle = paramObj.kind!!
             paramId = paramObj.approval_id!!
+            paramType = paramObj.type
         } else if (paramObj is MessageBean) {
             paramTitle = paramObj.type_name!!
             paramId = paramObj.approval_id!!
+            paramType = paramObj.type
+        } else if (paramObj is SpGroupItemBean) {
+            paramTitle = paramObj.name!!
+            paramId = paramObj.id!!
+            paramType = paramObj.type
         } else {
             finish()
         }
@@ -86,6 +90,7 @@ class SealApproveActivity : ToolbarActivity() {
                             .subscribe({ payload ->
                                 if (payload.isOk) {
                                     showToast("发送成功")
+                                    BuildSealActivity.start(this, paramId!!, paramType, paramTitle)
                                 } else
                                     showToast(payload.message)
                             }, { e ->
@@ -110,7 +115,7 @@ class SealApproveActivity : ToolbarActivity() {
                             .subscribeOn(Schedulers.io())
                             .subscribe({ payload ->
                                 if (payload.isOk) {
-                                    showToast("提交成功")
+                                    BuildSealActivity.start(this, paramId!!, paramType, paramTitle)
                                 } else
                                     showToast(payload.message)
                             }, { e ->
@@ -140,6 +145,9 @@ class SealApproveActivity : ToolbarActivity() {
                                 showToast("请求失败")
                             })
                 }
+                btn_right.setOnClickListener {
+                    finish()
+                }
             }
             5 -> {
                 btn_ok.text = "审批"
@@ -162,6 +170,13 @@ class SealApproveActivity : ToolbarActivity() {
                             .positiveText("确认")
                             .negativeText("否决")
                             .show()
+                }
+            }
+            6 -> {
+                btn_ok.text = "用印完成"
+                iv_state_agreed.visibility = View.VISIBLE
+                btn_ok.setOnClickListener {
+                    finish()
                 }
             }
         }

@@ -20,9 +20,7 @@ import com.nbsp.materialfilepicker.MaterialFilePicker
 import com.nbsp.materialfilepicker.ui.FilePickerActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
-import com.sogukj.pe.bean.ApproverBean
-import com.sogukj.pe.bean.CustomSealBean
-import com.sogukj.pe.bean.SpGroupItemBean
+import com.sogukj.pe.bean.*
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.FlowLayout
 import com.sogukj.service.SoguApi
@@ -39,18 +37,43 @@ import java.util.HashMap
 class BuildSignActivity : ToolbarActivity() {
 
     val gson = Gson()
-    lateinit var spGroudItemBean: SpGroupItemBean
+    lateinit var inflater: LayoutInflater
+    lateinit var paramTitle: String
+    var paramId: Int? = null
+    var paramType: Int? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        inflater = LayoutInflater.from(this)
+        val paramObj = intent.getSerializableExtra(Extras.DATA)
+        if (paramObj is ApprovalBean) {
+            paramTitle = paramObj.kind!!
+            paramId = paramObj.approval_id!!
+            paramType = paramObj.type
+        } else if (paramObj is MessageBean) {
+            paramTitle = paramObj.type_name!!
+            paramId = paramObj.approval_id!!
+            paramType = paramObj.type
+        } else if (paramObj is SpGroupItemBean) {
+            paramTitle = paramObj.name!!
+            paramId = paramObj.id!!
+            paramType = paramObj.type
+        } else {
+            paramId = intent.getIntExtra(Extras.ID, -1)
+            paramType = intent.getIntExtra(Extras.TYPE, -1)
+            paramTitle = intent.getStringExtra(Extras.TITLE)
+        }
+        if (paramId == -1 || paramType == -1) {
+            showToast("参数错误")
+            finish()
+        }
         setContentView(R.layout.activity_build_sign)
-        spGroudItemBean = intent.getSerializableExtra(Extras.DATA) as SpGroupItemBean
         setBack(true)
-        title = spGroudItemBean.name
+        title = paramTitle
         ll_seal.removeAllViews()
         ll_approver.removeAllViews()
         val inflater = LayoutInflater.from(this)
         SoguApi.getService(application)
-                .approveInfo(template_id = spGroudItemBean.id!!)
+                .approveInfo(template_id = paramId!!)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -67,8 +90,8 @@ class BuildSignActivity : ToolbarActivity() {
                 })
 
         SoguApi.getService(application)
-                .approver(template_id = spGroudItemBean.id!!
-                        , type = spGroudItemBean.type)
+                .approver(template_id = paramId!!
+                        , type = paramType)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -99,7 +122,7 @@ class BuildSignActivity : ToolbarActivity() {
 
     fun doConfirm() {
         val builder = FormBody.Builder()
-        builder.add("template_id", "${spGroudItemBean.id}")
+        builder.add("template_id", "${paramId}")
         for ((k, v) in paramMap) {
             if (v is String) {
                 builder.add(k, v)
@@ -400,7 +423,7 @@ class BuildSignActivity : ToolbarActivity() {
                     .uploadApprove(MultipartBody.Builder().setType(MultipartBody.FORM)
                             .addFormDataPart("file", file.getName(), RequestBody.create(MediaType.parse("*/*"), file))
                             .addFormDataPart("control", 8.toString())
-                            .addFormDataPart("template_id", "${spGroudItemBean.id}")
+                            .addFormDataPart("template_id", "${paramId}")
                             .build())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
@@ -496,7 +519,7 @@ class BuildSignActivity : ToolbarActivity() {
                     .uploadApprove(MultipartBody.Builder().setType(MultipartBody.FORM)
                             .addFormDataPart("file", file.getName(), RequestBody.create(MediaType.parse("*/*"), file))
                             .addFormDataPart("control", 9.toString())
-                            .addFormDataPart("template_id", "${spGroudItemBean.id}")
+                            .addFormDataPart("template_id", "${paramId}")
                             .build())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
@@ -555,6 +578,27 @@ class BuildSignActivity : ToolbarActivity() {
         fun start(ctx: Activity?, itemBean: SpGroupItemBean) {
             val intent = Intent(ctx, BuildSignActivity::class.java)
             intent.putExtra(Extras.DATA, itemBean)
+            ctx?.startActivity(intent)
+        }
+
+        fun start(ctx: Activity?, bean: ApprovalBean) {
+            val intent = Intent(ctx, BuildSignActivity::class.java)
+            intent.putExtra(Extras.DATA, bean)
+            ctx?.startActivity(intent)
+        }
+
+        fun start(ctx: Activity?, bean: MessageBean) {
+            val intent = Intent(ctx, BuildSignActivity::class.java)
+            intent.putExtra(Extras.DATA, bean)
+            ctx?.startActivity(intent)
+        }
+
+
+        fun start(ctx: Activity?, id: Int, paramType: Int?, paramTitle: String) {
+            val intent = Intent(ctx, BuildSignActivity::class.java)
+            intent.putExtra(Extras.ID, id)
+            intent.putExtra(Extras.TYPE, paramType)
+            intent.putExtra(Extras.TITLE, paramTitle)
             ctx?.startActivity(intent)
         }
     }

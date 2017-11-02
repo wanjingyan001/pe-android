@@ -22,10 +22,7 @@ import com.framework.base.ToolbarActivity
 import com.github.gcacace.signaturepad.views.SignaturePad
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
-import com.sogukj.pe.bean.ApprovalBean
-import com.sogukj.pe.bean.ApproveViewBean
-import com.sogukj.pe.bean.ApproverBean
-import com.sogukj.pe.bean.MessageBean
+import com.sogukj.pe.bean.*
 import com.sogukj.pe.util.FileUtil
 import com.sogukj.pe.util.PdfUtil
 import com.sogukj.pe.util.Trace
@@ -44,8 +41,7 @@ import java.io.FileOutputStream
 
 class SignApproveActivity : ToolbarActivity() {
 
-    //    lateinit var paramApprove: ApprovalBean
-    lateinit var inflater: LayoutInflater
+    lateinit var inflater:LayoutInflater
     lateinit var paramTitle: String
     var paramId: Int? = null
     var paramType: Int? = null
@@ -56,10 +52,16 @@ class SignApproveActivity : ToolbarActivity() {
         if (paramObj is ApprovalBean) {
             paramTitle = paramObj.kind!!
             paramId = paramObj.approval_id!!
+            paramType=paramObj.type
         } else if (paramObj is MessageBean) {
             paramTitle = paramObj.type_name!!
             paramId = paramObj.approval_id!!
-        } else {
+            paramType=paramObj.type
+        }else if (paramObj is SpGroupItemBean) {
+            paramTitle = paramObj.name!!
+            paramId = paramObj.id!!
+            paramType=paramObj.type
+        }  else {
             finish()
         }
         setContentView(R.layout.activity_seal_approve)
@@ -81,7 +83,7 @@ class SignApproveActivity : ToolbarActivity() {
                         showToast(payload.message)
                 }, { e ->
                     Trace.e(e)
-                    showToast("暂无可用数据")
+                    showToast("请求失败")
                 })
 
     }
@@ -175,11 +177,10 @@ class SignApproveActivity : ToolbarActivity() {
             5 -> {
                 btn_ok.text = "确认意见并签字"
                 state_sign_confirm.visibility = View.VISIBLE
-                val rb_sign = state_sign_confirm.findViewById(R.id.rb_sign) as RadioGroup
                 ll_single.visibility = View.VISIBLE
                 ll_twins.visibility = View.GONE
                 btn_ok.setOnClickListener {
-                    val type = when (rb_sign.checkedRadioButtonId) {
+                    val type = when (rg_sign.checkedRadioButtonId) {
                         R.id.rb_item1 -> 1
                         R.id.rb_item2 -> 2
                         R.id.rb_item3 -> 3

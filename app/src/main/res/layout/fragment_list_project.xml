@@ -224,25 +224,6 @@
 
         <include layout="@layout/layout_loading" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:orientation="vertical">
 
-            <ImageButton
-                android:id="@+id/fb_search"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ic_fb_search"
-                android:visibility="gone" />
-
-            <ImageButton
-                android:id="@+id/fb_add"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ic_fb_add" />
-        </LinearLayout>
     </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
 </LinearLayout>
