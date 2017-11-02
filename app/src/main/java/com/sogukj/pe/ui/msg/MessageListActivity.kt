@@ -45,6 +45,7 @@ class MessageListActivity : ToolbarActivity() {
                 val tvFrom = convertView.findViewById(R.id.tv_from) as TextView
                 val tvType = convertView.findViewById(R.id.tv_type) as TextView
                 val tvMsg = convertView.findViewById(R.id.tv_msg) as TextView
+                val tvUrgent = convertView.findViewById(R.id.tv_urgent) as TextView
                 override fun setData(view: View, data: MessageBean, position: Int) {
 
                     val strType = when (data.type) {
@@ -53,8 +54,8 @@ class MessageListActivity : ToolbarActivity() {
                         3 -> "签字审批"
                         else -> ""
                     }
+                    data.setColorStatus(tvState)
                     tvTitle.text = "${strType} No.${data.approval_id}"
-                    tvState.text = if (data.status == 1) "已审批" else "待审批"
                     tvTime.text = data.time
                     tvFrom.text = "发起人:" + data.username
                     tvType.text = "类型:" + data.type_name
@@ -65,7 +66,12 @@ class MessageListActivity : ToolbarActivity() {
                         tvNum.visibility = View.VISIBLE
                     else
                         tvNum.visibility = View.GONE
-
+                    val urgnet = data.urgent_count
+                    tvUrgent.text = "加急x${urgnet}"
+                    if (urgnet != null && urgnet > 0)
+                        tvUrgent.visibility = View.VISIBLE
+                    else
+                        tvUrgent.visibility = View.GONE
                 }
 
             }
