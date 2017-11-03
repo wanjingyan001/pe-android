@@ -60,7 +60,7 @@
                 android:layout_weight="1"
                 android:gravity="left"
                 android:singleLine="true"
-                android:text="系统消息助手"
+                android:text="暂无数据"
                 android:textColor="@color/text_3"
                 android:textSize="14sp" />
 

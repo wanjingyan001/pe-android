@@ -3,9 +3,11 @@ package com.sogukj.pe.ui.htdata
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
+import com.bumptech.glide.Glide
 import com.framework.base.ToolbarActivity
 import com.nbsp.materialfilepicker.MaterialFilePicker
 import com.nbsp.materialfilepicker.ui.FilePickerActivity
@@ -14,6 +16,7 @@ import com.sogukj.pe.R
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
+import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_project_book_upload.*
@@ -28,17 +31,23 @@ import kotlin.collections.HashMap
 
 
 class ProjectBookUploadActivity : ToolbarActivity() {
-    val filterList = TreeMap<String, String>()
+    val filterList = TreeMap<Int, String>()
     lateinit var project: ProjectBean
     val fmt = SimpleDateFormat("yyyy-MM-dd HH:mm")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         project = intent.getSerializableExtra(Extras.DATA) as ProjectBean
-        val map = intent.getSerializableExtra(Extras.MAP) as HashMap<String, String>
+        val map = intent.getSerializableExtra(Extras.MAP) as HashMap<Int, String>
         filterList.putAll(map)
         setContentView(R.layout.activity_project_book_upload)
         setBack(true)
         title = "项目文书上传"
+        val user = Store.store.getUser(this)
+        tv_user.text=user?.name
+        Glide.with(this)
+                .load(user?.headImage())
+                .error(R.drawable.img_logo_user)
+                .into(iv_user)
         tv_title.text = project.name
         tv_group.setOnClickListener {
             val items = ArrayList<String?>()
@@ -54,7 +63,7 @@ class ProjectBookUploadActivity : ToolbarActivity() {
                             if (p == -1) return false
                             tv_group.text = items[p]
                             tv_group.tag = "${p + 1}"
-                            uploadBean.group = "${p + 1}".toString()
+                            uploadBean.group = "${p + 1}"
                             dialog?.dismiss()
                             return true
                         }
@@ -63,7 +72,7 @@ class ProjectBookUploadActivity : ToolbarActivity() {
                     .show()
         }
         val rMap = HashMap<String, String>()
-        map.entries.forEach { e -> rMap.put(e.value, e.key) }
+        map.entries.forEach { e -> rMap.put(e.value, "${e.key}") }
         tv_class.setOnClickListener {
             val items = ArrayList<String?>()
             items.addAll(map.values)

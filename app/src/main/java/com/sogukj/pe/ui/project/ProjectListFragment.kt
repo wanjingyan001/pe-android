@@ -334,7 +334,15 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                 StoreProjectAddActivity.startEdit(baseActivity, data)
             }
             tvDel.setOnClickListener {
-                doDel(position)
+                MaterialDialog.Builder(baseActivity!!)
+                        .theme(Theme.LIGHT)
+                        .content("确认删除该数据")
+                        .negativeText("取消")
+                        .positiveText("确认")
+                        .onPositive { dialog, which ->
+                            doDel(position)
+                            dialog.dismiss()
+                        }.show()
             }
         }
 

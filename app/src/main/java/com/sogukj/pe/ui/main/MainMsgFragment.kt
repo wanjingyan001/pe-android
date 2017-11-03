@@ -48,7 +48,8 @@ class MainMsgFragment : ToolbarFragment() {
                 val tvNum = convertView.findViewById(R.id.tv_num) as TextView
 
                 override fun setData(view: View, data: MessageIndexBean, position: Int) {
-                    tvTitleMsg.text = data.title
+                    if (!TextUtils.isEmpty(data.title))
+                        tvTitleMsg.text = data.title
                     tvDate.text = data.time
                     tvNum.text = "${data.count}"
                     if (data.count != null && data.count > 0) {
