@@ -113,6 +113,9 @@ class ProjectActivity : ToolbarActivity() {
                     else
                         tv_more_yq.visibility = View.VISIBLE
                 })
+        disable(tv_cwsj)
+        disable(tv_gdzx)
+        disable(tv_xmzy)
         val user = Store.store.getUser(this)
         SoguApi.getService(application)
                 .projectPage(pageSize = 3, page = 1, company_id = project.company_id!!, uid = user?.uid)
@@ -165,6 +168,11 @@ class ProjectActivity : ToolbarActivity() {
         }
     }
 
+    fun disable(view: TextView) {
+        view.compoundDrawables[1]?.setColorFilter(colorGray, PorterDuff.Mode.SRC_ATOP)
+        view.setOnClickListener(null)
+    }
+
     val colorGray = Color.parseColor("#D9D9D9")
     fun onClick(view: View) {
         when (view.id) {
@@ -214,6 +222,7 @@ class ProjectActivity : ToolbarActivity() {
             R.id.tv_wangzhanbeian -> ICPListActivity.start(this@ProjectActivity, project)
 
             R.id.tv_xmws -> ProjectBookActivity.start(this@ProjectActivity, project)
+            R.id.tv_xmcb -> StoreProjectAddActivity.startView(this@ProjectActivity, project)
         }
     }
 

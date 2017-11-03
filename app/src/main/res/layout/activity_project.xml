@@ -686,6 +686,14 @@
                     android:drawableTop="@drawable/ic_proj_xmgy"
                     android:tag="tv_xmzw"
                     android:text="项目概要" />
+
+                <com.sogukj.pe.view.TipsView
+                    android:id="@+id/tv_xmcb"
+                    android:onClick="onClick"
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_xmcb"
+                    android:tag="tv_xmzw"
+                    android:text="储备信息" />
             </GridLayout>
         </LinearLayout>
     </ScrollView>

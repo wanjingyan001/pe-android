@@ -9,6 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal"
         android:paddingLeft="20dp"
         android:paddingRight="20dp">
@@ -27,19 +28,19 @@
 
         <TextView
             android:id="@+id/btn_add"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="45dp"
+            android:layout_height="20dp"
+            android:background="@drawable/bg_btn_setup"
             android:gravity="center"
-            android:paddingBottom="16dp"
-            android:paddingTop="28dp"
             android:text="+立项"
             android:textColor="@color/colorBlue"
-            android:textSize="16sp" />
+            android:textSize="12sp" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal"
         android:paddingBottom="18dp"
         android:paddingLeft="20dp"
@@ -82,9 +83,9 @@
             android:drawablePadding="3dp"
             android:gravity="center"
             android:paddingLeft="3dp"
+            android:text="编辑"
             android:textColor="@color/text_3"
-            android:textSize="12sp"
-            android:text="编辑" />
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/tv_del"
@@ -95,9 +96,9 @@
             android:drawablePadding="3dp"
             android:gravity="center"
             android:paddingLeft="3dp"
+            android:text="删除"
             android:textColor="@color/text_3"
-            android:textSize="12sp"
-            android:text="删除" />
+            android:textSize="12sp" />
     </LinearLayout>
 
 

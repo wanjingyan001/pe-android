@@ -224,15 +224,16 @@ class BuildSignActivity : ToolbarActivity() {
     }
 
 
-    private fun refreshListSelector(bean: CustomSealBean.ValueBean) {
-        selectView?.text = bean.name
-        selectBean?.value_map = bean
-        paramMap.put(selectBean?.fields!!, selectBean?.value_map?.id)
+    fun refreshListSelector(bean: CustomSealBean, data: CustomSealBean.ValueBean) {
+        val view = viewMap.get(bean.fields)
+        if (null != view) {
+            view?.text = data.name
+            paramMap.put(bean?.fields!!, data.id)
+        }
     }
 
-    var selectView: TextView? = null
-    var selectBean: CustomSealBean? = null
-    private fun add2(bean: CustomSealBean, inflater: LayoutInflater) {
+    val viewMap = HashMap<String, TextView>()
+    fun add2(bean: CustomSealBean, inflater: LayoutInflater) {
         val convertView = inflater.inflate(R.layout.cs_row_pop_list, null);
         ll_seal.addView(convertView)
 
@@ -240,8 +241,7 @@ class BuildSignActivity : ToolbarActivity() {
         val etValue = convertView.findViewById(R.id.et_value) as TextView
         tvLabel.text = bean.name
         etValue.text = bean.value_map?.name
-        selectBean = bean
-        selectView = etValue
+        viewMap.put(bean.fields, etValue)
         val iv_alert = convertView.findViewById(R.id.iv_alert)
         iv_alert.visibility = View.GONE
         checkList.add {
@@ -568,8 +568,9 @@ class BuildSignActivity : ToolbarActivity() {
             val filePath = data?.getStringExtra(FilePickerActivity.RESULT_FILE_PATH)
             uploadFile(filePath)
         } else if (requestCode == ListSelectorActivity.REQ_LIST_SELECTOR && resultCode === Activity.RESULT_OK) {
-            val bean = data?.getSerializableExtra(Extras.DATA) as CustomSealBean.ValueBean
-            refreshListSelector(bean)
+            val bean = data?.getSerializableExtra(Extras.DATA) as CustomSealBean
+            val data = data?.getSerializableExtra(Extras.DATA2) as CustomSealBean.ValueBean
+            refreshListSelector(bean, data)
         }
         super.onActivityResult(requestCode, resultCode, data)
     }

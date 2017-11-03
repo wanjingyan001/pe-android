@@ -48,7 +48,8 @@ class ListSelectorActivity : ToolbarActivity() {
         })
         adapter.onItemClick = { v, p ->
             val data = adapter.dataList.get(p)
-            intent.putExtra(Extras.DATA, data)
+            intent.putExtra(Extras.DATA, bean)
+            intent.putExtra(Extras.DATA2, data)
             setResult(Activity.RESULT_OK, intent)
             finish()
         }

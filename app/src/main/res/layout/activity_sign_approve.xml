@@ -101,7 +101,7 @@
                         <View
                             android:layout_width="5dp"
                             android:layout_height="10dp"
-                            android:layout_marginRight="10dp"
+                            android:layout_marginRight="5dp"
                             android:background="@color/color_main" />
 
                         <TextView
@@ -114,7 +114,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="9dp"
                         android:background="@color/divider" />
 
                     <LinearLayout
@@ -142,7 +142,7 @@
                         <View
                             android:layout_width="5dp"
                             android:layout_height="10dp"
-                            android:layout_marginRight="10dp"
+                            android:layout_marginRight="5dp"
                             android:background="@color/color_main" />
 
                         <TextView
@@ -155,7 +155,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="9dp"
                         android:background="@color/divider" />
 
                     <LinearLayout
@@ -176,21 +176,15 @@
                     layout="@layout/state_sign_confim"
                     android:visibility="gone" />
 
-                <LinearLayout
-                    android:id="@+id/ll_single"
+                <Button
+                    android:id="@+id/btn_single"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp">
-
-                    <Button
-                        android:id="@+id/btn_ok"
-                        android:layout_width="match_parent"
-                        android:layout_height="45dp"
-                        android:background="@drawable/bg_btn_blue"
-                        android:textColor="@color/white"
-                        android:textSize="18sp"
-                        tools:text="审批完成" />
-                </LinearLayout>
+                    android:layout_height="45dp"
+                    android:layout_marginTop="30dp"
+                    android:background="@drawable/bg_btn_blue"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    tools:text="审批完成" />
 
                 <LinearLayout
                     android:id="@+id/ll_twins"

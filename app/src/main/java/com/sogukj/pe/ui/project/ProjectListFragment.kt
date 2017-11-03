@@ -304,7 +304,6 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
 
         override fun setData(view: View, data: ProjectBean, position: Int) {
             var label = data.name
-            data.shortName?.apply { label = this }
             tvTitle.text = Html.fromHtml(label)
             val strTime = data.add_time
             tvTime.visibility = View.GONE
@@ -320,7 +319,16 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
             }
 
             btnAdd.setOnClickListener {
-                doSetUp(position, data)
+                MaterialDialog.Builder(baseActivity!!)
+                        .theme(Theme.LIGHT)
+                        .content("是否确认立项")
+                        .negativeText("取消")
+                        .positiveText("确认")
+                        .onPositive { dialog, which ->
+                            doSetUp(position, data)
+                            dialog.dismiss()
+                        }.show()
+
             }
             tvEdit.setOnClickListener {
                 StoreProjectAddActivity.startEdit(baseActivity, data)
@@ -360,8 +368,9 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
         }
 
         override fun setData(view: View, data: ProjectBean, position: Int) {
-            var label = data.name
-            data.shortName?.apply { label = this }
+            var label = data.shortName
+            if (TextUtils.isEmpty(label))
+                label = data.name
             tv1.text = Html.fromHtml(label)
             if (type == 1) {
                 tv2.text = when (data.status) {

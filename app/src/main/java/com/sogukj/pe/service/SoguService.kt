@@ -577,6 +577,9 @@ interface SoguService {
     @POST("/api/Approve/submitApprove")
     fun submitApprove(@Body body: RequestBody): Observable<Payload<Object>>
 
+    @POST("/api/Approve/updateApprove")
+    fun updateApprove(@Body body: RequestBody): Observable<Payload<Object>>
+
     @FormUrlEncoded
     @POST("/api/Approve/waitingMeApproval")
     fun listApproval(
@@ -617,7 +620,7 @@ interface SoguService {
     fun approveSign(@Body body: RequestBody): Observable<Payload<Object>>
 
     @FormUrlEncoded
-    @POST("/api/Approve/approveResult")
+    @POST("/api/Approve/Comment")
     fun submitComment(@Field("hid") hid: Int
                       , @Field("comment_id") comment_id: Int = 0
                       , @Field("content") content: String): Observable<Payload<Object>>

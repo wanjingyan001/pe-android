@@ -51,6 +51,11 @@ class MainMsgFragment : ToolbarFragment() {
                     tvTitleMsg.text = data.title
                     tvDate.text = data.time
                     tvNum.text = "${data.count}"
+                    if (data.count != null && data.count > 0) {
+                        tvNum.visibility = View.VISIBLE
+                    } else {
+                        tvNum.visibility = View.GONE
+                    }
                 }
 
             }

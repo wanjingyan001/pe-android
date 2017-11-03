@@ -138,12 +138,15 @@ class SignApproveActivity : ToolbarActivity() {
     }
 
     private fun initButtons(click: Int?) {
-        ll_single.visibility = View.VISIBLE
+        btn_single.visibility = View.GONE
         ll_twins.visibility = View.GONE
         when (click) {
+            0 -> {
+            }
             1 -> {
-                btn_ok.text = "申请加急"
-                btn_ok.setOnClickListener {
+                btn_single.visibility = View.VISIBLE
+                btn_single.text = "申请加急"
+                btn_single.setOnClickListener {
                     SoguApi.getService(application)
                             .approveUrgent(paramId!!)
                             .observeOn(AndroidSchedulers.mainThread())
@@ -161,25 +164,26 @@ class SignApproveActivity : ToolbarActivity() {
             }
             2 -> {
                 iv_state_signed.visibility = View.VISIBLE
-                btn_ok.text = "已签字"
+                btn_single.visibility = View.VISIBLE
+                btn_single.text = "已签字"
                 iv_state_signed.visibility = View.VISIBLE
-                btn_ok.setOnClickListener {
+                btn_single.setOnClickListener {
                     finish()
                 }
             }
             4 -> {
-                btn_ok.text = "文件签发"
+                btn_single.text = "文件签发"
                 iv_state_agreed.visibility = View.VISIBLE
-                btn_ok.setOnClickListener {
+                btn_single.setOnClickListener {
                     showSignDialog()
                 }
             }
             5 -> {
-                btn_ok.text = "确认意见并签字"
+                btn_single.text = "确认意见并签字"
                 state_sign_confirm.visibility = View.VISIBLE
-                ll_single.visibility = View.VISIBLE
+                btn_single.visibility = View.VISIBLE
                 ll_twins.visibility = View.GONE
-                btn_ok.setOnClickListener {
+                btn_single.setOnClickListener {
                     val type = when (rg_sign.checkedRadioButtonId) {
                         R.id.rb_item1 -> 1
                         R.id.rb_item2 -> 2
@@ -191,7 +195,7 @@ class SignApproveActivity : ToolbarActivity() {
             }
             6 -> {
                 iv_state_signed.visibility = View.VISIBLE
-                ll_single.visibility = View.GONE
+                btn_single.visibility = View.GONE
                 ll_twins.visibility = View.VISIBLE
                 btn_left.setOnClickListener {
                     SoguApi.getService(application)

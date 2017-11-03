@@ -23,7 +23,11 @@ class MessageBean : Serializable {
 
     fun setColorStatus(view: TextView) {
         val status_str = when (status) {
+            -1 -> "审批未通过"
+            1 -> "待审批"
+            0 -> "审批中"
             2 -> "已审批"
+            4 -> "审批通过"
             else -> "待审批"
         }
         view.text = status_str

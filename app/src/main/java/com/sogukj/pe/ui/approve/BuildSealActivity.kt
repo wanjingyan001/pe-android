@@ -36,6 +36,7 @@ import java.io.File
 import java.io.Serializable
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 class BuildSealActivity : ToolbarActivity() {
@@ -45,11 +46,11 @@ class BuildSealActivity : ToolbarActivity() {
     var paramTitle: String? = null
     var paramId: Int? = null
     var paramType: Int? = null
-    var flagEdit=false
+    var flagEdit = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         inflater = LayoutInflater.from(this)
-        flagEdit=intent.getBooleanExtra(Extras.FLAG,false)
+        flagEdit = intent.getBooleanExtra(Extras.FLAG, false)
         val paramObj = intent.getSerializableExtra(Extras.DATA) as Serializable?
         if (paramObj is ApprovalBean) {
             paramTitle = paramObj.kind!!
@@ -80,7 +81,7 @@ class BuildSealActivity : ToolbarActivity() {
         val inflater = LayoutInflater.from(this)
 
         SoguApi.getService(application)
-                .approveInfo(template_id = if (flagEdit)null else paramId!!,sid = if (!flagEdit)null else paramId!!)
+                .approveInfo(template_id = if (flagEdit) null else paramId!!, sid = if (!flagEdit) null else paramId!!)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -129,27 +130,52 @@ class BuildSealActivity : ToolbarActivity() {
 
     fun doConfirm() {
         val builder = FormBody.Builder()
-        builder.add("template_id", "${paramId}")
-        for ((k, v) in paramMap) {
-            if (v is String) {
-                builder.add(k, v)
-            } else
-                builder.add(k, gson.toJson(v))
+        if (flagEdit) {
+
+            builder.add("approval_id", "${paramId}")
+            for ((k, v) in paramMap) {
+                if (v is String) {
+                    builder.add(k, v)
+                } else
+                    builder.add(k, gson.toJson(v))
+            }
+            SoguApi.getService(application)
+                    .updateApprove(builder.build())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (payload.isOk && payload.payload != null) {
+                            showToast("保存成功")
+                            finish()
+                        } else
+                            showToast(payload.message)
+                    }, { e ->
+                        Trace.e(e)
+                        showToast("保存失败")
+                    })
+        } else {
+            builder.add("template_id", "${paramId}")
+            for ((k, v) in paramMap) {
+                if (v is String) {
+                    builder.add(k, v)
+                } else
+                    builder.add(k, gson.toJson(v))
+            }
+            SoguApi.getService(application)
+                    .submitApprove(builder.build())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (payload.isOk && payload.payload != null) {
+                            showToast("保存成功")
+                            finish()
+                        } else
+                            showToast(payload.message)
+                    }, { e ->
+                        Trace.e(e)
+                        showToast("保存失败")
+                    })
         }
-        SoguApi.getService(application)
-                .submitApprove(builder.build())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ payload ->
-                    if (payload.isOk && payload.payload != null) {
-                        showToast("保存成功")
-                        finish()
-                    } else
-                        showToast(payload.message)
-                }, { e ->
-                    Trace.e(e)
-                    showToast("保存失败")
-                })
     }
 
     fun addApprover(bean: ApproverBean, inflater: LayoutInflater) {
@@ -194,6 +220,7 @@ class BuildSealActivity : ToolbarActivity() {
                 false
             } else {
                 iv_alert.visibility = View.GONE
+                paramMap.put(bean.fields!!, bean.value_map?.id)
                 true
             }
         }
@@ -231,15 +258,16 @@ class BuildSealActivity : ToolbarActivity() {
     }
 
 
-    private fun refreshListSelector(bean: CustomSealBean.ValueBean) {
-        selectView?.text = bean.name
-        selectBean?.value_map = bean
-        paramMap.put(selectBean?.fields!!, selectBean?.value_map?.id)
+    fun refreshListSelector(bean: CustomSealBean, data: CustomSealBean.ValueBean) {
+        val view = viewMap.get(bean.fields)
+        if (null != view) {
+            view?.text = data.name
+            paramMap.put(bean?.fields!!, data.id)
+        }
     }
 
-    var selectView: TextView? = null
-    var selectBean: CustomSealBean? = null
-    private fun add2(bean: CustomSealBean, inflater: LayoutInflater) {
+    val viewMap = HashMap<String, TextView>()
+    fun add2(bean: CustomSealBean, inflater: LayoutInflater) {
         val convertView = inflater.inflate(R.layout.cs_row_pop_list, null);
         ll_seal.addView(convertView)
 
@@ -247,8 +275,7 @@ class BuildSealActivity : ToolbarActivity() {
         val etValue = convertView.findViewById(R.id.et_value) as TextView
         tvLabel.text = bean.name
         etValue.text = bean.value_map?.name
-        selectBean = bean
-        selectView = etValue
+        viewMap.put(bean.fields, etValue)
         val iv_alert = convertView.findViewById(R.id.iv_alert)
         iv_alert.visibility = View.GONE
         checkList.add {
@@ -258,6 +285,7 @@ class BuildSealActivity : ToolbarActivity() {
                 false
             } else {
                 iv_alert.visibility = View.GONE
+                paramMap.put(bean.fields!!, bean.value_map?.id)
                 true
             }
         }
@@ -576,8 +604,9 @@ class BuildSealActivity : ToolbarActivity() {
             val filePath = data?.getStringExtra(FilePickerActivity.RESULT_FILE_PATH)
             uploadFile(filePath)
         } else if (requestCode == ListSelectorActivity.REQ_LIST_SELECTOR && resultCode === Activity.RESULT_OK) {
-            val bean = data?.getSerializableExtra(Extras.DATA) as CustomSealBean.ValueBean
-            refreshListSelector(bean)
+            val bean = data?.getSerializableExtra(Extras.DATA) as CustomSealBean
+            val data = data?.getSerializableExtra(Extras.DATA2) as CustomSealBean.ValueBean
+            refreshListSelector(bean, data)
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
@@ -606,7 +635,7 @@ class BuildSealActivity : ToolbarActivity() {
             intent.putExtra(Extras.ID, id)
             intent.putExtra(Extras.TYPE, paramType)
             intent.putExtra(Extras.TITLE, paramTitle)
-            intent.putExtra(Extras.FLAG,edit)
+            intent.putExtra(Extras.FLAG, edit)
             ctx?.startActivity(intent)
         }
     }

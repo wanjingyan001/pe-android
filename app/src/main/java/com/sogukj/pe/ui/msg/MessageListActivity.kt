@@ -55,11 +55,11 @@ class MessageListActivity : ToolbarActivity() {
                         else -> ""
                     }
                     data.setColorStatus(tvState)
-                    tvTitle.text = "${strType} No.${data.approval_id}"
+                    tvTitle.text = data.title
                     tvTime.text = data.time
                     tvFrom.text = "发起人:" + data.username
                     tvType.text = "类型:" + data.type_name
-                    tvMsg.text = data.title
+                    tvMsg.text = "审批事由:" + data.reasons
                     val cnt = data.message_count
                     tvNum.text = "${cnt}"
                     if (cnt != null && cnt > 0)

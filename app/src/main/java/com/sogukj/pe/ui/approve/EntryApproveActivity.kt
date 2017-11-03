@@ -101,10 +101,11 @@ class EntryApproveActivity : ToolbarActivity() {
         itemView.tag = "${itemBean.id}"
         itemView.setOnClickListener {
             if (itemBean.id == null) return@setOnClickListener
-            if (itemBean.id!! >= 1 && itemBean.id!! <= 5) {
-                BuildSealActivity.start(this, itemBean!!)
-            } else if (itemBean.id!! >= 6) {
-                BuildSignActivity.start(this, itemBean!!)
+            when (itemBean.type) {
+                2 -> BuildSealActivity.start(this, itemBean!!)
+                3 -> BuildSignActivity.start(this, itemBean!!)
+                else -> {
+                }
             }
         }
 

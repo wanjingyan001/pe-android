@@ -35,7 +35,7 @@
             android:checked="true"
             android:drawableTop="@drawable/ic_tab_main_msg"
             android:gravity="center"
-            android:text="资讯"
+            android:text="消息"
             android:textColor="@color/tx_checkable"
             android:textSize="10sp" />
 

@@ -36,6 +36,11 @@ class MainActivity : BaseActivity() {
 
         App.INSTANCE.resetPush(true)
         verifyPermissions(this)
+        val dm = resources.displayMetrics
+        val dp = dm.density
+        val w = dm.widthPixels
+        val h=dm.heightPixels
+
     }
 
     val PERMISSIONS_STORAGE = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)

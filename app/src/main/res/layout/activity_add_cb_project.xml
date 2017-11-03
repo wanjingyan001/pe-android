@@ -47,19 +47,35 @@
                         android:text="企业基本信息" />
                 </LinearLayout>
 
-                <TableRow
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/divider_bottom"
                     android:paddingBottom="15dp"
                     android:paddingTop="15dp">
 
                     <TextView
                         style="@style/ItemTextLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
                         android:text="项目名称" />
+
+                    <ImageView
+                        android:id="@+id/iv_alert"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_check_warn"
+                        android:visibility="gone" />
 
                     <EditText
                         android:id="@+id/et_name"
-                        style="@style/ItemTextValue" />
-                </TableRow>
+                        style="@style/ItemTextValue"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+                </LinearLayout>
 
                 <TableRow
                     android:background="@drawable/divider_bottom"
@@ -84,10 +100,10 @@
                         style="@style/ItemTextLabel"
                         android:text="成立时间" />
 
-                    <EditText
+                    <TextView
                         android:id="@+id/et_estiblishTime"
                         style="@style/ItemTextValue"
-                        android:hint="2017-01-01" />
+                        android:hint="--" />
                 </TableRow>
 
                 <TableRow

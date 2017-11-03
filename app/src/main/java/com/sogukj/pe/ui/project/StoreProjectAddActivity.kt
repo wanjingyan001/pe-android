@@ -1,6 +1,8 @@
 package com.sogukj.pe.ui.project
 
 import android.app.Activity
+import android.app.AlertDialog
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
@@ -18,6 +20,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_add_cb_project.*
 import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Created by qinfei on 17/7/18.
@@ -35,11 +38,11 @@ class StoreProjectAddActivity : ToolbarActivity() {
         setContentView(R.layout.activity_add_cb_project)
         when (type) {
             TYPE_VIEW -> {
-                setTitle("查看储备项目")
+                title = project?.name
                 btn_commit.visibility = View.GONE
                 disable(et_name)
                 disable(et_info)
-                disable(et_estiblishTime)
+//                disable(et_estiblishTime)
                 disable(et_enterpriseType)
                 disable(et_regCapital)
                 disable(et_mainBusiness)
@@ -59,6 +62,18 @@ class StoreProjectAddActivity : ToolbarActivity() {
         setBack(true)
         btn_commit.setOnClickListener {
             doSave()
+        }
+        if (type != TYPE_VIEW) {
+            et_estiblishTime.setOnClickListener {
+                val calendar = Calendar.getInstance()
+                val year = calendar.get(Calendar.YEAR)
+                val month = calendar.get(Calendar.MONTH) + 1
+                val day = calendar.get(Calendar.DAY_OF_MONTH)
+                DatePickerDialog(this, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT, { v, y, m, d ->
+                    val strDate = "${y}-${m + 1}-${d}"
+                    et_estiblishTime.text = strDate
+                }, year, month, day).show()
+            }
         }
         if (type != TYPE_ADD) {
             SoguApi.getService(application)
@@ -111,7 +126,13 @@ class StoreProjectAddActivity : ToolbarActivity() {
     private fun doSave() {
         val bean = StoreProjectBean()
         bean.name = et_name.text.trim().toString()
-        if (TextUtils.isEmpty(bean.name)) return
+        if (TextUtils.isEmpty(bean.name)) {
+            showToast("项目名称不能为空")
+            et_name.requestFocus()
+            iv_alert.visibility = View.VISIBLE
+            return
+        }
+        iv_alert.visibility = View.GONE
         bean.info = et_info.text.trim().toString()
         bean.estiblishTime = et_estiblishTime.text.trim().toString()
         if (TextUtils.isEmpty(bean.estiblishTime)) {
