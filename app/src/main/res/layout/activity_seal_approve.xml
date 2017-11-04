@@ -94,9 +94,11 @@
                 <include
                     android:id="@+id/part2"
                     layout="@layout/seal_approve_part2" />
+
                 <include
                     android:id="@+id/part3"
                     layout="@layout/seal_approve_part3" />
+
                 <Button
                     android:id="@+id/btn_single"
                     android:layout_width="match_parent"

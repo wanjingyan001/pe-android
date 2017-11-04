@@ -31,6 +31,9 @@ import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_sign_approve.*
+import kotlinx.android.synthetic.main.sign_approve_part1.*
+import kotlinx.android.synthetic.main.sign_approve_part2.*
+import kotlinx.android.synthetic.main.sign_approve_part3.*
 import kotlinx.android.synthetic.main.state_sign_confim.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -38,6 +41,7 @@ import okhttp3.RequestBody
 import org.jetbrains.anko.collections.forEachWithIndex
 import java.io.File
 import java.io.FileOutputStream
+
 /**
  * Created by qinfei on 17/10/18.
  */
@@ -80,6 +84,7 @@ class SignApproveActivity : ToolbarActivity() {
                         initInfo(payload.payload?.fixation, payload.payload?.relax)
                         initFiles(payload.payload?.file_list)
                         initApprovers(payload.payload?.approve)
+                        initSegments(payload.payload?.segment)
                         initButtons(payload.payload?.click)
                     } else
                         showToast(payload.message)
@@ -87,6 +92,32 @@ class SignApproveActivity : ToolbarActivity() {
                     Trace.e(e)
                     showToast("请求失败")
                 })
+
+    }
+
+    fun initSegments(segments: List<ApproverBean>?) {
+        ll_segments.removeAllViews()
+        if (null == segments || segments.isEmpty()) {
+            part3.visibility = View.GONE
+            return
+        }
+        val inflater = LayoutInflater.from(this)
+        segments?.forEach { v ->
+            val convertView = inflater.inflate(R.layout.item_approve_sign_segment, null)
+            ll_segments.addView(convertView)
+
+            val ivUser = convertView.findViewById(R.id.iv_user) as CircleImageView
+            val tvName = convertView.findViewById(R.id.tv_name) as TextView
+            val tvStatus = convertView.findViewById(R.id.tv_status) as TextView
+            val tvTime = convertView.findViewById(R.id.tv_time) as TextView
+
+            tvName.text = v.name
+            val ch = v.name?.first()
+            ivUser.setChar(ch)
+            Glide.with(this)
+                    .load(v.url)
+                    .into(ivUser)
+        }
 
     }
 
@@ -142,6 +173,7 @@ class SignApproveActivity : ToolbarActivity() {
     private fun initButtons(click: Int?) {
         btn_single.visibility = View.GONE
         ll_twins.visibility = View.GONE
+        iv_state_signed.visibility = View.GONE
         when (click) {
             0 -> {
             }
@@ -220,24 +252,12 @@ class SignApproveActivity : ToolbarActivity() {
         }
     }
 
-    fun examineApprove(type: Int, text: String = "") {
-        SoguApi.getService(application)
-                .examineApprove(paramId!!, type, text)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ payload ->
-                    if (payload.isOk) {
-                        showToast("提交成功")
-                    } else
-                        showToast(payload.message)
-                }, { e ->
-                    Trace.e(e)
-                    showToast("提交失败")
-                })
-    }
-
     fun initApprovers(approveList: List<ApproverBean>?) {
         ll_approvers.removeAllViews()
+        if (null == approveList || approveList.isEmpty()) {
+            part2.visibility = View.GONE
+            return
+        }
         val inflater = LayoutInflater.from(this)
         approveList?.forEach { v ->
             val convertView = inflater.inflate(R.layout.item_approve_sign_approver, null)
@@ -311,8 +331,10 @@ class SignApproveActivity : ToolbarActivity() {
     }
 
     private fun initFiles(file_list: List<ApproveViewBean.FileBean>?) {
+        if (file_list == null || file_list.isEmpty()) {
+            part1.visibility = View.GONE
+        }
         ll_files.removeAllViews()
-        val inflater = LayoutInflater.from(this)
         file_list?.forEachWithIndex { i, v ->
             val view = inflater.inflate(R.layout.item_file_single, null) as TextView
             view.text = "${i + 1}、${v.file_name}"

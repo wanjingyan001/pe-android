@@ -208,6 +208,7 @@ class BuildSealActivity : ToolbarActivity() {
     private fun add1(bean: CustomSealBean, inflater: LayoutInflater) {
         val convertView = inflater.inflate(R.layout.cs_row_pop_list, null);
         ll_seal.addView(convertView)
+        fieldMap.put(bean.fields, convertView)
 
         val tvLabel = convertView.findViewById(R.id.tv_label) as TextView
         val etValue = convertView.findViewById(R.id.et_value) as TextView
@@ -267,10 +268,11 @@ class BuildSealActivity : ToolbarActivity() {
     }
 
     val viewMap = HashMap<String, TextView>()
+    val fieldMap = HashMap<String, View?>()
     fun add2(bean: CustomSealBean, inflater: LayoutInflater) {
         val convertView = inflater.inflate(R.layout.cs_row_pop_list, null);
         ll_seal.addView(convertView)
-
+        fieldMap.put(bean.fields, convertView)
         val tvLabel = convertView.findViewById(R.id.tv_label) as TextView
         val etValue = convertView.findViewById(R.id.et_value) as TextView
         tvLabel.text = bean.name
@@ -298,6 +300,7 @@ class BuildSealActivity : ToolbarActivity() {
     private fun add3(bean: CustomSealBean, inflater: LayoutInflater) {
         val convertView = inflater.inflate(R.layout.cs_row_edit_text, null);
         ll_seal.addView(convertView)
+        fieldMap.put(bean.fields, convertView)
 
         val tvLabel = convertView.findViewById(R.id.tv_label) as TextView
         val etValue = convertView.findViewById(R.id.et_value) as TextView
@@ -322,6 +325,7 @@ class BuildSealActivity : ToolbarActivity() {
     private fun add4(bean: CustomSealBean, inflater: LayoutInflater) {
         val convertView = inflater.inflate(R.layout.cs_row_edit_box, null);
         ll_seal.addView(convertView)
+        fieldMap.put(bean.fields, convertView)
 
         val tvLabel = convertView.findViewById(R.id.tv_label) as TextView
         val etValue = convertView.findViewById(R.id.et_value) as TextView
@@ -345,6 +349,7 @@ class BuildSealActivity : ToolbarActivity() {
     private fun add5(bean: CustomSealBean, inflater: LayoutInflater) {
         val convertView = inflater.inflate(R.layout.cs_row_radio, null);
         ll_seal.addView(convertView)
+        fieldMap.put(bean.fields, convertView)
         val tvLabel = convertView.findViewById(R.id.tv_label) as TextView
         val rgCheck = convertView.findViewById(R.id.rg_check) as RadioGroup
         tvLabel.text = bean.name
@@ -356,7 +361,23 @@ class BuildSealActivity : ToolbarActivity() {
                 paramMap.put(bean.fields, 0)
             }
         }
+        rgCheck.findViewById(R.id.rb_yes).setOnClickListener {
+            bean?.value_map?.hide?.split(",")?.forEach { field ->
+                if (!TextUtils.isEmpty(field)) {
+                    val view = fieldMap.get(field)
+                    view?.visibility = View.VISIBLE
+                }
+            }
+        }
 
+        rgCheck.findViewById(R.id.rb_no).setOnClickListener {
+            bean?.value_map?.hide?.split(",")?.forEach { field ->
+                if (!TextUtils.isEmpty(field)) {
+                    val view = fieldMap.get(field)
+                    view?.visibility = View.GONE
+                }
+            }
+        }
         val iv_alert = convertView.findViewById(R.id.iv_alert)
         iv_alert.visibility = View.GONE
     }
@@ -365,6 +386,7 @@ class BuildSealActivity : ToolbarActivity() {
 
         val convertView = inflater.inflate(R.layout.cs_row_check_box, null);
         ll_seal.addView(convertView)
+        fieldMap.put(bean.fields, convertView)
 
         val tvLabel = convertView.findViewById(R.id.tv_label) as TextView
         tvLabel.text = bean.name
@@ -445,6 +467,7 @@ class BuildSealActivity : ToolbarActivity() {
         ll_seal.addView(convertView)
         val tvLabel = convertView.findViewById(R.id.tv_label) as TextView
         tvLabel.text = bean.name
+        fieldMap.put(bean.fields, convertView)
 
         val ll_images = convertView.findViewById(R.id.ll_images) as FlowLayout
         ll_images.removeAllViews()
@@ -530,6 +553,7 @@ class BuildSealActivity : ToolbarActivity() {
     private fun add9(bean: CustomSealBean, inflater: LayoutInflater) {
         val convertView = inflater.inflate(R.layout.cs_row_files, null);
         ll_seal.addView(convertView)
+        fieldMap.put(bean.fields, convertView)
         val tvLabel = convertView.findViewById(R.id.tv_label) as TextView
         val tvFile = convertView.findViewById(R.id.tv_file) as TextView
         tvLabel.text = bean.name

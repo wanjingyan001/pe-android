@@ -25,5 +25,6 @@ class CustomSealBean : Serializable {
         var url: String? = null
         var size: String? = null
         var type: Int? = null
+        val hide: String = ""
     }
 }

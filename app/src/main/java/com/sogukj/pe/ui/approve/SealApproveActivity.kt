@@ -28,6 +28,7 @@ import kotlinx.android.synthetic.main.seal_approve_part1.*
 import kotlinx.android.synthetic.main.seal_approve_part2.*
 import kotlinx.android.synthetic.main.seal_approve_part3.*
 import org.jetbrains.anko.collections.forEachWithIndex
+
 /**
  * Created by qinfei on 17/10/18.
  */
@@ -120,7 +121,7 @@ class SealApproveActivity : ToolbarActivity() {
                 }
             }
             4 -> {
-                iv_state_signed.visibility = View.VISIBLE
+                iv_state_agreed.visibility = View.VISIBLE
                 btn_single.visibility = View.GONE
                 ll_twins.visibility = View.VISIBLE
                 btn_left.setOnClickListener {
@@ -170,7 +171,7 @@ class SealApproveActivity : ToolbarActivity() {
                 }
             }
             6 -> {
-                iv_state_signed.visibility = View.VISIBLE
+                iv_state_agreed.visibility = View.VISIBLE
                 btn_single.text = "导出审批单"
                 btn_single.setOnClickListener {
                     SoguApi.getService(application)
@@ -270,7 +271,11 @@ class SealApproveActivity : ToolbarActivity() {
                     .load(v.url)
                     .into(ivUser)
             tvStatus.text = v.status_str
-            tvContent.text = v.content
+            val buff = StringBuffer()
+            if (null != v.content) {
+                appendLine(buff, "意见", v.content)
+            }
+            tvContent.text = Html.fromHtml(buff.toString())
             tvTime.text = v.approval_time
             tvContent.visibility = View.GONE
             llComments.visibility = View.GONE

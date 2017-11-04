@@ -46,6 +46,7 @@ class MessageListActivity : ToolbarActivity() {
                 val tvType = convertView.findViewById(R.id.tv_type) as TextView
                 val tvMsg = convertView.findViewById(R.id.tv_msg) as TextView
                 val tvUrgent = convertView.findViewById(R.id.tv_urgent) as TextView
+                val ll_content=convertView.findViewById(R.id.ll_content)
                 override fun setData(view: View, data: MessageBean, position: Int) {
 
                     val strType = when (data.type) {
@@ -53,6 +54,11 @@ class MessageListActivity : ToolbarActivity() {
                         2 -> "用印审批"
                         3 -> "签字审批"
                         else -> ""
+                    }
+                    if (data.status==1){
+                        ll_content.setBackgroundResource(R.drawable.bg_pop_msg_left_1)
+                    }else{
+                        ll_content.setBackgroundResource(R.drawable.bg_pop_msg_left)
                     }
                     data.setColorStatus(tvState)
                     tvTitle.text = data.title

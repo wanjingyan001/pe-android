@@ -31,6 +31,6 @@
         android:textColor="@color/text_1"
         android:textSize="14sp"
         android:background="@color/white"
-        android:hint="--"
+        android:hint=""
         android:lines="1" />
 </LinearLayout>

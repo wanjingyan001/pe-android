@@ -23,7 +23,7 @@
             style="@style/SoguTextNormal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="用印环节" />
+            android:text="签发环节" />
     </LinearLayout>
 
     <View

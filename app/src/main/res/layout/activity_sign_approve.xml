@@ -86,91 +86,17 @@
                     android:layout_marginTop="30dp"
                     android:lineSpacingMultiplier="1.5" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="20dp"
-                    android:orientation="vertical">
+                <include
+                    android:id="@+id/part1"
+                    layout="@layout/sign_approve_part1" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                <include
+                    android:id="@+id/part2"
+                    layout="@layout/sign_approve_part2" />
 
-                        <View
-                            android:layout_width="5dp"
-                            android:layout_height="10dp"
-                            android:layout_marginRight="5dp"
-                            android:background="@color/color_main" />
-
-                        <TextView
-                            style="@style/SoguTextNormal"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="用印文件清单" />
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="9dp"
-                        android:background="@color/divider" />
-
-                    <LinearLayout
-                        android:id="@+id/ll_files"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <!--<include layout="@layout/item_file_single" />-->
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="20dp"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <View
-                            android:layout_width="5dp"
-                            android:layout_height="10dp"
-                            android:layout_marginRight="5dp"
-                            android:background="@color/color_main" />
-
-                        <TextView
-                            style="@style/SoguTextNormal"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="审批" />
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="9dp"
-                        android:background="@color/divider" />
-
-                    <LinearLayout
-                        android:id="@+id/ll_approvers"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <!--<include layout="@layitem_approve_seal_approverover" />-->
-
-                        <!--<include layout="@layitem_approve_seal_approverover" />-->
-
-                        <!--<include layout="@layitem_approve_seal_approverover" />-->
-                    </LinearLayout>
-                </LinearLayout>
+                <include
+                    android:id="@+id/part3"
+                    layout="@layout/sign_approve_part3" />
 
                 <include
                     layout="@layout/state_sign_confim"

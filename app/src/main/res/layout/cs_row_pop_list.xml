@@ -32,6 +32,6 @@
         android:textSize="14sp"
         android:drawableRight="@drawable/ic_arrow_r"
         android:gravity="center_vertical"
-        android:hint="--"
+        android:hint=""
         android:lines="1" />
 </LinearLayout>
