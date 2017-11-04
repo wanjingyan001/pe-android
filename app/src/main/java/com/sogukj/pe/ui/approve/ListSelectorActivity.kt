@@ -24,14 +24,19 @@ import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_list_common.*
+import kotlinx.android.synthetic.main.activity_list_search.*
+import kotlinx.android.synthetic.main.toolbar.*
 
+/**
+ * Created by qinfei on 17/10/18.
+ */
 class ListSelectorActivity : ToolbarActivity() {
     lateinit var adapter: RecyclerAdapter<CustomSealBean.ValueBean>
+    lateinit var bean: CustomSealBean
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_list_common)
-        var bean = intent.getSerializableExtra(Extras.DATA) as CustomSealBean
+        setContentView(R.layout.activity_list_search)
+        bean = intent.getSerializableExtra(Extras.DATA) as CustomSealBean
         title = bean.name
         setBack(true)
         adapter = RecyclerAdapter<CustomSealBean.ValueBean>(this, { _adapter, parent, type ->
@@ -70,27 +75,52 @@ class ListSelectorActivity : ToolbarActivity() {
         refresh.setOnRefreshListener(object : RefreshListenerAdapter() {
             override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
                 page = 1
-                doRequest(bean)
+                doRequest()
             }
 
             override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
                 ++page
-                doRequest(bean)
+                doRequest()
             }
 
         })
         refresh.setAutoLoadMore(true)
+
+        toolbar_menu.setOnClickListener {
+            search_bar.visibility = View.VISIBLE
+        }
+
+        search_bar.setCancel(true, {
+            page = 1
+            search_bar.visibility = View.GONE
+            search_bar.search = ""
+            doRequest()
+        })
+        search_bar.onTextChange = { text ->
+            page = 1
+            handler.removeCallbacks(searchTask)
+            handler.postDelayed(searchTask, 100)
+        }
+        search_bar.onSearch = { text ->
+            page = 1
+            doRequest()
+        }
         handler.postDelayed({
-            doRequest(bean)
+            doRequest()
         }, 100)
     }
 
+    val searchTask = Runnable {
+        page = 1
+        doRequest()
+    }
     var page = 1
-    fun doRequest(bean: CustomSealBean) {
+    fun doRequest() {
+        val text = search_bar.search
         val map = bean.value_map
         if (null != map)
             SoguApi.getService(application)
-                    .listSelector(type = map.type!!, page = page)
+                    .listSelector(type = map.type!!, page = page, fuzzyQuery = text)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe({ payload ->

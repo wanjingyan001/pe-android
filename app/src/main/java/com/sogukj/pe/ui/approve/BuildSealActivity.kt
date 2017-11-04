@@ -38,7 +38,9 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
-
+/**
+ * Created by qinfei on 17/10/18.
+ */
 class BuildSealActivity : ToolbarActivity() {
 
     val gson = Gson()
@@ -220,7 +222,6 @@ class BuildSealActivity : ToolbarActivity() {
                 false
             } else {
                 iv_alert.visibility = View.GONE
-                paramMap.put(bean.fields!!, bean.value_map?.id)
                 true
             }
         }
@@ -262,7 +263,6 @@ class BuildSealActivity : ToolbarActivity() {
         val view = viewMap.get(bean.fields)
         if (null != view) {
             view?.text = data.name
-            paramMap.put(bean?.fields!!, data.id)
         }
     }
 
@@ -280,12 +280,13 @@ class BuildSealActivity : ToolbarActivity() {
         iv_alert.visibility = View.GONE
         checkList.add {
             val str = etValue.text?.toString()
+            if (flagEdit)
+                paramMap.put(bean.fields!!, bean.value_map?.id)
             if (bean.is_must == 1 && str.isNullOrEmpty()) {
                 iv_alert.visibility = View.VISIBLE
                 false
             } else {
                 iv_alert.visibility = View.GONE
-                paramMap.put(bean.fields!!, bean.value_map?.id)
                 true
             }
         }
@@ -606,6 +607,7 @@ class BuildSealActivity : ToolbarActivity() {
         } else if (requestCode == ListSelectorActivity.REQ_LIST_SELECTOR && resultCode === Activity.RESULT_OK) {
             val bean = data?.getSerializableExtra(Extras.DATA) as CustomSealBean
             val data = data?.getSerializableExtra(Extras.DATA2) as CustomSealBean.ValueBean
+            paramMap.put(bean?.fields!!, data.id)
             refreshListSelector(bean, data)
         }
         super.onActivityResult(requestCode, resultCode, data)

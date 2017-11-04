@@ -572,7 +572,8 @@ interface SoguService {
     fun listSelector(
             @Field("page") page: Int = 1
             , @Field("pageSize") pageSize: Int = 20
-            , @Field("type") type: Int): Observable<Payload<List<CustomSealBean.ValueBean>>>
+            , @Field("type") type: Int
+            , @Field("fuzzyQuery") fuzzyQuery: String? = null): Observable<Payload<List<CustomSealBean.ValueBean>>>
 
     @POST("/api/Approve/submitApprove")
     fun submitApprove(@Body body: RequestBody): Observable<Payload<Object>>

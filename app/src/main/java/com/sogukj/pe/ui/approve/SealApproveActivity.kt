@@ -28,7 +28,9 @@ import kotlinx.android.synthetic.main.seal_approve_part1.*
 import kotlinx.android.synthetic.main.seal_approve_part2.*
 import kotlinx.android.synthetic.main.seal_approve_part3.*
 import org.jetbrains.anko.collections.forEachWithIndex
-
+/**
+ * Created by qinfei on 17/10/18.
+ */
 class SealApproveActivity : ToolbarActivity() {
 
     lateinit var inflater: LayoutInflater

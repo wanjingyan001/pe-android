@@ -38,7 +38,9 @@ import okhttp3.RequestBody
 import org.jetbrains.anko.collections.forEachWithIndex
 import java.io.File
 import java.io.FileOutputStream
-
+/**
+ * Created by qinfei on 17/10/18.
+ */
 class SignApproveActivity : ToolbarActivity() {
 
     lateinit var inflater: LayoutInflater

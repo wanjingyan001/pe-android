@@ -33,7 +33,9 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
 import java.util.HashMap
-
+/**
+ * Created by qinfei on 17/10/18.
+ */
 class BuildSignActivity : ToolbarActivity() {
 
     val gson = Gson()

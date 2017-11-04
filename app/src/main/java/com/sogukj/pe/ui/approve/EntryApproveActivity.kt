@@ -20,7 +20,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_approve.*
 import java.text.SimpleDateFormat
-
+/**
+ * Created by qinfei on 17/10/18.
+ */
 class EntryApproveActivity : ToolbarActivity() {
 
     val fmt = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")

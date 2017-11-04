@@ -26,7 +26,9 @@ import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_approve_search.*
-
+/**
+ * Created by qinfei on 17/10/18.
+ */
 class ApproveSearchActivity : ToolbarActivity() {
     lateinit var adapter: RecyclerAdapter<ApprovalBean>
     lateinit var inflater: LayoutInflater
