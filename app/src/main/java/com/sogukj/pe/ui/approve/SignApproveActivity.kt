@@ -152,6 +152,7 @@ class SignApproveActivity : ToolbarActivity() {
     private fun initButtons(click: Int?) {
         btn_single.visibility = View.VISIBLE
         ll_twins.visibility = View.GONE
+        state_sign_confirm.visibility = View.GONE
         iv_state_signed.visibility = View.GONE
         when (click) {
             0 -> {
