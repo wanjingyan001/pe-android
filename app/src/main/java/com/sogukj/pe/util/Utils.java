@@ -24,6 +24,7 @@ public class Utils {
     public static float pxToDp(Context context, int dp) {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, dp, context.getResources().getDisplayMetrics());
     }
+
     public static String stringFilter(String str) throws PatternSyntaxException {
         // 只允许字母、数字和汉字
         String regEx = "[^a-zA-Z0-9\u4E00-\u9FA5]";
@@ -31,6 +32,7 @@ public class Utils {
         Matcher m = p.matcher(str);
         return m.replaceAll("").trim();
     }
+
     public static void closeInput(Context context, View view) {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         boolean isOpen = imm.isActive();

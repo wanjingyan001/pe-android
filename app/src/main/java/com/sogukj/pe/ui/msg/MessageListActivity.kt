@@ -46,7 +46,7 @@ class MessageListActivity : ToolbarActivity() {
                 val tvType = convertView.findViewById(R.id.tv_type) as TextView
                 val tvMsg = convertView.findViewById(R.id.tv_msg) as TextView
                 val tvUrgent = convertView.findViewById(R.id.tv_urgent) as TextView
-                val ll_content=convertView.findViewById(R.id.ll_content)
+                val ll_content = convertView.findViewById(R.id.ll_content)
                 override fun setData(view: View, data: MessageBean, position: Int) {
 
                     val strType = when (data.type) {
@@ -55,9 +55,9 @@ class MessageListActivity : ToolbarActivity() {
                         3 -> "签字审批"
                         else -> ""
                     }
-                    if (data.status==1){
+                    if (data.status == 1) {
                         ll_content.setBackgroundResource(R.drawable.bg_pop_msg_left_1)
-                    }else{
+                    } else {
                         ll_content.setBackgroundResource(R.drawable.bg_pop_msg_left)
                     }
                     data.setColorStatus(tvState)
@@ -84,10 +84,11 @@ class MessageListActivity : ToolbarActivity() {
         })
         adapter.onItemClick = { v, p ->
             val data = adapter.dataList.get(p)
+            val is_mine = if (data.status == -1 || data.status == 4) 1 else 2
             if (data.type == 2)
-                SealApproveActivity.start(this, data)
+                SealApproveActivity.start(this, data, is_mine)
             else if (data.type == 3)
-                SignApproveActivity.start(this, data)
+                SignApproveActivity.start(this, data, is_mine)
         }
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = LinearLayoutManager.VERTICAL

@@ -139,7 +139,7 @@
                         android:background="@drawable/bg_btn_blue"
                         android:textColor="@color/white"
                         android:textSize="18sp"
-                        tools:text="用印完成" />
+                        android:text="用印完成" />
                 </LinearLayout>
             </LinearLayout>
 

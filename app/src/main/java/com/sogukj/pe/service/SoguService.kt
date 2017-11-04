@@ -599,7 +599,8 @@ interface SoguService {
 
     @FormUrlEncoded
     @POST("/api/Approve/approveShow")
-    fun showApprove(@Field("approval_id") approval_id: Int, @Field("type") type: Int? = null, @Field("classify") classify: Int? = null)
+    fun showApprove(@Field("approval_id") approval_id: Int, @Field("type") type: Int? = null, @Field("classify") classify: Int? = null
+                    , @Field("is_mine") is_mine: Int)
             : Observable<Payload<ApproveViewBean>>
 
     @FormUrlEncoded
@@ -616,6 +617,10 @@ interface SoguService {
     @FormUrlEncoded
     @POST("/api/Approve/applyUrgent")
     fun approveUrgent(@Field("approval_id") approval_id: Int): Observable<Payload<Object>>
+
+    @FormUrlEncoded
+    @POST("/api/Approve/finishApprove")
+    fun finishApprove(@Field("approval_id") approval_id: Int): Observable<Payload<Object>>
 
     @POST("/api/Approve/signResult")
     fun approveSign(@Body body: RequestBody): Observable<Payload<Object>>

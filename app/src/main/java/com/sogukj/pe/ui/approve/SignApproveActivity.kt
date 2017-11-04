@@ -51,10 +51,12 @@ class SignApproveActivity : ToolbarActivity() {
     lateinit var paramTitle: String
     var paramId: Int? = null
     var paramType: Int? = null
+    var is_mine = 2
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         inflater = LayoutInflater.from(this)
         val paramObj = intent.getSerializableExtra(Extras.DATA)
+        is_mine = intent.getIntExtra("is_mine", 2)
         if (paramObj is ApprovalBean) {
             paramTitle = paramObj.kind!!
             paramId = paramObj.approval_id!!
@@ -74,8 +76,12 @@ class SignApproveActivity : ToolbarActivity() {
         setBack(true)
         title = paramTitle
 
+        refresh()
+    }
+
+    fun refresh() {
         SoguApi.getService(application)
-                .showApprove(approval_id = paramId!!, classify = paramType)
+                .showApprove(approval_id = paramId!!, classify = paramType, is_mine = is_mine)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -92,33 +98,6 @@ class SignApproveActivity : ToolbarActivity() {
                     Trace.e(e)
                     showToast("请求失败")
                 })
-
-    }
-
-    fun initSegments(segments: List<ApproverBean>?) {
-        ll_segments.removeAllViews()
-        if (null == segments || segments.isEmpty()) {
-            part3.visibility = View.GONE
-            return
-        }
-        val inflater = LayoutInflater.from(this)
-        segments?.forEach { v ->
-            val convertView = inflater.inflate(R.layout.item_approve_sign_segment, null)
-            ll_segments.addView(convertView)
-
-            val ivUser = convertView.findViewById(R.id.iv_user) as CircleImageView
-            val tvName = convertView.findViewById(R.id.tv_name) as TextView
-            val tvStatus = convertView.findViewById(R.id.tv_status) as TextView
-            val tvTime = convertView.findViewById(R.id.tv_time) as TextView
-
-            tvName.text = v.name
-            val ch = v.name?.first()
-            ivUser.setChar(ch)
-            Glide.with(this)
-                    .load(v.url)
-                    .into(ivUser)
-        }
-
     }
 
     fun showSignDialog(type: Int = 1) {
@@ -156,7 +135,7 @@ class SignApproveActivity : ToolbarActivity() {
                         .subscribe({ payload ->
                             if (payload.isOk) {
                                 showToast("保存成功")
-                                finish()
+                                refresh()
                             } else
                                 showToast(payload.message)
                         }, { e ->
@@ -171,14 +150,14 @@ class SignApproveActivity : ToolbarActivity() {
     }
 
     private fun initButtons(click: Int?) {
-        btn_single.visibility = View.GONE
+        btn_single.visibility = View.VISIBLE
         ll_twins.visibility = View.GONE
         iv_state_signed.visibility = View.GONE
         when (click) {
             0 -> {
+                btn_single.visibility = View.GONE
             }
             1 -> {
-                btn_single.visibility = View.VISIBLE
                 btn_single.text = "申请加急"
                 btn_single.setOnClickListener {
                     SoguApi.getService(application)
@@ -196,18 +175,8 @@ class SignApproveActivity : ToolbarActivity() {
                             })
                 }
             }
-            2 -> {
-                iv_state_signed.visibility = View.VISIBLE
-                btn_single.visibility = View.VISIBLE
-                btn_single.text = "已签字"
-                iv_state_signed.visibility = View.VISIBLE
-                btn_single.setOnClickListener {
-                    finish()
-                }
-            }
             4 -> {
                 btn_single.text = "文件签发"
-                iv_state_agreed.visibility = View.VISIBLE
                 btn_single.setOnClickListener {
                     showSignDialog()
                 }
@@ -215,8 +184,6 @@ class SignApproveActivity : ToolbarActivity() {
             5 -> {
                 btn_single.text = "确认意见并签字"
                 state_sign_confirm.visibility = View.VISIBLE
-                btn_single.visibility = View.VISIBLE
-                ll_twins.visibility = View.GONE
                 btn_single.setOnClickListener {
                     val type = when (rg_sign.checkedRadioButtonId) {
                         R.id.rb_item1 -> 1
@@ -229,9 +196,8 @@ class SignApproveActivity : ToolbarActivity() {
             }
             6 -> {
                 iv_state_signed.visibility = View.VISIBLE
-                btn_single.visibility = View.GONE
-                ll_twins.visibility = View.VISIBLE
-                btn_left.setOnClickListener {
+                btn_single.text = "导出审批单"
+                btn_single.setOnClickListener {
                     SoguApi.getService(application)
                             .exportPdf(paramId!!)
                             .observeOn(AndroidSchedulers.mainThread())
@@ -239,8 +205,12 @@ class SignApproveActivity : ToolbarActivity() {
                             .subscribe({ payload ->
                                 if (payload.isOk) {
                                     val url = payload.payload
-                                    if (!TextUtils.isEmpty(url))
-                                        PdfUtil.loadPdf(this, url!!)
+                                    if (!TextUtils.isEmpty(url)) {
+                                        val intent = Intent(Intent.ACTION_VIEW)
+                                        intent.data = Uri.parse(url)
+                                        startActivity(intent)
+                                    }
+//                                        PdfUtil.loadPdf(this, url!!)
                                 } else
                                     showToast(payload.message)
                             }, { e ->
@@ -250,6 +220,38 @@ class SignApproveActivity : ToolbarActivity() {
                 }
             }
         }
+    }
+
+
+    fun initSegments(segments: List<ApproverBean>?) {
+        ll_segments.removeAllViews()
+        if (null == segments || segments.isEmpty()) {
+            part3.visibility = View.GONE
+            return
+        }
+        val inflater = LayoutInflater.from(this)
+        segments?.forEach { v ->
+            val convertView = inflater.inflate(R.layout.item_approve_sign_segment, null)
+            ll_segments.addView(convertView)
+
+            val ivUser = convertView.findViewById(R.id.iv_user) as CircleImageView
+            val tvName = convertView.findViewById(R.id.tv_name) as TextView
+            val tvStatus = convertView.findViewById(R.id.tv_status) as TextView
+            val tvTime = convertView.findViewById(R.id.tv_time) as TextView
+            val ivSign = convertView.findViewById(R.id.iv_sign) as ImageView
+
+            tvName.text = v.name
+            val ch = v.name?.first()
+            ivUser.setChar(ch)
+            Glide.with(this)
+                    .load(v.url)
+                    .into(ivUser)
+
+            Glide.with(this)
+                    .load(v.sign_img)
+                    .into(ivSign)
+        }
+
     }
 
     fun initApprovers(approveList: List<ApproverBean>?) {
@@ -375,15 +377,17 @@ class SignApproveActivity : ToolbarActivity() {
     }
 
     companion object {
-        fun start(ctx: Activity?, bean: ApprovalBean) {
+        fun start(ctx: Activity?, bean: ApprovalBean, is_mine: Int) {
             val intent = Intent(ctx, SignApproveActivity::class.java)
             intent.putExtra(Extras.DATA, bean)
+            intent.putExtra("is_mine", is_mine)
             ctx?.startActivity(intent)
         }
 
-        fun start(ctx: Activity?, bean: MessageBean) {
+        fun start(ctx: Activity?, bean: MessageBean, is_mine: Int) {
             val intent = Intent(ctx, SignApproveActivity::class.java)
             intent.putExtra(Extras.DATA, bean)
+            intent.putExtra("is_mine", is_mine)
             ctx?.startActivity(intent)
         }
     }

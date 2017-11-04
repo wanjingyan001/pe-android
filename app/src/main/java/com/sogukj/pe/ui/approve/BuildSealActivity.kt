@@ -3,7 +3,9 @@ package com.sogukj.pe.ui.approve
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
@@ -32,6 +34,7 @@ import okhttp3.FormBody
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import org.jetbrains.anko.sdk25.coroutines.onFocusChange
 import java.io.File
 import java.io.Serializable
 import java.util.*
@@ -350,27 +353,17 @@ class BuildSealActivity : ToolbarActivity() {
         val convertView = inflater.inflate(R.layout.cs_row_radio, null);
         ll_seal.addView(convertView)
         fieldMap.put(bean.fields, convertView)
+
         val tvLabel = convertView.findViewById(R.id.tv_label) as TextView
+        val ivAlert = convertView.findViewById(R.id.iv_alert) as ImageView
         val rgCheck = convertView.findViewById(R.id.rg_check) as RadioGroup
+        val rbYes = convertView.findViewById(R.id.rb_yes) as RadioButton
+        val rbNo = convertView.findViewById(R.id.rb_no) as RadioButton
+
         tvLabel.text = bean.name
         paramMap.put(bean.fields, 0)
-        rgCheck.setOnCheckedChangeListener { group, checkedId ->
-            if (checkedId == R.id.rb_yes) {
-                paramMap.put(bean.fields, 1)
-            } else {
-                paramMap.put(bean.fields, 0)
-            }
-        }
-        rgCheck.findViewById(R.id.rb_yes).setOnClickListener {
-            bean?.value_map?.hide?.split(",")?.forEach { field ->
-                if (!TextUtils.isEmpty(field)) {
-                    val view = fieldMap.get(field)
-                    view?.visibility = View.VISIBLE
-                }
-            }
-        }
-
-        rgCheck.findViewById(R.id.rb_no).setOnClickListener {
+        rbYes.setOnClickListener {
+            paramMap.put(bean.fields, 1)
             bean?.value_map?.hide?.split(",")?.forEach { field ->
                 if (!TextUtils.isEmpty(field)) {
                     val view = fieldMap.get(field)
@@ -378,8 +371,16 @@ class BuildSealActivity : ToolbarActivity() {
                 }
             }
         }
-        val iv_alert = convertView.findViewById(R.id.iv_alert)
-        iv_alert.visibility = View.GONE
+
+        rbNo.setOnClickListener {
+            paramMap.put(bean.fields, 0)
+            bean?.value_map?.hide?.split(",")?.forEach { field ->
+                if (!TextUtils.isEmpty(field)) {
+                    val view = fieldMap.get(field)
+                    view?.visibility = View.VISIBLE
+                }
+            }
+        }
     }
 
     private fun add6(bean: CustomSealBean, inflater: LayoutInflater) {
@@ -411,6 +412,16 @@ class BuildSealActivity : ToolbarActivity() {
                         v.is_select = 0
                     }
                     paramMap.put(bean.fields, bean.value_list)
+                }
+                etNum.setOnFocusChangeListener { v, hasFocus ->
+                    val editable = etNum.text.toString()
+                    try {
+                        val num = editable.toIntOrNull()
+                        if (num == null)
+                            etNum.text = "0"
+                    } catch (e: Exception) {
+
+                    }
                 }
 
                 tvMinus.setOnClickListener {

@@ -103,7 +103,7 @@
                     <TextView
                         android:id="@+id/et_estiblishTime"
                         style="@style/ItemTextValue"
-                        android:hint="--" />
+                        android:hint="" />
                 </TableRow>
 
                 <TableRow

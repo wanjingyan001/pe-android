@@ -113,8 +113,8 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
             doRequest()
         }
         ll_order_time_1.setOnClickListener { v ->
-            asc *= if (orderBy == 3) -1 else 1;
-            orderBy = 3
+            asc *= if (orderBy == 4) -1 else 1;
+            orderBy = 4
             doRequest()
         }
 
@@ -150,7 +150,7 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
     val fmt = SimpleDateFormat("MM/dd HH:mm")
     var offset = 0
     var asc = -1;
-    var orderBy = 3;
+    var orderBy = 4;
 
     fun doRequest() {
         iv_sort_name_1.visibility = View.GONE
@@ -159,22 +159,31 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
         iv_sort_time.visibility = View.GONE
         iv_sort_state.visibility = View.GONE
         val imgAsc = if (asc == -1) R.drawable.ic_down else R.drawable.ic_up
-        when (Math.abs(orderBy)) {
-            1 -> iv_sort_name
-            2 -> iv_sort_state
-            else -> iv_sort_time
-        }.apply {
-            setImageResource(imgAsc)
-            visibility = View.VISIBLE
+        if (type == TYPE_CB) {
+            val view = when (Math.abs(orderBy)) {
+                1 -> iv_sort_name_1
+                4 -> iv_sort_time_1
+                else -> {
+                    orderBy = 4
+                    iv_sort_time_1
+                }
+            }
+            view.setImageResource(imgAsc)
+            view.visibility = View.VISIBLE
+        } else {
+            val view = when (Math.abs(orderBy)) {
+                1 -> iv_sort_name
+                2 -> iv_sort_state
+                else -> {
+                    orderBy = 3
+                    iv_sort_time
+                }
+            }
+            view.setImageResource(imgAsc)
+            view.visibility = View.VISIBLE
         }
-        when (Math.abs(orderBy)) {
-            1 -> iv_sort_name_1
-            3 -> iv_sort_time_1
-            else -> null
-        }?.apply {
-            setImageResource(imgAsc)
-            visibility = View.VISIBLE
-        }
+
+
         val sort = orderBy * asc;
         val user = Store.store.getUser(baseActivity!!)
         SoguApi.getService(baseActivity!!.application)

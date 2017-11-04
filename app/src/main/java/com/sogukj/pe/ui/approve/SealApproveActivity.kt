@@ -38,10 +38,12 @@ class SealApproveActivity : ToolbarActivity() {
     lateinit var paramTitle: String
     var paramId: Int? = null
     var paramType: Int? = null
+    var is_mine = 2
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         inflater = LayoutInflater.from(this)
         val paramObj = intent.getSerializableExtra(Extras.DATA)
+        is_mine = intent.getIntExtra("is_mine", 2)
         if (paramObj is ApprovalBean) {
             paramTitle = paramObj.kind!!
             paramId = paramObj.approval_id!!
@@ -66,7 +68,7 @@ class SealApproveActivity : ToolbarActivity() {
 
     fun refresh() {
         SoguApi.getService(application)
-                .showApprove(approval_id = paramId!!, classify = paramType)
+                .showApprove(approval_id = paramId!!, classify = paramType, is_mine = is_mine)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -111,8 +113,6 @@ class SealApproveActivity : ToolbarActivity() {
                             })
                 }
             }
-            2 -> {
-            }
             3 -> {
                 btn_single.text = "重新发起审批"
                 btn_single.setOnClickListener {
@@ -122,8 +122,6 @@ class SealApproveActivity : ToolbarActivity() {
             }
             4 -> {
                 iv_state_agreed.visibility = View.VISIBLE
-                btn_single.visibility = View.GONE
-                ll_twins.visibility = View.VISIBLE
                 btn_left.setOnClickListener {
                     SoguApi.getService(application)
                             .exportPdf(paramId!!)
@@ -173,7 +171,9 @@ class SealApproveActivity : ToolbarActivity() {
             6 -> {
                 iv_state_agreed.visibility = View.VISIBLE
                 btn_single.text = "导出审批单"
-                btn_single.setOnClickListener {
+                btn_single.visibility = View.GONE
+                ll_twins.visibility = View.VISIBLE
+                btn_left.setOnClickListener {
                     SoguApi.getService(application)
                             .exportPdf(paramId!!)
                             .observeOn(AndroidSchedulers.mainThread())
@@ -181,8 +181,28 @@ class SealApproveActivity : ToolbarActivity() {
                             .subscribe({ payload ->
                                 if (payload.isOk) {
                                     val url = payload.payload
-                                    if (!TextUtils.isEmpty(url))
-                                        PdfUtil.loadPdf(this, url!!)
+                                    if (!TextUtils.isEmpty(url)) {
+                                        val intent = Intent(Intent.ACTION_VIEW)
+                                        intent.data = Uri.parse(url)
+                                        startActivity(intent)
+                                    }
+//                                        PdfUtil.loadPdf(this, url!!)
+                                } else
+                                    showToast(payload.message)
+                            }, { e ->
+                                Trace.e(e)
+                                showToast("请求失败")
+                            })
+                }
+
+                btn_right.setOnClickListener {
+                    SoguApi.getService(application)
+                            .finishApprove(paramId!!)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(Schedulers.io())
+                            .subscribe({ payload ->
+                                if (payload.isOk) {
+                                    refresh()
                                 } else
                                     showToast(payload.message)
                             }, { e ->
@@ -403,14 +423,16 @@ class SealApproveActivity : ToolbarActivity() {
     }
 
     companion object {
-        fun start(ctx: Activity?, bean: ApprovalBean) {
+        fun start(ctx: Activity?, bean: ApprovalBean, is_mine: Int) {
             val intent = Intent(ctx, SealApproveActivity::class.java)
             intent.putExtra(Extras.DATA, bean)
+            intent.putExtra("is_mine", is_mine)
             ctx?.startActivity(intent)
         }
 
-        fun start(ctx: Activity?, bean: MessageBean) {
+        fun start(ctx: Activity?, bean: MessageBean, is_mine: Int) {
             val intent = Intent(ctx, SealApproveActivity::class.java)
+            intent.putExtra("is_mine", is_mine)
             intent.putExtra(Extras.DATA, bean)
             ctx?.startActivity(intent)
         }

@@ -4,53 +4,52 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
     android:paddingTop="15dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+    <com.sogukj.pe.view.CircleImageView
+        android:id="@+id/iv_user"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginRight="5dp" />
 
-        <com.sogukj.pe.view.CircleImageView
-            android:id="@+id/iv_user"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginRight="5dp" />
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text_1"
+        android:textSize="12sp"
+        tools:text="经办人" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="right|center_vertical"
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tv_name"
+            android:id="@+id/tv_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/text_1"
+            android:textColor="@color/textColorBlue"
             android:textSize="12sp"
-            tools:text="经办人" />
+            android:visibility="gone"
+            tools:text="待审批" />
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/tv_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="right|center_vertical"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tv_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/textColorBlue"
-                android:textSize="12sp"
-                android:visibility="gone"
-                tools:text="待审批" />
-
-            <TextView
-                android:id="@+id/tv_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/text_3"
-                android:textSize="12sp"
-                android:visibility="gone"
-                tools:text="已同意" />
-        </LinearLayout>
+            android:textColor="@color/text_3"
+            android:textSize="12sp"
+            android:visibility="gone"
+            tools:text="已同意" />
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/iv_sign"
+        android:layout_width="100dp"
+        android:layout_height="40dp" />
 </LinearLayout>
