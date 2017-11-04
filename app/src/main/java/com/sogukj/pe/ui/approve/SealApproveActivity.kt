@@ -14,6 +14,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
 import com.framework.base.ToolbarActivity
+import com.nbsp.materialfilepicker.ui.FilePickerActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.*
@@ -419,7 +420,19 @@ class SealApproveActivity : ToolbarActivity() {
 
     fun appendLine(buff: StringBuffer, k: String?, v: String?) {
         if (null == k) return
-        buff.append("$k: <font color='#666666'>$v</font><br/>")
+        val sval = if (TextUtils.isEmpty(v)) "" else v
+        buff.append("$k: <font color='#666666'>$sval</font><br/>")
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == BuildSealActivity.REQ_EDIT && resultCode === Activity.RESULT_OK) {
+            val id = data?.getIntExtra(Extras.ID, paramId!!)
+            if (null != id) {
+                paramId = id
+                refresh()
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     companion object {

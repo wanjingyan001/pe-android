@@ -564,7 +564,8 @@ interface SoguService {
 
     @FormUrlEncoded
     @POST("/api/Approve/approveInfo")
-    fun approver(@Field("template_id") template_id: Int = 1
+    fun approver(@Field("template_id") template_id: Int? = null
+                 , @Field("sid") sid: Int? = null
                  , @Field("type") type: Int? = null): Observable<Payload<List<ApproverBean>>>
 
     @FormUrlEncoded
@@ -579,7 +580,7 @@ interface SoguService {
     fun submitApprove(@Body body: RequestBody): Observable<Payload<Object>>
 
     @POST("/api/Approve/updateApprove")
-    fun updateApprove(@Body body: RequestBody): Observable<Payload<Object>>
+    fun updateApprove(@Body body: RequestBody): Observable<Payload<Int>>
 
     @FormUrlEncoded
     @POST("/api/Approve/waitingMeApproval")

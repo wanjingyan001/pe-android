@@ -353,6 +353,17 @@ class ProjectBookActivity : ToolbarActivity(), SupportEmptyView {
                 tvTag.setBackgroundResource(bgColor1)
             }
         }
+        kotlin.run {
+            val itemTag = View.inflate(this, R.layout.item_tag_filter, null)
+            val tvTag = itemTag.findViewById(R.id.tv_tag) as TextView
+            tvTag.text = "全部"
+            tags.addView(itemTag)
+            tvTag.setOnClickListener {
+                fl_filter.visibility = View.GONE
+                ll_result.visibility = View.VISIBLE
+                doSearch()
+            }
+        }
         filterList.entries.forEach { e ->
             val itemTag = View.inflate(this, R.layout.item_tag_filter, null)
             val tvTag = itemTag.findViewById(R.id.tv_tag) as TextView
@@ -386,7 +397,10 @@ class ProjectBookActivity : ToolbarActivity(), SupportEmptyView {
         btn_ok.setOnClickListener {
             fl_filter.visibility = View.GONE
             ll_result.visibility = View.VISIBLE
-            doSearch(filter = checkedFilter.joinToString(","))
+            if (!checkedFilter.isEmpty())
+                doSearch(filter = checkedFilter.joinToString(","))
+            else
+                doSearch()
         }
     }
 

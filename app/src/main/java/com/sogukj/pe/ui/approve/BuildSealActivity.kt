@@ -86,7 +86,8 @@ class BuildSealActivity : ToolbarActivity() {
         val inflater = LayoutInflater.from(this)
 
         SoguApi.getService(application)
-                .approveInfo(template_id = if (flagEdit) null else paramId!!, sid = if (!flagEdit) null else paramId!!)
+                .approveInfo(template_id = if (flagEdit) null else paramId!!,
+                        sid = if (!flagEdit) null else paramId!!)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -103,8 +104,8 @@ class BuildSealActivity : ToolbarActivity() {
                 })
 
         SoguApi.getService(application)
-                .approver(template_id = paramId!!
-                        , type = paramType)
+                .approver(template_id = if (flagEdit) null else paramId!!,
+                        sid = if (!flagEdit) null else paramId!!)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -151,6 +152,9 @@ class BuildSealActivity : ToolbarActivity() {
                     .subscribe({ payload ->
                         if (payload.isOk && payload.payload != null) {
                             showToast("保存成功")
+                            val intent = Intent()
+                            intent.putExtra(Extras.ID, payload.payload!!)
+                            setResult(Activity.RESULT_OK, intent)
                             finish()
                         } else
                             showToast(payload.message)
@@ -308,6 +312,7 @@ class BuildSealActivity : ToolbarActivity() {
         val tvLabel = convertView.findViewById(R.id.tv_label) as TextView
         val etValue = convertView.findViewById(R.id.et_value) as TextView
         tvLabel.text = bean.name
+        etValue.text = bean.value
 
         val iv_alert = convertView.findViewById(R.id.iv_alert)
         iv_alert.visibility = View.GONE
@@ -333,6 +338,7 @@ class BuildSealActivity : ToolbarActivity() {
         val tvLabel = convertView.findViewById(R.id.tv_label) as TextView
         val etValue = convertView.findViewById(R.id.et_value) as TextView
         tvLabel.text = bean.name
+        etValue.text = bean.value
 
         val iv_alert = convertView.findViewById(R.id.iv_alert)
         iv_alert.visibility = View.GONE
@@ -667,13 +673,15 @@ class BuildSealActivity : ToolbarActivity() {
             ctx?.startActivity(intent)
         }
 
+        val REQ_EDIT = 0xe0;
+
         fun start(ctx: Activity?, id: Int, paramType: Int?, paramTitle: String, edit: Boolean = false) {
             val intent = Intent(ctx, BuildSealActivity::class.java)
             intent.putExtra(Extras.ID, id)
             intent.putExtra(Extras.TYPE, paramType)
             intent.putExtra(Extras.TITLE, paramTitle)
             intent.putExtra(Extras.FLAG, edit)
-            ctx?.startActivity(intent)
+            ctx?.startActivityForResult(intent, REQ_EDIT)
         }
     }
 }
