@@ -419,12 +419,16 @@ class BuildSealActivity : ToolbarActivity() {
                     }
                     paramMap.put(bean.fields, bean.value_list)
                 }
-                etNum.setOnFocusChangeListener { v, hasFocus ->
+                etNum.setOnFocusChangeListener { view, hasFocus ->
                     val editable = etNum.text.toString()
                     try {
-                        val num = editable.toIntOrNull()
-                        if (num == null)
-                            etNum.text = "0"
+                        var num = editable.toIntOrNull()
+                        if (num == null) {
+                            num = 0
+                        }
+                        etNum.text = "${num}"
+                        v.count = num
+                        paramMap.put(bean.fields, bean.value_list)
                     } catch (e: Exception) {
 
                     }

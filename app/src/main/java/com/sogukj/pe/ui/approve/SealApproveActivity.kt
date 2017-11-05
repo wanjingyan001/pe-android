@@ -29,6 +29,7 @@ import kotlinx.android.synthetic.main.seal_approve_part1.*
 import kotlinx.android.synthetic.main.seal_approve_part2.*
 import kotlinx.android.synthetic.main.seal_approve_part3.*
 import org.jetbrains.anko.collections.forEachWithIndex
+import java.text.SimpleDateFormat
 
 /**
  * Created by qinfei on 17/10/18.
@@ -80,6 +81,13 @@ class SealApproveActivity : ToolbarActivity() {
                         initApprovers(payload.payload?.approve)
                         initSegments(payload.payload?.segment)
                         initButtons(payload.payload?.click)
+                        val status = payload?.payload?.mainStatus
+                        if (null != status && status >= 2) {
+                            iv_state_agreed.visibility = View.VISIBLE
+                        } else {
+                            iv_state_agreed.visibility = View.GONE
+                        }
+
                     } else
                         showToast(payload.message)
                 }, { e ->
@@ -89,14 +97,14 @@ class SealApproveActivity : ToolbarActivity() {
     }
 
     fun initButtons(click: Int?) {
-        btn_single.visibility = View.VISIBLE
+        btn_single.visibility = View.GONE
         ll_twins.visibility = View.GONE
-        iv_state_agreed.visibility = View.GONE
         when (click) {
             0 -> {
                 btn_single.visibility = View.GONE
             }
             1 -> {
+                btn_single.visibility = View.VISIBLE
                 btn_single.text = "申请加急"
                 btn_single.setOnClickListener {
                     SoguApi.getService(application)
@@ -115,6 +123,7 @@ class SealApproveActivity : ToolbarActivity() {
                 }
             }
             3 -> {
+                btn_single.visibility = View.VISIBLE
                 btn_single.text = "重新发起审批"
                 btn_single.setOnClickListener {
                     BuildSealActivity.start(this, paramId!!, paramType, paramTitle, true)
@@ -122,7 +131,7 @@ class SealApproveActivity : ToolbarActivity() {
                 }
             }
             4 -> {
-                iv_state_agreed.visibility = View.VISIBLE
+                ll_twins.visibility = View.VISIBLE
                 btn_left.setOnClickListener {
                     SoguApi.getService(application)
                             .exportPdf(paramId!!)
@@ -131,8 +140,11 @@ class SealApproveActivity : ToolbarActivity() {
                             .subscribe({ payload ->
                                 if (payload.isOk) {
                                     val url = payload.payload
-                                    if (!TextUtils.isEmpty(url))
-                                        PdfUtil.loadPdf(this, url!!)
+                                    if (!TextUtils.isEmpty(url)) {
+                                        val intent = Intent(Intent.ACTION_VIEW)
+                                        intent.data = Uri.parse(url)
+                                        startActivity(intent)
+                                    }
                                 } else
                                     showToast(payload.message)
                             }, { e ->
@@ -141,10 +153,23 @@ class SealApproveActivity : ToolbarActivity() {
                             })
                 }
                 btn_right.setOnClickListener {
-                    finish()
+                    SoguApi.getService(application)
+                            .finishApprove(paramId!!)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(Schedulers.io())
+                            .subscribe({ payload ->
+                                if (payload.isOk) {
+                                    refresh()
+                                } else
+                                    showToast(payload.message)
+                            }, { e ->
+                                Trace.e(e)
+                                showToast("请求失败")
+                            })
                 }
             }
             5 -> {
+                btn_single.visibility = View.VISIBLE
                 btn_single.text = "审批"
                 btn_single.setOnClickListener {
                     MaterialDialog.Builder(this)
@@ -157,12 +182,10 @@ class SealApproveActivity : ToolbarActivity() {
                             .onPositive { dialog, dialogAction ->
                                 val text = dialog.inputEditText?.text.toString()
                                 examineApprove(1, text)
-                                refresh()
                             }
                             .onNegative { dialog, which ->
                                 val text = dialog.inputEditText?.text.toString()
                                 examineApprove(-1, text)
-                                refresh()
                             }
                             .positiveText("确认")
                             .negativeText("否决")
@@ -170,11 +193,9 @@ class SealApproveActivity : ToolbarActivity() {
                 }
             }
             6 -> {
-                iv_state_agreed.visibility = View.VISIBLE
+                btn_single.visibility = View.VISIBLE
                 btn_single.text = "导出审批单"
-                btn_single.visibility = View.GONE
-                ll_twins.visibility = View.VISIBLE
-                btn_left.setOnClickListener {
+                btn_single.setOnClickListener {
                     SoguApi.getService(application)
                             .exportPdf(paramId!!)
                             .observeOn(AndroidSchedulers.mainThread())
@@ -196,21 +217,7 @@ class SealApproveActivity : ToolbarActivity() {
                             })
                 }
 
-                btn_right.setOnClickListener {
-                    SoguApi.getService(application)
-                            .finishApprove(paramId!!)
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribeOn(Schedulers.io())
-                            .subscribe({ payload ->
-                                if (payload.isOk) {
-                                    refresh()
-                                } else
-                                    showToast(payload.message)
-                            }, { e ->
-                                Trace.e(e)
-                                showToast("请求失败")
-                            })
-                }
+
             }
         }
     }
@@ -223,6 +230,7 @@ class SealApproveActivity : ToolbarActivity() {
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         showToast("提交成功")
+                        refresh()
                     } else
                         showToast(payload.message)
                 }, { e ->
@@ -238,6 +246,7 @@ class SealApproveActivity : ToolbarActivity() {
             part3.visibility = View.GONE
             return
         }
+        part3.visibility = View.VISIBLE
         val inflater = LayoutInflater.from(this)
         segments?.forEach { v ->
             val convertView = inflater.inflate(R.layout.item_approve_seal_segment, null)
@@ -271,18 +280,32 @@ class SealApproveActivity : ToolbarActivity() {
             part2.visibility = View.GONE
             return
         }
+        part2.visibility = View.VISIBLE
         val inflater = LayoutInflater.from(this)
         approveList?.forEach { v ->
             val convertView = inflater.inflate(R.layout.item_approve_seal_approver, null)
             ll_approvers.addView(convertView)
 
             val tvPosition = convertView.findViewById(R.id.tv_position) as TextView
-            val ivUser = convertView.findViewById(R.id.iv_user) as com.sogukj.pe.view.CircleImageView
+            val ivUser = convertView.findViewById(R.id.iv_user) as CircleImageView
             val tvName = convertView.findViewById(R.id.tv_name) as TextView
             val tvStatus = convertView.findViewById(R.id.tv_status) as TextView
             val tvTime = convertView.findViewById(R.id.tv_time) as TextView
+            val tvEdit = convertView.findViewById(R.id.tv_edit) as TextView
             val tvContent = convertView.findViewById(R.id.tv_content) as TextView
             val llComments = convertView.findViewById(R.id.ll_comments) as LinearLayout
+
+            if (v?.status == 3) {
+                tvEdit.visibility = View.VISIBLE
+                if (v?.is_edit_file == 1) {
+                    tvEdit.text = "文件已修改"
+                    tvEdit.setBackgroundResource(R.drawable.bg_tag_edit_file_1)
+                } else {
+                    tvEdit.text = "文件未修改"
+                    tvEdit.setBackgroundResource(R.drawable.bg_tag_edit_file_0)
+                }
+            } else
+                tvEdit.visibility = View.GONE
             tvPosition.text = v.position
             tvName.text = v.name
             tvTime.text = v.approval_time
@@ -303,12 +326,15 @@ class SealApproveActivity : ToolbarActivity() {
             if (null != v.content && !TextUtils.isEmpty(v.content)) {
                 tvContent.visibility = View.VISIBLE
                 tvContent.setOnClickListener {
-                    doComment(v.hid!!)
+                    doComment(llComments, v.hid!!)
                 }
 
                 if (null != v.comment && v.comment!!.isNotEmpty()) {
                     llComments.visibility = View.VISIBLE
-                    setComment(llComments, v.hid!!, v.comment!!)
+                    llComments.removeAllViews()
+                    v.comment?.forEach { data ->
+                        addComment(llComments, v.hid!!, data)
+                    }
                 }
             }
 
@@ -318,7 +344,7 @@ class SealApproveActivity : ToolbarActivity() {
         }
     }
 
-    fun doComment(hid: Int, commentId: Int = 0) {
+    fun doComment(llComments: LinearLayout, hid: Int, commentId: Int = 0) {
         MaterialDialog.Builder(this)
                 .theme(Theme.LIGHT)
                 .title("评论")
@@ -328,60 +354,60 @@ class SealApproveActivity : ToolbarActivity() {
                 .cancelable(true)
                 .onPositive { dialog, dialogAction ->
                     val text = dialog.inputEditText?.text.toString()
-                    submitComment(hid, commentId, text)
+                    if (!TextUtils.isEmpty(text))
+                        SoguApi.getService(application)
+                                .submitComment(hid, comment_id = commentId, content = text)
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribeOn(Schedulers.io())
+                                .subscribe({ payload ->
+                                    if (payload.isOk) {
+                                        showToast("提交成功")
+                                        refresh()
+                                    } else
+                                        showToast(payload.message)
+                                }, { e ->
+                                    Trace.e(e)
+                                    showToast("提交失败")
+                                })
                 }
                 .positiveText("确认")
                 .negativeText("取消")
                 .show()
     }
 
-    fun submitComment(hid: Int, commentId: Int = 0, text: String) {
-        SoguApi.getService(application)
-                .submitComment(hid, comment_id = commentId, content = text)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ payload ->
-                    if (payload.isOk) {
-                        refresh()
-                        showToast("提交成功")
-                    } else
-                        showToast(payload.message)
-                }, { e ->
-                    Trace.e(e)
-                    showToast("提交失败")
-                })
-    }
+    val fmt_time = SimpleDateFormat("")
+    fun addComment(llComments: LinearLayout, hid: Int, data: ApproveViewBean.CommentBean) {
+        val convertView = inflater.inflate(R.layout.item_approve_comment, null)
+        llComments.addView(convertView)
+        val ivUser = convertView.findViewById(R.id.iv_user) as CircleImageView
+        val tvName = convertView.findViewById(R.id.tv_name) as TextView
+        val tvTime = convertView.findViewById(R.id.tv_time) as TextView
+        val tvComment = convertView.findViewById(R.id.tv_comment) as TextView
 
-    fun setComment(llComments: LinearLayout, hid: Int, comments: List<ApproveViewBean.CommentBean>) {
-        llComments.removeAllViews()
-        comments?.forEach { data ->
-            val convertView = inflater.inflate(R.layout.item_approve_comment, null)
-            llComments.addView(convertView)
-            val ivUser = convertView.findViewById(R.id.iv_user) as CircleImageView
-            val tvName = convertView.findViewById(R.id.tv_name) as TextView
-            val tvTime = convertView.findViewById(R.id.tv_time) as TextView
-            val tvComment = convertView.findViewById(R.id.tv_comment) as TextView
+        tvName.text = data.name
+        tvTime.text = data.add_time
+        val buff = StringBuffer()
+        if (!TextUtils.isEmpty(data.reply))
+            buff.append("回复<font color='#608cf8'>${data.reply}</font>")
+        buff.append(data.content)
+        tvComment.text = Html.fromHtml(buff.toString())
+        val ch = data.name?.first()
+        ivUser.setChar(ch)
+        Glide.with(this)
+                .load(data.url)
+                .into(ivUser)
 
-            tvName.text = data.name
-            tvComment.text = data.content
-            tvTime.text = data.add_time
-
-            val ch = data.name?.first()
-            ivUser.setChar(ch)
-            Glide.with(this)
-                    .load(data.url)
-                    .into(ivUser)
-
-            convertView.setOnClickListener {
-                doComment(hid, data.comment_id!!)
-            }
+        convertView.setOnClickListener {
+            doComment(llComments, hid, data.comment_id!!)
         }
     }
 
     private fun initFiles(file_list: List<ApproveViewBean.FileBean>?) {
         if (file_list == null || file_list.isEmpty()) {
             part1.visibility = View.GONE
+            return
         }
+        part1.visibility = View.VISIBLE
         ll_files.removeAllViews()
         val inflater = LayoutInflater.from(this)
         file_list?.forEachWithIndex { i, v ->

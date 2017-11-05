@@ -62,9 +62,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/text_3"
-                    android:textSize="12sp"
-                    android:visibility="gone"
+                    android:textSize="10sp"
                     tools:text="已同意" />
+
+                <TextView
+                    android:id="@+id/tv_edit"
+                    android:layout_width="55dp"
+                    android:layout_height="12dp"
+                    android:background="@drawable/bg_tag_edit_file_0"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="10sp"
+                    tools:text="文件未修改" />
             </LinearLayout>
         </LinearLayout>
 
@@ -83,14 +92,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/divider_top"
             android:orientation="vertical"
-            android:visibility="gone">
-
-            <include layout="@layout/item_approve_comment" />
-
-            <include layout="@layout/item_approve_comment" />
-
-            <include layout="@layout/item_approve_comment" />
-        </LinearLayout>
+            android:visibility="gone"></LinearLayout>
     </LinearLayout>
 
 </RelativeLayout>

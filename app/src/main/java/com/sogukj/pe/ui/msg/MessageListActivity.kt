@@ -116,9 +116,15 @@ class MessageListActivity : ToolbarActivity() {
             }
 
         })
+
         handler.postDelayed({
             doRequest()
         }, 100)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        doRequest()
     }
 
     var page = 1

@@ -15,7 +15,7 @@ class ApproverBean {
     var status: Int? = null//    string    审批结果
     var status_str: String? = null//    string    审批结果
     var content: String? = null//   string    审批意见
-    var is_edit_file: String? = null//    string    是否有修改用印清单文件
+    var is_edit_file: Int? = null//    string    是否有修改用印清单文件
     var comment: List<ApproveViewBean.CommentBean>? = null//   array    评论
     var user_id: Int? = null//   number    人id
     var sign_img: String? = null

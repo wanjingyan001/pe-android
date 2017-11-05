@@ -92,6 +92,12 @@ class SignApproveActivity : ToolbarActivity() {
                         initApprovers(payload.payload?.approve)
                         initSegments(payload.payload?.segment)
                         initButtons(payload.payload?.click)
+                        val status = payload?.payload?.mainStatus
+                        if (null != status && status >= 2) {
+                            iv_state_signed.visibility = View.VISIBLE
+                        } else {
+                            iv_state_signed.visibility = View.GONE
+                        }
                     } else
                         showToast(payload.message)
                 }, { e ->
@@ -150,15 +156,15 @@ class SignApproveActivity : ToolbarActivity() {
     }
 
     private fun initButtons(click: Int?) {
-        btn_single.visibility = View.VISIBLE
+        btn_single.visibility = View.GONE
         ll_twins.visibility = View.GONE
         state_sign_confirm.visibility = View.GONE
-        iv_state_signed.visibility = View.GONE
         when (click) {
             0 -> {
                 btn_single.visibility = View.GONE
             }
             1 -> {
+                btn_single.visibility = View.VISIBLE
                 btn_single.text = "申请加急"
                 btn_single.setOnClickListener {
                     SoguApi.getService(application)
@@ -177,14 +183,16 @@ class SignApproveActivity : ToolbarActivity() {
                 }
             }
             4 -> {
+                btn_single.visibility = View.VISIBLE
                 btn_single.text = "文件签发"
                 btn_single.setOnClickListener {
                     showSignDialog()
                 }
             }
             5 -> {
-                btn_single.text = "确认意见并签字"
                 state_sign_confirm.visibility = View.VISIBLE
+                btn_single.visibility = View.VISIBLE
+                btn_single.text = "确认意见并签字"
                 btn_single.setOnClickListener {
                     val type = when (rg_sign.checkedRadioButtonId) {
                         R.id.rb_item1 -> 1
@@ -196,7 +204,7 @@ class SignApproveActivity : ToolbarActivity() {
                 }
             }
             6 -> {
-                iv_state_signed.visibility = View.VISIBLE
+                btn_single.visibility = View.VISIBLE
                 btn_single.text = "导出审批单"
                 btn_single.setOnClickListener {
                     SoguApi.getService(application)
@@ -230,6 +238,7 @@ class SignApproveActivity : ToolbarActivity() {
             part3.visibility = View.GONE
             return
         }
+        part3.visibility = View.VISIBLE
         val inflater = LayoutInflater.from(this)
         segments?.forEach { v ->
             val convertView = inflater.inflate(R.layout.item_approve_sign_segment, null)
@@ -261,6 +270,7 @@ class SignApproveActivity : ToolbarActivity() {
             part2.visibility = View.GONE
             return
         }
+        part2.visibility = View.VISIBLE
         val inflater = LayoutInflater.from(this)
         approveList?.forEach { v ->
             val convertView = inflater.inflate(R.layout.item_approve_sign_approver, null)
@@ -290,53 +300,12 @@ class SignApproveActivity : ToolbarActivity() {
         }
     }
 
-    private fun submitComment(hid: Int, text: String) {
-        SoguApi.getService(application)
-                .submitComment(hid, 0, text)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ payload ->
-                    if (payload.isOk) {
-                        showToast("提交成功")
-                    } else
-                        showToast(payload.message)
-                }, { e ->
-                    Trace.e(e)
-                    showToast("提交失败")
-                })
-    }
-
-    private fun setComment(llComments: LinearLayout, comments: List<ApproveViewBean.CommentBean>?) {
-        llComments.removeAllViews()
-        if (null == comments || comments.isEmpty()) {
-            llComments.visibility = View.GONE
-            return
-        }
-        comments?.forEach { data ->
-            val convertView = inflater.inflate(R.layout.item_approve_comment, null)
-
-            val ivUser = convertView.findViewById(R.id.iv_user) as CircleImageView
-            val tvName = convertView.findViewById(R.id.tv_name) as TextView
-            val tvTime = convertView.findViewById(R.id.tv_time) as TextView
-            val tvComment = convertView.findViewById(R.id.tv_comment) as TextView
-
-            tvName.text = data.name
-            tvComment.text = data.content
-            tvTime.text = data.add_time
-
-            val ch = data.name?.first()
-            ivUser.setChar(ch)
-            Glide.with(this)
-                    .load(data.url)
-                    .into(ivUser)
-
-        }
-    }
-
     private fun initFiles(file_list: List<ApproveViewBean.FileBean>?) {
         if (file_list == null || file_list.isEmpty()) {
             part1.visibility = View.GONE
+            return
         }
+        part1.visibility = View.VISIBLE
         ll_files.removeAllViews()
         file_list?.forEachWithIndex { i, v ->
             val view = inflater.inflate(R.layout.item_file_single, null) as TextView
