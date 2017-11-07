@@ -98,6 +98,10 @@ class BuildSealActivity : ToolbarActivity() {
                     payload.payload?.forEach { bean ->
                         addRow(bean, inflater)
                     }
+                    hideFields.forEach { field ->
+                        val view = fieldMap.get(field)
+                        view?.visibility = View.GONE
+                    }
                 }, { e ->
                     Trace.e(e)
                     showToast("暂无可用数据")
@@ -355,7 +359,8 @@ class BuildSealActivity : ToolbarActivity() {
         }
     }
 
-    private fun add5(bean: CustomSealBean, inflater: LayoutInflater) {
+    val hideFields = ArrayList<String>()
+    fun add5(bean: CustomSealBean, inflater: LayoutInflater) {
         val convertView = inflater.inflate(R.layout.cs_row_radio, null);
         ll_seal.addView(convertView)
         fieldMap.put(bean.fields, convertView)
@@ -367,7 +372,18 @@ class BuildSealActivity : ToolbarActivity() {
         val rbNo = convertView.findViewById(R.id.rb_no) as RadioButton
 
         tvLabel.text = bean.name
-        paramMap.put(bean.fields, 0)
+        paramMap.put(bean.fields, bean.value_map?.is_select)
+        if (bean.value_map?.is_select == 1) {
+            rbYes.isChecked = true
+            rbNo.isChecked = false
+        } else {
+            rbYes.isChecked = false
+            rbNo.isChecked = true
+        }
+        bean?.value_map?.hide?.split(",")?.forEach { field ->
+            if (bean.value_map?.is_select == 1)
+                hideFields.add(field)
+        }
         rbYes.setOnClickListener {
             paramMap.put(bean.fields, 1)
             bean?.value_map?.hide?.split(",")?.forEach { field ->

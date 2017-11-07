@@ -81,11 +81,13 @@ class SealApproveActivity : ToolbarActivity() {
                         initApprovers(payload.payload?.approve)
                         initSegments(payload.payload?.segment)
                         initButtons(payload.payload?.click)
+
+                        iv_state_agreed.visibility = View.GONE
+                        iv_state_signed.visibility = View.GONE
+
                         val status = payload?.payload?.mainStatus
-                        if (null != status && status >= 2) {
+                        if (status != null && status > 1) {
                             iv_state_agreed.visibility = View.VISIBLE
-                        } else {
-                            iv_state_agreed.visibility = View.GONE
                         }
 
                     } else
@@ -259,17 +261,19 @@ class SealApproveActivity : ToolbarActivity() {
             val tvTime = convertView.findViewById(R.id.tv_time) as TextView
             tvPosition.text = v.position
             tvName.text = v.name
+            tvStatus.text = v.status_str
             tvTime.text = v.approval_time
+            if (null != v.approval_time || !TextUtils.isEmpty(v.approval_time)) {
+                tvTime.visibility = View.VISIBLE
+            } else {
+                tvTime.visibility = View.GONE
+            }
             val ch = v.name?.first()
             ivUser.setChar(ch)
             Glide.with(this)
                     .load(v.url)
                     .into(ivUser)
-            tvStatus.text = v.status_str
-            tvTime.text = v.approval_time
-            if (null != v.approval_time || !TextUtils.isEmpty(v.approval_time)) {
-                tvTime.visibility = View.VISIBLE
-            }
+
         }
 
     }
@@ -309,6 +313,11 @@ class SealApproveActivity : ToolbarActivity() {
             tvPosition.text = v.position
             tvName.text = v.name
             tvTime.text = v.approval_time
+            if (null != v.approval_time || !TextUtils.isEmpty(v.approval_time)) {
+                tvTime.visibility = View.VISIBLE
+            } else {
+                tvTime.visibility = View.GONE
+            }
             val ch = v.name?.first()
             ivUser.setChar(ch)
             Glide.with(this)
@@ -320,7 +329,6 @@ class SealApproveActivity : ToolbarActivity() {
                 appendLine(buff, "意见", v.content)
             }
             tvContent.text = Html.fromHtml(buff.toString())
-            tvTime.text = v.approval_time
             tvContent.visibility = View.GONE
             llComments.visibility = View.GONE
             if (null != v.content && !TextUtils.isEmpty(v.content)) {
@@ -336,10 +344,6 @@ class SealApproveActivity : ToolbarActivity() {
                         addComment(llComments, v.hid!!, data)
                     }
                 }
-            }
-
-            if (null != v.approval_time || !TextUtils.isEmpty(v.approval_time)) {
-                tvTime.visibility = View.VISIBLE
             }
         }
     }

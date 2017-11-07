@@ -18,6 +18,7 @@ import com.sogukj.pe.bean.MessageBean
 import com.sogukj.pe.ui.SupportEmptyView
 import com.sogukj.pe.ui.approve.SealApproveActivity
 import com.sogukj.pe.ui.approve.SignApproveActivity
+import com.sogukj.pe.util.ColorUtil
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
@@ -60,7 +61,7 @@ class MessageListActivity : ToolbarActivity() {
                     } else {
                         ll_content.setBackgroundResource(R.drawable.bg_pop_msg_left)
                     }
-                    data.setColorStatus(tvState)
+                    ColorUtil.setColorMessage(tvState, data)
                     tvTitle.text = data.title
                     tvTime.text = data.time
                     tvFrom.text = "发起人:" + data.username

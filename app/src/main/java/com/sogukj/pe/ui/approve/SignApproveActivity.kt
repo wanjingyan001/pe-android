@@ -92,11 +92,15 @@ class SignApproveActivity : ToolbarActivity() {
                         initApprovers(payload.payload?.approve)
                         initSegments(payload.payload?.segment)
                         initButtons(payload.payload?.click)
+
+                        iv_state_agreed.visibility = View.GONE
+                        iv_state_signed.visibility = View.GONE
                         val status = payload?.payload?.mainStatus
-                        if (null != status && status >= 2) {
+
+                        if (status != null && status >= 4) {
                             iv_state_signed.visibility = View.VISIBLE
-                        } else {
-                            iv_state_signed.visibility = View.GONE
+                        } else if (status != null && status >= 3) {
+                            iv_state_agreed.visibility = View.VISIBLE
                         }
                     } else
                         showToast(payload.message)
@@ -246,11 +250,17 @@ class SignApproveActivity : ToolbarActivity() {
 
             val ivUser = convertView.findViewById(R.id.iv_user) as CircleImageView
             val tvName = convertView.findViewById(R.id.tv_name) as TextView
-            val tvStatus = convertView.findViewById(R.id.tv_status) as TextView
             val tvTime = convertView.findViewById(R.id.tv_time) as TextView
             val ivSign = convertView.findViewById(R.id.iv_sign) as ImageView
 
+
             tvName.text = v.name
+            tvTime.text = v.approval_time
+            if (null != v.approval_time || !TextUtils.isEmpty(v.approval_time)) {
+                tvTime.visibility = View.VISIBLE
+            } else {
+                tvTime.visibility = View.GONE
+            }
             val ch = v.name?.first()
             ivUser.setChar(ch)
             Glide.with(this)
@@ -282,7 +292,13 @@ class SignApproveActivity : ToolbarActivity() {
             val tvStatus = convertView.findViewById(R.id.tv_status) as TextView
             val ivSign = convertView.findViewById(R.id.iv_sign) as ImageView
             tvName.text = v.name
+            tvStatus.text = v.status_str
             tvTime.text = v.approval_time
+            if (null != v.approval_time || !TextUtils.isEmpty(v.approval_time)) {
+                tvTime.visibility = View.VISIBLE
+            } else {
+                tvTime.visibility = View.GONE
+            }
             val ch = v.name?.first()
             ivUser.setChar(ch)
             Glide.with(this)
@@ -292,11 +308,6 @@ class SignApproveActivity : ToolbarActivity() {
             Glide.with(this)
                     .load(v.sign_img)
                     .into(ivSign)
-            tvStatus.text = v.status_str
-
-            if (null != v.approval_time || !TextUtils.isEmpty(v.approval_time)) {
-                tvTime.visibility = View.VISIBLE
-            }
         }
     }
 

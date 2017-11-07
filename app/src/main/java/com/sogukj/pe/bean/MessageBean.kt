@@ -16,41 +16,9 @@ class MessageBean : Serializable {
     var username: String? = null//	string	申请人
     var type: Int? = null//	number	类别	1=>出勤休假, 2=>用印审批 ,3=>签字审批
     var status: Int? = null//	number	审批状态	1待审批，2 已审批
+    var status_str: String? = null
     var reasons: String? = null//	string	审批说明
     var urgent_count: Int? = null//	number	加急次数
     var message_count: Int? = null//	number	留言数量
     var type_name: String? = null//	string	用印类别
-
-    fun setColorStatus(view: TextView) {
-        val status_str = when (status) {
-            -1 -> "审批未通过"
-            1 -> "待审批"
-            0 -> "审批中"
-            2 -> "已审批"
-            4 -> "审批通过"
-            else -> "待审批"
-        }
-        view.text = status_str
-        view.textColor = when (status) {
-            4 -> Color.parseColor("#fa34ca")
-            2 -> Color.parseColor("#50d59d")
-            1 -> Color.parseColor("#ffa715")
-            0 -> Color.parseColor("#4aaaf4")
-            -1 -> Color.parseColor("#ff5858")
-            else -> Color.parseColor("#ffa715")
-        }
-//        view.textColor = when (status_str) {
-//            "完成用印" -> Color.parseColor("#fa34ca")
-//            "签发完成" -> Color.parseColor("#fa34ca")
-//            "签发中" -> Color.parseColor("#806af2")
-//            "待用印" -> Color.parseColor("#806af2")
-//            "审批完成" -> Color.parseColor("#50d59d")
-//            "审批未通过" -> Color.parseColor("#ff5858")
-//            "签字中" -> Color.parseColor("#4aaaf4")
-//            "审批中" -> Color.parseColor("#4aaaf4")
-//            "待签字" -> Color.parseColor("#ffa715")
-//            "待审批" -> Color.parseColor("#ffa715")
-//            else -> Color.parseColor("#ffa715")
-//        }
-    }
 }
