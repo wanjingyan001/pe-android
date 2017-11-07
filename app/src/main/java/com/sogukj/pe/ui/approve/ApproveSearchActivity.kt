@@ -19,6 +19,7 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.ApprovalBean
 import com.sogukj.pe.ui.SupportEmptyView
+import com.sogukj.pe.util.ColorUtil
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
@@ -70,7 +71,7 @@ class ApproveSearchActivity : ToolbarActivity() {
                         tvTime.text = strs
                                 .getOrNull(1)
                     }
-                    data.setColorStatus(tvState)
+                    ColorUtil.setColorStatus(tvState,data)
                 }
             }
         })

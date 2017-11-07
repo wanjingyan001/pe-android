@@ -17,13 +17,5 @@ class ApprovalBean : Serializable {
     var status_str: String? = null//	string	审批状态
     var type: Int? = null//	number	类型
     var status: Int? = null//	number	状态
-    fun setColorStatus(view: TextView) {
-        view.text = status_str
-        view.textColor = when (status_str) {
-            "签发中" -> Color.parseColor("#806af2")
-            "审批中" -> Color.parseColor("#4aaaf4")
-            "待审批" -> Color.parseColor("#ffa715")
-            else -> Color.parseColor("#ffa715")
-        }
-    }
+
 }

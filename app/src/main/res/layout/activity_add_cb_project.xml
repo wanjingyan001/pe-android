@@ -201,11 +201,12 @@
 
                     <TextView
                         style="@style/ItemTextLabel"
-                        android:text="去年营业收入" />
+                        android:text="去年营业收入(万元)" />
 
                     <EditText
                         android:id="@+id/et_lastYearIncome"
-                        style="@style/ItemTextValue" />
+                        style="@style/ItemTextValue"
+                        android:inputType="numberSigned|numberDecimal" />
                 </TableRow>
 
                 <TableRow
@@ -215,11 +216,12 @@
 
                     <TextView
                         style="@style/ItemTextLabel"
-                        android:text="去年净利润" />
+                        android:text="去年净利润(万元)" />
 
                     <EditText
                         android:id="@+id/et_lastYearProfit"
-                        style="@style/ItemTextValue" />
+                        style="@style/ItemTextValue"
+                        android:inputType="numberSigned|numberDecimal" />
                 </TableRow>
 
                 <TableRow
@@ -229,11 +231,12 @@
 
                     <TextView
                         style="@style/ItemTextLabel"
-                        android:text="今年营收" />
+                        android:text="今年营收(万元)" />
 
                     <EditText
                         android:id="@+id/et_thisYearIncome"
-                        style="@style/ItemTextValue" />
+                        style="@style/ItemTextValue"
+                        android:inputType="numberSigned|numberDecimal" />
                 </TableRow>
 
                 <TableRow
@@ -243,11 +246,12 @@
 
                     <TextView
                         style="@style/ItemTextLabel"
-                        android:text="今年利润" />
+                        android:text="今年利润(万元)" />
 
                     <EditText
                         android:id="@+id/et_thisYearProfit"
-                        style="@style/ItemTextValue" />
+                        style="@style/ItemTextValue"
+                        android:inputType="numberSigned|numberDecimal" />
                 </TableRow>
             </TableLayout>
 
@@ -282,61 +286,81 @@
                         android:text="融资信息" />
                 </LinearLayout>
 
-                <TableRow
+                <LinearLayout
                     android:background="@drawable/divider_bottom"
                     android:paddingBottom="15dp"
                     android:paddingTop="15dp">
 
                     <TextView
                         style="@style/ItemTextLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:text="融资轮次" />
 
                     <EditText
                         android:id="@+id/et_lunci"
-                        style="@style/ItemTextValue" />
-                </TableRow>
+                        style="@style/ItemTextValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+                </LinearLayout>
 
-                <TableRow
+                <LinearLayout
                     android:background="@drawable/divider_bottom"
                     android:paddingBottom="15dp"
                     android:paddingTop="15dp">
 
                     <TextView
                         style="@style/ItemTextLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:text="融资需求及投后估值" />
 
                     <EditText
                         android:id="@+id/et_appraisement"
-                        style="@style/ItemTextValue" />
-                </TableRow>
+                        style="@style/ItemTextValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+                </LinearLayout>
 
-                <TableRow
+                <LinearLayout
                     android:background="@drawable/divider_bottom"
                     android:paddingBottom="15dp"
                     android:paddingTop="15dp">
 
                     <TextView
                         style="@style/ItemTextLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:text="融资用途" />
 
                     <EditText
                         android:id="@+id/et_financeUse"
-                        style="@style/ItemTextValue" />
-                </TableRow>
+                        style="@style/ItemTextValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+                </LinearLayout>
 
-                <TableRow
+                <LinearLayout
                     android:background="@drawable/divider_bottom"
                     android:paddingBottom="15dp"
                     android:paddingTop="15dp">
 
                     <TextView
                         style="@style/ItemTextLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:text="资本市场规划（退出方式）" />
 
                     <EditText
                         android:id="@+id/et_capitalPlan"
-                        style="@style/ItemTextValue" />
-                </TableRow>
+                        style="@style/ItemTextValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+                </LinearLayout>
             </TableLayout>
         </LinearLayout>
     </ScrollView>

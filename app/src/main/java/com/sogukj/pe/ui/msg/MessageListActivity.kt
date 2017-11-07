@@ -61,7 +61,7 @@ class MessageListActivity : ToolbarActivity() {
                     } else {
                         ll_content.setBackgroundResource(R.drawable.bg_pop_msg_left)
                     }
-                    ColorUtil.setColorMessage(tvState, data)
+                    ColorUtil.setColorStatus(tvState, data)
                     tvTitle.text = data.title
                     tvTime.text = data.time
                     tvFrom.text = "发起人:" + data.username
