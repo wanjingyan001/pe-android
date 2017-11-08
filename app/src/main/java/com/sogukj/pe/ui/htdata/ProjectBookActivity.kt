@@ -253,7 +253,7 @@ class ProjectBookActivity : ToolbarActivity(), SupportEmptyView {
         this.key = text
         val user = Store.store.getUser(this)
         val filter = if (checkedFilter.isEmpty()) null else checkedFilter.joinToString(",")
-        project.company_id = 325
+//        project.company_id = 325
         //TODO
         SoguApi.getService(application)
                 .projectBookSearch(company_id = project.company_id!!,
@@ -284,7 +284,7 @@ class ProjectBookActivity : ToolbarActivity(), SupportEmptyView {
     }
 
     fun doRequest() {
-        project.company_id = 325
+//        project.company_id = 325
         SoguApi.getService(application)
                 .projectBook(company_id = project.company_id!!)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -296,11 +296,24 @@ class ProjectBookActivity : ToolbarActivity(), SupportEmptyView {
                         adapter3.dataList.clear()
                         payload.payload?.apply {
                             if (null != list1)
-                                adapter1.dataList.addAll(list1!!.subList(0, 3))
+                                for (i in 0..2) {
+                                    if (list1!!.size > i) {
+                                        adapter1.dataList.add(list1!!.get(i))
+                                    }
+                                }
+
                             if (null != list2)
-                                adapter2.dataList.addAll(list2!!.subList(0, 3))
+                                for (i in 0..2) {
+                                    if (list2!!.size > i) {
+                                        adapter2.dataList.add(list2!!.get(i))
+                                    }
+                                }
                             if (null != list3)
-                                adapter3.dataList.addAll(list3!!.subList(0, 3))
+                                for (i in 0..2) {
+                                    if (list3!!.size > i) {
+                                        adapter3.dataList.add(list3!!.get(i))
+                                    }
+                                }
                         }
                         adapter1.notifyDataSetChanged()
                         adapter2.notifyDataSetChanged()
@@ -445,6 +458,11 @@ class ProjectBookActivity : ToolbarActivity(), SupportEmptyView {
             tvType.text = data?.name
         }
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        doRequest()
     }
 
     companion object {
