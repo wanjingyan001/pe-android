@@ -199,15 +199,5 @@
             android:background="@drawable/bg_btn_blue"
             android:text="上传文件"
             android:textSize="18sp" />
-
-
-        <Button
-            android:id="@+id/btn_commit"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/bg_btn_blue"
-            android:text="完成"
-            android:textSize="18sp" />
     </LinearLayout>
 </LinearLayout>

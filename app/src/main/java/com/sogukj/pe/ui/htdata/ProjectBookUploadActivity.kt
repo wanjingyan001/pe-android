@@ -93,23 +93,15 @@ class ProjectBookUploadActivity : ToolbarActivity() {
                     })
                     .show()
         }
-        btn_upload.setOnClickListener {
+        ll_upload_empty.setOnClickListener {
             val list = ArrayList<String>()
             MaterialFilePicker()
                     .withActivity(this)
                     .withRequestCode(REQ_SELECT_FILE)
-//                    .withFilter(Pattern.compile(".*\\.txt$")) // Filtering files and directories by file name using regexp
-//                    .withFilterDirectories(true) // Set directories filterable (false by default)
-//                    .withHiddenFiles(true) // Show hidden files and folders
                     .start()
-
-//            val intent = Intent(Intent.ACTION_GET_CONTENT)
-//            intent.type = "*/*"
-//            intent.addCategory(Intent.CATEGORY_OPENABLE);
-//            startActivityForResult(Intent.createChooser(intent, "选择文件"), REQ_SELECT_FILE)
         }
 
-        btn_commit.setOnClickListener {
+        btn_upload.setOnClickListener {
             handler.postDelayed({ doSave() }, 10)
         }
     }

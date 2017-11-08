@@ -203,6 +203,7 @@ class ProjectBookActivity : ToolbarActivity(), SupportEmptyView {
     }
 
     fun stateDefault() {
+        page = 1
         fl_filter.visibility = View.GONE
         search_view.tv_cancel.visibility = View.GONE
         iv_filter.visibility = View.VISIBLE
@@ -212,6 +213,8 @@ class ProjectBookActivity : ToolbarActivity(), SupportEmptyView {
     }
 
     fun stateSearch() {
+        page = 1
+        checkedFilter.clear()
         fl_filter.visibility = View.GONE
         search_view.tv_cancel.visibility = View.VISIBLE
         iv_filter.visibility = View.GONE
@@ -226,6 +229,10 @@ class ProjectBookActivity : ToolbarActivity(), SupportEmptyView {
     }
 
     fun stateFilter() {
+        page = 1
+        checkedFilter.clear()
+        setTags(filterList)
+        search_view.search = ""
         fl_filter.visibility = View.VISIBLE
         search_view.tv_cancel.visibility = View.GONE
         iv_filter.visibility = View.VISIBLE
@@ -235,14 +242,23 @@ class ProjectBookActivity : ToolbarActivity(), SupportEmptyView {
 
     }
 
-    fun doSearch(text: String = "", filter: String? = null) {
+
+    val searchTask = Runnable {
+        doSearch(search_view.search)
+    }
+    var key = ""
+    val filterList = HashMap<Int, String>()
+    var page = 1
+    fun doSearch(text: String = "") {
         this.key = text
         val user = Store.store.getUser(this)
+        val filter = if (checkedFilter.isEmpty()) null else checkedFilter.joinToString(",")
         project.company_id = 325
+        //TODO
         SoguApi.getService(application)
                 .projectBookSearch(company_id = project.company_id!!,
                         fuzzyQuery = text
-                        , fileClass = filter)
+                        , fileClass = filter, page = page)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -267,12 +283,6 @@ class ProjectBookActivity : ToolbarActivity(), SupportEmptyView {
 
     }
 
-    val searchTask = Runnable {
-        doSearch(search_view.search)
-    }
-    var key = ""
-    val filterList = HashMap<Int, String>()
-    var page = 1
     fun doRequest() {
         project.company_id = 325
         SoguApi.getService(application)
@@ -286,11 +296,11 @@ class ProjectBookActivity : ToolbarActivity(), SupportEmptyView {
                         adapter3.dataList.clear()
                         payload.payload?.apply {
                             if (null != list1)
-                                adapter1.dataList.addAll(list1!!.asIterable())
+                                adapter1.dataList.addAll(list1!!.subList(0, 3))
                             if (null != list2)
-                                adapter2.dataList.addAll(list2!!.asIterable())
+                                adapter2.dataList.addAll(list2!!.subList(0, 3))
                             if (null != list3)
-                                adapter3.dataList.addAll(list3!!.asIterable())
+                                adapter3.dataList.addAll(list3!!.subList(0, 3))
                         }
                         adapter1.notifyDataSetChanged()
                         adapter2.notifyDataSetChanged()
@@ -361,6 +371,7 @@ class ProjectBookActivity : ToolbarActivity(), SupportEmptyView {
             tvTag.setOnClickListener {
                 fl_filter.visibility = View.GONE
                 ll_result.visibility = View.VISIBLE
+                checkedFilter.clear()
                 doSearch()
             }
         }
@@ -398,7 +409,7 @@ class ProjectBookActivity : ToolbarActivity(), SupportEmptyView {
             fl_filter.visibility = View.GONE
             ll_result.visibility = View.VISIBLE
             if (!checkedFilter.isEmpty())
-                doSearch(filter = checkedFilter.joinToString(","))
+                doSearch()
             else
                 doSearch()
         }
