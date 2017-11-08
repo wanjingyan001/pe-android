@@ -270,6 +270,8 @@ class ApproveListActivity : ToolbarActivity(), TabLayout.OnTabSelectedListener {
             tvTag.setOnClickListener(onClickTemplate)
             tags_type.addView(itemTag)
             tvTag.setOnClickListener {
+                paramStates.clear()
+                paramTemplates.clear()
                 fl_filter.visibility = View.GONE
                 doRequest()
             }
@@ -282,6 +284,8 @@ class ApproveListActivity : ToolbarActivity(), TabLayout.OnTabSelectedListener {
             tvTag.setOnClickListener(onClickTemplate)
             tags_state.addView(itemTag)
             tvTag.setOnClickListener {
+                paramStates.clear()
+                paramTemplates.clear()
                 fl_filter.visibility = View.GONE
                 doRequest()
             }
@@ -293,6 +297,13 @@ class ApproveListActivity : ToolbarActivity(), TabLayout.OnTabSelectedListener {
             tvTag.tag = e.key
             tvTag.setOnClickListener(onClickTemplate)
             tags_type.addView(itemTag)
+            if (paramTemplates.contains(e.key)) {
+                tvTag.setTextColor(textColor1)
+                tvTag.setBackgroundResource(bgColor1)
+            } else {
+                tvTag.setTextColor(textColor0)
+                tvTag.setBackgroundResource(bgColor0)
+            }
         }
         itemBean.status?.entries?.forEach { e ->
             val itemTag = inflater.inflate(R.layout.item_tag_filter2, null)
@@ -301,6 +312,13 @@ class ApproveListActivity : ToolbarActivity(), TabLayout.OnTabSelectedListener {
             tvTag.tag = e.key
             tvTag.setOnClickListener(onClickStatus)
             tags_state.addView(itemTag)
+            if (paramStates.contains(e.key)) {
+                tvTag.setTextColor(textColor1)
+                tvTag.setBackgroundResource(bgColor1)
+            } else {
+                tvTag.setTextColor(textColor0)
+                tvTag.setBackgroundResource(bgColor0)
+            }
         }
     }
 

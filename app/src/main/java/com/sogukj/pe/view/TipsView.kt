@@ -7,6 +7,7 @@ package com.sogukj.pe.view
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.widget.TextView
 import com.sogukj.pe.util.Utils
 
 
@@ -19,6 +20,7 @@ class TipsView : android.support.v7.widget.AppCompatTextView {
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {}
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle) {}
+
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
@@ -42,4 +44,5 @@ class TipsView : android.support.v7.widget.AppCompatTextView {
         this.color = color
         invalidate()
     }
+    
 }

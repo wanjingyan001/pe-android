@@ -1,7 +1,10 @@
 package com.sogukj.pe.ui.main
 
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import com.framework.base.BaseFragment
 import com.sogukj.pe.R
 import com.sogukj.pe.ui.approve.EntryApproveActivity
@@ -27,6 +30,15 @@ class MainHomeFragment : BaseFragment() {
         tv_sp.setOnClickListener {
             EntryApproveActivity.start(baseActivity)
         }
+        disable(tv_jj)
+        disable(tv_rl)
+        disable(tv_lxr)
+    }
+
+    val colorGray = Color.parseColor("#D9D9D9")
+    fun disable(view: TextView) {
+        view.compoundDrawables[1]?.setColorFilter(colorGray, PorterDuff.Mode.SRC_ATOP)
+        view.setOnClickListener(null)
     }
 
     companion object {

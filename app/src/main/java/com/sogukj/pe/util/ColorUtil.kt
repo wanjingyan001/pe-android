@@ -33,6 +33,7 @@ object ColorUtil {
             "签发中" -> Color.parseColor("#806af2")
             "待用印" -> Color.parseColor("#806af2")
             "审批完成" -> Color.parseColor("#50d59d")
+            "审批通过" -> Color.parseColor("#50d59d")
             "审批未通过" -> Color.parseColor("#ff5858")
             "签字中" -> Color.parseColor("#4aaaf4")
             "审批中" -> Color.parseColor("#4aaaf4")

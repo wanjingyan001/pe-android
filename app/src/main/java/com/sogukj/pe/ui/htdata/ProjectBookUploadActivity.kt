@@ -43,7 +43,7 @@ class ProjectBookUploadActivity : ToolbarActivity() {
         setBack(true)
         title = "项目文书上传"
         val user = Store.store.getUser(this)
-        tv_user.text=user?.name
+        tv_user.text = user?.name
         Glide.with(this)
                 .load(user?.headImage())
                 .error(R.drawable.img_logo_user)
@@ -134,7 +134,7 @@ class ProjectBookUploadActivity : ToolbarActivity() {
         val file = File(uploadBean.file)
         SoguApi.getService(application)
                 .uploadBook(MultipartBody.Builder().setType(MultipartBody.FORM)
-                        .addFormDataPart("fileBook", file.getName(), RequestBody.create(MediaType.parse("*/*"), file))
+                        .addFormDataPart("file", file.getName(), RequestBody.create(MediaType.parse("*/*"), file))
                         .addFormDataPart("company_id", project.company_id?.toString())
                         .addFormDataPart("status", uploadBean.group)
                         .addFormDataPart("fileClass", uploadBean.type)
