@@ -143,7 +143,7 @@
                 <android.support.v7.widget.GridLayout
                     android:id="@+id/gl_shangshi"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_height="wrap_content"
                     android:padding="10dp"
                     app:columnCount="4"
                     app:rowCount="3">
@@ -154,8 +154,7 @@
                         android:drawableTop="@drawable/ic_proj_gphq"
                         android:tag="volatility"
                         android:text="股票行情"
-                        app:layout_columnWeight="1"
-                        app:layout_rowWeight="1" />
+                        app:layout_columnWeight="1" />
 
                     <com.sogukj.pe.view.TipsView
                         android:id="@+id/tv_company"
@@ -163,8 +162,7 @@
                         android:drawableTop="@drawable/ic_proj_qyjs"
                         android:tag="companyInfo"
                         android:text="企业简介"
-                        app:layout_columnWeight="1"
-                        app:layout_rowWeight="1" />
+                        app:layout_columnWeight="1" />
 
                     <com.sogukj.pe.view.TipsView
                         android:id="@+id/tv_gaoguan"
@@ -172,8 +170,7 @@
                         android:drawableTop="@drawable/ic_proj_ggxx"
                         android:tag="seniorExecutive"
                         android:text="高管信息"
-                        app:layout_columnWeight="1"
-                        app:layout_rowWeight="1" />
+                        app:layout_columnWeight="1" />
 
                     <com.sogukj.pe.view.TipsView
                         android:id="@+id/tv_cangukonggu"
@@ -181,8 +178,7 @@
                         android:drawableTop="@drawable/ic_proj_cgkg"
                         android:tag="holdingCompany"
                         android:text="参股控股"
-                        app:layout_columnWeight="1"
-                        app:layout_rowWeight="1" />
+                        app:layout_columnWeight="1" />
 
                     <com.sogukj.pe.view.TipsView
                         android:id="@+id/tv_shangshigonggao"
@@ -190,8 +186,7 @@
                         android:drawableTop="@drawable/ic_proj_ssgg"
                         android:tag="announcement"
                         android:text="上市公告"
-                        app:layout_columnWeight="1"
-                        app:layout_rowWeight="1" />
+                        app:layout_columnWeight="1" />
 
                     <com.sogukj.pe.view.TipsView
                         android:id="@+id/tv_shidagudong"
@@ -199,8 +194,7 @@
                         android:drawableTop="@drawable/ic_proj_sdgd"
                         android:tag="shareholder"
                         android:text="十大股东"
-                        app:layout_columnWeight="1"
-                        app:layout_rowWeight="1" />
+                        app:layout_columnWeight="1" />
 
                     <com.sogukj.pe.view.TipsView
                         android:id="@+id/tv_shidaliutong"
@@ -208,8 +202,7 @@
                         android:drawableTop="@drawable/ic_proj_sdlt"
                         android:tag="shareholder2"
                         android:text="十大流通"
-                        app:layout_columnWeight="1"
-                        app:layout_rowWeight="1" />
+                        app:layout_columnWeight="1" />
 
                     <com.sogukj.pe.view.TipsView
                         android:id="@+id/tv_faxinxiangguan"
@@ -217,8 +210,7 @@
                         android:drawableTop="@drawable/ic_proj_fxxg"
                         android:tag="issueRelated"
                         android:text="发行相关"
-                        app:layout_columnWeight="1"
-                        app:layout_rowWeight="1" />
+                        app:layout_columnWeight="1" />
 
                     <com.sogukj.pe.view.TipsView
                         android:id="@+id/tv_gubenjiegou"
@@ -226,8 +218,7 @@
                         android:drawableTop="@drawable/ic_proj_gbjg"
                         android:tag="shareStructure"
                         android:text="股本结构"
-                        app:layout_columnWeight="1"
-                        app:layout_rowWeight="1" />
+                        app:layout_columnWeight="1" />
 
                     <com.sogukj.pe.view.TipsView
                         android:id="@+id/tv_gubenbiandong"
@@ -235,8 +226,7 @@
                         android:drawableTop="@drawable/ic_proj_gbbd"
                         android:tag="equitychange"
                         android:text="股本变动"
-                        app:layout_columnWeight="1"
-                        app:layout_rowWeight="1" />
+                        app:layout_columnWeight="1" />
 
                     <com.sogukj.pe.view.TipsView
                         android:id="@+id/tv_fenhong"
@@ -244,8 +234,7 @@
                         android:drawableTop="@drawable/ic_proj_fhqk"
                         android:tag="bonusInfo"
                         android:text="分红情况"
-                        app:layout_columnWeight="1"
-                        app:layout_rowWeight="1" />
+                        app:layout_columnWeight="1" />
 
                     <com.sogukj.pe.view.TipsView
                         android:id="@+id/tv_peigu"
@@ -253,8 +242,7 @@
                         android:drawableTop="@drawable/ic_proj_pgqk"
                         android:tag="allotmen"
                         android:text="配股情况"
-                        app:layout_columnWeight="1"
-                        app:layout_rowWeight="1" />
+                        app:layout_columnWeight="1" />
 
                 </android.support.v7.widget.GridLayout>
             </LinearLayout>
