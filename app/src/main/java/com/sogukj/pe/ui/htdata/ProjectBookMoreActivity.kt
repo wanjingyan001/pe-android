@@ -36,9 +36,11 @@ class ProjectBookMoreActivity : ToolbarActivity() {
 
     lateinit var adapter: RecyclerAdapter<ProjectBookBean>
     lateinit var project: ProjectBean
+    var type = 1
     val df = SimpleDateFormat("yyyy-MM-dd")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        type = intent.getIntExtra(Extras.TYPE, 1)
         project = intent.getSerializableExtra(Extras.DATA) as ProjectBean
         setContentView(R.layout.activity_list_common)
         title = "项目文书"
@@ -110,7 +112,7 @@ class ProjectBookMoreActivity : ToolbarActivity() {
     var page = 1
     fun doRequest() {
         SoguApi.getService(application)
-                .projectBookSearch(project.company_id!!, page = page)
+                .projectBookSearch(project.company_id!!, page = page, status = type)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -140,7 +142,7 @@ class ProjectBookMoreActivity : ToolbarActivity() {
         fun start(ctx: Activity?, project: ProjectBean, type: Int) {
             val intent = Intent(ctx, ProjectBookMoreActivity::class.java)
             intent.putExtra(Extras.DATA, project)
-            intent.putExtra(Extras.TYPE,type)
+            intent.putExtra(Extras.TYPE, type)
             ctx?.startActivity(intent)
         }
     }

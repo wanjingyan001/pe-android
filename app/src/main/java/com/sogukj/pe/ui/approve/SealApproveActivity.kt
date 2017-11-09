@@ -441,6 +441,8 @@ class SealApproveActivity : ToolbarActivity() {
 
     private fun initUser(fixation: ApproveViewBean.FromBean?) {
         if (null == fixation) return
+        val ch = fixation.name?.first()
+        iv_user.setChar(ch)
         Glide.with(this)
                 .load(fixation.url)
                 .into(iv_user)

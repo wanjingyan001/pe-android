@@ -158,11 +158,14 @@ class MainProjectFragment : BaseFragment() {
         }
 
         Store.store.getUser(baseActivity!!)?.apply {
-            if (null != url)
+            if (null != url) {
+                val ch = name?.first()
+                iv_user.setChar(ch)
                 Glide.with(baseActivity)
                         .load(headImage())
-                        .error(R.drawable.img_logo_user)
                         .into(iv_user)
+            }
+
         }
 
 //        iv_add.setOnClickListener {
