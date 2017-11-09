@@ -129,27 +129,27 @@
 
     <style name="ItemGridProject">
         <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/text_size_medium</item>
         <item name="android:textColor">@color/text_1</item>
-        <item name="android:layout_columnWeight" tools:ignore="NewApi">1</item>
-        <item name="android:gravity">center</item>
-        <!--<item name="android:layout_gravity">center</item>-->
+        <item name="android:gravity">center_horizontal</item>
         <item name="android:paddingTop">10dp</item>
         <item name="android:paddingBottom">10dp</item>
         <item name="android:drawablePadding">5dp</item>
     </style>
 
     <style name="ItemGridMain">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/text_size_medium</item>
         <item name="android:textColor">@color/text_1</item>
-        <item name="android:layout_columnWeight" tools:ignore="NewApi">1</item>
-        <!--<item name="android:layout_gravity">center</item>-->
-        <item name="android:gravity">center</item>
+        <item name="android:gravity">center_horizontal</item>
         <item name="android:padding">15dp</item>
         <item name="android:layout_margin">10dp</item>
         <item name="android:drawablePadding">5dp</item>
         <item name="android:background">@drawable/bg_item_list</item>
     </style>
+
     <style name="ItemGridApprove">
         <item name="android:textSize">@dimen/text_size_medium</item>
         <item name="android:textColor">@color/text_1</item>

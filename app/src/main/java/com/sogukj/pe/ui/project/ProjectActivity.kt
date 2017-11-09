@@ -140,7 +140,7 @@ class ProjectActivity : ToolbarActivity() {
                 })
     }
 
-    fun refresh(grid: GridLayout, data: Map<String, Int?>, color: Int = Color.RED) {
+    fun refresh(grid: android.support.v7.widget.GridLayout, data: Map<String, Int?>, color: Int = Color.RED) {
         val size = grid.childCount
         for (i in 0 until size) {
             val child = grid.getChildAt(i) as TipsView

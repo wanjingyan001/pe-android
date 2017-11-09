@@ -140,103 +140,123 @@
                         android:text="上市信息" />
                 </LinearLayout>
 
-                <GridLayout
+                <android.support.v7.widget.GridLayout
                     android:id="@+id/gl_shangshi"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:columnCount="4"
+                    android:layout_height="0dp"
                     android:padding="10dp"
-                    android:rowCount="3">
+                    app:columnCount="4"
+                    app:rowCount="3">
 
                     <com.sogukj.pe.view.TipsView
                         android:id="@+id/tv_stock"
                         style="@style/ItemGridProject"
                         android:drawableTop="@drawable/ic_proj_gphq"
-
                         android:tag="volatility"
-                        android:text="股票行情" />
+                        android:text="股票行情"
+                        app:layout_columnWeight="1"
+                        app:layout_rowWeight="1" />
 
                     <com.sogukj.pe.view.TipsView
                         android:id="@+id/tv_company"
                         style="@style/ItemGridProject"
                         android:drawableTop="@drawable/ic_proj_qyjs"
-
                         android:tag="companyInfo"
-                        android:text="企业简介" />
+                        android:text="企业简介"
+                        app:layout_columnWeight="1"
+                        app:layout_rowWeight="1" />
 
                     <com.sogukj.pe.view.TipsView
                         android:id="@+id/tv_gaoguan"
                         style="@style/ItemGridProject"
                         android:drawableTop="@drawable/ic_proj_ggxx"
                         android:tag="seniorExecutive"
-                        android:text="高管信息" />
+                        android:text="高管信息"
+                        app:layout_columnWeight="1"
+                        app:layout_rowWeight="1" />
 
                     <com.sogukj.pe.view.TipsView
                         android:id="@+id/tv_cangukonggu"
                         style="@style/ItemGridProject"
                         android:drawableTop="@drawable/ic_proj_cgkg"
                         android:tag="holdingCompany"
-                        android:text="参股控股" />
+                        android:text="参股控股"
+                        app:layout_columnWeight="1"
+                        app:layout_rowWeight="1" />
 
                     <com.sogukj.pe.view.TipsView
                         android:id="@+id/tv_shangshigonggao"
                         style="@style/ItemGridProject"
                         android:drawableTop="@drawable/ic_proj_ssgg"
                         android:tag="announcement"
-                        android:text="上市公告" />
+                        android:text="上市公告"
+                        app:layout_columnWeight="1"
+                        app:layout_rowWeight="1" />
 
                     <com.sogukj.pe.view.TipsView
                         android:id="@+id/tv_shidagudong"
                         style="@style/ItemGridProject"
                         android:drawableTop="@drawable/ic_proj_sdgd"
-
                         android:tag="shareholder"
-                        android:text="十大股东" />
+                        android:text="十大股东"
+                        app:layout_columnWeight="1"
+                        app:layout_rowWeight="1" />
 
                     <com.sogukj.pe.view.TipsView
                         android:id="@+id/tv_shidaliutong"
                         style="@style/ItemGridProject"
                         android:drawableTop="@drawable/ic_proj_sdlt"
                         android:tag="shareholder2"
-                        android:text="十大流通" />
+                        android:text="十大流通"
+                        app:layout_columnWeight="1"
+                        app:layout_rowWeight="1" />
 
                     <com.sogukj.pe.view.TipsView
                         android:id="@+id/tv_faxinxiangguan"
                         style="@style/ItemGridProject"
                         android:drawableTop="@drawable/ic_proj_fxxg"
                         android:tag="issueRelated"
-                        android:text="发行相关" />
+                        android:text="发行相关"
+                        app:layout_columnWeight="1"
+                        app:layout_rowWeight="1" />
 
                     <com.sogukj.pe.view.TipsView
                         android:id="@+id/tv_gubenjiegou"
                         style="@style/ItemGridProject"
                         android:drawableTop="@drawable/ic_proj_gbjg"
                         android:tag="shareStructure"
-                        android:text="股本结构" />
+                        android:text="股本结构"
+                        app:layout_columnWeight="1"
+                        app:layout_rowWeight="1" />
 
                     <com.sogukj.pe.view.TipsView
                         android:id="@+id/tv_gubenbiandong"
                         style="@style/ItemGridProject"
                         android:drawableTop="@drawable/ic_proj_gbbd"
                         android:tag="equitychange"
-                        android:text="股本变动" />
+                        android:text="股本变动"
+                        app:layout_columnWeight="1"
+                        app:layout_rowWeight="1" />
 
                     <com.sogukj.pe.view.TipsView
                         android:id="@+id/tv_fenhong"
                         style="@style/ItemGridProject"
                         android:drawableTop="@drawable/ic_proj_fhqk"
                         android:tag="bonusInfo"
-                        android:text="分红情况" />
+                        android:text="分红情况"
+                        app:layout_columnWeight="1"
+                        app:layout_rowWeight="1" />
 
                     <com.sogukj.pe.view.TipsView
                         android:id="@+id/tv_peigu"
                         style="@style/ItemGridProject"
                         android:drawableTop="@drawable/ic_proj_pgqk"
                         android:tag="allotmen"
-                        android:text="配股情况" />
+                        android:text="配股情况"
+                        app:layout_columnWeight="1"
+                        app:layout_rowWeight="1" />
 
-                </GridLayout>
+                </android.support.v7.widget.GridLayout>
             </LinearLayout>
 
             <View
@@ -264,86 +284,96 @@
                     android:text="企业背景" />
             </LinearLayout>
 
-            <GridLayout
+            <android.support.v7.widget.GridLayout
                 android:id="@+id/gl_qiyebeijin"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:columnCount="4"
                 android:padding="10dp"
-                android:rowCount="3">
+                app:columnCount="4"
+                app:rowCount="3">
 
                 <com.sogukj.pe.view.TipsView
                     android:id="@+id/tv_bizinfo"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_gsxx"
                     android:tag="sgcompanyinfo"
-                    android:text="工商信息" />
+                    android:text="工商信息"
+                    app:layout_columnWeight="1" />
 
 
                 <com.sogukj.pe.view.TipsView
                     android:id="@+id/tv_qiyeguanxi"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_qygx"
-                    android:text="企业关系" />
+                    android:text="企业关系"
+                    app:layout_columnWeight="1" />
 
                 <com.sogukj.pe.view.TipsView
                     android:id="@+id/tv_shareholder_info"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_gudong"
                     android:tag="holder"
-                    android:text="股东信息" />
+                    android:text="股东信息"
+                    app:layout_columnWeight="1" />
 
                 <com.sogukj.pe.view.TipsView
                     android:id="@+id/tv_equity_structure"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_gqjg"
                     android:tag="equityRatio"
-                    android:text="股权结构" />
+                    android:text="股权结构"
+                    app:layout_columnWeight="1" />
 
                 <com.sogukj.pe.view.TipsView
                     android:id="@+id/tv_key_personal"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_zyry"
                     android:tag="staff"
-                    android:text="主要人员" />
+                    android:text="主要人员"
+                    app:layout_columnWeight="1" />
 
                 <com.sogukj.pe.view.TipsView
                     android:id="@+id/tv_investment"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_dwtz"
                     android:tag="invest"
-                    android:text="对外投资" />
+                    android:text="对外投资"
+                    app:layout_columnWeight="1" />
 
                 <com.sogukj.pe.view.TipsView
                     android:id="@+id/tv_change_record"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_bgjl"
                     android:tag="changeinfo"
-                    android:text="变更记录" />
+                    android:text="变更记录"
+                    app:layout_columnWeight="1" />
 
                 <com.sogukj.pe.view.TipsView
                     android:id="@+id/tv_qiyelianbao"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_qynb"
                     android:tag="annualreport"
-                    android:text="企业年报" />
+                    android:text="企业年报"
+                    app:layout_columnWeight="1" />
 
                 <com.sogukj.pe.view.TipsView
                     android:id="@+id/tv_branch"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_fzjg"
                     android:tag="branch"
-                    android:text="分支机构" />
+                    android:text="分支机构"
+                    app:layout_columnWeight="1" />
 
                 <com.sogukj.pe.view.TipsView
                     android:id="@+id/tv_gsjj"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_gsjj"
                     android:tag="sgcompanyinfo2"
-                    android:text="公司简介" />
+                    android:text="公司简介"
+                    app:layout_columnWeight="1" />
 
-            </GridLayout>
+            </android.support.v7.widget.GridLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -370,51 +400,56 @@
                     android:text="企业发展" />
             </LinearLayout>
 
-            <GridLayout
+            <android.support.v7.widget.GridLayout
                 android:id="@+id/gl_qiyefazhan"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:columnCount="4"
                 android:padding="10dp"
-                android:rowCount="2">
+                app:columnCount="4"
+                app:rowCount="2">
 
                 <com.sogukj.pe.view.TipsView
                     android:id="@+id/tv_rongzilishi"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_rzls"
                     android:tag="findHistoryRongzi"
-                    android:text="融资历史" />
+                    android:text="融资历史"
+                    app:layout_columnWeight="1" />
 
                 <com.sogukj.pe.view.TipsView
                     android:id="@+id/tv_touzishijian"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_tzsj"
                     android:tag="findTzanli"
-                    android:text="投资事件" />
+                    android:text="投资事件"
+                    app:layout_columnWeight="1" />
 
                 <com.sogukj.pe.view.TipsView
                     android:id="@+id/tv_hexintuandui"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_hxtd"
                     android:tag="findTeamMember"
-                    android:text="核心团队" />
+                    android:text="核心团队"
+                    app:layout_columnWeight="1" />
 
                 <com.sogukj.pe.view.TipsView
                     android:id="@+id/tv_qiyeyewu"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_qyyw"
                     android:tag="getProductInfo"
-                    android:text="企业业务" />
+                    android:text="企业业务"
+                    app:layout_columnWeight="1" />
 
                 <com.sogukj.pe.view.TipsView
                     android:id="@+id/tv_jinpinxinxi"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_jpxx"
                     android:tag="findJingpin"
-                    android:text="竞品信息" />
+                    android:text="竞品信息"
+                    app:layout_columnWeight="1" />
 
-            </GridLayout>
+            </android.support.v7.widget.GridLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -441,112 +476,128 @@
                     android:text="经营状况" />
             </LinearLayout>
 
-            <GridLayout
+            <android.support.v7.widget.GridLayout
                 android:id="@+id/gl_jinyinzhuankuang"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:columnCount="4"
                 android:padding="10dp"
-                android:rowCount="4">
+                app:columnCount="4"
+                app:rowCount="4">
 
                 <com.sogukj.pe.view.TipsView
                     android:id="@+id/tv_zhaopinxinxi"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_zpxx"
                     android:tag="employments"
-                    android:text="招聘信息" />
+                    android:text="招聘信息"
+                    app:layout_columnWeight="1" />
 
                 <com.sogukj.pe.view.TipsView
                     android:id="@+id/tv_zhaiquanxinxi"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_zqxx"
                     android:tag="bond"
-                    android:text="债券信息" />
+                    android:text="债券信息"
+                    app:layout_columnWeight="1" />
 
                 <com.sogukj.pe.view.TipsView
                     android:id="@+id/tv_shuiwupinji"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_swpj"
                     android:tag="taxCredit"
-                    android:text="税务评级" />
+                    android:text="税务评级"
+                    app:layout_columnWeight="1" />
 
                 <com.sogukj.pe.view.TipsView
                     android:id="@+id/tv_goudixinxi"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_gdxx"
                     android:tag="purchaseLand"
-                    android:text="购地信息" />
+                    android:text="购地信息"
+                    app:layout_columnWeight="1" />
 
                 <com.sogukj.pe.view.TipsView
                     android:id="@+id/tv_zhaotoubiao"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_ztb"
                     android:tag="bids"
-                    android:text="招投标" />
+                    android:text="招投标"
+                    app:layout_columnWeight="1" />
 
                 <com.sogukj.pe.view.TipsView
                     android:id="@+id/tv_zizhizhenshu"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_zzzs"
                     android:tag="qualification"
-                    android:text="资质证书" />
+                    android:text="资质证书"
+                    app:layout_columnWeight="1" />
 
                 <com.sogukj.pe.view.TipsView
                     android:id="@+id/tv_chouchajiancha"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_ccjc"
                     android:tag="checkInfo"
-                    android:text="抽查检查" />
+                    android:text="抽查检查"
+                    app:layout_columnWeight="1" />
 
                 <com.sogukj.pe.view.TipsView
                     android:id="@+id/tv_chanpinxinxi"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_cpxx"
                     android:tag="appbkInfo"
-                    android:text="产品信息" />
+                    android:text="产品信息"
+                    app:layout_columnWeight="1" />
 
                 <com.sogukj.pe.view.TipsView
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_xzxk"
-                    android:text="行政许可" />
+                    android:text="行政许可"
+                    app:layout_columnWeight="1" />
 
                 <com.sogukj.pe.view.TipsView
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_qsxx"
-                    android:text="清算信息" />
+                    android:text="清算信息"
+                    app:layout_columnWeight="1" />
 
                 <com.sogukj.pe.view.TipsView
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_gsyg"
-                    android:text="公司员工" />
+                    android:text="公司员工"
+                    app:layout_columnWeight="1" />
 
                 <com.sogukj.pe.view.TipsView
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_cwzl"
-                    android:text="财务总览" />
+                    android:text="财务总览"
+                    app:layout_columnWeight="1" />
 
                 <com.sogukj.pe.view.TipsView
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_lrb"
-                    android:text="利润表" />
+                    android:text="利润表"
+                    app:layout_columnWeight="1" />
 
                 <com.sogukj.pe.view.TipsView
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_zcfzb"
-                    android:text="资产负债表" />
+                    android:text="资产负债表"
+                    app:layout_columnWeight="1" />
 
                 <com.sogukj.pe.view.TipsView
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_xjllb"
-                    android:text="现金流量表" />
+                    android:text="现金流量表"
+                    app:layout_columnWeight="1" />
 
                 <com.sogukj.pe.view.TipsView
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_jckxyxx"
-                    android:text="进出口信用信息" />
+                    android:text="进出口信用信息"
+                    app:layout_columnWeight="1" />
 
-            </GridLayout>
+            </android.support.v7.widget.GridLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -573,56 +624,62 @@
                     android:text="知识产权" />
             </LinearLayout>
 
-            <GridLayout
+            <android.support.v7.widget.GridLayout
                 android:id="@+id/gl_zhishichanquan"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:columnCount="4"
                 android:padding="10dp"
-                android:rowCount="2">
+                app:columnCount="4"
+                app:rowCount="2">
 
                 <com.sogukj.pe.view.TipsView
                     android:id="@+id/tv_shangbiao"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_sbxx"
                     android:tag="tm"
-                    android:text="商标信息" />
+                    android:text="商标信息"
+                    app:layout_columnWeight="1" />
 
                 <com.sogukj.pe.view.TipsView
                     android:id="@+id/tv_zhuanli"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_zlxx"
                     android:tag="patents"
-                    android:text="专利信息" />
+                    android:text="专利信息"
+                    app:layout_columnWeight="1" />
 
                 <com.sogukj.pe.view.TipsView
                     android:id="@+id/tv_zhuzuoquan"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_zzq"
                     android:tag="copyReg2"
-                    android:text="著作权" />
+                    android:text="著作权"
+                    app:layout_columnWeight="1" />
 
                 <com.sogukj.pe.view.TipsView
                     android:id="@+id/tv_ranzhuquan"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_rzq"
                     android:tag="copyReg"
-                    android:text="软著权" />
+                    android:text="软著权"
+                    app:layout_columnWeight="1" />
 
                 <com.sogukj.pe.view.TipsView
                     android:id="@+id/tv_wangzhanbeian"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_wzba"
                     android:tag="icp"
-                    android:text="网站备案" />
+                    android:text="网站备案"
+                    app:layout_columnWeight="1" />
 
                 <com.sogukj.pe.view.TipsView
                     android:id="@+id/tv_zhengshu"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_qyzs"
-                    android:text="企业证书" />
-            </GridLayout>
+                    android:text="企业证书"
+                    app:layout_columnWeight="1" />
+            </android.support.v7.widget.GridLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -649,28 +706,30 @@
                     android:text="海通数据" />
             </LinearLayout>
 
-            <GridLayout
+            <android.support.v7.widget.GridLayout
                 android:id="@+id/gl_htdata"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:columnCount="4"
                 android:padding="10dp"
-                android:rowCount="2">
+                app:columnCount="4"
+                app:rowCount="2">
 
                 <com.sogukj.pe.view.TipsView
                     android:id="@+id/tv_cwsj"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_cwsj"
                     android:tag="tv_cwsj"
-                    android:text="财务数据" />
+                    android:text="财务数据"
+                    app:layout_columnWeight="1" />
 
                 <com.sogukj.pe.view.TipsView
                     android:id="@+id/tv_gdzx"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_gdzx"
                     android:tag="tv_gdzx"
-                    android:text="股东征信" />
+                    android:text="股东征信"
+                    app:layout_columnWeight="1" />
 
                 <com.sogukj.pe.view.TipsView
                     android:id="@+id/tv_xmws"
@@ -678,23 +737,26 @@
                     android:drawableTop="@drawable/ic_proj_xmws"
                     android:onClick="onClick"
                     android:tag="tv_xmws"
-                    android:text="项目文书" />
+                    android:text="项目文书"
+                    app:layout_columnWeight="1" />
 
                 <com.sogukj.pe.view.TipsView
                     android:id="@+id/tv_xmzy"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_xmgy"
                     android:tag="tv_xmzw"
-                    android:text="项目概要" />
+                    android:text="项目概要"
+                    app:layout_columnWeight="1" />
 
                 <com.sogukj.pe.view.TipsView
                     android:id="@+id/tv_xmcb"
-                    android:onClick="onClick"
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_xmcb"
+                    android:onClick="onClick"
                     android:tag="tv_xmzw"
-                    android:text="储备信息" />
-            </GridLayout>
+                    android:text="储备信息"
+                    app:layout_columnWeight="1" />
+            </android.support.v7.widget.GridLayout>
         </LinearLayout>
     </ScrollView>
 

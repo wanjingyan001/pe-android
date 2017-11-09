@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -9,57 +10,65 @@
         android:layout_height="215dp"
         android:background="@drawable/bg_main_baner" />
 
-    <GridLayout
-        android:id="@+id/gl_shangshi"
+    <android.support.v7.widget.GridLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:columnCount="3"
         android:padding="20dp"
-        android:rowCount="2">
+        app:columnCount="3"
+        app:orientation="horizontal"
+        app:rowCount="2">
 
         <com.sogukj.pe.view.TipsView
             android:id="@+id/tv_sp"
             style="@style/ItemGridMain"
+            android:layout_width="0dp"
             android:drawableTop="@drawable/ic_main_sp"
-            android:tag="volatility"
-            android:text="审批" />
+            android:text="审批"
+            app:layout_columnWeight="1" />
 
         <com.sogukj.pe.view.TipsView
             android:id="@+id/tv_zx"
             style="@style/ItemGridMain"
+            android:layout_width="0dp"
             android:drawableTop="@drawable/ic_main_zx"
-            android:tag="companyInfo"
-            android:text="资讯" />
+            android:text="资讯"
+            app:layout_columnWeight="1" />
 
         <com.sogukj.pe.view.TipsView
             android:id="@+id/tv_jj"
             style="@style/ItemGridMain"
+            android:layout_width="0dp"
             android:drawableTop="@drawable/ic_main_jj"
-            android:tag="seniorExecutive"
-            android:text="基金" />
+            android:text="基金"
+            app:layout_columnWeight="1" />
 
         <com.sogukj.pe.view.TipsView
             android:id="@+id/tv_rl"
             style="@style/ItemGridMain"
+            android:layout_width="0dp"
             android:drawableTop="@drawable/ic_main_rl"
             android:tag="announcement"
-            android:text="日历" />
+            android:text="日历"
+            app:layout_columnWeight="1" />
 
         <com.sogukj.pe.view.TipsView
             android:id="@+id/tv_lxr"
             style="@style/ItemGridMain"
+            android:layout_width="0dp"
             android:drawableTop="@drawable/ic_main_lxr"
             android:tag="shareholder"
-            android:text="联系人" />
+            android:text="联系人"
+            app:layout_columnWeight="1" />
 
         <com.sogukj.pe.view.TipsView
             android:id="@+id/tv_me"
             style="@style/ItemGridMain"
+            android:layout_width="0dp"
             android:drawableTop="@drawable/ic_main_me"
             android:tag="shareholder"
-            android:text="我的" />
-
-    </GridLayout>
+            android:text="我的"
+            app:layout_columnWeight="1" />
+    </android.support.v7.widget.GridLayout>
 
 </LinearLayout>
