@@ -72,7 +72,8 @@ class UserEditActivity : ToolbarActivity() {
                         .error(R.drawable.img_logo_user)
                         .into(iv_user)
         }
-        tv_resume.setOnClickListener {
+
+        tr_resume.setOnClickListener {
             UserResumeActivity.start(this)
         }
         tv_depart.setOnClickListener {

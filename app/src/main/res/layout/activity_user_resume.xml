@@ -43,7 +43,7 @@
                         style="@style/SoguTextNormal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="审批" />
+                        android:text="基本信息" />
                 </LinearLayout>
 
                 <TableRow android:background="@drawable/divider_bottom">
