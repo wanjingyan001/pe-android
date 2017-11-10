@@ -52,7 +52,6 @@
             <TextView
                 style="@style/SoguTextMedium"
                 android:layout_gravity="center_vertical"
-                android:layout_weight="1"
                 android:text="姓名" />
 
             <EditText
@@ -78,7 +77,6 @@
             <TextView
                 style="@style/SoguTextMedium"
                 android:layout_gravity="center_vertical"
-                android:layout_weight="1"
                 android:text="部门" />
 
             <TextView
@@ -104,7 +102,6 @@
             <TextView
                 style="@style/SoguTextMedium"
                 android:layout_gravity="center_vertical"
-                android:layout_weight="1"
                 android:text="职务" />
 
             <EditText
@@ -130,7 +127,6 @@
             <TextView
                 style="@style/SoguTextMedium"
                 android:layout_gravity="center_vertical"
-                android:layout_weight="1"
                 android:text="手机" />
 
             <TextView
@@ -176,6 +172,7 @@
                 android:layout_gravity="center_vertical"
                 android:src="@drawable/ic_arrow_r" />
         </TableRow>
+
         <TableRow
             android:id="@+id/tr_project"
             android:background="@drawable/divider_bottom"
@@ -184,7 +181,6 @@
             <TextView
                 style="@style/SoguTextMedium"
                 android:layout_gravity="center_vertical"
-                android:layout_weight="1"
                 android:text="项目 " />
 
             <EditText
@@ -202,6 +198,7 @@
                 android:layout_gravity="center_vertical"
                 android:src="@drawable/ic_arrow_r" />
         </TableRow>
+
         <TableRow
             android:id="@+id/tr_note"
             android:background="@drawable/divider_bottom"
@@ -210,11 +207,36 @@
             <TextView
                 style="@style/SoguTextMedium"
                 android:layout_gravity="center_vertical"
-                android:layout_weight="1"
                 android:text="备注" />
 
             <EditText
                 android:id="@+id/tv_note"
+                style="@style/SoguTextMedium"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:gravity="right"
+                android:hint="未填写"
+                android:inputType="textEmailAddress" />
+
+            <ImageView
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_arrow_r" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tr_resume"
+            android:background="@drawable/divider_bottom"
+            android:padding="15dp">
+
+            <TextView
+                style="@style/SoguTextMedium"
+                android:layout_gravity="center_vertical"
+                android:text="个人简历" />
+
+            <EditText
+                android:id="@+id/tv_resume"
                 style="@style/SoguTextMedium"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="10dp"

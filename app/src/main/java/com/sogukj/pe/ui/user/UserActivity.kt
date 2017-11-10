@@ -118,19 +118,17 @@ class UserActivity : ToolbarActivity() {
     }
 
     private fun updateUser(user: UserBean?) {
-        user?.apply {
-            tv_name?.text = name
-            tv_mobile?.text = phone
-            if (!TextUtils.isEmpty(email))
-                tv_mail?.text = email
-            if (!TextUtils.isEmpty(depart_name))
-                tv_job?.text = position
-            if (!TextUtils.isEmpty(url))
-                Glide.with(this@UserActivity)
-                        .load(headImage())
-                        .error(R.drawable.img_logo_user)
-                        .into(iv_user)
-        }
+        if (null == user) return
+        tv_name?.text = user.name
+        tv_mobile?.text = user.phone
+        if (!TextUtils.isEmpty(user.email))
+            tv_mail?.text = user.email
+        if (!TextUtils.isEmpty(user.depart_name))
+            tv_job?.text = user.position
+        if (!TextUtils.isEmpty(user.url))
+            Glide.with(this@UserActivity)
+                    .load(user.headImage())
+                    .into(iv_user)
     }
 
     fun setData(departList: List<DepartmentBean>) {
