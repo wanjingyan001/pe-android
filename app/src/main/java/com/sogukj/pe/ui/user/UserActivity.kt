@@ -29,7 +29,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_user.*
 import org.jetbrains.anko.find
-import org.jetbrains.anko.sdk25.coroutines.onClick
 
 /**
  * Created by qinfei on 17/7/18.
@@ -88,9 +87,9 @@ class UserActivity : ToolbarActivity() {
 
         val user = Store.store.getUser(this)
         updateUser(user)
-        user?.uid?.apply {
+        if (null != user?.uid) {
             SoguApi.getService(application)
-                    .userInfo(this)
+                    .userInfo(user?.uid!!)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe({ payload ->
@@ -106,7 +105,7 @@ class UserActivity : ToolbarActivity() {
         }
 
 
-        iv_user.onClick {
+        iv_user.setOnClickListener {
             UserEditActivity.start(this@UserActivity, departList)
         }
     }
@@ -121,6 +120,8 @@ class UserActivity : ToolbarActivity() {
         if (null == user) return
         tv_name?.text = user.name
         tv_mobile?.text = user.phone
+        val ch = user.name?.first()
+        iv_user.setChar(ch)
         if (!TextUtils.isEmpty(user.email))
             tv_mail?.text = user.email
         if (!TextUtils.isEmpty(user.depart_name))
@@ -182,8 +183,8 @@ class UserActivity : ToolbarActivity() {
             val s = tv_name.text as Spannable
             s.setSpan(link, userBean.name.length, s.length, Spanned.SPAN_MARK_MARK)
         }
-        if (null != userBean.name && userBean.name!!.length > 0) {
-            val ch = userBean.name!!.first();
+        if (userBean.name.isNotEmpty()) {
+            val ch = userBean.name.first()
             iv_user.setChar(ch)
         }
         Glide.with(this)

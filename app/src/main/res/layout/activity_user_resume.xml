@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.sogukj.pe.ui.user.UserResumeActivity">
+
+    <include layout="@layout/toolbar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/divider2">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@color/white"
+                android:paddingLeft="20dp"
+                android:paddingRight="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="38dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:layout_width="5dp"
+                        android:layout_height="10dp"
+                        android:layout_marginRight="5dp"
+                        android:background="@color/color_main" />
+
+                    <TextView
+                        style="@style/SoguTextNormal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="审批" />
+                </LinearLayout>
+
+                <TableRow android:background="@drawable/divider_bottom">
+
+                    <TextView
+                        style="@style/TableTextLabel"
+                        android:text="姓名" />
+
+                    <EditText
+                        android:id="@+id/tv_name"
+                        style="@style/TableTextValue"
+                        android:layout_marginRight="10dp"
+                        android:hint="未填写" />
+
+
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center_vertical"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_arrow_r"
+                        android:visibility="invisible" />
+                </TableRow>
+
+                <TableRow android:background="@drawable/divider_bottom">
+
+                    <TextView
+                        style="@style/TableTextLabel"
+                        android:text="职位" />
+
+                    <TextView
+                        android:id="@+id/tv_job"
+                        style="@style/TableTextValue"
+                        android:layout_marginRight="10dp"
+                        android:hint="请选择" />
+
+
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center_vertical"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_arrow_r" />
+                </TableRow>
+
+                <TableRow android:background="@drawable/divider_bottom">
+
+                    <TextView
+                        style="@style/TableTextLabel"
+                        android:text="性别" />
+
+                    <TextView
+                        android:id="@+id/tv_sex"
+                        style="@style/TableTextValue"
+                        android:layout_marginRight="10dp"
+                        android:hint="请选择" />
+
+
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center_vertical"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_arrow_r" />
+                </TableRow>
+
+                <TableRow android:background="@drawable/divider_bottom">
+
+                    <TextView
+                        style="@style/TableTextLabel"
+                        android:text="语言" />
+
+                    <TextView
+                        android:id="@+id/tv_language"
+                        style="@style/TableTextValue"
+                        android:layout_marginRight="10dp"
+                        android:hint="请选择" />
+
+
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center_vertical"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_arrow_r" />
+                </TableRow>
+
+                <TableRow android:background="@drawable/divider_bottom">
+
+                    <TextView
+                        style="@style/TableTextLabel"
+                        android:text="工作年限" />
+
+                    <TextView
+                        android:id="@+id/tv_woek_experience"
+                        style="@style/TableTextValue"
+                        android:layout_marginRight="10dp"
+                        android:hint="请选择" />
+
+
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center_vertical"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_arrow_r" />
+                </TableRow>
+
+                <TableRow android:background="@drawable/divider_bottom">
+
+                    <TextView
+                        style="@style/TableTextLabel"
+                        android:text="所在城市" />
+
+                    <TextView
+                        android:id="@+id/tv_city"
+                        style="@style/TableTextValue"
+                        android:layout_marginRight="10dp"
+                        android:hint="请选择" />
+
+
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center_vertical"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_arrow_r" />
+                </TableRow>
+
+                <TableRow android:background="@drawable/divider_bottom">
+
+                    <TextView
+                        style="@style/TableTextLabel"
+                        android:text="最高学历" />
+
+                    <TextView
+                        android:id="@+id/tv_education"
+                        style="@style/TableTextValue"
+                        android:layout_marginRight="10dp"
+                        android:hint="请选择" />
+
+
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center_vertical"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_arrow_r" />
+                </TableRow>
+
+                <TableRow android:background="@drawable/divider_bottom">
+
+                    <TextView
+                        style="@style/TableTextLabel"
+                        android:text="联系邮箱" />
+
+                    <EditText
+                        android:id="@+id/tv_mail"
+                        style="@style/TableTextValue"
+                        android:layout_marginRight="10dp"
+                        android:hint="请填写" />
+
+
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center_vertical"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_arrow_r"
+                        android:visibility="invisible" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        style="@style/TableTextLabel"
+                        android:text="联系电话" />
+
+                    <EditText
+                        android:id="@+id/tv_phone"
+                        style="@style/TableTextValue"
+                        android:layout_marginRight="10dp"
+                        android:hint="请填写" />
+
+
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center_vertical"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_arrow_r"
+                        android:visibility="invisible" />
+                </TableRow>
+
+            </TableLayout>
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="8dp"
+                android:background="@color/white"
+                android:paddingLeft="20dp"
+                android:paddingRight="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="38dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:layout_width="5dp"
+                        android:layout_height="10dp"
+                        android:layout_marginRight="5dp"
+                        android:background="@color/color_main" />
+
+                    <TextView
+                        style="@style/SoguTextNormal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="教育经历" />
+                </LinearLayout>
+
+                <FrameLayout
+                    android:id="@+id/fl_education"
+                    android:layout_gravity="center">
+
+                    <TextView
+                        android:id="@+id/tv_add_education"
+                        android:layout_width="163dp"
+                        android:layout_height="38dp"
+                        android:layout_gravity="center"
+                        android:layout_margin="34dp"
+                        android:background="@drawable/bg_border_round_blue"
+                        android:gravity="center"
+                        android:text="添加教育经历 +"
+                        android:textColor="@color/textColorBlue"
+                        android:textSize="15sp" />
+                </FrameLayout>
+            </TableLayout>
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="8dp"
+                android:background="@color/white"
+                android:paddingLeft="20dp"
+                android:paddingRight="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="38dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:layout_width="5dp"
+                        android:layout_height="10dp"
+                        android:layout_marginRight="5dp"
+                        android:background="@color/color_main" />
+
+                    <TextView
+                        style="@style/SoguTextNormal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="工作经历" />
+                </LinearLayout>
+
+                <FrameLayout
+                    android:id="@+id/fl_work_expericence"
+                    android:layout_gravity="center">
+
+                    <TextView
+                        android:id="@+id/tv_add_work_expericence"
+                        android:layout_width="163dp"
+                        android:layout_height="38dp"
+                        android:layout_gravity="center"
+                        android:layout_margin="34dp"
+                        android:background="@drawable/bg_border_round_blue"
+                        android:gravity="center"
+                        android:text="添加工作经历 +"
+                        android:textColor="@color/textColorBlue"
+                        android:textSize="15sp" />
+                </FrameLayout>
+            </TableLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -72,6 +72,9 @@ class UserEditActivity : ToolbarActivity() {
                         .error(R.drawable.img_logo_user)
                         .into(iv_user)
         }
+        tv_resume.setOnClickListener {
+            UserResumeActivity.start(this)
+        }
         tv_depart.setOnClickListener {
             val items = ArrayList<String?>()
             departList?.forEach {

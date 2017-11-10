@@ -106,9 +106,30 @@
         <item name="android:textColor">@color/text_1</item>
     </style>
 
+    <style name="TableTextLabel">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">#808080</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="TableTextValue">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:hint"></item>
+        <item name="android:layout_marginRight">20dp</item>
+        <item name="android:gravity">right|center_vertical</item>
+        <item name="android:background">@null</item>
+        <item name="android:textColor">@color/text_1</item>
+        <item name="android:layout_marginLeft">20dp</item>
+    </style>
+
     <style name="ItemTextLabel">
         <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/text_3</item>
+        <item name="android:textColor">#808080</item>
     </style>
 
     <style name="ItemTextValue">
