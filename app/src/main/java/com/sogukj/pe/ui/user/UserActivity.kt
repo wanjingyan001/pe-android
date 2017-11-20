@@ -3,6 +3,7 @@ package com.sogukj.pe.ui.user
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.os.HandlerThread
 import android.text.Spannable
 import android.text.Spanned
 import android.text.TextUtils
@@ -105,9 +106,10 @@ class UserActivity : ToolbarActivity() {
         }
 
 
-        iv_user.setOnClickListener {
+        ll_user.setOnClickListener {
             UserEditActivity.start(this@UserActivity, departList)
         }
+
     }
 
     override fun onResume() {
@@ -124,8 +126,8 @@ class UserActivity : ToolbarActivity() {
         iv_user.setChar(ch)
         if (!TextUtils.isEmpty(user.email))
             tv_mail?.text = user.email
-        if (!TextUtils.isEmpty(user.depart_name))
-            tv_job?.text = user.position
+//        if (!TextUtils.isEmpty(user.depart_name))
+//            tv_job?.text = user.position
         if (!TextUtils.isEmpty(user.url))
             Glide.with(this@UserActivity)
                     .load(user.headImage())
@@ -189,7 +191,6 @@ class UserActivity : ToolbarActivity() {
         }
         Glide.with(this)
                 .load(userBean.headImage())
-//                .error(R.drawable.img_user_default)
                 .into(iv_user)
 //        iv_user.setImageDrawable(text)
     }
