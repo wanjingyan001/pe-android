@@ -395,7 +395,12 @@
         <activity android:name=".ui.project.ProjectFocusActivity" />
         <activity android:name=".ui.user.UserResumeActivity" />
         <activity android:name=".ui.user.WorkExpericenceAddActivity" />
-        <activity android:name=".ui.user.EducationActivity"></activity>
+        <activity android:name=".ui.user.EducationActivity" />
+        <activity android:name=".ui.fund.FundMainActivity" />
+        <activity android:name=".ui.fund.FundDetailActivity" />
+        <activity android:name=".ui.fund.FundSearchActivity" />
+        <activity android:name=".ui.fund.FundStructureActivity" />
+        <activity android:name=".ui.fund.FundAccountActivity"></activity>
     </application>
 
 </manifest>

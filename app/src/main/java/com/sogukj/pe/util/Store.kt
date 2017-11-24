@@ -138,6 +138,43 @@ class Store private constructor() {
         XmlDb.open(ctx).set(UserBean::class.java.simpleName, "{}")
     }
 
+    /**
+     * 获取基金的查询记录
+     */
+    private var fundSearchList = LinkedList<String>()
+
+    fun getFundSearch(ctx: Context): Collection<String> {
+        fundSearchList.clear()
+        val strJson = XmlDb.open(ctx).get("fund.search", "")
+        if (!strJson.isEmpty()) {
+            val searchData = GSON.fromJson<Array<String>>(strJson, Array<String>::class.java)
+            fundSearchList.addAll(searchData)
+        }
+        return fundSearchList
+    }
+
+    /**
+     * 存储基金的查询记录
+     */
+    fun saveFundSearch(ctx: Context, resultProject: Collection<String>) {
+        if (resultProject.isNotEmpty()) {
+            for (info in resultProject) {
+                if (!fundSearchList.contains(info)) {
+                    fundSearchList.addFirst(info)
+                }
+            }
+        }
+        while (this.fundSearchList.size > 20) {
+            this.fundSearchList.removeLast()
+        }
+        XmlDb.open(ctx).set("fund.search", GSON.toJson(this.fundSearchList.toArray()))
+    }
+
+    fun clearFundSearch(ctx: Context){
+        fundSearchList.clear()
+        XmlDb.open(ctx).set("fund.search", GSON.toJson(this.fundSearchList.toArray()))
+    }
+
     class SizeList<E> : LinkedList<E>() {
 
         fun distinct() {

@@ -646,9 +646,36 @@ interface SoguService {
     @POST("/api/Message/getMessageList")
     fun msgList(): Observable<Payload<List<MessageBean>>>
 
-//    @FormUrlEncoded
+    //    @FormUrlEncoded
 //    @POST("/api/Approve/applyUrgent")
-//    fun approveUrgent(@Field("approval_id") approval_id: Int): Observable<Payload<String>>
+//    fun approveUrgent(@Field("approval_id")z approval_id: Int): Observable<Payload<String>>
+    /**
+     * 获取所有基金公司列表
+     */
+    @FormUrlEncoded
+    @POST("/api/Foundation/fundList")
+    fun getAllFunds(@Field("page") page: Int = 1,
+                    @Field("pageSize") pageSize: Int = 20,
+                    @Field("sort") sort: Int,
+                    @Field("fuzzyQuery") fuzzyQuery: String = ""): Observable<Payload<List<FundSmallBean>>>
+
+    /**
+     * 获取指定基金的详情
+     */
+    @FormUrlEncoded
+    @POST("/api/Foundation/fundInfo")
+    fun getFundDetail(@Field("fund_id") fund_id: Int): Observable<Payload<FundDetail>>
+
+    /**
+     * 获取指定基金的架构
+     */
+    @FormUrlEncoded
+    @POST("/api/Foundation/fundStructure")
+    fun getFundStructure(@Field("fund_id") fund_id: Int): Observable<Payload<FundStructure>>
+
+    @FormUrlEncoded
+    @POST("/api/Foundation/fundLedger")
+    fun getFundAccount(@Field("fund_id") fund_id: Int): Observable<Payload<FundAccount>>
 
     companion object {
         const val APPKEY_NAME = "appkey"

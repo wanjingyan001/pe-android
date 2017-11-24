@@ -8,9 +8,11 @@ import android.widget.TextView
 import com.framework.base.BaseFragment
 import com.sogukj.pe.R
 import com.sogukj.pe.ui.approve.EntryApproveActivity
+import com.sogukj.pe.ui.fund.FundMainActivity
 import com.sogukj.pe.ui.news.NewsListActivity
 import com.sogukj.pe.ui.user.UserActivity
 import kotlinx.android.synthetic.main.fragment_home.*
+import org.jetbrains.anko.sdk25.coroutines.onClick
 
 /**
  * Created by qinfei on 17/10/11.
@@ -30,7 +32,8 @@ class MainHomeFragment : BaseFragment() {
         tv_sp.setOnClickListener {
             EntryApproveActivity.start(baseActivity)
         }
-        disable(tv_jj)
+        tv_jj.onClick { FundMainActivity.start(baseActivity) }
+//        disable(tv_jj)
         disable(tv_rl)
         disable(tv_lxr)
     }
