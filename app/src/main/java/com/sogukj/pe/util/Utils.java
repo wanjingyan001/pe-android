@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.telephony.TelephonyManager;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import java.util.regex.Matcher;
@@ -91,5 +93,22 @@ public class Utils {
         Pattern p = Pattern.compile("^[1][0-9]{10}$");
         Matcher m = p.matcher(str);
         return m.matches();
+    }
+
+    public static int[] getAndroiodScreenProperty(Context context) {
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics dm = new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(dm);
+        int width = dm.widthPixels;
+        int height = dm.heightPixels;
+        float density = dm.density;
+        int densityDpi = dm.densityDpi;
+        // 屏幕宽度算法:屏幕宽度（像素）/屏幕密度
+        int screenWidth = (int) (width / density);
+        int screenHeight = (int) (height / density);
+        int[] ints = new int[2];
+        ints[0] = screenWidth;
+        ints[1] = screenHeight;
+        return ints;
     }
 }

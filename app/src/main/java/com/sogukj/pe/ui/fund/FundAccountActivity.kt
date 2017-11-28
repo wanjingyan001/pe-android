@@ -3,22 +3,23 @@ package com.sogukj.pe.ui.fund
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.widget.DividerItemDecoration
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.util.Log
-import android.view.View
 import android.widget.TextView
 import com.framework.base.ToolbarActivity
 import com.google.gson.Gson
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.FundSmallBean
-import com.sogukj.pe.view.RecyclerAdapter
-import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.activity_fund_account.*
 import org.jetbrains.anko.find
 
 class FundAccountActivity : ToolbarActivity() {
-    private lateinit var adapter: RecyclerAdapter<Map<String, String>>
+    private lateinit var adapter: FundAccountAdapter
     private var map = HashMap<String, String>()
 
     companion object {
@@ -41,8 +42,12 @@ class FundAccountActivity : ToolbarActivity() {
         doRequest(bean.id)
     }
 
-    fun initAdapter() {
-
+    private fun initAdapter() {
+        adapter = FundAccountAdapter(this, map)
+        val recyclerView = find<RecyclerView>(R.id.accountList)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+        recyclerView.adapter = adapter
     }
 
     fun doRequest(fundId: Int) {
@@ -59,8 +64,12 @@ class FundAccountActivity : ToolbarActivity() {
                             map.put("PE已上市项目浮盈/亏", profitLoss)
                             map.put("定增项目浮盈/亏", fixProfit)
                             map.put("估值", valuations)
-                            adapter.dataList.add(map)
-                            adapter.notifyDataSetChanged()
+                            adapter.setData(map)
+                            val con = contributeSize.toFloat()
+                            val act = actualSize.toFloat()
+                            fund_histogram.setData(floatArrayOf(con + act, con, act))
+                            fundPie.setDatas(floatArrayOf(RaiseFunds.toFloat(), freeFunds.toFloat()))
+                            progressChart.setData(floatArrayOf(quitAll.toFloat(),quitNum.toFloat(),investedNum.toFloat()))
                         }
                     } else {
                         showToast(payload.message)

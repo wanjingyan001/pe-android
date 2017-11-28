@@ -11,6 +11,7 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.framework.base.ToolbarActivity
 import com.google.gson.Gson
+import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.FundDetail
 import com.sogukj.pe.bean.FundSmallBean
@@ -28,12 +29,11 @@ class FundDetailActivity : ToolbarActivity() {
     lateinit var adapter: RecyclerAdapter<FundDetail.NameList>
 
     companion object {
-        val DATA: String = "DATA"
         val TAG = FundDetailActivity::class.java.simpleName
 
         fun start(ctx: Context?, data: FundSmallBean) {
             val intent = Intent(ctx, FundDetailActivity::class.java)
-            intent.putExtra(DATA, data)
+            intent.putExtra(Extras.DATA, data)
             ctx?.startActivity(intent)
         }
     }
@@ -42,7 +42,7 @@ class FundDetailActivity : ToolbarActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_fund_detail)
-        val data = intent.getSerializableExtra(DATA) as FundSmallBean
+        val data = intent.getSerializableExtra(Extras.DATA) as FundSmallBean
         setBack(true)
         title = data.fundName
         run {

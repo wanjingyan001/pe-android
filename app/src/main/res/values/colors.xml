@@ -81,4 +81,13 @@
     <color name="colorPrimaryOrange">#fe942d</color>
 
     <color name="colorKlineBlack">#4b53bd</color>
+    
+    <color name="fund_deep_red">#ff5858</color>
+    <color name="fund_light_red">#ffe6e6</color>
+    <color name="fund_pink">#ffaaaa</color>
+    <color name="fund_light_yellow">#ffdf99</color>
+    <color name="fund_deep_yellow">#ffad58</color>
+    <color name="fund_deep_green">#7ed321</color>
+    <color name="fund_light_green">#b8e986</color>
+    <color name="fund_deep_blue">#21d3cb</color>
 </resources>
