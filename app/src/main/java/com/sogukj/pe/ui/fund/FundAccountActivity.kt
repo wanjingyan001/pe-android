@@ -36,8 +36,9 @@ class FundAccountActivity : ToolbarActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_fund_account)
         val bean = intent.getSerializableExtra(DATA) as FundSmallBean
+        setBack(true)
         title = "基金台账"
-        find<TextView>(R.id.companyName).text = bean.fundName
+        find<TextView>(R.id.cardCompanyName).text = bean.fundName
         initAdapter()
         doRequest(bean.id)
     }
@@ -67,9 +68,11 @@ class FundAccountActivity : ToolbarActivity() {
                             adapter.setData(map)
                             val con = contributeSize.toFloat()
                             val act = actualSize.toFloat()
-                            fund_histogram.setData(floatArrayOf(con + act, con, act))
+                            fund_histogram.setData(floatArrayOf(fundSize.toFloat(), con, act))
                             fundPie.setDatas(floatArrayOf(RaiseFunds.toFloat(), freeFunds.toFloat()))
                             progressChart.setData(floatArrayOf(quitAll.toFloat(),quitNum.toFloat(),investedNum.toFloat()))
+                            fund_pie2.setColor(intArrayOf(R.color.fund_deep_blue,R.color.fund_light_blue))
+                            fund_pie2.setDatas(floatArrayOf(investedMoney.toFloat(),fundSize.toFloat()))
                         }
                     } else {
                         showToast(payload.message)

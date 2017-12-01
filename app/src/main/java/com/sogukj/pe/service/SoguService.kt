@@ -673,9 +673,40 @@ interface SoguService {
     @POST("/api/Foundation/fundStructure")
     fun getFundStructure(@Field("fund_id") fund_id: Int): Observable<Payload<FundStructure>>
 
+    /**
+     * 获取指定基金的台账
+     */
     @FormUrlEncoded
     @POST("/api/Foundation/fundLedger")
     fun getFundAccount(@Field("fund_id") fund_id: Int): Observable<Payload<FundAccount>>
+
+    /**
+     * 征信开始界面接口
+     */
+    @FormUrlEncoded
+    @POST("/api/Credit/showCreditInfo")
+    fun showCreditInfo(@Field("company_id") company_id: Int = 10): Observable<Payload<CreditInfo>>
+
+    /**
+     * 征信-敏感信息
+     */
+    @POST("/api/Credit/sensitiveData")
+    fun sensitiveData(@Body reqBean: SensitiveReqBean): Observable<Payload<SensitiveInfo>>
+
+    /**
+     * 涉诉信息相关
+     */
+    @FormUrlEncoded
+    @POST("/api/Credit/declarationList")
+    fun declarationList(@Field("id") id: Int,
+                        @Field("type") type: String): Observable<Payload<List<SecondaryBean>>>
+
+
+    /**
+     * 一键查询
+     */
+    @POST("/api/Credit/queryCreditInfo")
+    fun queryCreditInfo(@Body reqBean:List<CreditReqBean>):Observable<Payload<Any>>
 
     companion object {
         const val APPKEY_NAME = "appkey"

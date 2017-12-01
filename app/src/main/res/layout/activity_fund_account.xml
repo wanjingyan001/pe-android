@@ -21,7 +21,7 @@
 
 
             <TextView
-                android:id="@+id/companyName"
+                android:id="@+id/cardCompanyName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
@@ -63,7 +63,7 @@
                 <com.sogukj.pe.view.Histogram
                     android:id="@+id/fund_histogram"
                     android:layout_width="wrap_content"
-                    android:layout_height="130dp"
+                    android:layout_height="150dp"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:paddingLeft="20dp">
@@ -297,12 +297,85 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <com.sogukj.pe.view.FundProgress3
-                android:id="@+id/progressChart"
-                android:layout_width="wrap_content"
-                android:layout_height="100dp">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            </com.sogukj.pe.view.FundProgress3>
+                <com.sogukj.pe.view.FundProgress3
+                    android:id="@+id/progressChart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp">
+
+                </com.sogukj.pe.view.FundProgress3>
+
+                <LinearLayout
+                    android:id="@+id/layout6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@+id/progressChart"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="36dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:id="@+id/view6"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:background="@color/fund_deep_green" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="12dp"
+                        android:text="已投项目数量"
+                        android:textColor="#808080"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/layout6"
+                    android:layout_below="@+id/layout6"
+                    android:layout_marginTop="12dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:id="@+id/view7"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:background="@color/fund_light_green" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="12dp"
+                        android:text="退出项目数量（全部退出）"
+                        android:textColor="#808080"
+                        android:textSize="12sp" />
+
+                    <View
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:background="@drawable/ic_fund_legend1" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="12dp"
+                        android:text="退出项目数量（部分退出）"
+                        android:textColor="#808080"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
 
 
             <LinearLayout
@@ -328,11 +401,86 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="200dp">
 
-            </FrameLayout>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+
+                <com.sogukj.pe.view.FundPieChart
+                    android:id="@+id/fund_pie2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="200dp"
+                    android:padding="20dp">
+
+                </com.sogukj.pe.view.FundPieChart>
+
+                <TextView
+                    android:id="@+id/unit3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginRight="30dp"
+                    android:text="单位：万元"
+                    android:textColor="@color/text_3"
+                    android:textSize="12sp" />
+
+                <LinearLayout
+                    android:id="@+id/layout8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/unit3"
+                    android:layout_marginRight="48dp"
+                    android:layout_marginTop="28dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:id="@+id/view8"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:background="@color/fund_light_blue" />
+
+                    <TextView
+                        android:id="@+id/tv8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="12dp"
+                        android:text="已投金额"
+                        android:textColor="#808080"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/layout8"
+                    android:layout_below="@+id/layout8"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:id="@+id/view9"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:background="@color/fund_deep_blue" />
+
+                    <TextView
+                        android:id="@+id/textView9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="12dp"
+                        android:text="基金实缴规模"
+                        android:textColor="#808080"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+            </RelativeLayout>
 
             <TextView
                 android:layout_width="match_parent"

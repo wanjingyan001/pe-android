@@ -17,4 +17,6 @@ object Extras {
     val DATA2 = "ext.data2"
     val LIST = "ext.list"
     val MAP = "ext.map"
+    val REQUESTCODE = 1001
+    val RESULTCODE = 1002
 }

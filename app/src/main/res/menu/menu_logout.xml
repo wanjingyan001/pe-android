@@ -6,5 +6,6 @@
         android:id="@+id/action_logout"
         android:orderInCategory="100"
         android:title="退出"
+        android:icon="@drawable/ic_business_card"
         app:showAsAction="always" />
 </menu>

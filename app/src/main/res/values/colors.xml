@@ -89,5 +89,15 @@
     <color name="fund_deep_yellow">#ffad58</color>
     <color name="fund_deep_green">#7ed321</color>
     <color name="fund_light_green">#b8e986</color>
-    <color name="fund_deep_blue">#21d3cb</color>
+    <color name="fund_light_blue">#21d3cb</color>
+    <color name="fund_deep_blue">#0099FF</color>
+    <color name="shareholder_gray">#f3f5f7</color>
+    <color name="shareholder_text_gray">#808080</color>
+    <color name="shareholder_sensitive_text1">#ff3300</color>
+    <color name="shareholder_sensitive_text2">#50d59d</color>
+    <color name="shareholder_sensitive_text3">#f7b62b</color>
+    <color name="shareholder_sensitive_bg">#ffebeb</color>
+    <color name="shareholder_sensitive_bg1">#fffeeb</color>
+    <color name="shareholder_sensitive_bg2">#f1ffeb</color>
+
 </resources>
