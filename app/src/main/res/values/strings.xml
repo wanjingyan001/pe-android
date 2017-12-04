@@ -20,4 +20,34 @@
     <string name="tv_title_result_project" formatted="false">匹配到&lt;font color="#ff3300">%d&lt;/font>家公司: </string>
     <string name="tv_title_result_news" formatted="false">匹配到&lt;font color="#ff3300">%d&lt;/font>条资讯: </string>
     <string name="tv_title_result_search" formatted="false">匹配到&lt;font color="#ff3300">%d&lt;/font>条结果: </string>
+    <string-array name="Language">
+        <item>英语</item>
+        <item>德语</item>
+        <item>法语</item>
+        <item>俄语</item>
+        <item>西班牙语</item>
+        <item>日语</item>
+    </string-array>
+    <string-array name="Education">
+        <item>高中</item>
+        <item>本科</item>
+        <item>硕士</item>
+        <item>MBA</item>
+        <item>博士</item>
+    </string-array>
+    <string-array name="workers">
+        <item>少于50人</item>
+        <item>50–150人</item>
+        <item>150–500人</item>
+        <item>500–1000人</item>
+        <item>1000–5000人</item>
+        <item>5000–10000人</item>
+        <item>10000人以上</item>
+    </string-array>
+    <string-array name="BusinessNature">
+        <item>国有企业</item>
+        <item>外资企业</item>
+        <item>集体企业</item>
+        <item>私营企业</item>
+    </string-array>
 </resources>

@@ -2,11 +2,8 @@ package com.sogukj.pe.ui.fund
 
 import android.content.Context
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v7.widget.CardView
 import android.support.v7.widget.GridLayout
-import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.Gravity
@@ -54,7 +51,7 @@ class FundStructureActivity : ToolbarActivity() {
                 val convertView = _adapter.getView(R.layout.item_fund_structure_ratio, parent)
                 object : RecyclerHolder<FundStructure.FundedRatio>(convertView) {
                     override fun setData(view: View, data: FundStructure.FundedRatio, position: Int) {
-                        convertView.find<TextView>(R.id.companyName).text = data.partnerName
+                        convertView.find<TextView>(R.id.cardCompanyName).text = data.partnerName
                         convertView.find<TextView>(R.id.contributeTv).text = data.contribute
                         convertView.find<TextView>(R.id.investRateTv).text = data.investRate
                     }

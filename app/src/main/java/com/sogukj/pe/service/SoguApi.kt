@@ -1,6 +1,7 @@
 package com.sogukj.service
 
 import android.app.Application
+import com.google.gson.Gson
 import com.sogukj.pe.Consts
 import com.sogukj.pe.util.Trace
 import com.sogukj.util.Store
@@ -30,6 +31,7 @@ class SoguApi {
                     builder.addHeader("appkey", "d5f17cafef0829b5")
                     val request = builder.build()
                     val response = chain.proceed(request)
+                    Trace.i("http", "RequestBody:${Gson().toJson(response.request().body())}")
                     Trace.i("http", "${request.url()} => ${response.code()}:${response.message()}")
                     response
                 }

@@ -94,9 +94,15 @@ public class Histogram extends View {
         valueX[0] = Utils.dpToPx(context, 15) + getPaddingLeft();
         valueX[1] = Utils.dpToPx(context, 50) + getPaddingLeft();
         valueX[2] = Utils.dpToPx(context, 85) + getPaddingLeft();
-        valueY[0] = Utils.dpToPx(context, 110);
-        valueY[1] = (datas[1] / datas[0]) * Utils.dpToPx(context, 110);
-        valueY[2] = (datas[2] / datas[0]) * Utils.dpToPx(context, 110);
+        valueY[0] = Utils.dpToPx(context, 130);
+        valueY[1] = (datas[1] / datas[0]) * Utils.dpToPx(context, 130);
+        valueY[2] = (datas[2] / datas[0]) * Utils.dpToPx(context, 130);
+        if (valueY[1]<100){
+            valueY[1] = 75;
+        }
+        if (valueY[2]<100){
+            valueY[2] = 75;
+        }
         int top = Utils.dpToPx(context, 35);
         rectF1 = new RectF(valueX[0], top, valueX[0] + ITEM_WIDTH, valueY[0] + top);
         rectF2 = new RectF(valueX[1], valueY[0] - valueY[1] + top,
@@ -110,7 +116,7 @@ public class Histogram extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (valueX[0] == 0) {
+        if (datas[0] == 0) {
             return;
         }
         canvas.drawRect(rectF1, totalPaint);
@@ -140,7 +146,7 @@ public class Histogram extends View {
         path3.lineTo((rectF3.left + rectF3.right) / 2 + 50, rectF3.top - 50);
         path3.lineTo((rectF3.left + rectF3.right) / 2 + 300, rectF3.top - 50);
         canvas.drawPath(path3, linePaint);
-        canvas.drawText(String.valueOf(datas[1]), (rectF3.left + rectF3.right) / 2 + 50, rectF3.top - 70, textPaint);
+        canvas.drawText(String.valueOf(datas[2]), (rectF3.left + rectF3.right) / 2 + 50, rectF3.top - 70, textPaint);
 
     }
 }

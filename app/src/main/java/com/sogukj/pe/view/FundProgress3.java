@@ -80,17 +80,16 @@ public class FundProgress3 extends View {
         textPaint.setColor(Color.parseColor("#808080"));
         textPaint.setTextSize(Utils.dpToPx(context, 12));
         textPaint.setAntiAlias(true);
-
-
     }
 
     public void setData(float[] data) {
         datas = data;
-        float total = datas[0] + datas[1] + datas[2];
-        float sectionWidth = width * (datas[0] / total);
-        float allWidth = width * (datas[1] / total);
-        float investWidth = width * (datas[2] / total);
-
+        float sectionWidth = width * (datas[0] / datas[2]);
+        float allWidth = width * (datas[1] / datas[2]);
+        if (datas[2] - datas[0] - datas[1] < 0) {
+            return;
+        }
+        float investWidth = width * ((datas[2] - datas[0] - datas[1]) / datas[2]);
         int top = (getHeight() - Utils.dpToPx(context, HEIGHT)) / 2;
         int left = Utils.dpToPx(context, 20);
         rectF = new RectF(left, top, sectionWidth + left, Utils.dpToPx(context, HEIGHT) + top);
@@ -109,7 +108,7 @@ public class FundProgress3 extends View {
         canvas.drawRect(rectF1, quitAllPaint);
         canvas.drawRect(rectF2, investedPaint);
         //绘制斜线
-        for (int i = 0; i <= (int) (rectF1.right - rectF1.left) / 20; i++) {
+        for (int i = 0; i < (int) (rectF1.right - rectF1.left) / 20; i++) {
             canvas.drawLine(rectF1.left + 20 * i, rectF1.top, rectF1.right, rectF1.bottom - 20 * i, slashPaint);
         }
         for (int i = 0; i < (int) (rectF1.bottom - rectF1.top) / 20; i++) {
@@ -128,7 +127,8 @@ public class FundProgress3 extends View {
         canvas.drawText(String.valueOf(datas[0]), (rectF.left + rectF.right) / 2 - 30, rectF.top - Utils.dpToPx(context, 17), textPaint);
         canvas.drawText(String.valueOf(datas[1]), (rectF1.left + rectF1.right) / 2 - 30, rectF.top - Utils.dpToPx(context, 17), textPaint);
         canvas.drawText(String.valueOf(datas[0] + datas[1] + datas[2]),
-                (rectF.left + rectF2.right) / 2 - 30, rectF.bottom + Utils.dpToPx(context, 19), textPaint);
+                (rectF.left + rectF2.right) / 2 - 30, rectF.bottom + Utils.dpToPx(context, 21), textPaint);
 
+        canvas.drawText("单位：个", rectF2.right - Utils.dpToPx(context, 64), rectF.top - Utils.dpToPx(context, 17), textPaint);
     }
 }

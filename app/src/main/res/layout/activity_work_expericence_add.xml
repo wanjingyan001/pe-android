@@ -4,9 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:orientation="vertical">
 
-    <include layout="@layout/toolbar" />
+    <include layout="@layout/layout_shareholder_toolbar" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -74,11 +76,11 @@
                         style="@style/TableTextLabel"
                         android:text="公司" />
 
-                    <TextView
-                        android:id="@+id/tv_school"
+                    <EditText
+                        android:id="@+id/tv_company"
                         style="@style/TableTextValue"
                         android:layout_marginRight="10dp"
-                        android:hint="请选择" />
+                        android:hint="请填写" />
 
 
                     <ImageView
@@ -95,11 +97,11 @@
                         style="@style/TableTextLabel"
                         android:text="职能" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/tv_skill"
                         style="@style/TableTextValue"
                         android:layout_marginRight="10dp"
-                        android:hint="请选择" />
+                        android:hint="请填写" />
 
 
                     <ImageView
@@ -116,11 +118,11 @@
                         style="@style/TableTextLabel"
                         android:text="工作描述" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/tv_desc"
                         style="@style/TableTextValue"
                         android:layout_marginRight="10dp"
-                        android:hint="请选择" />
+                        android:hint="请填写" />
 
 
                     <ImageView
@@ -158,11 +160,11 @@
                         style="@style/TableTextLabel"
                         android:text="部门" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/tv_depart"
                         style="@style/TableTextValue"
                         android:layout_marginRight="10dp"
-                        android:hint="请选择" />
+                        android:hint="请填写" />
 
 
                     <ImageView

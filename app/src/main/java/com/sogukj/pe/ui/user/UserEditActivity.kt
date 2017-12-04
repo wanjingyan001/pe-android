@@ -48,20 +48,20 @@ class UserEditActivity : ToolbarActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_edit)
         setBack(true)
-        setTitle("个人信息")
+        title = "个人信息"
         val departList = intent.getSerializableExtra(Extras.DATA) as ArrayList<DepartmentBean>?
         Store.store.getUser(this)?.apply {
             user = this
             if (!TextUtils.isEmpty(name))
                 tv_name?.setText(name)
             if (!TextUtils.isEmpty(phone))
-                tv_phone?.setText(phone)
+                tv_phone?.text = phone
             if (!TextUtils.isEmpty(email))
                 tv_email?.setText(email)
             if (!TextUtils.isEmpty(position))
                 tv_posotion?.setText(position)
             if (!TextUtils.isEmpty(depart_name))
-                tv_depart?.setText(depart_name)
+                tv_depart?.text = depart_name
             if (!TextUtils.isEmpty(project))
                 tv_project?.setText(project)
             if (!TextUtils.isEmpty(memo))
@@ -123,7 +123,7 @@ class UserEditActivity : ToolbarActivity() {
                                 doUpload(path!!)
                         }
                     })
-                    .openGallery();
+                    .openGallery()
         }
 
     }
@@ -132,13 +132,13 @@ class UserEditActivity : ToolbarActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.action_save -> {
-                doSave();return true;
+                doSave();return true
             }
         }
         return false
     }
 
-    fun compressImage(srcImagePath: String, outWidth: Int, outHeight: Int, maxFileSize: Int): String? {
+    private fun compressImage(srcImagePath: String, outWidth: Int, outHeight: Int, maxFileSize: Int): String? {
         val options = BitmapFactory.Options()
         options.inJustDecodeBounds = true
         BitmapFactory.decodeFile(srcImagePath, options)
@@ -320,7 +320,7 @@ class UserEditActivity : ToolbarActivity() {
         SoguApi.getService(application)
                 .uploadImg(MultipartBody.Builder().setType(MultipartBody.FORM)
                         .addFormDataPart("uid", user.uid!!.toString())
-                        .addFormDataPart("image", file.getName(), RequestBody.create(MediaType.parse("image/*"), file))
+                        .addFormDataPart("image", file.name, RequestBody.create(MediaType.parse("image/*"), file))
                         .build()).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->

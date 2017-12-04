@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:orientation="vertical">
 
     <include layout="@layout/toolbar" />
@@ -74,11 +76,11 @@
                         style="@style/TableTextLabel"
                         android:text="学校" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/tv_school"
                         style="@style/TableTextValue"
                         android:layout_marginRight="10dp"
-                        android:hint="请选择" />
+                        android:hint="请填写" />
 
 
                     <ImageView
@@ -116,11 +118,11 @@
                         style="@style/TableTextLabel"
                         android:text="专业" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/tv_profession"
                         style="@style/TableTextValue"
                         android:layout_marginRight="10dp"
-                        android:hint="请选择" />
+                        android:hint="请填写" />
 
 
                     <ImageView
@@ -137,11 +139,11 @@
                         style="@style/TableTextLabel"
                         android:text="专业描述" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/tv_description"
                         style="@style/TableTextValue"
                         android:layout_marginRight="10dp"
-                        android:hint="请选择" />
+                        android:hint="请填写" />
 
 
                     <ImageView

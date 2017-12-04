@@ -10,7 +10,7 @@ class FundAccount : Serializable {
     var contributeSize: String = "0"//基金认缴规模
     var actualSize: String = "0"//基金实缴规模
     var investedNum: Int = 0//已投项目数量
-    var investedMoney: String = ""//已投金额基金余额
+    var investedMoney: String = "0"//已投金额基金余额
     var withdraw: String = ""//已收回金额
     var balance: String = ""//基金余额
     var quitNum: Int = 0//退出项目数量(部分)
@@ -24,5 +24,5 @@ class FundAccount : Serializable {
     var sponsor: String = ""//海通出资
     var freeFunds: String = "0"//自由资金引入
     var RaiseFunds: String = "0"//外部筹集资金
-    var fundSize: String = ""//基金规模
+    var fundSize: String = "0"//基金规模
 }

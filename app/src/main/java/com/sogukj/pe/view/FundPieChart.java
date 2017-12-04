@@ -76,6 +76,14 @@ public class FundPieChart extends View {
         invalidate();
     }
 
+    public void setColor(int[] newColor){
+        this.color[0] = newColor[0];
+        this.color[1] = newColor[1];
+        raisePaint.setColor(getResources().getColor(color[0]));
+        freePaint.setColor(getResources().getColor(color[1]));
+
+    }
+
     @SuppressLint("DrawAllocation")
     @Override
     protected void onDraw(Canvas canvas) {
