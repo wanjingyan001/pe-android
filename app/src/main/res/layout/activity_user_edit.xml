@@ -185,7 +185,7 @@
             <TextView
                 android:id="@+id/tv_resume"
                 style="@style/TableTextValue"
-                android:hint="未填写" />
+                android:hint="完善简历" />
 
             <ImageView
                 android:layout_gravity="center_vertical"

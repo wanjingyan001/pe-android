@@ -705,8 +705,28 @@ interface SoguService {
     /**
      * 一键查询
      */
+    @FormUrlEncoded
     @POST("/api/Credit/queryCreditInfo")
-    fun queryCreditInfo(@Body reqBean:List<CreditReqBean>):Observable<Payload<Any>>
+    fun queryCreditInfo(@Field("info") info: String): Observable<Payload<Any>>
+
+    /**
+     * 省市区选择
+     */
+    @POST("/api/Index/getCityArea")
+    fun getCityArea(): Observable<Payload<List<CityArea>>>
+
+    /**
+     * 行业分类
+     */
+    @POST("/api/Index/industryCategory")
+    fun industryCategory():Observable<Payload<List<Industry>>>
+
+    /**
+     *获取个人简历所有信息
+     */
+    @FormUrlEncoded
+    @POST("/api/Userfont/getPersonalResume")
+    fun getPersonalResume(@Field("uid") uid: Int): Observable<Payload<Resume>>
 
     companion object {
         const val APPKEY_NAME = "appkey"

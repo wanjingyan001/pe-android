@@ -19,6 +19,7 @@ import com.framework.base.BaseActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.CreditReqBean
+import com.sogukj.pe.bean.QueryReqBean
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.IOSPopwindow
@@ -158,33 +159,18 @@ class AddCreditActivity : BaseActivity(), View.OnClickListener {
         return creditReq
     }
 
-    private fun doInquire(info: List<CreditReqBean>) {
-        if (info.isNotEmpty()) {
-            SoguApi.getService(application)
-                    .queryCreditInfo(info)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe({ payload ->
-                        if (payload.isOk) {
-                            setResult(Extras.RESULTCODE)
-                            finish()
-                        } else {
-                            showToast(payload.message)
-                        }
-                    }, { e ->
-                        Trace.e(e)
-                    })
-
-        }
-    }
-
     @TargetApi(Build.VERSION_CODES.KITKAT)
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.back -> finish()
             R.id.addTv -> {
                 if (adapter.dataList.isNotEmpty()) {
-                    doInquire(adapter.dataList)
+                    val query = QueryReqBean()
+                    query.info = adapter.dataList as ArrayList<CreditReqBean>
+                    val intent = Intent()
+                    intent.putExtra(Extras.DATA, query)
+                    setResult(Extras.RESULTCODE, intent)
+                    finish()
                 } else {
                     finish()
                 }
@@ -202,6 +188,10 @@ class AddCreditActivity : BaseActivity(), View.OnClickListener {
                     adapter.dataList.add(it)
                     adapter.notifyDataSetChanged()
                 }
+                nameEdt.setText("")
+                phoneEdt.setText("")
+                IDCardEdt.setText("")
+                postEdt.setText("")
             }
         }
     }

@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:context="com.sogukj.pe.ui.user.UserResumeActivity">
 
     <include layout="@layout/layout_shareholder_toolbar" />
@@ -74,11 +76,11 @@
                         style="@style/TableTextLabel"
                         android:text="职位" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/tv_job"
                         style="@style/TableTextValue"
                         android:layout_marginRight="10dp"
-                        android:hint="请选择" />
+                        android:hint="请填写" />
 
 
                     <ImageView

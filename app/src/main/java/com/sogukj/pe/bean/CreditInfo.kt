@@ -22,19 +22,20 @@ class CreditInfo : Serializable {
         var error_info: String? = null//错误信息
         var sum: Int? = null//负面信息总数(第一次进入不返回此字段)
         var piece: Piece? = null//负面信息分布(进入详情时带入（第一次进入不返回此字段）)
+        var isChange = false
 
         inner class Piece : Serializable {
             var ns = 0
             var nd = 0
             var nc = 0
             var nco = 0
-            var cou = Cou()
+            var cou: Cou? = null
 
             inner class Cou : Serializable {
-                var cpws = 0
-                var zxgg = 0
-                var ktgg = 0
-                var fygg = 0
+                var cpws: Int? = null
+                var zxgg: Int? = null
+                var ktgg: Int? = null
+                var fygg: Int? = null
             }
         }
     }
