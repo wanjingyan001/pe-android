@@ -100,4 +100,5 @@
     <color name="shareholder_sensitive_bg1">#fffeeb</color>
     <color name="shareholder_sensitive_bg2">#f1ffeb</color>
 
+    <color name="weekly_label">#4b5266</color>
 </resources>
