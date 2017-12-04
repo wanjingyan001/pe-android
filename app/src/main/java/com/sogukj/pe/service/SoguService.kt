@@ -2,6 +2,7 @@ package com.sogukj.service
 
 import com.sogukj.pe.bean.*
 import com.sogukj.pe.service.Payload
+import com.sogukj.pe.ui.project.InvestSuggestActivity
 import io.reactivex.Observable
 import okhttp3.Call
 import okhttp3.RequestBody
@@ -11,6 +12,8 @@ import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
+import java.util.*
+import kotlin.collections.HashMap
 
 /**
  * Created by qinfei on 17/6/2.
@@ -681,4 +684,40 @@ interface SoguService {
         const val APPKEY_NAME = "appkey"
         const val APPKEY_VALUE = "d5f17cafef0829b5"
     }
+
+    // 投资项目管理-立项尽调数据
+    @FormUrlEncoded
+    @POST("/api/Listinformation/surveyData")
+    fun surveyData(@Field("company_id") company_id: Int): Observable<Payload<SurveyDataBean>>
+
+    // 添加或修改立项尽调数据
+    @POST("/api/Listinformation/addEditSurveyData")
+    fun addEditSurveyData(@Body map: HashMap<String, Any>): Observable<Payload<Object>>
+
+    // 投资项目管理-投资决策数据
+    @FormUrlEncoded
+    @POST("/api/Listinformation/investSuggest")
+    fun investSuggest(@Field("company_id") company_id: Int): Observable<Payload<InvestSuggestBean>>
+
+    // 投资项目管理-添加或修改投资决策数据
+    @POST("/api/Listinformation/addEditInvestSuggest")
+    fun addEditInvestSuggest(@Body map: HashMap<String, Any>): Observable<Payload<Object>>
+
+    // 投资项目管理-投后管理数据
+    @FormUrlEncoded
+    @POST("/api/Listinformation/manageData")
+    fun manageData(@Field("company_id") company_id: Int): Observable<Payload<ManageDataBean>>
+
+    // 投资项目管理-添加或修改投后管理数据
+    @POST("/api/Listinformation/addEditManageData")
+    fun addEditManageData(@Body map: HashMap<String, Any>): Observable<Payload<Object>>
+
+    // 记录列表
+    @FormUrlEncoded
+    @POST("/api/Archives/recodeInfo")
+    fun recodeInfo(@Field("company_id") company_id: Int): Observable<Payload<RecordInfoBean>>
+
+    //跟踪记录-新增记录
+    @POST("/api/Archives/addRecord")
+    fun addRecord(@Body map: HashMap<String, Any>): Observable<Payload<Object>>
 }

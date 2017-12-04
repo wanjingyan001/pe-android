@@ -90,4 +90,6 @@
     <color name="fund_deep_green">#7ed321</color>
     <color name="fund_light_green">#b8e986</color>
     <color name="fund_deep_blue">#21d3cb</color>
+
+    <color name="weekly_label">#4b5266</color>
 </resources>

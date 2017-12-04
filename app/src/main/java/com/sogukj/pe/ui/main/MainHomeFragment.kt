@@ -11,6 +11,7 @@ import com.sogukj.pe.ui.approve.EntryApproveActivity
 import com.sogukj.pe.ui.fund.FundMainActivity
 import com.sogukj.pe.ui.news.NewsListActivity
 import com.sogukj.pe.ui.user.UserActivity
+import com.sogukj.pe.ui.weekly.WeeklyActivity
 import kotlinx.android.synthetic.main.fragment_home.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
 
@@ -33,6 +34,7 @@ class MainHomeFragment : BaseFragment() {
             EntryApproveActivity.start(baseActivity)
         }
         tv_jj.onClick { FundMainActivity.start(baseActivity) }
+        tv_weekly.onClick { WeeklyActivity.start(baseActivity) }
 //        disable(tv_jj)
         disable(tv_rl)
         disable(tv_lxr)

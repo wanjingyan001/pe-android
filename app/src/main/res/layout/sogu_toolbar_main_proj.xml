@@ -39,10 +39,15 @@
             app:tabGravity="fill"
             app:tabIndicatorColor="@color/white"
             app:tabIndicatorHeight="2dp"
-            app:tabMode="fixed"
+            app:tabMode="scrollable"
             app:tabPaddingEnd="0dp"
             app:tabPaddingStart="0dp"
             app:tabTextColor="@color/white">
+
+            <android.support.design.widget.TabItem
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="调研" />
 
             <android.support.design.widget.TabItem
                 android:layout_width="match_parent"
@@ -59,10 +64,10 @@
                 android:layout_height="match_parent"
                 android:text="已投" />
 
-            <!--<android.support.design.widget.TabItem-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:text="关注" />-->
+            <android.support.design.widget.TabItem
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="退出" />
         </android.support.design.widget.TabLayout>
 
         <!--<ImageView-->

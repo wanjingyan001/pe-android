@@ -55,6 +55,16 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        //
+        if(type == TYPE_DY || type == TYPE_TC) {
+            adapter = RecyclerAdapter<ProjectBean>(baseActivity!!, { _adapter, parent, t ->
+                ProjectHolder(_adapter.getView(R.layout.item_main_project, parent))
+            })
+            return
+        }
+        //
+
         ll_header.visibility = if (type == TYPE_CB) View.VISIBLE else View.GONE
         ll_header2.visibility = if (type == TYPE_LX) View.VISIBLE else View.GONE
         ll_header1.visibility = if (type == TYPE_GZ || type == TYPE_YT) View.VISIBLE else View.GONE
@@ -441,6 +451,8 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
         const val TYPE_LX = 1
         const val TYPE_YT = 2
         const val TYPE_GZ = 3
+        const val TYPE_DY = 0
+        const val TYPE_TC = 5
 
         fun newInstance(type: Int): ProjectListFragment {
             val fragment = ProjectListFragment()

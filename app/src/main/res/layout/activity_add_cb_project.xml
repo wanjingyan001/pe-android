@@ -84,6 +84,20 @@
 
                     <TextView
                         style="@style/ItemTextLabel"
+                        android:text="公司名称" />
+
+                    <EditText
+                        android:id="@+id/et_company_name"
+                        style="@style/ItemTextValue" />
+                </TableRow>
+
+                <TableRow
+                    android:background="@drawable/divider_bottom"
+                    android:paddingBottom="15dp"
+                    android:paddingTop="15dp">
+
+                    <TextView
+                        style="@style/ItemTextLabel"
                         android:text="相关概念" />
 
                     <EditText

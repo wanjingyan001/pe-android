@@ -44,9 +44,11 @@ class MainProjectFragment : BaseFragment() {
         get() = R.layout.fragment_main_project //To change initializer of created properties use File | Settings | File Templates.
 
     val fragments = arrayOf(
+            ProjectListFragment.newInstance(ProjectListFragment.TYPE_DY),
             ProjectListFragment.newInstance(ProjectListFragment.TYPE_CB),
             ProjectListFragment.newInstance(ProjectListFragment.TYPE_LX),
-            ProjectListFragment.newInstance(ProjectListFragment.TYPE_YT)
+            ProjectListFragment.newInstance(ProjectListFragment.TYPE_YT),
+            ProjectListFragment.newInstance(ProjectListFragment.TYPE_TC)
     )
     lateinit var adapter: RecyclerAdapter<ProjectBean>
 
