@@ -223,6 +223,7 @@ class ProjectActivity : ToolbarActivity() {
 
             R.id.tv_xmws -> ProjectBookActivity.start(this@ProjectActivity, project)
             R.id.tv_xmcb -> StoreProjectAddActivity.startView(this@ProjectActivity, project)
+            R.id.tv_gdzx -> ShareholderCreditActivity.start(this@ProjectActivity, project)
 
             // 跟踪记录,尽调数据,投决数据,投后管理数据
             R.id.tv_xmgz -> RecordTraceActivity.start(this@ProjectActivity, project)
