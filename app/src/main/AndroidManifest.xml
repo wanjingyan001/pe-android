@@ -453,6 +453,29 @@
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity android:name=".ui.user.CityAreaActivity" />
         <activity android:name=".ui.user.IndustryActivity"></activity>
+
+        <activity
+            android:name=".ui.project.SurveyDataActivity"
+            android:configChanges="keyboard|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.project.InvestSuggestActivity"
+            android:configChanges="keyboard|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.project.ManageDataActivity"
+            android:configChanges="keyboard|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity android:name=".ui.project.RecordTraceActivity" />
+        <activity
+            android:name=".ui.project.RecordDetailActivity"
+            android:configChanges="keyboard|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity android:name=".ui.weekly.WeeklyActivity"></activity>
     </application>
 
 </manifest>

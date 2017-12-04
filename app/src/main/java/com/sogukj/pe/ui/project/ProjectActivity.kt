@@ -114,7 +114,7 @@ class ProjectActivity : ToolbarActivity() {
                         tv_more_yq.visibility = View.VISIBLE
                 })
         disable(tv_cwsj)
-//        disable(tv_gdzx)
+        disable(tv_gdzx)
         disable(tv_xmzy)
         val user = Store.store.getUser(this)
         SoguApi.getService(application)
@@ -224,6 +224,12 @@ class ProjectActivity : ToolbarActivity() {
             R.id.tv_xmws -> ProjectBookActivity.start(this@ProjectActivity, project)
             R.id.tv_xmcb -> StoreProjectAddActivity.startView(this@ProjectActivity, project)
             R.id.tv_gdzx -> ShareholderCreditActivity.start(this@ProjectActivity, project)
+
+        // 跟踪记录,尽调数据,投决数据,投后管理数据
+            R.id.tv_xmgz -> RecordTraceActivity.start(this@ProjectActivity, project)
+            R.id.tv_xmjd -> SurveyDataActivity.start(this@ProjectActivity, project)
+            R.id.tv_xmtj -> InvestSuggestActivity.start(this@ProjectActivity, project)
+            R.id.tv_xmthgl -> ManageDataActivity.start(this@ProjectActivity, project)
         }
     }
 
