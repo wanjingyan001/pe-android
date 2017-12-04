@@ -118,11 +118,11 @@
                         style="@style/TableTextLabel"
                         android:text="专业" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/tv_profession"
                         style="@style/TableTextValue"
                         android:layout_marginRight="10dp"
-                        android:hint="请选择" />
+                        android:hint="请填写" />
 
 
                     <ImageView
@@ -139,11 +139,11 @@
                         style="@style/TableTextLabel"
                         android:text="专业描述" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/tv_description"
                         style="@style/TableTextValue"
                         android:layout_marginRight="10dp"
-                        android:hint="请选择" />
+                        android:hint="请填写" />
 
 
                     <ImageView
