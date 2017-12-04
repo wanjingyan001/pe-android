@@ -396,11 +396,64 @@
         <activity android:name=".ui.user.UserResumeActivity" />
         <activity android:name=".ui.user.WorkExpericenceAddActivity" />
         <activity android:name=".ui.user.EducationActivity" />
-        <activity android:name=".ui.fund.FundMainActivity" />
-        <activity android:name=".ui.fund.FundDetailActivity" />
-        <activity android:name=".ui.fund.FundSearchActivity" />
-        <activity android:name=".ui.fund.FundStructureActivity" />
-        <activity android:name=".ui.fund.FundAccountActivity" />
+        <activity
+            android:name=".ui.fund.FundMainActivity"
+            android:configChanges="keyboard|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.fund.FundDetailActivity"
+            android:configChanges="keyboard|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.fund.FundSearchActivity"
+            android:configChanges="keyboard|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.fund.FundStructureActivity"
+            android:configChanges="keyboard|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.fund.FundAccountActivity"
+            android:configChanges="keyboard|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.project.ShareholderCreditActivity"
+            android:configChanges="keyboard|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".ui.project.AddCreditActivity"
+            android:configChanges="keyboard|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.project.SensitiveInfoActivity"
+            android:configChanges="keyboard|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.project.SecondaryActivity"
+            android:configChanges="keyboard|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.user.OrganizationActivity"
+            android:configChanges="keyboard|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.user.SettingActivity"
+            android:configChanges="keyboard|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity android:name=".ui.user.CityAreaActivity" />
+        <activity android:name=".ui.user.IndustryActivity"></activity>
+
         <activity
             android:name=".ui.project.SurveyDataActivity"
             android:configChanges="keyboard|orientation|screenSize"
