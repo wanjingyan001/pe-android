@@ -10,6 +10,7 @@ class ProjectBean : Serializable {
     var shortName: String? = null;
     var state: String? = null//	Datetime	现状	A轮  B轮  类似这些（type=2时取此数据）
     var update_time: String? = null//	Varchar	最近更新时间	（type=2时取此数据）
+    var next_time: String? = null//	Varchar	退出时间	（type=5时取此数据）
     var add_time: String? = null//	Varchar	录入时间	（type=1时取此数据）
     var status: Int = 1//	Int	状态（默认1）	0禁用 1准备中  2已完成（type=1时取此数据）
     var company_id: Int? = null

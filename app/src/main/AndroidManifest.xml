@@ -84,7 +84,8 @@
         <activity
             android:name=".ui.project.ProjectAddActivity"
             android:configChanges="orientation|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity
             android:name=".ui.project.ProjectActivity"
             android:configChanges="orientation|screenSize"
@@ -452,8 +453,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity android:name=".ui.user.CityAreaActivity" />
-        <activity android:name=".ui.user.IndustryActivity"></activity>
-
+        <activity android:name=".ui.user.IndustryActivity" />
         <activity
             android:name=".ui.project.SurveyDataActivity"
             android:configChanges="keyboard|orientation|screenSize"
@@ -475,7 +475,8 @@
             android:configChanges="keyboard|orientation|screenSize"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity android:name=".ui.weekly.WeeklyActivity"></activity>
+        <activity android:name=".ui.weekly.WeeklyActivity" />
+        <activity android:name=".ui.weekly.WeeklyRecordActivity"></activity>
     </application>
 
 </manifest>

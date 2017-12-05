@@ -91,6 +91,7 @@ interface SoguService {
             , @Field("regLocation") regLocation: String? = null
             , @Field("creditCode") creditCode: String? = null
             , @Field("info") info: String? = null
+            , @Field("type") type: Int? = null
             , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
     ): Observable<Payload<Object>>
 
@@ -426,12 +427,12 @@ interface SoguService {
             , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
     ): Observable<Payload<ProjectDetailBean>>
 
-    @FormUrlEncoded
-    @POST("/api/news/changeStatus")
-    fun editProject(
-            @Field("company_id") company_id: Int
-            , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
-    ): Observable<Payload<Object>>
+//    @FormUrlEncoded
+//    @POST("/api/news/changeStatus")
+//    fun editProject(
+//            @Field("company_id") company_id: Int
+//            , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
+//    ): Observable<Payload<Object>>
 
     @FormUrlEncoded
     @POST("/api/news/deleteProject")
@@ -524,9 +525,15 @@ interface SoguService {
     fun getStoreProject(@Field("company_id") company_id: Int): Observable<Payload<StoreProjectBean>>
 
 
+//    @FormUrlEncoded
+//    @POST("/api/news/setUpProject")
+//    fun setUpProject(@Field("company_id") company_id: Int): Observable<Payload<Object>>
+
+    // 项目改投（修改项目状态）
+    // 非空（1=>调研转储备，2=>储备转立项，3=>立项转已投，4=>已投转退出）
     @FormUrlEncoded
-    @POST("/api/news/setUpProject")
-    fun setUpProject(@Field("company_id") company_id: Int): Observable<Payload<Object>>
+    @POST("/api/news/changeStatus")
+    fun changeStatus(@Field("company_id") company_id: Int, @Field("status") status: Int): Observable<Payload<Object>>
 
     @FormUrlEncoded
     @POST("/api/Listinformation/projectBook")

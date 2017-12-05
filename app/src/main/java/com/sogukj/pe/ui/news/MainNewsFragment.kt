@@ -152,7 +152,7 @@ class MainNewsFragment : BaseFragment() {
                         .into(iv_user)
         }
         iv_add.setOnClickListener {
-            ProjectAddActivity.start(baseActivity)
+            ProjectAddActivity.startAdd(baseActivity)
         }
         search_view.onTextChange = { text ->
             if (TextUtils.isEmpty(text)) {

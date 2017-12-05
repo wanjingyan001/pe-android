@@ -209,7 +209,11 @@ class MainProjectFragment : BaseFragment() {
 
 
         fb_add.setOnClickListener {
-            StoreProjectAddActivity.startAdd(baseActivity)
+            if(view_pager.currentItem == 0) {
+                ProjectAddActivity.startAdd(baseActivity)
+            } else if(view_pager.currentItem == 1) {
+                StoreProjectAddActivity.startAdd(baseActivity)
+            }
         }
         fb_search.setOnClickListener {
             ll_search.visibility = View.VISIBLE
@@ -248,7 +252,7 @@ class MainProjectFragment : BaseFragment() {
 
             override fun onPageSelected(position: Int) {
                 tabs?.getTabAt(position)?.select()
-                fb_add.visibility = if (position == 0) View.VISIBLE else View.GONE
+                fb_add.visibility = if (position == 0 || position == 1) View.VISIBLE else View.GONE
 //                iv_search?.visibility = if (position == 2) View.VISIBLE else View.GONE
 //                iv_add?.visibility = if (position == 1 && user?.is_admin == 1) View.VISIBLE else View.GONE
             }
@@ -293,14 +297,18 @@ class MainProjectFragment : BaseFragment() {
         val user = Store.store.getUser(baseActivity!!)
         val pos = tabs.selectedTabPosition
         var type = when (pos) {
-            0 -> 4;
+            0 -> 6
+            1 -> 4
+            2 -> 1
+            3 -> 2
+            4 -> 5
             else -> pos
         }
         val tmplist = LinkedList<String>()
         tmplist.add(text)
         Store.store.projectSearch(baseActivity!!, tmplist)
         SoguApi.getService(baseActivity!!.application)
-                .listProject(offset = offset, pageSize = 20, uid = user?.uid, type = type, fuzzyQuery = text)
+                .listProject(offset = offset, pageSize = 20, uid = user?.uid, type = null, fuzzyQuery = text)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->

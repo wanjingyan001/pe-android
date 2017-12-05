@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import com.framework.base.ToolbarActivity
+import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.util.Trace
@@ -20,8 +21,20 @@ class ProjectAddActivity : ToolbarActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_project)
-        setTitle("申请新增项目数据")
         setBack(true)
+
+        var type = intent.getStringExtra(Extras.TYPE)
+        if(type == "ADD"){
+            setTitle("申请新增项目数据")
+        } else if(type == "EDIT"){
+            setTitle("编辑调研项目")
+            var data = intent.getSerializableExtra(Extras.DATA) as ProjectBean
+            et_name.setText(data.name)
+            et_faren.setText(data.legalPersonName)
+            et_reg_address.setText(data.regLocation)
+            et_credit_code.setText(data.creditCode)
+            et_other.setText(data.info)
+        }
     }
 
     override val menuId: Int
@@ -49,7 +62,7 @@ class ProjectAddActivity : ToolbarActivity() {
                         , creditCode = project.creditCode
                         , legalPersonName = project.legalPersonName
                         , regLocation = project.regLocation
-                        , info = project.info)
+                        , info = project.info, type = 6)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -67,8 +80,17 @@ class ProjectAddActivity : ToolbarActivity() {
     }
 
     companion object {
-        fun start(ctx: Activity?) {
-            ctx?.startActivity(Intent(ctx, ProjectAddActivity::class.java))
+        fun startAdd(ctx: Activity?) {
+            var intent = Intent(ctx, ProjectAddActivity::class.java)
+            intent.putExtra(Extras.TYPE, "ADD")
+            ctx?.startActivity(intent)
+        }
+
+        fun startEdit(ctx: Activity?, data : ProjectBean) {
+            var intent = Intent(ctx, ProjectAddActivity::class.java)
+            intent.putExtra(Extras.TYPE, "EDIT")
+            intent.putExtra(Extras.DATA, data)
+            ctx?.startActivity(intent)
         }
     }
 }

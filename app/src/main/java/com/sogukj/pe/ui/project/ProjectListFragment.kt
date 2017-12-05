@@ -56,33 +56,26 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //
-        if(type == TYPE_DY || type == TYPE_TC) {
-            adapter = RecyclerAdapter<ProjectBean>(baseActivity!!, { _adapter, parent, t ->
-                ProjectHolder(_adapter.getView(R.layout.item_main_project, parent))
-            })
-            return
-        }
-        //
-
-        ll_header.visibility = if (type == TYPE_CB) View.VISIBLE else View.GONE
+        ll_header.visibility = if (type == TYPE_CB || type == TYPE_DY) View.VISIBLE else View.GONE
         ll_header2.visibility = if (type == TYPE_LX) View.VISIBLE else View.GONE
         ll_header1.visibility = if (type == TYPE_GZ || type == TYPE_YT) View.VISIBLE else View.GONE
+        ll_header3.visibility = if (type == TYPE_TC) View.VISIBLE else View.GONE
         adapter = RecyclerAdapter<ProjectBean>(baseActivity!!, { _adapter, parent, t ->
             when (type) {
-                TYPE_GZ, TYPE_YT -> ProjectHolder(_adapter.getView(R.layout.item_main_project, parent))
+                TYPE_GZ, TYPE_YT, TYPE_TC -> ProjectHolder(_adapter.getView(R.layout.item_main_project, parent))
                 TYPE_LX -> ProjectHolder(_adapter.getView(R.layout.item_main_project_2, parent))
-                TYPE_CB -> StoreProjectHolder(_adapter.getView(R.layout.item_main_project_3, parent))
+                TYPE_CB, TYPE_DY -> StoreProjectHolder(_adapter.getView(R.layout.item_main_project_3, parent))
                 else -> throw IllegalArgumentException()
             }
 
         })
         adapter.onItemClick = { v, p ->
             val project = adapter.getItem(p);
-            if (type == TYPE_CB)
-                StoreProjectAddActivity.startView(baseActivity, project)
-            else
-                ProjectActivity.start(baseActivity, project)
+//            if (type == TYPE_CB || type == TYPE_DY)
+//                StoreProjectAddActivity.startView(baseActivity, project)
+//            else
+//                ProjectActivity.start(baseActivity, project)
+            ProjectActivity.start(baseActivity, project)
         }
 
         val user = Store.store.getUser(baseActivity!!)
@@ -169,7 +162,7 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
         iv_sort_time.visibility = View.GONE
         iv_sort_state.visibility = View.GONE
         val imgAsc = if (asc == -1) R.drawable.ic_down else R.drawable.ic_up
-        if (type == TYPE_CB) {
+        if (type == TYPE_CB || type == TYPE_DY) {
             val view = when (Math.abs(orderBy)) {
                 1 -> iv_sort_name_1
                 4 -> iv_sort_time_1
@@ -249,7 +242,9 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                     .negativeText("取消")
                     .show()
         }
-        if (type == TYPE_YT) tvAdd.visibility = View.GONE
+        if (type == TYPE_TC) tvAdd.visibility = View.GONE
+        var toast_txt = if(type == TYPE_LX) "添加已投" else if(type == TYPE_YT) "添加到退出" else ""
+        tvAdd.text = toast_txt
         pop.isTouchable = true
         pop.isFocusable = true
         pop.isOutsideTouchable = true
@@ -282,20 +277,30 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
     }
 
     fun doAdd(position: Int) {
+        var status = if(type == TYPE_LX) 3 else if(type == TYPE_YT) 4 else 0
         val project = adapter.dataList[position]
         SoguApi.getService(baseActivity!!.application)
-                .editProject(project.company_id!!)
+                //.editProject(project.company_id!!)
+                .changeStatus(project.company_id!!, status)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        showToast("添加拟投成功")
+                        if(type == TYPE_LX){
+                            showToast("添加拟投成功")
+                        } else if(type == TYPE_YT){
+                            showToast("已添加到退出")
+                        }
                         adapter.dataList.removeAt(position)
                         adapter.notifyDataSetChanged()
                     } else showToast(payload.message)
                 }, { e ->
                     Trace.e(e)
-                    showToast("添加拟投失败")
+                    if(type == TYPE_LX){
+                        showToast("添加拟投失败")
+                    } else if(type == TYPE_YT){
+                        showToast("添加到退出失败")
+                    }
                 })
 
     }
@@ -337,20 +342,41 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                         .getOrNull(1)
             }
 
-            btnAdd.setOnClickListener {
-                MaterialDialog.Builder(baseActivity!!)
-                        .theme(Theme.LIGHT)
-                        .content("是否确认立项")
-                        .negativeText("取消")
-                        .positiveText("确认")
-                        .onPositive { dialog, which ->
-                            doSetUp(position, data)
-                            dialog.dismiss()
-                        }.show()
-
+            if(type == TYPE_DY){
+                btnAdd.text = "+储备"
+                btnAdd.setOnClickListener {
+                    MaterialDialog.Builder(baseActivity!!)
+                            .theme(Theme.LIGHT)
+                            .content("是否确认储备")
+                            .negativeText("取消")
+                            .positiveText("确认")
+                            .onPositive { dialog, which ->
+                                doSetUp(position, data, 1)
+                                dialog.dismiss()
+                            }.show()
+                }
+            } else if(type == TYPE_CB){
+                btnAdd.text = "+立项"
+                btnAdd.setOnClickListener {
+                    MaterialDialog.Builder(baseActivity!!)
+                            .theme(Theme.LIGHT)
+                            .content("是否确认立项")
+                            .negativeText("取消")
+                            .positiveText("确认")
+                            .onPositive { dialog, which ->
+                                doSetUp(position, data, 2)
+                                dialog.dismiss()
+                            }.show()
+                }
             }
+
             tvEdit.setOnClickListener {
-                StoreProjectAddActivity.startEdit(baseActivity, data)
+                if(type == TYPE_CB){
+                    StoreProjectAddActivity.startEdit(baseActivity, data)
+                } else if(type == TYPE_DY){
+                    ProjectAddActivity.startEdit(baseActivity, data)
+                }
+
             }
             tvDel.setOnClickListener {
                 MaterialDialog.Builder(baseActivity!!)
@@ -367,9 +393,10 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
 
     }
 
-    fun doSetUp(position: Int, data: ProjectBean) {
+    fun doSetUp(position: Int, data: ProjectBean, status: Int) {
         SoguApi.getService(baseActivity!!.application)
-                .setUpProject(data.company_id!!)
+                //.setUpProject(data.company_id!!)
+                .changeStatus(data.company_id!!, status!!)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -404,7 +431,7 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                     2 -> "已完成"
                     else -> "准备中"
                 }
-            } else {
+            } else if (type == 2 || type == 5) {
                 tv2.text = data.state
                 tv2.textColor = when (data.state) {
                     "初创" -> Color.parseColor("#9e9e9e")
@@ -436,7 +463,8 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
             }
             tv3.text = when (type) {
                 1 -> data.add_time
-                else -> data.update_time
+                2 -> data.update_time
+                else -> data.next_time
             }
 
             if (tv2.text.isNullOrEmpty()) tv2.text = "--"
@@ -451,7 +479,7 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
         const val TYPE_LX = 1
         const val TYPE_YT = 2
         const val TYPE_GZ = 3
-        const val TYPE_DY = 0
+        const val TYPE_DY = 6
         const val TYPE_TC = 5
 
         fun newInstance(type: Int): ProjectListFragment {
