@@ -185,41 +185,41 @@
                     android:text="储备信息"
                     app:layout_columnWeight="1" />
 
-                <com.sogukj.pe.view.TipsView
-                    android:id="@+id/tv_xmgz"
-                    style="@style/ItemGridProject"
-                    android:drawableTop="@drawable/ic_proj_gzjl"
-                    android:onClick="onClick"
-                    android:tag="tv_xmzw"
-                    android:text="跟踪记录"
-                    app:layout_columnWeight="1" />
+                <!--<com.sogukj.pe.view.TipsView-->
+                    <!--android:id="@+id/tv_xmgz"-->
+                    <!--style="@style/ItemGridProject"-->
+                    <!--android:drawableTop="@drawable/ic_proj_gzjl"-->
+                    <!--android:onClick="onClick"-->
+                    <!--android:tag="tv_xmzw"-->
+                    <!--android:text="跟踪记录"-->
+                    <!--app:layout_columnWeight="1" />-->
 
-                <com.sogukj.pe.view.TipsView
-                    android:id="@+id/tv_xmjd"
-                    style="@style/ItemGridProject"
-                    android:drawableTop="@drawable/ic_proj_jdsj"
-                    android:onClick="onClick"
-                    android:tag="tv_xmzw"
-                    android:text="尽调数据"
-                    app:layout_columnWeight="1" />
+                <!--<com.sogukj.pe.view.TipsView-->
+                    <!--android:id="@+id/tv_xmjd"-->
+                    <!--style="@style/ItemGridProject"-->
+                    <!--android:drawableTop="@drawable/ic_proj_jdsj"-->
+                    <!--android:onClick="onClick"-->
+                    <!--android:tag="tv_xmzw"-->
+                    <!--android:text="尽调数据"-->
+                    <!--app:layout_columnWeight="1" />-->
 
-                <com.sogukj.pe.view.TipsView
-                    android:id="@+id/tv_xmtj"
-                    style="@style/ItemGridProject"
-                    android:drawableTop="@drawable/ic_proj_tjsj"
-                    android:onClick="onClick"
-                    android:tag="tv_xmzw"
-                    android:text="投决数据"
-                    app:layout_columnWeight="1" />
+                <!--<com.sogukj.pe.view.TipsView-->
+                    <!--android:id="@+id/tv_xmtj"-->
+                    <!--style="@style/ItemGridProject"-->
+                    <!--android:drawableTop="@drawable/ic_proj_tjsj"-->
+                    <!--android:onClick="onClick"-->
+                    <!--android:tag="tv_xmzw"-->
+                    <!--android:text="投决数据"-->
+                    <!--app:layout_columnWeight="1" />-->
 
-                <com.sogukj.pe.view.TipsView
-                    android:id="@+id/tv_xmthgl"
-                    style="@style/ItemGridProject"
-                    android:drawableTop="@drawable/ic_proj_thglsj"
-                    android:onClick="onClick"
-                    android:tag="tv_xmzw"
-                    android:text="投后管理数据"
-                    app:layout_columnWeight="1" />
+                <!--<com.sogukj.pe.view.TipsView-->
+                    <!--android:id="@+id/tv_xmthgl"-->
+                    <!--style="@style/ItemGridProject"-->
+                    <!--android:drawableTop="@drawable/ic_proj_thglsj"-->
+                    <!--android:onClick="onClick"-->
+                    <!--android:tag="tv_xmzw"-->
+                    <!--android:text="投后管理数据"-->
+                    <!--app:layout_columnWeight="1" />-->
             </android.support.v7.widget.GridLayout>
 
             <LinearLayout

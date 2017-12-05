@@ -217,47 +217,47 @@
                         android:src="@drawable/ic_arrow_r" />
                 </TableRow>
 
-                <TableRow android:background="@drawable/divider_bottom">
+                <!--<TableRow android:background="@drawable/divider_bottom">-->
 
-                    <TextView
-                        style="@style/TableTextLabel"
-                        android:text="附加信息" />
+                    <!--<TextView-->
+                        <!--style="@style/TableTextLabel"-->
+                        <!--android:text="附加信息" />-->
 
-                    <TextView
-                        android:id="@+id/tv_other"
-                        style="@style/TableTextValue"
-                        android:layout_marginRight="10dp"
-                        android:hint="请选择" />
-
-
-                    <ImageView
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_gravity="center_vertical"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/ic_arrow_r" />
-                </TableRow>
-
-                <TableRow android:background="@drawable/divider_bottom">
-
-                    <TextView
-                        style="@style/TableTextLabel"
-                        android:text="工作类型" />
-
-                    <TextView
-                        android:id="@+id/tv_work_type"
-                        style="@style/TableTextValue"
-                        android:layout_marginRight="10dp"
-                        android:hint="请选择" />
+                    <!--<TextView-->
+                        <!--android:id="@+id/tv_other"-->
+                        <!--style="@style/TableTextValue"-->
+                        <!--android:layout_marginRight="10dp"-->
+                        <!--android:hint="请选择" />-->
 
 
-                    <ImageView
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_gravity="center_vertical"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/ic_arrow_r" />
-                </TableRow>
+                    <!--<ImageView-->
+                        <!--android:layout_width="25dp"-->
+                        <!--android:layout_height="25dp"-->
+                        <!--android:layout_gravity="center_vertical"-->
+                        <!--android:scaleType="centerInside"-->
+                        <!--android:src="@drawable/ic_arrow_r" />-->
+                <!--</TableRow>-->
+
+                <!--<TableRow android:background="@drawable/divider_bottom">-->
+
+                    <!--<TextView-->
+                        <!--style="@style/TableTextLabel"-->
+                        <!--android:text="工作类型" />-->
+
+                    <!--<TextView-->
+                        <!--android:id="@+id/tv_work_type"-->
+                        <!--style="@style/TableTextValue"-->
+                        <!--android:layout_marginRight="10dp"-->
+                        <!--android:hint="请选择" />-->
+
+
+                    <!--<ImageView-->
+                        <!--android:layout_width="25dp"-->
+                        <!--android:layout_height="25dp"-->
+                        <!--android:layout_gravity="center_vertical"-->
+                        <!--android:scaleType="centerInside"-->
+                        <!--android:src="@drawable/ic_arrow_r" />-->
+                <!--</TableRow>-->
 
             </TableLayout>
         </LinearLayout>

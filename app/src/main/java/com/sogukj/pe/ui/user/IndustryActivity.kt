@@ -47,7 +47,7 @@ class IndustryActivity : BaseActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_industry)
         Utils.setWindowStatusBarColor(this, R.color.white)
-        toolbar_title.text = "城市列表"
+        toolbar_title.text = "行业列表"
         addTv.text = "完成"
         addTv.setOnClickListener(this)
 
@@ -128,9 +128,9 @@ class IndustryActivity : BaseActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.addTv -> {
-                val city = parentAdapter.dataList[selectPosition]
+                val industry = childrenAdapter.dataList[selectPosition]
                 val intent = Intent()
-                intent.putExtra(Extras.DATA, city)
+                intent.putExtra(Extras.DATA, industry)
                 setResult(Extras.RESULTCODE, intent)
                 finish()
             }

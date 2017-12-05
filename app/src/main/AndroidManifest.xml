@@ -454,6 +454,7 @@
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity android:name=".ui.user.CityAreaActivity" />
         <activity android:name=".ui.user.IndustryActivity" />
+
         <activity
             android:name=".ui.project.SurveyDataActivity"
             android:configChanges="keyboard|orientation|screenSize"
@@ -477,6 +478,10 @@
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity android:name=".ui.weekly.WeeklyActivity" />
         <activity android:name=".ui.weekly.WeeklyRecordActivity"></activity>
+
+        <activity android:name=".ui.user.ResumeEditorActivity" />
+        <activity android:name=".ui.calendar.CalendarMainActivity"></activity>
+
     </application>
 
 </manifest>

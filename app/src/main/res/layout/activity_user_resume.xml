@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:focusable="true"
     android:focusableInTouchMode="true"
+    android:orientation="vertical"
     tools:context="com.sogukj.pe.ui.user.UserResumeActivity">
 
     <include layout="@layout/layout_shareholder_toolbar" />
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/divider2">
@@ -253,6 +253,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="38dp"
+                    android:layout_gravity="center_vertical"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
@@ -263,15 +264,27 @@
                         android:background="@color/color_main" />
 
                     <TextView
+                        android:id="@+id/educationLayout"
                         style="@style/SoguTextNormal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:drawableRight="@drawable/ic_right"
+                        android:gravity="center_vertical"
                         android:text="教育经历" />
                 </LinearLayout>
 
-                <FrameLayout
+                <LinearLayout
                     android:id="@+id/fl_education"
-                    android:layout_gravity="center">
+                    android:layout_gravity="center"
+                    android:orientation="vertical">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/educationList"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="false">
+
+                    </android.support.v7.widget.RecyclerView>
 
                     <TextView
                         android:id="@+id/tv_add_education"
@@ -284,12 +297,13 @@
                         android:text="添加教育经历 +"
                         android:textColor="@color/textColorBlue"
                         android:textSize="15sp" />
-                </FrameLayout>
+                </LinearLayout>
             </TableLayout>
 
             <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
                 android:layout_marginTop="8dp"
                 android:background="@color/white"
                 android:paddingLeft="20dp"
@@ -308,15 +322,27 @@
                         android:background="@color/color_main" />
 
                     <TextView
+                        android:id="@+id/workLayout"
                         style="@style/SoguTextNormal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:drawableRight="@drawable/ic_right"
+                        android:gravity="center_vertical"
                         android:text="工作经历" />
                 </LinearLayout>
 
-                <FrameLayout
+                <LinearLayout
                     android:id="@+id/fl_work_expericence"
-                    android:layout_gravity="center">
+                    android:layout_gravity="center"
+                    android:orientation="vertical">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/workList"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="false">
+
+                    </android.support.v7.widget.RecyclerView>
 
                     <TextView
                         android:id="@+id/tv_add_work_expericence"
@@ -329,8 +355,8 @@
                         android:text="添加工作经历 +"
                         android:textColor="@color/textColorBlue"
                         android:textSize="15sp" />
-                </FrameLayout>
+                </LinearLayout>
             </TableLayout>
         </LinearLayout>
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 </LinearLayout>

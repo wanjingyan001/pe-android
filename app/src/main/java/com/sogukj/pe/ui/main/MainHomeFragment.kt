@@ -8,6 +8,7 @@ import android.widget.TextView
 import com.framework.base.BaseFragment
 import com.sogukj.pe.R
 import com.sogukj.pe.ui.approve.EntryApproveActivity
+import com.sogukj.pe.ui.calendar.CalendarMainActivity
 import com.sogukj.pe.ui.fund.FundMainActivity
 import com.sogukj.pe.ui.news.NewsListActivity
 import com.sogukj.pe.ui.user.UserActivity
@@ -33,10 +34,11 @@ class MainHomeFragment : BaseFragment() {
         tv_sp.setOnClickListener {
             EntryApproveActivity.start(baseActivity)
         }
-        tv_jj.onClick { FundMainActivity.start(baseActivity) }
         tv_weekly.onClick { WeeklyActivity.start(baseActivity) }
+        tv_jj.setOnClickListener { FundMainActivity.start(baseActivity) }
+        tv_rl.setOnClickListener { CalendarMainActivity.start(baseActivity) }
 //        disable(tv_jj)
-        disable(tv_rl)
+//        disable(tv_rl)
         disable(tv_lxr)
     }
 

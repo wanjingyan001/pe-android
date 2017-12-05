@@ -1,10 +1,12 @@
 package com.sogukj.pe.util;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Build;
+import android.support.design.widget.TabLayout;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -12,7 +14,11 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.LinearLayout;
 
+import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -62,6 +68,7 @@ public class Utils {
      * @param context
      * @return
      */
+    @SuppressLint("MissingPermission")
     public static String getIMEI(Context context) {
         TelephonyManager telephonemanage = (TelephonyManager) context.getSystemService(Activity.TELEPHONY_SERVICE);
         return telephonemanage.getDeviceId();
@@ -87,6 +94,7 @@ public class Utils {
      * @param context
      * @return
      */
+    @SuppressLint("MissingPermission")
     public static String getIMSI(Context context) {
         TelephonyManager telephonemanage = (TelephonyManager) context.getSystemService(Activity.TELEPHONY_SERVICE);
         return telephonemanage.getSubscriberId();
@@ -175,5 +183,53 @@ public class Utils {
         return input != null && input.length() > 0 && Pattern.matches(regex, input);
     }
 
+
+    @SuppressLint("SimpleDateFormat")
+    public static String getTime(Date date) {//可根据需要自行截取数据显示
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM");
+        return format.format(date);
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    public static String getTime(long time) {//可根据需要自行截取数据显示
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+        return format.format(new Date(time));
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    public static String getDayFromDate(long time) {
+        SimpleDateFormat format = new SimpleDateFormat("dd");
+        return format.format(new Date(time));
+    }
+
+    public static void setUpIndicatorWidth(TabLayout tabLayout, int marginLeft, int marginRight, Context context) {
+        Class<?> tabLayoutClass = tabLayout.getClass();
+        Field tabStrip = null;
+        try {
+            tabStrip = tabLayoutClass.getDeclaredField("mTabStrip");
+            tabStrip.setAccessible(true);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+        LinearLayout layout = null;
+        try {
+            if (tabStrip != null) {
+                layout = (LinearLayout) tabStrip.get(tabLayout);
+            }
+            for (int i = 0; i < layout.getChildCount(); i++) {
+                View child = layout.getChildAt(i);
+                child.setPadding(0, 0, 0, 0);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    params.setMarginStart(dpToPx(context, marginLeft));
+                    params.setMarginEnd(dpToPx(context, marginRight));
+                }
+                child.setLayoutParams(params);
+                child.invalidate();
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

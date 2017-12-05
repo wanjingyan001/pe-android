@@ -729,7 +729,7 @@ interface SoguService {
      * 行业分类
      */
     @POST("/api/Index/industryCategory")
-    fun industryCategory():Observable<Payload<List<Industry>>>
+    fun industryCategory(): Observable<Payload<List<Industry>>>
 
     /**
      *获取个人简历所有信息
@@ -737,6 +737,24 @@ interface SoguService {
     @FormUrlEncoded
     @POST("/api/Userfont/getPersonalResume")
     fun getPersonalResume(@Field("uid") uid: Int): Observable<Payload<Resume>>
+
+    /**
+     * 简历-添加教育经历
+     */
+    @POST("/api/Userfont/addExperience")
+    fun addExperience(@Body reqBean: EducationReqBean): Observable<Payload<EducationBean>>
+
+    /**
+     * 简历-添加工作经历
+     */
+    @POST("/api/Userfont/addExperience")
+    fun addWorkExperience(@Body reqBean: WorkReqBean): Observable<Payload<WorkEducationBean>>
+
+    /**
+     * 简历-修改个人简历基本信息
+     */
+    @POST("/api/Userfont/editResumeBaseInfo")
+    fun editResumeBaseInfo(@Body ae:UserResumeReqBean): Observable<Payload<Any>>
 
     companion object {
         const val APPKEY_NAME = "appkey"

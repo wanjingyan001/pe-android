@@ -125,7 +125,7 @@ class CityAreaActivity : BaseActivity(), View.OnClickListener {
                 val city = cityAdapter.dataList[selectPosition]
                 val intent = Intent()
                 intent.putExtra(Extras.DATA, city)
-                setResult(Extras.RESULTCODE, intent)
+                setResult(Extras.RESULTCODE3, intent)
                 finish()
             }
         }

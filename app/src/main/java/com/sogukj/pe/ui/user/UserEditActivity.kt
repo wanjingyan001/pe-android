@@ -52,8 +52,10 @@ class UserEditActivity : ToolbarActivity() {
         val departList = intent.getSerializableExtra(Extras.DATA) as ArrayList<DepartmentBean>?
         Store.store.getUser(this)?.apply {
             user = this
-            if (!TextUtils.isEmpty(name))
+            if (!TextUtils.isEmpty(name)){
                 tv_name?.setText(name)
+                tv_name?.isEnabled = false
+            }
             if (!TextUtils.isEmpty(phone))
                 tv_phone?.text = phone
             if (!TextUtils.isEmpty(email))
