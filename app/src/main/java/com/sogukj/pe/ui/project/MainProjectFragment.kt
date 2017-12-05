@@ -308,7 +308,7 @@ class MainProjectFragment : BaseFragment() {
         tmplist.add(text)
         Store.store.projectSearch(baseActivity!!, tmplist)
         SoguApi.getService(baseActivity!!.application)
-                .listProject(offset = offset, pageSize = 20, uid = user?.uid, type = null, fuzzyQuery = text)
+                .listProject(offset = offset, pageSize = 20, uid = user?.uid, type = 0, fuzzyQuery = text)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
