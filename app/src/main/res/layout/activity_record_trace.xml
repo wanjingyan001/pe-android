@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg_record"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
     tools:context="com.sogukj.pe.ui.project.RecordTraceActivity">
@@ -28,14 +29,17 @@
                 style="@style/SoguTextLarge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="25dp"
                 android:text="上海搜股科技" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_marginBottom="20dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
+                android:layout_marginTop="25dp"
                 android:background="@color/divider2" />
 
             <TableLayout
@@ -113,6 +117,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:background="@color/divider2" />
@@ -126,15 +131,18 @@
         </LinearLayout>
 
         <TextView
-            style="@style/SoguTextTitle2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="75dp"
+            android:layout_height="25dp"
             android:layout_gravity="right"
             android:layout_marginRight="30dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/rectangle"
             android:gravity="center"
-            android:text="投后管理" />
+            android:letterSpacing="0.04"
+            android:lineSpacingExtra="2sp"
+            android:text="投后管理"
+            android:textColor="#ffffff"
+            android:textSize="12sp" />
 
     </FrameLayout>
 

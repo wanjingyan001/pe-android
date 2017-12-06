@@ -7,6 +7,7 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.util.AttributeSet
 import android.util.Log
+import android.util.TypedValue
 import android.widget.ImageView
 import com.sogukj.pe.util.Utils
 import com.taobao.accs.utl.UT
@@ -31,7 +32,8 @@ class DotView : ImageView {
         super.onDraw(canvas)
         var lineWidth = Utils.dpToPx(context, 2)//线条宽度，单位px
         var radius = Utils.dpToPx(context, 7) / 2 //半径
-        var dot_pos = Utils.dpToPx(context, 23)
+        var dot_pos = Utils.dpToPx(context, 20)//点最上面的距离
+        var center_pos = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 23.5f, context.resources.displayMetrics).toInt()
         mPaint.isAntiAlias = false
         if (upFlag) {
             mPaint.color = Color.parseColor("#f1f1f1")
@@ -40,15 +42,15 @@ class DotView : ImageView {
         }
         if (lowFlag) {
             mPaint.color = Color.parseColor("#f1f1f1")
-            var rect = Rect(width / 2 - lineWidth / 2, dot_pos, width / 2 + lineWidth / 2, height)
+            var rect = Rect(width / 2 - lineWidth / 2, dot_pos + radius * 2, width / 2 + lineWidth / 2, height)
             canvas.drawRect(rect, mPaint)
         }
         if (mImportant) {
             mPaint.color = Color.parseColor("#ff5858")
-            canvas.drawCircle(width.toFloat() / 2, dot_pos.toFloat(), radius.toFloat(), mPaint)
+            canvas.drawCircle(width.toFloat() / 2, center_pos.toFloat(), radius.toFloat(), mPaint)
         } else {
             mPaint.color = Color.parseColor("#608cf8")
-            canvas.drawCircle(width.toFloat() / 2, dot_pos.toFloat(), radius.toFloat(), mPaint)
+            canvas.drawCircle(width.toFloat() / 2, center_pos.toFloat(), radius.toFloat(), mPaint)
         }
     }
 

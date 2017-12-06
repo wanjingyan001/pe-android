@@ -103,4 +103,5 @@
 
 
     <color name="weekly_label">#4b5266</color>
+    <color name="bg_record">#f7f9fc</color>
 </resources>

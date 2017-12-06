@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg_record"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
     tools:context="com.sogukj.pe.ui.project.RecordDetailActivity">
@@ -22,7 +23,7 @@
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_round_linearlayout"
+        android:background="@color/white"
         android:paddingLeft="20dp"
         android:paddingRight="20dp">
 
@@ -74,7 +75,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:background="@drawable/bg_round_linearlayout"
+        android:background="@color/white"
         android:paddingLeft="20dp"
         android:paddingRight="20dp">
 
@@ -100,7 +101,7 @@
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/bg_round_linearlayout"
+        android:background="@color/white"
         android:paddingLeft="20dp"
         android:paddingRight="20dp">
 
@@ -123,7 +124,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:background="@drawable/bg_round_linearlayout"
+        android:background="@color/white"
         android:paddingLeft="20dp"
         android:paddingRight="20dp">
 
