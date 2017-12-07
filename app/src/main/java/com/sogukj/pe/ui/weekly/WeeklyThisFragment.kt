@@ -34,8 +34,25 @@ class WeeklyThisFragment : BaseFragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         inflate = LayoutInflater.from(context)
+
+        var mItems = resources.getStringArray(R.array.spinner_this)
+        val arr_adapter = ArrayAdapter<String>(context, R.layout.spinner_item, mItems)
+        arr_adapter.setDropDownViewResource(R.layout.spinner_dropdown)
+        spinner_this.adapter = arr_adapter
+        spinner_this.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View,
+                                        pos: Int, id: Long) {
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+            }
+        })
+        childs = 1
+
         initView()
     }
+
+    var childs = 0
 
     fun initView() {
         val item = inflate.inflate(R.layout.weekly_item, null) as LinearLayout
@@ -46,7 +63,7 @@ class WeeklyThisFragment : BaseFragment() {
         item.addView(ll_event)
         item.addView(ll_leave)
 
-        root.addView(item, 0)
+        root.addView(item, childs++)
 
         val item1 = inflate.inflate(R.layout.weekly_item, null) as LinearLayout
 
@@ -58,7 +75,7 @@ class WeeklyThisFragment : BaseFragment() {
         item1.addView(ll_event1)
         item1.addView(ll_leave1)
 
-        root.addView(item1, 1)
+        root.addView(item1, childs++)
 
         //showToast("${root.childCount}")
 

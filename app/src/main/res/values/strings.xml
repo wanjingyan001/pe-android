@@ -56,4 +56,10 @@
         <item>投资部</item>
         <item>风控部</item>
     </string-array>
+
+    <string-array name="spinner_this">
+        <item>全部事务</item>
+        <item>项目事务</item>
+        <item>个人事务</item>
+    </string-array>
 </resources>
