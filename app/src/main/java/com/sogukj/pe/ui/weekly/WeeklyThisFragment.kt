@@ -14,10 +14,13 @@ import com.framework.base.BaseFragment
 import com.sogukj.pe.Extras
 
 import com.sogukj.pe.R
+import com.sogukj.pe.bean.WeeklyItemBean
 import com.sogukj.pe.bean.WeeklyWatchBean
 import com.sogukj.pe.view.CircleImageView
+import com.sogukj.pe.view.MyListView
 import kotlinx.android.synthetic.main.buchong_empty.*
 import kotlinx.android.synthetic.main.buchong_full.*
+import kotlinx.android.synthetic.main.fragment_schedule.*
 import kotlinx.android.synthetic.main.fragment_weekly_this.*
 import kotlinx.android.synthetic.main.send.*
 
@@ -55,29 +58,22 @@ class WeeklyThisFragment : BaseFragment() {
     var childs = 0
 
     fun initView() {
+        val data = ArrayList<WeeklyItemBean>()
+        data.add(WeeklyItemBean())
+        data.add(WeeklyItemBean())
+        data.add(WeeklyItemBean())
+
         val item = inflate.inflate(R.layout.weekly_item, null) as LinearLayout
-
-        val ll_event = inflate.inflate(R.layout.weekly_event, null) as LinearLayout
-        val ll_leave = inflate.inflate(R.layout.weekly_leave, null) as LinearLayout
-
-        item.addView(ll_event)
-        item.addView(ll_leave)
-
+        val event_list = item.findViewById(R.id.event_list) as MyListView
+        val adapter = WeeklyEventAdapter(context, data)
+        event_list.adapter = adapter
         root.addView(item, childs++)
 
         val item1 = inflate.inflate(R.layout.weekly_item, null) as LinearLayout
-
-        val ll_event1 = inflate.inflate(R.layout.weekly_event, null) as LinearLayout
-        //跟踪 bg_genzong FFFF5858
-        //出差 bg_chuchai FF56B9F6
-        val ll_leave1 = inflate.inflate(R.layout.weekly_leave, null) as LinearLayout
-
-        item1.addView(ll_event1)
-        item1.addView(ll_leave1)
-
+        val event_list1 = item1.findViewById(R.id.event_list) as MyListView
+        val adapter1 = WeeklyEventAdapter(context, data)
+        event_list1.adapter = adapter1
         root.addView(item1, childs++)
-
-        //showToast("${root.childCount}")
 
         bu_chong_empty.setOnClickListener {
             val intent = Intent(context, WeeklyRecordActivity::class.java)
@@ -116,6 +112,44 @@ class WeeklyThisFragment : BaseFragment() {
         list1.add(beanObj1)
         var chaosong_adapter = MyAdapter(context, list1)
         grid_chaosong_to.adapter = chaosong_adapter
+    }
+
+    class WeeklyEventAdapter(var context: Context, val list: ArrayList<WeeklyItemBean>) : BaseAdapter() {
+
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+            var viewHolder: ViewHolder
+            var conView = convertView
+            if (conView == null) {
+                viewHolder = ViewHolder()
+                conView = LayoutInflater.from(context).inflate(R.layout.weekly_event, null) as LinearLayout
+                //conView = LayoutInflater.from(context).inflate(R.layout.weekly_leave, null) as LinearLayout
+//                viewHolder.icon = conView.findViewById(R.id.icon) as CircleImageView
+//                viewHolder.name = conView.findViewById(R.id.name) as TextView
+                conView.setTag(viewHolder)
+            } else {
+                viewHolder = conView.getTag() as ViewHolder
+            }
+//            viewHolder.icon?.setImageResource(list.get(position).icon)
+//            viewHolder.name?.text = list.get(position).name
+            return conView
+        }
+
+        override fun getItem(position: Int): Any {
+            return list.get(position)
+        }
+
+        override fun getItemId(position: Int): Long {
+            return position.toLong()
+        }
+
+        override fun getCount(): Int {
+            return list.size
+        }
+
+        class ViewHolder {
+            var icon: ImageView? = null
+            var name: TextView? = null
+        }
     }
 
     class MyAdapter(var context: Context, val list: ArrayList<WeeklyWatchBean.BeanObj>) : BaseAdapter() {

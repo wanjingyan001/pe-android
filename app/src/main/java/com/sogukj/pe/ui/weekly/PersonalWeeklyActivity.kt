@@ -23,21 +23,9 @@ class PersonalWeeklyActivity : BaseActivity() {
 
     lateinit var manager: FragmentManager
 
-    fun setCornerRadius() {
-        val gd = GradientDrawable()
-        var rad_pix = Utils.dpToPx(context, 10).toFloat()
-        var floatArr = floatArrayOf(0f, 0f, rad_pix, rad_pix, 0f, 0f, 0f, 0f)
-        gd.shape = RECTANGLE
-        gd.cornerRadii = floatArr
-        gd.setColor(Color.parseColor("#FFFFFF"))
-        container.setBackgroundDrawable(gd)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_personal_weekly)
-
-        setCornerRadius()
 
         manager = supportFragmentManager
         manager.beginTransaction().add(R.id.container, fragments[0]).commit()

@@ -34,7 +34,7 @@ class WeeklyDotView : ImageView {
         var space = Utils.dpToPx(context, 5)
 
         mPaint.isAntiAlias = false
-        mPaint.color = Color.parseColor("#F1F1F1")
+        mPaint.color = Color.parseColor("#FFADB1BE")
 
         canvas.drawCircle(width.toFloat() / 2, dot_pos.toFloat(), radius.toFloat(), mPaint)
 

@@ -2,9 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="30dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingTop="30dp">
 
     <include layout="@layout/weeklylabel" />
+
+    <com.sogukj.pe.view.MyListView
+        android:id="@+id/event_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:divider="#ffffff"
+        android:dividerHeight="10dp" />
 
 </LinearLayout>
