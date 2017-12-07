@@ -15,7 +15,7 @@ import android.widget.TimePicker
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
-import com.sogukj.pe.ui.project.RecordDetailActivity.TimeBean
+import com.sogukj.pe.bean.TimeItem
 import kotlinx.android.synthetic.main.activity_weekly_record.*
 import org.jetbrains.anko.textColor
 import java.text.SimpleDateFormat
@@ -113,6 +113,11 @@ class WeeklyRecordActivity : ToolbarActivity() {
             back.setBackgroundResource(R.drawable.grey_back)
         }
         setBack(true)
+
+        btn_commit.setOnClickListener {
+            setResult(Activity.RESULT_OK)
+            finish()
+        }
     }
 
     /**
@@ -128,25 +133,5 @@ class WeeklyRecordActivity : ToolbarActivity() {
             day_str = "0${time.day}"
         }
         return "${time.year}-${month_str}-${day_str}";
-    }
-
-    class TimeItem(year: Int, month: Int, day: Int) {
-        var year = year
-        var month = month
-        var day = day
-    }
-
-    companion object {
-        fun startAdd(ctx: Activity?) {
-            val intent = Intent(ctx, WeeklyRecordActivity::class.java)
-            intent.putExtra(Extras.FLAG, "ADD")
-            ctx?.startActivityForResult(intent, 0x001)
-        }
-
-        fun startEdit(ctx: Activity?) {
-            val intent = Intent(ctx, WeeklyRecordActivity::class.java)
-            intent.putExtra(Extras.FLAG, "EDIT")
-            ctx?.startActivityForResult(intent, 0x002)
-        }
     }
 }

@@ -1,25 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="40dp"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="horizontal">
 
     <com.sogukj.pe.view.CircleImageView
         android:id="@+id/icon"
         android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@null"
-        android:src="@drawable/send_add" />
+        android:layout_height="40dp" />
 
     <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="张三"
-        android:textColor="@color/text_3"
+        android:layout_marginLeft="5dp"
+        android:text="张木穆"
         android:textSize="12sp" />
+
+    <!--text1  text3-->
 
 </LinearLayout>

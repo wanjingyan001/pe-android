@@ -51,6 +51,9 @@
         <item>私营企业</item>
     </string-array>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="spinner">
+        <item>全部</item>
+        <item>投资部</item>
+        <item>风控部</item>
+    </string-array>
 </resources>

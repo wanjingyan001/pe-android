@@ -2,9 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="20dp"
-    android:layout_marginTop="20dp"
-    android:background="#F7F9FC"
+    android:layout_marginBottom="15dp"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp"
+    android:layout_marginTop="30dp"
+    android:background="@drawable/bg_round_linearlayout_this_send"
     android:orientation="vertical">
 
     <TextView
@@ -15,41 +17,17 @@
         android:layout_marginTop="20dp"
         android:text="发送给" />
 
-    <GridLayout
-        android:layout_width="300dp"
+    <com.sogukj.pe.view.MyGridView
+        android:id="@+id/grid_send_to"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginTop="10dp"
-        android:columnCount="5"
-        android:orientation="horizontal">
-
-        <com.sogukj.pe.view.SendItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <com.sogukj.pe.view.SendItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <com.sogukj.pe.view.SendItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <com.sogukj.pe.view.SendItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <com.sogukj.pe.view.SendItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <com.sogukj.pe.view.SendItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    </GridLayout>
+        android:horizontalSpacing="20dp"
+        android:numColumns="5"
+        android:verticalSpacing="12dp" />
 
     <TextView
         style="@style/SoguTextMedium"
@@ -59,22 +37,17 @@
         android:layout_marginTop="10dp"
         android:text="抄送给" />
 
-    <GridLayout
-        android:layout_width="300dp"
+    <com.sogukj.pe.view.MyGridView
+        android:id="@+id/grid_chaosong_to"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="10dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginTop="10dp"
-        android:columnCount="5"
-        android:orientation="horizontal">
-
-        <com.sogukj.pe.view.SendItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    </GridLayout>
+        android:horizontalSpacing="20dp"
+        android:numColumns="5"
+        android:verticalSpacing="12dp" />
 
     <Button
         android:id="@+id/btn_commit"
@@ -84,6 +57,7 @@
         android:layout_marginBottom="15dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/bg_btn_blue"
         android:text="提交" />
 </LinearLayout>
