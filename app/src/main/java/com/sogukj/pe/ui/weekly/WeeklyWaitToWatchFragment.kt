@@ -96,6 +96,9 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
         bean.list.add(obj)
         adapter.dataList.add(bean)
         adapter.dataList.add(bean)
+        adapter.dataList.add(bean)
+        adapter.dataList.add(bean)
+        adapter.dataList.add(bean)
 
         var bean1 = WeeklyWatchBean()
         bean1.date = "本周"
