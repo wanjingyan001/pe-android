@@ -3,6 +3,8 @@ package com.sogukj.pe.ui.weekly
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -16,6 +18,8 @@ import com.sogukj.pe.bean.TimeItem
 import kotlinx.android.synthetic.main.fragment_weekly_wait_to_watch.*
 import com.sogukj.pe.bean.WeeklyWatchBean
 import com.sogukj.pe.view.*
+import org.jetbrains.anko.support.v4.startActivityForResult
+import org.jetbrains.anko.textColor
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -60,12 +64,17 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
                     tv_title.text = data.date
                     data.list?.let {
                         var adapter = MyAdapter(context, it)
+                        adapter.sort()
                         grid.adapter = adapter
-                        adapter.notifyDataSetChanged()
 
                         grid.setOnItemClickListener(object : AdapterView.OnItemClickListener {
                             override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                                PersonalWeeklyActivity.start(context)
+
+                                (grid.adapter.getItem(position) as WeeklyWatchBean.BeanObj).click = true
+                                grid.setTag("CLICK")
+
+                                val intent = Intent(context, PersonalWeeklyActivity::class.java)
+                                startActivityForResult(intent, 0x011)
                             }
                         })
                     }
@@ -85,6 +94,7 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
         var obj = WeeklyWatchBean.BeanObj()
         obj.icon = R.drawable.bg
         obj.name = "名利里"
+        obj.click = false
         bean.list.add(obj)
         bean.list.add(obj)
         bean.list.add(obj)
@@ -101,6 +111,7 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
         var obj1 = WeeklyWatchBean.BeanObj()
         obj1.icon = R.drawable.week_y
         obj1.name = "名利里"
+        obj1.click = false
         bean1.list.add(obj1)
         bean1.list.add(obj1)
         adapter.dataList.add(bean1)
@@ -196,6 +207,15 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 0x011) {
+            var grid = root.findViewWithTag("CLICK") as GridView
+            (grid.adapter as MyAdapter).notifyDataSetChanged()
+            grid.setTag("")
+        }
+    }
+
     /**
      * month是已经调整过的month
      */
@@ -213,6 +233,11 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
 
     class MyAdapter(var context: Context, val list: ArrayList<WeeklyWatchBean.BeanObj>) : BaseAdapter() {
 
+        // click=true放前面
+        fun sort() {
+
+        }
+
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             var viewHolder: ViewHolder
             var conView = convertView
@@ -227,10 +252,17 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
             }
             viewHolder.icon?.setImageResource(list.get(position).icon)
             viewHolder.name?.text = list.get(position).name
+            if (list.get(position).click) {
+                viewHolder.icon?.alpha = 0.8f
+                viewHolder.name?.textColor = Color.parseColor("#A0A4AA")
+            } else {
+                viewHolder.icon?.alpha = 1f
+                viewHolder.name?.textColor = Color.parseColor("#282828")
+            }
             return conView
         }
 
-        override fun getItem(position: Int): Any {
+        override fun getItem(position: Int): WeeklyWatchBean.BeanObj {
             return list.get(position)
         }
 

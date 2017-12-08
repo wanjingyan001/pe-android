@@ -10,5 +10,6 @@ class WeeklyWatchBean {
     class BeanObj {
         var icon: Int = 0
         var name: String? = null
+        var click: Boolean = false
     }
 }

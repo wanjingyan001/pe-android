@@ -44,6 +44,10 @@ class PersonalWeeklyActivity : BaseActivity() {
         record_buchong.setOnClickListener {
             replace(1)
         }
+
+        back.setOnClickListener {
+            finish()
+        }
     }
 
     fun switchContent(from: Int, to: Int) {
@@ -79,13 +83,6 @@ class PersonalWeeklyActivity : BaseActivity() {
         } else {
             view.textColor = Color.parseColor("#FFc7c7c7")
             view.setBackgroundResource(R.drawable.weekly_unselected)
-        }
-    }
-
-    companion object {
-        fun start(ctx: Context?) {
-            val intent = Intent(ctx, PersonalWeeklyActivity::class.java)
-            ctx?.startActivity(intent)
         }
     }
 }
