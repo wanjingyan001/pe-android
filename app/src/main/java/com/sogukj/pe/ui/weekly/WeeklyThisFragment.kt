@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,12 +13,9 @@ import com.framework.base.BaseFragment
 import com.sogukj.pe.Extras
 
 import com.sogukj.pe.R
-import com.sogukj.pe.R.id.dot
-import com.sogukj.pe.R.id.event
 import com.sogukj.pe.bean.WeeklyItemBean
 import com.sogukj.pe.bean.WeeklyWatchBean
 import com.sogukj.pe.view.CircleImageView
-import com.sogukj.pe.view.DotView
 import com.sogukj.pe.view.MyListView
 import com.sogukj.pe.view.WeeklyDotView
 import kotlinx.android.synthetic.main.buchong_empty.*

@@ -6,7 +6,6 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,11 +16,8 @@ import com.sogukj.pe.bean.TimeItem
 import kotlinx.android.synthetic.main.fragment_weekly_wait_to_watch.*
 import com.sogukj.pe.bean.WeeklyWatchBean
 import com.sogukj.pe.view.*
-import kotlinx.android.synthetic.*
-import kotlinx.android.synthetic.main.fragment_main_project.*
 import java.text.SimpleDateFormat
 import java.util.*
-
 
 /**
  * A simple [Fragment] subclass.
