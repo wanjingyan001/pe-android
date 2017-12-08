@@ -122,8 +122,6 @@ class WeeklyThisFragment : BaseFragment() {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             var conView = convertView
 
-            var holderLeave: ViewHolderLeave
-
             if (position == 0) {
                 // 会议，跟踪记录
                 conView = LayoutInflater.from(context).inflate(R.layout.weekly_event, null) as LinearLayout
@@ -170,22 +168,6 @@ class WeeklyThisFragment : BaseFragment() {
 
         override fun getCount(): Int {
             return list.size
-        }
-
-        //会议，跟踪记录
-        class ViewHolderEvent {
-            var dot: WeeklyDotView? = null
-            var event: TextView? = null
-            var tag: TextView? = null
-        }
-
-        //请假，出差
-        class ViewHolderLeave {
-            var dot: WeeklyDotView? = null
-            var event: TextView? = null
-            var tv_start_time: TextView? = null
-            var tv_end_time: TextView? = null
-            var tag: TextView? = null
         }
     }
 

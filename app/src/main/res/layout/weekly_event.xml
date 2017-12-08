@@ -17,7 +17,8 @@
         android:layout_gravity="center"
         android:layout_marginRight="20dp"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingLeft="5dp">
 
         <TextView
             android:id="@+id/event"
