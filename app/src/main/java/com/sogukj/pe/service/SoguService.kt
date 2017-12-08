@@ -754,7 +754,7 @@ interface SoguService {
      * 简历-修改个人简历基本信息
      */
     @POST("/api/Userfont/editResumeBaseInfo")
-    fun editResumeBaseInfo(@Body ae:UserResumeReqBean): Observable<Payload<Any>>
+    fun editResumeBaseInfo(@Body ae: UserResumeReqBean): Observable<Payload<Any>>
 
     companion object {
         const val APPKEY_NAME = "appkey"
@@ -796,4 +796,8 @@ interface SoguService {
     //跟踪记录-新增记录
     @POST("/api/Archives/addRecord")
     fun addRecord(@Body map: HashMap<String, Any>): Observable<Payload<Object>>
+
+    //周报-本周周报
+    @POST("/api/Weekly/index")
+    fun getWeekly(): Observable<Payload<WeeklyThisBean>>
 }

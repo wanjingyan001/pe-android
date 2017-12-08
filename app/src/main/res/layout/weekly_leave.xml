@@ -13,9 +13,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:paddingLeft="5dp"
         android:layout_marginRight="20dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingLeft="5dp">
 
         <TextView
             android:id="@+id/event"
@@ -31,7 +31,7 @@
             android:id="@+id/tv_start_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="2dp"
             android:gravity="top|left"
             android:text="开始时间：10月6日 16:20"
             android:textColor="#FFADB1BE"
@@ -41,7 +41,7 @@
             android:id="@+id/tv_end_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="2dp"
             android:gravity="top|left"
             android:text="结束时间：10月7日 09:30"
             android:textColor="#FFADB1BE"
@@ -53,6 +53,16 @@
             android:layout_marginBottom="5dp"
             android:gravity="center"
             android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/AI"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/invalidname"
+                android:gravity="center"
+                android:text="AI采集"
+                android:textColor="#FFADB1BE"
+                android:textSize="10sp" />
 
             <View
                 android:layout_width="0dp"

@@ -22,6 +22,7 @@ import org.jetbrains.anko.support.v4.startActivityForResult
 import org.jetbrains.anko.textColor
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * A simple [Fragment] subclass.
@@ -37,6 +38,8 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
     lateinit var startBean: TimeItem
     lateinit var endBean: TimeItem
     var currentClick = 0
+
+    val loadedData = ArrayList<WeeklyWatchBean>()
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -106,7 +109,7 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
         obj3.name = "名利里3"
         obj3.click = false
         bean.list.add(obj3)
-        adapter.dataList.add(bean)
+        loadedData.add(bean)
 
         var bean1 = WeeklyWatchBean()
         bean1.date = "本周"
@@ -116,8 +119,9 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
         obj1.click = false
         bean1.list.add(obj1)
         bean1.list.add(obj1)
-        adapter.dataList.add(bean1)
+        loadedData.add(bean1)
 
+        adapter.dataList = loadedData
         adapter.notifyDataSetChanged()
 
 
@@ -135,6 +139,8 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
             total.setClick(true)
             unread.setClick(false)
             readed.setClick(false)
+
+            sort()
         }
         unread.setOnClickListener {
             if (currentClick == 1) {
@@ -144,6 +150,8 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
             total.setClick(false)
             unread.setClick(true)
             readed.setClick(false)
+
+            sort()
         }
         readed.setOnClickListener {
             if (currentClick == 2) {
@@ -153,6 +161,8 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
             total.setClick(false)
             unread.setClick(false)
             readed.setClick(true)
+
+            sort()
         }
 
 
@@ -206,6 +216,33 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
                     endBean.day = p3
                 }
             })
+        }
+    }
+
+    private fun sort() {
+        if (currentClick == 0) {
+            adapter.dataList = loadedData
+            adapter.notifyDataSetChanged()
+        } else {
+            // 未读-1-false，已读-2-true
+            var flag = if (currentClick == 1) false else true
+            var obj_list = ArrayList<WeeklyWatchBean>()
+            for (i in 0 until loadedData.size) {
+                var objs = ArrayList<WeeklyWatchBean.BeanObj>()
+                for (j in 0 until loadedData[i].list.size) {
+                    if (loadedData[i].list[j].click == flag) {
+                        objs.add(loadedData[i].list[j])
+                    }
+                }
+                if (objs.size != 0) {
+                    var bean = WeeklyWatchBean()
+                    bean.date = loadedData[i].date
+                    bean.list.addAll(objs)
+                    obj_list.add(bean)
+                }
+            }
+            adapter.dataList = obj_list
+            adapter.notifyDataSetChanged()
         }
     }
 

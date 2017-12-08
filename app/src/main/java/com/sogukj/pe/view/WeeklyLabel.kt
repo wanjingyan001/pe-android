@@ -29,7 +29,7 @@ class WeeklyLabel : LinearLayout {
     }
 
     fun setData(seq: String, week: String, date: String) {
-        tv_seq.text = seq
+        tv_index.text = seq
         tv_week.text = week
         tv_date.text = date
     }

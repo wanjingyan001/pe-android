@@ -1,15 +1,25 @@
 package com.sogukj.pe.bean
 
+import java.util.*
+import kotlin.collections.ArrayList
+
 /**
  * Created by sogubaby on 2017/12/6.
  */
 class WeeklyWatchBean {
     var date: String? = null
-    val list: ArrayList<BeanObj> = ArrayList()
+    var list: ArrayList<BeanObj> = ArrayList()
 
     class BeanObj {
         var icon: Int = 0
         var name: String? = null
         var click: Boolean = false
+    }
+
+    fun clone(): WeeklyWatchBean {
+        var cloObj = WeeklyWatchBean()
+        cloObj.date = this.date
+        cloObj.list = ArrayList<BeanObj>(this.list)
+        return cloObj
     }
 }

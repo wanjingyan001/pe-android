@@ -17,7 +17,7 @@ import org.jetbrains.anko.textColor
 class PersonalWeeklyActivity : BaseActivity() {
 
     val fragments = arrayOf(
-            WeeklyThisFragment(),
+            WeeklyThisFragment.newInstance("PERSONAL"),
             RecordBuChongFragment()
     )
 
