@@ -14,19 +14,19 @@ import com.framework.base.BaseFragment
 import com.sogukj.pe.Extras
 
 import com.sogukj.pe.R
+import com.sogukj.pe.R.id.dot
+import com.sogukj.pe.R.id.event
 import com.sogukj.pe.bean.WeeklyItemBean
 import com.sogukj.pe.bean.WeeklyWatchBean
 import com.sogukj.pe.view.CircleImageView
+import com.sogukj.pe.view.DotView
 import com.sogukj.pe.view.MyListView
+import com.sogukj.pe.view.WeeklyDotView
 import kotlinx.android.synthetic.main.buchong_empty.*
 import kotlinx.android.synthetic.main.buchong_full.*
-import kotlinx.android.synthetic.main.fragment_schedule.*
 import kotlinx.android.synthetic.main.fragment_weekly_this.*
 import kotlinx.android.synthetic.main.send.*
 
-/**
- * A simple [Fragment] subclass.
- */
 class WeeklyThisFragment : BaseFragment() {
 
     override val containerViewId: Int
@@ -116,22 +116,48 @@ class WeeklyThisFragment : BaseFragment() {
 
     class WeeklyEventAdapter(var context: Context, val list: ArrayList<WeeklyItemBean>) : BaseAdapter() {
 
+        val EVENT = 0x001
+        val LEAVE = 0x002
+
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-            var viewHolder: ViewHolder
             var conView = convertView
-            if (conView == null) {
-                viewHolder = ViewHolder()
+
+            var holderLeave: ViewHolderLeave
+
+            if (position == 0) {
+                // 会议，跟踪记录
                 conView = LayoutInflater.from(context).inflate(R.layout.weekly_event, null) as LinearLayout
-                //conView = LayoutInflater.from(context).inflate(R.layout.weekly_leave, null) as LinearLayout
-//                viewHolder.icon = conView.findViewById(R.id.icon) as CircleImageView
-//                viewHolder.name = conView.findViewById(R.id.name) as TextView
-                conView.setTag(viewHolder)
+                var dot = conView.findViewById(R.id.dot) as WeeklyDotView
+                var event = conView.findViewById(R.id.event) as TextView
+                var tag = conView.findViewById(R.id.tag) as TextView
+
+//                dot.setTime("")
+//                event.text = ""
+//                tag.text = ""
             } else {
-                viewHolder = conView.getTag() as ViewHolder
+                // 请假，出差
+                conView = LayoutInflater.from(context).inflate(R.layout.weekly_leave, null) as LinearLayout
+                var dot = conView.findViewById(R.id.dot) as WeeklyDotView
+                var event = conView.findViewById(R.id.event) as TextView
+                var tv_start_time = conView.findViewById(R.id.tv_start_time) as TextView
+                var tv_end_time = conView.findViewById(R.id.tv_end_time) as TextView
+                var tag = conView.findViewById(R.id.tag) as TextView
+
+//                dot.setTime("")
+//                event.text = ""
+//                tv_start_time.text = ""
+//                tv_end_time.text = ""
+//                tag.text = ""
             }
-//            viewHolder.icon?.setImageResource(list.get(position).icon)
-//            viewHolder.name?.text = list.get(position).name
             return conView
+        }
+
+        override fun getItemViewType(position: Int): Int {
+            return super.getItemViewType(position)
+        }
+
+        override fun getViewTypeCount(): Int {
+            return 0x003
         }
 
         override fun getItem(position: Int): Any {
@@ -146,9 +172,20 @@ class WeeklyThisFragment : BaseFragment() {
             return list.size
         }
 
-        class ViewHolder {
-            var icon: ImageView? = null
-            var name: TextView? = null
+        //会议，跟踪记录
+        class ViewHolderEvent {
+            var dot: WeeklyDotView? = null
+            var event: TextView? = null
+            var tag: TextView? = null
+        }
+
+        //请假，出差
+        class ViewHolderLeave {
+            var dot: WeeklyDotView? = null
+            var event: TextView? = null
+            var tv_start_time: TextView? = null
+            var tv_end_time: TextView? = null
+            var tag: TextView? = null
         }
     }
 
