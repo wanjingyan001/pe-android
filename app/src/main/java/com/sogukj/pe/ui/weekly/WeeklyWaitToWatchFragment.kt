@@ -93,24 +93,26 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
         bean.date = "本周"
         var obj = WeeklyWatchBean.BeanObj()
         obj.icon = R.drawable.bg
-        obj.name = "名利里"
+        obj.name = "名利里1"
         obj.click = false
         bean.list.add(obj)
-        bean.list.add(obj)
-        bean.list.add(obj)
-        bean.list.add(obj)
-        bean.list.add(obj)
-        adapter.dataList.add(bean)
-        adapter.dataList.add(bean)
-        adapter.dataList.add(bean)
-        adapter.dataList.add(bean)
+        var obj2 = WeeklyWatchBean.BeanObj()
+        obj2.icon = R.drawable.bg
+        obj2.name = "名利里2"
+        obj2.click = false
+        bean.list.add(obj2)
+        var obj3 = WeeklyWatchBean.BeanObj()
+        obj3.icon = R.drawable.bg
+        obj3.name = "名利里3"
+        obj3.click = false
+        bean.list.add(obj3)
         adapter.dataList.add(bean)
 
         var bean1 = WeeklyWatchBean()
         bean1.date = "本周"
         var obj1 = WeeklyWatchBean.BeanObj()
         obj1.icon = R.drawable.week_y
-        obj1.name = "名利里"
+        obj1.name = "名利里4"
         obj1.click = false
         bean1.list.add(obj1)
         bean1.list.add(obj1)
@@ -211,6 +213,7 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 0x011) {
             var grid = root.findViewWithTag("CLICK") as GridView
+            (grid.adapter as MyAdapter).sort()
             (grid.adapter as MyAdapter).notifyDataSetChanged()
             grid.setTag("")
         }
@@ -235,7 +238,19 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
 
         // click=true放前面
         fun sort() {
-
+            for (i in 0 until list.size) {
+                if (list[i].click == false) {
+                    for (j in (i + 1) until list.size) {
+                        if (list[j].click == true) {
+                            var tmp = list[i]
+                            list[i] = list[j]
+                            list[j] = tmp
+                            break
+                        }
+                    }
+                    break
+                }
+            }
         }
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
