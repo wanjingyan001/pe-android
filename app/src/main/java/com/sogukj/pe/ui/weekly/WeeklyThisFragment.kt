@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,8 +13,9 @@ import com.google.gson.JsonSyntaxException
 import com.sogukj.pe.Extras
 
 import com.sogukj.pe.R
+import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.bean.WeeklyThisBean
-import com.sogukj.pe.bean.WeeklyWatchBean
+import com.sogukj.pe.ui.user.OrganizationActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.CircleImageView
 import com.sogukj.pe.view.MyListView
@@ -84,6 +84,7 @@ class WeeklyThisFragment : BaseFragment() {
     }
 
     var childs = 0
+    lateinit var week: WeeklyThisBean.Week
 
     fun initView(loaded: WeeklyThisBean) {
 
@@ -117,44 +118,91 @@ class WeeklyThisFragment : BaseFragment() {
             bu_chong_empty.setOnClickListener {
                 val intent = Intent(context, WeeklyRecordActivity::class.java)
                 intent.putExtra(Extras.FLAG, "ADD")
-                startActivityForResult(intent, 0x001)
+                startActivityForResult(intent, ADD)
             }
         } else {
             bu_chong_empty.visibility = View.GONE
             buchong_full.visibility = View.VISIBLE
-            var week = loaded.week as WeeklyThisBean.Week
+            week = loaded.week as WeeklyThisBean.Week
             var time = buchong_full.findViewById(R.id.time) as TextView
             var times = buchong_full.findViewById(R.id.times) as TextView
             var info = buchong_full.findViewById(R.id.info) as TextView
             var buchong_edit = buchong_full.findViewById(R.id.buchong_edit) as ImageView
 
+            var S_TIME = week.s_times?.split("-")
+            var E_TIME = week.e_times?.split("-")
+
             time.text = week.time
-            times.text = week.times
+            times.text = "${S_TIME?.get(1)}.${S_TIME?.get(2)}-${E_TIME?.get(1)}.${E_TIME?.get(2)}"
             info.text = week.info
 
             buchong_edit.setOnClickListener {
                 val intent = Intent(context, WeeklyRecordActivity::class.java)
                 intent.putExtra(Extras.FLAG, "EDIT")
-                startActivityForResult(intent, 0x002)
+                intent.putExtra(Extras.DATA, week)
+                startActivityForResult(intent, EDIT)
             }
         }
 
-        var beanObj = WeeklyWatchBean.BeanObj()
-        beanObj.icon = R.drawable.send_add
+        var beanObj = UserBean()
         beanObj.name = "添加"
-        var list = ArrayList<WeeklyWatchBean.BeanObj>()
+        var list = ArrayList<UserBean>()
         list.add(beanObj)
         var send_adapter = MyAdapter(context, list)
         grid_send_to.adapter = send_adapter
 
-        var list1 = ArrayList<WeeklyWatchBean.BeanObj>()
-        var beanObj1 = WeeklyWatchBean.BeanObj()
-        beanObj1.icon = R.drawable.send_add
+        var list1 = ArrayList<UserBean>()
+        var beanObj1 = UserBean()
         beanObj1.name = "添加"
         list1.add(beanObj1)
         var chaosong_adapter = MyAdapter(context, list1)
         grid_chaosong_to.adapter = chaosong_adapter
+
+        grid_send_to.setOnItemClickListener { parent, view, position, id ->
+            var already = ArrayList<UserBean>()
+            var list = ArrayList<UserBean>(send_adapter.list)
+            list.removeAt(list.size - 1)
+            already.addAll(list)
+            list = ArrayList<UserBean>(chaosong_adapter.list)
+            list.removeAt(list.size - 1)
+            already.addAll(list)
+
+            var obj = parent.getItemAtPosition(position) as UserBean
+            if (obj.name == "添加") {
+                val intent = Intent(context, OrganizationActivity::class.java)
+                intent.putExtra(Extras.FLAG, "WEEKLY")
+                intent.putExtra(Extras.DATA, already)
+                startActivityForResult(intent, SEND)
+            }
+        }
+
+        grid_chaosong_to.setOnItemClickListener { parent, view, position, id ->
+            var already = ArrayList<UserBean>()
+            var list = ArrayList<UserBean>(send_adapter.list)
+            list.removeAt(list.size - 1)
+            already.addAll(list)
+            list = ArrayList<UserBean>(chaosong_adapter.list)
+            list.removeAt(list.size - 1)
+            already.addAll(list)
+
+            var obj = parent.getItemAtPosition(position) as UserBean
+            if (obj.name == "添加") {
+                val intent = Intent(context, OrganizationActivity::class.java)
+                intent.putExtra(Extras.FLAG, "WEEKLY")
+                intent.putExtra(Extras.DATA, already)
+                startActivityForResult(intent, CHAO_SONG)
+            }
+        }
+
+        btn_commit.setOnClickListener {
+
+        }
     }
+
+    var ADD = 0x005
+    var EDIT = 0x006
+    var SEND = 0x007
+    var CHAO_SONG = 0x008
 
     class WeeklyEventAdapter(var context: Context, val list: ArrayList<WeeklyThisBean.Automatic.WeeklyData>) : BaseAdapter() {
 
@@ -221,7 +269,7 @@ class WeeklyThisFragment : BaseFragment() {
         }
     }
 
-    class MyAdapter(var context: Context, val list: ArrayList<WeeklyWatchBean.BeanObj>) : BaseAdapter() {
+    class MyAdapter(var context: Context, val list: ArrayList<UserBean>) : BaseAdapter() {
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             var viewHolder: ViewHolder
@@ -235,7 +283,11 @@ class WeeklyThisFragment : BaseFragment() {
             } else {
                 viewHolder = conView.getTag() as ViewHolder
             }
-            viewHolder.icon?.setImageResource(list.get(position).icon)
+            if (list.get(position).name == "添加") {
+                viewHolder.icon?.setImageResource(R.drawable.send_add)
+            } else {
+                viewHolder.icon?.setChar(list.get(position).name?.first())
+            }
             viewHolder.name?.text = list.get(position).name
             return conView
         }
@@ -253,20 +305,45 @@ class WeeklyThisFragment : BaseFragment() {
         }
 
         class ViewHolder {
-            var icon: ImageView? = null
+            var icon: CircleImageView? = null
             var name: TextView? = null
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Log.e("onActivityResult", "onActivityResult")
-        if (requestCode == 0x001 && resultCode == Activity.RESULT_OK) {//ADD
+        if (requestCode == ADD && resultCode == Activity.RESULT_OK) {//ADD
             bu_chong_empty.visibility = View.GONE
             buchong_full.visibility = View.VISIBLE
-        } else if (requestCode == 0x002 && resultCode == Activity.RESULT_OK) {//EDIT
+
+            week = data?.getSerializableExtra(Extras.DATA) as WeeklyThisBean.Week
+            var time = buchong_full.findViewById(R.id.time) as TextView
+            var times = buchong_full.findViewById(R.id.times) as TextView
+            var info = buchong_full.findViewById(R.id.info) as TextView
+
+            var S_TIME = week.s_times?.split("-")
+            var E_TIME = week.e_times?.split("-")
+
+            time.text = week.time
+            times.text = "${S_TIME?.get(1)}.${S_TIME?.get(2)}-${E_TIME?.get(1)}.${E_TIME?.get(2)}"
+            info.text = week.info
+        } else if (requestCode == EDIT && resultCode == Activity.RESULT_OK) {//EDIT
             bu_chong_empty.visibility = View.GONE
             buchong_full.visibility = View.VISIBLE
+
+            week = data?.getSerializableExtra(Extras.DATA) as WeeklyThisBean.Week
+            var info = buchong_full.findViewById(R.id.info) as TextView
+            info.text = week.info
+        } else if (requestCode == SEND && resultCode == Activity.RESULT_OK) {//SEND
+            var adapter = grid_send_to.adapter as MyAdapter
+            var beanObj = data?.getSerializableExtra(Extras.DATA) as UserBean
+            adapter.list.add(adapter.list.size - 1, beanObj)
+            adapter.notifyDataSetChanged()
+        } else if (requestCode == CHAO_SONG && resultCode == Activity.RESULT_OK) {//CHAO_SONG
+            var adapter = grid_chaosong_to.adapter as MyAdapter
+            var beanObj = data?.getSerializableExtra(Extras.DATA) as UserBean
+            adapter.list.add(adapter.list.size - 1, beanObj)
+            adapter.notifyDataSetChanged()
         }
     }
 

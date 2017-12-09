@@ -17,30 +17,82 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.DepartmentBean
 import com.sogukj.pe.bean.UserBean
+import com.sogukj.pe.bean.WeeklyWatchBean
+import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.CircleImageView
 import com.sogukj.pe.view.LinkSpan
+import com.sogukj.service.SoguApi
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_organization.*
 import org.jetbrains.anko.find
 
 class OrganizationActivity : ToolbarActivity() {
     lateinit var departList: ArrayList<DepartmentBean>
+    lateinit var alreadyList: ArrayList<UserBean>
 
     companion object {
         fun start(ctx: Activity?, departList: ArrayList<DepartmentBean>) {
             val intent = Intent(ctx, OrganizationActivity::class.java)
             intent.putExtra(Extras.DATA, departList)
+            intent.putExtra(Extras.FLAG, "USER")
             ctx?.startActivity(intent)
         }
     }
 
+    var flag = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_organization)
-        departList = intent.getSerializableExtra(Extras.DATA) as ArrayList<DepartmentBean>
-        setBack(true)
-        title = "公司组织架构"
-        setData(departList)
+
+        flag = intent.getStringExtra(Extras.FLAG)
+        if (flag == "USER") {
+            departList = intent.getSerializableExtra(Extras.DATA) as ArrayList<DepartmentBean>
+            setBack(true)
+            title = "公司组织架构"
+            setData(departList)
+        } else if (flag == "WEEKLY") {
+            setBack(true)
+            title = "请选择"
+            departList = ArrayList<DepartmentBean>()
+            alreadyList = intent.getSerializableExtra(Extras.DATA) as ArrayList<UserBean>
+
+            SoguApi.getService(application)
+                    .userDepart()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (payload.isOk) {
+                            departList.clear()
+                            payload.payload?.apply {
+                                for (list in this) {
+                                    var LIST = list.clone()
+                                    var dataList = LIST.data
+                                    for (bean in alreadyList) {
+                                        var databeanIndex: Int = 0
+                                        while (databeanIndex < dataList!!.size) {
+                                            if (bean.name == dataList[databeanIndex].name) {
+                                                dataList.removeAt(databeanIndex)
+                                                break
+                                            }
+                                            databeanIndex++
+                                        }
+                                    }
+                                    if (dataList!!.size != 0) {
+                                        departList.add(LIST)
+                                    }
+                                }
+                            }
+                            setData(departList)
+                        } else
+                            showToast(payload.message)
+                    }, { e ->
+                        Trace.e(e)
+                        showToast("数据获取失败")
+                    })
+        }
+
     }
 
     fun setData(departList: List<DepartmentBean>) {
@@ -96,6 +148,16 @@ class OrganizationActivity : ToolbarActivity() {
         if (userBean.name.isNotEmpty()) {
             val ch = userBean.name.first()
             iv_user.setChar(ch)
+        }
+
+
+        item_content.setOnClickListener {
+            if (flag == "WEEKLY") {
+                var intent = Intent()
+                intent.putExtra(Extras.DATA, userBean)
+                setResult(Activity.RESULT_OK, intent)
+                finish()
+            }
         }
     }
 

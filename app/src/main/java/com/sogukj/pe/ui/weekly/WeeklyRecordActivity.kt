@@ -13,11 +13,18 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.TimePicker
 import com.framework.base.ToolbarActivity
+import com.google.gson.JsonSyntaxException
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.TimeItem
+import com.sogukj.pe.bean.WeeklyThisBean
+import com.sogukj.pe.util.Trace
+import com.sogukj.service.SoguApi
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_weekly_record.*
 import org.jetbrains.anko.textColor
+import java.net.UnknownHostException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -27,6 +34,7 @@ class WeeklyRecordActivity : ToolbarActivity() {
 
     lateinit var startBean: TimeItem
     lateinit var endBean: TimeItem
+    lateinit var week: WeeklyThisBean.Week
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,18 +57,11 @@ class WeeklyRecordActivity : ToolbarActivity() {
 
         } else if (tag == "EDIT") {
             title = "修改工作日程"
+            week = intent.getSerializableExtra(Extras.DATA) as WeeklyThisBean.Week
 
-            // TODO
-            var calendar = Calendar.getInstance()
-            var year = calendar.get(Calendar.YEAR)
-            var month = calendar.get(Calendar.MONTH) + 1
-            var day = calendar.get(Calendar.DAY_OF_MONTH)
-
-            startBean = TimeItem(year, month, day)
-            endBean = TimeItem(year, month, day)
-
-            tv_start_time.text = formatTime(startBean)
-            tv_end_time.text = formatTime(endBean)
+            tv_start_time.text = week.s_times
+            tv_end_time.text = week.e_times
+            et_des.setText(week.info)
         }
 
         var selector = LayoutInflater.from(this).inflate(R.layout.time_selector, null)
@@ -71,6 +72,9 @@ class WeeklyRecordActivity : ToolbarActivity() {
         time_picker.visibility = View.GONE
 
         tv_start_time.setOnClickListener {
+            if (tag == "EDIT") {
+                return@setOnClickListener
+            }
             dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", object : DialogInterface.OnClickListener {
                 override fun onClick(p0: DialogInterface?, p1: Int) {
                     tv_start_time.text = formatTime(startBean)
@@ -88,6 +92,9 @@ class WeeklyRecordActivity : ToolbarActivity() {
         }
 
         tv_end_time.setOnClickListener {
+            if (tag == "EDIT") {
+                return@setOnClickListener
+            }
             dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", object : DialogInterface.OnClickListener {
                 override fun onClick(p0: DialogInterface?, p1: Int) {
                     tv_end_time.text = formatTime(endBean)
@@ -115,8 +122,49 @@ class WeeklyRecordActivity : ToolbarActivity() {
         setBack(true)
 
         btn_commit.setOnClickListener {
-            setResult(Activity.RESULT_OK)
-            finish()
+            var weekly_id: Int? = null
+            if (tag == "EDIT") {
+                weekly_id = week.weekly_id
+            }
+            SoguApi.getService(application)
+                    .addEditReport(tv_start_time.text.toString(), tv_end_time.text.toString(), et_des.text.toString(), weekly_id)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (payload.isOk) {
+                            payload.payload?.apply {
+                                var df = SimpleDateFormat("HH:mm")
+                                if (tag == "EDIT") {
+                                    var intent = Intent()
+                                    //week.time = df.format(Date())
+                                    week.info = et_des.text.toString()
+                                    intent.putExtra("DATA", week)
+                                    setResult(Activity.RESULT_OK, intent)
+                                    finish()
+                                } else {
+                                    week = WeeklyThisBean.Week()
+                                    week.time = df.format(Date())
+                                    week.s_times = tv_start_time.text.toString()
+                                    week.e_times = tv_end_time.text.toString()
+                                    week.info = et_des.text.toString()
+                                    week.weekly_id = this as Int
+
+                                    var intent = Intent()
+                                    intent.putExtra("DATA", week)
+                                    setResult(Activity.RESULT_OK, intent)
+                                    finish()
+                                }
+                            }
+                        } else
+                            showToast(payload.message)
+                    }, { e ->
+                        Trace.e(e)
+                        when (e) {
+                            is JsonSyntaxException -> showToast("后台数据出错")
+                            is UnknownHostException -> showToast("网络出错")
+                            else -> showToast("未知错误")
+                        }
+                    })
         }
     }
 

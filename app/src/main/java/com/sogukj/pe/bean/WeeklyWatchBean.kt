@@ -1,5 +1,6 @@
 package com.sogukj.pe.bean
 
+import java.io.Serializable
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -10,7 +11,7 @@ class WeeklyWatchBean {
     var date: String? = null
     var list: ArrayList<BeanObj> = ArrayList()
 
-    class BeanObj {
+    class BeanObj : Serializable {
         var icon: Int = 0
         var name: String? = null
         var click: Boolean = false

@@ -800,4 +800,19 @@ interface SoguService {
     //周报-本周周报
     @POST("/api/Weekly/index")
     fun getWeekly(): Observable<Payload<WeeklyThisBean>>
+
+    // 补充工作日程 新增和编辑都是这个接口
+    @FormUrlEncoded
+    @POST("/api/Weekly/addReport")
+    fun addEditReport(@Field("start_time") start_time: String,
+                      @Field("end_time") end_time: String,
+                      @Field("content") content: String,
+                      @Field("week_id") week_id: Int? = null): Observable<Payload<Object>>
+
+    //周报-发送周报
+    @FormUrlEncoded
+    @POST("/api/Weekly/sendReport")
+    fun sendReport(@Field("week_id") week_id: Int? = null,
+                   @Field("accept_uid") accept_uid: String,
+                   @Field("copy_uid") copy_uid: String? = null): Observable<Payload<Object>>
 }

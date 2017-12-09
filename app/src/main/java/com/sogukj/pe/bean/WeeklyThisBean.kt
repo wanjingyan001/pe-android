@@ -1,5 +1,7 @@
 package com.sogukj.pe.bean
 
+import java.io.Serializable
+
 /**
  * Created by sogubaby on 2017/12/8.
  */
@@ -24,9 +26,10 @@ class WeeklyThisBean {
         }
     }
 
-    class Week {
+    class Week : Serializable {
         var time: String? = null//08:24
-        var times: String? = null//10.06-10.13
+        var s_times: String? = null//2017-10-06
+        var e_times: String? = null//2017-10-13
         var info: String? = null//周报内容
         var weekly_id: Int? = null//周报id
     }
