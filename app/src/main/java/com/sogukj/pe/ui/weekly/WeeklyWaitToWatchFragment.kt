@@ -89,6 +89,7 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
         val layoutManager = LinearLayoutManager(context)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         list.layoutManager = layoutManager
+        list.addItemDecoration(SpaceItemDecoration(20))
         list.adapter = adapter
 
 
@@ -302,7 +303,7 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
             } else {
                 viewHolder = conView.getTag() as ViewHolder
             }
-            viewHolder.icon?.setImageResource(list.get(position).icon)
+            viewHolder.icon?.setChar(list.get(position).name?.first())
             viewHolder.name?.text = list.get(position).name
             if (list.get(position).click) {
                 viewHolder.icon?.alpha = 0.8f
@@ -327,7 +328,7 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
         }
 
         class ViewHolder {
-            var icon: ImageView? = null
+            var icon: CircleImageView? = null
             var name: TextView? = null
         }
     }

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -85,6 +86,8 @@ class WeeklyThisFragment : BaseFragment() {
 
     var childs = 0
     lateinit var week: WeeklyThisBean.Week
+    lateinit var send_adapter: MyAdapter
+    lateinit var chaosong_adapter: MyAdapter
 
     fun initView(loaded: WeeklyThisBean) {
 
@@ -111,6 +114,7 @@ class WeeklyThisFragment : BaseFragment() {
                 root.addView(item, childs++)
             }
         }
+
         if (loaded.week == null) {
             bu_chong_empty.visibility = View.VISIBLE
             buchong_full.visibility = View.GONE
@@ -148,14 +152,14 @@ class WeeklyThisFragment : BaseFragment() {
         beanObj.name = "添加"
         var list = ArrayList<UserBean>()
         list.add(beanObj)
-        var send_adapter = MyAdapter(context, list)
+        send_adapter = MyAdapter(context, list)
         grid_send_to.adapter = send_adapter
 
         var list1 = ArrayList<UserBean>()
         var beanObj1 = UserBean()
         beanObj1.name = "添加"
         list1.add(beanObj1)
-        var chaosong_adapter = MyAdapter(context, list1)
+        chaosong_adapter = MyAdapter(context, list1)
         grid_chaosong_to.adapter = chaosong_adapter
 
         grid_send_to.setOnItemClickListener { parent, view, position, id ->
@@ -195,7 +199,70 @@ class WeeklyThisFragment : BaseFragment() {
         }
 
         btn_commit.setOnClickListener {
+            var weekly_id: Int? = null
+            if (week != null) {
+                weekly_id = week.weekly_id
+            }
+            var accept_uid: String = ""
+            for (item in send_adapter.list) {
+                if (item.name == "添加") {
+                    continue
+                }
+                accept_uid = "${accept_uid},${item.uid}"
+            }
+            if (accept_uid != "") {
+                accept_uid = accept_uid.substring(1)
+            }
 
+            var copy_uid: String? = null
+            if (chaosong_adapter.list.size != 0) {
+                copy_uid = ""
+                for (item in chaosong_adapter.list) {
+                    if (item.name == "添加") {
+                        continue
+                    }
+                    copy_uid = "${copy_uid},${item.uid}"
+                }
+                if (copy_uid != "") {
+                    copy_uid = copy_uid?.substring(1)
+                }
+            }
+
+            if (accept_uid == "") {
+                showToast("发送人不可为空")
+                return@setOnClickListener
+            }
+            SoguApi.getService(baseActivity!!.application)
+                    .sendReport(weekly_id, accept_uid, copy_uid)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (payload.isOk) {
+                            payload.payload?.apply {
+
+                            }
+                        } else
+                            showToast(payload.message)
+                    }, { e ->
+                        Trace.e(e)
+                        when (e) {
+                            is JsonSyntaxException -> showToast("后台数据出错")
+                            is UnknownHostException -> showToast("网络出错")
+                            else -> showToast("未知错误")
+                        }
+                    })
+        }
+
+        var tag = arguments.getString(Extras.FLAG)
+        if (tag == "MAIN") {
+            bu_chong_empty.visibility = View.VISIBLE
+            buchong_full.visibility = View.VISIBLE
+            send_layout.visibility = View.VISIBLE
+        } else if (tag == "PERSONAL") {
+            bu_chong_empty.visibility = View.GONE
+            buchong_full.visibility = View.GONE
+            send_layout.visibility = View.GONE
+            buchong_hint.visibility = View.GONE
         }
     }
 
