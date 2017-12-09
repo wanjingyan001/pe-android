@@ -8,18 +8,25 @@ import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.framework.base.BaseFragment
+import com.google.gson.JsonSyntaxException
 import com.sogukj.pe.R
+import com.sogukj.pe.bean.ReceiveSpinnerBean
 import com.sogukj.pe.bean.TimeItem
 import kotlinx.android.synthetic.main.fragment_weekly_wait_to_watch.*
 import com.sogukj.pe.bean.WeeklyWatchBean
+import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.*
-import org.jetbrains.anko.support.v4.startActivityForResult
+import com.sogukj.service.SoguApi
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.textColor
+import java.net.UnknownHostException
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -40,23 +47,30 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
     var currentClick = 0
 
     val loadedData = ArrayList<WeeklyWatchBean>()
+    lateinit var spinner_data: ArrayList<ReceiveSpinnerBean>
+    var selected_depart_id: Long = 0
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var mItems = resources.getStringArray(R.array.spinner)
-        val arr_adapter = ArrayAdapter<String>(context, R.layout.spinner_item, mItems)
+        val arr_adapter = ArrayAdapter<String>(context, R.layout.spinner_item)
         arr_adapter.setDropDownViewResource(R.layout.spinner_dropdown)
         spinner.adapter = arr_adapter
         spinner.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View,
                                         pos: Int, id: Long) {
+                selected_depart_id = parent.selectedItemId
+                Log.e("IIIIIDDDDDD", "${selected_depart_id}")
+                var selected_depart = spinner_data.get(selected_depart_id.toInt()).name
+                Log.e("IIIIIDDDDDD", selected_depart)
+                Log.e("IIIIIDDDDDD", "${spinner_data.get(selected_depart_id.toInt()).id ?: 100000}")
+
+                doRequest()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
             }
         })
-
 
         adapter = RecyclerAdapter<WeeklyWatchBean>(context, { _adapter, parent, type ->
             val convertView = _adapter.getView(R.layout.item_wait_watch, parent) as LinearLayout
@@ -65,7 +79,7 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
                 val grid = convertView.findViewById(R.id.grid_list) as MyGridView
                 override fun setData(view: View, data: WeeklyWatchBean, position: Int) {
                     tv_title.text = data.date
-                    data.list?.let {
+                    data.data?.let {
                         var adapter = MyAdapter(context, it)
                         adapter.sort()
                         grid.adapter = adapter
@@ -73,7 +87,7 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
                         grid.setOnItemClickListener(object : AdapterView.OnItemClickListener {
                             override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
 
-                                (grid.adapter.getItem(position) as WeeklyWatchBean.BeanObj).click = true
+                                (grid.adapter.getItem(position) as WeeklyWatchBean.BeanObj).is_read = 1
                                 grid.setTag("CLICK")
 
                                 val intent = Intent(context, PersonalWeeklyActivity::class.java)
@@ -96,30 +110,30 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
         var bean = WeeklyWatchBean()
         bean.date = "本周"
         var obj = WeeklyWatchBean.BeanObj()
-        obj.icon = R.drawable.bg
+        obj.img_url = "https://www.baidu.com/img/bd_logo1.png"
         obj.name = "名利里1"
-        obj.click = false
-        bean.list.add(obj)
+        obj.is_read = 0
+        bean.data.add(obj)
         var obj2 = WeeklyWatchBean.BeanObj()
-        obj2.icon = R.drawable.bg
+        obj2.img_url = "https://www.baidu.com/img/bd_logo1.png"
         obj2.name = "名利里2"
-        obj2.click = false
-        bean.list.add(obj2)
+        obj2.is_read = 1
+        bean.data.add(obj2)
         var obj3 = WeeklyWatchBean.BeanObj()
-        obj3.icon = R.drawable.bg
+        obj3.img_url = "https://www.baidu.com/img/bd_logo1.png"
         obj3.name = "名利里3"
-        obj3.click = false
-        bean.list.add(obj3)
+        obj3.is_read = 1
+        bean.data.add(obj3)
         loadedData.add(bean)
 
         var bean1 = WeeklyWatchBean()
         bean1.date = "本周"
         var obj1 = WeeklyWatchBean.BeanObj()
-        obj1.icon = R.drawable.week_y
+        obj1.img_url = "https://www.baidu.com/img/bd_logo1.png"
         obj1.name = "名利里4"
-        obj1.click = false
-        bean1.list.add(obj1)
-        bean1.list.add(obj1)
+        obj1.is_read = 0
+        bean1.data.add(obj1)
+        bean1.data.add(obj1)
         loadedData.add(bean1)
 
         adapter.dataList = loadedData
@@ -141,7 +155,9 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
             unread.setClick(false)
             readed.setClick(false)
 
-            sort()
+            //sort()
+
+            doRequest()
         }
         unread.setOnClickListener {
             if (currentClick == 1) {
@@ -152,7 +168,8 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
             unread.setClick(true)
             readed.setClick(false)
 
-            sort()
+            //sort()
+            doRequest()
         }
         readed.setOnClickListener {
             if (currentClick == 2) {
@@ -163,7 +180,8 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
             unread.setClick(false)
             readed.setClick(true)
 
-            sort()
+            //sort()
+            doRequest()
         }
 
 
@@ -189,6 +207,8 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
             dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", object : DialogInterface.OnClickListener {
                 override fun onClick(p0: DialogInterface?, p1: Int) {
                     start.text = formatTime(startBean)
+
+                    doRequest()
                 }
             })
             dialog.show()
@@ -206,6 +226,8 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
             dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", object : DialogInterface.OnClickListener {
                 override fun onClick(p0: DialogInterface?, p1: Int) {
                     end.text = formatTime(endBean)
+
+                    doRequest()
                 }
             })
             dialog.show()
@@ -218,6 +240,70 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
                 }
             })
         }
+
+        SoguApi.getService(baseActivity!!.application)
+                .getDepartment()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        payload.payload?.apply {
+                            spinner_data = this
+                            var total = ReceiveSpinnerBean()
+                            total.id = null
+                            total.name = "全部"
+                            spinner_data.add(0, total)
+
+                            for (item in spinner_data) {
+                                arr_adapter.add(item.name)
+                            }
+                            arr_adapter.notifyDataSetChanged()
+
+                            currentClick = 0
+                            selected_depart_id = 0
+                            doRequest()
+                        }
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    when (e) {
+                        is JsonSyntaxException -> showToast("后台数据出错")
+                        is UnknownHostException -> showToast("网络出错")
+                        else -> showToast("未知错误")
+                    }
+                })
+    }
+
+    fun doRequest() {
+        var is_read: Int? = null
+        if (currentClick == 1) {
+            is_read = 0
+        } else if (currentClick == 2) {
+            is_read = 1
+        }
+
+        var de_id = spinner_data.get(selected_depart_id.toInt()).id
+
+        SoguApi.getService(baseActivity!!.application)
+                .receive(is_read, de_id, formatTime(startBean), formatTime(endBean))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        payload.payload?.apply {
+
+                        }
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    when (e) {
+                        is JsonSyntaxException -> showToast("后台数据出错")
+                        is UnknownHostException -> showToast("网络出错")
+                        else -> showToast("未知错误")
+                    }
+                })
     }
 
     private fun sort() {
@@ -226,19 +312,19 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
             adapter.notifyDataSetChanged()
         } else {
             // 未读-1-false，已读-2-true
-            var flag = if (currentClick == 1) false else true
+            var flag = if (currentClick == 1) 0 else 1
             var obj_list = ArrayList<WeeklyWatchBean>()
             for (i in 0 until loadedData.size) {
                 var objs = ArrayList<WeeklyWatchBean.BeanObj>()
-                for (j in 0 until loadedData[i].list.size) {
-                    if (loadedData[i].list[j].click == flag) {
-                        objs.add(loadedData[i].list[j])
+                for (j in 0 until loadedData[i].data.size) {
+                    if (loadedData[i].data[j].is_read == flag) {
+                        objs.add(loadedData[i].data[j])
                     }
                 }
                 if (objs.size != 0) {
                     var bean = WeeklyWatchBean()
                     bean.date = loadedData[i].date
-                    bean.list.addAll(objs)
+                    bean.data.addAll(objs)
                     obj_list.add(bean)
                 }
             }
@@ -277,9 +363,9 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
         // click=true放前面
         fun sort() {
             for (i in 0 until list.size) {
-                if (list[i].click == false) {
+                if (list[i].is_read == 0) {
                     for (j in (i + 1) until list.size) {
-                        if (list[j].click == true) {
+                        if (list[j].is_read == 1) {
                             var tmp = list[i]
                             list[i] = list[j]
                             list[j] = tmp
@@ -305,7 +391,7 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
             }
             viewHolder.icon?.setChar(list.get(position).name?.first())
             viewHolder.name?.text = list.get(position).name
-            if (list.get(position).click) {
+            if (list.get(position).is_read == 1) {
                 viewHolder.icon?.alpha = 0.8f
                 viewHolder.name?.textColor = Color.parseColor("#A0A4AA")
             } else {

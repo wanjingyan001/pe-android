@@ -13,6 +13,7 @@ import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 /**
@@ -815,4 +816,22 @@ interface SoguService {
     fun sendReport(@Field("week_id") week_id: Int? = null,
                    @Field("accept_uid") accept_uid: String,
                    @Field("copy_uid") copy_uid: String? = null): Observable<Payload<Object>>
+
+    //周报-我发出的
+    @FormUrlEncoded
+    @POST("/api/Weekly/send")
+    fun send(@Field("start_time") start_time: String,
+             @Field("end_time") end_time: String): Observable<Payload<WeeklySendBean>>
+
+    //待我查看的周报
+    @FormUrlEncoded
+    @POST("/api/Weekly/receive ")
+    fun receive(@Field("is_read") is_read: Int? = null,
+                @Field("de_id") de_id: Int? = null,
+                @Field("start_time") start_time: String? = null,
+                @Field("end_time") end_time: String? = null): Observable<Payload<Object>>
+
+
+    @POST("/api/UserFont/getDepartment")
+    fun getDepartment(): Observable<Payload<ArrayList<ReceiveSpinnerBean>>>
 }

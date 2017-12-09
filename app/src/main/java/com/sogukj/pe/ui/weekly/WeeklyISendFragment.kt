@@ -20,10 +20,16 @@ import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import kotlinx.android.synthetic.main.fragment_weekly_isend.*
 import android.widget.TextView
+import com.google.gson.JsonSyntaxException
 import com.sogukj.pe.bean.TimeItem
+import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.ListAdapter
 import com.sogukj.pe.view.MyGridView
+import com.sogukj.service.SoguApi
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.item_week_send.*
+import java.net.UnknownHostException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -67,6 +73,7 @@ class WeeklyISendFragment : BaseFragment() {
         list.layoutManager = layoutManager
         list.adapter = adapter
 
+        // TODO 假数据
         var bean = WeeklySendBean()
         bean.date = "2017年10月"
         bean.list.add("10.06-10.12")
@@ -96,16 +103,7 @@ class WeeklyISendFragment : BaseFragment() {
         adapter.dataList.add(bean2)
 
         adapter.notifyDataSetChanged()
-
-
-
-
-
-
-
-
-
-
+        // TODO 假数据
 
 
         var calendar = Calendar.getInstance()
@@ -130,6 +128,7 @@ class WeeklyISendFragment : BaseFragment() {
             dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", object : DialogInterface.OnClickListener {
                 override fun onClick(p0: DialogInterface?, p1: Int) {
                     start.text = formatTime(startBean)
+                    doRequest()
                 }
             })
             dialog.show()
@@ -147,6 +146,7 @@ class WeeklyISendFragment : BaseFragment() {
             dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", object : DialogInterface.OnClickListener {
                 override fun onClick(p0: DialogInterface?, p1: Int) {
                     end.text = formatTime(endBean)
+                    doRequest()
                 }
             })
             dialog.show()
@@ -159,6 +159,30 @@ class WeeklyISendFragment : BaseFragment() {
                 }
             })
         }
+
+        doRequest()
+    }
+
+    fun doRequest() {
+        SoguApi.getService(baseActivity!!.application)
+                .send(formatTime(startBean), formatTime(endBean))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        payload.payload?.apply {
+
+                        }
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    when (e) {
+                        is JsonSyntaxException -> showToast("后台数据出错")
+                        is UnknownHostException -> showToast("网络出错")
+                        else -> showToast("未知错误")
+                    }
+                })
     }
 
     /**

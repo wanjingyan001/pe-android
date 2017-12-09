@@ -9,18 +9,20 @@ import kotlin.collections.ArrayList
  */
 class WeeklyWatchBean {
     var date: String? = null
-    var list: ArrayList<BeanObj> = ArrayList()
+    var data: ArrayList<BeanObj> = ArrayList()
 
     class BeanObj : Serializable {
-        var icon: Int = 0
+        var img_url: String? = null
         var name: String? = null
-        var click: Boolean = false
+        var user_id: Int? = null
+        var is_read: Int? = null//1=>已读，0=>未读,null=>全部
+        var week_id: Int? = null
     }
 
     fun clone(): WeeklyWatchBean {
         var cloObj = WeeklyWatchBean()
         cloObj.date = this.date
-        cloObj.list = ArrayList<BeanObj>(this.list)
+        cloObj.data = ArrayList<BeanObj>(this.data)
         return cloObj
     }
 }
