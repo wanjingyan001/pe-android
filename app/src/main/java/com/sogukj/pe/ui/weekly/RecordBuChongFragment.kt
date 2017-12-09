@@ -7,8 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.framework.base.BaseFragment
+import com.sogukj.pe.Extras
 
 import com.sogukj.pe.R
+import com.sogukj.pe.bean.WeeklyThisBean
 import kotlinx.android.synthetic.main.buchong_full.*
 
 
@@ -25,5 +27,23 @@ class RecordBuChongFragment : BaseFragment() {
 
         buchong_edit.visibility = View.GONE
 
+        var week = arguments.getSerializable(Extras.DATA) as WeeklyThisBean.Week
+
+        var S_TIME = week.s_times?.split("-")
+        var E_TIME = week.e_times?.split("-")
+
+        time.text = week.time
+        times.text = "${S_TIME?.get(1)}.${S_TIME?.get(2)}-${E_TIME?.get(1)}.${E_TIME?.get(2)}"
+        info.text = week.info
+    }
+
+    companion object {
+        fun newInstance(data: WeeklyThisBean.Week? = null): RecordBuChongFragment {
+            val fragment = RecordBuChongFragment()
+            var args = Bundle()
+            args.putSerializable(Extras.DATA, data)
+            fragment.setArguments(args)
+            return fragment
+        }
     }
 }

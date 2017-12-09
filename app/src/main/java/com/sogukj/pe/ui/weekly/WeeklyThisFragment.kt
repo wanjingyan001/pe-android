@@ -16,6 +16,7 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.bean.WeeklyThisBean
+import com.sogukj.pe.bean.WeeklyWatchBean
 import com.sogukj.pe.ui.user.OrganizationActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.CircleImageView
@@ -36,6 +37,8 @@ class WeeklyThisFragment : BaseFragment() {
         get() = R.layout.fragment_weekly_this
 
     lateinit var inflate: LayoutInflater
+    var user_id: Int? = null//可空（如果为空，显示自己的周报）
+    var issue: Int? = null//可空（1=>个人事务,2=>项目事务）
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -45,9 +48,19 @@ class WeeklyThisFragment : BaseFragment() {
         val arr_adapter = ArrayAdapter<String>(context, R.layout.spinner_item, mItems)
         arr_adapter.setDropDownViewResource(R.layout.spinner_dropdown)
         spinner_this.adapter = arr_adapter
+        //spinner_this.setSelection(0, true)
         spinner_this.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View,
                                         pos: Int, id: Long) {
+                clearView()
+                if (pos == 0) {
+                    issue = null
+                } else if (pos == 1) {
+                    issue = 2
+                } else if (pos == 2) {
+                    issue = 1
+                }
+                doRequest()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
@@ -57,13 +70,37 @@ class WeeklyThisFragment : BaseFragment() {
         var tag = arguments.getString(Extras.FLAG)
         if (tag == "MAIN") {
             spinner_this.visibility = View.GONE
+            user_id = null
+            issue = null
+            doRequest()
         } else if (tag == "PERSONAL") {
             spinner_this.visibility = View.VISIBLE
+            var obj = arguments.getSerializable(Extras.DATA) as WeeklyThisBean
+            initView(obj)
         }
+    }
 
+    fun clearView() {
+        var tag = arguments.getString(Extras.FLAG)
+        if (tag == "MAIN") {
+            //不存在这种情况
+        } else if (tag == "PERSONAL") {
+            var flag = true
+            while (flag) {
+                try {
+                    root.getChildAt(1) as TextView
+                    flag = false
+                } catch (e: Exception) {
+                    root.removeViewAt(1)
+                }
+            }
+        }
+    }
+
+    fun doRequest() {
         baseActivity?.let {
             SoguApi.getService(it.application)
-                    .getWeekly()
+                    .getWeekly(user_id, issue)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe({ payload ->
@@ -255,9 +292,9 @@ class WeeklyThisFragment : BaseFragment() {
 
         var tag = arguments.getString(Extras.FLAG)
         if (tag == "MAIN") {
-            bu_chong_empty.visibility = View.VISIBLE
-            buchong_full.visibility = View.VISIBLE
-            send_layout.visibility = View.VISIBLE
+//            bu_chong_empty.visibility = View.VISIBLE
+//            buchong_full.visibility = View.VISIBLE
+//            send_layout.visibility = View.VISIBLE
         } else if (tag == "PERSONAL") {
             bu_chong_empty.visibility = View.GONE
             buchong_full.visibility = View.GONE
@@ -416,10 +453,11 @@ class WeeklyThisFragment : BaseFragment() {
 
     companion object {
 
-        fun newInstance(tag: String): WeeklyThisFragment {
+        fun newInstance(tag: String, data: WeeklyThisBean? = null): WeeklyThisFragment {
             val fragment = WeeklyThisFragment()
             var args = Bundle()
             args.putString(Extras.FLAG, tag)
+            args.putSerializable(Extras.DATA, data)
             fragment.setArguments(args)
             return fragment
         }

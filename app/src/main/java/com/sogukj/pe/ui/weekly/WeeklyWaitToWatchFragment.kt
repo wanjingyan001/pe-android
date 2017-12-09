@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import android.widget.*
 import com.framework.base.BaseFragment
 import com.google.gson.JsonSyntaxException
+import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.ReceiveSpinnerBean
 import com.sogukj.pe.bean.TimeItem
@@ -56,6 +57,7 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
         val arr_adapter = ArrayAdapter<String>(context, R.layout.spinner_item)
         arr_adapter.setDropDownViewResource(R.layout.spinner_dropdown)
         spinner.adapter = arr_adapter
+        spinner.setSelection(0, true)
         spinner.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View,
                                         pos: Int, id: Long) {
@@ -65,6 +67,8 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
                 Log.e("IIIIIDDDDDD", selected_depart)
                 Log.e("IIIIIDDDDDD", "${spinner_data.get(selected_depart_id.toInt()).id ?: 100000}")
 
+                adapter.dataList.clear()
+                adapter.notifyDataSetChanged()
                 doRequest()
             }
 
@@ -91,6 +95,7 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
                                 grid.setTag("CLICK")
 
                                 val intent = Intent(context, PersonalWeeklyActivity::class.java)
+                                intent.putExtra(Extras.DATA, grid.adapter.getItem(position) as WeeklyWatchBean.BeanObj)
                                 startActivityForResult(intent, 0x011)
                             }
                         })
@@ -105,42 +110,6 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
         list.layoutManager = layoutManager
         list.addItemDecoration(SpaceItemDecoration(20))
         list.adapter = adapter
-
-
-        var bean = WeeklyWatchBean()
-        bean.date = "本周"
-        var obj = WeeklyWatchBean.BeanObj()
-        obj.img_url = "https://www.baidu.com/img/bd_logo1.png"
-        obj.name = "名利里1"
-        obj.is_read = 0
-        bean.data.add(obj)
-        var obj2 = WeeklyWatchBean.BeanObj()
-        obj2.img_url = "https://www.baidu.com/img/bd_logo1.png"
-        obj2.name = "名利里2"
-        obj2.is_read = 1
-        bean.data.add(obj2)
-        var obj3 = WeeklyWatchBean.BeanObj()
-        obj3.img_url = "https://www.baidu.com/img/bd_logo1.png"
-        obj3.name = "名利里3"
-        obj3.is_read = 1
-        bean.data.add(obj3)
-        loadedData.add(bean)
-
-        var bean1 = WeeklyWatchBean()
-        bean1.date = "本周"
-        var obj1 = WeeklyWatchBean.BeanObj()
-        obj1.img_url = "https://www.baidu.com/img/bd_logo1.png"
-        obj1.name = "名利里4"
-        obj1.is_read = 0
-        bean1.data.add(obj1)
-        bean1.data.add(obj1)
-        loadedData.add(bean1)
-
-        adapter.dataList = loadedData
-        adapter.notifyDataSetChanged()
-
-
-
 
         currentClick == 0
         total.setClick(true)
@@ -157,6 +126,9 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
 
             //sort()
 
+            adapter.dataList.clear()
+            adapter.notifyDataSetChanged()
+
             doRequest()
         }
         unread.setOnClickListener {
@@ -169,6 +141,10 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
             readed.setClick(false)
 
             //sort()
+
+            adapter.dataList.clear()
+            adapter.notifyDataSetChanged()
+
             doRequest()
         }
         readed.setOnClickListener {
@@ -181,6 +157,10 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
             readed.setClick(true)
 
             //sort()
+
+            adapter.dataList.clear()
+            adapter.notifyDataSetChanged()
+
             doRequest()
         }
 
@@ -208,6 +188,8 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
                 override fun onClick(p0: DialogInterface?, p1: Int) {
                     start.text = formatTime(startBean)
 
+                    adapter.dataList.clear()
+                    adapter.notifyDataSetChanged()
                     doRequest()
                 }
             })
@@ -227,6 +209,8 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
                 override fun onClick(p0: DialogInterface?, p1: Int) {
                     end.text = formatTime(endBean)
 
+                    adapter.dataList.clear()
+                    adapter.notifyDataSetChanged()
                     doRequest()
                 }
             })
@@ -240,6 +224,9 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
                 }
             })
         }
+
+        currentClick = 0
+        selected_depart_id = 0
 
         SoguApi.getService(baseActivity!!.application)
                 .getDepartment()
@@ -258,10 +245,6 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
                                 arr_adapter.add(item.name)
                             }
                             arr_adapter.notifyDataSetChanged()
-
-                            currentClick = 0
-                            selected_depart_id = 0
-                            doRequest()
                         }
                     } else
                         showToast(payload.message)
@@ -292,7 +275,8 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         payload.payload?.apply {
-
+                            adapter.dataList.addAll(this)
+                            adapter.notifyDataSetChanged()
                         }
                     } else
                         showToast(payload.message)

@@ -799,8 +799,10 @@ interface SoguService {
     fun addRecord(@Body map: HashMap<String, Any>): Observable<Payload<Object>>
 
     //周报-本周周报
+    @FormUrlEncoded
     @POST("/api/Weekly/index")
-    fun getWeekly(): Observable<Payload<WeeklyThisBean>>
+    fun getWeekly(@Field("user_id") user_id: Int? = null,
+                  @Field("issue") issue: Int? = null): Observable<Payload<WeeklyThisBean>>
 
     // 补充工作日程 新增和编辑都是这个接口
     @FormUrlEncoded
@@ -820,7 +822,9 @@ interface SoguService {
     //周报-我发出的
     @FormUrlEncoded
     @POST("/api/Weekly/send")
-    fun send(@Field("start_time") start_time: String,
+    fun send(@Field("page") page: Int = 1,
+             @Field("pageSize") pageSize: Int = 20,
+             @Field("start_time") start_time: String,
              @Field("end_time") end_time: String): Observable<Payload<WeeklySendBean>>
 
     //待我查看的周报
@@ -829,7 +833,7 @@ interface SoguService {
     fun receive(@Field("is_read") is_read: Int? = null,
                 @Field("de_id") de_id: Int? = null,
                 @Field("start_time") start_time: String? = null,
-                @Field("end_time") end_time: String? = null): Observable<Payload<Object>>
+                @Field("end_time") end_time: String? = null): Observable<Payload<ArrayList<WeeklyWatchBean>>>
 
 
     @POST("/api/UserFont/getDepartment")

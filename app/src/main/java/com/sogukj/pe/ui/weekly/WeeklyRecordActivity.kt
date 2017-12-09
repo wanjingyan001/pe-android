@@ -126,6 +126,10 @@ class WeeklyRecordActivity : ToolbarActivity() {
             if (tag == "EDIT") {
                 weekly_id = week.weekly_id
             }
+            if(et_des.text.toString().trim() == ""){
+                showToast("工作内容不能为空")
+                return@setOnClickListener
+            }
             SoguApi.getService(application)
                     .addEditReport(tv_start_time.text.toString(), tv_end_time.text.toString(), et_des.text.toString(), weekly_id)
                     .observeOn(AndroidSchedulers.mainThread())

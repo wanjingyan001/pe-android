@@ -5,7 +5,7 @@ import java.io.Serializable
 /**
  * Created by sogubaby on 2017/12/8.
  */
-class WeeklyThisBean {
+class WeeklyThisBean : Serializable {
     var automatic: ArrayList<Automatic>? = null//本周周报
     var week: Week? = null//补充记录
 

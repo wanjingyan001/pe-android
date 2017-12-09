@@ -6,20 +6,27 @@ import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.GradientDrawable.RECTANGLE
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.framework.base.BaseActivity
+import com.google.gson.JsonSyntaxException
+import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.bean.WeeklyWatchBean
+import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
+import com.sogukj.service.SoguApi
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_personal_weekly.*
 import org.jetbrains.anko.textColor
+import java.net.UnknownHostException
 
 class PersonalWeeklyActivity : BaseActivity() {
 
-    val fragments = arrayOf(
-            WeeklyThisFragment.newInstance("PERSONAL"),
-            RecordBuChongFragment()
-    )
+    lateinit var fragments: Array<Fragment>
 
     lateinit var manager: FragmentManager
 
@@ -27,8 +34,11 @@ class PersonalWeeklyActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_personal_weekly)
 
-        manager = supportFragmentManager
-        manager.beginTransaction().add(R.id.container, fragments[0]).commit()
+        var bean = intent.getSerializableExtra(Extras.DATA) as WeeklyWatchBean.BeanObj
+
+        name.text = bean.name
+        Glide.with(context).load(bean.img_url).into(icon)
+
 
         back.setOnClickListener {
             finish()
@@ -45,9 +55,33 @@ class PersonalWeeklyActivity : BaseActivity() {
             replace(1)
         }
 
-        back.setOnClickListener {
-            finish()
-        }
+        SoguApi.getService(application)
+                .getWeekly(bean.user_id, null)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        payload.payload?.apply {
+
+                            fragments = arrayOf(
+                                    WeeklyThisFragment.newInstance("PERSONAL", this),
+                                    RecordBuChongFragment.newInstance(this.week)
+                            )
+
+                            manager = supportFragmentManager
+                            manager.beginTransaction().add(R.id.container, fragments[0]).commit()
+                        }
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    when (e) {
+                        is JsonSyntaxException -> showToast("后台数据出错")
+                        is UnknownHostException -> showToast("网络出错")
+                        else -> showToast("未知错误")
+                    }
+                })
+
     }
 
     fun switchContent(from: Int, to: Int) {

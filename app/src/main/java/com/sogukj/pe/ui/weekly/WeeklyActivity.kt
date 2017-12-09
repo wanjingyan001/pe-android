@@ -16,7 +16,7 @@ import org.jetbrains.anko.textColor
 class WeeklyActivity : ToolbarActivity() {
 
     val fragments = arrayOf(
-            WeeklyThisFragment.newInstance("MAIN"),
+            WeeklyThisFragment.newInstance("MAIN", null),
             WeeklyWaitToWatchFragment(),
             WeeklyISendFragment()
     )
