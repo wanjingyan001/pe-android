@@ -6,9 +6,8 @@ import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.widget.DividerItemDecoration
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,14 +20,17 @@ import com.sogukj.pe.view.RecyclerHolder
 import kotlinx.android.synthetic.main.fragment_weekly_isend.*
 import android.widget.TextView
 import com.google.gson.JsonSyntaxException
+import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
+import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
+import com.lcodecore.tkrefreshlayout.footer.BallPulseView
+import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.bean.TimeItem
+import com.sogukj.pe.ui.SupportEmptyView
 import com.sogukj.pe.util.Trace
-import com.sogukj.pe.view.ListAdapter
 import com.sogukj.pe.view.MyGridView
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.item_week_send.*
 import java.net.UnknownHostException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -58,7 +60,7 @@ class WeeklyISendFragment : BaseFragment() {
                 val grid = convertView.findViewById(R.id.grid_list) as MyGridView
                 override fun setData(view: View, data: WeeklySendBean, position: Int) {
                     tv_title.text = data.date
-                    data.list?.let {
+                    data.data?.let {
                         var adapter = MyAdapter(context, it)
                         grid.adapter = adapter
                         adapter.notifyDataSetChanged()
@@ -72,39 +74,6 @@ class WeeklyISendFragment : BaseFragment() {
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         list.layoutManager = layoutManager
         list.adapter = adapter
-
-        // TODO 假数据
-        var bean = WeeklySendBean()
-        bean.date = "2017年10月"
-        bean.list.add("10.06-10.12")
-        bean.list.add("10.13-10.15")
-        bean.list.add("10.16-10.18")
-        bean.list.add("10.19-10.21")
-        bean.list.add("10.22-10.23")
-        bean.list.add("10.34-10.35")
-        adapter.dataList.add(bean)
-
-        var bean1 = WeeklySendBean()
-        bean1.date = "2017年11月"
-        bean1.list.add("11.06-11.12")
-        bean1.list.add("11.13-11.20")
-        adapter.dataList.add(bean1)
-
-        var bean2 = WeeklySendBean()
-        bean2.date = "2017年10月"
-        bean2.list.add("10.06-10.12")
-        bean2.list.add("10.13-10.15")
-        bean2.list.add("10.16-10.18")
-        bean2.list.add("10.19-10.21")
-        bean2.list.add("10.22-10.23")
-        bean2.list.add("10.34-10.35")
-        adapter.dataList.add(bean2)
-        adapter.dataList.add(bean2)
-        adapter.dataList.add(bean2)
-
-        adapter.notifyDataSetChanged()
-        // TODO 假数据
-
 
         var calendar = Calendar.getInstance()
         var year = calendar.get(Calendar.YEAR)
@@ -128,6 +97,8 @@ class WeeklyISendFragment : BaseFragment() {
             dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", object : DialogInterface.OnClickListener {
                 override fun onClick(p0: DialogInterface?, p1: Int) {
                     start.text = formatTime(startBean)
+                    adapter.dataList.clear()
+                    adapter.notifyDataSetChanged()
                     doRequest()
                 }
             })
@@ -146,6 +117,8 @@ class WeeklyISendFragment : BaseFragment() {
             dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", object : DialogInterface.OnClickListener {
                 override fun onClick(p0: DialogInterface?, p1: Int) {
                     end.text = formatTime(endBean)
+                    adapter.dataList.clear()
+                    adapter.notifyDataSetChanged()
                     doRequest()
                 }
             })
@@ -159,6 +132,27 @@ class WeeklyISendFragment : BaseFragment() {
                 }
             })
         }
+
+        val header = ProgressLayout(baseActivity)
+        header.setColorSchemeColors(ContextCompat.getColor(baseActivity, R.color.color_main))
+        refresh.setHeaderView(header)
+        val footer = BallPulseView(baseActivity)
+        footer.setAnimatingColor(ContextCompat.getColor(baseActivity, R.color.color_main))
+        refresh.setBottomView(footer)
+        refresh.setOverScrollRefreshShow(false)
+        refresh.setOnRefreshListener(object : RefreshListenerAdapter() {
+            override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
+                page = 1
+                doRequest()
+            }
+
+            override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
+                ++page
+                doRequest()
+            }
+
+        })
+        refresh.setAutoLoadMore(true)
 
         doRequest()
     }
@@ -174,7 +168,8 @@ class WeeklyISendFragment : BaseFragment() {
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         payload.payload?.apply {
-
+                            adapter.dataList.addAll(this)
+                            //adapter.notifyDataSetChanged()
                         }
                     } else
                         showToast(payload.message)
@@ -185,6 +180,13 @@ class WeeklyISendFragment : BaseFragment() {
                         is UnknownHostException -> showToast("网络出错")
                         else -> showToast("未知错误")
                     }
+                }, {
+                    refresh.setEnableLoadmore(adapter.dataList.size % 20 == 0)
+                    adapter.notifyDataSetChanged()
+                    if (page == 1)
+                        refresh.finishRefreshing()
+                    else
+                        refresh.finishLoadmore()
                 })
     }
 
@@ -200,10 +202,10 @@ class WeeklyISendFragment : BaseFragment() {
         if (time.day < 10) {
             day_str = "0${time.day}"
         }
-        return "${time.year}-${month_str}-${day_str}";
+        return "${time.year}-${month_str}-${day_str}"
     }
 
-    class MyAdapter(var context: Context, val list: ArrayList<String>) : BaseAdapter() {
+    class MyAdapter(var context: Context, val list: ArrayList<WeeklySendBean.WeeklySendBeanObj>) : BaseAdapter() {
 
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
@@ -211,7 +213,7 @@ class WeeklyISendFragment : BaseFragment() {
             if (conView == null) {
                 conView = LayoutInflater.from(context).inflate(R.layout.senditem, null)
             }
-            (conView as TextView).text = list.get(position)
+            (conView as TextView).text = list.get(position).week
             return conView
         }
 

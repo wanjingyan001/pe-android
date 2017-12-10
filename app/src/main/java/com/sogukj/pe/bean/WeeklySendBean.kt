@@ -5,5 +5,10 @@ package com.sogukj.pe.bean
  */
 class WeeklySendBean {
     var date: String? = null
-    val list: ArrayList<String> = ArrayList()
+    val data: ArrayList<WeeklySendBeanObj>? = null
+
+    class WeeklySendBeanObj {
+        var week: String? = null//每周时间段
+        var week_id: Int? = null//周报ID
+    }
 }

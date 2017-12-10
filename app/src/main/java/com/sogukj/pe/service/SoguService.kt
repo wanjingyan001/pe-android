@@ -825,7 +825,7 @@ interface SoguService {
     fun send(@Field("page") page: Int = 1,
              @Field("pageSize") pageSize: Int = 20,
              @Field("start_time") start_time: String,
-             @Field("end_time") end_time: String): Observable<Payload<WeeklySendBean>>
+             @Field("end_time") end_time: String): Observable<Payload<ArrayList<WeeklySendBean>>>
 
     //待我查看的周报
     @FormUrlEncoded

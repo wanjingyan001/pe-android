@@ -1,10 +1,11 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/refresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusableInTouchMode="true"
-    android:scrollbars="none"
     android:overScrollMode="never"
+    android:scrollbars="none"
     tools:context="com.sogukj.pe.ui.weekly.WeeklyISendFragment">
 
     <LinearLayout
@@ -57,4 +58,4 @@
 
     </LinearLayout>
 
-</ScrollView>
+</com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
