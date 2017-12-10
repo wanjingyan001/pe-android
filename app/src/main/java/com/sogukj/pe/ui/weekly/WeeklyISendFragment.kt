@@ -83,8 +83,8 @@ class WeeklyISendFragment : BaseFragment() {
         startBean = TimeItem(year, month, day)
         endBean = TimeItem(year, month, day)
 
-        start.text = formatTime(startBean)
-        end.text = formatTime(endBean)
+        start.text = ""//formatTime(startBean)
+        end.text = ""//formatTime(endBean)
 
         var selector = LayoutInflater.from(context).inflate(R.layout.time_selector, null)
         var dialog = AlertDialog.Builder(context).setView(selector).create()
@@ -96,6 +96,10 @@ class WeeklyISendFragment : BaseFragment() {
         start.setOnClickListener {
             dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", object : DialogInterface.OnClickListener {
                 override fun onClick(p0: DialogInterface?, p1: Int) {
+                    if (end.text.trim() == "") {
+                        start.text = formatTime(startBean)
+                        return
+                    }
                     if (startBean.compare(endBean) == 1) {
                         showToast("日期选择错误")
                         return
@@ -120,6 +124,10 @@ class WeeklyISendFragment : BaseFragment() {
         end.setOnClickListener {
             dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", object : DialogInterface.OnClickListener {
                 override fun onClick(p0: DialogInterface?, p1: Int) {
+                    if (start.text.trim() == "") {
+                        end.text = formatTime(endBean)
+                        return
+                    }
                     if (startBean.compare(endBean) == 1) {
                         showToast("日期选择错误")
                         return
