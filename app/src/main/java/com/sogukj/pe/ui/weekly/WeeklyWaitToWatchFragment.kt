@@ -7,6 +7,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,6 +16,10 @@ import android.view.ViewGroup
 import android.widget.*
 import com.framework.base.BaseFragment
 import com.google.gson.JsonSyntaxException
+import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
+import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
+import com.lcodecore.tkrefreshlayout.footer.BallPulseView
+import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.ReceiveSpinnerBean
@@ -282,7 +287,31 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
                         else -> showToast("未知错误")
                     }
                 })
+
+        val header = ProgressLayout(baseActivity)
+        header.setColorSchemeColors(ContextCompat.getColor(baseActivity, R.color.color_main))
+        root.setHeaderView(header)
+        val footer = BallPulseView(baseActivity)
+        footer.setAnimatingColor(ContextCompat.getColor(baseActivity, R.color.color_main))
+        root.setBottomView(footer)
+        root.setOverScrollRefreshShow(false)
+        root.setOnRefreshListener(object : RefreshListenerAdapter() {
+            override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
+                page = 1
+                doRequest()
+            }
+
+            override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
+                ++page
+                doRequest()
+            }
+
+        })
+        root.setAutoLoadMore(true)
     }
+
+    var page = 1
+    var pageSize = 5
 
     fun doRequest() {
         var is_read: Int? = null
@@ -302,14 +331,14 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
         }
 
         SoguApi.getService(baseActivity!!.application)
-                .receive(is_read, de_id, start_time, end_time)
+                .receive(is_read, de_id, start_time, end_time, page, pageSize)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         payload.payload?.apply {
                             adapter.dataList.addAll(this)
-                            adapter.notifyDataSetChanged()
+                            //adapter.notifyDataSetChanged()
                         }
                     } else
                         showToast(payload.message)
@@ -320,6 +349,13 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
                         is UnknownHostException -> showToast("网络出错")
                         else -> showToast("未知错误")
                     }
+                }, {
+                    root.setEnableLoadmore(adapter.dataList.size % pageSize == 0)
+                    adapter.notifyDataSetChanged()
+                    if (page == 1)
+                        root.finishRefreshing()
+                    else
+                        root.finishLoadmore()
                 })
     }
 

@@ -25,7 +25,6 @@ import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import com.lcodecore.tkrefreshlayout.footer.BallPulseView
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.bean.TimeItem
-import com.sogukj.pe.ui.SupportEmptyView
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.MyGridView
 import com.sogukj.service.SoguApi
@@ -174,7 +173,7 @@ class WeeklyISendFragment : BaseFragment() {
     }
 
     var page = 1
-    var pageSize = 20
+    var pageSize = 5
 
     fun doRequest() {
         SoguApi.getService(baseActivity!!.application)
@@ -197,7 +196,7 @@ class WeeklyISendFragment : BaseFragment() {
                         else -> showToast("未知错误")
                     }
                 }, {
-                    refresh.setEnableLoadmore(adapter.dataList.size % 20 == 0)
+                    refresh.setEnableLoadmore(adapter.dataList.size % pageSize == 0)
                     adapter.notifyDataSetChanged()
                     if (page == 1)
                         refresh.finishRefreshing()

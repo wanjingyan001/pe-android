@@ -825,7 +825,7 @@ interface SoguService {
     @FormUrlEncoded
     @POST("/api/Weekly/send")
     fun send(@Field("page") page: Int = 1,
-             @Field("pageSize") pageSize: Int = 20,
+             @Field("pageSize") pageSize: Int = 5,
              @Field("start_time") start_time: String,
              @Field("end_time") end_time: String): Observable<Payload<ArrayList<WeeklySendBean>>>
 
@@ -835,7 +835,9 @@ interface SoguService {
     fun receive(@Field("is_read") is_read: Int? = null,
                 @Field("de_id") de_id: Int? = null,
                 @Field("start_time") start_time: String? = null,
-                @Field("end_time") end_time: String? = null): Observable<Payload<ArrayList<WeeklyWatchBean>>>
+                @Field("end_time") end_time: String? = null,
+                @Field("page") page: Int = 1,
+                @Field("pageSize") pageSize: Int = 5): Observable<Payload<ArrayList<WeeklyWatchBean>>>
 
 
     @POST("/api/UserFont/getDepartment")
