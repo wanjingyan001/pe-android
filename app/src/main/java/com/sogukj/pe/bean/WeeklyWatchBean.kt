@@ -8,7 +8,9 @@ import kotlin.collections.ArrayList
  * Created by sogubaby on 2017/12/6.
  */
 class WeeklyWatchBean {
-    var date: String? = null
+    var date: String? = null//10.06-10.13
+    var s_time: String? = null//2017-10-06
+    var e_time: String? = null//2017-10-13
     var data: ArrayList<BeanObj> = ArrayList()
 
     class BeanObj : Serializable {

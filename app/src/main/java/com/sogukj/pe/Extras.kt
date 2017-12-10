@@ -22,4 +22,7 @@ object Extras {
     val RESULTCODE = 1002
     val RESULTCODE2 = 1003
     val RESULTCODE3 = 1004
+
+    val TIME1 = "ext.s_time"
+    val TIME2 = "ext.e_time"
 }

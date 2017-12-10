@@ -98,9 +98,18 @@ class WeeklyThisFragment : BaseFragment() {
     }
 
     fun doRequest() {
+        var tag = arguments.getString(Extras.FLAG)
+        var s_time: String? = null
+        var e_time: String? = null
+        if (tag == "MAIN") {
+            //
+        } else if (tag == "PERSONAL") {
+            s_time = arguments.getString(Extras.TIME1)
+            e_time = arguments.getString(Extras.TIME2)
+        }
         baseActivity?.let {
             SoguApi.getService(it.application)
-                    .getWeekly(user_id, issue)
+                    .getWeekly(user_id, issue, s_time, e_time)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe({ payload ->
@@ -457,11 +466,13 @@ class WeeklyThisFragment : BaseFragment() {
 
     companion object {
 
-        fun newInstance(tag: String, data: WeeklyThisBean? = null): WeeklyThisFragment {
+        fun newInstance(tag: String, data: WeeklyThisBean? = null, s_time: String? = null, e_time: String? = null): WeeklyThisFragment {
             val fragment = WeeklyThisFragment()
             var args = Bundle()
             args.putString(Extras.FLAG, tag)
             args.putSerializable(Extras.DATA, data)
+            args.putString(Extras.TIME1, s_time)
+            args.putString(Extras.TIME2, e_time)
             fragment.setArguments(args)
             return fragment
         }

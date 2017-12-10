@@ -56,7 +56,7 @@ class PersonalWeeklyActivity : BaseActivity() {
         }
 
         SoguApi.getService(application)
-                .getWeekly(bean.user_id, null)
+                .getWeekly(bean.user_id, null, intent.getStringExtra(Extras.TIME1), intent.getStringExtra(Extras.TIME2))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -64,7 +64,7 @@ class PersonalWeeklyActivity : BaseActivity() {
                         payload.payload?.apply {
 
                             fragments = arrayOf(
-                                    WeeklyThisFragment.newInstance("PERSONAL", this),
+                                    WeeklyThisFragment.newInstance("PERSONAL", this, intent.getStringExtra(Extras.TIME1), intent.getStringExtra(Extras.TIME2)),
                                     RecordBuChongFragment.newInstance(this.week)
                             )
 

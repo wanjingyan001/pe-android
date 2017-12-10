@@ -96,6 +96,8 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
 
                                 val intent = Intent(context, PersonalWeeklyActivity::class.java)
                                 intent.putExtra(Extras.DATA, grid.adapter.getItem(position) as WeeklyWatchBean.BeanObj)
+                                intent.putExtra(Extras.TIME1, data.s_time)
+                                intent.putExtra(Extras.TIME2, data.e_time)
                                 startActivityForResult(intent, 0x011)
                             }
                         })
