@@ -173,8 +173,10 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
         startBean = TimeItem(year, month, day)
         endBean = TimeItem(year, month, day)
 
-        start.text = formatTime(startBean)
-        end.text = formatTime(endBean)
+//        start.text = formatTime(startBean)
+//        end.text = formatTime(endBean)
+        start.text = ""
+        end.text = ""
 
         var selector = LayoutInflater.from(context).inflate(R.layout.time_selector, null)
         var dialog = AlertDialog.Builder(context).setView(selector).create()
@@ -186,6 +188,11 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
         start.setOnClickListener {
             dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", object : DialogInterface.OnClickListener {
                 override fun onClick(p0: DialogInterface?, p1: Int) {
+
+                    if (end.text.trim() == "") {
+                        start.text = formatTime(startBean)
+                        return
+                    }
 
                     if (startBean.compare(endBean) == 1) {
                         showToast("日期选择错误")
@@ -213,6 +220,11 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
         end.setOnClickListener {
             dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", object : DialogInterface.OnClickListener {
                 override fun onClick(p0: DialogInterface?, p1: Int) {
+
+                    if (start.text.trim() == "") {
+                        end.text = formatTime(endBean)
+                        return
+                    }
 
                     if (startBean.compare(endBean) == 1) {
                         showToast("日期选择错误")
@@ -280,8 +292,15 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
 
         var de_id = spinner_data.get(selected_depart_id.toInt()).id
 
+        var start_time: String? = null
+        var end_time: String? = null
+        if (start.text.trim() != "") {
+            start_time = formatTime(startBean)
+            end_time = formatTime(endBean)
+        }
+
         SoguApi.getService(baseActivity!!.application)
-                .receive(is_read, de_id, formatTime(startBean), formatTime(endBean))
+                .receive(is_read, de_id, start_time, end_time)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
