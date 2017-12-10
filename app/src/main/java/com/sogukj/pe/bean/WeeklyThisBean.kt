@@ -31,6 +31,6 @@ class WeeklyThisBean : Serializable {
         var s_times: String? = null//2017-10-06
         var e_times: String? = null//2017-10-13
         var info: String? = null//周报内容
-        var weekly_id: Int? = null//周报id
+        var week_id: Int? = null//周报id
     }
 }

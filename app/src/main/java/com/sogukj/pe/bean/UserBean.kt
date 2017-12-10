@@ -16,6 +16,7 @@ open class UserBean() : Serializable {
     var depart_id: Int? = null
     var numberOfShares: Int = 0
     var is_admin: Int = 0
+    var user_id: Int? = null//
 
     fun headImage(): String? {
         if (null == url) return null

@@ -152,13 +152,14 @@ class WeeklyThisFragment : BaseFragment() {
             }
         }
 
-        if (loaded.week == null) {
+        if (loaded.week?.week_id == null) {
             bu_chong_empty.visibility = View.VISIBLE
             buchong_full.visibility = View.GONE
 
             bu_chong_empty.setOnClickListener {
                 val intent = Intent(context, WeeklyRecordActivity::class.java)
                 intent.putExtra(Extras.FLAG, "ADD")
+                intent.putExtra(Extras.DATA, loaded.week)
                 startActivityForResult(intent, ADD)
             }
         } else {
@@ -236,16 +237,22 @@ class WeeklyThisFragment : BaseFragment() {
         }
 
         btn_commit.setOnClickListener {
+
+            if (send_adapter.list.size == 1) {
+                showToast("发送人不可为空")
+                return@setOnClickListener
+            }
+
             var weekly_id: Int? = null
             if (week != null) {
-                weekly_id = week.weekly_id
+                weekly_id = week.week_id
             }
             var accept_uid: String = ""
             for (item in send_adapter.list) {
                 if (item.name == "添加") {
                     continue
                 }
-                accept_uid = "${accept_uid},${item.uid}"
+                accept_uid = "${accept_uid},${item.user_id}"
             }
             if (accept_uid != "") {
                 accept_uid = accept_uid.substring(1)
@@ -258,17 +265,13 @@ class WeeklyThisFragment : BaseFragment() {
                     if (item.name == "添加") {
                         continue
                     }
-                    copy_uid = "${copy_uid},${item.uid}"
+                    copy_uid = "${copy_uid},${item.user_id}"
                 }
                 if (copy_uid != "") {
                     copy_uid = copy_uid?.substring(1)
                 }
             }
 
-            if (accept_uid == "") {
-                showToast("发送人不可为空")
-                return@setOnClickListener
-            }
             SoguApi.getService(baseActivity!!.application)
                     .sendReport(weekly_id, accept_uid, copy_uid)
                     .observeOn(AndroidSchedulers.mainThread())
@@ -278,6 +281,7 @@ class WeeklyThisFragment : BaseFragment() {
                             payload.payload?.apply {
 
                             }
+                            baseActivity?.finish()
                         } else
                             showToast(payload.message)
                     }, { e ->

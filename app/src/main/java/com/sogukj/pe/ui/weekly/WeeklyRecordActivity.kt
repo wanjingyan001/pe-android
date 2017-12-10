@@ -44,16 +44,21 @@ class WeeklyRecordActivity : ToolbarActivity() {
         if (tag == "ADD") {
             title = "补充工作日程"
 
-            var calendar = Calendar.getInstance()
-            var year = calendar.get(Calendar.YEAR)
-            var month = calendar.get(Calendar.MONTH) + 1
-            var day = calendar.get(Calendar.DAY_OF_MONTH)
+//            var calendar = Calendar.getInstance()
+//            var year = calendar.get(Calendar.YEAR)
+//            var month = calendar.get(Calendar.MONTH) + 1
+//            var day = calendar.get(Calendar.DAY_OF_MONTH)
+//
+//            startBean = TimeItem(year, month, day)
+//            endBean = TimeItem(year, month, day)
+//
+//            tv_start_time.text = formatTime(startBean)
+//            tv_end_time.text = formatTime(endBean)
 
-            startBean = TimeItem(year, month, day)
-            endBean = TimeItem(year, month, day)
+            week = intent.getSerializableExtra(Extras.DATA) as WeeklyThisBean.Week
 
-            tv_start_time.text = formatTime(startBean)
-            tv_end_time.text = formatTime(endBean)
+            tv_start_time.text = week.s_times
+            tv_end_time.text = week.e_times
 
         } else if (tag == "EDIT") {
             title = "修改工作日程"
@@ -72,11 +77,15 @@ class WeeklyRecordActivity : ToolbarActivity() {
         time_picker.visibility = View.GONE
 
         tv_start_time.setOnClickListener {
-            if (tag == "EDIT") {
+            if (tag == "EDIT" || tag == "ADD") {
                 return@setOnClickListener
             }
             dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", object : DialogInterface.OnClickListener {
                 override fun onClick(p0: DialogInterface?, p1: Int) {
+                    if (startBean.compare(endBean) == 1) {
+                        showToast("日期选择错误")
+                        return
+                    }
                     tv_start_time.text = formatTime(startBean)
                 }
             })
@@ -92,11 +101,15 @@ class WeeklyRecordActivity : ToolbarActivity() {
         }
 
         tv_end_time.setOnClickListener {
-            if (tag == "EDIT") {
+            if (tag == "EDIT" || tag == "ADD") {
                 return@setOnClickListener
             }
             dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", object : DialogInterface.OnClickListener {
                 override fun onClick(p0: DialogInterface?, p1: Int) {
+                    if (startBean.compare(endBean) == 1) {
+                        showToast("日期选择错误")
+                        return
+                    }
                     tv_end_time.text = formatTime(endBean)
                 }
             })
@@ -124,9 +137,9 @@ class WeeklyRecordActivity : ToolbarActivity() {
         btn_commit.setOnClickListener {
             var weekly_id: Int? = null
             if (tag == "EDIT") {
-                weekly_id = week.weekly_id
+                weekly_id = week.week_id
             }
-            if(et_des.text.toString().trim() == ""){
+            if (et_des.text.toString().trim() == "") {
                 showToast("工作内容不能为空")
                 return@setOnClickListener
             }
@@ -142,19 +155,20 @@ class WeeklyRecordActivity : ToolbarActivity() {
                                     var intent = Intent()
                                     //week.time = df.format(Date())
                                     week.info = et_des.text.toString()
-                                    intent.putExtra("DATA", week)
+                                    intent.putExtra(Extras.DATA, week)
                                     setResult(Activity.RESULT_OK, intent)
                                     finish()
                                 } else {
-                                    week = WeeklyThisBean.Week()
+//                                    week = WeeklyThisBean.Week()
                                     week.time = df.format(Date())
-                                    week.s_times = tv_start_time.text.toString()
-                                    week.e_times = tv_end_time.text.toString()
+//                                    week.s_times = tv_start_time.text.toString()
+//                                    week.e_times = tv_end_time.text.toString()
                                     week.info = et_des.text.toString()
-                                    week.weekly_id = this as Int
+                                    // 应该是int，确实double
+                                    week.week_id = this.toString().split(".")[0].toInt()
 
                                     var intent = Intent()
-                                    intent.putExtra("DATA", week)
+                                    intent.putExtra(Extras.DATA, week)
                                     setResult(Activity.RESULT_OK, intent)
                                     finish()
                                 }

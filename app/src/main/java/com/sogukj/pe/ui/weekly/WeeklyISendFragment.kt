@@ -96,6 +96,10 @@ class WeeklyISendFragment : BaseFragment() {
         start.setOnClickListener {
             dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", object : DialogInterface.OnClickListener {
                 override fun onClick(p0: DialogInterface?, p1: Int) {
+                    if (startBean.compare(endBean) == 1) {
+                        showToast("日期选择错误")
+                        return
+                    }
                     start.text = formatTime(startBean)
                     adapter.dataList.clear()
                     adapter.notifyDataSetChanged()
@@ -116,6 +120,10 @@ class WeeklyISendFragment : BaseFragment() {
         end.setOnClickListener {
             dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", object : DialogInterface.OnClickListener {
                 override fun onClick(p0: DialogInterface?, p1: Int) {
+                    if (startBean.compare(endBean) == 1) {
+                        showToast("日期选择错误")
+                        return
+                    }
                     end.text = formatTime(endBean)
                     adapter.dataList.clear()
                     adapter.notifyDataSetChanged()
