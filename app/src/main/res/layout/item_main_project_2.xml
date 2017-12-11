@@ -4,39 +4,72 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_item_list"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:padding="10dp">
 
-    <TextView
-        android:id="@+id/tv1"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="3"
-        android:gravity="left"
-        android:singleLine="true"
-        android:textColor="@color/text_1"
-        android:textSize="14sp"
-        tools:text="@string/tools_text_title" />
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:gravity="left"
+            android:singleLine="true"
+            android:textColor="@color/text_1"
+            android:textSize="14sp"
+            tools:text="@string/tools_text_title" />
 
 
-    <TextView
-        android:id="@+id/tv3"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:gravity="center"
-        android:textColor="@color/text_1"
-        android:textSize="14sp"
-        tools:text="07/07 12:00" />
+        <TextView
+            android:id="@+id/tv3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:textColor="@color/text_1"
+            android:textSize="14sp"
+            tools:text="07/07 12:00" />
 
-    <TextView
-        android:id="@+id/tv2"
-        android:layout_width="0dp"
+        <TextView
+            android:id="@+id/tv2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/text_1"
+            android:textSize="14sp"
+            tools:text="A轮" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:textColor="@color/text_1"
-        android:textSize="14sp"
-        tools:text="A轮" />
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rect_orange"
+            android:gravity="center"
+            android:text="有商业价值"
+            android:textColor="@color/white"
+            android:textSize="10sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/rect_blue"
+            android:gravity="center"
+            android:text="创始人无能力"
+            android:textColor="@color/white"
+            android:textSize="10sp" />
+    </LinearLayout>
 
 </LinearLayout>

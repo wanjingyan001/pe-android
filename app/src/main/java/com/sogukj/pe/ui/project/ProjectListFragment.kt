@@ -81,7 +81,10 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
         val user = Store.store.getUser(baseActivity!!)
         if (type != TYPE_GZ && user?.is_admin == 1)
             adapter.onItemLongClick = { v, p ->
-                editOptions(v, p)
+                if (type == TYPE_DY || type == TYPE_CB) {
+                } else {
+                    editOptions(v, p)
+                }
                 true
             }
         val layoutManager = LinearLayoutManager(baseActivity)
@@ -243,7 +246,7 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                     .show()
         }
         if (type == TYPE_TC) tvAdd.visibility = View.GONE
-        var toast_txt = if(type == TYPE_LX) "添加已投" else if(type == TYPE_YT) "添加到退出" else ""
+        var toast_txt = if (type == TYPE_LX) "添加已投" else if (type == TYPE_YT) "添加到退出" else ""
         tvAdd.text = toast_txt
         pop.isTouchable = true
         pop.isFocusable = true
@@ -277,7 +280,7 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
     }
 
     fun doAdd(position: Int) {
-        var status = if(type == TYPE_LX) 3 else if(type == TYPE_YT) 4 else 0
+        var status = if (type == TYPE_LX) 3 else if (type == TYPE_YT) 4 else 0
         val project = adapter.dataList[position]
         SoguApi.getService(baseActivity!!.application)
                 //.editProject(project.company_id!!)
@@ -286,9 +289,9 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        if(type == TYPE_LX){
+                        if (type == TYPE_LX) {
                             showToast("添加拟投成功")
-                        } else if(type == TYPE_YT){
+                        } else if (type == TYPE_YT) {
                             showToast("已添加到退出")
                         }
                         adapter.dataList.removeAt(position)
@@ -296,9 +299,9 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                     } else showToast(payload.message)
                 }, { e ->
                     Trace.e(e)
-                    if(type == TYPE_LX){
+                    if (type == TYPE_LX) {
                         showToast("添加拟投失败")
-                    } else if(type == TYPE_YT){
+                    } else if (type == TYPE_YT) {
                         showToast("添加到退出失败")
                     }
                 })
@@ -323,7 +326,11 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
             tvTime = convertView.findViewById(R.id.tv_time) as TextView
             tvEdit = convertView.findViewById(R.id.tv_edit) as TextView
             tvDel = convertView.findViewById(R.id.tv_del) as TextView
-
+            if (type == TYPE_CB) {
+                convertView.findViewById(R.id.suffix).visibility = View.VISIBLE
+            } else if (type == TYPE_DY) {
+                convertView.findViewById(R.id.suffix).visibility = View.GONE
+            }
         }
 
         override fun setData(view: View, data: ProjectBean, position: Int) {
@@ -342,7 +349,7 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                         .getOrNull(1)
             }
 
-            if(type == TYPE_DY){
+            if (type == TYPE_DY) {
                 btnAdd.text = "+储备"
                 btnAdd.setOnClickListener {
                     MaterialDialog.Builder(baseActivity!!)
@@ -355,7 +362,7 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                                 dialog.dismiss()
                             }.show()
                 }
-            } else if(type == TYPE_CB){
+            } else if (type == TYPE_CB) {
                 btnAdd.text = "+立项"
                 btnAdd.setOnClickListener {
                     MaterialDialog.Builder(baseActivity!!)
@@ -371,9 +378,9 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
             }
 
             tvEdit.setOnClickListener {
-                if(type == TYPE_CB){
+                if (type == TYPE_CB) {
                     StoreProjectAddActivity.startEdit(baseActivity, data)
-                } else if(type == TYPE_DY){
+                } else if (type == TYPE_DY) {
                     ProjectAddActivity.startEdit(baseActivity, data)
                 }
 

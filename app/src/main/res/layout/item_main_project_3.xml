@@ -40,9 +40,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp"
         android:orientation="horizontal"
-        android:paddingBottom="18dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp">
 
@@ -99,6 +99,35 @@
             android:text="删除"
             android:textColor="@color/text_3"
             android:textSize="12sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/suffix"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rect_orange"
+            android:gravity="center"
+            android:text="有商业价值"
+            android:textColor="@color/white"
+            android:textSize="10sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/rect_blue"
+            android:gravity="center"
+            android:text="创始人无能力"
+            android:textColor="@color/white"
+            android:textSize="10sp" />
     </LinearLayout>
 
 
