@@ -271,7 +271,7 @@ class WeeklyThisFragment : BaseFragment() {
             }
 
             var copy_uid: String? = null
-            if (chaosong_adapter.list.size != 0) {
+            if (chaosong_adapter.list.size > 1) {
                 copy_uid = ""
                 for (item in chaosong_adapter.list) {
                     if (item.name == "添加") {
