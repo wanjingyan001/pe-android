@@ -24,6 +24,8 @@ abstract class ToolbarActivity : BaseActivity() {
     var toolbar: Toolbar? = null
         private set
 
+    lateinit var mMenu:Menu
+
     fun setBack(visible: Boolean) {
         toolbar?.apply {
             val back = this.findViewById(R.id.toolbar_back) as View?
@@ -93,7 +95,7 @@ abstract class ToolbarActivity : BaseActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-
+        mMenu = menu
         if (menuId != 0) {
             menuInflater.inflate(menuId, menu)
             return true

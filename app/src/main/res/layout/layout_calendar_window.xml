@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingLeft="12dp"
+    android:paddingRight="12dp"
+    android:paddingTop="12dp">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divider2" />
+
+    <TextView
+        android:id="@+id/monthAndYear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:gravity="center"
+        android:textColor="@color/text_1"
+        android:textSize="14sp" />
+
+    <com.ldf.calendar.view.MonthPager
+        android:id="@+id/calendar_view"
+        android:layout_width="match_parent"
+        android:layout_height="270dp"
+        android:background="#fff">
+
+    </com.ldf.calendar.view.MonthPager>
+
+</LinearLayout>

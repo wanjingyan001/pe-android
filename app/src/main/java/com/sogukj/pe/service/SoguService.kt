@@ -2,19 +2,13 @@ package com.sogukj.service
 
 import com.sogukj.pe.bean.*
 import com.sogukj.pe.service.Payload
-import com.sogukj.pe.ui.project.InvestSuggestActivity
+import com.sogukj.pe.ui.calendar.*
 import io.reactivex.Observable
-import okhttp3.Call
 import okhttp3.RequestBody
-import okhttp3.Response
-import okhttp3.ResponseBody
 import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
-import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 /**
  * Created by qinfei on 17/6/2.
@@ -756,6 +750,92 @@ interface SoguService {
      */
     @POST("/api/Userfont/editResumeBaseInfo")
     fun editResumeBaseInfo(@Body ae: UserResumeReqBean): Observable<Payload<Any>>
+
+    /**
+     * 获取日程/团队日程
+     * stat:1=>日程，2=>团队日程,3=>项目事项
+     * time: 2017-10-10形式
+     * filter:stat=2时，多个uid以逗号隔开,例如’1，2‘
+     */
+    @FormUrlEncoded
+    @POST("/api/Calendar/showSchedule")
+    fun showSchedule(@Field("page") page: Int = 1,
+                     @Field("pageSize") pageSize: Int = 20,
+                     @Field("stat") stat: Int,
+                     @Field("time") time: String,
+                     @Field("filter") filter: String? = null): Observable<Payload<List<ScheduleBean>>>
+
+    /**
+     * 获取项目事项
+     */
+    @FormUrlEncoded
+    @POST("/api/Calendar/showSchedule")
+    fun ShowMatterSchedule(@Field("page") page: Int = 1,
+                           @Field("pageSize") pageSize: Int = 20,
+                           @Field("stat") stat: Int = 3,
+                           @Field("time") time: String,
+                           @Field("filter") filter: String? = null,
+                           @Field("company_id") company_id: String? = null): Observable<Payload<List<ProjectMattersBean>>>
+
+    /**
+     * 获取任务列表
+     */
+    @FormUrlEncoded
+    @POST("/api/Calendar/showTask")
+    fun showTask(@Field("page") page: Int = 1,
+                 @Field("pageSize") pageSize: Int = 20,
+                 @Field("range") range: String,//时间区间 可空（’w'=>一周内，'m'=>一月内，’y‘=>一年内）
+                 @Field("is_finish") is_finish: String//是否完成  （1=>完成，0=>未完成）全部请传 ‘ ’
+    ): Observable<Payload<List<TaskItemBean>>>
+
+
+    /**
+     * 项目关键节点|项目代办|项目完成
+     */
+    @FormUrlEncoded
+    @POST("/api/Calendar/projectMatter")
+    fun projectMatter(@Field("company_id") company_id: Int,
+                      @Field("is_important") is_important: Int? = null,//是否节点 1=>项目关键节点
+                      @Field("is_finish") is_finish: Int? = null//是否完成 1=>项目完成，0=>项目代办  选择此项时is_important必空
+    ): Observable<Payload<List<KeyNode>>>
+
+
+    /**
+     * 任务详情
+     */
+    @FormUrlEncoded
+    @POST("/api/Calendar/showTaskInfo")
+    fun showTaskDetail(@Field("data_id") data_id: Int): Observable<Payload<TaskDetailBean>>
+
+    /**
+     * 添加评论
+     */
+    @FormUrlEncoded
+    @POST("/api/Calendar/addComment")
+    fun addComment(@Field("data_id") data_id: Int,
+                   @Field("content") content: String): Observable<Payload<TaskDetailBean.Record>>
+
+
+    /**
+     * 获取要修改的日程/任务数据
+     */
+    @FormUrlEncoded
+    @POST("/api/Calendar/showEditTask")
+    fun showEditTask(@Field("data_id") data_id: Int): Observable<Payload<ModifiedTaskBean>>
+
+    /**
+     * 提交修改
+     */
+    @POST("/api/Calendar/aeCalendarInfo")
+    fun aeCalendarInfo(@Body reqBean: TaskModifyBean): Observable<Payload<Any>>
+
+    /**
+     * 重大事件
+     */
+    @FormUrlEncoded
+    @POST("api/Calendar/showGreatPoint")
+    fun showGreatPoint(@Field("timer") timer: String): Observable<Payload<List<String>>>
+
 
     companion object {
         const val APPKEY_NAME = "appkey"

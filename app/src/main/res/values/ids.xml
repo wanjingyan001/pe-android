@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="taskLayout" type="id"/>
+    <item name="typeTv" type="id"/>
+    <item name="confirmStatus" type="id"/>
+    <item name="reason" type="id"/>
+    <item name="notAttend" type="id"/>
+    <item name="canAttend" type="id"/>
+
+</resources>

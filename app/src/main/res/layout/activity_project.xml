@@ -156,6 +156,7 @@
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_gdzx"
                     android:tag="tv_gdzx"
+                    android:onClick="onClick"
                     android:text="股东征信"
                     app:layout_columnWeight="1" />
 

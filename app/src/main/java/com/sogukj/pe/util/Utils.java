@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
@@ -18,7 +19,9 @@ import android.widget.LinearLayout;
 
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -197,9 +200,41 @@ public class Utils {
     }
 
     @SuppressLint("SimpleDateFormat")
+    public static String getTime(long time, @NonNull String pattern){
+        SimpleDateFormat format = new SimpleDateFormat(pattern);
+        return format.format(new Date(time));
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    public static String getTime(Date date, @NonNull String pattern){
+        SimpleDateFormat format = new SimpleDateFormat(pattern);
+        return format.format(date);
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    public static String getWeek(long time){
+        SimpleDateFormat format = new SimpleDateFormat("E", Locale.CHINA);
+        return format.format(new Date(time));
+    }
+
+    @SuppressLint("SimpleDateFormat")
     public static String getDayFromDate(long time) {
         SimpleDateFormat format = new SimpleDateFormat("dd");
         return format.format(new Date(time));
+    }
+
+    public static Long[] getSupportBeginDayofMonth(int year, int monthOfYear) {
+        Calendar cal = Calendar.getInstance();
+        // 不加下面2行，就是取当前时间前一个月的第一天及最后一天
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.MONTH, monthOfYear);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.add(Calendar.DAY_OF_MONTH, -1);
+        Date lastDate = cal.getTime();
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        Date firstDate = cal.getTime();
+
+        return new Long[]{firstDate.getTime(),lastDate.getTime()};
     }
 
     public static void setUpIndicatorWidth(TabLayout tabLayout, int marginLeft, int marginRight, Context context) {
@@ -231,5 +266,4 @@ public class Utils {
             e.printStackTrace();
         }
     }
-
 }

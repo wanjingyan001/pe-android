@@ -2,8 +2,8 @@ package com.sogukj.pe.ui.user
 
 import android.app.Activity
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.text.Spannable
 import android.text.Spanned
 import android.text.TextUtils
@@ -11,13 +11,11 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.bumptech.glide.Glide
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.DepartmentBean
 import com.sogukj.pe.bean.UserBean
-import com.sogukj.pe.bean.WeeklyWatchBean
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.CircleImageView
 import com.sogukj.pe.view.LinkSpan
@@ -27,9 +25,13 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_organization.*
 import org.jetbrains.anko.find
 
+
 class OrganizationActivity : ToolbarActivity() {
     lateinit var departList: ArrayList<DepartmentBean>
     lateinit var alreadyList: ArrayList<UserBean>
+    //    val departList = ArrayList<DepartmentBean>()
+    lateinit var code: String
+    var tag: String? = null
 
     companion object {
         fun start(ctx: Activity?, departList: ArrayList<DepartmentBean>) {
@@ -37,6 +39,19 @@ class OrganizationActivity : ToolbarActivity() {
             intent.putExtra(Extras.DATA, departList)
             intent.putExtra(Extras.FLAG, "USER")
             ctx?.startActivity(intent)
+        }
+
+        fun startForResult(ctx: Activity?, tag: String) {
+            val intent = Intent(ctx, OrganizationActivity::class.java)
+            intent.putExtra(Extras.CODE, "SelectUser")
+            intent.putExtra(Extras.NAME, tag)
+            ctx?.startActivityForResult(intent, Extras.REQUESTCODE)
+        }
+
+        fun startForResult(ctx: Fragment?) {
+            val intent = Intent(ctx?.context, OrganizationActivity::class.java)
+            intent.putExtra(Extras.CODE, "SelectUser")
+            ctx?.startActivityForResult(intent, Extras.REQUESTCODE)
         }
     }
 
@@ -93,6 +108,28 @@ class OrganizationActivity : ToolbarActivity() {
                     })
         }
 
+        code = intent.getStringExtra(Extras.CODE)
+        tag = intent.getStringExtra(Extras.NAME)
+        setBack(true)
+        title = "公司组织架构"
+
+        SoguApi.getService(application)
+                .userDepart()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        departList.clear()
+                        payload.payload?.forEach {
+                            departList.add(it)
+                        }
+                        setData(departList)
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    showToast("数据获取失败")
+                })
     }
 
     fun setData(departList: List<DepartmentBean>) {
@@ -156,9 +193,20 @@ class OrganizationActivity : ToolbarActivity() {
                 var intent = Intent()
                 intent.putExtra(Extras.DATA, userBean)
                 setResult(Activity.RESULT_OK, intent)
-                finish()
+                if (code.isNotEmpty()) {
+                    item_content.setOnClickListener {
+                        val intent = Intent()
+                        intent.putExtra(Extras.DATA, userBean)
+                        if (tag == "CcPersonAdapter") {
+                            setResult(Extras.RESULTCODE, intent)
+                        } else {
+                            setResult(Extras.RESULTCODE2, intent)
+                        }
+                        finish()
+                    }
+                }
             }
+
         }
     }
-
 }

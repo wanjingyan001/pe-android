@@ -64,14 +64,12 @@ class UserEditActivity : ToolbarActivity() {
                 tv_posotion?.setText(position)
             if (!TextUtils.isEmpty(depart_name))
                 tv_depart?.text = depart_name
-            if (!TextUtils.isEmpty(project))
-                tv_project?.setText(project)
             if (!TextUtils.isEmpty(memo))
                 tv_note?.setText(memo)
             if (!TextUtils.isEmpty(url))
                 Glide.with(this@UserEditActivity)
                         .load(headImage())
-                        .error(R.drawable.img_logo_user)
+//                        .error(R.drawable.img_logo_user)
                         .into(iv_user)
         }
 
@@ -284,9 +282,6 @@ class UserEditActivity : ToolbarActivity() {
         }
         tv_email.text?.trim()?.toString()?.apply {
             user.email = this
-        }
-        tv_project.text?.trim()?.toString()?.apply {
-            user.project = this
         }
         tv_note.text?.trim()?.toString()?.apply {
             user.memo = this

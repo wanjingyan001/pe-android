@@ -11,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.GridLayout
 import android.widget.TextView
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
@@ -114,7 +113,7 @@ class ProjectActivity : ToolbarActivity() {
                         tv_more_yq.visibility = View.VISIBLE
                 })
         disable(tv_cwsj)
-        disable(tv_gdzx)
+//        disable(tv_gdzx)
         disable(tv_xmzy)
         val user = Store.store.getUser(this)
         SoguApi.getService(application)

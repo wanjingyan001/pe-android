@@ -138,23 +138,6 @@
                 android:src="@drawable/ic_arrow_r" />
         </TableRow>
 
-        <TableRow
-            android:id="@+id/tr_project"
-            android:background="@drawable/divider_bottom">
-
-            <TextView
-                style="@style/TableTextLabel"
-                android:text="项目 " />
-
-            <EditText
-                android:id="@+id/tv_project"
-                style="@style/TableTextValue"
-                android:hint="未填写" />
-
-            <ImageView
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_arrow_r" />
-        </TableRow>
 
         <TableRow
             android:id="@+id/tr_note"
