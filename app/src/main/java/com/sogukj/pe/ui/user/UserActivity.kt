@@ -105,7 +105,7 @@ class UserActivity : ToolbarActivity() {
             UserEditActivity.start(this@UserActivity, departList)
         }
         structure.setOnClickListener {
-            OrganizationActivity.start(this)
+            OrganizationActivity.start(this, departList)
         }
         setting.setOnClickListener {
             SettingActivity.start(this)
