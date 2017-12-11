@@ -3,37 +3,22 @@ package com.sogukj.pe.ui.user
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.os.HandlerThread
-import android.text.Spannable
-import android.text.Spanned
 import android.text.TextUtils
 import android.view.Gravity
 import android.view.MenuItem
-import android.view.View
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
 import com.framework.base.ToolbarActivity
-import com.sogukj.pe.App
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.DepartmentBean
 import com.sogukj.pe.bean.UserBean
-import com.sogukj.pe.ui.LoginActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.BusinessCardWindow
-import com.sogukj.pe.view.CircleImageView
-import com.sogukj.pe.view.LinkSpan
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_user.*
-import kotlinx.android.synthetic.main.toolbar.*
 import org.jetbrains.anko.find
-import org.jetbrains.anko.imageResource
 
 /**
  * Created by qinfei on 17/7/18.
@@ -120,7 +105,7 @@ class UserActivity : ToolbarActivity() {
             UserEditActivity.start(this@UserActivity, departList)
         }
         structure.setOnClickListener {
-            OrganizationActivity.start(this, departList)
+            OrganizationActivity.start(this)
         }
         setting.setOnClickListener {
             SettingActivity.start(this)

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_margin="15dp"
+        android:text="09:30"
+        android:textColor="#adb1be"
+        android:textSize="14sp" />
+
+
+    <ImageView
+        android:id="@+id/right_arrow"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="20dp"
+        android:src="@drawable/ic_right" />
+
+    <CheckBox
+        android:id="@+id/finishBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"
+        android:layout_toLeftOf="@+id/right_arrow" />
+
+    <TextView
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/finishBox"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="70dp"
+        android:layout_marginRight="35dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/text_1"
+        android:textSize="14sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignLeft="@+id/content"
+        android:layout_alignRight="@+id/right_arrow"
+        android:layout_below="@+id/finishBox"
+        android:layout_marginTop="15dp"
+        android:background="@color/divider2" />
+</RelativeLayout>

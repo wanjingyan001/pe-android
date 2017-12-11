@@ -100,8 +100,13 @@
     <color name="shareholder_sensitive_bg1">#fffeeb</color>
     <color name="shareholder_sensitive_bg2">#f1ffeb</color>
     <color name="calendar_text_alphe">#8Cffffff</color>
+    <color name="calendar_bg_color">#f7f9fc</color>
+    <color name="matter_detail_line">#c2d3fd</color>
+    <color name="matter_blue">#6883c5</color>
+    <color name="matter_gray_light">#f2f7fe</color>
+    <color name="matter_gray_deep">#a6c5f0</color>
 
-
+    <color name="matter_text_blue1">#dce8f9</color>
     <color name="weekly_label">#4b5266</color>
     <color name="bg_record">#f7f9fc</color>
 </resources>
