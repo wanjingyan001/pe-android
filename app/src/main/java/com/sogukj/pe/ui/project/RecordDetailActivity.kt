@@ -4,12 +4,14 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.DatePicker
 import android.widget.TimePicker
+import com.bigkoo.pickerview.TimePickerView
 import com.framework.base.ToolbarActivity
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
@@ -19,6 +21,7 @@ import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.bean.RecordInfoBean
 import com.sogukj.pe.util.DateUtils
 import com.sogukj.pe.util.Trace
+import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -36,9 +39,6 @@ class RecordDetailActivity : ToolbarActivity() {
     var type: String = ""
     var format = SimpleDateFormat("yyyy.MM.dd HH:mm")
 
-    lateinit var startBean: TimeBean
-    lateinit var endBean: TimeBean
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_record_detail)
@@ -48,72 +48,38 @@ class RecordDetailActivity : ToolbarActivity() {
             setTitle("新增记录")
 
             var calendar = Calendar.getInstance()
-            var year = calendar.get(Calendar.YEAR)
-            var month = calendar.get(Calendar.MONTH) + 1
-            var day = calendar.get(Calendar.DAY_OF_MONTH)
-            var hour = calendar.get(Calendar.HOUR_OF_DAY)
-            var minute = calendar.get(Calendar.MINUTE)
 
-            startBean = TimeBean(year, month, day, hour, minute)
-            endBean = TimeBean(year, month, day, hour, minute)
-
-            tv_start_time.text = formatTime(startBean)
-            tv_end_time.text = formatTime(endBean)
-
-            var selector = LayoutInflater.from(this).inflate(R.layout.time_selector, null)
-            var dialog = AlertDialog.Builder(this).setView(selector).create()
-            var date_picker = selector.findViewById(R.id.date) as DatePicker
-            var time_picker = selector.findViewById(R.id.time) as TimePicker
-            time_picker.setIs24HourView(true)
+            tv_start_time.text = format.format(calendar.time)
+            tv_end_time.text = format.format(calendar.time)
 
             tv_start_time.setOnClickListener {
-                dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", object : DialogInterface.OnClickListener {
-                    override fun onClick(p0: DialogInterface?, p1: Int) {
-                        tv_start_time.text = formatTime(startBean)
-                    }
+                calendar.time = format.parse(tv_start_time.text.toString())
+                val timePicker = TimePickerView.Builder(this, { date, view ->
+                    tv_start_time.text = format.format(date)
                 })
-                dialog.show()
-
-                date_picker.init(startBean.year, startBean.month - 1, startBean.day, object : DatePicker.OnDateChangedListener {
-                    override fun onDateChanged(p0: DatePicker?, p1: Int, p2: Int, p3: Int) {
-                        startBean.year = p1
-                        startBean.month = p2 + 1
-                        startBean.day = p3
-                    }
-                })
-                time_picker.currentHour = startBean.hour
-                time_picker.currentMinute = startBean.minute
-                time_picker.setOnTimeChangedListener(object : TimePicker.OnTimeChangedListener {
-                    override fun onTimeChanged(p0: TimePicker?, p1: Int, p2: Int) {
-                        startBean.hour = p1
-                        startBean.minute = p2
-                    }
-                })
+                        //年月日时分秒 的显示与否，不设置则默认全部显示
+                        .setType(booleanArrayOf(true, true, true, true, true, false))
+                        .setDividerColor(Color.DKGRAY)
+                        .setContentSize(15)
+                        .setDate(calendar)
+                        .setCancelColor(resources.getColor(R.color.shareholder_text_gray))
+                        .build()
+                timePicker.show()
             }
 
             tv_end_time.setOnClickListener {
-                dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", object : DialogInterface.OnClickListener {
-                    override fun onClick(p0: DialogInterface?, p1: Int) {
-                        tv_end_time.text = formatTime(endBean)
-                    }
+                calendar.time = format.parse(tv_end_time.text.toString())
+                val timePicker = TimePickerView.Builder(this, { date, view ->
+                    tv_end_time.text = format.format(date)
                 })
-                dialog.show()
-
-                date_picker.init(endBean.year, endBean.month - 1, endBean.day, object : DatePicker.OnDateChangedListener {
-                    override fun onDateChanged(p0: DatePicker?, p1: Int, p2: Int, p3: Int) {
-                        endBean.year = p1
-                        endBean.month = p2 + 1
-                        endBean.day = p3
-                    }
-                })
-                time_picker.currentHour = endBean.hour
-                time_picker.currentMinute = endBean.minute
-                time_picker.setOnTimeChangedListener(object : TimePicker.OnTimeChangedListener {
-                    override fun onTimeChanged(p0: TimePicker?, p1: Int, p2: Int) {
-                        endBean.hour = p1
-                        endBean.minute = p2
-                    }
-                })
+                        //年月日时分秒 的显示与否，不设置则默认全部显示
+                        .setType(booleanArrayOf(true, true, true, true, true, false))
+                        .setDividerColor(Color.DKGRAY)
+                        .setContentSize(15)
+                        .setDate(calendar)
+                        .setCancelColor(resources.getColor(R.color.shareholder_text_gray))
+                        .build()
+                timePicker.show()
             }
         } else if (type.equals("VIEW")) {
             setTitle("记录详情")
@@ -138,29 +104,6 @@ class RecordDetailActivity : ToolbarActivity() {
         company_name.text = project.name
 
         setBack(true)
-    }
-
-    /**
-     * month是已经调整过的month
-     */
-    fun formatTime(time: TimeBean): String {
-        var month_str = "${time.month}"
-        if (time.month < 10) {
-            month_str = "0${time.month}"
-        }
-        var day_str = "${time.day}"
-        if (time.day < 10) {
-            day_str = "0${time.day}"
-        }
-        var hour_str = "${time.hour}"
-        if (time.hour < 10) {
-            hour_str = "0${time.hour}"
-        }
-        var minute_str = "${time.minute}"
-        if (time.minute < 10) {
-            minute_str = "0${time.minute}"
-        }
-        return "${time.year}.${month_str}.${day_str} ${hour_str}:${minute_str}";
     }
 
     override val menuId: Int
@@ -198,9 +141,9 @@ class RecordDetailActivity : ToolbarActivity() {
             isImportant = 1
         }
 
-        var start_Date = format.parse("${startBean.year}.${startBean.month}.${startBean.day} ${startBean.hour}:${startBean.minute}")
+        var start_Date = format.parse(tv_start_time.text.toString())
         start_Date.time /= 1000
-        var end_Date = format.parse("${endBean.year}.${endBean.month}.${endBean.day} ${endBean.hour}:${endBean.minute}")
+        var end_Date = format.parse(tv_end_time.text.toString())
         end_Date.time /= 1000
         if (end_Date.time < start_Date.time) {
             showToast("日期错误")
@@ -255,14 +198,6 @@ class RecordDetailActivity : ToolbarActivity() {
             intent.putExtra(Extras.TYPE, "VIEW")
             ctx?.startActivityForResult(intent, 0x002)
         }
-    }
-
-    class TimeBean(year: Int, month: Int, day: Int, hour: Int, minute: Int) {
-        var year = year
-        var month = month
-        var day = day
-        var hour = hour
-        var minute = minute
     }
 
     override fun onBackPressed() {

@@ -1,22 +1,17 @@
 package com.sogukj.pe.ui.weekly
 
 import android.app.Activity
-import android.app.AlertDialog
-import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.widget.DatePicker
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.TimePicker
+import com.bigkoo.pickerview.TimePickerView
 import com.framework.base.ToolbarActivity
 import com.google.gson.JsonSyntaxException
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
-import com.sogukj.pe.bean.TimeItem
 import com.sogukj.pe.bean.WeeklyThisBean
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
@@ -32,28 +27,20 @@ class WeeklyRecordActivity : ToolbarActivity() {
 
     var format = SimpleDateFormat("yyyy-MM-dd")
 
-    lateinit var startBean: TimeItem
-    lateinit var endBean: TimeItem
     lateinit var week: WeeklyThisBean.Week
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_weekly_record)
 
+        var calendar = Calendar.getInstance()
+
         var tag = intent.getStringExtra(Extras.FLAG)
         if (tag == "ADD") {
             title = "补充工作日程"
 
-//            var calendar = Calendar.getInstance()
-//            var year = calendar.get(Calendar.YEAR)
-//            var month = calendar.get(Calendar.MONTH) + 1
-//            var day = calendar.get(Calendar.DAY_OF_MONTH)
-//
-//            startBean = TimeItem(year, month, day)
-//            endBean = TimeItem(year, month, day)
-//
-//            tv_start_time.text = formatTime(startBean)
-//            tv_end_time.text = formatTime(endBean)
+            tv_start_time.text = format.format(calendar.time)
+            tv_end_time.text = format.format(calendar.time)
 
             week = intent.getSerializableExtra(Extras.DATA) as WeeklyThisBean.Week
 
@@ -69,59 +56,41 @@ class WeeklyRecordActivity : ToolbarActivity() {
             et_des.setText(week.info)
         }
 
-        var selector = LayoutInflater.from(this).inflate(R.layout.time_selector, null)
-        var dialog = AlertDialog.Builder(this).setView(selector).create()
-        var date_picker = selector.findViewById(R.id.date) as DatePicker
-        var time_picker = selector.findViewById(R.id.time) as TimePicker
-        time_picker.setIs24HourView(true)
-        time_picker.visibility = View.GONE
-
         tv_start_time.setOnClickListener {
             if (tag == "EDIT" || tag == "ADD") {
                 return@setOnClickListener
             }
-            dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", object : DialogInterface.OnClickListener {
-                override fun onClick(p0: DialogInterface?, p1: Int) {
-                    if (startBean.compare(endBean) == 1) {
-                        showToast("日期选择错误")
-                        return
-                    }
-                    tv_start_time.text = formatTime(startBean)
-                }
-            })
-            dialog.show()
 
-            date_picker.init(startBean.year, startBean.month - 1, startBean.day, object : DatePicker.OnDateChangedListener {
-                override fun onDateChanged(p0: DatePicker?, p1: Int, p2: Int, p3: Int) {
-                    startBean.year = p1
-                    startBean.month = p2 + 1
-                    startBean.day = p3
-                }
+            calendar.time = format.parse(tv_start_time.text.toString())
+            val timePicker = TimePickerView.Builder(this, { date, view ->
+                tv_start_time.text = format.format(date)
             })
+                    //年月日时分秒 的显示与否，不设置则默认全部显示
+                    .setType(booleanArrayOf(true, true, true, true, true, false))
+                    .setDividerColor(Color.DKGRAY)
+                    .setContentSize(15)
+                    .setDate(calendar)
+                    .setCancelColor(resources.getColor(R.color.shareholder_text_gray))
+                    .build()
+            timePicker.show()
         }
 
         tv_end_time.setOnClickListener {
             if (tag == "EDIT" || tag == "ADD") {
                 return@setOnClickListener
             }
-            dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", object : DialogInterface.OnClickListener {
-                override fun onClick(p0: DialogInterface?, p1: Int) {
-                    if (startBean.compare(endBean) == 1) {
-                        showToast("日期选择错误")
-                        return
-                    }
-                    tv_end_time.text = formatTime(endBean)
-                }
+            calendar.time = format.parse(tv_end_time.text.toString())
+            val timePicker = TimePickerView.Builder(this, { date, view ->
+                tv_end_time.text = format.format(date)
             })
-            dialog.show()
-
-            date_picker.init(endBean.year, endBean.month - 1, endBean.day, object : DatePicker.OnDateChangedListener {
-                override fun onDateChanged(p0: DatePicker?, p1: Int, p2: Int, p3: Int) {
-                    endBean.year = p1
-                    endBean.month = p2 + 1
-                    endBean.day = p3
-                }
-            })
+                    //年月日时分秒 的显示与否，不设置则默认全部显示
+                    .setType(booleanArrayOf(true, true, true, true, true, false))
+                    .setDividerColor(Color.DKGRAY)
+                    .setContentSize(15)
+                    .setDate(calendar)
+                    .setCancelColor(resources.getColor(R.color.shareholder_text_gray))
+                    .build()
+            timePicker.show()
         }
 
         toolbar?.setBackgroundColor(Color.WHITE)
@@ -184,20 +153,5 @@ class WeeklyRecordActivity : ToolbarActivity() {
                         }
                     })
         }
-    }
-
-    /**
-     * month是已经调整过的month
-     */
-    fun formatTime(time: TimeItem): String {
-        var month_str = "${time.month}"
-        if (time.month < 10) {
-            month_str = "0${time.month}"
-        }
-        var day_str = "${time.day}"
-        if (time.day < 10) {
-            day_str = "0${time.day}"
-        }
-        return "${time.year}-${month_str}-${day_str}";
     }
 }

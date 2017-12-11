@@ -4,6 +4,7 @@ package com.sogukj.pe.ui.weekly
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
@@ -19,12 +20,12 @@ import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import kotlinx.android.synthetic.main.fragment_weekly_isend.*
 import android.widget.TextView
+import com.bigkoo.pickerview.TimePickerView
 import com.google.gson.JsonSyntaxException
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import com.lcodecore.tkrefreshlayout.footer.BallPulseView
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
-import com.sogukj.pe.bean.TimeItem
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.MyGridView
 import com.sogukj.service.SoguApi
@@ -45,9 +46,6 @@ class WeeklyISendFragment : BaseFragment() {
 
     lateinit var adapter: RecyclerAdapter<WeeklySendBean>
     var format = SimpleDateFormat("yyyy-MM-dd")
-
-    lateinit var startBean: TimeItem
-    lateinit var endBean: TimeItem
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -75,77 +73,78 @@ class WeeklyISendFragment : BaseFragment() {
         list.adapter = adapter
 
         var calendar = Calendar.getInstance()
-        var year = calendar.get(Calendar.YEAR)
-        var month = calendar.get(Calendar.MONTH) + 1
-        var day = calendar.get(Calendar.DAY_OF_MONTH)
-
-        startBean = TimeItem(year, month, day)
-        endBean = TimeItem(year, month, day)
 
         start.text = ""//formatTime(startBean)
         end.text = ""//formatTime(endBean)
 
-        var selector = LayoutInflater.from(context).inflate(R.layout.time_selector, null)
-        var dialog = AlertDialog.Builder(context).setView(selector).create()
-        var date_picker = selector.findViewById(R.id.date) as DatePicker
-        var time_picker = selector.findViewById(R.id.time) as TimePicker
-        time_picker.setIs24HourView(true)
-        time_picker.visibility = View.GONE
-
         start.setOnClickListener {
-            dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", object : DialogInterface.OnClickListener {
-                override fun onClick(p0: DialogInterface?, p1: Int) {
-                    if (end.text.trim() == "") {
-                        start.text = formatTime(startBean)
-                        return
-                    }
-                    if (startBean.compare(endBean) == 1) {
-                        showToast("日期选择错误")
-                        return
-                    }
-                    start.text = formatTime(startBean)
-                    adapter.dataList.clear()
-                    adapter.notifyDataSetChanged()
-                    doRequest()
+            if (start.text != "") {
+                calendar.time = format.parse(start.text.toString())
+            } else {
+                calendar = Calendar.getInstance()
+            }
+            val timePicker = TimePickerView.Builder(context, { date, view ->
+                if (end.text.trim() == "") {
+                    start.text = format.format(date)
+                    return@Builder
                 }
-            })
-            dialog.show()
 
-            date_picker.init(startBean.year, startBean.month - 1, startBean.day, object : DatePicker.OnDateChangedListener {
-                override fun onDateChanged(p0: DatePicker?, p1: Int, p2: Int, p3: Int) {
-                    startBean.year = p1
-                    startBean.month = p2 + 1
-                    startBean.day = p3
+                var startBean = date
+                var endBean = format.parse(end.text.toString())
+                if (startBean.compareTo(endBean) > 0) {
+                    showToast("日期选择错误")
+                    return@Builder
                 }
+
+                start.text = format.format(date)
+
+                adapter.dataList.clear()
+                adapter.notifyDataSetChanged()
+                doRequest()
             })
+                    //年月日时分秒 的显示与否，不设置则默认全部显示
+                    .setType(booleanArrayOf(true, true, true, false, false, false))
+                    .setDividerColor(Color.DKGRAY)
+                    .setContentSize(20)
+                    .setDate(calendar)
+                    .setCancelColor(resources.getColor(R.color.shareholder_text_gray))
+                    .build()
+            timePicker.show()
         }
 
         end.setOnClickListener {
-            dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", object : DialogInterface.OnClickListener {
-                override fun onClick(p0: DialogInterface?, p1: Int) {
-                    if (start.text.trim() == "") {
-                        end.text = formatTime(endBean)
-                        return
-                    }
-                    if (startBean.compare(endBean) == 1) {
-                        showToast("日期选择错误")
-                        return
-                    }
-                    end.text = formatTime(endBean)
-                    adapter.dataList.clear()
-                    adapter.notifyDataSetChanged()
-                    doRequest()
+            if (end.text != "") {
+                calendar.time = format.parse(end.text.toString())
+            } else {
+                calendar = Calendar.getInstance()
+            }
+            val timePicker = TimePickerView.Builder(context, { date, view ->
+                if (start.text.trim() == "") {
+                    end.text = format.format(date)
+                    return@Builder
                 }
-            })
-            dialog.show()
 
-            date_picker.init(endBean.year, endBean.month - 1, endBean.day, object : DatePicker.OnDateChangedListener {
-                override fun onDateChanged(p0: DatePicker?, p1: Int, p2: Int, p3: Int) {
-                    endBean.year = p1
-                    endBean.month = p2 + 1
-                    endBean.day = p3
+                var startBean = format.parse(start.text.toString())
+                var endBean = date
+                if (startBean.compareTo(endBean) > 0) {
+                    showToast("日期选择错误")
+                    return@Builder
                 }
+
+                end.text = format.format(date)
+
+                adapter.dataList.clear()
+                adapter.notifyDataSetChanged()
+                doRequest()
             })
+                    //年月日时分秒 的显示与否，不设置则默认全部显示
+                    .setType(booleanArrayOf(true, true, true, false, false, false))
+                    .setDividerColor(Color.DKGRAY)
+                    .setContentSize(20)
+                    .setDate(calendar)
+                    .setCancelColor(resources.getColor(R.color.shareholder_text_gray))
+                    .build()
+            timePicker.show()
         }
 
         val header = ProgressLayout(baseActivity)
@@ -203,21 +202,6 @@ class WeeklyISendFragment : BaseFragment() {
                     else
                         refresh.finishLoadmore()
                 })
-    }
-
-    /**
-     * month是已经调整过的month
-     */
-    fun formatTime(time: TimeItem): String {
-        var month_str = "${time.month}"
-        if (time.month < 10) {
-            month_str = "0${time.month}"
-        }
-        var day_str = "${time.day}"
-        if (time.day < 10) {
-            day_str = "0${time.day}"
-        }
-        return "${time.year}-${month_str}-${day_str}"
     }
 
     class MyAdapter(var context: Context, val list: ArrayList<WeeklySendBean.WeeklySendBeanObj>) : BaseAdapter() {
