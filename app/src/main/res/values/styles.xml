@@ -236,4 +236,12 @@
         <item name="android:textSize">@dimen/text_size_samll</item>
         <item name="android:textColor">#c2d3fd</item>
     </style>
+
+    <style name="MyDialogActivity">
+        <item name="android:windowBackground">@color/business_card_bg</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowAnimationStyle">@null</item>
+
+    </style>
 </resources>

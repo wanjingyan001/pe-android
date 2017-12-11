@@ -80,6 +80,7 @@ public class TeamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                                 listener.onItemClick(v, position);
                             }
                         });
+
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();
@@ -106,7 +107,7 @@ public class TeamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return data.size();
+        return data.size() == 0 ? 1 : data.size();
     }
 
     class HeadHolder extends RecyclerView.ViewHolder {

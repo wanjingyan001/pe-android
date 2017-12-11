@@ -268,4 +268,9 @@ public class CalendarViewAdapter extends PagerAdapter {
         Calendar c2 = calendars.get(2);
         c2.setDayRenderer(dayRenderer.copy());
     }
+
+    @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
+    }
 }

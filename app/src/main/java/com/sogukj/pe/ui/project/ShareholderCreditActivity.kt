@@ -30,10 +30,11 @@ import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_add_credit.*
 import kotlinx.android.synthetic.main.activity_shareholder_credit.*
 import kotlinx.android.synthetic.main.layout_shareholder_toolbar.*
-import org.jetbrains.anko.*
+import org.jetbrains.anko.backgroundColor
+import org.jetbrains.anko.find
+import org.jetbrains.anko.textColor
 
 class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
 
@@ -133,7 +134,7 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
             val info = QueryReqBean()
             info.info = list as ArrayList<CreditReqBean>
             SoguApi.getService(application)
-                    .queryCreditInfo(Gson().toJson(list))
+                    .queryCreditInfo(info)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe({ payload ->

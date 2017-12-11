@@ -254,7 +254,6 @@
                         android:layout_height="wrap_content"
                         android:layout_alignBottom="@+id/caseDetails"
                         android:layout_alignParentRight="true"
-                        android:text="6件"
                         android:textColor="@color/text_1" />
 
 
@@ -432,7 +431,6 @@
                         android:drawablePadding="10dp"
                         android:drawableRight="@drawable/ic_right"
                         android:gravity="center_vertical"
-                        android:text="110条记录"
                         android:textColor="@color/fund_deep_red" />
 
                     <View

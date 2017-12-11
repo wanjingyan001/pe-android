@@ -5,12 +5,18 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.Gravity
 import android.view.View
+import android.widget.CompoundButton
 import com.framework.base.BaseFragment
 import com.google.gson.Gson
+import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
+import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
+import com.lcodecore.tkrefreshlayout.footer.BallPulseView
+import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.CustomSealBean
@@ -21,6 +27,7 @@ import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_project_matters.*
+import kotlinx.android.synthetic.main.layout_empty.*
 import org.jetbrains.anko.support.v4.find
 import java.text.SimpleDateFormat
 import java.util.*
@@ -32,7 +39,7 @@ import kotlin.collections.ArrayList
  * Use the [ProjectMattersFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ProjectMattersFragment : BaseFragment(), View.OnClickListener {
+class ProjectMattersFragment : BaseFragment(), View.OnClickListener, ScheduleItemClickListener {
 
 
     override val containerViewId: Int
@@ -59,8 +66,31 @@ class ProjectMattersFragment : BaseFragment(), View.OnClickListener {
         super.onViewCreated(view, savedInstanceState)
         projectAdapter = ProjectAdapter(context, data)
         projectAdapter.setListener(this)
+        projectAdapter.setItemClickListener(this)
         projectList.layoutManager = LinearLayoutManager(context)
         projectList.adapter = projectAdapter
+        val header = ProgressLayout(context)
+        header.setColorSchemeColors(ContextCompat.getColor(context, R.color.color_main))
+        refresh.setHeaderView(header)
+        val footer = BallPulseView(context)
+        footer.setAnimatingColor(ContextCompat.getColor(context, R.color.color_main))
+        refresh.setBottomView(footer)
+        refresh.setOverScrollRefreshShow(false)
+        refresh.setEnableLoadmore(true)
+        refresh.setOnRefreshListener(object : RefreshListenerAdapter() {
+            override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
+                page = 1
+                doRequest(page, date, companyId)
+            }
+
+            override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
+                ++page
+                doRequest(page, date, companyId)
+            }
+
+        })
+
+
         doRequest(page, date)
         window = CalendarWindow(context, { date ->
             page = 1
@@ -69,8 +99,6 @@ class ProjectMattersFragment : BaseFragment(), View.OnClickListener {
             this.date = Utils.getTime(calendar.time.time, "yyyy-MM-dd")
             doRequest(page, this.date, companyId)
         })
-
-
     }
 
 
@@ -81,6 +109,9 @@ class ProjectMattersFragment : BaseFragment(), View.OnClickListener {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
+                        if (page == 1) {
+                            data.clear()
+                        }
                         Log.d("WJY", Gson().toJson(payload.payload))
                         payload.payload?.let {
                             val dayList = ArrayList<String>()
@@ -103,25 +134,28 @@ class ProjectMattersFragment : BaseFragment(), View.OnClickListener {
                                     companyList.add(matterCompany)
                                 }
                             }
+                            val companys = ArrayList<ProjectMatterCompany>()
+                            val infos = ArrayList<ScheduleBean>()
                             dayList.forEachIndexed { index, s ->
-                                data.add(ProjectMatterMD(s))
+                                val md = ProjectMatterMD(s)
+                                data.add(md)
                                 companyList.forEachIndexed { position, name ->
                                     data.add(name)
+                                    companys.add(name)
                                     infoList.forEachIndexed { i, scheduleBean ->
                                         val day = scheduleBean.start_time?.split(" ")?.get(0)
                                         if (day.equals(s) && name.companyId == scheduleBean.company_id.toString()) {
                                             data.add(scheduleBean)
+                                            infos.add(scheduleBean)
                                         }
                                     }
-
-                                    payload.payload?.forEachIndexed { i, projectMattersBean ->
-                                        projectMattersBean.item?.forEachIndexed { j, scheduleBean ->
-                                            val day = scheduleBean.start_time?.split(" ")?.get(0)
-                                            if (day.equals(s) && projectMattersBean.cName!!.equals(name)) {
-                                                data.add(ProjectMatterInfo(day!!, scheduleBean.title!!))
-                                            }
-                                        }
+                                    if (infos.size == 0) {
+                                        data.remove(name)
+                                        companys.remove(name)
                                     }
+                                }
+                                if (companys.size == 0) {
+                                    data.remove(md)
                                 }
                             }
                             projectAdapter.notifyDataSetChanged()
@@ -132,6 +166,19 @@ class ProjectMattersFragment : BaseFragment(), View.OnClickListener {
                     }
                 }, { e ->
                     Trace.e(e)
+                }, {
+                    if (data.size == 0) {
+                        iv_empty.visibility = View.VISIBLE
+                    } else {
+                        iv_empty.visibility = View.GONE
+                    }
+                    refresh?.setEnableLoadmore((data.size - 1) % 20 == 0)
+                    projectAdapter.notifyDataSetChanged()
+                    if (page == 1) {
+                        refresh?.finishRefreshing()
+                    } else {
+                        refresh?.finishLoadmore()
+                    }
                 })
     }
 
@@ -146,6 +193,30 @@ class ProjectMattersFragment : BaseFragment(), View.OnClickListener {
                 window.showAtLocation(find(R.id.project_matter_main), Gravity.BOTTOM, 0, 0)
             }
         }
+    }
+
+    override fun onItemClick(view: View, position: Int) {
+    }
+
+    override fun finishCheck(buttonView: CompoundButton, isChecked: Boolean, position: Int) {
+        val bean = data[position] as ScheduleBean
+        bean.id?.let { finishTask(it) }
+    }
+
+    fun finishTask(id: Int) {
+        SoguApi.getService(activity.application)
+                .finishTask(id)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        showToast("日程标记成功")
+                    } else {
+                        showToast(payload.message)
+                    }
+                }, { e ->
+                    Trace.e(e)
+                })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

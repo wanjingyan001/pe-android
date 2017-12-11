@@ -8,8 +8,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.sogukj.pe.R;
-import com.sogukj.pe.view.CircleImageView;
+import com.sogukj.pe.util.Utils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -44,9 +47,14 @@ public class CompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 TodoYear year = (TodoYear) o;
                 ((YearHolder) holder).Year.setText(year.getYear());
             } else if (holder instanceof InfoHolder) {
-                CompleteInfo info = (CompleteInfo) o;
-                ((InfoHolder) holder).completeTime.setText(info.getDate());
-                ((InfoHolder) holder).completeInfo.setText(info.getInfo());
+                KeyNode info = (KeyNode) o;
+                try {
+                    Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(info.getEnd_time());
+                    ((InfoHolder) holder).completeTime.setText(Utils.getTime(date,"yyyy年MM月dd日  HH:mm"));
+                    ((InfoHolder) holder).completeInfo.setText(info.getTitle());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         } catch (ClassCastException e) {
             e.printStackTrace();
@@ -63,7 +71,7 @@ public class CompleteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         Object o = data.get(position);
         if (o instanceof TodoYear) {
             return year;
-        } else if (o instanceof CompleteInfo) {
+        } else if (o instanceof KeyNode) {
             return info;
         }else {
             return info;

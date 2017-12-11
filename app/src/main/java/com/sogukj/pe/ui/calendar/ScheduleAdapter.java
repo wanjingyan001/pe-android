@@ -3,10 +3,12 @@ package com.sogukj.pe.ui.calendar;
 import android.content.Context;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,10 +29,15 @@ public class ScheduleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private int HEAD = 1, ITEM = 2, EMPTY = 3;
     private Context context;
     private List<ScheduleBean> data;
+    private ScheduleItemClickListener listener;
 
     public ScheduleAdapter(Context context, List<ScheduleBean> data) {
         this.context = context;
         this.data = data;
+    }
+
+    public void setListener(ScheduleItemClickListener listener) {
+        this.listener = listener;
     }
 
     @Override
@@ -45,10 +52,10 @@ public class ScheduleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (data.size() > 0) {
             ScheduleBean bean = data.get(position);
-            if (bean != null){
+            if (bean != null) {
                 try {
                     long startTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(bean.getStart_time()).getTime();
                     if (holder instanceof HeadHolder) {
@@ -68,15 +75,38 @@ public class ScheduleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             ((ItemHolder) holder).endTime.setText(Utils.getTime(endTime));
                         }
                         ((ItemHolder) holder).contentTv.setText(bean.getTitle());
-                        if (bean.is_finish() != null && bean.is_finish() == 1) {
-                            ((ItemHolder) holder).finishBox.setSelected(true);
+                        Log.d("WJY", "is_finish:" + bean.is_finish() ) ;
+                        if ( bean.is_finish() == 1) {
+                            ((ItemHolder) holder).finishBox.setChecked(true);
                             ((ItemHolder) holder).contentTv.setPaintFlags(
                                     ((ItemHolder) holder).contentTv.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                         } else {
-                            ((ItemHolder) holder).finishBox.setSelected(false);
+                            ((ItemHolder) holder).finishBox.setChecked(false);
                             ((ItemHolder) holder).contentTv.setPaintFlags(
                                     ((ItemHolder) holder).contentTv.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
                         }
+                        ((ItemHolder) holder).view.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                listener.onItemClick(v, position);
+                            }
+                        });
+                        ((ItemHolder) holder).finishBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                Log.d("WJY", "isChecked:" + isChecked) ;
+                                ((ItemHolder) holder).finishBox.setChecked(isChecked);
+                                if (isChecked){
+                                    ((ItemHolder) holder).contentTv.setPaintFlags(
+                                            ((ItemHolder) holder).contentTv.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                                }else {
+                                    ((ItemHolder) holder).contentTv.setPaintFlags(
+                                            ((ItemHolder) holder).contentTv.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                                }
+                                listener.finishCheck(buttonView, isChecked, position);
+                            }
+                        });
+
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();
@@ -90,7 +120,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemCount() {
-        return data.size();
+        return data.size() == 0 ? 1 : data.size();
     }
 
     @Override
@@ -124,9 +154,11 @@ public class ScheduleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         private TextView endTime;
         private TextView contentTv;
         private CheckBox finishBox;
+        private View view;
 
         public ItemHolder(View itemView) {
             super(itemView);
+            view = itemView;
             startTime = ((TextView) itemView.findViewById(R.id.startTime));
             endTime = ((TextView) itemView.findViewById(R.id.endTime));
             contentTv = ((TextView) itemView.findViewById(R.id.contentTv));

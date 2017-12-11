@@ -5,8 +5,13 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
+import android.widget.CompoundButton
 import com.framework.base.BaseFragment
 import com.sogukj.pe.R
+import com.sogukj.pe.util.Trace
+import com.sogukj.service.SoguApi
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_todo.*
 
 
@@ -15,34 +20,99 @@ import kotlinx.android.synthetic.main.fragment_todo.*
  * Use the [TodoFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class TodoFragment : BaseFragment() {
+class TodoFragment : BaseFragment(), ScheduleItemClickListener {
+
+
     override val containerViewId: Int
         get() = R.layout.fragment_todo
-
-    private var mParam1: String? = null
+    val data = ArrayList<Any>()
+    lateinit var adapter: TodoAdapter
+    private var companyId: String? = null
     private var mParam2: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (arguments != null) {
-            mParam1 = arguments.getString(ARG_PARAM1)
+            companyId = arguments.getString(ARG_PARAM1)
             mParam2 = arguments.getString(ARG_PARAM2)
         }
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val data = ArrayList<Any>()
-        data.add(TodoYear("2017"))
-        data.add(TodoDay("14"))
-        data.add(TodoInfo("09:30", "完成对同花顺的立项尽调完成对同..."))
-        data.add(TodoInfo("12:00", "参加股东会议"))
-        val adapter = TodoAdapter(data, context)
+        adapter = TodoAdapter(data, context)
+        adapter.setListener(this)
         todoList.layoutManager = LinearLayoutManager(context)
         todoList.adapter = adapter
+        companyId?.let { doRequest(it) }
+    }
+
+    fun doRequest(id: String) {
+        SoguApi.getService(activity.application)
+                .projectMatter(id.toInt(), 0)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        data.clear()
+                        payload.payload?.let {
+                            val yearList = ArrayList<String>()
+                            val dayList = ArrayList<String>()
+                            val infoList = ArrayList<KeyNode>()
+                            it.forEachIndexed { index, matterDetails ->
+                                yearList.add(matterDetails.year)
+                                matterDetails.data.forEach {
+                                    dayList.add(it.end_time?.split(" ")?.get(0)!!)
+                                    infoList.add(it)
+                                }
+                            }
+                            yearList.forEach {
+                                data.add(TodoYear(it))
+                                dayList.forEachIndexed { _, s ->
+                                    if (s.substring(0, 4) == it) {
+                                        data.add(TodoDay(s))
+                                    }
+                                    infoList.forEachIndexed { _, keyNode ->
+                                        if (keyNode.end_time?.split(" ")?.get(0).equals(s)) {
+                                            data.add(keyNode)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        showToast(payload.message)
+                    }
+                }, { e -> Trace.e(e) }, {
+                    adapter.notifyDataSetChanged()
+                })
+    }
+
+    override fun onItemClick(view: View, position: Int) {
 
     }
 
+    override fun finishCheck(buttonView: CompoundButton, isChecked: Boolean, position: Int) {
+        val keyNode = data[position] as KeyNode
+        keyNode.data_id?.let { finishTask(it) }
+    }
+
+
+    fun finishTask(id: Int) {
+        SoguApi.getService(activity.application)
+                .finishTask(id)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        companyId?.let { doRequest(it) }
+                    } else {
+                        showToast(payload.message)
+                    }
+                }, { e ->
+                    Trace.e(e)
+                })
+    }
 
 
     companion object {

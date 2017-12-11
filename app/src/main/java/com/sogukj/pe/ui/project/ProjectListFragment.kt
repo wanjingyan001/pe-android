@@ -243,18 +243,20 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                     .show()
         }
         if (type == TYPE_TC) tvAdd.visibility = View.GONE
-        var toast_txt = if(type == TYPE_LX) "添加已投" else if(type == TYPE_YT) "添加到退出" else ""
+        var toast_txt = if (type == TYPE_LX) "添加已投" else if (type == TYPE_YT) "添加到退出" else ""
         tvAdd.text = toast_txt
         pop.isTouchable = true
         pop.isFocusable = true
         pop.isOutsideTouchable = true
         pop.setBackgroundDrawable(BitmapDrawable(resources, null as Bitmap?))
         val location = IntArray(2)
-        val view = view.find<View>(R.id.tv1)
-        view.getLocationInWindow(location)
-        val x = location[0]
-        val y = location[1]
-        pop.showAtLocation(view, Gravity.CENTER_HORIZONTAL or Gravity.TOP, 0, y - view.getMeasuredHeight())
+        if (view.id != R.id.project_main_layout3) {
+            val view = view.find<View>(R.id.tv1)
+            view.getLocationInWindow(location)
+            val x = location[0]
+            val y = location[1]
+            pop.showAtLocation(view, Gravity.CENTER_HORIZONTAL or Gravity.TOP, 0, y - view.getMeasuredHeight())
+        }
     }
 
     fun doDel(position: Int) {
@@ -277,7 +279,7 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
     }
 
     fun doAdd(position: Int) {
-        var status = if(type == TYPE_LX) 3 else if(type == TYPE_YT) 4 else 0
+        var status = if (type == TYPE_LX) 3 else if (type == TYPE_YT) 4 else 0
         val project = adapter.dataList[position]
         SoguApi.getService(baseActivity!!.application)
                 //.editProject(project.company_id!!)
@@ -286,9 +288,9 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        if(type == TYPE_LX){
+                        if (type == TYPE_LX) {
                             showToast("添加拟投成功")
-                        } else if(type == TYPE_YT){
+                        } else if (type == TYPE_YT) {
                             showToast("已添加到退出")
                         }
                         adapter.dataList.removeAt(position)
@@ -296,9 +298,9 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                     } else showToast(payload.message)
                 }, { e ->
                     Trace.e(e)
-                    if(type == TYPE_LX){
+                    if (type == TYPE_LX) {
                         showToast("添加拟投失败")
-                    } else if(type == TYPE_YT){
+                    } else if (type == TYPE_YT) {
                         showToast("添加到退出失败")
                     }
                 })
@@ -342,7 +344,7 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                         .getOrNull(1)
             }
 
-            if(type == TYPE_DY){
+            if (type == TYPE_DY) {
                 btnAdd.text = "+储备"
                 btnAdd.setOnClickListener {
                     MaterialDialog.Builder(baseActivity!!)
@@ -355,7 +357,7 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                                 dialog.dismiss()
                             }.show()
                 }
-            } else if(type == TYPE_CB){
+            } else if (type == TYPE_CB) {
                 btnAdd.text = "+立项"
                 btnAdd.setOnClickListener {
                     MaterialDialog.Builder(baseActivity!!)
@@ -371,9 +373,9 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
             }
 
             tvEdit.setOnClickListener {
-                if(type == TYPE_CB){
+                if (type == TYPE_CB) {
                     StoreProjectAddActivity.startEdit(baseActivity, data)
-                } else if(type == TYPE_DY){
+                } else if (type == TYPE_DY) {
                     ProjectAddActivity.startEdit(baseActivity, data)
                 }
 

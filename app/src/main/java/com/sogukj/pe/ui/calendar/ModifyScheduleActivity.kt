@@ -18,67 +18,57 @@ import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_modify_task.*
+import kotlinx.android.synthetic.main.activity_modify_schedule.*
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.properties.Delegates
 
-/**
- * 添加/修改任务界面
- */
-class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonListener {
+class ModifyScheduleActivity : ToolbarActivity(), AddPersonListener, View.OnClickListener {
+
+
     var type: Long by Delegates.notNull()
-    var data_id: Int by Delegates.notNull()
+    var data_id = 0
     var companyId: Int? = null
     var time: Int? = null
     lateinit var adapter: CcPersonAdapter
-    lateinit var exAdapter: ExecutiveAdapter
     val data = ArrayList<UserBean>()
-    val data2 = ArrayList<UserBean>()
-    override val menuId: Int
-        get() = R.menu.modify_submit
-
 
     companion object {
         const val CREATE = 1L
         const val MODIFY = 2L
         fun start(ctx: Activity?) {
-            val intent = Intent(ctx, ModifyTaskActivity::class.java)
+            val intent = Intent(ctx, ModifyScheduleActivity::class.java)
             intent.putExtra(Extras.TYPE, CREATE)
             ctx?.startActivity(intent)
         }
 
         fun start(ctx: Activity?, data_id: Int) {
-            val intent = Intent(ctx, ModifyTaskActivity::class.java)
+            val intent = Intent(ctx, ModifyScheduleActivity::class.java)
             intent.putExtra(Extras.TYPE, MODIFY)
             intent.putExtra(Extras.DATA, data_id)
             ctx?.startActivity(intent)
         }
     }
 
+    override val menuId: Int
+        get() = R.menu.modify_submit
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_modify_task)
+        setContentView(R.layout.activity_modify_schedule)
         setBack(true)
         adapter = CcPersonAdapter(context, data)
         adapter.setListener(this)
         copyList.layoutManager = GridLayoutManager(context, 6)
         copyList.adapter = adapter
-
-        exAdapter = ExecutiveAdapter(context, data2)
-        exAdapter.setListener(this)
-        executiveList.layoutManager = GridLayoutManager(context, 6)
-        executiveList.adapter = exAdapter
         type = intent.getLongExtra(Extras.TYPE, -1)
         if (type == CREATE) {
-            title = "创建任务"
+            title = "创建日程"
         } else {
-            title = "修改任务"
+            title = "修改日程"
             data_id = intent.getIntExtra(Extras.DATA, -1)
             doRequest()
         }
-        startTime.setOnClickListener(this)
         deadline.setOnClickListener(this)
         remind.setOnClickListener(this)
     }
@@ -97,17 +87,8 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                             companyId = it.company_id
                             associatedEdt.setText(it.cName)
                             missionDetails.setText(it.info)
-                            startTime.text = it.start_time
                             deadline.text = it.end_time
-
                             remind.text = "截止前${(it.clock)?.div(60)}分钟"
-                            it.executor?.forEach {
-                                val bean = UserBean()
-                                bean.uid = it.id
-                                bean.name = it.name
-                                bean.url = it.url
-                                exAdapter.addData(bean)
-                            }
                             it.watcher?.forEach {
                                 val bean = UserBean()
                                 bean.uid = it.id
@@ -122,24 +103,18 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                 })
     }
 
-
     private fun submitChange() {
         val reqBean = TaskModifyBean()
         val bean = reqBean.ae
-        reqBean.data_id = data_id
+        if (data_id != 0) {
+            reqBean.data_id = data_id
+        }
         reqBean.type = 1
         bean.info = missionDetails.text.toString()
         val parse = SimpleDateFormat("MM月dd日 E HH:mm").parse(deadline.text.toString())
         bean.end_time = Utils.getTime(parse, "yyyy-MM-dd HH:mm:ss")
         bean.company_id = companyId
-        val parse2 = SimpleDateFormat("MM月dd日 E HH:mm").parse(startTime.text.toString())
-        bean.start_time = Utils.getTime(parse2, "yyyy-MM-dd HH:mm:ss")
         bean.clock = time?.times(60)
-        val exusers = StringBuilder()
-        data2.forEach {
-            exusers.append(it.user_id.toString() + ",")
-        }
-        bean.executor = exusers.toString()
         val watchusers = StringBuilder()
         data.forEach {
             watchusers.append(it.user_id.toString() + ",")
@@ -164,31 +139,10 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
 
     }
 
-
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.startTime -> {
-                Utils.closeInput(context,missionDetails)
-                val selectedDate = Calendar.getInstance()//系统当前时间
-                val startDate = Calendar.getInstance()
-                startDate.set(1949, 10, 1)
-                val endDate = Calendar.getInstance()
-                endDate.set(2020, 12, 31)
-                val timePicker = TimePickerView.Builder(this, { date, view ->
-                    startTime.text = Utils.getTime(date, "MM月dd日 E HH:mm")
-                })
-                        //年月日时分秒 的显示与否，不设置则默认全部显示
-                        .setType(booleanArrayOf(false, true, true, true, true, false))
-                        .setDividerColor(Color.DKGRAY)
-                        .setContentSize(21)
-                        .setDate(selectedDate)
-                        .setCancelColor(resources.getColor(R.color.shareholder_text_gray))
-                        .setRangDate(startDate, endDate)
-                        .build()
-                timePicker.show()
-            }
             R.id.deadline -> {
-                Utils.closeInput(context,missionDetails)
+                Utils.closeInput(context, missionDetails)
                 val selectedDate = Calendar.getInstance()//系统当前时间
                 val startDate = Calendar.getInstance()
                 startDate.set(1949, 10, 1)
@@ -209,7 +163,7 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
 
             }
             R.id.remind -> {
-                Utils.closeInput(context,missionDetails)
+                Utils.closeInput(context, missionDetails)
                 val selectedDate = Calendar.getInstance()//系统当前时间
                 val startDate = Calendar.getInstance()
                 startDate.set(selectedDate.get(Calendar.YEAR), selectedDate.get(Calendar.MONTH) + 1, selectedDate.get(Calendar.DAY_OF_MONTH))
@@ -234,18 +188,6 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == Extras.REQUESTCODE && data != null) {
-            val userBean = data.getSerializableExtra(Extras.DATA) as UserBean
-            if (resultCode == Extras.RESULTCODE) {
-                adapter.addData(userBean)
-            } else {
-                exAdapter.addData(userBean)
-            }
-        }
-    }
-
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.modify_submit -> {
@@ -255,8 +197,17 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == Extras.REQUESTCODE && data != null) {
+            val userBean = data.getSerializableExtra(Extras.DATA) as UserBean
+            if (resultCode == Extras.RESULTCODE) {
+                adapter.addData(userBean)
+            }
+        }
+    }
 
     override fun addPerson(tag: String) {
-        OrganizationActivity.startForResult(this@ModifyTaskActivity, tag)
+        OrganizationActivity.startForResult(this, tag)
     }
 }

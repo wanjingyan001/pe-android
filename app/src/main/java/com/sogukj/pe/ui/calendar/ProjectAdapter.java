@@ -2,11 +2,13 @@ package com.sogukj.pe.ui.calendar;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,6 +32,7 @@ public class ProjectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private Context context;
     private List<Object> data;
     private View.OnClickListener listener;
+    private ScheduleItemClickListener itemClickListener;
 
 
     public ProjectAdapter(Context context, List<Object> data) {
@@ -39,6 +42,10 @@ public class ProjectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     public void setListener(View.OnClickListener listener) {
         this.listener = listener;
+    }
+
+    public void setItemClickListener(ScheduleItemClickListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
     }
 
     @Override
@@ -54,7 +61,7 @@ public class ProjectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         Object o = data.get(position);
         if (holder instanceof ProjectHolder) {
             ProjectMatterMD md = (ProjectMatterMD) o;
@@ -81,6 +88,35 @@ public class ProjectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ScheduleBean info = (ScheduleBean) o;
             ((BeanHolder) holder).timeTv.setText(info.getStart_time());
             ((BeanHolder) holder).contentTv.setText(info.getTitle());
+            if (info.is_finish() == 1){
+                ((BeanHolder) holder).finishBox.setChecked(true);
+                ((BeanHolder) holder).contentTv.setPaintFlags(
+                        ((BeanHolder) holder).contentTv.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            }else {
+                ((BeanHolder) holder).finishBox.setChecked(false);
+                ((BeanHolder) holder).contentTv.setPaintFlags(
+                        ((BeanHolder) holder).contentTv.getPaintFlags()  & (~Paint.STRIKE_THRU_TEXT_FLAG));
+            }
+            ((BeanHolder) holder).view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    itemClickListener.onItemClick(v, position);
+                }
+            });
+            ((BeanHolder) holder).finishBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    ((BeanHolder) holder).finishBox.setChecked(isChecked);
+                    if (isChecked){
+                        ((BeanHolder) holder).contentTv.setPaintFlags(
+                                ((BeanHolder) holder).contentTv.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    }else {
+                        ((BeanHolder) holder).contentTv.setPaintFlags(
+                                ((BeanHolder) holder).contentTv.getPaintFlags()  & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                    }
+                    itemClickListener.finishCheck(buttonView, isChecked, position);
+                }
+            });
         }
     }
 
@@ -128,13 +164,14 @@ public class ProjectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     class BeanHolder extends RecyclerView.ViewHolder {
-
+        private View view;
         private TextView timeTv;
         private TextView contentTv;
         private CheckBox finishBox;
 
         public BeanHolder(View itemView) {
             super(itemView);
+            view = itemView;
             timeTv = ((TextView) itemView.findViewById(R.id.timeTv));
             contentTv = ((TextView) itemView.findViewById(R.id.contentTv));
             finishBox = ((CheckBox) itemView.findViewById(R.id.finishBox));

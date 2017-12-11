@@ -1,10 +1,11 @@
 package com.sogukj.pe.ui.user
 
+import android.annotation.TargetApi
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
-import android.view.Gravity
 import android.view.MenuItem
 import com.bumptech.glide.Glide
 import com.framework.base.ToolbarActivity
@@ -18,8 +19,8 @@ import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_user.*
-import org.jetbrains.anko.find
 
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 /**
  * Created by qinfei on 17/7/18.
  */
@@ -50,8 +51,9 @@ class UserActivity : ToolbarActivity() {
 
                 val user = Store.store.getUser(this@UserActivity)
                 user?.let {
-                    window.setData(it)
-                    window.showAtLocation(find(R.id.user_main), Gravity.CENTER, 0, 0)
+                    CardActivity.start(this,it)
+//                    window.setData(it)
+//                    window.showAtLocation(find(R.id.user_main), Gravity.CENTER, 0, 0)
                 }
             }
         }
@@ -85,7 +87,7 @@ class UserActivity : ToolbarActivity() {
         updateUser(user)
         if (null != user?.uid) {
             SoguApi.getService(application)
-                    .userInfo(user?.uid!!)
+                    .userInfo(user.uid!!)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe({ payload ->
@@ -110,12 +112,17 @@ class UserActivity : ToolbarActivity() {
         setting.setOnClickListener {
             SettingActivity.start(this)
         }
-        window = BusinessCardWindow(this, {
-
-        })
-
-
+//        window = BusinessCardWindow(this, {
+//            if (Utils.saveImage(this, window.inflate)) {
+//                showToast("名片已经保存至${Environment.getExternalStorageDirectory().absolutePath}")
+//                window.dismiss()
+//            } else {
+//                showToast("权限不足")
+//                window.dismiss()
+//            }
+//        })
     }
+
 
     override fun onResume() {
         super.onResume()
@@ -127,7 +134,7 @@ class UserActivity : ToolbarActivity() {
         if (null == user) return
         tv_name?.text = user.name
         tv_position?.text = user.position
-        val ch = user.name?.first()
+        val ch = user.name.first()
         iv_user.setChar(ch)
         if (!TextUtils.isEmpty(user.email))
             tv_mail?.text = user.email

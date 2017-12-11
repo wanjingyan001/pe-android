@@ -13,6 +13,8 @@ import com.ldf.calendar.model.CalendarDate;
 import com.ldf.calendar.view.DayView;
 import com.sogukj.pe.R;
 
+import java.util.Calendar;
+
 /**
  * Created by ldf on 17/6/26.
  */
@@ -47,17 +49,21 @@ public class CustomDayView extends DayView {
     }
 
     private void renderMarker(CalendarDate date, State state) {
-        if (Utils.loadMarkData().containsKey(date.toString())) {
-            if (state == State.SELECT || date.toString().equals(today.toString())) {
-                marker.setVisibility(GONE);
-            } else {
-                marker.setVisibility(VISIBLE);
+        Calendar instance = Calendar.getInstance();
+        instance.set(date.year, date.month - 1, date.day);
+        String time = com.sogukj.pe.util.Utils.getTime(instance.getTime(), "yyyy-MM-dd");
+        if (Utils.loadMarkData().containsKey(time)) {
+//            if (state == State.SELECT || date.toString().equals(today.toString())) {
+//                marker.setVisibility(GONE);
+//            } else {
+//            marker.setVisibility(VISIBLE);
 //                if (Utils.loadMarkData().get(date.toString()).equals("0")) {
-//
+//                    marker.setEnabled(true);
 //                } else {
-//
+//                    marker.setEnabled(false);
 //                }
-            }
+//            }
+            marker.setVisibility(VISIBLE);
         } else {
             marker.setVisibility(GONE);
         }

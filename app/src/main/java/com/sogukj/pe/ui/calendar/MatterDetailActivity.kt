@@ -55,8 +55,8 @@ class MatterDetailActivity : ToolbarActivity() {
         nodeList.adapter = adapter
 
         val fragments = ArrayList<Fragment>()
-        fragments.add(TodoFragment.newInstance("", ""))
-        fragments.add(CompleteProjectFragment.newInstance("", ""))
+        fragments.add(TodoFragment.newInstance(company.companyId, ""))
+        fragments.add(CompleteProjectFragment.newInstance(company.companyId, ""))
         mattersList.adapter = MatterPagerAdapter(supportFragmentManager, fragments)
         matterTab.setupWithViewPager(mattersList)
 
@@ -65,7 +65,7 @@ class MatterDetailActivity : ToolbarActivity() {
 
     fun doRequest(id: String) {
         SoguApi.getService(application)
-                .projectMatter(id.toInt(), 1)
+                .projectMatter(company_id = id.toInt(), is_important = 1)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->

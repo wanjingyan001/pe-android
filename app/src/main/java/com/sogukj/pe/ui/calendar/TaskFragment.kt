@@ -98,23 +98,16 @@ class TaskFragment : BaseFragment(), View.OnClickListener, TaskFilterWindow.Filt
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
+                        if (page == 1){
+                            data.clear()
+                        }
                         Log.d("WJY", Gson().toJson(payload.payload))
                         payload.payload.let {
                             data.clear()
-                            val dayList = ArrayList<String>()
                             it?.forEachIndexed { index, taskItemBean ->
-                                val day = taskItemBean.end_time.split(" ")[0]
-                                if (!dayList.contains(day)) {
-                                    dayList.add(day)
-                                }
-                            }
-                            dayList.forEach {
-                                data.add(TodoDay(it))
-                                payload.payload?.forEachIndexed { index, taskItemBean ->
-                                    val day = taskItemBean.end_time.split(" ")[0]
-                                    if (day == it) {
-                                        data.add(taskItemBean)
-                                    }
+                                data.add(TodoDay(taskItemBean.date))
+                                taskItemBean.data.forEach {
+                                    data.add(it)
                                 }
                             }
                         }
@@ -176,16 +169,33 @@ class TaskFragment : BaseFragment(), View.OnClickListener, TaskFilterWindow.Filt
     override fun onItemClick(view: View, position: Int) {
         when (view.id) {
             R.id.taskItemLayout -> {
-                val bean = data[position] as TaskItemBean
+                val bean = data[position] as TaskItemBean.ItemBean
                 TaskDetailActivity.start(activity, bean)
             }
         }
     }
 
     override fun finishCheck(buttonView: CompoundButton, isChecked: Boolean, position: Int) {
-        val bean = data[position] as TaskItemBean
+        val bean = data[position] as TaskItemBean.ItemBean
         bean.is_finish = if (isChecked) 1 else 0
         taskAdapter.notifyItemChanged(position)
+        finishTask(bean.data_id)
+    }
+
+    fun finishTask(id: Int) {
+        SoguApi.getService(activity.application)
+                .finishTask(id)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        showToast("任务标记成功")
+                    } else {
+                        showToast(payload.message)
+                    }
+                }, { e ->
+                    Trace.e(e)
+                })
     }
 
     override fun itemClick(view: View?, position: Int, filter: String?) {

@@ -30,10 +30,10 @@ import org.jetbrains.anko.find
 class TaskDetailActivity : ToolbarActivity(), CommentListener {
     lateinit var adapter: RecyclerAdapter<TaskDetailBean.Record>
     lateinit var window: CommentWindow
-    lateinit var taskItemBean: TaskItemBean
+    lateinit var taskItemBean: TaskItemBean.ItemBean
 
     companion object {
-        fun start(ctx: Activity?, bean: TaskItemBean) {
+        fun start(ctx: Activity?, bean: TaskItemBean.ItemBean) {
             val intent = Intent(ctx, TaskDetailActivity::class.java)
             intent.putExtra(Extras.DATA, bean)
             ctx?.startActivity(intent)
@@ -46,7 +46,7 @@ class TaskDetailActivity : ToolbarActivity(), CommentListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task_detail)
-        taskItemBean = intent.getSerializableExtra(Extras.DATA) as TaskItemBean
+        taskItemBean = intent.getSerializableExtra(Extras.DATA) as TaskItemBean.ItemBean
         title = "任务详情"
         setBack(true)
 
