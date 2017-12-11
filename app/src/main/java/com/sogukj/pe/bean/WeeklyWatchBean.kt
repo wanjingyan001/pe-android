@@ -9,15 +9,15 @@ import kotlin.collections.ArrayList
  */
 class WeeklyWatchBean {
     var date: String? = null//10.06-10.13
-    var s_time: String? = null//2017-10-06
-    var e_time: String? = null//2017-10-13
+    var start_time: String? = null//2017-10-06
+    var end_time: String? = null//2017-10-13
     var data: ArrayList<BeanObj> = ArrayList()
 
     class BeanObj : Serializable {
         var img_url: String? = null
         var name: String? = null
         var user_id: Int? = null
-        var is_read: Int? = null//1=>已读，0=>未读,null=>全部
+        var is_read: Int? = null//2=>已读，1=>未读,null=>全部
         var week_id: Int? = null
     }
 

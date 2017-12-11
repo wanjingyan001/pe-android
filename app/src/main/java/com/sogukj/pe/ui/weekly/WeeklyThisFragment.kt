@@ -38,6 +38,7 @@ class WeeklyThisFragment : BaseFragment() {
 
     lateinit var inflate: LayoutInflater
     var user_id: Int? = null//可空（如果为空，显示自己的周报）
+    var week_id: Int? = null//可空（如果为空，显示自己的周报）
     var issue: Int? = null//可空（1=>个人事务,2=>项目事务）
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -48,7 +49,7 @@ class WeeklyThisFragment : BaseFragment() {
         val arr_adapter = ArrayAdapter<String>(context, R.layout.spinner_item, mItems)
         arr_adapter.setDropDownViewResource(R.layout.spinner_dropdown)
         spinner_this.adapter = arr_adapter
-        //spinner_this.setSelection(0, true)
+        spinner_this.setSelection(0, true)
         spinner_this.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View,
                                         pos: Int, id: Long) {
@@ -72,6 +73,7 @@ class WeeklyThisFragment : BaseFragment() {
             spinner_this.visibility = View.GONE
             user_id = null
             issue = null
+            week_id = null
             doRequest()
         } else if (tag == "PERSONAL") {
             spinner_this.visibility = View.VISIBLE
@@ -106,10 +108,11 @@ class WeeklyThisFragment : BaseFragment() {
         } else if (tag == "PERSONAL") {
             s_time = arguments.getString(Extras.TIME1)
             e_time = arguments.getString(Extras.TIME2)
+            week_id = arguments.getInt(Extras.CODE)
         }
         baseActivity?.let {
             SoguApi.getService(it.application)
-                    .getWeekly(user_id, issue, s_time, e_time)
+                    .getWeekly(user_id, issue, s_time, e_time, week_id)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe({ payload ->
@@ -180,8 +183,8 @@ class WeeklyThisFragment : BaseFragment() {
             var info = buchong_full.findViewById(R.id.info) as TextView
             var buchong_edit = buchong_full.findViewById(R.id.buchong_edit) as ImageView
 
-            var S_TIME = week.s_times?.split("-")
-            var E_TIME = week.e_times?.split("-")
+            var S_TIME = week.start_time?.split("-")
+            var E_TIME = week.end_time?.split("-")
 
             time.text = week.time
             times.text = "${S_TIME?.get(1)}.${S_TIME?.get(2)}-${E_TIME?.get(1)}.${E_TIME?.get(2)}"
@@ -438,8 +441,8 @@ class WeeklyThisFragment : BaseFragment() {
             var times = buchong_full.findViewById(R.id.times) as TextView
             var info = buchong_full.findViewById(R.id.info) as TextView
 
-            var S_TIME = week.s_times?.split("-")
-            var E_TIME = week.e_times?.split("-")
+            var S_TIME = week.start_time?.split("-")
+            var E_TIME = week.end_time?.split("-")
 
             time.text = week.time
             times.text = "${S_TIME?.get(1)}.${S_TIME?.get(2)}-${E_TIME?.get(1)}.${E_TIME?.get(2)}"
@@ -466,13 +469,14 @@ class WeeklyThisFragment : BaseFragment() {
 
     companion object {
 
-        fun newInstance(tag: String, data: WeeklyThisBean? = null, s_time: String? = null, e_time: String? = null): WeeklyThisFragment {
+        fun newInstance(tag: String, data: WeeklyThisBean? = null, s_time: String? = null, e_time: String? = null, week_id: Int): WeeklyThisFragment {
             val fragment = WeeklyThisFragment()
             var args = Bundle()
             args.putString(Extras.FLAG, tag)
             args.putSerializable(Extras.DATA, data)
             args.putString(Extras.TIME1, s_time)
             args.putString(Extras.TIME2, e_time)
+            args.putInt(Extras.CODE, week_id)
             fragment.setArguments(args)
             return fragment
         }

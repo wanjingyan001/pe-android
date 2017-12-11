@@ -57,15 +57,15 @@ class WeeklyRecordActivity : ToolbarActivity() {
 
             week = intent.getSerializableExtra(Extras.DATA) as WeeklyThisBean.Week
 
-            tv_start_time.text = week.s_times
-            tv_end_time.text = week.e_times
+            tv_start_time.text = week.start_time
+            tv_end_time.text = week.end_time
 
         } else if (tag == "EDIT") {
             title = "修改工作日程"
             week = intent.getSerializableExtra(Extras.DATA) as WeeklyThisBean.Week
 
-            tv_start_time.text = week.s_times
-            tv_end_time.text = week.e_times
+            tv_start_time.text = week.start_time
+            tv_end_time.text = week.end_time
             et_des.setText(week.info)
         }
 

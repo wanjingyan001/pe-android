@@ -52,7 +52,7 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
     lateinit var endBean: TimeItem
     var currentClick = 0
 
-    val loadedData = ArrayList<WeeklyWatchBean>()
+    var loadedData = ArrayList<WeeklyWatchBean>()
     lateinit var spinner_data: ArrayList<ReceiveSpinnerBean>
     var selected_depart_id: Long = 0
 
@@ -96,13 +96,13 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
                         grid.setOnItemClickListener(object : AdapterView.OnItemClickListener {
                             override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
 
-                                (grid.adapter.getItem(position) as WeeklyWatchBean.BeanObj).is_read = 1
+                                (grid.adapter.getItem(position) as WeeklyWatchBean.BeanObj).is_read = 2
                                 grid.setTag("CLICK")
 
                                 val intent = Intent(context, PersonalWeeklyActivity::class.java)
                                 intent.putExtra(Extras.DATA, grid.adapter.getItem(position) as WeeklyWatchBean.BeanObj)
-                                intent.putExtra(Extras.TIME1, data.s_time)
-                                intent.putExtra(Extras.TIME2, data.e_time)
+                                intent.putExtra(Extras.TIME1, data.start_time)
+                                intent.putExtra(Extras.TIME2, data.end_time)
                                 startActivityForResult(intent, 0x011)
                             }
                         })
@@ -290,12 +290,12 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
 
         val header = ProgressLayout(baseActivity)
         header.setColorSchemeColors(ContextCompat.getColor(baseActivity, R.color.color_main))
-        root.setHeaderView(header)
+        refresh.setHeaderView(header)
         val footer = BallPulseView(baseActivity)
         footer.setAnimatingColor(ContextCompat.getColor(baseActivity, R.color.color_main))
-        root.setBottomView(footer)
-        root.setOverScrollRefreshShow(false)
-        root.setOnRefreshListener(object : RefreshListenerAdapter() {
+        refresh.setBottomView(footer)
+        refresh.setOverScrollRefreshShow(false)
+        refresh.setOnRefreshListener(object : RefreshListenerAdapter() {
             override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
                 page = 1
                 doRequest()
@@ -307,7 +307,7 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
             }
 
         })
-        root.setAutoLoadMore(true)
+        refresh.setAutoLoadMore(true)
     }
 
     var page = 1
@@ -316,9 +316,9 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
     fun doRequest() {
         var is_read: Int? = null
         if (currentClick == 1) {
-            is_read = 0
-        } else if (currentClick == 2) {
             is_read = 1
+        } else if (currentClick == 2) {
+            is_read = 2
         }
 
         var de_id = spinner_data.get(selected_depart_id.toInt()).id
@@ -337,6 +337,7 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         payload.payload?.apply {
+                            loadedData = this
                             adapter.dataList.addAll(this)
                             //adapter.notifyDataSetChanged()
                         }
@@ -350,12 +351,12 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
                         else -> showToast("未知错误")
                     }
                 }, {
-                    root.setEnableLoadmore(adapter.dataList.size % pageSize == 0)
+                    refresh.setEnableLoadmore(adapter.dataList.size % pageSize == 0)
                     adapter.notifyDataSetChanged()
                     if (page == 1)
-                        root.finishRefreshing()
+                        refresh.finishRefreshing()
                     else
-                        root.finishLoadmore()
+                        refresh.finishLoadmore()
                 })
     }
 
@@ -365,7 +366,7 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
             adapter.notifyDataSetChanged()
         } else {
             // 未读-1-false，已读-2-true
-            var flag = if (currentClick == 1) 0 else 1
+            var flag = if (currentClick == 1) 1 else 2
             var obj_list = ArrayList<WeeklyWatchBean>()
             for (i in 0 until loadedData.size) {
                 var objs = ArrayList<WeeklyWatchBean.BeanObj>()
@@ -416,9 +417,9 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
         // click=true放前面
         fun sort() {
             for (i in 0 until list.size) {
-                if (list[i].is_read == 0) {
+                if (list[i].is_read == 1) {
                     for (j in (i + 1) until list.size) {
-                        if (list[j].is_read == 1) {
+                        if (list[j].is_read == 2) {
                             var tmp = list[i]
                             list[i] = list[j]
                             list[j] = tmp
@@ -444,10 +445,10 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
             }
             viewHolder.icon?.setChar(list.get(position).name?.first())
             viewHolder.name?.text = list.get(position).name
-            if (list.get(position).is_read == 1) {
+            if (list.get(position).is_read == 2) {
                 viewHolder.icon?.alpha = 0.8f
                 viewHolder.name?.textColor = Color.parseColor("#A0A4AA")
-            } else {
+            } else if (list.get(position).is_read == 1) {
                 viewHolder.icon?.alpha = 1f
                 viewHolder.name?.textColor = Color.parseColor("#282828")
             }

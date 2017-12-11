@@ -29,8 +29,8 @@ class RecordBuChongFragment : BaseFragment() {
 
         var week = arguments.getSerializable(Extras.DATA) as WeeklyThisBean.Week
 
-        var S_TIME = week.s_times?.split("-")
-        var E_TIME = week.e_times?.split("-")
+        var S_TIME = week.start_time?.split("-")
+        var E_TIME = week.end_time?.split("-")
 
         time.text = week.time
         times.text = "${S_TIME?.get(1)}.${S_TIME?.get(2)}-${E_TIME?.get(1)}.${E_TIME?.get(2)}"

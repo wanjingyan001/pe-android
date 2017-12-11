@@ -803,8 +803,9 @@ interface SoguService {
     @POST("/api/Weekly/index")
     fun getWeekly(@Field("user_id") user_id: Int? = null,
                   @Field("issue") issue: Int? = null,
-                  @Field("s_time") s_time: String? = null,
-                  @Field("e_time") e_time: String? = null): Observable<Payload<WeeklyThisBean>>
+                  @Field("start_time") start_time: String? = null,
+                  @Field("end_time") end_time: String? = null,
+                  @Field("week_id") week_id: Int? = null): Observable<Payload<WeeklyThisBean>>
 
     // 补充工作日程 新增和编辑都是这个接口
     @FormUrlEncoded

@@ -28,8 +28,8 @@ class WeeklyThisBean : Serializable {
 
     class Week : Serializable {
         var time: String? = null//08:24
-        var s_times: String? = null//2017-10-06
-        var e_times: String? = null//2017-10-13
+        var start_time: String? = null//2017-10-06
+        var end_time: String? = null//2017-10-13
         var info: String? = null//周报内容
         var week_id: Int? = null//周报id
     }

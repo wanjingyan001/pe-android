@@ -177,7 +177,7 @@ class WeeklyISendFragment : BaseFragment() {
 
     fun doRequest() {
         SoguApi.getService(baseActivity!!.application)
-                .send(page, pageSize, formatTime(startBean), formatTime(endBean))
+                .send(page, pageSize, start.text.toString(), end.text.toString())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
