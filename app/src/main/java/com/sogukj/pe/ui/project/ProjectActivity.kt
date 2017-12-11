@@ -33,6 +33,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_project.*
 import org.jetbrains.anko.find
+import org.jetbrains.anko.textColor
 
 /**
  * Created by qinfei on 17/7/18.
@@ -138,6 +139,38 @@ class ProjectActivity : ToolbarActivity() {
                     Trace.e(e)
                     tv_more_yq.visibility = View.GONE
                 })
+
+        btn_yes.setOnClickListener {
+            btn_yes.setBackgroundResource(R.drawable.bg_rectangle_blue)
+            btn_yes.textColor = Color.parseColor("#ffffff")
+
+            btn_no.setBackgroundResource(R.drawable.bg_rectangle_white)
+            btn_no.textColor = Color.parseColor("#282828")
+        }
+
+        btn_no.setOnClickListener {
+            btn_no.setBackgroundResource(R.drawable.bg_rectangle_blue)
+            btn_no.textColor = Color.parseColor("#ffffff")
+
+            btn_yes.setBackgroundResource(R.drawable.bg_rectangle_white)
+            btn_yes.textColor = Color.parseColor("#282828")
+        }
+
+        btn_you.setOnClickListener {
+            btn_you.setBackgroundResource(R.drawable.bg_rectangle_blue)
+            btn_you.textColor = Color.parseColor("#ffffff")
+
+            btn_wu.setBackgroundResource(R.drawable.bg_rectangle_white)
+            btn_wu.textColor = Color.parseColor("#282828")
+        }
+
+        btn_wu.setOnClickListener {
+            btn_wu.setBackgroundResource(R.drawable.bg_rectangle_blue)
+            btn_wu.textColor = Color.parseColor("#ffffff")
+
+            btn_you.setBackgroundResource(R.drawable.bg_rectangle_white)
+            btn_you.textColor = Color.parseColor("#282828")
+        }
     }
 
     fun refresh(grid: android.support.v7.widget.GridLayout, data: Map<String, Int?>, color: Int = Color.RED) {
