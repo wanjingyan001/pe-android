@@ -477,7 +477,7 @@
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity android:name=".ui.weekly.WeeklyActivity" />
         <activity android:name=".ui.weekly.WeeklyRecordActivity" />
-        <activity android:name=".ui.weekly.PersonalWeeklyActivity"></activity>
+        <activity android:name=".ui.weekly.PersonalWeeklyActivity" />
         <activity
             android:name=".ui.user.ResumeEditorActivity"
             android:configChanges="keyboard|orientation|screenSize"
@@ -502,8 +502,11 @@
             android:name=".ui.calendar.ModifyTaskActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.calendar.CompanySelectActivity"></activity>
->>>>>>> Stashed changes
+        <activity android:name=".ui.calendar.CompanySelectActivity" />
+        <activity
+            android:name=".ui.user.CardActivity"
+            android:theme="@style/MyDialogActivity" />
+        <activity android:name=".ui.calendar.ModifyScheduleActivity"></activity>
     </application>
 
 </manifest>

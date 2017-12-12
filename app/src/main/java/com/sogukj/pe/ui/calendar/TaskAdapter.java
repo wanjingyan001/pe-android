@@ -63,27 +63,21 @@ public class TaskAdapter extends RecyclerView.Adapter {
             }
 
         } else if (holder instanceof InfoHolder) {
-            final TaskItemBean bean = (TaskItemBean) o;
-            try {
-                Date parse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(bean.getEnd_time());
-                ((InfoHolder) holder).time.setText(Utils.getTime(parse, "HH:mm"));
-                ((InfoHolder) holder).content.setText(bean.getTitle());
-                if (bean.getLeader() == null) {
-                    ((InfoHolder) holder).typeTv.setVisibility(View.GONE);
-                } else {
-                    ((InfoHolder) holder).typeTv.setVisibility(View.VISIBLE);
-                    ((InfoHolder) holder).typeTv.setText(bean.getLeader());
-                }
-                if (bean.is_finish() == 1) {
-                    ((InfoHolder) holder).finishBox.setSelected(true);
-                    ((InfoHolder) holder).content.setPaintFlags(((InfoHolder) holder).content.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                } else {
-                    ((InfoHolder) holder).finishBox.setSelected(false);
-                    ((InfoHolder) holder).content.setPaintFlags(((InfoHolder) holder).content.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-                }
-
-            } catch (ParseException e) {
-                e.printStackTrace();
+            final TaskItemBean.ItemBean bean = (TaskItemBean.ItemBean) o;
+            ((InfoHolder) holder).time.setText(bean.getEnd_time());
+            ((InfoHolder) holder).content.setText(bean.getTitle());
+            if (bean.getLeader() == null) {
+                ((InfoHolder) holder).typeTv.setVisibility(View.GONE);
+            } else {
+                ((InfoHolder) holder).typeTv.setVisibility(View.VISIBLE);
+                ((InfoHolder) holder).typeTv.setText(bean.getLeader());
+            }
+            if (bean.is_finish() == 1) {
+                ((InfoHolder) holder).finishBox.setSelected(true);
+                ((InfoHolder) holder).content.setPaintFlags(((InfoHolder) holder).content.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            } else {
+                ((InfoHolder) holder).finishBox.setSelected(false);
+                ((InfoHolder) holder).content.setPaintFlags(((InfoHolder) holder).content.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
             }
             ((InfoHolder) holder).finishBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -115,7 +109,7 @@ public class TaskAdapter extends RecyclerView.Adapter {
         Object o = data.get(position);
         if (o instanceof TodoDay) {
             return day;
-        } else if (o instanceof TaskItemBean) {
+        } else if (o instanceof TaskItemBean.ItemBean) {
             return info;
         }
         return info;

@@ -73,6 +73,10 @@ public class BusinessCardWindow extends PopupWindow {
         cardAddress.setText(bean.getMemo());
     }
 
+    public View getInflate(){
+        return inflate;
+    }
+
     /**
      * 设置添加屏幕的背景透明度
      *

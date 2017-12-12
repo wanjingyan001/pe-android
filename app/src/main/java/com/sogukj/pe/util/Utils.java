@@ -5,18 +5,27 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Point;
+import android.graphics.Rect;
 import android.os.Build;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
+import android.view.Display;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -265,5 +274,50 @@ public class Utils {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 生成视图的预览
+     * @param activity
+     * @param v
+     * @return  视图生成失败返回null
+     *          视图生成成功返回视图的绝对路径
+     */
+    public static boolean saveImage(Activity activity, View v) {
+        Bitmap bitmap;
+        String path =  Environment.getExternalStorageDirectory().getAbsolutePath()  + "/Download/BusinessCard.png";
+        View view = activity.getWindow().getDecorView();
+        view.setDrawingCacheEnabled(true);
+        view.buildDrawingCache();
+        bitmap = view.getDrawingCache();
+        Rect frame = new Rect();
+        activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
+        int[] location = new int[2];
+        v.getLocationOnScreen(location);
+        try {
+            bitmap = Bitmap.createBitmap(bitmap, location[0], location[1], v.getWidth(), v.getHeight());
+            FileOutputStream fout = new FileOutputStream(path);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fout);
+            return true;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Log.e(TAG, "生成预览图片失败：" + e);
+        } catch (IllegalArgumentException e) {
+            Log.e(TAG, "width is <= 0, or height is <= 0");
+        } finally {
+            // 清理缓存
+            view.destroyDrawingCache();
+        }
+        return false;
+
+    }
+
+    public static void saveCard(Activity activity, PopupWindow window){
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.y;
+
     }
 }

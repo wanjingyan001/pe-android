@@ -27,17 +27,16 @@ import org.jetbrains.anko.find
 
 
 class OrganizationActivity : ToolbarActivity() {
-    lateinit var departList: ArrayList<DepartmentBean>
+    //    lateinit var departList: ArrayList<DepartmentBean>
     lateinit var alreadyList: ArrayList<UserBean>
-    //    val departList = ArrayList<DepartmentBean>()
+    val departList = ArrayList<DepartmentBean>()
     lateinit var code: String
     var tag: String? = null
 
     companion object {
-        fun start(ctx: Activity?, departList: ArrayList<DepartmentBean>) {
+        fun start(ctx: Activity?) {
             val intent = Intent(ctx, OrganizationActivity::class.java)
-            intent.putExtra(Extras.DATA, departList)
-            intent.putExtra(Extras.FLAG, "USER")
+            intent.putExtra(Extras.CODE, "USER")
             ctx?.startActivity(intent)
         }
 
@@ -55,63 +54,67 @@ class OrganizationActivity : ToolbarActivity() {
         }
     }
 
-    var flag = ""
+//    var flag = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_organization)
-
-        flag = intent.getStringExtra(Extras.FLAG)
-        if (flag == "USER") {
-            departList = intent.getSerializableExtra(Extras.DATA) as ArrayList<DepartmentBean>
-            setBack(true)
-            title = "公司组织架构"
-            setData(departList)
-        } else if (flag == "WEEKLY") {
-            setBack(true)
-            title = "请选择"
-            departList = ArrayList<DepartmentBean>()
-            alreadyList = intent.getSerializableExtra(Extras.DATA) as ArrayList<UserBean>
-
-            SoguApi.getService(application)
-                    .userDepart()
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe({ payload ->
-                        if (payload.isOk) {
-                            departList.clear()
-                            payload.payload?.apply {
-                                for (list in this) {
-                                    var LIST = list.clone()
-                                    var dataList = LIST.data
-                                    for (bean in alreadyList) {
-                                        var databeanIndex: Int = 0
-                                        while (databeanIndex < dataList!!.size) {
-                                            if (bean.name == dataList[databeanIndex].name) {
-                                                dataList.removeAt(databeanIndex)
-                                                break
-                                            }
-                                            databeanIndex++
-                                        }
-                                    }
-                                    if (dataList!!.size != 0) {
-                                        departList.add(LIST)
-                                    }
-                                }
-                            }
-                            setData(departList)
-                        } else
-                            showToast(payload.message)
-                    }, { e ->
-                        Trace.e(e)
-                        showToast("数据获取失败")
-                    })
-        }
+//
+//        flag = intent.getStringExtra(Extras.FLAG)
+//        if (flag == "USER") {
+//            departList = intent.getSerializableExtra(Extras.DATA) as ArrayList<DepartmentBean>
+//            setBack(true)
+//            title = "公司组织架构"
+//            setData(departList)
+//        } else if (flag == "WEEKLY") {
+//            setBack(true)
+//            title = "请选择"
+//            departList = ArrayList<DepartmentBean>()
+//            alreadyList = intent.getSerializableExtra(Extras.DATA) as ArrayList<UserBean>
+//
+//            SoguApi.getService(application)
+//                    .userDepart()
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribeOn(Schedulers.io())
+//                    .subscribe({ payload ->
+//                        if (payload.isOk) {
+//                            departList.clear()
+//                            payload.payload?.apply {
+//                                for (list in this) {
+//                                    var LIST = list.clone()
+//                                    var dataList = LIST.data
+//                                    for (bean in alreadyList) {
+//                                        var databeanIndex: Int = 0
+//                                        while (databeanIndex < dataList!!.size) {
+//                                            if (bean.name == dataList[databeanIndex].name) {
+//                                                dataList.removeAt(databeanIndex)
+//                                                break
+//                                            }
+//                                            databeanIndex++
+//                                        }
+//                                    }
+//                                    if (dataList!!.size != 0) {
+//                                        departList.add(LIST)
+//                                    }
+//                                }
+//                            }
+//                            setData(departList)
+//                        } else
+//                            showToast(payload.message)
+//                    }, { e ->
+//                        Trace.e(e)
+//                        showToast("数据获取失败")
+//                    })
+//        }
 
         code = intent.getStringExtra(Extras.CODE)
         tag = intent.getStringExtra(Extras.NAME)
         setBack(true)
-        title = "公司组织架构"
+        if (code == "USER") {
+            title = "公司组织架构"
+        } else if (code == "SelectUser") {
+            title = "请选择"
+        }
 
         SoguApi.getService(application)
                 .userDepart()
@@ -188,25 +191,24 @@ class OrganizationActivity : ToolbarActivity() {
         }
 
 
-        item_content.setOnClickListener {
-            if (flag == "WEEKLY") {
-                var intent = Intent()
+//        item_content.setOnClickListener {
+//            if (flag == "WEEKLY") {
+//                var intent = Intent()
+//                intent.putExtra(Extras.DATA, userBean)
+//                setResult(Activity.RESULT_OK, intent)
+//            }
+//        }
+        if (code.isNotEmpty()) {
+            item_content.setOnClickListener {
+                val intent = Intent()
                 intent.putExtra(Extras.DATA, userBean)
-                setResult(Activity.RESULT_OK, intent)
-                if (code.isNotEmpty()) {
-                    item_content.setOnClickListener {
-                        val intent = Intent()
-                        intent.putExtra(Extras.DATA, userBean)
-                        if (tag == "CcPersonAdapter") {
-                            setResult(Extras.RESULTCODE, intent)
-                        } else {
-                            setResult(Extras.RESULTCODE2, intent)
-                        }
-                        finish()
-                    }
+                if (tag == "CcPersonAdapter") {
+                    setResult(Extras.RESULTCODE, intent)
+                } else {
+                    setResult(Extras.RESULTCODE2, intent)
                 }
+                finish()
             }
-
         }
     }
 }

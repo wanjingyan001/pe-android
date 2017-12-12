@@ -49,6 +49,7 @@ class TeamScheduleFragment : BaseFragment(), ScheduleItemClickListener {
     private var mParam1: String? = null
     private var mParam2: String? = null
     lateinit var monthSelect: MonthSelectListener
+    private lateinit var calendarAdapter: CalendarViewAdapter
     var page = 1
     var filter: StringBuilder = StringBuilder("")
     lateinit var date: String
@@ -72,10 +73,12 @@ class TeamScheduleFragment : BaseFragment(), ScheduleItemClickListener {
     }
 
 
+
+
     private fun initCalendarView() {
         calendar_view.setViewheight(Utils.dpToPx(context, 270))
         val dayView = CustomDayView(context, R.layout.custom_day)
-        val calendarAdapter = CalendarViewAdapter(context, object : OnSelectDateListener {
+        calendarAdapter = CalendarViewAdapter(context, object : OnSelectDateListener {
             override fun onSelectDate(date: CalendarDate?) {
                 //选中日期监听
                 val calendar = java.util.Calendar.getInstance()
@@ -104,6 +107,9 @@ class TeamScheduleFragment : BaseFragment(), ScheduleItemClickListener {
                     val date = currentCalendars[position % currentCalendars.size].seedDate
                     monthSelect.onMonthSelect(date)
                     this@TeamScheduleFragment.date = "${date.year}年${date.month}月"
+                    val time = Utils.getSupportBeginDayofMonth(date.year, date.month - 1)
+                    val time1 = Utils.getSupportBeginDayofMonth(date.year, date.month + 1)
+                    showGreatPoint("${Utils.getTime(time[0], "yyyyMMdd")}-${Utils.getTime(time1[1], "yyyyMMdd")}")
                 }
             }
 
@@ -112,13 +118,15 @@ class TeamScheduleFragment : BaseFragment(), ScheduleItemClickListener {
             }
 
         })
-        val map = HashMap<String, String>()
-        map.put("2017-12-3", "0")
-        map.put("2017-12-9", "0")
-        map.put("2017-12-16", "0")
-        map.put("2017-12-24", "0")
-        map.put("2017-11-30", "0")
-        calendarAdapter.setMarkData(map)
+        val timer = Utils.getSupportBeginDayofMonth(
+                Utils.getTime(System.currentTimeMillis(), "yyyy").toInt(),
+                Utils.getTime(System.currentTimeMillis(), "MM").toInt()
+        )
+        val timer1 = Utils.getSupportBeginDayofMonth(
+                Utils.getTime(System.currentTimeMillis(), "yyyy").toInt(),
+                Utils.getTime(System.currentTimeMillis(), "MM").toInt()
+        )
+        showGreatPoint("${Utils.getTime(timer[0], "yyyyMMdd")}-${Utils.getTime(timer1[1], "yyyyMMdd")}")
     }
 
     fun doRequest(page: Int, date: String, filter: String? = null) {
@@ -144,6 +152,28 @@ class TeamScheduleFragment : BaseFragment(), ScheduleItemClickListener {
     }
 
 
+    private fun showGreatPoint(timer: String) {
+        SoguApi.getService(activity.application)
+                .showGreatPoint(timer)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        payload.payload?.let {
+                            Log.d("WJY",Gson().toJson(it))
+                            val map = HashMap<String, String>()
+                            it.forEach {
+                                map.put(it, "1")
+                            }
+                            calendarAdapter.setMarkData(map)
+                            calendarAdapter.invalidateCurrentCalendar()
+                        }
+                    } else {
+                        showToast(payload.message)
+                    }
+                })
+    }
+
     fun initList() {
         teamAdapter = TeamAdapter(context, data)
         teamList.layoutManager = LinearLayoutManager(context)
@@ -163,7 +193,7 @@ class TeamScheduleFragment : BaseFragment(), ScheduleItemClickListener {
                 OrganizationActivity.startForResult(this)
             }
             R.id.teamItemLayout -> {
-
+                ModifyScheduleActivity.start(activity, data[position].data_id!!)
             }
         }
     }
@@ -171,6 +201,8 @@ class TeamScheduleFragment : BaseFragment(), ScheduleItemClickListener {
     override fun finishCheck(buttonView: CompoundButton, isChecked: Boolean, position: Int) {
 
     }
+
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

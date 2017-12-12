@@ -11,3 +11,4 @@ class ProjectMatterInfo(var time: String, var content: String) : Serializable
 
 class ProjectMatterCompany(var companyName: String,
                            var companyId: String) : Serializable
+

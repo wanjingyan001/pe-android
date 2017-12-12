@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.View
+import android.widget.CompoundButton
 import com.framework.base.BaseFragment
 import com.google.gson.Gson
 import com.ldf.calendar.component.CalendarAttr
@@ -61,8 +62,9 @@ class ScheduleFragment : BaseFragment() {
         initCalendarView()
         initList()
         doRequest(page, SimpleDateFormat("yyyy-MM-dd").format(Date(System.currentTimeMillis())))
+
         addSchedule.setOnClickListener {
-            ModifyTaskActivity.start(activity)
+            ModifyScheduleActivity.start(activity)
         }
     }
 
@@ -83,6 +85,19 @@ class ScheduleFragment : BaseFragment() {
 
         }, CalendarAttr.CalendayType.MONTH, dayView)
         CalendarViewAdapter.weekArrayType = 1
+        initCalendar()
+        val timer = Utils.getSupportBeginDayofMonth(
+                Utils.getTime(System.currentTimeMillis(), "yyyy").toInt(),
+                Utils.getTime(System.currentTimeMillis(), "MM").toInt()
+        )
+        val timer1 = Utils.getSupportBeginDayofMonth(
+                Utils.getTime(System.currentTimeMillis(), "yyyy").toInt(),
+                Utils.getTime(System.currentTimeMillis(), "MM").toInt()
+        )
+        showGreatPoint("${Utils.getTime(timer[0], "yyyyMMdd")}-${Utils.getTime(timer1[1], "yyyyMMdd")}")
+    }
+
+    private fun initCalendar() {
         calendar_view.adapter = calendarAdapter
         calendar_view.currentItem = MonthPager.CURRENT_DAY_INDEX
         calendar_view.setPageTransformer(false) { page, position ->
@@ -100,9 +115,9 @@ class ScheduleFragment : BaseFragment() {
                     Log.d("WJY", "${date.year}年\n${date.month}月")
                     monthSelect.onMonthSelect(date)
                     this@ScheduleFragment.date = "${date.year}年${date.month}月"
-
-                    val month = Utils.getSupportBeginDayofMonth(date.year, date.month)
-                    showGreatPoint(Utils.getTime(month[0], "yyyyMMdd") + "-" + Utils.getTime(month[1], "yyyyMMdd"))
+                    val time = Utils.getSupportBeginDayofMonth(date.year, date.month - 1)
+                    val time1 = Utils.getSupportBeginDayofMonth(date.year, date.month + 1)
+                    showGreatPoint("${Utils.getTime(time[0], "yyyyMMdd")}-${Utils.getTime(time1[1], "yyyyMMdd")}")
                 }
             }
 
@@ -141,7 +156,7 @@ class ScheduleFragment : BaseFragment() {
                 })
     }
 
-    fun showGreatPoint(timer: String) {
+    private fun showGreatPoint(timer: String) {
         SoguApi.getService(activity.application)
                 .showGreatPoint(timer)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -149,12 +164,13 @@ class ScheduleFragment : BaseFragment() {
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         payload.payload?.let {
-                            Log.d("WJY",Gson().toJson(it))
+                            Log.d("WJY", Gson().toJson(it))
                             val map = HashMap<String, String>()
                             it.forEach {
                                 map.put(it, "1")
                             }
                             calendarAdapter.setMarkData(map)
+                            calendarAdapter.invalidateCurrentCalendar()
                         }
                     } else {
                         showToast(payload.message)
@@ -162,10 +178,36 @@ class ScheduleFragment : BaseFragment() {
                 })
     }
 
+    fun finishTask(id: Int) {
+        SoguApi.getService(activity.application)
+                .finishTask(id)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        showToast("日程标记成功")
+                    } else {
+                        showToast(payload.message)
+                    }
+                }, { e ->
+                    Trace.e(e)
+                })
+    }
+
     private fun initList() {
         adapter = ScheduleAdapter(context, data)
         list.layoutManager = LinearLayoutManager(context)
         list.adapter = adapter
+        adapter.setListener(object : ScheduleItemClickListener {
+            override fun onItemClick(view: View, position: Int) {
+                ModifyScheduleActivity.start(activity, data[position].data_id!!)
+            }
+
+            override fun finishCheck(buttonView: CompoundButton, isChecked: Boolean, position: Int) {
+                val scheduleBean = data[position]
+                scheduleBean.id?.let { finishTask(it) }
+            }
+        })
     }
 
 

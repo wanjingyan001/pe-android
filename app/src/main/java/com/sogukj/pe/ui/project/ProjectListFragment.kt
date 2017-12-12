@@ -275,11 +275,13 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
         pop.isOutsideTouchable = true
         pop.setBackgroundDrawable(BitmapDrawable(resources, null as Bitmap?))
         val location = IntArray(2)
-        val view = view.find<View>(R.id.tv1)
-        view.getLocationInWindow(location)
-        val x = location[0]
-        val y = location[1]
-        pop.showAtLocation(view, Gravity.CENTER_HORIZONTAL or Gravity.TOP, 0, y - view.getMeasuredHeight())
+        if (view.id != R.id.project_main_layout3) {
+            val view = view.find<View>(R.id.tv1)
+            view.getLocationInWindow(location)
+            val x = location[0]
+            val y = location[1]
+            pop.showAtLocation(view, Gravity.CENTER_HORIZONTAL or Gravity.TOP, 0, y - view.getMeasuredHeight())
+        }
     }
 
     fun doDel(position: Int) {

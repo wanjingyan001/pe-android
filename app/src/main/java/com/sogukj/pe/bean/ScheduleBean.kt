@@ -14,7 +14,7 @@ class ScheduleBean : Serializable {
     var type: Int? = null//类别
     var data_id: Int? = null//对应表ID
     var timing: String? = null//时间  当stat=1或2时返回时间段，当stat=3时返回时间点
-    var is_finish: Int? = null//是否完成  （0=>未完成，1=>完成）仅当stat=3时返回
+    var is_finish: Int = 0//是否完成  （0=>未完成，1=>完成）仅当stat=3时返回
     var company_id: Int? = null//公司id  仅当stat=3时返回
 
 }

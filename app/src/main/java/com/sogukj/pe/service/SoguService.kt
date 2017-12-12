@@ -711,9 +711,9 @@ interface SoguService {
     /**
      * 一键查询
      */
-    @FormUrlEncoded
+//    @FormUrlEncoded
     @POST("/api/Credit/queryCreditInfo")
-    fun queryCreditInfo(@Field("info") info: String): Observable<Payload<Any>>
+    fun queryCreditInfo(@Body info: QueryReqBean): Observable<Payload<Any>>
 
     /**
      * 省市区选择
@@ -791,7 +791,7 @@ interface SoguService {
 
 
     /**
-     * 项目关键节点|项目代办|项目完成
+     * 项目关键节点
      */
     @FormUrlEncoded
     @POST("/api/Calendar/projectMatter")
@@ -800,6 +800,15 @@ interface SoguService {
                       @Field("is_finish") is_finish: Int? = null//是否完成 1=>项目完成，0=>项目代办  选择此项时is_important必空
     ): Observable<Payload<List<KeyNode>>>
 
+
+    /**
+     * 项目代办|项目完成
+     */
+    @FormUrlEncoded
+    @POST("/api/Calendar/projectMatter")
+    fun projectMatter(@Field("company_id") company_id: Int,
+                      @Field("is_finish") is_finish: Int? = null//是否完成 1=>项目完成，0=>项目代办  选择此项时is_important必空
+    ): Observable<Payload<List<MatterDetails>>>
 
     /**
      * 任务详情
@@ -836,6 +845,10 @@ interface SoguService {
     @FormUrlEncoded
     @POST("api/Calendar/showGreatPoint")
     fun showGreatPoint(@Field("timer") timer: String): Observable<Payload<List<String>>>
+
+    @FormUrlEncoded
+    @POST("/api/Calendar/finishTask")
+    fun finishTask(@Field("rid")rid :Int) :Observable<Payload<Any>>
 
 
     companion object {

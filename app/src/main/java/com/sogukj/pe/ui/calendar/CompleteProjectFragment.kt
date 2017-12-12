@@ -4,12 +4,15 @@ package com.sogukj.pe.ui.calendar
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.view.LayoutInflater
+import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import com.framework.base.BaseFragment
-
+import com.google.gson.Gson
 import com.sogukj.pe.R
+import com.sogukj.pe.util.Trace
+import com.sogukj.service.SoguApi
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_complete_project.*
 
 
@@ -21,14 +24,14 @@ import kotlinx.android.synthetic.main.fragment_complete_project.*
 class CompleteProjectFragment : BaseFragment() {
     override val containerViewId: Int
         get() = R.layout.fragment_complete_project
-
-    private var mParam1: String? = null
+    val data = ArrayList<Any>()
+    private var companyId: String? = null
     private var mParam2: String? = null
-
+    lateinit var adapter: CompleteAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (arguments != null) {
-            mParam1 = arguments.getString(ARG_PARAM1)
+            companyId = arguments.getString(ARG_PARAM1)
             mParam2 = arguments.getString(ARG_PARAM2)
         }
     }
@@ -36,16 +39,36 @@ class CompleteProjectFragment : BaseFragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val data = ArrayList<Any>()
-        data.add(TodoYear("2017年度"))
-        data.add(CompleteInfo("储备该项目", "2015年11月13日 14:02"))
-        data.add(CompleteInfo("项目立项", "2015年11月6日 14:02"))
-        data.add(CompleteInfo("对赌协议签订（这里是内容这里是内容这里是内容这里是内容） ", "2015年11月1日 14:02"))
-        val adapter = CompleteAdapter(context, data)
+        adapter = CompleteAdapter(context, data)
         completeList.layoutManager = LinearLayoutManager(context)
         completeList.adapter = adapter
+        companyId?.let { doRequest(it) }
     }
 
+
+    fun doRequest(id: String) {
+        SoguApi.getService(activity.application)
+                .projectMatter(id.toInt(), 1)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        Log.d("WJY", Gson().toJson(payload.payload))
+                        payload.payload?.let {
+                            it.forEach {
+                                data.add(TodoYear(it.year))
+                                it.data.forEach {
+                                    data.add(it)
+                                }
+                            }
+                        }
+                    } else {
+                        showToast(payload.message)
+                    }
+                }, { e -> Trace.e(e) }, {
+                    adapter.notifyDataSetChanged()
+                })
+    }
 
     companion object {
         private val ARG_PARAM1 = "param1"
