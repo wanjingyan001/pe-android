@@ -26,7 +26,8 @@ public class TaskFilterWindow extends PopupWindow {
     private List<String> filters;
     private FilterItemClickListener listener;
     private String tag;
-
+    private int selectPosition;
+    private FilterAdapter adapter;
 
     public TaskFilterWindow(Context context, List<String> filters, FilterItemClickListener listener, String tag) {
         super(context);
@@ -37,13 +38,17 @@ public class TaskFilterWindow extends PopupWindow {
         init();
     }
 
-
+    public void setSelectPosition(int selectPosition) {
+        this.selectPosition = selectPosition;
+        adapter.notifyDataSetChanged();
+    }
 
     private void init() {
         inflate = LayoutInflater.from(context).inflate(R.layout.layout_task_filter_window, null);
         filterList = (RecyclerView) inflate.findViewById(R.id.taskFilterList);
         filterList.setLayoutManager(new LinearLayoutManager(context));
-        filterList.setAdapter(new FilterAdapter());
+        adapter = new FilterAdapter();
+        filterList.setAdapter(adapter);
         this.setContentView(inflate);
         this.setWidth(WindowManager.LayoutParams.MATCH_PARENT);
         this.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
@@ -55,7 +60,6 @@ public class TaskFilterWindow extends PopupWindow {
 
     class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.FilterHolder> {
 
-
         @Override
         public FilterHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View inflate = LayoutInflater.from(context).inflate(R.layout.item_task_filter_list, parent, false);
@@ -64,14 +68,19 @@ public class TaskFilterWindow extends PopupWindow {
 
         @Override
         public void onBindViewHolder(final FilterHolder holder, final int position) {
+            if (position == selectPosition){
+                holder.filterTv.setSelected(true);
+            }else {
+                holder.filterTv.setSelected(false);
+            }
             holder.filterTv.setText(filters.get(position));
             holder.filterTv.setTag(tag);
             if (listener != null) {
                 holder.filterTv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        dismiss();
                         listener.itemClick(v, position, holder.filterTv.getText().toString());
+                        dismiss();
                     }
                 });
             }

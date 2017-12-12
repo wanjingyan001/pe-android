@@ -27,112 +27,109 @@ import org.jetbrains.anko.find
 
 
 class OrganizationActivity : ToolbarActivity() {
-    //    lateinit var departList: ArrayList<DepartmentBean>
+    lateinit var departList: ArrayList<DepartmentBean>
     lateinit var alreadyList: ArrayList<UserBean>
-    val departList = ArrayList<DepartmentBean>()
-    lateinit var code: String
+    //    var departList = ArrayList<DepartmentBean>()
     var tag: String? = null
 
     companion object {
         fun start(ctx: Activity?) {
             val intent = Intent(ctx, OrganizationActivity::class.java)
-            intent.putExtra(Extras.CODE, "USER")
+            intent.putExtra(Extras.FLAG, "USER")
+
             ctx?.startActivity(intent)
         }
 
         fun startForResult(ctx: Activity?, tag: String) {
             val intent = Intent(ctx, OrganizationActivity::class.java)
-            intent.putExtra(Extras.CODE, "SelectUser")
+            intent.putExtra(Extras.FLAG, "SelectUser")
             intent.putExtra(Extras.NAME, tag)
             ctx?.startActivityForResult(intent, Extras.REQUESTCODE)
         }
 
         fun startForResult(ctx: Fragment?) {
             val intent = Intent(ctx?.context, OrganizationActivity::class.java)
-            intent.putExtra(Extras.CODE, "SelectUser")
+            intent.putExtra(Extras.FLAG, "SelectUser")
             ctx?.startActivityForResult(intent, Extras.REQUESTCODE)
         }
     }
 
-//    var flag = ""
+    var flag: String? = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_organization)
 //
-//        flag = intent.getStringExtra(Extras.FLAG)
-//        if (flag == "USER") {
-//            departList = intent.getSerializableExtra(Extras.DATA) as ArrayList<DepartmentBean>
-//            setBack(true)
-//            title = "公司组织架构"
-//            setData(departList)
-//        } else if (flag == "WEEKLY") {
-//            setBack(true)
-//            title = "请选择"
-//            departList = ArrayList<DepartmentBean>()
-//            alreadyList = intent.getSerializableExtra(Extras.DATA) as ArrayList<UserBean>
-//
-//            SoguApi.getService(application)
-//                    .userDepart()
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .subscribeOn(Schedulers.io())
-//                    .subscribe({ payload ->
-//                        if (payload.isOk) {
-//                            departList.clear()
-//                            payload.payload?.apply {
-//                                for (list in this) {
-//                                    var LIST = list.clone()
-//                                    var dataList = LIST.data
-//                                    for (bean in alreadyList) {
-//                                        var databeanIndex: Int = 0
-//                                        while (databeanIndex < dataList!!.size) {
-//                                            if (bean.name == dataList[databeanIndex].name) {
-//                                                dataList.removeAt(databeanIndex)
-//                                                break
-//                                            }
-//                                            databeanIndex++
-//                                        }
-//                                    }
-//                                    if (dataList!!.size != 0) {
-//                                        departList.add(LIST)
-//                                    }
-//                                }
-//                            }
-//                            setData(departList)
-//                        } else
-//                            showToast(payload.message)
-//                    }, { e ->
-//                        Trace.e(e)
-//                        showToast("数据获取失败")
-//                    })
-//        }
-
-        code = intent.getStringExtra(Extras.CODE)
-        tag = intent.getStringExtra(Extras.NAME)
-        setBack(true)
-        if (code == "USER") {
+        flag = intent.getStringExtra(Extras.FLAG)
+        if (flag == "USER") {
+            departList = intent.getSerializableExtra(Extras.DATA) as ArrayList<DepartmentBean>
+            setBack(true)
             title = "公司组织架构"
-        } else if (code == "SelectUser") {
+            setData(departList)
+        } else if (flag == "WEEKLY") {
+            setBack(true)
             title = "请选择"
+            departList = ArrayList<DepartmentBean>()
+            alreadyList = intent.getSerializableExtra(Extras.DATA) as ArrayList<UserBean>
+
+            SoguApi.getService(application)
+                    .userDepart()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (payload.isOk) {
+                            departList.clear()
+                            payload.payload?.apply {
+                                for (list in this) {
+                                    var LIST = list.clone()
+                                    var dataList = LIST.data
+                                    for (bean in alreadyList) {
+                                        var databeanIndex: Int = 0
+                                        while (databeanIndex < dataList!!.size) {
+                                            if (bean.name == dataList[databeanIndex].name) {
+                                                dataList.removeAt(databeanIndex)
+                                                break
+                                            }
+                                            databeanIndex++
+                                        }
+                                    }
+                                    if (dataList!!.size != 0) {
+                                        departList.add(LIST)
+                                    }
+                                }
+                            }
+                            setData(departList)
+                        } else
+                            showToast(payload.message)
+                    }, { e ->
+                        Trace.e(e)
+                        showToast("数据获取失败")
+                    })
+        } else if (flag == "SelectUser") {
+            title = "请选择"
+            setBack(true)
+            tag = intent.getStringExtra(Extras.NAME)
+            departList = ArrayList<DepartmentBean>()
+            SoguApi.getService(application)
+                    .userDepart()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (payload.isOk) {
+                            departList.clear()
+                            payload.payload?.forEach {
+                                departList.add(it)
+                            }
+                            setData(departList)
+                        } else
+                            showToast(payload.message)
+                    }, { e ->
+                        Trace.e(e)
+                        showToast("数据获取失败")
+                    })
         }
 
-        SoguApi.getService(application)
-                .userDepart()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ payload ->
-                    if (payload.isOk) {
-                        departList.clear()
-                        payload.payload?.forEach {
-                            departList.add(it)
-                        }
-                        setData(departList)
-                    } else
-                        showToast(payload.message)
-                }, { e ->
-                    Trace.e(e)
-                    showToast("数据获取失败")
-                })
+
     }
 
     fun setData(departList: List<DepartmentBean>) {
@@ -191,15 +188,12 @@ class OrganizationActivity : ToolbarActivity() {
         }
 
 
-//        item_content.setOnClickListener {
-//            if (flag == "WEEKLY") {
-//                var intent = Intent()
-//                intent.putExtra(Extras.DATA, userBean)
-//                setResult(Activity.RESULT_OK, intent)
-//            }
-//        }
-        if (code.isNotEmpty()) {
-            item_content.setOnClickListener {
+        item_content.setOnClickListener {
+            if (flag == "WEEKLY") {
+                var intent = Intent()
+                intent.putExtra(Extras.DATA, userBean)
+                setResult(Activity.RESULT_OK, intent)
+            } else if (flag == "SelectUser") {
                 val intent = Intent()
                 intent.putExtra(Extras.DATA, userBean)
                 if (tag == "CcPersonAdapter") {
@@ -210,5 +204,6 @@ class OrganizationActivity : ToolbarActivity() {
                 finish()
             }
         }
+
     }
 }

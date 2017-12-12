@@ -134,12 +134,18 @@ class TaskFragment : BaseFragment(), View.OnClickListener, TaskFilterWindow.Filt
 
     }
 
+
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.dateFilter -> {
                 dateFilterTv.textColor = resources.getColor(R.color.color_main)
                 val dateFilters = arrayListOf("一周内", "一月内", "一年内")
-                val dateWindow = TaskFilterWindow(context, dateFilters, this, "date")
+                val dateWindow = TaskFilterWindow(activity, dateFilters, this, "date")
+                dateFilters.forEachIndexed { index, s ->
+                    if (s.equals(dateFilterTv.text)){
+                        dateWindow.setSelectPosition(index)
+                    }
+                }
                 dateWindow.setOnDismissListener {
                     dateFilterTv.textColor = resources.getColor(R.color.text_3)
                     arrow1.visibility = View.VISIBLE
@@ -152,7 +158,12 @@ class TaskFragment : BaseFragment(), View.OnClickListener, TaskFilterWindow.Filt
             R.id.taskFilter -> {
                 taskFilterTv.textColor = resources.getColor(R.color.color_main)
                 val taskFilters = arrayListOf("未完成任务", "已完成任务", "全部任务")
-                val taskWindow = TaskFilterWindow(context, taskFilters, this, "task")
+                val taskWindow = TaskFilterWindow(activity, taskFilters, this, "task")
+                taskFilters.forEachIndexed { index, s ->
+                    if (s.equals(taskFilterTv.text)){
+                        taskWindow.setSelectPosition(index)
+                    }
+                }
                 taskWindow.setOnDismissListener {
                     taskFilterTv.textColor = resources.getColor(R.color.text_3)
                     arrow2.visibility = View.VISIBLE
@@ -230,6 +241,7 @@ class TaskFragment : BaseFragment(), View.OnClickListener, TaskFilterWindow.Filt
                 }
             }
         }
+
         doRequest(page, range, isFinish)
     }
 
