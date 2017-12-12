@@ -47,12 +47,14 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/pingjia"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="15dp"
         android:layout_marginTop="12dp"
         android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/business"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/rect_orange"
@@ -62,6 +64,7 @@
             android:textSize="10sp" />
 
         <TextView
+            android:id="@+id/ability"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"

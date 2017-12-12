@@ -9,6 +9,7 @@ class ProjectBean : Serializable {
     var name: String? = null//	Varchar	公司名称
     var shortName: String? = null;
     var state: String? = null//	Datetime	现状	A轮  B轮  类似这些（type=2时取此数据）
+    var type: Int? = null//1是立项，2是已投，4是储备
     var update_time: String? = null//	Varchar	最近更新时间	（type=2时取此数据）
     var next_time: String? = null//	Varchar	退出时间	（type=5时取此数据）
     var add_time: String? = null//	Varchar	录入时间	（type=1时取此数据）
@@ -21,4 +22,7 @@ class ProjectBean : Serializable {
     var creditCode: String? = null//	varchar		统一社会信用代码	可空
     var info: String? = null//	text		其他信息	可空
     var is_volatility = 0
+
+    var is_ability: Int? = null//有无能力 1 有能力 2 无能力
+    var is_business: Int? = null//有无商业价值  1有价值  2无价值
 }

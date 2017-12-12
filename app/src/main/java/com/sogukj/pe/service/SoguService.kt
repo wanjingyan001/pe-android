@@ -9,6 +9,7 @@ import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
+import java.util.*
 
 /**
  * Created by qinfei on 17/6/2.
@@ -912,7 +913,7 @@ interface SoguService {
 
     //待我查看的周报
     @FormUrlEncoded
-    @POST("/api/Weekly/receive ")
+    @POST("/api/Weekly/receive")
     fun receive(@Field("is_read") is_read: Int? = null,
                 @Field("de_id") de_id: Int? = null,
                 @Field("start_time") start_time: String? = null,
@@ -923,4 +924,12 @@ interface SoguService {
 
     @POST("/api/UserFont/getDepartment")
     fun getDepartment(): Observable<Payload<ArrayList<ReceiveSpinnerBean>>>
+
+
+    //投资经理评价
+    @FormUrlEncoded
+    @POST("/api/Comment/assess")
+    fun assess(@Field("company_id") company_id: Int,
+               @Field("is_business") is_business: Int,
+               @Field("is_ability") is_ability: Int): Observable<Payload<Object>>
 }

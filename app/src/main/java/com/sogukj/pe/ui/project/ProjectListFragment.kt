@@ -1,5 +1,6 @@
 package com.sogukj.pe.ui.project
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
@@ -10,9 +11,11 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Html
 import android.text.TextUtils
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
+import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
@@ -75,7 +78,12 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
 //                StoreProjectAddActivity.startView(baseActivity, project)
 //            else
 //                ProjectActivity.start(baseActivity, project)
-            ProjectActivity.start(baseActivity, project)
+
+            //ProjectActivity.start(baseActivity, project)
+            val intent = Intent(context, ProjectActivity::class.java)
+            intent.putExtra(Extras.DATA, project)
+            intent.putExtra(Extras.CODE, p)
+            startActivityForResult(intent, 0x001)
         }
 
         val user = Store.store.getUser(baseActivity!!)
@@ -150,7 +158,21 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
 
     override fun onStart() {
         super.onStart()
+        Log.e("onStart", "onStart")
         doRequest()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 0x001) {
+            data?.let {
+                Log.e("type", "${type}")
+                var project = it.getSerializableExtra(Extras.DATA) as ProjectBean
+                var position = it.getIntExtra(Extras.CODE, 0)
+                //adapter.dataList[position] = project
+                //adapter.notifyDataSetChanged()
+            }
+        }
     }
 
     val fmt = SimpleDateFormat("MM/dd HH:mm")
@@ -318,6 +340,9 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
         val tvTime: TextView
         val tvEdit: TextView
         val tvDel: TextView
+        val tv4: TextView
+        val tv5: TextView
+        val tv_pingjia: LinearLayout
 
         init {
             tvTitle = convertView.findViewById(R.id.tv_title) as TextView
@@ -326,14 +351,20 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
             tvTime = convertView.findViewById(R.id.tv_time) as TextView
             tvEdit = convertView.findViewById(R.id.tv_edit) as TextView
             tvDel = convertView.findViewById(R.id.tv_del) as TextView
-            if (type == TYPE_CB) {
-                convertView.findViewById(R.id.suffix).visibility = View.VISIBLE
-            } else if (type == TYPE_DY) {
-                convertView.findViewById(R.id.suffix).visibility = View.GONE
-            }
+            tv4 = convertView.findViewById(R.id.business) as TextView
+            tv5 = convertView.findViewById(R.id.ability) as TextView
+            tv_pingjia = convertView.findViewById(R.id.pingjia) as LinearLayout
         }
 
         override fun setData(view: View, data: ProjectBean, position: Int) {
+            // TODO
+            // TODO
+            // TODO
+            // TODO
+//            if (type != TYPE_CB) {
+//                return
+//            }
+            Log.e("StoreProjectHolder", "${type}")
             var label = data.name
             tvTitle.text = Html.fromHtml(label)
             val strTime = data.add_time
@@ -396,6 +427,40 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                             dialog.dismiss()
                         }.show()
             }
+            if (type == TYPE_CB) {
+                tv_pingjia.visibility = View.VISIBLE
+            } else if (type == TYPE_DY) {
+                tv_pingjia.visibility = View.GONE
+            }
+            if (type == TYPE_CB) {
+                //convertView.findViewById(R.id.suffix).visibility = View.VISIBLE
+                if (data.is_business == 1) {
+                    tv4.text = "有商业价值"
+                } else if (data.is_business == 2) {
+                    tv4.text = "无商业价值"
+                }
+
+                if (data.is_ability == 1) {
+                    tv5.text = "创始人有能力"
+                } else if (data.is_ability == 2) {
+                    tv5.text = "创始人无能力"
+                }
+
+                if (data.is_business == null && data.is_ability == null) {
+                    tv_pingjia.visibility = View.GONE
+                } else {
+                    if (data.is_business == null) {
+                        tv4.visibility = View.GONE
+                    } else {
+                        tv4.visibility = View.VISIBLE
+                    }
+                    if (data.is_ability == null) {
+                        tv5.visibility = View.GONE
+                    } else {
+                        tv5.visibility = View.VISIBLE
+                    }
+                }
+            }
         }
 
     }
@@ -421,14 +486,28 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
         val tv1: TextView
         val tv2: TextView
         val tv3: TextView
+        val tv4: TextView
+        val tv5: TextView
+        val pingjia: LinearLayout
 
         init {
             tv1 = view.find(R.id.tv1)
             tv2 = view.find(R.id.tv2)
             tv3 = view.find(R.id.tv3)
+            tv4 = view.find(R.id.business)
+            tv5 = view.find(R.id.ability)
+            pingjia = view.find(R.id.pingjia)
         }
 
         override fun setData(view: View, data: ProjectBean, position: Int) {
+            // TODO
+            // TODO
+            // TODO
+            // TODO
+//            if (type != TYPE_CB) {
+//                return
+//            }
+            Log.e("ProjectHolder", "${type}")
             var label = data.shortName
             if (TextUtils.isEmpty(label))
                 label = data.name
@@ -476,6 +555,33 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
 
             if (tv2.text.isNullOrEmpty()) tv2.text = "--"
             if (tv3.text.isNullOrEmpty()) tv3.text = "--"
+
+            if (data.is_business == 1) {
+                tv4.text = "有商业价值"
+            } else if (data.is_business == 2) {
+                tv4.text = "无商业价值"
+            }
+
+            if (data.is_ability == 1) {
+                tv5.text = "创始人有能力"
+            } else if (data.is_ability == 2) {
+                tv5.text = "创始人无能力"
+            }
+
+            if (data.is_business == null && data.is_ability == null) {
+                pingjia.visibility = View.GONE
+            } else {
+                if (data.is_business == null) {
+                    tv4.visibility = View.GONE
+                } else {
+                    tv4.visibility = View.VISIBLE
+                }
+                if (data.is_ability == null) {
+                    tv5.visibility = View.GONE
+                } else {
+                    tv5.visibility = View.VISIBLE
+                }
+            }
         }
 
     }

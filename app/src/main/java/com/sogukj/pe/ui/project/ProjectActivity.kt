@@ -7,12 +7,14 @@ import android.graphics.PorterDuff
 import android.os.Bundle
 import android.text.Html
 import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import com.framework.base.ToolbarActivity
+import com.google.gson.JsonSyntaxException
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.NewsBean
@@ -32,7 +34,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_project.*
 import org.jetbrains.anko.find
+import org.jetbrains.anko.numberPicker
 import org.jetbrains.anko.textColor
+import java.net.UnknownHostException
 
 /**
  * Created by qinfei on 17/7/18.
@@ -41,9 +45,21 @@ class ProjectActivity : ToolbarActivity() {
     lateinit var adapterNeg: ListAdapter<NewsBean>
     lateinit var adapterYuqin: ListAdapter<NewsBean>
     lateinit var project: ProjectBean
+    var position = 0
+
+    override fun onBackPressed() {
+        var intent = Intent()
+        intent.putExtra(Extras.DATA, project)
+        intent.putExtra(Extras.CODE, position)
+        setResult(Activity.RESULT_CANCELED, intent)
+        super.onBackPressed()
+        Log.e("onBackPressed", "onBackPressed")
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         project = intent.getSerializableExtra(Extras.DATA) as ProjectBean
+        position = intent.getIntExtra(Extras.CODE, 0)
         setContentView(R.layout.activity_project)
         setBack(true)
         setTitle(project.name)
@@ -139,37 +155,142 @@ class ProjectActivity : ToolbarActivity() {
                     tv_more_yq.visibility = View.GONE
                 })
 
-        btn_yes.setOnClickListener {
+        is_business = project.is_business
+        is_ability = project.is_ability
+        if (is_business == 1) {
             btn_yes.setBackgroundResource(R.drawable.bg_rectangle_blue)
             btn_yes.textColor = Color.parseColor("#ffffff")
 
             btn_no.setBackgroundResource(R.drawable.bg_rectangle_white)
             btn_no.textColor = Color.parseColor("#282828")
-        }
-
-        btn_no.setOnClickListener {
+        } else if (is_business == 2) {
             btn_no.setBackgroundResource(R.drawable.bg_rectangle_blue)
             btn_no.textColor = Color.parseColor("#ffffff")
 
             btn_yes.setBackgroundResource(R.drawable.bg_rectangle_white)
             btn_yes.textColor = Color.parseColor("#282828")
+        } else if (is_business == null) {
+            btn_yes.setBackgroundResource(R.drawable.bg_rectangle_white)
+            btn_yes.textColor = Color.parseColor("#282828")
+
+            btn_no.setBackgroundResource(R.drawable.bg_rectangle_white)
+            btn_no.textColor = Color.parseColor("#282828")
         }
 
-        btn_you.setOnClickListener {
+        if (is_ability == 1) {
             btn_you.setBackgroundResource(R.drawable.bg_rectangle_blue)
             btn_you.textColor = Color.parseColor("#ffffff")
 
             btn_wu.setBackgroundResource(R.drawable.bg_rectangle_white)
             btn_wu.textColor = Color.parseColor("#282828")
-        }
-
-        btn_wu.setOnClickListener {
+        } else if (is_ability == 2) {
             btn_wu.setBackgroundResource(R.drawable.bg_rectangle_blue)
             btn_wu.textColor = Color.parseColor("#ffffff")
 
             btn_you.setBackgroundResource(R.drawable.bg_rectangle_white)
             btn_you.textColor = Color.parseColor("#282828")
+        } else if (is_ability == null) {
+            btn_you.setBackgroundResource(R.drawable.bg_rectangle_white)
+            btn_you.textColor = Color.parseColor("#282828")
+
+            btn_wu.setBackgroundResource(R.drawable.bg_rectangle_white)
+            btn_wu.textColor = Color.parseColor("#282828")
         }
+
+        btn_yes.setOnClickListener {
+            if (is_business == 1) {
+                return@setOnClickListener
+            }
+            btn_yes.setBackgroundResource(R.drawable.bg_rectangle_blue)
+            btn_yes.textColor = Color.parseColor("#ffffff")
+
+            btn_no.setBackgroundResource(R.drawable.bg_rectangle_white)
+            btn_no.textColor = Color.parseColor("#282828")
+
+            is_business = 1
+
+            manager_assess()
+        }
+
+        btn_no.setOnClickListener {
+            if (is_business == 2) {
+                return@setOnClickListener
+            }
+            btn_no.setBackgroundResource(R.drawable.bg_rectangle_blue)
+            btn_no.textColor = Color.parseColor("#ffffff")
+
+            btn_yes.setBackgroundResource(R.drawable.bg_rectangle_white)
+            btn_yes.textColor = Color.parseColor("#282828")
+
+            is_business = 2
+
+            manager_assess()
+        }
+
+        btn_you.setOnClickListener {
+            if (is_ability == 1) {
+                return@setOnClickListener
+            }
+            btn_you.setBackgroundResource(R.drawable.bg_rectangle_blue)
+            btn_you.textColor = Color.parseColor("#ffffff")
+
+            btn_wu.setBackgroundResource(R.drawable.bg_rectangle_white)
+            btn_wu.textColor = Color.parseColor("#282828")
+
+            is_ability = 1
+
+            manager_assess()
+        }
+
+        btn_wu.setOnClickListener {
+            if (is_ability == 2) {
+                return@setOnClickListener
+            }
+            btn_wu.setBackgroundResource(R.drawable.bg_rectangle_blue)
+            btn_wu.textColor = Color.parseColor("#ffffff")
+
+            btn_you.setBackgroundResource(R.drawable.bg_rectangle_white)
+            btn_you.textColor = Color.parseColor("#282828")
+
+            is_ability = 2
+
+            manager_assess()
+        }
+    }
+
+    var is_business: Int? = null//非空(1=>有价值 ,2=>无价值)
+    var is_ability: Int? = null//非空(1=>有能力,2=>无能力)
+
+    fun <T1, T2, T3> ifNotNull(value1: T1?, value2: T2?, value3: T3?, bothNotNull: (T1, T2, T3) -> (Unit)) {
+        if (value1 != null && value2 != null && value3 != null) {
+            bothNotNull(value1, value2, value3)
+        }
+    }
+
+    fun manager_assess() {
+        var id = project.company_id
+
+        ifNotNull(is_business, is_ability, id, { is_business, is_ability, id ->
+            SoguApi.getService(application)
+                    .assess(id, is_business, is_ability)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (payload.isOk) {
+                            Log.e("success", "success")
+                            project.is_ability = is_ability
+                            project.is_business = is_business
+                        } else
+                            showToast(payload.message)
+                    }, { e ->
+                        Trace.e(e)
+                        when (e) {
+                            is JsonSyntaxException -> showToast("后台数据出错")
+                            is UnknownHostException -> showToast("网络出错")
+                            else -> showToast("未知错误")
+                        }
+                    })
+        })
     }
 
     fun refresh(grid: android.support.v7.widget.GridLayout, data: Map<String, Int?>, color: Int = Color.RED) {

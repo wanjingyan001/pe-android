@@ -42,6 +42,7 @@
             app:tabMode="scrollable"
             app:tabPaddingEnd="0dp"
             app:tabPaddingStart="0dp"
+            app:tabMaxWidth="50dp"
             app:tabTextColor="@color/white">
 
             <android.support.design.widget.TabItem
