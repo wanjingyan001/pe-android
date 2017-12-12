@@ -476,6 +476,8 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                         showToast("修改成功")
                         adapter.dataList.removeAt(position)
                         adapter.notifyDataSetChanged()
+                    } else {
+                        showToast("修改失败")
                     }
                 }, { e -> Trace.e(e) })
     }
