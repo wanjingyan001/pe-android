@@ -349,32 +349,32 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
                 })
     }
 
-    private fun sort() {
-        if (currentClick == 0) {
-            adapter.dataList = loadedData
-            adapter.notifyDataSetChanged()
-        } else {
-            // 未读-1-false，已读-2-true
-            var flag = if (currentClick == 1) 1 else 2
-            var obj_list = ArrayList<WeeklyWatchBean>()
-            for (i in 0 until loadedData.size) {
-                var objs = ArrayList<WeeklyWatchBean.BeanObj>()
-                for (j in 0 until loadedData[i].data.size) {
-                    if (loadedData[i].data[j].is_read == flag) {
-                        objs.add(loadedData[i].data[j])
-                    }
-                }
-                if (objs.size != 0) {
-                    var bean = WeeklyWatchBean()
-                    bean.date = loadedData[i].date
-                    bean.data.addAll(objs)
-                    obj_list.add(bean)
-                }
-            }
-            adapter.dataList = obj_list
-            adapter.notifyDataSetChanged()
-        }
-    }
+//    private fun sort() {
+//        if (currentClick == 0) {
+//            adapter.dataList = loadedData
+//            adapter.notifyDataSetChanged()
+//        } else {
+//            // 未读-1-false，已读-2-true
+//            var flag = if (currentClick == 1) 1 else 2
+//            var obj_list = ArrayList<WeeklyWatchBean>()
+//            for (i in 0 until loadedData.size) {
+//                var objs = ArrayList<WeeklyWatchBean.BeanObj>()
+//                for (j in 0 until loadedData[i].data!!.size) {
+//                    if (loadedData[i].data[j].is_read == flag) {
+//                        objs.add(loadedData[i].data[j])
+//                    }
+//                }
+//                if (objs.size != 0) {
+//                    var bean = WeeklyWatchBean()
+//                    bean.date = loadedData[i].date
+//                    bean.data?.addAll(objs)
+//                    obj_list.add(bean)
+//                }
+//            }
+//            adapter.dataList = obj_list
+//            adapter.notifyDataSetChanged()
+//        }
+//    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

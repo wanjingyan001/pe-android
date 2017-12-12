@@ -11,10 +11,10 @@ class WeeklyWatchBean {
     var date: String? = null//10.06-10.13
     var start_time: String? = null//2017-10-06
     var end_time: String? = null//2017-10-13
-    var data: ArrayList<BeanObj> = ArrayList()
+    var data: ArrayList<BeanObj>? = null
 
     class BeanObj : Serializable {
-        var img_url: String? = null
+        var url: String? = null
         var name: String? = null
         var user_id: Int? = null
         var is_read: Int? = null//2=>已读，1=>未读,null=>全部

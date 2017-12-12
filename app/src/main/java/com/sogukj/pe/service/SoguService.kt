@@ -83,6 +83,7 @@ interface SoguService {
     @POST("/api/news/applyNewProject")
     fun addProject(
             @Field("name") name: String
+            , @Field("shortName") shortName: String
             , @Field("legalPersonName") legalPersonName: String? = null
             , @Field("regLocation") regLocation: String? = null
             , @Field("creditCode") creditCode: String? = null
@@ -477,6 +478,7 @@ interface SoguService {
     @POST("/api/news/addStoreProject")
     fun addStoreProject(
             @Field("name") name: String
+            , @Field("shortName") shortName: String
             , @Field("info") info: String? = null
             , @Field("estiblishTime") estiblishTime: String? = null//yyyy-MM-dd
             , @Field("enterpriseType") enterpriseType: String? = null
@@ -499,6 +501,7 @@ interface SoguService {
     fun editStoreProject(
             @Field("company_id") company_id: Int
             , @Field("name") name: String
+            , @Field("shortName") shortName: String
             , @Field("info") info: String? = null
             , @Field("estiblishTime") estiblishTime: String? = null//yyyy-MM-dd
             , @Field("enterpriseType") enterpriseType: String? = null

@@ -25,10 +25,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="项目名称" />
+                android:text="公司名称" />
 
             <EditText
                 android:id="@+id/et_name"
+                style="@style/SoguTextMedium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/edit_text"
+                tools:text="aaa" />
+
+            <TextView
+                style="@style/SoguTextMedium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="项目名称" />
+
+            <EditText
+                android:id="@+id/et_short_name"
                 style="@style/SoguTextMedium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

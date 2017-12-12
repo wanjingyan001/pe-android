@@ -87,7 +87,7 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
         }
 
         val user = Store.store.getUser(baseActivity!!)
-        if (type != TYPE_GZ && user?.is_admin == 1)
+        if (type != TYPE_GZ)// && user?.is_admin == 1
             adapter.onItemLongClick = { v, p ->
                 if (type == TYPE_DY || type == TYPE_CB) {
                 } else {
@@ -359,15 +359,9 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
         }
 
         override fun setData(view: View, data: ProjectBean, position: Int) {
-            // TODO
-            // TODO
-            // TODO
-            // TODO
-//            if (type != TYPE_CB) {
-//                return
-//            }
-            Log.e("StoreProjectHolder", "${type}")
-            var label = data.name
+            var label = data.shortName
+            if (TextUtils.isEmpty(label))
+                label = data.name
             tvTitle.text = Html.fromHtml(label)
             val strTime = data.add_time
             tvTime.visibility = View.GONE
@@ -504,14 +498,6 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
         }
 
         override fun setData(view: View, data: ProjectBean, position: Int) {
-            // TODO
-            // TODO
-            // TODO
-            // TODO
-//            if (type != TYPE_CB) {
-//                return
-//            }
-            Log.e("ProjectHolder", "${type}")
             var label = data.shortName
             if (TextUtils.isEmpty(label))
                 label = data.name

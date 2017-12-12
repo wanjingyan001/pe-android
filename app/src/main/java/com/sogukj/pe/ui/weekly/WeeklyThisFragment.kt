@@ -311,6 +311,11 @@ class WeeklyThisFragment : BaseFragment() {
 //            bu_chong_empty.visibility = View.VISIBLE
 //            buchong_full.visibility = View.VISIBLE
 //            send_layout.visibility = View.VISIBLE
+            if (loaded.week?.is_send_week == 0) {
+                send_layout.visibility = View.VISIBLE
+            } else {
+                send_layout.visibility = View.GONE
+            }
         } else if (tag == "PERSONAL") {
             bu_chong_empty.visibility = View.GONE
             buchong_full.visibility = View.GONE

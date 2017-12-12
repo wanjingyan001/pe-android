@@ -37,7 +37,7 @@ class PersonalWeeklyActivity : BaseActivity() {
         var bean = intent.getSerializableExtra(Extras.DATA) as WeeklyWatchBean.BeanObj
 
         name.text = bean.name
-        Glide.with(context).load(bean.img_url).into(icon)
+        Glide.with(context).load(bean.url).into(icon)
 
 
         back.setOnClickListener {

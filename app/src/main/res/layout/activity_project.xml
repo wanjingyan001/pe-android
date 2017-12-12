@@ -109,12 +109,14 @@
                 android:textColor="@color/text_more"
                 android:textSize="15sp" />
 
-            <!--<View-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="10dp"-->
-            <!--android:background="@color/divider" />-->
+            <View
+                android:id="@+id/divide1"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="@color/divider" />
 
             <FrameLayout
+                android:id="@+id/divide2"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
                 android:layout_marginLeft="10dp"

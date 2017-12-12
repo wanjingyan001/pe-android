@@ -5,6 +5,7 @@ package com.sogukj.pe.bean
  */
 class StoreProjectBean {
     var name: String? = null//	varchar	公司名称
+    var shortName: String? = null//	varchar	公司名称
     //    var uid	int	用户id
     var info: String? = null//   text    相关概念
     var estiblishTime: String? = null//yyyy-MM-dd    date    成立时间

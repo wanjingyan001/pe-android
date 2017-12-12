@@ -13,6 +13,7 @@ import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_add_project.*
+
 /**
  * Created by qinfei on 17/7/18.
  */
@@ -24,12 +25,13 @@ class ProjectAddActivity : ToolbarActivity() {
         setBack(true)
 
         var type = intent.getStringExtra(Extras.TYPE)
-        if(type == "ADD"){
+        if (type == "ADD") {
             setTitle("申请新增项目数据")
-        } else if(type == "EDIT"){
+        } else if (type == "EDIT") {
             setTitle("编辑调研项目")
             var data = intent.getSerializableExtra(Extras.DATA) as ProjectBean
             et_name.setText(data.name)
+            et_short_name.setText(data.shortName)
             et_faren.setText(data.legalPersonName)
             et_reg_address.setText(data.regLocation)
             et_credit_code.setText(data.creditCode)
@@ -53,12 +55,14 @@ class ProjectAddActivity : ToolbarActivity() {
         val project = ProjectBean()
         project.name = et_name?.text?.trim()?.toString()
         if (project.name == null) return
+        project.shortName = et_short_name?.text?.trim()?.toString()
         project.legalPersonName = et_faren?.text?.trim()?.toString()
         project.regLocation = et_reg_address?.text?.trim()?.toString()
         project.creditCode = et_credit_code?.text?.trim()?.toString()
         project.info = et_other?.text?.trim()?.toString()
         SoguApi.getService(application)
                 .addProject(name = project.name!!
+                        , shortName = project.shortName!!
                         , creditCode = project.creditCode
                         , legalPersonName = project.legalPersonName
                         , regLocation = project.regLocation
@@ -86,7 +90,7 @@ class ProjectAddActivity : ToolbarActivity() {
             ctx?.startActivity(intent)
         }
 
-        fun startEdit(ctx: Activity?, data : ProjectBean) {
+        fun startEdit(ctx: Activity?, data: ProjectBean) {
             var intent = Intent(ctx, ProjectAddActivity::class.java)
             intent.putExtra(Extras.TYPE, "EDIT")
             intent.putExtra(Extras.DATA, data)

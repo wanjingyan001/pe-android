@@ -64,6 +64,14 @@ class ProjectActivity : ToolbarActivity() {
         setBack(true)
         setTitle(project.name)
 
+        if (project.type == 6) {
+            divide1.visibility = View.VISIBLE
+            divide2.visibility = View.GONE
+        } else {
+            divide1.visibility = View.GONE
+            divide2.visibility = View.VISIBLE
+        }
+
         ll_shangshi.visibility = if (project.is_volatility == 0) View.GONE else View.VISIBLE
         adapterNeg = ListAdapter<NewsBean> { NewsHolder() }
         adapterYuqin = ListAdapter<NewsBean> { NewsHolder() }

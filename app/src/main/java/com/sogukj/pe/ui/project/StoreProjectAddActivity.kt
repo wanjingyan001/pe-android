@@ -40,7 +40,8 @@ class StoreProjectAddActivity : ToolbarActivity() {
             TYPE_VIEW -> {
                 title = project?.name
                 btn_commit.visibility = View.GONE
-                disable(et_name)
+                disable(et_company_name)
+                disable(et_short_name)
                 disable(et_info)
 //                disable(et_estiblishTime)
                 disable(et_enterpriseType)
@@ -98,7 +99,8 @@ class StoreProjectAddActivity : ToolbarActivity() {
     }
 
     fun fillForm(bean: StoreProjectBean) {
-        et_name.setText(bean.name)
+        et_company_name.setText(bean.name)
+        et_short_name.setText(bean.shortName)
         et_info.setText(bean.info)
         et_estiblishTime.setText(bean.estiblishTime)
         et_enterpriseType.setText(bean.enterpriseType)
@@ -125,14 +127,13 @@ class StoreProjectAddActivity : ToolbarActivity() {
 
     private fun doSave() {
         val bean = StoreProjectBean()
-        bean.name = et_name.text.trim().toString()
+        bean.name = et_company_name.text.trim().toString()
         if (TextUtils.isEmpty(bean.name)) {
-            showToast("项目名称不能为空")
-            et_name.requestFocus()
-            iv_alert.visibility = View.VISIBLE
+            showToast("公司名称不能为空")
+            et_company_name.requestFocus()
             return
         }
-        iv_alert.visibility = View.GONE
+        bean.shortName = et_short_name.text.trim().toString()
         bean.info = et_info.text.trim().toString()
         bean.estiblishTime = et_estiblishTime.text.trim().toString()
         if (TextUtils.isEmpty(bean.estiblishTime)) {
@@ -154,6 +155,7 @@ class StoreProjectAddActivity : ToolbarActivity() {
         if (type == TYPE_ADD)
             SoguApi.getService(application)
                     .addStoreProject(name = bean.name!!
+                            , shortName = bean.shortName!!
                             , info = bean.info
                             , estiblishTime = bean.estiblishTime
                             , enterpriseType = bean.enterpriseType
@@ -186,6 +188,7 @@ class StoreProjectAddActivity : ToolbarActivity() {
             SoguApi.getService(application)
                     .editStoreProject(company_id = project!!.company_id!!
                             , name = bean.name!!
+                            , shortName = bean.shortName!!
                             , info = bean.info
                             , estiblishTime = bean.estiblishTime
                             , enterpriseType = bean.enterpriseType
