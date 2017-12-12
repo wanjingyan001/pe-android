@@ -33,10 +33,10 @@ class OrganizationActivity : ToolbarActivity() {
     var tag: String? = null
 
     companion object {
-        fun start(ctx: Activity?) {
+        fun start(ctx: Activity?, departList: ArrayList<DepartmentBean>) {
             val intent = Intent(ctx, OrganizationActivity::class.java)
+            intent.putExtra(Extras.DATA, departList)
             intent.putExtra(Extras.FLAG, "USER")
-
             ctx?.startActivity(intent)
         }
 
@@ -193,6 +193,7 @@ class OrganizationActivity : ToolbarActivity() {
                 var intent = Intent()
                 intent.putExtra(Extras.DATA, userBean)
                 setResult(Activity.RESULT_OK, intent)
+                finish()
             } else if (flag == "SelectUser") {
                 val intent = Intent()
                 intent.putExtra(Extras.DATA, userBean)
