@@ -209,9 +209,9 @@ class MainProjectFragment : BaseFragment() {
 
 
         fb_add.setOnClickListener {
-            if(view_pager.currentItem == 0) {
+            if (view_pager.currentItem == 0) {
                 ProjectAddActivity.startAdd(baseActivity)
-            } else if(view_pager.currentItem == 1) {
+            } else if (view_pager.currentItem == 1) {
                 StoreProjectAddActivity.startAdd(baseActivity)
             }
         }
@@ -227,6 +227,7 @@ class MainProjectFragment : BaseFragment() {
         }
         var adapter = ArrayPagerAdapter(childFragmentManager, fragments)
         view_pager.adapter = adapter
+        view_pager.offscreenPageLimit = fragments.size
 
         val user = Store.store.getUser(baseActivity!!)
         tabs?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {

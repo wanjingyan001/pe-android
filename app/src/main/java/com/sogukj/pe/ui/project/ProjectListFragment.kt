@@ -1,5 +1,6 @@
 package com.sogukj.pe.ui.project
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -154,23 +155,40 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
         handler.postDelayed({
             doRequest()
         }, 100)
+        Log.e("onViewCreated", "${type}")
+        isViewCreated = true
     }
 
     override fun onStart() {
         super.onStart()
-        Log.e("onStart", "onStart")
-        doRequest()
+        Log.e("onStart", "${type}")
+        //doRequest()
+    }
+
+    var isViewCreated = false
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        if (isVisibleToUser == true && isViewCreated == true) {
+            Log.e("setUserVisibleHint", "${type}")
+            doRequest()
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        isViewCreated = false
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 0x001) {
             data?.let {
-                Log.e("type", "${type}")
+                Log.e("onActivityResult", "${type}")
                 var project = it.getSerializableExtra(Extras.DATA) as ProjectBean
                 var position = it.getIntExtra(Extras.CODE, 0)
-                //adapter.dataList[position] = project
-                //adapter.notifyDataSetChanged()
+                adapter.dataList[position] = project
+                adapter.notifyDataSetChanged()
             }
         }
     }
