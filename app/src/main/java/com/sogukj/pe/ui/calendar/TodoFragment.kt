@@ -49,7 +49,7 @@ class TodoFragment : BaseFragment(), ScheduleItemClickListener {
 
     fun doRequest(id: String) {
         SoguApi.getService(activity.application)
-                .projectMatter(id.toInt(), 0)
+                .projectMatter2(id.toInt(), 3)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->

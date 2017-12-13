@@ -13,7 +13,6 @@ import com.sogukj.pe.R
 import com.sogukj.pe.bean.DepartmentBean
 import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.util.Trace
-import com.sogukj.pe.view.BusinessCardWindow
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -26,34 +25,15 @@ import kotlinx.android.synthetic.main.activity_user.*
  */
 
 class UserActivity : ToolbarActivity() {
-    lateinit var window: BusinessCardWindow
-
     override val menuId: Int
         get() = R.menu.menu_logout
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.action_logout -> {
-//                MaterialDialog.Builder(this@UserActivity)
-//                        .theme(Theme.LIGHT)
-//                        .title("提示")
-//                        .content("确定要退出此帐号?")
-//                        .onPositive { materialDialog, dialogAction ->
-//                            Store.store.clearUser(this)
-//                            LoginActivity.start(this)
-//                            App.INSTANCE.resetPush(false)
-//                            finish()
-//                        }
-//                        .positiveText("确定")
-//                        .negativeText("取消")
-//                        .show()
-//                return true
-
                 val user = Store.store.getUser(this@UserActivity)
                 user?.let {
-                    CardActivity.start(this,it)
-//                    window.setData(it)
-//                    window.showAtLocation(find(R.id.user_main), Gravity.CENTER, 0, 0)
+                    CardActivity.start(this, it)
                 }
             }
         }
@@ -64,7 +44,7 @@ class UserActivity : ToolbarActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user)
-        title = "个人信息"
+        title = "个人中心"
         setBack(true)
         SoguApi.getService(application)
                 .userDepart()
@@ -112,15 +92,29 @@ class UserActivity : ToolbarActivity() {
         setting.setOnClickListener {
             SettingActivity.start(this)
         }
-//        window = BusinessCardWindow(this, {
-//            if (Utils.saveImage(this, window.inflate)) {
-//                showToast("名片已经保存至${Environment.getExternalStorageDirectory().absolutePath}")
-//                window.dismiss()
-//            } else {
-//                showToast("权限不足")
-//                window.dismiss()
-//            }
-//        })
+
+    }
+
+
+    fun getBelongBean(userId: Int) {
+        SoguApi.getService(application)
+                .getBelongProject(userId)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        payload.payload?.let {
+                            tv_1.text = it.dy.toString()
+                            tv_2.text = it.cb.toString()
+                            tv_3.text = it.lx.toString()
+                            tv_4.text = it.yt.toString()
+                            tv_5.text = it.tc.toString()
+                            tv_6.text = it.gz.toString()
+                        }
+                    } else {
+                        showToast(payload.message)
+                    }
+                })
     }
 
 
@@ -128,6 +122,7 @@ class UserActivity : ToolbarActivity() {
         super.onResume()
         val user = Store.store.getUser(this)
         updateUser(user)
+        user?.uid?.let { getBelongBean(it) }
     }
 
     private fun updateUser(user: UserBean?) {

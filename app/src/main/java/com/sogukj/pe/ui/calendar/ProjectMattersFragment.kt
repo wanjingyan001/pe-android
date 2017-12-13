@@ -129,19 +129,19 @@ class ProjectMattersFragment : BaseFragment(), View.OnClickListener, ScheduleIte
                                     }
                                     companyid = scheduleBean.company_id.toString()
                                 }
-                                val matterCompany = ProjectMatterCompany(projectMattersBean.cName!!, companyid)
-                                if (!companyList.contains(matterCompany)) {
-                                    companyList.add(matterCompany)
+                                projectMattersBean.cName?.let {
+                                    val matterCompany = ProjectMatterCompany(it, companyid)
+                                    if (!companyList.contains(matterCompany)) {
+                                        companyList.add(matterCompany)
+                                    }
                                 }
                             }
-                            val companys = ArrayList<ProjectMatterCompany>()
-                            val infos = ArrayList<ScheduleBean>()
                             dayList.forEachIndexed { index, s ->
                                 val md = ProjectMatterMD(s)
                                 data.add(md)
                                 companyList.forEachIndexed { position, name ->
+                                    val infos = ArrayList<ScheduleBean>()
                                     data.add(name)
-                                    companys.add(name)
                                     infoList.forEachIndexed { i, scheduleBean ->
                                         val day = scheduleBean.start_time?.split(" ")?.get(0)
                                         if (day.equals(s) && name.companyId == scheduleBean.company_id.toString()) {
@@ -149,13 +149,6 @@ class ProjectMattersFragment : BaseFragment(), View.OnClickListener, ScheduleIte
                                             infos.add(scheduleBean)
                                         }
                                     }
-                                    if (infos.size == 0) {
-                                        data.remove(name)
-                                        companys.remove(name)
-                                    }
-                                }
-                                if (companys.size == 0) {
-                                    data.remove(md)
                                 }
                             }
                             projectAdapter.notifyDataSetChanged()

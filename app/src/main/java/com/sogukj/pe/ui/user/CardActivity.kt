@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.os.Environment
 import android.text.TextUtils
 import android.widget.Toast
-import anet.channel.util.Utils.context
 import com.bumptech.glide.Glide
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
@@ -46,7 +45,7 @@ class CardActivity : Activity() {
 
     fun setData(bean: UserBean) {
         if (!TextUtils.isEmpty(bean.url)) {
-            Glide.with(context)
+            Glide.with(this)
                     .load(bean.headImage())
                     .into(headerImage)
         }

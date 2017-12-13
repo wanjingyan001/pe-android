@@ -57,8 +57,8 @@ public class ScheduleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             ScheduleBean bean = data.get(position);
             if (bean != null) {
                 try {
-                    long startTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(bean.getStart_time()).getTime();
                     if (holder instanceof HeadHolder) {
+                        long startTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(bean.getStart_time()).getTime();
                         if (Utils.getTime(new Date(startTime), "yyyy年MM月dd日")
                                 .equals(Utils.getTime(System.currentTimeMillis(), "yyyy年MM月dd日"))) {
                             ((HeadHolder) holder).dayTv.setText("今天");
@@ -70,6 +70,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         }
                     } else if (holder instanceof ItemHolder) {
                         if (bean.getEnd_time() != null) {
+                            long startTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(bean.getStart_time()).getTime();
                             long endTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(bean.getEnd_time()).getTime();
                             ((ItemHolder) holder).startTime.setText(Utils.getTime(startTime));
                             ((ItemHolder) holder).endTime.setText(Utils.getTime(endTime));

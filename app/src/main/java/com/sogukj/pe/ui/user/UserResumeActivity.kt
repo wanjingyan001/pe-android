@@ -25,18 +25,28 @@ import kotlinx.android.synthetic.main.layout_shareholder_toolbar.*
 import org.jetbrains.anko.find
 
 class UserResumeActivity : BaseActivity(), View.OnClickListener {
-    var user: UserBean? = null
+    lateinit var user: UserBean
     var city: CityArea.City? = null
     lateinit var educationAdapter: RecyclerAdapter<EducationBean>
     lateinit var workAdapter: RecyclerAdapter<WorkEducationBean>
+    var isSelf: Boolean = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_resume)
         Utils.setWindowStatusBarColor(this, R.color.white)
-        toolbar_title.text = "个人简历"
-        addTv.text = "保存"
+        user = intent.getSerializableExtra(Extras.DATA) as UserBean
+        if (user.uid == Store.store.getUser(this)?.uid) {
+            isSelf = true
+            toolbar_title.text = "个人简历"
+            addTv.text = "保存"
+        } else {
+            isSelf = false
+            toolbar_title.text = "${user.name}简历"
+            addTv.visibility = View.GONE
+        }
+
         initAdapter()
 
         back.setOnClickListener { finish() }
@@ -55,7 +65,11 @@ class UserResumeActivity : BaseActivity(), View.OnClickListener {
         tv_education.setOnClickListener(this)
         educationLayout.setOnClickListener(this)
         workLayout.setOnClickListener(this)
-        doRequest(Store.store.getUser(this)?.uid!!)
+        if (isSelf) {
+            user.uid?.let { doRequest(it) }
+        } else {
+            user.user_id?.let { doRequest(it) }
+        }
     }
 
     fun setData(baseInfo: Resume.BaseInfoBean) {
@@ -74,6 +88,15 @@ class UserResumeActivity : BaseActivity(), View.OnClickListener {
             tv_mail.setText(it.email)
             tv_phone.setText(it.phone)
             tv_phone.isEnabled = false
+            if (!isSelf) {
+                tv_job.isEnabled = false
+                tv_sex.isEnabled = false
+                tv_language.isEnabled = false
+                tv_woek_experience.isEnabled = false
+                tv_city.isEnabled = false
+                tv_education.isEnabled = false
+                tv_mail.isEnabled = false
+            }
         }
     }
 
@@ -89,6 +112,10 @@ class UserResumeActivity : BaseActivity(), View.OnClickListener {
             educationAdapter.dataList.add(education)
         }
         educationAdapter.notifyDataSetChanged()
+        if (!isSelf) {
+            educationList.isEnabled = false
+            tv_add_education.isEnabled = false
+        }
     }
 
     fun setWorkListData(listData: List<Resume.WorkBean>) {
@@ -106,17 +133,22 @@ class UserResumeActivity : BaseActivity(), View.OnClickListener {
             workAdapter.dataList.add(workeducation)
         }
         workAdapter.notifyDataSetChanged()
+        if (!isSelf) {
+            workList.isEnabled = false
+            tv_add_work_expericence.isEnabled = false
+        }
     }
 
-
+    lateinit var resume: Resume
     fun doRequest(uId: Int) {
         SoguApi.getService(application)
-                .getPersonalResume(uid = uId)
+                .getPersonalResume(user_id = uId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         payload.payload?.apply {
+                            resume = this
                             this.baseInfo?.apply {
                                 setData(this)
                             }
@@ -210,11 +242,17 @@ class UserResumeActivity : BaseActivity(), View.OnClickListener {
                 editResumeBaseInfo(reqBean)
             }
             R.id.tv_sex -> {
+                val position: Int
+                when {
+                    tv_sex.text == "男" -> position = 0
+                    tv_sex.text == "女" -> position = 1
+                    else -> position = -1
+                }
                 MaterialDialog.Builder(this)
                         .title("选择性别")
                         .theme(Theme.LIGHT)
                         .items(arrayListOf("男", "女"))
-                        .itemsCallbackSingleChoice(0) { dialog, itemView, which, text ->
+                        .itemsCallbackSingleChoice(position) { dialog, itemView, which, text ->
                             tv_sex.text = text
                             true
                         }
@@ -224,11 +262,18 @@ class UserResumeActivity : BaseActivity(), View.OnClickListener {
 
             }
             R.id.tv_language -> {
+                var position = -1
+                val languageList = resources.getStringArray(R.array.Language).toList()
+                languageList.forEachIndexed { index, s ->
+                    if (tv_language.text == s) {
+                        position = index
+                    }
+                }
                 MaterialDialog.Builder(this)
                         .title("选择语言")
                         .theme(Theme.LIGHT)
-                        .items(resources.getStringArray(R.array.Language).toList())
-                        .itemsCallbackSingleChoice(0) { dialog, itemView, which, text ->
+                        .items(languageList)
+                        .itemsCallbackSingleChoice(position) { dialog, itemView, which, text ->
                             tv_language.text = text
                             true
                         }
@@ -268,10 +313,10 @@ class UserResumeActivity : BaseActivity(), View.OnClickListener {
                         .show()
             }
             R.id.educationLayout -> {
-
+                ResumeEditorActivity.start(this, resume)
             }
             R.id.workLayout -> {
-
+                ResumeEditorActivity.start2(this, resume)
             }
         }
     }
@@ -296,14 +341,14 @@ class UserResumeActivity : BaseActivity(), View.OnClickListener {
                     educationAdapter.notifyDataSetChanged()
                 }
             }
-
         }
     }
 
 
     companion object {
-        fun start(ctx: Activity?) {
+        fun start(ctx: Activity?, userBean: UserBean) {
             val intent = Intent(ctx, UserResumeActivity::class.java)
+            intent.putExtra(Extras.DATA, userBean)
             ctx?.startActivity(intent)
         }
     }

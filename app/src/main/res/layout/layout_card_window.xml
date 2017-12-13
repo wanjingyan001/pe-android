@@ -19,7 +19,7 @@
             android:background="@drawable/bg_business_card"
             android:padding="20dp">
 
-            <ImageView
+            <com.sogukj.pe.view.CircleImageView
                 android:id="@+id/headerImage"
                 android:layout_width="80dp"
                 android:layout_height="80dp"

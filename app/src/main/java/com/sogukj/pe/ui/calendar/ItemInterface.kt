@@ -20,6 +20,6 @@ interface CommentListener {
     fun confirmListener(comment: String)
 }
 
-internal interface AddPersonListener {
+ interface AddPersonListener {
     fun addPerson(tag:String)
 }

@@ -203,6 +203,8 @@ class OrganizationActivity : ToolbarActivity() {
                     setResult(Extras.RESULTCODE2, intent)
                 }
                 finish()
+            }else{
+                UserResumeActivity.start(this, userBean)
             }
         }
 

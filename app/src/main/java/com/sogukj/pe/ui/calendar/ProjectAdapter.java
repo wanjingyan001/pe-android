@@ -88,14 +88,14 @@ public class ProjectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ScheduleBean info = (ScheduleBean) o;
             ((BeanHolder) holder).timeTv.setText(info.getStart_time());
             ((BeanHolder) holder).contentTv.setText(info.getTitle());
-            if (info.is_finish() == 1){
+            if (info.is_finish() == 1) {
                 ((BeanHolder) holder).finishBox.setChecked(true);
                 ((BeanHolder) holder).contentTv.setPaintFlags(
                         ((BeanHolder) holder).contentTv.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-            }else {
+            } else {
                 ((BeanHolder) holder).finishBox.setChecked(false);
                 ((BeanHolder) holder).contentTv.setPaintFlags(
-                        ((BeanHolder) holder).contentTv.getPaintFlags()  & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                        ((BeanHolder) holder).contentTv.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
             }
             ((BeanHolder) holder).view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -107,12 +107,12 @@ public class ProjectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     ((BeanHolder) holder).finishBox.setChecked(isChecked);
-                    if (isChecked){
+                    if (isChecked) {
                         ((BeanHolder) holder).contentTv.setPaintFlags(
                                 ((BeanHolder) holder).contentTv.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                    }else {
+                    } else {
                         ((BeanHolder) holder).contentTv.setPaintFlags(
-                                ((BeanHolder) holder).contentTv.getPaintFlags()  & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                                ((BeanHolder) holder).contentTv.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
                     }
                     itemClickListener.finishCheck(buttonView, isChecked, position);
                 }
@@ -155,9 +155,11 @@ public class ProjectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     class MatterHolder extends RecyclerView.ViewHolder {
         private TextView companyName;
         private ImageView companyDetails;
+        private View view;
 
         public MatterHolder(View itemView) {
             super(itemView);
+            view = itemView;
             companyName = ((TextView) itemView.findViewById(R.id.companyName));
             companyDetails = ((ImageView) itemView.findViewById(R.id.companyDetails));
         }

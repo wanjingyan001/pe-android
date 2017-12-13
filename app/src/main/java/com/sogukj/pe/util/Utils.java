@@ -3,10 +3,10 @@ package com.sogukj.pe.util;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Environment;
@@ -16,13 +16,11 @@ import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Display;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -311,13 +309,14 @@ public class Utils {
         return false;
 
     }
-
-    public static void saveCard(Activity activity, PopupWindow window){
-        Display display = activity.getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        int width = size.x;
-        int height = size.y;
-
-    }
+//
+//    public static void setAlarmClock(Activity activity){
+//        AlarmManager am = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
+//        assert am != null;
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            am.setExact(AlarmManager.RTC_WAKEUP, );
+//        }else {
+//            am.set(AlarmManager.RTC_WAKEUP, );
+//        }
+//    }
 }

@@ -5,11 +5,9 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.View
 import android.widget.CompoundButton
 import com.framework.base.BaseFragment
-import com.google.gson.Gson
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import com.lcodecore.tkrefreshlayout.footer.BallPulseView
@@ -101,7 +99,6 @@ class TaskFragment : BaseFragment(), View.OnClickListener, TaskFilterWindow.Filt
                         if (page == 1){
                             data.clear()
                         }
-                        Log.d("WJY", Gson().toJson(payload.payload))
                         payload.payload.let {
                             data.clear()
                             it?.forEachIndexed { index, taskItemBean ->

@@ -4,11 +4,9 @@ package com.sogukj.pe.ui.calendar
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.View
 import android.widget.CompoundButton
 import com.framework.base.BaseFragment
-import com.google.gson.Gson
 import com.ldf.calendar.component.CalendarAttr
 import com.ldf.calendar.component.CalendarViewAdapter
 import com.ldf.calendar.interf.OnSelectDateListener
@@ -112,7 +110,6 @@ class ScheduleFragment : BaseFragment() {
                 val currentCalendars = calendarAdapter.pagers
                 if (currentCalendars[position % currentCalendars.size] is Calendar) {
                     val date = currentCalendars[position % currentCalendars.size].seedDate
-                    Log.d("WJY", "${date.year}年\n${date.month}月")
                     monthSelect.onMonthSelect(date)
                     this@ScheduleFragment.date = "${date.year}年${date.month}月"
                     val time = Utils.getSupportBeginDayofMonth(date.year, date.month - 1)
@@ -138,7 +135,6 @@ class ScheduleFragment : BaseFragment() {
                     if (payload.isOk) {
                         data.clear()
                         payload.payload?.let {
-                            Log.d("WJY", "${it.size}")
                             if (it.isNotEmpty()) {
                                 val bean = ScheduleBean()
                                 bean.start_time = it[0].start_time
@@ -164,7 +160,6 @@ class ScheduleFragment : BaseFragment() {
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         payload.payload?.let {
-                            Log.d("WJY", Gson().toJson(it))
                             val map = HashMap<String, String>()
                             it.forEach {
                                 map.put(it, "1")

@@ -127,6 +127,7 @@ dependencies {
     compile 'com.afollestad.material-dialogs:core:0.9.4.5'
     compile 'com.afollestad.material-dialogs:commons:0.9.4.5'
     compile 'com.contrarywind:Android-PickerView:3.2.7'
+    compile 'com.github.mcxtzhang:SwipeDelMenuLayout:V1.3.0'
     testCompile 'junit:junit:4.12'
     compile project(':PushSDK')
     compile project(':shareSDK')

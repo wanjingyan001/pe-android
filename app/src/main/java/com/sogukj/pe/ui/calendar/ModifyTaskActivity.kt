@@ -11,6 +11,7 @@ import com.bigkoo.pickerview.TimePickerView
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.bean.CustomSealBean
 import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.ui.user.OrganizationActivity
 import com.sogukj.pe.util.Trace
@@ -63,7 +64,7 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
         setBack(true)
         adapter = CcPersonAdapter(context, data)
         adapter.setListener(this)
-        copyList.layoutManager = GridLayoutManager(context, 6)
+        copyList.layoutManager = GridLayoutManager(this, 6)
         copyList.adapter = adapter
 
         exAdapter = ExecutiveAdapter(context, data2)
@@ -78,6 +79,7 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
             data_id = intent.getIntExtra(Extras.DATA, -1)
             doRequest()
         }
+        relatedProject.setOnClickListener(this)
         startTime.setOnClickListener(this)
         deadline.setOnClickListener(this)
         remind.setOnClickListener(this)
@@ -95,11 +97,10 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                     if (payload.isOk) {
                         payload.payload?.let {
                             companyId = it.company_id
-                            associatedEdt.setText(it.cName)
+                            relatedProject.text = it.cName
                             missionDetails.setText(it.info)
-                            startTime.text = it.start_time
-                            deadline.text = it.end_time
-
+                            startTime.text = Utils.getTime(SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(it.start_time), "MM月dd日 E HH:mm")
+                            deadline.text = Utils.getTime(SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(it.end_time), "MM月dd日 E HH:mm")
                             remind.text = "截止前${(it.clock)?.div(60)}分钟"
                             it.executor?.forEach {
                                 val bean = UserBean()
@@ -124,16 +125,26 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
 
 
     private fun submitChange() {
+        if (missionDetails.text.isEmpty()) {
+            showToast("请填写日程描述")
+            return
+        }
+        if (startTime.text.isEmpty() || deadline.text.isEmpty()) {
+            showToast("请选择时间")
+            return
+        }
         val reqBean = TaskModifyBean()
         val bean = reqBean.ae
         reqBean.data_id = data_id
         reqBean.type = 1
         bean.info = missionDetails.text.toString()
-        val parse = SimpleDateFormat("MM月dd日 E HH:mm").parse(deadline.text.toString())
-        bean.end_time = Utils.getTime(parse, "yyyy-MM-dd HH:mm:ss")
-        bean.company_id = companyId
-        val parse2 = SimpleDateFormat("MM月dd日 E HH:mm").parse(startTime.text.toString())
-        bean.start_time = Utils.getTime(parse2, "yyyy-MM-dd HH:mm:ss")
+        if (companyBean.id != null) {
+            bean.company_id = companyBean.id
+        } else {
+            bean.company_id = companyId
+        }
+        bean.start_time = Utils.getTime(start, "yyyy-MM-dd HH:mm:ss")
+        bean.end_time = Utils.getTime(endTime, "yyyy-MM-dd HH:mm:ss")
         bean.clock = time?.times(60)
         val exusers = StringBuilder()
         data2.forEach {
@@ -164,21 +175,26 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
 
     }
 
-
+    var start: Date? = null
+    var endTime: Date? = null
     override fun onClick(v: View?) {
         when (v?.id) {
+            R.id.relatedProject -> {
+                CompanySelectActivity.start(this)
+            }
             R.id.startTime -> {
-                Utils.closeInput(context,missionDetails)
+                Utils.closeInput(context, missionDetails)
                 val selectedDate = Calendar.getInstance()//系统当前时间
                 val startDate = Calendar.getInstance()
                 startDate.set(1949, 10, 1)
                 val endDate = Calendar.getInstance()
                 endDate.set(2020, 12, 31)
                 val timePicker = TimePickerView.Builder(this, { date, view ->
+                    start = date
                     startTime.text = Utils.getTime(date, "MM月dd日 E HH:mm")
                 })
                         //年月日时分秒 的显示与否，不设置则默认全部显示
-                        .setType(booleanArrayOf(false, true, true, true, true, false))
+                        .setType(booleanArrayOf(true, true, true, true, true, false))
                         .setDividerColor(Color.DKGRAY)
                         .setContentSize(21)
                         .setDate(selectedDate)
@@ -188,17 +204,18 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                 timePicker.show()
             }
             R.id.deadline -> {
-                Utils.closeInput(context,missionDetails)
+                Utils.closeInput(context, missionDetails)
                 val selectedDate = Calendar.getInstance()//系统当前时间
                 val startDate = Calendar.getInstance()
                 startDate.set(1949, 10, 1)
                 val endDate = Calendar.getInstance()
                 endDate.set(2020, 12, 31)
                 val timePicker = TimePickerView.Builder(this, { date, view ->
+                    endTime = date
                     deadline.text = Utils.getTime(date, "MM月dd日 E HH:mm")
                 })
                         //年月日时分秒 的显示与否，不设置则默认全部显示
-                        .setType(booleanArrayOf(false, true, true, true, true, false))
+                        .setType(booleanArrayOf(true, true, true, true, true, false))
                         .setDividerColor(Color.DKGRAY)
                         .setContentSize(21)
                         .setDate(selectedDate)
@@ -209,20 +226,40 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
 
             }
             R.id.remind -> {
-                Utils.closeInput(context,missionDetails)
+                if (start == null) {
+                    showToast("请选择开始时间")
+                    return
+                }
+                if (endTime == null) {
+                    showToast("请选择结束时间")
+                    return
+                }
+                Utils.closeInput(context, missionDetails)
                 val selectedDate = Calendar.getInstance()//系统当前时间
                 val startDate = Calendar.getInstance()
-                startDate.set(selectedDate.get(Calendar.YEAR), selectedDate.get(Calendar.MONTH) + 1, selectedDate.get(Calendar.DAY_OF_MONTH))
+                startDate.set(
+                        Utils.getTime(start, "yyyy").toInt(),
+                        Utils.getTime(start, "MM").toInt() - 1,
+                        Utils.getTime(start, "dd").toInt(),
+                        Utils.getTime(start, "HH").toInt(),
+                        Utils.getTime(start, "mm").toInt()
+                )
                 val endDate = Calendar.getInstance()
-                endDate.set(selectedDate.get(Calendar.YEAR), selectedDate.get(Calendar.MONTH) + 1, selectedDate.get(Calendar.DAY_OF_MONTH))
+                endDate.set(Utils.getTime(endTime, "yyyy").toInt(),
+                        Utils.getTime(endTime, "MM").toInt() - 1,
+                        Utils.getTime(endTime, "dd").toInt(),
+                        Utils.getTime(endTime, "HH").toInt(),
+                        Utils.getTime(endTime, "mm").toInt())
                 val timePicker = TimePickerView.Builder(this, { date, view ->
-                    val hour = Utils.getTime(date, "HH")
-                    val minute = Utils.getTime(date, "mm")
-                    time = hour.toInt() * 60 + minute.toInt()
-                    remind.text = "截止前${time}分钟"
+                    val time = endTime!!.time - date.time
+                    if (time < 0) {
+                        showToast("提醒时间不能大于结束时间")
+                    } else {
+                        remind.text = "截止前${time / 1000 / 60}分钟"
+                    }
                 })
                         //年月日时分秒 的显示与否，不设置则默认全部显示
-                        .setType(booleanArrayOf(false, false, false, true, true, false))
+                        .setType(booleanArrayOf(true, true, true, true, true, false))
                         .setDividerColor(Color.DKGRAY)
                         .setContentSize(21)
                         .setDate(selectedDate)
@@ -234,14 +271,19 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
         }
     }
 
+    lateinit var companyBean: CustomSealBean.ValueBean
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == Extras.REQUESTCODE && data != null) {
-            val userBean = data.getSerializableExtra(Extras.DATA) as UserBean
             if (resultCode == Extras.RESULTCODE) {
+                val userBean = data.getSerializableExtra(Extras.DATA) as UserBean
                 adapter.addData(userBean)
-            } else {
+            } else if (resultCode == Extras.RESULTCODE2) {
+                val userBean = data.getSerializableExtra(Extras.DATA) as UserBean
                 exAdapter.addData(userBean)
+            } else if (resultCode == Activity.RESULT_OK) {
+                companyBean = data.getSerializableExtra(Extras.DATA) as CustomSealBean.ValueBean
+                relatedProject.text = companyBean.name
             }
         }
     }

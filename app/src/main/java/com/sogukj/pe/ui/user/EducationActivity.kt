@@ -9,7 +9,6 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.bigkoo.pickerview.TimePickerView
 import com.framework.base.BaseActivity
-import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.EducationBean
@@ -118,7 +117,7 @@ class EducationActivity : BaseActivity(), View.OnClickListener {
                     tv_start_date.text = Utils.getTime(date)
                 })
                         //年月日时分秒 的显示与否，不设置则默认全部显示
-                        .setType(booleanArrayOf(true, true, true, false, false, false))
+                        .setType(booleanArrayOf(true, true, false, false, false, false))
                         .setDividerColor(Color.DKGRAY)
                         .setContentSize(21)
                         .setDate(selectedDate)
@@ -133,7 +132,7 @@ class EducationActivity : BaseActivity(), View.OnClickListener {
                     tv_date_end.text = Utils.getTime(date)
                 })
                         //年月日时分秒 的显示与否，不设置则默认全部显示
-                        .setType(booleanArrayOf(true, true, true, false, false, false))
+                        .setType(booleanArrayOf(true, true, false, false, false, false))
                         .setDividerColor(Color.DKGRAY)
                         .setContentSize(21)
                         .setDate(selectedDate)

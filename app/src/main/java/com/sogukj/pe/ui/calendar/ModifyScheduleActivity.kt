@@ -4,13 +4,15 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.support.v7.widget.GridLayoutManager
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import com.bigkoo.pickerview.TimePickerView
 import com.framework.base.ToolbarActivity
+import com.google.gson.Gson
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.bean.CustomSealBean
 import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.ui.user.OrganizationActivity
 import com.sogukj.pe.util.Trace
@@ -19,13 +21,12 @@ import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_modify_schedule.*
+import org.jetbrains.anko.find
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.properties.Delegates
 
 class ModifyScheduleActivity : ToolbarActivity(), AddPersonListener, View.OnClickListener {
-
-
     var type: Long by Delegates.notNull()
     var data_id = 0
     var companyId: Int? = null
@@ -59,17 +60,19 @@ class ModifyScheduleActivity : ToolbarActivity(), AddPersonListener, View.OnClic
         setBack(true)
         adapter = CcPersonAdapter(context, data)
         adapter.setListener(this)
-        copyList.layoutManager = GridLayoutManager(context, 6)
-        copyList.adapter = adapter
+//        copyList.layoutManager = GridLayoutManager(context, 6)
+//        copyList.adapter = adapter
         type = intent.getLongExtra(Extras.TYPE, -1)
         if (type == CREATE) {
-            title = "创建日程"
+            title = "添加日程"
         } else {
             title = "修改日程"
             data_id = intent.getIntExtra(Extras.DATA, -1)
             doRequest()
         }
+        relatedProject.setOnClickListener(this)
         deadline.setOnClickListener(this)
+        startTime.setOnClickListener(this)
         remind.setOnClickListener(this)
     }
 
@@ -85,9 +88,10 @@ class ModifyScheduleActivity : ToolbarActivity(), AddPersonListener, View.OnClic
                     if (payload.isOk) {
                         payload.payload?.let {
                             companyId = it.company_id
-                            associatedEdt.setText(it.cName)
+                            relatedProject.text = it.cName
                             missionDetails.setText(it.info)
-                            deadline.text = it.end_time
+                            startTime.text = Utils.getTime(SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(it.start_time), "MM月dd日 E HH:mm")
+                            deadline.text = Utils.getTime(SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(it.end_time), "MM月dd日 E HH:mm")
                             remind.text = "截止前${(it.clock)?.div(60)}分钟"
                             it.watcher?.forEach {
                                 val bean = UserBean()
@@ -104,6 +108,14 @@ class ModifyScheduleActivity : ToolbarActivity(), AddPersonListener, View.OnClic
     }
 
     private fun submitChange() {
+        if (missionDetails.text.isEmpty()) {
+            showToast("请填写日程描述")
+            return
+        }
+        if (startTime.text.isEmpty() || deadline.text.isEmpty()) {
+            showToast("请选择时间")
+            return
+        }
         val reqBean = TaskModifyBean()
         val bean = reqBean.ae
         if (data_id != 0) {
@@ -111,15 +123,20 @@ class ModifyScheduleActivity : ToolbarActivity(), AddPersonListener, View.OnClic
         }
         reqBean.type = 1
         bean.info = missionDetails.text.toString()
-        val parse = SimpleDateFormat("MM月dd日 E HH:mm").parse(deadline.text.toString())
-        bean.end_time = Utils.getTime(parse, "yyyy-MM-dd HH:mm:ss")
-        bean.company_id = companyId
+        bean.start_time = Utils.getTime(start, "yyyy-MM-dd HH:mm:ss")
+        bean.end_time = Utils.getTime(endTime, "yyyy-MM-dd HH:mm:ss")
+        if (companyBean.id != null) {
+            bean.company_id = companyBean.id
+        } else {
+            bean.company_id = companyId
+        }
         bean.clock = time?.times(60)
         val watchusers = StringBuilder()
         data.forEach {
             watchusers.append(it.user_id.toString() + ",")
         }
         bean.watcher = watchusers.toString()
+        Log.d("WJY",Gson().toJson(reqBean))
         SoguApi.getService(application)
                 .aeCalendarInfo(reqBean)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -139,8 +156,34 @@ class ModifyScheduleActivity : ToolbarActivity(), AddPersonListener, View.OnClic
 
     }
 
+    var start: Date? = null
+    var endTime: Date? = null
     override fun onClick(v: View?) {
         when (v?.id) {
+            R.id.relatedProject -> {
+                CompanySelectActivity.start(this)
+            }
+            R.id.startTime -> {
+                Utils.closeInput(context, missionDetails)
+                val selectedDate = Calendar.getInstance()//系统当前时间
+                val startDate = Calendar.getInstance()
+                startDate.set(1949, 10, 1)
+                val endDate = Calendar.getInstance()
+                endDate.set(2020, 12, 31)
+                val timePicker = TimePickerView.Builder(this, { date, view ->
+                    start = date
+                    startTime.text = Utils.getTime(date, "MM月dd日 E HH:mm")
+                })
+                        //年月日时分秒 的显示与否，不设置则默认全部显示
+                        .setType(booleanArrayOf(true, true, true, true, true, false))
+                        .setDividerColor(Color.DKGRAY)
+                        .setContentSize(21)
+                        .setDate(selectedDate)
+                        .setCancelColor(resources.getColor(R.color.shareholder_text_gray))
+                        .setRangDate(startDate, endDate)
+                        .build()
+                timePicker.show()
+            }
             R.id.deadline -> {
                 Utils.closeInput(context, missionDetails)
                 val selectedDate = Calendar.getInstance()//系统当前时间
@@ -149,10 +192,11 @@ class ModifyScheduleActivity : ToolbarActivity(), AddPersonListener, View.OnClic
                 val endDate = Calendar.getInstance()
                 endDate.set(2020, 12, 31)
                 val timePicker = TimePickerView.Builder(this, { date, view ->
+                    endTime = date
                     deadline.text = Utils.getTime(date, "MM月dd日 E HH:mm")
                 })
                         //年月日时分秒 的显示与否，不设置则默认全部显示
-                        .setType(booleanArrayOf(false, true, true, true, true, false))
+                        .setType(booleanArrayOf(true, true, true, true, true, false))
                         .setDividerColor(Color.DKGRAY)
                         .setContentSize(21)
                         .setDate(selectedDate)
@@ -163,20 +207,42 @@ class ModifyScheduleActivity : ToolbarActivity(), AddPersonListener, View.OnClic
 
             }
             R.id.remind -> {
+                //截止时间要在结束时间之前
+                if (start == null) {
+                    showToast("请选择开始时间")
+                    return
+                }
+                if (endTime == null) {
+                    showToast("请选择结束时间")
+                    return
+                }
                 Utils.closeInput(context, missionDetails)
                 val selectedDate = Calendar.getInstance()//系统当前时间
                 val startDate = Calendar.getInstance()
-                startDate.set(selectedDate.get(Calendar.YEAR), selectedDate.get(Calendar.MONTH) + 1, selectedDate.get(Calendar.DAY_OF_MONTH))
+                startDate.set(
+                        Utils.getTime(start, "yyyy").toInt(),
+                        Utils.getTime(start, "MM").toInt() - 1,
+                        Utils.getTime(start, "dd").toInt(),
+                        Utils.getTime(start, "HH").toInt(),
+                        Utils.getTime(start, "mm").toInt()
+                )
                 val endDate = Calendar.getInstance()
-                endDate.set(selectedDate.get(Calendar.YEAR), selectedDate.get(Calendar.MONTH) + 1, selectedDate.get(Calendar.DAY_OF_MONTH))
+                endDate.set(Utils.getTime(endTime, "yyyy").toInt(),
+                        Utils.getTime(endTime, "MM").toInt() - 1,
+                        Utils.getTime(endTime, "dd").toInt(),
+                        Utils.getTime(endTime, "HH").toInt(),
+                        Utils.getTime(endTime, "mm").toInt())
                 val timePicker = TimePickerView.Builder(this, { date, view ->
-                    val hour = Utils.getTime(date, "HH")
-                    val minute = Utils.getTime(date, "mm")
-                    time = hour.toInt() * 60 + minute.toInt()
-                    remind.text = "截止前${time}分钟"
+                    val time = endTime!!.time - date.time
+                    if (time < 0) {
+                        showToast("提醒时间不能大于结束时间")
+                    } else {
+                        Log.d("WJY", "截止前$time")
+                        remind.text = "截止前${time / 1000 / 60}分钟"
+                    }
                 })
                         //年月日时分秒 的显示与否，不设置则默认全部显示
-                        .setType(booleanArrayOf(false, false, false, true, true, false))
+                        .setType(booleanArrayOf(true, true, true, true, true, false))
                         .setDividerColor(Color.DKGRAY)
                         .setContentSize(21)
                         .setDate(selectedDate)
@@ -197,14 +263,24 @@ class ModifyScheduleActivity : ToolbarActivity(), AddPersonListener, View.OnClic
         return super.onOptionsItemSelected(item)
     }
 
+    lateinit var companyBean: CustomSealBean.ValueBean
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == Extras.REQUESTCODE && data != null) {
-            val userBean = data.getSerializableExtra(Extras.DATA) as UserBean
             if (resultCode == Extras.RESULTCODE) {
+                val userBean = data.getSerializableExtra(Extras.DATA) as UserBean
                 adapter.addData(userBean)
+            } else if (resultCode == Activity.RESULT_OK) {
+                companyBean = data.getSerializableExtra(Extras.DATA) as CustomSealBean.ValueBean
+                relatedProject.text = companyBean.name
             }
         }
+    }
+
+
+    override fun onPause() {
+        super.onPause()
+        Utils.closeInput(this, find(R.id.modify_schedule_main))
     }
 
     override fun addPerson(tag: String) {

@@ -9,7 +9,7 @@ import android.support.v4.app.FragmentStatePagerAdapter
  */
 class MatterPagerAdapter(fm: FragmentManager,
                          val fragments: List<Fragment>) : FragmentStatePagerAdapter(fm) {
-    val titles = arrayListOf("项目代办事项", "项目完成事项日程")
+    val titles = arrayListOf("项目关键节点","项目代办事项", "项目完成事项日程")
 
     override fun getItem(position: Int): Fragment = fragments[position]
 
