@@ -40,6 +40,7 @@ class WeeklyThisFragment : BaseFragment() {
     var user_id: Int? = null//可空（如果为空，显示自己的周报）
     var week_id: Int? = null//可空（如果为空，显示自己的周报）
     var issue: Int? = null//可空（1=>个人事务,2=>项目事务）
+    var TYPE: String = ""
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -68,14 +69,19 @@ class WeeklyThisFragment : BaseFragment() {
             }
         })
 
-        var tag = arguments.getString(Extras.FLAG)
-        if (tag == "MAIN") {
+        buchong_hint.visibility = View.GONE
+        bu_chong_empty.visibility = View.GONE
+        buchong_full.visibility = View.GONE
+        send_layout.visibility = View.GONE
+
+        TYPE = arguments.getString(Extras.FLAG)
+        if (TYPE == "MAIN") {
             spinner_this.visibility = View.GONE
             user_id = null
             issue = null
             week_id = null
             doRequest()
-        } else if (tag == "PERSONAL") {
+        } else if (TYPE == "PERSONAL") {
             spinner_this.visibility = View.VISIBLE
             var obj = arguments.getSerializable(Extras.DATA) as WeeklyThisBean
             initView(obj)
@@ -83,10 +89,9 @@ class WeeklyThisFragment : BaseFragment() {
     }
 
     fun clearView() {
-        var tag = arguments.getString(Extras.FLAG)
-        if (tag == "MAIN") {
+        if (TYPE == "MAIN") {
             //不存在这种情况
-        } else if (tag == "PERSONAL") {
+        } else if (TYPE == "PERSONAL") {
             var flag = true
             while (flag) {
                 try {
@@ -100,12 +105,11 @@ class WeeklyThisFragment : BaseFragment() {
     }
 
     fun doRequest() {
-        var tag = arguments.getString(Extras.FLAG)
         var s_time: String? = null
         var e_time: String? = null
-        if (tag == "MAIN") {
+        if (TYPE == "MAIN") {
             //
-        } else if (tag == "PERSONAL") {
+        } else if (TYPE == "PERSONAL") {
             s_time = arguments.getString(Extras.TIME1)
             e_time = arguments.getString(Extras.TIME2)
             week_id = arguments.getInt(Extras.CODE)
@@ -162,6 +166,16 @@ class WeeklyThisFragment : BaseFragment() {
 
                 root.addView(item, childs++)
             }
+        }
+
+        if (TYPE == "PERSONAL") {
+            return
+        }
+
+        if (loaded.week?.is_send_week == 0) {
+            send_layout.visibility = View.VISIBLE
+        } else {
+            send_layout.visibility = View.GONE
         }
 
         if (loaded.week?.week_id == null) {
@@ -304,23 +318,6 @@ class WeeklyThisFragment : BaseFragment() {
                             else -> showToast("未知错误")
                         }
                     })
-        }
-
-        var tag = arguments.getString(Extras.FLAG)
-        if (tag == "MAIN") {
-//            bu_chong_empty.visibility = View.VISIBLE
-//            buchong_full.visibility = View.VISIBLE
-//            send_layout.visibility = View.VISIBLE
-            if (loaded.week?.is_send_week == 0) {
-                send_layout.visibility = View.VISIBLE
-            } else {
-                send_layout.visibility = View.GONE
-            }
-        } else if (tag == "PERSONAL") {
-            bu_chong_empty.visibility = View.GONE
-            buchong_full.visibility = View.GONE
-            send_layout.visibility = View.GONE
-            buchong_hint.visibility = View.GONE
         }
     }
 

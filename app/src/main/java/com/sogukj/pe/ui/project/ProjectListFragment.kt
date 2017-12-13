@@ -445,6 +445,7 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                 if (data.is_business == null && data.is_ability == null) {
                     tv_pingjia.visibility = View.GONE
                 } else {
+                    tv_pingjia.visibility = View.VISIBLE
                     if (data.is_business == null) {
                         tv4.visibility = View.GONE
                     } else {
@@ -561,6 +562,7 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
             if (data.is_business == null && data.is_ability == null) {
                 pingjia.visibility = View.GONE
             } else {
+                pingjia.visibility = View.VISIBLE
                 if (data.is_business == null) {
                     tv4.visibility = View.GONE
                 } else {
