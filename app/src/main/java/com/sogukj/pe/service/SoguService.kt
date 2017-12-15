@@ -65,7 +65,7 @@ interface SoguService {
     fun uploadImg(@Body body: RequestBody): Observable<Payload<Object>>
 
     @FormUrlEncoded
-    @POST("/api/userFont/changeMyInfo")
+    @POST("/api/Userfont/changeMyInfo")
     fun saveUser(@Field("uid") uid: Int
                  , @Field("name") name: String? = null
                  , @Field("depart_id") depart_id: Int? = null
@@ -850,6 +850,10 @@ interface SoguService {
      */
     @POST("/api/Calendar/aeCalendarInfo")
     fun aeCalendarInfo(@Body reqBean: TaskModifyBean): Observable<Payload<Any>>
+
+    @FormUrlEncoded
+    @POST("/api/Calendar/deleteTask")
+    fun deleteTask(@Field("data_id")data_id:Int): Observable<Payload<Any>>
 
     /**
      * 重大事件

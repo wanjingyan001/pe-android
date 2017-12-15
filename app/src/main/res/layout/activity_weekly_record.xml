@@ -7,7 +7,7 @@
     android:orientation="vertical"
     tools:context="com.sogukj.pe.ui.weekly.WeeklyRecordActivity">
 
-    <include layout="@layout/toolbar" />
+    <include layout="@layout/layout_shareholder_toolbar" />
 
     <TableLayout
         android:layout_width="match_parent"
@@ -75,12 +75,15 @@
 
             <TextView
                 style="@style/ItemTextLabel"
-                android:layout_height="20dp"
+                android:layout_height="match_parent"
+                android:gravity="top"
                 android:text="工作内容" />
 
             <EditText
                 android:id="@+id/et_des"
-                style="@style/ItemTextValue" />
+                style="@style/ItemTextValue"
+                android:layout_height="120dp"
+                android:gravity="top"/>
         </TableRow>
     </TableLayout>
 

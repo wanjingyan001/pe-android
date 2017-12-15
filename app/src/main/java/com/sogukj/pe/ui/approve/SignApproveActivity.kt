@@ -3,7 +3,6 @@ package com.sogukj.pe.ui.approve
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.text.Html
@@ -11,10 +10,7 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.RadioGroup
 import android.widget.TextView
-import cn.finalteam.rxgalleryfinal.utils.BitmapUtils
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
@@ -24,7 +20,6 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.*
 import com.sogukj.pe.util.FileUtil
-import com.sogukj.pe.util.PdfUtil
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.CircleImageView
 import com.sogukj.service.SoguApi
@@ -57,20 +52,24 @@ class SignApproveActivity : ToolbarActivity() {
         inflater = LayoutInflater.from(this)
         val paramObj = intent.getSerializableExtra(Extras.DATA)
         is_mine = intent.getIntExtra("is_mine", 2)
-        if (paramObj is ApprovalBean) {
-            paramTitle = paramObj.kind!!
-            paramId = paramObj.approval_id!!
-            paramType = paramObj.type
-        } else if (paramObj is MessageBean) {
-            paramTitle = paramObj.type_name!!
-            paramId = paramObj.approval_id!!
-            paramType = paramObj.type
-        } else if (paramObj is SpGroupItemBean) {
-            paramTitle = paramObj.name!!
-            paramId = paramObj.id!!
-            paramType = paramObj.type
-        } else {
-            finish()
+        if (paramObj == null){
+
+        }else{
+            if (paramObj is ApprovalBean) {
+                paramTitle = paramObj.kind!!
+                paramId = paramObj.approval_id!!
+                paramType = paramObj.type
+            } else if (paramObj is MessageBean) {
+                paramTitle = paramObj.type_name!!
+                paramId = paramObj.approval_id!!
+                paramType = paramObj.type
+            } else if (paramObj is SpGroupItemBean) {
+                paramTitle = paramObj.name!!
+                paramId = paramObj.id!!
+                paramType = paramObj.type
+            } else {
+                finish()
+            }
         }
         setContentView(R.layout.activity_sign_approve)
         setBack(true)
@@ -372,6 +371,14 @@ class SignApproveActivity : ToolbarActivity() {
             val intent = Intent(ctx, SignApproveActivity::class.java)
             intent.putExtra(Extras.DATA, bean)
             intent.putExtra("is_mine", is_mine)
+            ctx?.startActivity(intent)
+        }
+
+        fun start(ctx: Activity?, data_id: Int, title: String) {
+            val intent = Intent(ctx, SignApproveActivity::class.java)
+            intent.putExtra("is_mine", 2)
+            intent.putExtra(Extras.ID, data_id)
+            intent.putExtra(Extras.TITLE, title)
             ctx?.startActivity(intent)
         }
     }

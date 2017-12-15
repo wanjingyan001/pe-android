@@ -67,7 +67,7 @@ public class ProjectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ProjectMatterMD md = (ProjectMatterMD) o;
             try {
                 Date parse = new SimpleDateFormat("yyyy-MM-dd").parse(md.getMDTime());
-                ((ProjectHolder) holder).MDTime.setText(Utils.getTime(parse, "yyyy年MM月dd日"));
+                ((ProjectHolder) holder).MDTime.setText(Utils.getTime(parse, "MM月dd日"));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -86,7 +86,13 @@ public class ProjectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             });
         } else if (holder instanceof BeanHolder) {
             ScheduleBean info = (ScheduleBean) o;
-            ((BeanHolder) holder).timeTv.setText(info.getStart_time());
+            try {
+                Date parse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(info.getStart_time());
+                ((BeanHolder) holder).timeTv.setText(Utils.getTime(parse,"HH:mm"));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
             ((BeanHolder) holder).contentTv.setText(info.getTitle());
             if (info.is_finish() == 1) {
                 ((BeanHolder) holder).finishBox.setChecked(true);

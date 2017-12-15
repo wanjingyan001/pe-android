@@ -5,25 +5,24 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
 import com.bigkoo.pickerview.TimePickerView
-import com.framework.base.ToolbarActivity
+import com.framework.base.BaseActivity
 import com.google.gson.JsonSyntaxException
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.WeeklyThisBean
 import com.sogukj.pe.util.Trace
+import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_weekly_record.*
-import org.jetbrains.anko.textColor
+import kotlinx.android.synthetic.main.layout_shareholder_toolbar.*
 import java.net.UnknownHostException
 import java.text.SimpleDateFormat
 import java.util.*
 
-class WeeklyRecordActivity : ToolbarActivity() {
+class WeeklyRecordActivity : BaseActivity() {
 
     var format = SimpleDateFormat("yyyy-MM-dd")
 
@@ -32,12 +31,13 @@ class WeeklyRecordActivity : ToolbarActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_weekly_record)
+        Utils.setWindowStatusBarColor(this, R.color.white)
 
         var calendar = Calendar.getInstance()
 
         var tag = intent.getStringExtra(Extras.FLAG)
         if (tag == "ADD") {
-            title = "补充工作日程"
+            toolbar_title.text = "补充工作日程"
 
             tv_start_time.text = format.format(calendar.time)
             tv_end_time.text = format.format(calendar.time)
@@ -48,14 +48,15 @@ class WeeklyRecordActivity : ToolbarActivity() {
             tv_end_time.text = week.end_time
 
         } else if (tag == "EDIT") {
-            title = "修改工作日程"
+            toolbar_title.text  = "修改工作日程"
             week = intent.getSerializableExtra(Extras.DATA) as WeeklyThisBean.Week
 
             tv_start_time.text = week.start_time
             tv_end_time.text = week.end_time
             et_des.setText(week.info)
         }
-
+        addTv.visibility = View.GONE
+        back.setOnClickListener { finish() }
         tv_start_time.setOnClickListener {
             if (tag == "EDIT" || tag == "ADD") {
                 return@setOnClickListener
@@ -93,15 +94,15 @@ class WeeklyRecordActivity : ToolbarActivity() {
             timePicker.show()
         }
 
-        toolbar?.setBackgroundColor(Color.WHITE)
-        toolbar?.apply {
-            val title = this.findViewById(R.id.toolbar_title) as TextView?
-            title?.textColor = Color.parseColor("#282828")
-            val back = this.findViewById(R.id.toolbar_back) as ImageView
-            back?.visibility = View.VISIBLE
-            back.setBackgroundResource(R.drawable.grey_back)
-        }
-        setBack(true)
+//        toolbar?.setBackgroundColor(Color.WHITE)
+//        toolbar?.apply {
+//            val title = this.findViewById(R.id.toolbar_title) as TextView?
+//            title?.textColor = Color.parseColor("#282828")
+//            val back = this.findViewById(R.id.toolbar_back) as ImageView
+//            back?.visibility = View.VISIBLE
+//            back.setBackgroundResource(R.drawable.grey_back)
+//        }
+//        setBack(true)
 
         btn_commit.setOnClickListener {
             var weekly_id: Int? = null

@@ -30,7 +30,7 @@ class ModifyScheduleActivity : ToolbarActivity(), AddPersonListener, View.OnClic
     var type: Long by Delegates.notNull()
     var data_id = 0
     var companyId: Int? = null
-    var time: Int? = null
+    var time: Long by Delegates.notNull()
     lateinit var adapter: CcPersonAdapter
     val data = ArrayList<UserBean>()
 
@@ -87,12 +87,14 @@ class ModifyScheduleActivity : ToolbarActivity(), AddPersonListener, View.OnClic
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         payload.payload?.let {
+                            Log.d("WJY", Gson().toJson(payload.payload));
                             companyId = it.company_id
                             relatedProject.text = it.cName
                             missionDetails.setText(it.info)
                             startTime.text = Utils.getTime(SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(it.start_time), "MM月dd日 E HH:mm")
                             deadline.text = Utils.getTime(SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(it.end_time), "MM月dd日 E HH:mm")
-                            remind.text = "截止前${(it.clock)?.div(60)}分钟"
+                            Log.d("WJY", "开始前:" + it.clock)
+                            remind.text = "开始前${(it.clock)?.div(60)}分钟"
                             it.watcher?.forEach {
                                 val bean = UserBean()
                                 bean.uid = it.id
@@ -116,6 +118,10 @@ class ModifyScheduleActivity : ToolbarActivity(), AddPersonListener, View.OnClic
             showToast("请选择时间")
             return
         }
+        if (start!!.time - endTime!!.time > 0) {
+            showToast("开始时间不能大于结束时间")
+            return
+        }
         val reqBean = TaskModifyBean()
         val bean = reqBean.ae
         if (data_id != 0) {
@@ -130,13 +136,13 @@ class ModifyScheduleActivity : ToolbarActivity(), AddPersonListener, View.OnClic
         } else {
             bean.company_id = companyId
         }
-        bean.clock = time?.times(60)
+        bean.clock = (time / 1000).toInt()
         val watchusers = StringBuilder()
         data.forEach {
             watchusers.append(it.user_id.toString() + ",")
         }
         bean.watcher = watchusers.toString()
-        Log.d("WJY",Gson().toJson(reqBean))
+        Log.d("WJY", Gson().toJson(reqBean))
         SoguApi.getService(application)
                 .aeCalendarInfo(reqBean)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -220,25 +226,24 @@ class ModifyScheduleActivity : ToolbarActivity(), AddPersonListener, View.OnClic
                 val selectedDate = Calendar.getInstance()//系统当前时间
                 val startDate = Calendar.getInstance()
                 startDate.set(
-                        Utils.getTime(start, "yyyy").toInt(),
+                        selectedDate.get(Calendar.YEAR),
+                        selectedDate.get(Calendar.MONTH) - 1,
+                        selectedDate.get(Calendar.DAY_OF_MONTH),
+                        selectedDate.get(Calendar.HOUR_OF_DAY),
+                        selectedDate.get(Calendar.MINUTE)
+                )
+                val endDate = Calendar.getInstance()
+                endDate.set(Utils.getTime(start, "yyyy").toInt(),
                         Utils.getTime(start, "MM").toInt() - 1,
                         Utils.getTime(start, "dd").toInt(),
                         Utils.getTime(start, "HH").toInt(),
-                        Utils.getTime(start, "mm").toInt()
-                )
-                val endDate = Calendar.getInstance()
-                endDate.set(Utils.getTime(endTime, "yyyy").toInt(),
-                        Utils.getTime(endTime, "MM").toInt() - 1,
-                        Utils.getTime(endTime, "dd").toInt(),
-                        Utils.getTime(endTime, "HH").toInt(),
-                        Utils.getTime(endTime, "mm").toInt())
+                        Utils.getTime(start, "mm").toInt())
                 val timePicker = TimePickerView.Builder(this, { date, view ->
-                    val time = endTime!!.time - date.time
+                    time = start!!.time - date.time
                     if (time < 0) {
-                        showToast("提醒时间不能大于结束时间")
+                        showToast("提醒时间不能大于开始时间")
                     } else {
-                        Log.d("WJY", "截止前$time")
-                        remind.text = "截止前${time / 1000 / 60}分钟"
+                        remind.text = "开始前${time / 1000 / 60}分钟"
                     }
                 })
                         //年月日时分秒 的显示与否，不设置则默认全部显示
