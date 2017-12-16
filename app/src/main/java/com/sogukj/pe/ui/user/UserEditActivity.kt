@@ -22,6 +22,7 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.DepartmentBean
 import com.sogukj.pe.bean.UserBean
+import com.sogukj.pe.ui.score.JudgeActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
@@ -51,7 +52,7 @@ class UserEditActivity : ToolbarActivity() {
         val departList = intent.getSerializableExtra(Extras.DATA) as ArrayList<DepartmentBean>?
         Store.store.getUser(this)?.apply {
             user = this
-            if (!TextUtils.isEmpty(name)){
+            if (!TextUtils.isEmpty(name)) {
                 tv_name?.setText(name)
                 tv_name?.isEnabled = false
             }
@@ -70,13 +71,13 @@ class UserEditActivity : ToolbarActivity() {
                         .load(headImage())
 //                        .error(R.drawable.img_logo_user)
                         .into(iv_user)
-            if(full!=null){
+            if (full != null) {
                 tv_resume.text = "简历完整度:${full}"
             }
         }
 
         tr_resume.setOnClickListener {
-            UserResumeActivity.start(this,Store.store.getUser(this)!!)
+            UserResumeActivity.start(this, Store.store.getUser(this)!!)
         }
         tv_depart.setOnClickListener {
             val items = ArrayList<String?>()
@@ -85,7 +86,7 @@ class UserEditActivity : ToolbarActivity() {
                 items.add(it.de_name)
             }
             items.forEachIndexed { index, s ->
-                if (s!! == tv_depart.text){
+                if (s!! == tv_depart.text) {
                     position = index
                 }
             }
@@ -131,11 +132,14 @@ class UserEditActivity : ToolbarActivity() {
                     })
                     .openGallery()
         }
+
         tr_rate.setOnClickListener {
-
+            JudgeActivity.start(context, TYPE_EMPLOYEE)
         }
-
     }
+
+    val TYPE_EMPLOYEE = 3
+    val TYPE_MANAGE = 4
 
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

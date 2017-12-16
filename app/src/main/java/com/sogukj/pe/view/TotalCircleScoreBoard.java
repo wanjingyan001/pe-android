@@ -68,9 +68,9 @@ public class TotalCircleScoreBoard extends View {
         }
     }
 
-    //宽高274dp
+    //宽高250dp
     //最外层有进度的宽4dp
-    //图片宽高252dp
+    //图片宽高230dp
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -78,6 +78,21 @@ public class TotalCircleScoreBoard extends View {
         drawOut(canvas);
         drawInnerImage(canvas);
         drawTxt(canvas);
+//        if (tag == "FINISH") {
+//            drawOut(canvas);
+//            drawInnerImage(canvas);
+//            drawTxt(canvas);
+//        } else if (tag == "UNFINISH") {
+//
+//        }
+        if (tag == "UNFINISH") {
+            try {
+                Thread.sleep(10);
+                step++;
+                invalidate();
+            } catch (Exception e) {
+            }
+        }
     }
 
     private void drawOut(Canvas canvas) {
@@ -88,15 +103,27 @@ public class TotalCircleScoreBoard extends View {
         /***********绘制圆弧*************/
         float pad = Utils.dpToPx(ctx, 2);
         RectF rectf_head = new RectF(pad, pad, getWidth() - pad, getHeight() - pad);//确定外切矩形范围
-        canvas.drawArc(rectf_head, 120, 3 * step, false, paint);//绘制圆弧，不含圆心
-        //一共300，分100次，每次3
+
+        if (tag == "FINISH") {
+            canvas.drawArc(rectf_head, 120, 3 * step, false, paint);//绘制圆弧，不含圆心
+            //一共300，分100次，每次3
+        } else if (tag == "UNFINISH") {
+            int angle = 3 * step;
+            int yushu = angle / 300;
+            if (yushu % 2 == 1) {
+                angle = 300 * (yushu + 1) - angle;
+            } else {
+                angle = angle - 300 * yushu;
+            }
+            canvas.drawArc(rectf_head, 120, angle, false, paint);//绘制圆弧，不含圆心
+        }
     }
 
     private void drawInnerImage(Canvas canvas) {
         int center = getWidth() / 2;
         Rect rect_src = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-        Rect rect_dst = new Rect(center - Utils.dpToPx(ctx, 252 / 2), center - Utils.dpToPx(ctx, 252 / 2),
-                center + Utils.dpToPx(ctx, 252 / 2), center + Utils.dpToPx(ctx, 252 / 2));
+        Rect rect_dst = new Rect(center - Utils.dpToPx(ctx, 230 / 2), center - Utils.dpToPx(ctx, 230 / 2),
+                center + Utils.dpToPx(ctx, 230 / 2), center + Utils.dpToPx(ctx, 230 / 2));
         paint.setStyle(Paint.Style.STROKE);
         canvas.drawBitmap(bitmap, rect_src, rect_dst, paint);
     }
@@ -105,9 +132,30 @@ public class TotalCircleScoreBoard extends View {
         paint.setStyle(Paint.Style.FILL);
         paint.setStrokeWidth(1);
         paint.setColor(Color.parseColor("#411a1a"));
-        paint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 65, ctx.getResources().getDisplayMetrics()));
+        paint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 50, ctx.getResources().getDisplayMetrics()));
         String str = df.format(step * txt);
-        canvas.drawText(str, Utils.dpToPx(ctx, 60), Utils.dpToPx(ctx, 170), paint);
+
+        if (str.substring(str.length() - 2).equals("00")) {
+            str = str.substring(0, str.length() - 3);
+        }
+
+        int center = getWidth() / 2;
+
+        if (tag == "FINISH") {
+            Rect textRect = new Rect();
+            paint.getTextBounds(str, 0, str.length(), textRect);
+            canvas.drawText(str, center - textRect.width() / 2, center + textRect.height() / 2, paint);
+        } else if (tag == "UNFINISH") {
+            str = "计算中\n...";
+
+            Rect textRect = new Rect();
+            paint.getTextBounds(str, 0, "计算中".length(), textRect);
+            canvas.drawText("计算中", center - textRect.width() / 2, center + textRect.height() / 2, paint);
+
+            Rect textRect1 = new Rect();
+            paint.getTextBounds(str, 0, "...".length(), textRect1);
+            canvas.drawText("...", center - textRect1.width() / 2, center + textRect1.height() / 2, paint);
+        }
     }
 
     private DecimalFormat df = new DecimalFormat("#####0.00");
@@ -118,6 +166,13 @@ public class TotalCircleScoreBoard extends View {
     public void setDate(int step, double txt) {
         this.step = 100 - step;
         this.txt = txt;
+        invalidate();
+    }
+
+    private String tag = "FINISH";
+
+    public void setTag() {
+        this.tag = "UNFINISH";
         invalidate();
     }
 }

@@ -105,12 +105,21 @@ public class SingleCircleScoreBoard extends View {
         paint.setStyle(Paint.Style.FILL);
         paint.setStrokeWidth(1);
         paint.setColor(Color.parseColor("#411a1a"));
-        paint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 28, ctx.getResources().getDisplayMetrics()));
+        paint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 18, ctx.getResources().getDisplayMetrics()));
         String str = df.format(step * txt);
-        canvas.drawText(str, Utils.dpToPx(ctx, 16), Utils.dpToPx(ctx, 45), paint);
+
+        if (str.substring(str.length() - 2).equals("00")) {
+            str = str.substring(0, str.length() - 3);
+        }
+
+        Rect textRect = new Rect();
+        paint.getTextBounds(str, 0, str.length(), textRect);
+        int center = getWidth() / 2;
+
+        canvas.drawText(str, center - textRect.width() / 2, center + textRect.height() / 2, paint);
     }
 
-    private DecimalFormat df = new DecimalFormat("#####0");
+    private DecimalFormat df = new DecimalFormat("#####0.00");
 
     private int step = 0;
     private double txt = 0.00;

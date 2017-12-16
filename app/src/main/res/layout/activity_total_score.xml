@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,20 +10,46 @@
 
     <include layout="@layout/toolbar" />
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <com.sogukj.pe.view.CircleImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            app:civ_border_color="#66FFFFFF"
+            app:civ_border_width="2dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="张三"
+            android:textColor="#FFEF9687"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
     <com.sogukj.pe.view.TotalCircleScoreBoard
         android:id="@+id/total"
-        android:layout_width="274dp"
-        android:layout_height="274dp"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
         android:layout_gravity="center"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="10dp" />
 
     <LinearLayout
+        android:id="@+id/ll_finish"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="70dp"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <com.sogukj.pe.view.SingleCircleScoreBoard
             android:id="@+id/single1"
@@ -36,5 +63,15 @@
             android:layout_marginLeft="50dp" />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/ll_unfinish"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:gravity="center"
+        android:text="尚未完成计算\n正在等待其他同事完成评分"
+        android:textColor="#FFF57069"
+        android:textSize="20sp" />
 
 </LinearLayout>
