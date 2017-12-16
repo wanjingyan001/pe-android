@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.sogukj.pe">
-    <!--package="com.sogukj.pe"-->
 
+    <!-- package="com.sogukj.pe" -->
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -27,12 +27,13 @@
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="59b781c607fe652e44000165" />
-        <!--59b781c607fe652e44000165-->
+        <!-- 59b781c607fe652e44000165 -->
 
         <meta-data
             android:name="UMENG_MESSAGE_SECRET"
             android:value="a4bb361310d9aee916f2cc43c5dbda5c" />
-        <!--a4bb361310d9aee916f2cc43c5dbda5c-->
+        <!-- a4bb361310d9aee916f2cc43c5dbda5c -->
+
 
         <!-- <meta-data -->
         <!-- android:name="UMENG_CHANNEL" -->
@@ -92,7 +93,7 @@
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateVisible|adjustPan" />
-        <!--android:windowSoftInputMode="stateHidden|adjustResize"-->
+        <!-- android:windowSoftInputMode="stateHidden|adjustResize" -->
         <activity
             android:name=".ui.project.ProjectActivity"
             android:configChanges="orientation|screenSize"
@@ -515,8 +516,9 @@
             android:name=".ui.user.CardActivity"
             android:theme="@style/MyDialogActivity" />
         <activity android:name=".ui.calendar.ModifyScheduleActivity" />
-        <activity android:name=".ui.score.TotalScoreActivity"></activity>
-        <activity android:name=".ui.user.FeedBackActivity"></activity>
+        <activity android:name=".ui.score.TotalScoreActivity" />
+        <activity android:name=".ui.user.FeedBackActivity" />
+        <activity android:name=".ui.score.JudgeActivity"></activity>
     </application>
 
 </manifest>

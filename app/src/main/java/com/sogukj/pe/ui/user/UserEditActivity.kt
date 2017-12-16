@@ -131,6 +131,9 @@ class UserEditActivity : ToolbarActivity() {
                     })
                     .openGallery()
         }
+        tr_rate.setOnClickListener {
+
+        }
 
     }
 

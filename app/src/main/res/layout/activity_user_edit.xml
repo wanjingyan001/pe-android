@@ -174,5 +174,23 @@
                 android:layout_gravity="center_vertical"
                 android:src="@drawable/ic_arrow_r" />
         </TableRow>
+
+        <TableRow
+            android:id="@+id/tr_rate"
+            android:background="@drawable/divider_bottom">
+
+            <TextView
+                style="@style/TableTextLabel"
+                android:text="年终评分" />
+
+            <TextView
+                android:id="@+id/tv_rate"
+                style="@style/TableTextValue"
+                android:hint="暂未开启" />
+
+            <ImageView
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_arrow_r" />
+        </TableRow>
     </TableLayout>
 </LinearLayout>
