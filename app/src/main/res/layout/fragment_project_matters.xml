@@ -41,15 +41,4 @@
         <include layout="@layout/layout_empty" />
     </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/addSchedule"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="50dp"
-        android:layout_marginLeft="20dp"
-        android:scaleType="center"
-        android:src="@mipmap/ic_add_schedule"
-        app:borderWidth="0.0dp" />
 </RelativeLayout>

@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.os.Environment
 import android.text.TextUtils
 import android.view.MenuItem
-import android.view.View
 import cn.finalteam.rxgalleryfinal.RxGalleryFinal
 import cn.finalteam.rxgalleryfinal.imageloader.ImageLoaderType
 import cn.finalteam.rxgalleryfinal.rxbus.RxBusResultDisposable
@@ -71,32 +70,39 @@ class UserEditActivity : ToolbarActivity() {
                         .load(headImage())
 //                        .error(R.drawable.img_logo_user)
                         .into(iv_user)
+            if(full!=null){
+                tv_resume.text = "简历完整度:${full}"
+            }
         }
 
         tr_resume.setOnClickListener {
-            UserResumeActivity.start(this)
+            UserResumeActivity.start(this,Store.store.getUser(this)!!)
         }
         tv_depart.setOnClickListener {
             val items = ArrayList<String?>()
+            var position = -1
             departList?.forEach {
                 items.add(it.de_name)
             }
+            items.forEachIndexed { index, s ->
+                if (s!! == tv_depart.text){
+                    position = index
+                }
+            }
+
             MaterialDialog.Builder(this@UserEditActivity)
                     .theme(Theme.LIGHT)
                     .title("选择部门")
                     .items(items)
-                    .itemsCallbackSingleChoice(-1, object : MaterialDialog.ListCallbackSingleChoice {
-                        override fun onSelection(dialog: MaterialDialog?, v: View?, p: Int, s: CharSequence?): Boolean {
-                            if (p == -1) return false
-                            val data = departList?.get(p)
-                            data?.apply {
-                                user.depart_id = depart_id
-                                user.depart_name = de_name
-                            }
-                            tv_depart.text = user.depart_name
-                            return true
+                    .itemsCallbackSingleChoice(position, MaterialDialog.ListCallbackSingleChoice { dialog, v, p, s ->
+                        if (p == -1) return@ListCallbackSingleChoice false
+                        val data = departList?.get(p)
+                        data?.apply {
+                            user.depart_id = depart_id
+                            user.depart_name = de_name
                         }
-
+                        tv_depart.text = user.depart_name
+                        true
                     })
                     .positiveText("确定")
                     .negativeText("取消")

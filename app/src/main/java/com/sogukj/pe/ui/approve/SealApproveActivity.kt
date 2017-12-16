@@ -14,11 +14,9 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
 import com.framework.base.ToolbarActivity
-import com.nbsp.materialfilepicker.ui.FilePickerActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.*
-import com.sogukj.pe.util.PdfUtil
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.CircleImageView
 import com.sogukj.service.SoguApi
@@ -46,20 +44,25 @@ class SealApproveActivity : ToolbarActivity() {
         inflater = LayoutInflater.from(this)
         val paramObj = intent.getSerializableExtra(Extras.DATA)
         is_mine = intent.getIntExtra("is_mine", 2)
-        if (paramObj is ApprovalBean) {
-            paramTitle = paramObj.kind!!
-            paramId = paramObj.approval_id!!
-            paramType = paramObj.type
-        } else if (paramObj is MessageBean) {
-            paramTitle = paramObj.type_name!!
-            paramId = paramObj.approval_id!!
-            paramType = paramObj.type
-        } else if (paramObj is SpGroupItemBean) {
-            paramTitle = paramObj.name!!
-            paramId = paramObj.id!!
-            paramType = paramObj.type
+        if (paramObj == null) {
+            paramId = intent.getIntExtra(Extras.ID, -1)
+            title = intent.getStringExtra(Extras.TITLE)
         } else {
-            finish()
+            if (paramObj is ApprovalBean) {
+                paramTitle = paramObj.kind!!
+                paramId = paramObj.approval_id!!
+                paramType = paramObj.type
+            } else if (paramObj is MessageBean) {
+                paramTitle = paramObj.type_name!!
+                paramId = paramObj.approval_id!!
+                paramType = paramObj.type
+            } else if (paramObj is SpGroupItemBean) {
+                paramTitle = paramObj.name!!
+                paramId = paramObj.id!!
+                paramType = paramObj.type
+            } else {
+                finish()
+            }
         }
         setContentView(R.layout.activity_seal_approve)
         setBack(true)
@@ -479,6 +482,14 @@ class SealApproveActivity : ToolbarActivity() {
             val intent = Intent(ctx, SealApproveActivity::class.java)
             intent.putExtra("is_mine", is_mine)
             intent.putExtra(Extras.DATA, bean)
+            ctx?.startActivity(intent)
+        }
+
+        fun start(ctx: Activity?, data_id: Int, title: String) {
+            val intent = Intent(ctx, SealApproveActivity::class.java)
+            intent.putExtra("is_mine", 2)
+            intent.putExtra(Extras.ID, data_id)
+            intent.putExtra(Extras.TITLE, title)
             ctx?.startActivity(intent)
         }
     }

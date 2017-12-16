@@ -33,6 +33,9 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
 import java.util.HashMap
+import kotlin.collections.ArrayList
+import kotlin.collections.component1
+import kotlin.collections.component2
 /**
  * Created by qinfei on 17/10/18.
  */
@@ -509,6 +512,7 @@ class BuildSignActivity : ToolbarActivity() {
             MaterialFilePicker()
                     .withActivity(this)
                     .withRequestCode(REQ_SELECT_FILE)
+                    .withTitle("内部存储")
 //                    .withFilter(Pattern.compile(".*\\.txt$")) // Filtering files and directories by file name using regexp
                     .start()
         }

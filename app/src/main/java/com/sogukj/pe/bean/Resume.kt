@@ -1,15 +1,17 @@
 package com.sogukj.pe.bean
 
+import java.io.Serializable
+
 /**
  * Created by admin on 2017/12/2.
  */
 
-class Resume {
+class Resume :Serializable {
     var baseInfo: BaseInfoBean? = null//基础信息
     var eduction: List<EductionBean>? = null//教育经历
     var work: List<WorkBean>? = null//工作经历
 
-    class BaseInfoBean {
+   inner class BaseInfoBean :Serializable{
         /**
          * position : 风控副总裁
          * sex : 3
@@ -35,7 +37,7 @@ class Resume {
         var phone: String? = null//联系电话
     }
 
-    class EductionBean {
+   inner class EductionBean :Serializable{
         /**
          * id : 1
          * toSchoolDate : 2011/06
@@ -55,7 +57,7 @@ class Resume {
         var majorInfo: String? = null//专业描述
     }
 
-    class WorkBean {
+   inner class WorkBean :Serializable{
         /**
          * id : 1
          * employDate : 2017/01

@@ -1,6 +1,5 @@
 package com.sogukj.pe.ui.user
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
@@ -20,10 +19,8 @@ import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_user_resume.*
 import kotlinx.android.synthetic.main.activity_work_expericence_add.*
 import kotlinx.android.synthetic.main.layout_shareholder_toolbar.*
-import java.text.SimpleDateFormat
 import java.util.*
 
 class WorkExpericenceAddActivity : BaseActivity(), View.OnClickListener {
@@ -145,7 +142,7 @@ class WorkExpericenceAddActivity : BaseActivity(), View.OnClickListener {
                     tv_start_date.text = Utils.getTime(date)
                 })
                         //年月日时分秒 的显示与否，不设置则默认全部显示
-                        .setType(booleanArrayOf(true, true, true, false, false, false))
+                        .setType(booleanArrayOf(true, true, false, false, false, false))
                         .setDividerColor(Color.DKGRAY)
                         .setContentSize(21)
                         .setDate(selectedDate)
@@ -160,7 +157,7 @@ class WorkExpericenceAddActivity : BaseActivity(), View.OnClickListener {
                     tv_date_end.text = Utils.getTime(date)
                 })
                         //年月日时分秒 的显示与否，不设置则默认全部显示
-                        .setType(booleanArrayOf(true, true, true, false, false, false))
+                        .setType(booleanArrayOf(true, true, false, false, false, false))
                         .setDividerColor(Color.DKGRAY)
                         .setContentSize(21)
                         .setDate(selectedDate)

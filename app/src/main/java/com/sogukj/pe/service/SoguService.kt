@@ -65,7 +65,7 @@ interface SoguService {
     fun uploadImg(@Body body: RequestBody): Observable<Payload<Object>>
 
     @FormUrlEncoded
-    @POST("/api/userFont/changeMyInfo")
+    @POST("/api/Userfont/changeMyInfo")
     fun saveUser(@Field("uid") uid: Int
                  , @Field("name") name: String? = null
                  , @Field("depart_id") depart_id: Int? = null
@@ -735,7 +735,7 @@ interface SoguService {
      */
     @FormUrlEncoded
     @POST("/api/Userfont/getPersonalResume")
-    fun getPersonalResume(@Field("uid") uid: Int): Observable<Payload<Resume>>
+    fun getPersonalResume(@Field("user_id") user_id: Int): Observable<Payload<Resume>>
 
     /**
      * 简历-添加教育经历
@@ -754,6 +754,15 @@ interface SoguService {
      */
     @POST("/api/Userfont/editResumeBaseInfo")
     fun editResumeBaseInfo(@Body ae: UserResumeReqBean): Observable<Payload<Any>>
+
+    /**
+     * 删除（教育|工作）经历
+     */
+    @FormUrlEncoded
+    @POST("/api/UserFont/deleteExperience")
+    fun deleteExperience(@Field("we_id") we_id: Int,//教育|工作ID（非空必传 )
+                         @Field("type") type: Int //非空（1=>教育，2=>工作）
+    ): Observable<Payload<Any>>
 
     /**
      * 获取日程/团队日程
@@ -794,14 +803,13 @@ interface SoguService {
 
 
     /**
-     * 项目关键节点
-     * project_type 1 2 3
+     * 项目关键节点|项目代办|项目完成
+     *
      */
     @FormUrlEncoded
     @POST("/api/Calendar/projectMatter")
     fun projectMatter(@Field("company_id") company_id: Int,
-                      @Field("is_important") is_important: Int? = null,//是否节点 1=>项目关键节点
-                      @Field("is_finish") is_finish: Int? = null//是否完成 1=>项目完成，0=>项目代办  选择此项时is_important必空
+                      @Field("project_type") project_type: Int = 1//1=>项目关键节点,2=>项目完成，3=>项目代办
     ): Observable<Payload<List<KeyNode>>>
 
 
@@ -810,8 +818,8 @@ interface SoguService {
      */
     @FormUrlEncoded
     @POST("/api/Calendar/projectMatter")
-    fun projectMatter(@Field("company_id") company_id: Int,
-                      @Field("is_finish") is_finish: Int? = null//是否完成 1=>项目完成，0=>项目代办  选择此项时is_important必空
+    fun projectMatter2(@Field("company_id") company_id: Int,
+                       @Field("project_type") project_type: Int? = null//1=>项目关键节点,2=>项目完成，3=>项目代办
     ): Observable<Payload<List<MatterDetails>>>
 
     /**
@@ -843,6 +851,10 @@ interface SoguService {
     @POST("/api/Calendar/aeCalendarInfo")
     fun aeCalendarInfo(@Body reqBean: TaskModifyBean): Observable<Payload<Any>>
 
+    @FormUrlEncoded
+    @POST("/api/Calendar/deleteTask")
+    fun deleteTask(@Field("data_id")data_id:Int): Observable<Payload<Any>>
+
     /**
      * 重大事件
      */
@@ -850,10 +862,29 @@ interface SoguService {
     @POST("api/Calendar/showGreatPoint")
     fun showGreatPoint(@Field("timer") timer: String): Observable<Payload<List<String>>>
 
+    /**
+     * 完成任务
+     */
     @FormUrlEncoded
     @POST("/api/Calendar/finishTask")
-    fun finishTask(@Field("rid")rid :Int) :Observable<Payload<Any>>
+    fun finishTask(@Field("rid") rid: Int): Observable<Payload<Any>>
 
+
+    /**
+     * 意见反馈
+     */
+    @FormUrlEncoded
+    @POST("/api/Userfont/addFeedback")
+    fun addFeedback(@Field("suggestion") suggestion: String,
+                    @Field("contacter") contacter: String? = null,
+                    @Field("contactWay") contactWay: String): Observable<Payload<Any>>
+
+    /**
+     * 获取个人项目归属信息
+     */
+    @FormUrlEncoded
+    @POST("/api/UserFont/getBelongProject")
+    fun getBelongProject(@Field("user_id") user_id: Int): Observable<Payload<BelongBean>>
 
     companion object {
         const val APPKEY_NAME = "appkey"

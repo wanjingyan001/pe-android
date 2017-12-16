@@ -17,6 +17,7 @@ open class UserBean() : Serializable {
     var numberOfShares: Int = 0
     var is_admin: Int = 0
     var user_id: Int? = null
+    var full: String? = null
 
 
     fun headImage(): String? {

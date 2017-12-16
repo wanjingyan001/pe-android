@@ -89,6 +89,46 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/divider2" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="我关注的公司"
+                android:textColor="@color/text_1"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_6"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:paddingRight="10dp"
+                android:textColor="#bdbdbd"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_right" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="12dp"
             android:background="@color/divider2" />
 
         <TableLayout
@@ -146,6 +186,13 @@
                 <TextView
                     android:layout_weight="1"
                     android:gravity="center"
+                    android:text="调研"
+                    android:textColor="@color/text_3"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_weight="1"
+                    android:gravity="center"
                     android:text="储备"
                     android:textColor="@color/text_3"
                     android:textSize="12sp" />
@@ -168,13 +215,6 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="退出"
-                    android:textColor="@color/text_3"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="关注"
                     android:textColor="@color/text_3"
                     android:textSize="12sp" />
             </TableRow>

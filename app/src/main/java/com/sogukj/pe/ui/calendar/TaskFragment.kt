@@ -5,11 +5,9 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.View
 import android.widget.CompoundButton
 import com.framework.base.BaseFragment
-import com.google.gson.Gson
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import com.lcodecore.tkrefreshlayout.footer.BallPulseView
@@ -56,7 +54,7 @@ class TaskFragment : BaseFragment(), View.OnClickListener, TaskFilterWindow.Filt
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
-        doRequest(page, range, isFinish)
+
         dateFilter.setOnClickListener(this)
         taskFilter.setOnClickListener(this)
     }
@@ -91,6 +89,11 @@ class TaskFragment : BaseFragment(), View.OnClickListener, TaskFilterWindow.Filt
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        doRequest(page, range, isFinish)
+    }
+
     fun doRequest(page: Int, range: String, isFinish: String) {
         SoguApi.getService(activity.application)
                 .showTask(page = page, range = range, is_finish = isFinish)
@@ -101,7 +104,6 @@ class TaskFragment : BaseFragment(), View.OnClickListener, TaskFilterWindow.Filt
                         if (page == 1){
                             data.clear()
                         }
-                        Log.d("WJY", Gson().toJson(payload.payload))
                         payload.payload.let {
                             data.clear()
                             it?.forEachIndexed { index, taskItemBean ->
@@ -181,7 +183,7 @@ class TaskFragment : BaseFragment(), View.OnClickListener, TaskFilterWindow.Filt
         when (view.id) {
             R.id.taskItemLayout -> {
                 val bean = data[position] as TaskItemBean.ItemBean
-                TaskDetailActivity.start(activity, bean)
+                TaskDetailActivity.start(activity, bean.data_id,bean.title,ModifyTaskActivity.Task)
             }
         }
     }
@@ -190,17 +192,22 @@ class TaskFragment : BaseFragment(), View.OnClickListener, TaskFilterWindow.Filt
         val bean = data[position] as TaskItemBean.ItemBean
         bean.is_finish = if (isChecked) 1 else 0
         taskAdapter.notifyItemChanged(position)
-        finishTask(bean.data_id)
+        finishTask(bean.data_id,isChecked)
+
     }
 
-    fun finishTask(id: Int) {
+    fun finishTask(id: Int, isChecked: Boolean) {
         SoguApi.getService(activity.application)
                 .finishTask(id)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        showToast("任务标记成功")
+                        if (isChecked){
+                            showToast("您完成了该任务")
+                        }else{
+                            showToast("您重新打开了该任务")
+                        }
                     } else {
                         showToast(payload.message)
                     }

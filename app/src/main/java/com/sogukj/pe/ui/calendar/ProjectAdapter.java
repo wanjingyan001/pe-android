@@ -67,7 +67,7 @@ public class ProjectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ProjectMatterMD md = (ProjectMatterMD) o;
             try {
                 Date parse = new SimpleDateFormat("yyyy-MM-dd").parse(md.getMDTime());
-                ((ProjectHolder) holder).MDTime.setText(Utils.getTime(parse, "yyyy年MM月dd日"));
+                ((ProjectHolder) holder).MDTime.setText(Utils.getTime(parse, "MM月dd日"));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -86,16 +86,22 @@ public class ProjectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             });
         } else if (holder instanceof BeanHolder) {
             ScheduleBean info = (ScheduleBean) o;
-            ((BeanHolder) holder).timeTv.setText(info.getStart_time());
+            try {
+                Date parse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(info.getStart_time());
+                ((BeanHolder) holder).timeTv.setText(Utils.getTime(parse,"HH:mm"));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
             ((BeanHolder) holder).contentTv.setText(info.getTitle());
-            if (info.is_finish() == 1){
+            if (info.is_finish() == 1) {
                 ((BeanHolder) holder).finishBox.setChecked(true);
                 ((BeanHolder) holder).contentTv.setPaintFlags(
                         ((BeanHolder) holder).contentTv.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-            }else {
+            } else {
                 ((BeanHolder) holder).finishBox.setChecked(false);
                 ((BeanHolder) holder).contentTv.setPaintFlags(
-                        ((BeanHolder) holder).contentTv.getPaintFlags()  & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                        ((BeanHolder) holder).contentTv.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
             }
             ((BeanHolder) holder).view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -107,12 +113,12 @@ public class ProjectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     ((BeanHolder) holder).finishBox.setChecked(isChecked);
-                    if (isChecked){
+                    if (isChecked) {
                         ((BeanHolder) holder).contentTv.setPaintFlags(
                                 ((BeanHolder) holder).contentTv.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                    }else {
+                    } else {
                         ((BeanHolder) holder).contentTv.setPaintFlags(
-                                ((BeanHolder) holder).contentTv.getPaintFlags()  & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                                ((BeanHolder) holder).contentTv.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
                     }
                     itemClickListener.finishCheck(buttonView, isChecked, position);
                 }
@@ -155,9 +161,11 @@ public class ProjectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     class MatterHolder extends RecyclerView.ViewHolder {
         private TextView companyName;
         private ImageView companyDetails;
+        private View view;
 
         public MatterHolder(View itemView) {
             super(itemView);
+            view = itemView;
             companyName = ((TextView) itemView.findViewById(R.id.companyName));
             companyDetails = ((ImageView) itemView.findViewById(R.id.companyDetails));
         }

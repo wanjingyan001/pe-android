@@ -21,6 +21,7 @@
     <string name="tv_title_result_news" formatted="false">匹配到&lt;font color="#ff3300">%d&lt;/font>条资讯: </string>
     <string name="tv_title_result_search" formatted="false">匹配到&lt;font color="#ff3300">%d&lt;/font>条结果: </string>
     <string-array name="Language">
+        <item>汉语</item>
         <item>英语</item>
         <item>德语</item>
         <item>法语</item>
@@ -62,4 +63,7 @@
         <item>项目事务</item>
         <item>个人事务</item>
     </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

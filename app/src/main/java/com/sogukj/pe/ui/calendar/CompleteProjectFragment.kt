@@ -48,7 +48,7 @@ class CompleteProjectFragment : BaseFragment() {
 
     fun doRequest(id: String) {
         SoguApi.getService(activity.application)
-                .projectMatter(id.toInt(), 1)
+                .projectMatter2(id.toInt(), 2)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->

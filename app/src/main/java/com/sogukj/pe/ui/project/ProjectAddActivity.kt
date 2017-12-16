@@ -3,7 +3,6 @@ package com.sogukj.pe.ui.project
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.view.MenuItem
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
@@ -37,19 +36,22 @@ class ProjectAddActivity : ToolbarActivity() {
             et_credit_code.setText(data.creditCode)
             et_other.setText(data.info)
         }
-    }
-
-    override val menuId: Int
-        get() = R.menu.user_edit
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
-            R.id.action_save -> {
-                doSave();return true;
-            }
+        btn_commit.setOnClickListener {
+            doSave()
         }
-        return false
     }
+
+//    override val menuId: Int
+//        get() = R.menu.user_edit
+//
+//    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+//        when (item?.itemId) {
+//            R.id.action_save -> {
+//                doSave();return true;
+//            }
+//        }
+//        return false
+//    }
 
     private fun doSave() {
         val project = ProjectBean()

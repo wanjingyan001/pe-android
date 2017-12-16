@@ -17,6 +17,8 @@ import com.ldf.calendar.view.Calendar
 import com.ldf.calendar.view.MonthPager
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.ScheduleBean
+import com.sogukj.pe.ui.approve.SealApproveActivity
+import com.sogukj.pe.ui.approve.SignApproveActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
@@ -46,6 +48,8 @@ class ScheduleFragment : BaseFragment() {
     lateinit var date: String
     lateinit var calendarAdapter: CalendarViewAdapter
 
+    lateinit var selectDate: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (arguments != null) {
@@ -61,11 +65,8 @@ class ScheduleFragment : BaseFragment() {
         calendar_view.setViewheight(Utils.dpToPx(context, 270))
         initCalendarView()
         initList()
-        doRequest(page, SimpleDateFormat("yyyy-MM-dd").format(Date(System.currentTimeMillis())))
 
-        addSchedule.setOnClickListener {
-            ModifyScheduleActivity.start(activity)
-        }
+        selectDate = SimpleDateFormat("yyyy-MM-dd").format(Date(System.currentTimeMillis()))
     }
 
 
@@ -76,7 +77,8 @@ class ScheduleFragment : BaseFragment() {
                 //选中日期监听
                 val calendar = java.util.Calendar.getInstance()
                 calendar.set(date?.year!!, date.month - 1, date.day)
-                doRequest(page, Utils.getTime(calendar.time.time, "yyyy-MM-dd"))
+                selectDate = Utils.getTime(calendar.time.time, "yyyy-MM-dd")
+                doRequest(page, selectDate)
             }
 
             override fun onSelectOtherMonth(offset: Int) {
@@ -112,7 +114,6 @@ class ScheduleFragment : BaseFragment() {
                 val currentCalendars = calendarAdapter.pagers
                 if (currentCalendars[position % currentCalendars.size] is Calendar) {
                     val date = currentCalendars[position % currentCalendars.size].seedDate
-                    Log.d("WJY", "${date.year}年\n${date.month}月")
                     monthSelect.onMonthSelect(date)
                     this@ScheduleFragment.date = "${date.year}年${date.month}月"
                     val time = Utils.getSupportBeginDayofMonth(date.year, date.month - 1)
@@ -128,6 +129,11 @@ class ScheduleFragment : BaseFragment() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        doRequest(page, selectDate)
+    }
+
 
     fun doRequest(page: Int, date: String) {
         SoguApi.getService(activity.application)
@@ -138,7 +144,6 @@ class ScheduleFragment : BaseFragment() {
                     if (payload.isOk) {
                         data.clear()
                         payload.payload?.let {
-                            Log.d("WJY", "${it.size}")
                             if (it.isNotEmpty()) {
                                 val bean = ScheduleBean()
                                 bean.start_time = it[0].start_time
@@ -164,7 +169,7 @@ class ScheduleFragment : BaseFragment() {
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         payload.payload?.let {
-                            Log.d("WJY", Gson().toJson(it))
+                            Log.d("WJY", Gson().toJson(payload.payload))
                             val map = HashMap<String, String>()
                             it.forEach {
                                 map.put(it, "1")
@@ -178,14 +183,18 @@ class ScheduleFragment : BaseFragment() {
                 })
     }
 
-    fun finishTask(id: Int) {
+    fun finishTask(id: Int, isChecked: Boolean) {
         SoguApi.getService(activity.application)
                 .finishTask(id)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        showToast("日程标记成功")
+                        if (isChecked) {
+                            showToast("您完成了该日程")
+                        } else {
+                            showToast("您重新打开了该日程")
+                        }
                     } else {
                         showToast(payload.message)
                     }
@@ -200,12 +209,47 @@ class ScheduleFragment : BaseFragment() {
         list.adapter = adapter
         adapter.setListener(object : ScheduleItemClickListener {
             override fun onItemClick(view: View, position: Int) {
-                ModifyScheduleActivity.start(activity, data[position].data_id!!)
+                val scheduleBean = data[position]
+                when (scheduleBean.type) {
+                    0 -> {
+                        //日程
+                        TaskDetailActivity.start(activity, scheduleBean.data_id!!, scheduleBean.title!!, ModifyTaskActivity.Schedule)
+                    }
+                    1 -> {
+                        //任务
+                        TaskDetailActivity.start(activity, scheduleBean.data_id!!, scheduleBean.title!!, ModifyTaskActivity.Task)
+                    }
+                    2 -> {
+                        //会议
+                    }
+                    3 -> {
+                        //用印审批
+                        SealApproveActivity.start(activity, scheduleBean.data_id!!, "用印审批")
+                    }
+                    4 -> {
+                        //签字审批
+                        SignApproveActivity.start(activity, scheduleBean.data_id!!, "签字审批")
+                    }
+                    5 -> {
+                        //跟踪记录
+
+                    }
+                    6 -> {
+                        //项目
+
+                    }
+                    7 -> {
+                        //请假
+                    }
+                    8 -> {
+                        // 出差
+                    }
+                }
             }
 
             override fun finishCheck(buttonView: CompoundButton, isChecked: Boolean, position: Int) {
                 val scheduleBean = data[position]
-                scheduleBean.id?.let { finishTask(it) }
+                scheduleBean.id?.let { finishTask(it, isChecked) }
             }
         })
     }

@@ -11,6 +11,7 @@ class TaskDetailBean : Serializable {
 
     inner class Info : Serializable {
         var number: String? = null//任务编号
+        var cName: String = ""//关联项目
         var publisher: String? = null//任务发布者
         var timing: String? = null//安排时间
         var info: String? = null//任务详情

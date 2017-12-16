@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
+import android.view.View
 import com.framework.base.ToolbarActivity
 import com.ldf.calendar.model.CalendarDate
 import com.sogukj.pe.R
@@ -42,11 +43,14 @@ class CalendarMainActivity : ToolbarActivity(), MonthSelectListener, ViewPager.O
         val adapter = ContentAdapter(supportFragmentManager, fragments, titles)
         contentPager.adapter = adapter
         tabLayout.setupWithViewPager(contentPager)
-        Utils.setUpIndicatorWidth(tabLayout, 18, 18, this)
+        Utils.setUpIndicatorWidth(tabLayout, 12, 12, this)
 
         contentPager.addOnPageChangeListener(this)
         contentPager.currentItem = 0
         title = SimpleDateFormat("yyyy年MM月").format(Date(System.currentTimeMillis()))
+        addSchedule.setOnClickListener {
+            ModifyTaskActivity.startForCreate(this, ModifyTaskActivity.Schedule)
+        }
     }
 
     override fun onMonthSelect(date: CalendarDate) {
@@ -63,14 +67,32 @@ class CalendarMainActivity : ToolbarActivity(), MonthSelectListener, ViewPager.O
 
     override fun onPageSelected(position: Int) {
         when (position) {
-            1, 2 -> {
-                title = "日历"
-            }
             0 -> {
                 title = scheduleFragment.date
+                addSchedule.visibility = View.VISIBLE
+                addSchedule.setOnClickListener {
+                    ModifyTaskActivity.startForCreate(this, ModifyTaskActivity.Schedule)
+                }
+            }
+            1 -> {
+                title = "日历"
+                addSchedule.visibility = View.VISIBLE
+                addSchedule.setOnClickListener {
+                    ModifyTaskActivity.startForCreate(this, ModifyTaskActivity.Task)
+                }
+            }
+            2 -> {
+                title = "日历"
+                addSchedule.visibility = View.VISIBLE
+                addSchedule.setOnClickListener {
+                    ModifyTaskActivity.startForCreate(this, "")
+                }
             }
             3 -> {
                 title = teamScheduleFragment.date
+                addSchedule.setOnClickListener {
+                    ModifyTaskActivity.startForCreate(this, ModifyTaskActivity.Schedule)
+                }
             }
         }
     }

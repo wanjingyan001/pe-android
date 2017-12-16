@@ -21,6 +21,8 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.CustomSealBean
 import com.sogukj.pe.bean.ScheduleBean
+import com.sogukj.pe.ui.approve.SealApproveActivity
+import com.sogukj.pe.ui.approve.SignApproveActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
@@ -32,6 +34,7 @@ import org.jetbrains.anko.support.v4.find
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 /**
@@ -90,8 +93,6 @@ class ProjectMattersFragment : BaseFragment(), View.OnClickListener, ScheduleIte
 
         })
 
-
-        doRequest(page, date)
         window = CalendarWindow(context, { date ->
             page = 1
             val calendar = java.util.Calendar.getInstance()
@@ -129,19 +130,20 @@ class ProjectMattersFragment : BaseFragment(), View.OnClickListener, ScheduleIte
                                     }
                                     companyid = scheduleBean.company_id.toString()
                                 }
-                                val matterCompany = ProjectMatterCompany(projectMattersBean.cName!!, companyid)
-                                if (!companyList.contains(matterCompany)) {
-                                    companyList.add(matterCompany)
+                                projectMattersBean.cName?.let {
+                                    val matterCompany = ProjectMatterCompany(it, companyid)
+                                    if (!companyList.contains(matterCompany)) {
+                                        companyList.add(matterCompany)
+                                    }
                                 }
                             }
-                            val companys = ArrayList<ProjectMatterCompany>()
-                            val infos = ArrayList<ScheduleBean>()
                             dayList.forEachIndexed { index, s ->
+                                val map = HashMap<String, List<ScheduleBean>>()
                                 val md = ProjectMatterMD(s)
                                 data.add(md)
                                 companyList.forEachIndexed { position, name ->
+                                    val infos = ArrayList<ScheduleBean>()
                                     data.add(name)
-                                    companys.add(name)
                                     infoList.forEachIndexed { i, scheduleBean ->
                                         val day = scheduleBean.start_time?.split(" ")?.get(0)
                                         if (day.equals(s) && name.companyId == scheduleBean.company_id.toString()) {
@@ -149,14 +151,15 @@ class ProjectMattersFragment : BaseFragment(), View.OnClickListener, ScheduleIte
                                             infos.add(scheduleBean)
                                         }
                                     }
-                                    if (infos.size == 0) {
-                                        data.remove(name)
-                                        companys.remove(name)
-                                    }
+                                    map.put(name.companyName, infos)
                                 }
-                                if (companys.size == 0) {
-                                    data.remove(md)
-                                }
+//                                data.forEachIndexed { index2, any ->
+//                                    if (any is ProjectMatterCompany){
+//                                        if (map.getValue(any.companyName).isEmpty()) {
+//                                            data.remove(index2)
+//                                        }
+//                                    }
+//                                }
                             }
                             projectAdapter.notifyDataSetChanged()
                         }
@@ -182,6 +185,11 @@ class ProjectMattersFragment : BaseFragment(), View.OnClickListener, ScheduleIte
                 })
     }
 
+    override fun onResume() {
+        super.onResume()
+        doRequest(page, date)
+    }
+
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.matters_img1 -> {
@@ -196,21 +204,61 @@ class ProjectMattersFragment : BaseFragment(), View.OnClickListener, ScheduleIte
     }
 
     override fun onItemClick(view: View, position: Int) {
+        val bean = data[position] as ScheduleBean
+
+        when (bean.type) {
+            0 -> {
+                //日程
+                TaskDetailActivity.start(activity, bean.data_id!!, bean.title!!, ModifyTaskActivity.Schedule)
+            }
+            1 -> {
+                //任务
+                TaskDetailActivity.start(activity, bean.data_id!!, bean.title!!, ModifyTaskActivity.Task)
+            }
+            2 -> {
+                //会议
+            }
+            3 -> {
+                //用印审批
+                SealApproveActivity.start(activity, bean.data_id!!, "用印审批")
+            }
+            4 -> {
+                //签字审批
+                SignApproveActivity.start(activity, bean.data_id!!, "签字审批")
+            }
+            5 -> {
+                //跟踪记录
+            }
+            6 -> {
+                //项目
+            }
+            7 -> {
+                //请假
+            }
+            8 -> {
+                // 出差
+            }
+        }
+
     }
 
     override fun finishCheck(buttonView: CompoundButton, isChecked: Boolean, position: Int) {
         val bean = data[position] as ScheduleBean
-        bean.id?.let { finishTask(it) }
+        bean.id?.let { finishTask(it, isChecked) }
     }
 
-    fun finishTask(id: Int) {
+    fun finishTask(id: Int, isChecked: Boolean) {
         SoguApi.getService(activity.application)
                 .finishTask(id)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        showToast("日程标记成功")
+                        if (isChecked) {
+                            showToast("您完成了该项目事项")
+                        } else {
+                            showToast("您重新打开了该项目事项")
+                        }
                     } else {
                         showToast(payload.message)
                     }

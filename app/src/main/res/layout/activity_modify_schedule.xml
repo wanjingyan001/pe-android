@@ -7,6 +7,7 @@
     android:background="@color/calendar_bg_color"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
+    android:id="@+id/modify_schedule_main"
     tools:context="com.sogukj.pe.ui.calendar.ModifyTaskActivity">
 
     <include layout="@layout/toolbar" />
@@ -89,23 +90,21 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="关联项目（选填）"
+                        android:text="关联项目"
                         android:textColor="@color/shareholder_text_gray"
                         android:textSize="14sp" />
 
-                    <EditText
-                        android:id="@+id/associatedEdt"
+                    <TextView
+                        android:id="@+id/relatedProject"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:layout_weight="1"
-                        android:background="@null"
                         android:drawablePadding="10dp"
+                        android:drawableRight="@drawable/ic_right"
                         android:gravity="right|center_vertical"
-                        android:hint="请填写"
-                        android:textColor="@color/text_1"
-                        android:textColorHint="@color/text_3"
-                        android:textSize="14sp" />
+                        android:text="请选择"
+                        android:textColor="@color/text_1" />
 
                 </LinearLayout>
 
@@ -216,36 +215,36 @@
                 android:background="@color/white"
                 android:orientation="vertical">
 
-                <!--<LinearLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:gravity="center_vertical"-->
-                    <!--android:orientation="horizontal"-->
-                    <!--android:paddingBottom="18dp"-->
-                    <!--android:paddingLeft="20dp"-->
-                    <!--android:paddingRight="15dp"-->
-                    <!--android:paddingTop="18dp">-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingBottom="18dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="15dp"
+                    android:paddingTop="18dp">
 
-                    <!--<TextView-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:text="开始时间"-->
-                        <!--android:textColor="@color/shareholder_text_gray"-->
-                        <!--android:textSize="14sp" />-->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="开始时间"
+                        android:textColor="@color/shareholder_text_gray"
+                        android:textSize="14sp" />
 
-                    <!--<TextView-->
-                        <!--android:id="@+id/startTime"-->
-                        <!--android:layout_width="0dp"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_marginLeft="10dp"-->
-                        <!--android:layout_weight="1"-->
-                        <!--android:drawablePadding="10dp"-->
-                        <!--android:drawableRight="@drawable/ic_right"-->
-                        <!--android:gravity="right|center_vertical"-->
-                        <!--android:text="请选择"-->
-                        <!--android:textColor="@color/text_1" />-->
+                    <TextView
+                        android:id="@+id/startTime"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:drawablePadding="10dp"
+                        android:drawableRight="@drawable/ic_right"
+                        android:gravity="right|center_vertical"
+                        android:text="请选择"
+                        android:textColor="@color/text_1" />
 
-                <!--</LinearLayout>-->
+                </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
@@ -325,38 +324,38 @@
 
                 </LinearLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:background="@color/divider2" />
+                <!--<View-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="1dp"-->
+                    <!--android:layout_marginLeft="20dp"-->
+                    <!--android:layout_marginRight="20dp"-->
+                    <!--android:background="@color/divider2" />-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:orientation="vertical"
-                    android:paddingBottom="18dp"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="15dp"
-                    android:paddingTop="18dp">
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:background="@color/white"-->
+                    <!--android:orientation="vertical"-->
+                    <!--android:paddingBottom="18dp"-->
+                    <!--android:paddingLeft="20dp"-->
+                    <!--android:paddingRight="15dp"-->
+                    <!--android:paddingTop="18dp">-->
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
-                        android:text="抄送人"
-                        android:textColor="@color/shareholder_text_gray"
-                        android:textSize="14sp" />
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_marginBottom="5dp"-->
+                        <!--android:text="抄送人"-->
+                        <!--android:textColor="@color/shareholder_text_gray"-->
+                        <!--android:textSize="14sp" />-->
 
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/copyList"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                    <!--<android.support.v7.widget.RecyclerView-->
+                        <!--android:id="@+id/copyList"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content">-->
 
-                    </android.support.v7.widget.RecyclerView>
-                </LinearLayout>
+                    <!--</android.support.v7.widget.RecyclerView>-->
+                <!--</LinearLayout>-->
             </LinearLayout>
 
             <View

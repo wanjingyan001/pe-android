@@ -34,6 +34,7 @@ class CityAreaActivity : BaseActivity(), View.OnClickListener {
             ctx?.startActivityForResult(intent, Extras.REQUESTCODE)
         }
     }
+
     var selectPosition: Int by Delegates.notNull()
     lateinit var areaAdpater: RecyclerAdapter<CityArea>
     lateinit var cityAdapter: RecyclerAdapter<CityArea.City?>
@@ -58,8 +59,12 @@ class CityAreaActivity : BaseActivity(), View.OnClickListener {
         })
         areaAdpater.onItemClick = { v, position ->
             val data = areaAdpater.dataList[position]
-            for (i in 0..areaAdpater.dataList.size) {
-                data.seclected = position == i
+            areaAdpater.dataList.forEachIndexed { index, cityArea ->
+                if (index == position) {
+                    areaAdpater.dataList[position].seclected = true
+                } else {
+                    areaAdpater.dataList[index].seclected = false
+                }
             }
             areaAdpater.notifyDataSetChanged()
             cityAdapter.dataList.clear()
@@ -86,9 +91,14 @@ class CityAreaActivity : BaseActivity(), View.OnClickListener {
         })
         cityAdapter.onItemClick = { v, position ->
             selectPosition = position
-            for (i in 0..cityAdapter.dataList.size) {
-                cityAdapter.dataList[position]?.seclected = position == i
+            cityAdapter.dataList.forEachIndexed { index, city ->
+                if (index == position) {
+                    cityAdapter.dataList[position]?.seclected = true
+                } else {
+                    cityAdapter.dataList[index]?.seclected = false
+                }
             }
+
             cityAdapter.notifyDataSetChanged()
         }
         cityList.layoutManager = LinearLayoutManager(this)
@@ -116,7 +126,6 @@ class CityAreaActivity : BaseActivity(), View.OnClickListener {
                     Trace.e(e)
                 })
     }
-
 
 
     override fun onClick(v: View?) {

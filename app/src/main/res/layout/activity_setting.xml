@@ -40,7 +40,7 @@
             android:gravity="center"
             android:singleLine="true"
             android:textColor="@color/text_1"
-            tools:text="主    页" />
+            tools:text="设置中心" />
 
     </android.support.v7.widget.Toolbar>
 
