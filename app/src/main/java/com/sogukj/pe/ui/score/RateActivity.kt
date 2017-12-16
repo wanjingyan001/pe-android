@@ -15,6 +15,13 @@ import com.sogukj.pe.R
 import com.sogukj.pe.view.ArrayPagerAdapter
 import kotlinx.android.synthetic.main.activity_rate.*
 import org.jetbrains.anko.textColor
+import com.lcodecore.tkrefreshlayout.utils.DensityUtil
+import android.support.v4.view.MarginLayoutParamsCompat.setMarginEnd
+import android.support.v4.view.MarginLayoutParamsCompat.setMarginStart
+import android.widget.LinearLayout
+import com.sogukj.pe.util.Utils
+import java.lang.reflect.AccessibleObject.setAccessible
+
 
 class RateActivity : ToolbarActivity() {
 
@@ -78,5 +85,23 @@ class RateActivity : ToolbarActivity() {
             }
 
         })
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) {
+            val tabStrip = tabs::class.java.getDeclaredField("mTabStrip")
+            tabStrip.setAccessible(true)
+            val ll_tab = tabStrip.get(tabs) as LinearLayout
+            for (i in 0 until ll_tab.childCount) {
+                val child = ll_tab.getChildAt(i)
+                child.setPadding(0, 0, 0, 0)
+                val params = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f)
+//                params.leftMargin = 170
+//                params.rightMargin = 170
+                child.layoutParams = params
+//                child.invalidate()
+            }
+        }
     }
 }
