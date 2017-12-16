@@ -67,10 +67,10 @@ class EmployeeInteractActivity : ToolbarActivity() {
                     lll.visibility = View.GONE
 
                     var obser = TextViewClickObservable(context, judge, bar)
-                    date.add(obser)
+                    observable_List.add(obser)
 
                     if (position == adapter.dataList.size - 1) {
-                        Observable.combineLatest(date, object : Function<Array<Any>, Boolean> {
+                        Observable.combineLatest(observable_List, object : Function<Array<Any>, Boolean> {
                             override fun apply(str: Array<Any>): Boolean {
                                 return true//isEmailValid(str[0].toString()) && isPasswordValid(str[1].toString())
                             }
@@ -109,5 +109,5 @@ class EmployeeInteractActivity : ToolbarActivity() {
         adapter.notifyDataSetChanged()
     }
 
-    val date = ArrayList<Observable<CharSequence>>()
+    val observable_List = ArrayList<Observable<CharSequence>>()
 }

@@ -97,11 +97,18 @@ class JudgeFragment : BaseFragment() {
             }
         })
         adapter.onItemClick = { v, p ->
-            Log.e("seq", "${p}")
-            if (p == 0) {
-                callback.judgeFinish()
-            } else {
-                EmployeeInteractActivity.start(context)
+            if (type1 == TYPE_EMPLOYEE) {
+                if (p == 0) {
+                    callback.judgeFinish()
+                } else {
+                    EmployeeInteractActivity.start(context)
+                }
+            } else if (type1 == TYPE_MANAGE) {
+                if (p == 0) {
+                    callback.judgeFinish()
+                } else {
+                    RateActivity.start(context)
+                }
             }
         }
         val layoutManager = LinearLayoutManager(context)

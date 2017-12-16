@@ -98,8 +98,12 @@ class JudgeActivity : ToolbarActivity(), JudgeFragment.judgeInterface {
 
         toolbar_menu.setOnClickListener {
             if (canClick) {
-                //0-未完成，1-已完成
-                TotalScoreActivity.start(context, 0)
+                if (type == TYPE_EMPLOYEE) {
+                    //0-未完成，1-已完成
+                    TotalScoreActivity.start(context, 0)
+                } else if (type == TYPE_MANAGE) {
+                    ScoreListActivity.start(context)
+                }
             }
         }
     }

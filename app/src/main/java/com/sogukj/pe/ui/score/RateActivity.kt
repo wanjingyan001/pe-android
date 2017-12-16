@@ -1,6 +1,7 @@
 package com.sogukj.pe.ui.score
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -18,7 +19,7 @@ import org.jetbrains.anko.textColor
 class RateActivity : ToolbarActivity() {
 
     companion object {
-        fun start(ctx: Activity?) {
+        fun start(ctx: Context?) {
             val intent = Intent(ctx, RateActivity::class.java)
             ctx?.startActivity(intent)
         }

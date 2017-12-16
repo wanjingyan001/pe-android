@@ -519,7 +519,10 @@
         <activity android:name=".ui.score.EmployeeInteractActivity" />
         <activity android:name=".ui.score.TotalScoreActivity" />
         <activity android:name=".ui.user.FeedBackActivity" />
-        <activity android:name=".ui.score.JudgeActivity"></activity>
+        <activity android:name=".ui.score.JudgeActivity" />
+        <activity android:name=".ui.score.ScoreDetailActivity" />
+        <activity android:name=".ui.score.RateActivity" />
+        <activity android:name=".ui.score.ScoreListActivity"></activity>
     </application>
 
 </manifest>
