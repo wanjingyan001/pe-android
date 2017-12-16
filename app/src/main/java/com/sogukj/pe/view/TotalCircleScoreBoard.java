@@ -149,12 +149,12 @@ public class TotalCircleScoreBoard extends View {
             str = "计算中\n...";
 
             Rect textRect = new Rect();
-            paint.getTextBounds(str, 0, "计算中".length(), textRect);
+            paint.getTextBounds("计算中", 0, "计算中".length(), textRect);
             canvas.drawText("计算中", center - textRect.width() / 2, center + textRect.height() / 2, paint);
 
             Rect textRect1 = new Rect();
-            paint.getTextBounds(str, 0, "...".length(), textRect1);
-            canvas.drawText("...", center - textRect1.width() / 2, center + textRect1.height() / 2, paint);
+            paint.getTextBounds("...", 0, "...".length(), textRect1);
+            canvas.drawText("...", center - textRect1.width() / 2, center + textRect.height() / 2 + textRect1.height() + Utils.dpToPx(ctx, 12), paint);
         }
     }
 
