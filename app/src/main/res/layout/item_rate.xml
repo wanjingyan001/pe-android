@@ -54,17 +54,18 @@
         android:paddingRight="20dp">
 
         <TextView
+            android:id="@+id/subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="基准目标："
+            android:text="基准目标:"
             android:textColor="@color/text_3"
             android:textSize="@dimen/text_size_samll" />
 
         <TextView
             android:id="@+id/desc"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="2dp"
+            android:layout_marginLeft="5dp"
             android:lineSpacingExtra="2dp"
             android:text="协助投资经理完成公司、行业的尽调材料信息搜集，协助投资经理完成项目尽调材料、投资建议书等报告制作；协助投资经理完成对拟投企业管理层的访谈。"
             android:textColor="@color/text_3"
