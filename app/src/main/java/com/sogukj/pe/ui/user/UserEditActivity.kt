@@ -135,8 +135,8 @@ class UserEditActivity : ToolbarActivity() {
         }
 
         tr_rate.setOnClickListener {
-            //JudgeActivity.start(context, TYPE_MANAGE)
-            FengKongActivity.start(context)
+            JudgeActivity.start(context, TYPE_MANAGE)
+            //FengKongActivity.start(context)
         }
     }
 

@@ -70,18 +70,17 @@ class EmployeeInteractActivity : ToolbarActivity() {
                     observable_List.add(obser)
 
                     if (position == adapter.dataList.size - 1) {
-                        Observable.combineLatest(observable_List, object : Function<Array<Any>, Boolean> {
-                            override fun apply(str: Array<Any>): Boolean {
-                                return true//isEmailValid(str[0].toString()) && isPasswordValid(str[1].toString())
+                        Observable.combineLatest(observable_List, object : Function<Array<Any>, Int> {
+                            override fun apply(str: Array<Any>): Int {
+                                var result = 0
+                                return result//isEmailValid(str[0].toString()) && isPasswordValid(str[1].toString())
                             }
-                        }).subscribe(object : Consumer<Boolean> {
-                            override fun accept(t: Boolean) {
-                                if (t == true) {
-                                    tv_socre.text = "98.00"
-                                    btn_commit.setBackgroundColor(Color.parseColor("#FFE95C4A"))
-                                    btn_commit.setOnClickListener {
+                        }).subscribe(object : Consumer<Int> {
+                            override fun accept(t: Int) {
+                                tv_socre.text = "${t}"
+                                btn_commit.setBackgroundColor(Color.parseColor("#FFE95C4A"))
+                                btn_commit.setOnClickListener {
 
-                                    }
                                 }
                             }
                         })
@@ -109,5 +108,5 @@ class EmployeeInteractActivity : ToolbarActivity() {
         adapter.notifyDataSetChanged()
     }
 
-    val observable_List = ArrayList<Observable<CharSequence>>()
+    val observable_List = ArrayList<Observable<Int>>()
 }
