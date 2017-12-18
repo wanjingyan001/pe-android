@@ -29,10 +29,12 @@
             android:layout_marginLeft="15dp"
             android:textColor="@color/text_1" />
 
-        <CheckBox
+
+        <ImageView
             android:id="@+id/finishBox"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:src="@drawable/bg_finish_box" />
 
         <ImageView
             android:layout_width="wrap_content"

@@ -2,7 +2,6 @@ package com.sogukj.pe.ui.fund
 
 import android.content.Context
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DividerItemDecoration
@@ -21,7 +20,6 @@ import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.FundSmallBean
 import com.sogukj.pe.ui.SupportEmptyView
-import com.sogukj.pe.ui.user.UserActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
@@ -181,7 +179,7 @@ class FundSearchActivity : ToolbarActivity(), View.OnClickListener {
                             adapter.dataList.clear()
                         }
                         payload.payload?.apply {
-                            Log.d(FundMainActivity.TAG, Gson().toJson(this))
+                            Log.d(FundMainFragment.TAG, Gson().toJson(this))
                             adapter.dataList.addAll(this)
                         }
                     } else

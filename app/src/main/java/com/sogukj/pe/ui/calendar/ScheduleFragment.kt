@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.View
-import android.widget.CompoundButton
 import com.framework.base.BaseFragment
 import com.google.gson.Gson
 import com.ldf.calendar.component.CalendarAttr
@@ -19,6 +18,8 @@ import com.sogukj.pe.R
 import com.sogukj.pe.bean.ScheduleBean
 import com.sogukj.pe.ui.approve.SealApproveActivity
 import com.sogukj.pe.ui.approve.SignApproveActivity
+import com.sogukj.pe.ui.project.ProjectActivity
+import com.sogukj.pe.ui.project.RecordTraceActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
@@ -232,11 +233,11 @@ class ScheduleFragment : BaseFragment() {
                     }
                     5 -> {
                         //跟踪记录
-
+                        getCompanyDetail(scheduleBean.data_id!!, 5)
                     }
                     6 -> {
                         //项目
-
+                        getCompanyDetail(scheduleBean.data_id!!, 6)
                     }
                     7 -> {
                         //请假
@@ -247,11 +248,37 @@ class ScheduleFragment : BaseFragment() {
                 }
             }
 
-            override fun finishCheck(buttonView: CompoundButton, isChecked: Boolean, position: Int) {
+            override fun finishCheck(isChecked: Boolean, position: Int) {
                 val scheduleBean = data[position]
                 scheduleBean.id?.let { finishTask(it, isChecked) }
             }
         })
+    }
+
+
+    fun getCompanyDetail(cId: Int, type: Int) {
+        SoguApi.getService(activity.application)
+                .singleCompany(cId)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        payload.payload?.let {
+                            when (type) {
+                                5 -> {
+                                    RecordTraceActivity.start(activity, it)
+                                }
+                                6 -> {
+                                    ProjectActivity.start(activity, it)
+                                }
+                            }
+                        }
+                    } else {
+                        showToast(payload.message)
+                    }
+                }, { e ->
+                    Trace.e(e)
+                })
     }
 
 

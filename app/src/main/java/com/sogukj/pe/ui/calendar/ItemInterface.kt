@@ -1,7 +1,6 @@
 package com.sogukj.pe.ui.calendar
 
 import android.view.View
-import android.widget.CompoundButton
 import com.ldf.calendar.model.CalendarDate
 
 /**
@@ -13,7 +12,7 @@ interface MonthSelectListener {
 
 interface ScheduleItemClickListener {
     fun onItemClick(view: View, position: Int)
-    fun finishCheck(buttonView: CompoundButton, isChecked: Boolean, position: Int)
+    fun finishCheck( isChecked: Boolean, position: Int)
 }
 
 interface CommentListener {

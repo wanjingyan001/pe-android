@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,11 +11,15 @@ import android.widget.*
 import com.framework.base.BaseFragment
 import com.google.gson.JsonSyntaxException
 import com.sogukj.pe.Extras
-
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.bean.WeeklyThisBean
-import com.sogukj.pe.bean.WeeklyWatchBean
+import com.sogukj.pe.ui.approve.SealApproveActivity
+import com.sogukj.pe.ui.approve.SignApproveActivity
+import com.sogukj.pe.ui.calendar.ModifyTaskActivity
+import com.sogukj.pe.ui.calendar.TaskDetailActivity
+import com.sogukj.pe.ui.project.ProjectActivity
+import com.sogukj.pe.ui.project.RecordTraceActivity
 import com.sogukj.pe.ui.user.OrganizationActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.CircleImageView
@@ -163,6 +166,44 @@ class WeeklyThisFragment : BaseFragment() {
 
                 val adapter = WeeklyEventAdapter(context, items.data!!)
                 event_list.adapter = adapter
+                event_list.setOnItemClickListener { parent, view, position, id ->
+                    val weeklyData = items.data?.get(position)
+                    when (weeklyData?.type) {
+                        0 -> {
+                            //日程
+                            TaskDetailActivity.start(activity, weeklyData.data_id!!, weeklyData.title!!, ModifyTaskActivity.Schedule)
+                        }
+                        1 -> {
+                            //任务
+                            TaskDetailActivity.start(activity, weeklyData.data_id!!, weeklyData.title!!, ModifyTaskActivity.Task)
+                        }
+                        2 -> {
+                            //会议
+                        }
+                        3 -> {
+                            //用印审批
+                            SealApproveActivity.start(activity, weeklyData.data_id!!, "用印审批")
+                        }
+                        4 -> {
+                            //签字审批
+                            SignApproveActivity.start(activity, weeklyData.data_id!!, "签字审批")
+                        }
+                        5 -> {
+                            //跟踪记录
+                            getCompanyDetail(weeklyData.data_id!!, 5)
+                        }
+                        6 -> {
+                            //项目
+                            getCompanyDetail(weeklyData.data_id!!, 6)
+                        }
+                        7 -> {
+                            //请假
+                        }
+                        8 -> {
+                            // 出差
+                        }
+                    }
+                }
 
                 root.addView(item, childs++)
             }
@@ -326,7 +367,7 @@ class WeeklyThisFragment : BaseFragment() {
     var SEND = 0x007
     var CHAO_SONG = 0x008
 
-    class WeeklyEventAdapter(var context: Context, val list: ArrayList<WeeklyThisBean.Automatic.WeeklyData>) : BaseAdapter() {
+    inner class WeeklyEventAdapter(var context: Context, val list: ArrayList<WeeklyThisBean.Automatic.WeeklyData>) : BaseAdapter() {
 
         val EVENT = 0x001
         val LEAVE = 0x002
@@ -389,6 +430,32 @@ class WeeklyThisFragment : BaseFragment() {
         override fun getCount(): Int {
             return list.size
         }
+
+    }
+
+    private fun getCompanyDetail(cId: Int, type: Int) {
+        SoguApi.getService(activity.application)
+                .singleCompany(cId)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        payload.payload?.let {
+                            when (type) {
+                                5 -> {
+                                    RecordTraceActivity.start(activity, it)
+                                }
+                                6 -> {
+                                    ProjectActivity.start(activity, it)
+                                }
+                            }
+                        }
+                    } else {
+                        showToast(payload.message)
+                    }
+                }, { e ->
+                    Trace.e(e)
+                })
     }
 
     class MyAdapter(var context: Context, val list: ArrayList<UserBean>) : BaseAdapter() {

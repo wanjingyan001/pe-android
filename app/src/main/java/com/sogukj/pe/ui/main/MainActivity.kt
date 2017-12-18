@@ -11,6 +11,7 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.NewsBean
 import com.sogukj.pe.ui.LoginActivity
+import com.sogukj.pe.ui.fund.FundMainFragment
 import com.sogukj.pe.ui.news.NewsDetailActivity
 import com.sogukj.pe.ui.project.MainProjectFragment
 import com.sogukj.util.Store
@@ -24,6 +25,7 @@ class MainActivity : BaseActivity() {
     val fgProj = MainProjectFragment.newInstance()
     val fgMsg = MainMsgFragment.newInstance()
     val fgHome = MainHomeFragment.newInstance()
+    val fgFund = FundMainFragment.newInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,6 +68,7 @@ class MainActivity : BaseActivity() {
         val fragment = when (checkId) {
             R.id.rb_msg -> fgMsg
             R.id.rb_project -> fgProj
+            R.id.rb_fund -> fgFund
             else -> fgHome
         }
         supportFragmentManager.beginTransaction()
