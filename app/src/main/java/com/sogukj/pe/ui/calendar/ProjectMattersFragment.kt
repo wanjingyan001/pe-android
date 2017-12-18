@@ -10,7 +10,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.Gravity
 import android.view.View
-import android.widget.CompoundButton
 import com.framework.base.BaseFragment
 import com.google.gson.Gson
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
@@ -23,6 +22,8 @@ import com.sogukj.pe.bean.CustomSealBean
 import com.sogukj.pe.bean.ScheduleBean
 import com.sogukj.pe.ui.approve.SealApproveActivity
 import com.sogukj.pe.ui.approve.SignApproveActivity
+import com.sogukj.pe.ui.project.ProjectActivity
+import com.sogukj.pe.ui.project.RecordTraceActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
@@ -100,6 +101,7 @@ class ProjectMattersFragment : BaseFragment(), View.OnClickListener, ScheduleIte
             this.date = Utils.getTime(calendar.time.time, "yyyy-MM-dd")
             doRequest(page, this.date, companyId)
         })
+        doRequest(page, date)
     }
 
 
@@ -231,6 +233,7 @@ class ProjectMattersFragment : BaseFragment(), View.OnClickListener, ScheduleIte
             }
             6 -> {
                 //项目
+                getCompanyDetail(bean.data_id!!, 6)
             }
             7 -> {
                 //请假
@@ -239,10 +242,34 @@ class ProjectMattersFragment : BaseFragment(), View.OnClickListener, ScheduleIte
                 // 出差
             }
         }
-
     }
 
-    override fun finishCheck(buttonView: CompoundButton, isChecked: Boolean, position: Int) {
+    fun getCompanyDetail(cId: Int, type: Int) {
+        SoguApi.getService(activity.application)
+                .singleCompany(cId)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        payload.payload?.let {
+                            when (type) {
+                                5 -> {
+                                    RecordTraceActivity.start(activity, it)
+                                }
+                                6 -> {
+                                    ProjectActivity.start(activity, it)
+                                }
+                            }
+                        }
+                    } else {
+                        showToast(payload.message)
+                    }
+                }, { e ->
+                    Trace.e(e)
+                })
+    }
+
+    override fun finishCheck( isChecked: Boolean, position: Int) {
         val bean = data[position] as ScheduleBean
         bean.id?.let { finishTask(it, isChecked) }
     }

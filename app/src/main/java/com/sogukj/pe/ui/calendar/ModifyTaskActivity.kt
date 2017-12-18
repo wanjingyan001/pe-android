@@ -5,12 +5,14 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.bigkoo.pickerview.TimePickerView
 import com.framework.base.ToolbarActivity
+import com.google.gson.Gson
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.CustomSealBean
@@ -34,7 +36,7 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
     var type: Long by Delegates.notNull()
     var name: String? = null
     var selectT:Int by Delegates.notNull()
-    var data_id: Int by Delegates.notNull()
+    var data_id: Int? = null
     var companyId: Int? = null
     var time: Long by Delegates.notNull()
     lateinit var adapter: CcPersonAdapter
@@ -91,6 +93,7 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                         copyLayout.visibility = View.VISIBLE
                         line.visibility = View.VISIBLE
                         selectTypeLayout.visibility = View.GONE
+                        selectT = 1
                         title = "添加任务"
                     }
                     Schedule -> {
@@ -98,6 +101,7 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                         copyLayout.visibility = View.GONE
                         line.visibility = View.GONE
                         selectTypeLayout.visibility = View.GONE
+                        selectT = 0
                         title = "添加日程"
                     }
                     else -> {
@@ -113,6 +117,7 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                         copyLayout.visibility = View.VISIBLE
                         line.visibility = View.VISIBLE
                         selectTypeLayout.visibility = View.GONE
+                        selectT = 1
                         title = "修改任务"
                     }
                     Schedule -> {
@@ -120,6 +125,7 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                         copyLayout.visibility = View.GONE
                         line.visibility = View.GONE
                         selectTypeLayout.visibility = View.GONE
+                        selectT = 0
                         title = "修改日程"
                     }
                     else -> {
@@ -139,41 +145,40 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
     }
 
     fun doRequest() {
-        if (data_id == 0) {
-            return
-        }
-        SoguApi.getService(application)
-                .showEditTask(data_id)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ payload ->
-                    if (payload.isOk) {
-                        payload.payload?.let {
-                            companyId = it.company_id
-                            relatedProject.text = it.cName
-                            missionDetails.setText(it.info)
-                            startTime.text = Utils.getTime(SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(it.start_time), "MM月dd日 E HH:mm")
-                            deadline.text = Utils.getTime(SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(it.end_time), "MM月dd日 E HH:mm")
-                            remind.text = "截止前${(it.clock)?.div(60)}分钟"
-                            it.executor?.forEach {
-                                val bean = UserBean()
-                                bean.uid = it.id
-                                bean.name = it.name
-                                bean.url = it.url
-                                exAdapter.addData(bean)
+        data_id?.let {
+            SoguApi.getService(application)
+                    .showEditTask(it)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (payload.isOk) {
+                            payload.payload?.let {
+                                companyId = it.company_id
+                                relatedProject.text = it.cName
+                                missionDetails.setText(it.info)
+                                startTime.text = Utils.getTime(SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(it.start_time), "MM月dd日 E HH:mm")
+                                deadline.text = Utils.getTime(SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(it.end_time), "MM月dd日 E HH:mm")
+                                remind.text = "截止前${(it.clock)?.div(60)}分钟"
+                                it.executor?.forEach {
+                                    val bean = UserBean()
+                                    bean.uid = it.id
+                                    bean.name = it.name
+                                    bean.url = it.url
+                                    exAdapter.addData(bean)
+                                }
+                                it.watcher?.forEach {
+                                    val bean = UserBean()
+                                    bean.uid = it.id
+                                    bean.name = it.name
+                                    bean.url = it.url
+                                    adapter.addData(bean)
+                                }
                             }
-                            it.watcher?.forEach {
-                                val bean = UserBean()
-                                bean.uid = it.id
-                                bean.name = it.name
-                                bean.url = it.url
-                                adapter.addData(bean)
-                            }
+                        } else {
+                            showToast(payload.message)
                         }
-                    } else {
-                        showToast(payload.message)
-                    }
-                })
+                    })
+        }
     }
 
 
@@ -193,7 +198,6 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
         val reqBean = TaskModifyBean()
         val bean = reqBean.ae
         reqBean.data_id = data_id
-
         reqBean.type = selectT
         bean.info = missionDetails.text.toString()
         if (companyBean.id != null) {
@@ -208,12 +212,17 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
         data2.forEach {
             exusers.append(it.user_id.toString() + ",")
         }
-        bean.executor = exusers.toString()
+        if (exusers.isNotEmpty()) {
+            bean.executor = exusers.toString().substring(0, exusers.length - 1)
+        }
         val watchusers = StringBuilder()
         data.forEach {
             watchusers.append(it.user_id.toString() + ",")
         }
-        bean.watcher = watchusers.toString()
+        if (watchusers.isNotEmpty()) {
+            bean.watcher = watchusers.toString().substring(0, watchusers.length - 1)
+        }
+        Log.d("WJY", Gson().toJson(reqBean))
         SoguApi.getService(application)
                 .aeCalendarInfo(reqBean)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -243,12 +252,12 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                         .title("请选择类型")
                         .items(arrayListOf("日程", "任务"))
                         .itemsCallbackSingleChoice(-1) { dialog, itemView, which, text ->
-                            if (text == "日程"){
+                            if (text == "日程") {
                                 selectT = 0
                                 executiveLayout.visibility = View.GONE
                                 copyLayout.visibility = View.GONE
                                 line.visibility = View.GONE
-                            }else if (text == "任务"){
+                            } else if (text == "任务") {
                                 selectT = 1
                                 executiveLayout.visibility = View.VISIBLE
                                 copyLayout.visibility = View.VISIBLE

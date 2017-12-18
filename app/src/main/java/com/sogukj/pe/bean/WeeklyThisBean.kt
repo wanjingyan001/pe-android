@@ -9,12 +9,12 @@ class WeeklyThisBean : Serializable {
     var automatic: ArrayList<Automatic>? = null//本周周报
     var week: Week? = null//补充记录
 
-    class Automatic {
+    class Automatic : Serializable{
         var date: String? = null//2017-10-06
         var week_day: String? = null
         var data: ArrayList<WeeklyData>? = null
 
-        class WeeklyData {
+        class WeeklyData : Serializable{
             var time: String? = null//08:24
             var title: String? = null//投资经理在上海接见xxxxx
             var is_collect: Int? = null//1是 0否  用于显示AI采集图标和背景图区分

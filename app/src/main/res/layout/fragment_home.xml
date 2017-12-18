@@ -8,7 +8,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="215dp"
-        android:background="@drawable/bg_main_baner" />
+        android:background="@mipmap/pe_banner" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -46,13 +46,13 @@
                     android:text="资讯"
                     app:layout_columnWeight="1" />
 
-                <com.sogukj.pe.view.TipsView
-                    android:id="@+id/tv_jj"
-                    style="@style/ItemGridMain"
-                    android:layout_width="0dp"
-                    android:drawableTop="@drawable/ic_main_jj"
-                    android:text="基金"
-                    app:layout_columnWeight="1" />
+                <!--<com.sogukj.pe.view.TipsView-->
+                    <!--android:id="@+id/tv_jj"-->
+                    <!--style="@style/ItemGridMain"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:drawableTop="@drawable/ic_main_jj"-->
+                    <!--android:text="基金"-->
+                    <!--app:layout_columnWeight="1" />-->
 
                 <com.sogukj.pe.view.TipsView
                     android:id="@+id/tv_rl"
@@ -85,7 +85,7 @@
                     android:id="@+id/tv_weekly"
                     style="@style/ItemGridMain"
                     android:layout_width="0dp"
-                    android:drawableTop="@drawable/ic_main_me"
+                    android:drawableTop="@drawable/ic_main_weekly"
                     android:tag="shareholder"
                     android:text="周报"
                     app:layout_columnWeight="1" />

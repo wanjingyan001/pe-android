@@ -1,22 +1,29 @@
 package com.sogukj.pe.ui.calendar;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sogukj.pe.R;
+import com.sogukj.pe.service.Payload;
 import com.sogukj.pe.util.Utils;
+import com.sogukj.service.SoguApi;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by admin on 2017/12/7.
@@ -43,7 +50,7 @@ public class TaskAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         Object o = data.get(position);
         if (holder instanceof DayHolder) {
             TodoDay day = (TodoDay) o;
@@ -79,14 +86,23 @@ public class TaskAdapter extends RecyclerView.Adapter {
                 ((InfoHolder) holder).finishBox.setSelected(false);
                 ((InfoHolder) holder).content.setPaintFlags(((InfoHolder) holder).content.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
             }
-            ((InfoHolder) holder).finishBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            ((InfoHolder) holder).finishBox.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                public void onClick(View v) {
                     if (listener != null) {
-                        listener.finishCheck(buttonView, isChecked, position);
+                        ((InfoHolder) holder).finishBox.setSelected(!v.isSelected());
+                        if (v.isSelected()) {
+                            ((InfoHolder) holder).content.setPaintFlags(
+                                    ((InfoHolder) holder).content.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                        } else {
+                            ((InfoHolder) holder).content.setPaintFlags(
+                                    ((InfoHolder) holder).content.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                        }
+                        finishTask(bean.getData_id(), v.isSelected());
                     }
                 }
             });
+
 
             ((InfoHolder) holder).view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -97,6 +113,38 @@ public class TaskAdapter extends RecyclerView.Adapter {
                 }
             });
         }
+    }
+
+    private void finishTask(int id, final boolean isChecked) {
+        SoguApi.Companion.getService(((Activity) context).getApplication())
+                .finishTask(id)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<Payload<Object>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(Payload<Object> objectPayload) {
+                        if (objectPayload.isOk()) {
+                            if (listener!=null){
+                                listener.finishCheck(isChecked, 0);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     @Override
@@ -113,6 +161,10 @@ public class TaskAdapter extends RecyclerView.Adapter {
             return info;
         }
         return info;
+    }
+
+    public List<Object> getData() {
+        return data;
     }
 
     class DayHolder extends RecyclerView.ViewHolder {
@@ -134,7 +186,7 @@ public class TaskAdapter extends RecyclerView.Adapter {
 //        private TextView canAttend;
 //        private TextView notAttend;
         private TextView time;
-        private CheckBox finishBox;
+        private ImageView finishBox;
         private TextView content;
         private View view;
 
@@ -142,7 +194,7 @@ public class TaskAdapter extends RecyclerView.Adapter {
             super(itemView);
             view = itemView;
             time = ((TextView) itemView.findViewById(R.id.time));
-            finishBox = ((CheckBox) itemView.findViewById(R.id.finishBox));
+            finishBox = ((ImageView) itemView.findViewById(R.id.finishBox));
             content = ((TextView) itemView.findViewById(R.id.content));
             typeTv = ((TextView) itemView.findViewById(R.id.typeTv));
 //            confirmStatus = ((TextView) itemView.findViewById(R.id.confirmStatus));

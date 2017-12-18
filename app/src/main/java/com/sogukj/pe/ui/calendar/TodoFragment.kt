@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
-import android.widget.CompoundButton
 import com.framework.base.BaseFragment
 import com.sogukj.pe.R
 import com.sogukj.pe.util.Trace
@@ -92,7 +91,7 @@ class TodoFragment : BaseFragment(), ScheduleItemClickListener {
 
     }
 
-    override fun finishCheck(buttonView: CompoundButton, isChecked: Boolean, position: Int) {
+    override fun finishCheck( isChecked: Boolean, position: Int) {
         val keyNode = data[position] as KeyNode
         keyNode.data_id?.let { finishTask(it) }
     }

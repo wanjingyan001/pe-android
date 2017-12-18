@@ -7,8 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -88,20 +86,33 @@ public class ProjectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ScheduleBean info = (ScheduleBean) o;
             try {
                 Date parse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(info.getStart_time());
-                ((BeanHolder) holder).timeTv.setText(Utils.getTime(parse,"HH:mm"));
+                ((BeanHolder) holder).timeTv.setText(Utils.getTime(parse, "HH:mm"));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
 
             ((BeanHolder) holder).contentTv.setText(info.getTitle());
             if (info.is_finish() == 1) {
-                ((BeanHolder) holder).finishBox.setChecked(true);
+                ((BeanHolder) holder).finishBox.setSelected(true);
                 ((BeanHolder) holder).contentTv.setPaintFlags(
                         ((BeanHolder) holder).contentTv.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             } else {
-                ((BeanHolder) holder).finishBox.setChecked(false);
+                ((BeanHolder) holder).finishBox.setSelected(false);
                 ((BeanHolder) holder).contentTv.setPaintFlags(
                         ((BeanHolder) holder).contentTv.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+            }
+            if (info.is_collect() != null) {
+                //noinspection ConstantConditions
+                if (info.is_collect() == 1) {
+                    ((BeanHolder) holder).finishBox.setVisibility(View.INVISIBLE);
+                    ((BeanHolder) holder).contentTv.getPaint().setTextSkewX(0);
+                } else {
+                    ((BeanHolder) holder).finishBox.setVisibility(View.VISIBLE);
+                    ((BeanHolder) holder).finishBox.setSelected(true);
+                    ((BeanHolder) holder).contentTv.getPaint().setTextSkewX(-0.4f);
+                }
+            }else {
+                ((BeanHolder) holder).contentTv.getPaint().setTextSkewX(0);
             }
             ((BeanHolder) holder).view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -109,20 +120,21 @@ public class ProjectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     itemClickListener.onItemClick(v, position);
                 }
             });
-            ((BeanHolder) holder).finishBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            ((BeanHolder) holder).finishBox.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    ((BeanHolder) holder).finishBox.setChecked(isChecked);
-                    if (isChecked) {
+                public void onClick(View v) {
+                    ((BeanHolder) holder).finishBox.setSelected(!v.isSelected());
+                    if (v.isSelected()) {
                         ((BeanHolder) holder).contentTv.setPaintFlags(
                                 ((BeanHolder) holder).contentTv.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                     } else {
                         ((BeanHolder) holder).contentTv.setPaintFlags(
                                 ((BeanHolder) holder).contentTv.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
                     }
-                    itemClickListener.finishCheck(buttonView, isChecked, position);
+                    itemClickListener.finishCheck(v.isSelected(), position);
                 }
             });
+
         }
     }
 
@@ -175,14 +187,14 @@ public class ProjectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         private View view;
         private TextView timeTv;
         private TextView contentTv;
-        private CheckBox finishBox;
+        private ImageView finishBox;
 
         public BeanHolder(View itemView) {
             super(itemView);
             view = itemView;
             timeTv = ((TextView) itemView.findViewById(R.id.timeTv));
             contentTv = ((TextView) itemView.findViewById(R.id.contentTv));
-            finishBox = ((CheckBox) itemView.findViewById(R.id.finishBox));
+            finishBox = ((ImageView) itemView.findViewById(R.id.finishBox));
         }
     }
 }

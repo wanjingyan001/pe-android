@@ -6,7 +6,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
-import android.widget.CompoundButton
+import android.widget.Toast
 import com.framework.base.BaseFragment
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
@@ -40,7 +40,7 @@ class TaskFragment : BaseFragment(), View.OnClickListener, TaskFilterWindow.Filt
     private var mParam2: String? = null
     var page = 1
     var range = "w"
-    var isFinish = ""
+    var isFinish: Int = 2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,7 +61,7 @@ class TaskFragment : BaseFragment(), View.OnClickListener, TaskFilterWindow.Filt
 
 
     private fun initAdapter() {
-        taskAdapter = TaskAdapter(context, data)
+        taskAdapter = TaskAdapter(activity, data)
         taskAdapter.setListener(this)
 
         taskList.layoutManager = LinearLayoutManager(context)
@@ -94,14 +94,14 @@ class TaskFragment : BaseFragment(), View.OnClickListener, TaskFilterWindow.Filt
         doRequest(page, range, isFinish)
     }
 
-    fun doRequest(page: Int, range: String, isFinish: String) {
+    fun doRequest(page: Int, range: String, isFinish: Int) {
         SoguApi.getService(activity.application)
                 .showTask(page = page, range = range, is_finish = isFinish)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        if (page == 1){
+                        if (page == 1) {
                             data.clear()
                         }
                         payload.payload.let {
@@ -144,7 +144,7 @@ class TaskFragment : BaseFragment(), View.OnClickListener, TaskFilterWindow.Filt
                 val dateFilters = arrayListOf("一周内", "一月内", "一年内")
                 val dateWindow = TaskFilterWindow(activity, dateFilters, this, "date")
                 dateFilters.forEachIndexed { index, s ->
-                    if (s.equals(dateFilterTv.text)){
+                    if (s.equals(dateFilterTv.text)) {
                         dateWindow.setSelectPosition(index)
                     }
                 }
@@ -162,7 +162,7 @@ class TaskFragment : BaseFragment(), View.OnClickListener, TaskFilterWindow.Filt
                 val taskFilters = arrayListOf("未完成任务", "已完成任务", "全部任务")
                 val taskWindow = TaskFilterWindow(activity, taskFilters, this, "task")
                 taskFilters.forEachIndexed { index, s ->
-                    if (s.equals(taskFilterTv.text)){
+                    if (s.equals(taskFilterTv.text)) {
                         taskWindow.setSelectPosition(index)
                     }
                 }
@@ -183,17 +183,9 @@ class TaskFragment : BaseFragment(), View.OnClickListener, TaskFilterWindow.Filt
         when (view.id) {
             R.id.taskItemLayout -> {
                 val bean = data[position] as TaskItemBean.ItemBean
-                TaskDetailActivity.start(activity, bean.data_id,bean.title,ModifyTaskActivity.Task)
+                TaskDetailActivity.start(activity, bean.data_id, bean.title, ModifyTaskActivity.Task)
             }
         }
-    }
-
-    override fun finishCheck(buttonView: CompoundButton, isChecked: Boolean, position: Int) {
-        val bean = data[position] as TaskItemBean.ItemBean
-        bean.is_finish = if (isChecked) 1 else 0
-        taskAdapter.notifyItemChanged(position)
-        finishTask(bean.data_id,isChecked)
-
     }
 
     fun finishTask(id: Int, isChecked: Boolean) {
@@ -214,6 +206,14 @@ class TaskFragment : BaseFragment(), View.OnClickListener, TaskFilterWindow.Filt
                 }, { e ->
                     Trace.e(e)
                 })
+    }
+
+    override fun finishCheck(isChecked: Boolean, position: Int) {
+        if (isChecked) {
+            Toast.makeText(context, "您完成了该任务", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(context, "您重新打开了该任务", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun itemClick(view: View?, position: Int, filter: String?) {
@@ -237,13 +237,13 @@ class TaskFragment : BaseFragment(), View.OnClickListener, TaskFilterWindow.Filt
                 taskFilterTv.text = filter
                 when (filter) {
                     "未完成任务" -> {
-                        isFinish = "0"
+                        isFinish = 0
                     }
                     "已完成任务" -> {
-                        isFinish = "1"
+                        isFinish = 1
                     }
                     "全部任务" -> {
-                        isFinish = ""
+                        isFinish = 2
                     }
                 }
             }

@@ -9,12 +9,10 @@ import com.framework.base.BaseFragment
 import com.sogukj.pe.R
 import com.sogukj.pe.ui.approve.EntryApproveActivity
 import com.sogukj.pe.ui.calendar.CalendarMainActivity
-import com.sogukj.pe.ui.fund.FundMainActivity
 import com.sogukj.pe.ui.news.NewsListActivity
 import com.sogukj.pe.ui.user.UserActivity
 import com.sogukj.pe.ui.weekly.WeeklyActivity
 import kotlinx.android.synthetic.main.fragment_home.*
-import org.jetbrains.anko.sdk25.coroutines.onClick
 
 /**
  * Created by qinfei on 17/10/11.
@@ -34,8 +32,8 @@ class MainHomeFragment : BaseFragment() {
         tv_sp.setOnClickListener {
             EntryApproveActivity.start(baseActivity)
         }
-        tv_weekly.onClick { WeeklyActivity.start(baseActivity) }
-        tv_jj.setOnClickListener { FundMainActivity.start(baseActivity) }
+        tv_weekly.setOnClickListener { WeeklyActivity.start(baseActivity) }
+//        tv_jj.setOnClickListener { FundMainFragment.start(baseActivity) }
         tv_rl.setOnClickListener { CalendarMainActivity.start(baseActivity) }
 //        disable(tv_jj)
 //        disable(tv_rl)

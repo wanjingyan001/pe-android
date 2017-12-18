@@ -23,7 +23,7 @@ class CalendarMainActivity : ToolbarActivity(), MonthSelectListener, ViewPager.O
     }
 
     val fragments = ArrayList<Fragment>()
-    val titles = arrayListOf("日程", "任务", "项目事项", "团队日程")
+    val titles = arrayListOf("日历", "任务", "项目事项", "团队日程")
     private lateinit var scheduleFragment: ScheduleFragment
     private lateinit var teamScheduleFragment: TeamScheduleFragment
 

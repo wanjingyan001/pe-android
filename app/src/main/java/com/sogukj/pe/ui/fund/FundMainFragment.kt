@@ -1,8 +1,5 @@
 package com.sogukj.pe.ui.fund
 
-import android.content.Context
-import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DividerItemDecoration
@@ -11,7 +8,7 @@ import android.util.Log
 import android.view.View
 import android.widget.TextView
 import com.bumptech.glide.Glide
-import com.framework.base.ToolbarActivity
+import com.framework.base.BaseFragment
 import com.google.gson.Gson
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
@@ -37,7 +34,9 @@ import kotlinx.android.synthetic.main.fund_mian_toolbar.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.imageResource
 
-class FundMainActivity : ToolbarActivity(), View.OnClickListener {
+class FundMainFragment : BaseFragment(), View.OnClickListener {
+    override val containerViewId: Int
+        get() = R.layout.activity_fund_main
 
 
     lateinit var adapter: RecyclerAdapter<FundSmallBean>
@@ -46,22 +45,23 @@ class FundMainActivity : ToolbarActivity(), View.OnClickListener {
     private var currentTimeOrder = RegTimeAsc
 
     companion object {
-        val TAG: String = FundMainActivity::class.java.simpleName
+        val TAG: String = FundMainFragment::class.java.simpleName
 
-        fun start(ctx: Context?) {
-            ctx?.startActivity(Intent(ctx, FundMainActivity::class.java))
+        fun newInstance(): FundMainFragment{
+            val fragment = FundMainFragment()
+            val args = Bundle()
+            fragment.arguments = args
+            return fragment
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_fund_main)
-        setBack(true)
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         fundTitle.text = "基金"
 
         run {
             //列表和adapter的初始化
-            adapter = RecyclerAdapter(this, { _adapter, parent, type ->
+            adapter = RecyclerAdapter(context, { _adapter, parent, type ->
                 val convertView = _adapter.getView(R.layout.item_fund_main_list, parent)
                 object : RecyclerHolder<FundSmallBean>(convertView) {
                     val fundName = convertView.find<TextView>(R.id.fundName)
@@ -73,16 +73,16 @@ class FundMainActivity : ToolbarActivity(), View.OnClickListener {
                 }
             })
             adapter.onItemClick = { _, position ->
-                FundDetailActivity.start(this@FundMainActivity, adapter.dataList[position])
+                FundDetailActivity.start(activity, adapter.dataList[position])
             }
-            recycler_view.layoutManager = LinearLayoutManager(this)
-            recycler_view.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+            recycler_view.layoutManager = LinearLayoutManager(context)
+            recycler_view.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
             recycler_view.adapter = adapter
-            val header = ProgressLayout(this)
-            header.setColorSchemeColors(ContextCompat.getColor(this, R.color.color_main))
+            val header = ProgressLayout(context)
+            header.setColorSchemeColors(ContextCompat.getColor(context, R.color.color_main))
             refresh.setHeaderView(header)
-            val footer = BallPulseView(this)
-            footer.setAnimatingColor(ContextCompat.getColor(this, R.color.color_main))
+            val footer = BallPulseView(context)
+            footer.setAnimatingColor(ContextCompat.getColor(context, R.color.color_main))
             refresh.setBottomView(footer)
             refresh.setOverScrollRefreshShow(false)
             refresh.setEnableLoadmore(true)
@@ -108,13 +108,14 @@ class FundMainActivity : ToolbarActivity(), View.OnClickListener {
         }
     }
 
+
     override fun onStart() {
         super.onStart()
         run {
             //显示用户头像
-            Store.store.getUser(this)?.apply {
+            Store.store.getUser(context)?.apply {
                 iv_user.mChar = name?.first()
-                Glide.with(this@FundMainActivity)
+                Glide.with(this@FundMainFragment)
                         .load(headImage())
                         .into(iv_user)
             }
@@ -126,7 +127,7 @@ class FundMainActivity : ToolbarActivity(), View.OnClickListener {
      * 获取基金公司列表
      */
     fun doRequest() {
-        SoguApi.getService(application)
+        SoguApi.getService(activity.application)
                 .getAllFunds(page = page, sort = (currentNameOrder + currentTimeOrder))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -181,10 +182,10 @@ class FundMainActivity : ToolbarActivity(), View.OnClickListener {
                 doRequest()
             }
             R.id.iv_user -> {
-                UserActivity.start(this)
+                UserActivity.start(activity)
             }
             R.id.iv_search -> {
-                FundSearchActivity.start(this)
+                FundSearchActivity.start(activity)
             }
         }
 

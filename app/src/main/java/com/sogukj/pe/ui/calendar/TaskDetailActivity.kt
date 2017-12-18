@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.CircleImageView
 import com.sogukj.pe.view.CommentWindow
@@ -147,6 +148,8 @@ class TaskDetailActivity : ToolbarActivity(), CommentListener, View.OnClickListe
                     } else {
                         showToast(payload.message)
                     }
+                }, { e ->
+                    Trace.e(e)
                 })
 
     }

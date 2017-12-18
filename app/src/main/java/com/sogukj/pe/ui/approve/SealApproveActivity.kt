@@ -46,7 +46,7 @@ class SealApproveActivity : ToolbarActivity() {
         is_mine = intent.getIntExtra("is_mine", 2)
         if (paramObj == null) {
             paramId = intent.getIntExtra(Extras.ID, -1)
-            title = intent.getStringExtra(Extras.TITLE)
+            paramTitle = intent.getStringExtra(Extras.TITLE)
         } else {
             if (paramObj is ApprovalBean) {
                 paramTitle = paramObj.kind!!

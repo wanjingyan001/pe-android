@@ -24,13 +24,15 @@
         android:layout_marginRight="20dp"
         android:src="@drawable/ic_right" />
 
-    <CheckBox
+
+    <ImageView
         android:id="@+id/finishBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginRight="10dp"
-        android:layout_toLeftOf="@+id/right_arrow" />
+        android:layout_toLeftOf="@+id/right_arrow"
+        android:src="@drawable/bg_finish_box" />
 
     <TextView
         android:id="@+id/content"
@@ -50,7 +52,6 @@
         android:layout_height="1dp"
         android:layout_alignLeft="@+id/content"
         android:layout_alignRight="@+id/right_arrow"
-        android:layout_below="@+id/finishBox"
-        android:layout_marginTop="15dp"
+        android:layout_alignParentBottom="true"
         android:background="@color/divider2" />
 </RelativeLayout>

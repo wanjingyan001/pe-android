@@ -7,11 +7,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.sogukj.pe.R;
 import com.sogukj.pe.bean.ScheduleBean;
 import com.sogukj.pe.util.Utils;
@@ -69,6 +68,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             ((HeadHolder) holder).month.setText(Utils.getWeek(startTime) + "\n" + Utils.getTime(startTime, "yyyy年MM月"));
                         }
                     } else if (holder instanceof ItemHolder) {
+                        Log.d("WJY", position + "===>" + new Gson().toJson(bean));
                         if (bean.getEnd_time() != null) {
                             long startTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(bean.getStart_time()).getTime();
                             long endTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(bean.getEnd_time()).getTime();
@@ -76,15 +76,27 @@ public class ScheduleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             ((ItemHolder) holder).endTime.setText(Utils.getTime(endTime));
                         }
                         ((ItemHolder) holder).contentTv.setText(bean.getTitle());
-                        Log.d("WJY", "is_finish:" + bean.is_finish() ) ;
-                        if ( bean.is_finish() == 1) {
-                            ((ItemHolder) holder).finishBox.setChecked(true);
+                        if (bean.is_finish() == 1) {
+                            ((ItemHolder) holder).finishBox.setSelected(true);
                             ((ItemHolder) holder).contentTv.setPaintFlags(
                                     ((ItemHolder) holder).contentTv.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                         } else {
-                            ((ItemHolder) holder).finishBox.setChecked(false);
+                            ((ItemHolder) holder).finishBox.setSelected(false);
                             ((ItemHolder) holder).contentTv.setPaintFlags(
                                     ((ItemHolder) holder).contentTv.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                        }
+                        if (bean.is_collect() != null) {
+                            //noinspection ConstantConditions
+                            if (bean.is_collect() == 1) {
+                                ((ItemHolder) holder).finishBox.setVisibility(View.INVISIBLE);
+                                ((ItemHolder) holder).contentTv.getPaint().setTextSkewX(0);
+                            } else {
+                                ((ItemHolder) holder).finishBox.setVisibility(View.VISIBLE);
+                                ((ItemHolder) holder).finishBox.setSelected(true);
+                                ((ItemHolder) holder).contentTv.getPaint().setTextSkewX(-0.4f);
+                            }
+                        }else {
+                            ((ItemHolder) holder).contentTv.getPaint().setTextSkewX(0);
                         }
                         ((ItemHolder) holder).view.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -92,22 +104,21 @@ public class ScheduleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                 listener.onItemClick(v, position);
                             }
                         });
-                        ((ItemHolder) holder).finishBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        ((ItemHolder) holder).finishBox.setOnClickListener(new View.OnClickListener() {
                             @Override
-                            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                                Log.d("WJY", "isChecked:" + isChecked) ;
-                                ((ItemHolder) holder).finishBox.setChecked(isChecked);
-                                if (isChecked){
+                            public void onClick(View v) {
+                                Log.d("WJY", "isChecked:" + v.isSelected());
+                                ((ItemHolder) holder).finishBox.setSelected(!v.isSelected());
+                                if (v.isSelected()) {
                                     ((ItemHolder) holder).contentTv.setPaintFlags(
                                             ((ItemHolder) holder).contentTv.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                                }else {
+                                } else {
                                     ((ItemHolder) holder).contentTv.setPaintFlags(
                                             ((ItemHolder) holder).contentTv.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
                                 }
-                                listener.finishCheck(buttonView, isChecked, position);
+                                listener.finishCheck(v.isSelected(), position);
                             }
                         });
-
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();
@@ -154,7 +165,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         private TextView startTime;
         private TextView endTime;
         private TextView contentTv;
-        private CheckBox finishBox;
+        private ImageView finishBox;
         private View view;
 
         public ItemHolder(View itemView) {
@@ -163,7 +174,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             startTime = ((TextView) itemView.findViewById(R.id.startTime));
             endTime = ((TextView) itemView.findViewById(R.id.endTime));
             contentTv = ((TextView) itemView.findViewById(R.id.contentTv));
-            finishBox = ((CheckBox) itemView.findViewById(R.id.finishBox));
+            finishBox = ((ImageView) itemView.findViewById(R.id.finishBox));
         }
     }
 

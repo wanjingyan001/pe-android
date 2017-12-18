@@ -16,8 +16,8 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="25dp"
         android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_marginTop="30dp"
-        android:text="完成对同花顺的立项尽调的会议"
         android:textColor="@color/weekly_label"
         android:textSize="20sp"
         android:textStyle="bold" />
@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:text="任务编号：RW145555"
+        android:text="任务编号："
         android:textColor="@color/text_1"
         android:textSize="14sp" />
 
@@ -39,7 +39,18 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="15dp"
-        android:text="安排时间：管理公司印章"
+        android:text="安排时间："
+        android:textColor="@color/text_1"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/related_project"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="15dp"
+        android:text="关联项目："
         android:textColor="@color/text_1"
         android:textSize="14sp" />
 
@@ -62,7 +73,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="15dp"
-        android:text="任务发布者：陈建"
+        android:text="任务发布者："
         android:textColor="@color/text_1"
         android:textSize="14sp" />
 
@@ -73,7 +84,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="15dp"
-        android:text="任务执行者：陈建"
+        android:text="任务执行者："
         android:textColor="@color/text_1"
         android:textSize="14sp" />
 
@@ -84,7 +95,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="15dp"
-        android:text="抄送人：陈建"
+        android:text="抄送人："
         android:textColor="@color/text_1"
         android:textSize="14sp" />
 
@@ -95,7 +106,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="15dp"
-        android:text="任务详情：关于投资诗襄信息科技公司的第三届第五次分组立项"
+        android:text="任务详情："
         android:textColor="@color/text_1"
         android:textSize="14sp" />
 

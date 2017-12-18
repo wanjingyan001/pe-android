@@ -70,6 +70,7 @@ class TeamScheduleFragment : BaseFragment(), ScheduleItemClickListener {
         initCalendarView()
         initList()
         selectDate = SimpleDateFormat("yyyy-MM-dd").format(Date(System.currentTimeMillis()))
+        doRequest(page, selectDate)
     }
 
 
@@ -143,6 +144,11 @@ class TeamScheduleFragment : BaseFragment(), ScheduleItemClickListener {
                         Log.d("WJY", Gson().toJson(payload.payload))
                         data.clear()
                         payload.payload?.let {
+                            if (it.isNotEmpty()) {
+                                val bean = ScheduleBean()
+                                bean.start_time = it[0].start_time
+                                data.add(bean)
+                            }
                             data.addAll(it)
                         }
                     } else {
@@ -202,19 +208,20 @@ class TeamScheduleFragment : BaseFragment(), ScheduleItemClickListener {
         }
     }
 
-    override fun finishCheck(buttonView: CompoundButton, isChecked: Boolean, position: Int) {
+    override fun finishCheck( isChecked: Boolean, position: Int) {
 
     }
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == Extras.REQUESTCODE && resultCode == Extras.RESULTCODE && data != null) {
+        if (requestCode == Extras.REQUESTCODE && resultCode == Extras.RESULTCODE2 && data != null) {
             val userBean = data.getSerializableExtra(Extras.DATA) as UserBean
-            Log.d("WJY", "${userBean.name}====>${userBean.uid}")
-            userBean.uid.let {
-                filter = filter.append("${userBean.uid},")
-                doRequest(page, date, filter.toString())
+            Log.d("WJY", "${userBean.name}====>${userBean.user_id}")
+            userBean.user_id.let {
+                filter = filter.append("${userBean.user_id},")
+                val s = filter.toString()
+                doRequest(page, selectDate, s.substring(0, s.length - 1))
             }
         }
     }

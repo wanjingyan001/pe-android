@@ -798,7 +798,7 @@ interface SoguService {
     fun showTask(@Field("page") page: Int = 1,
                  @Field("pageSize") pageSize: Int = 20,
                  @Field("range") range: String,//时间区间 可空（’w'=>一周内，'m'=>一月内，’y‘=>一年内）
-                 @Field("is_finish") is_finish: String//是否完成  （1=>完成，0=>未完成）全部请传 ‘ ’
+                 @Field("is_finish") is_finish: Int//是否完成  （1=>完成，0=>未完成）全部请传 2
     ): Observable<Payload<List<TaskItemBean>>>
 
 
@@ -869,7 +869,6 @@ interface SoguService {
     @POST("/api/Calendar/finishTask")
     fun finishTask(@Field("rid") rid: Int): Observable<Payload<Any>>
 
-
     /**
      * 意见反馈
      */
@@ -885,6 +884,10 @@ interface SoguService {
     @FormUrlEncoded
     @POST("/api/UserFont/getBelongProject")
     fun getBelongProject(@Field("user_id") user_id: Int): Observable<Payload<BelongBean>>
+
+    @FormUrlEncoded
+    @POST("/api/News/singleCom")
+    fun singleCompany(@Field("cId")cId:Int):Observable<Payload<ProjectBean>>
 
     companion object {
         const val APPKEY_NAME = "appkey"
