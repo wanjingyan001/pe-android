@@ -22,6 +22,7 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.DepartmentBean
 import com.sogukj.pe.bean.UserBean
+import com.sogukj.pe.ui.score.FengKongActivity
 import com.sogukj.pe.ui.score.JudgeActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
@@ -134,7 +135,8 @@ class UserEditActivity : ToolbarActivity() {
         }
 
         tr_rate.setOnClickListener {
-            JudgeActivity.start(context, TYPE_MANAGE)
+            //JudgeActivity.start(context, TYPE_MANAGE)
+            FengKongActivity.start(context)
         }
     }
 
