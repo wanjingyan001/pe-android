@@ -193,8 +193,7 @@ class RateFragment : BaseFragment() {
                             for (ites in str) {
                                 date.add(ites as Int)
                             }
-                            //date = str as Array<Int>
-                            result = date[0].toInt() * 0.2 + date[1] * 0.15 + date[2] * 0.15 + date[3] * 0.1 + date[4] * 0.1 + date[5] * 0.2 - date[6] * 0.2
+                            result = date[0] * 0.2 + date[1] * 0.15 + date[2] * 0.15 + date[3] * 0.1 + date[4] * 0.1 + date[5] * 0.2 - date[6] * 0.2
                             return result//isEmailValid(str[0].toString()) && isPasswordValid(str[1].toString())
                         }
                     }).subscribe(object : Consumer<Double> {
