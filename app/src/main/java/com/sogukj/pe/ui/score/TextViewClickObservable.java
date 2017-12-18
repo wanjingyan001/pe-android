@@ -151,6 +151,8 @@ class TextViewClickObservable extends Observable<Integer> {
 
                         }
                     });
+                    tabs.getTabAt(0).select();
+                    mSelected = optionsItems_D;
                 } catch (NoSuchFieldException e) {
                     e.printStackTrace();
                 } catch (IllegalAccessException e) {

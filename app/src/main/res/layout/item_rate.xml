@@ -18,6 +18,7 @@
             android:layout_height="12dp"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
+            android:progressDrawable="@drawable/pb"
             android:max="120" />
 
         <TextView
@@ -28,7 +29,7 @@
             android:background="@drawable/rate_pingjia"
             android:gravity="right"
             android:padding="3dp"
-            android:text="评价"
+            android:text="评分"
             android:textColor="@color/white"
             android:textSize="14sp" />
 

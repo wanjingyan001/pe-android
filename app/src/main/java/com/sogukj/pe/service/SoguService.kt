@@ -952,7 +952,7 @@ interface SoguService {
     @POST("/api/Weekly/sendReport")
     fun sendReport(@Field("week_id") week_id: Int? = null,
                    @Field("accept_uid") accept_uid: String,
-                   @Field("copy_uid") copy_uid: String? = null): Observable<Payload<Object>>
+                   @Field("watch_uid") watch_uid: String? = null): Observable<Payload<Object>>
 
     //周报-我发出的
     @FormUrlEncoded

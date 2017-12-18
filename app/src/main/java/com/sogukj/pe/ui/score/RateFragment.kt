@@ -143,9 +143,11 @@ class RateFragment : BaseFragment() {
             rateItem2.list.add(rateBean2)
 
 
-            head_adapter.dataList.add(rateItem)
-            head_adapter.dataList.add(rateItem1)
-            head_adapter.dataList.add(rateItem2)
+            var list = ArrayList<RateItem>()
+            list.add(rateItem)
+            list.add(rateItem1)
+            list.add(rateItem2)
+            head_adapter.dataList.addAll(list)
             head_adapter.notifyDataSetChanged()
 
             maxItem = 7
@@ -225,19 +227,19 @@ class RateFragment : BaseFragment() {
                 head_title.text = data.head_title
             }
 
-            sub_adapter = RecyclerAdapter<RateItem.RateBean>(context, { _adapter, parent, t ->
+            var inner_adapter = RecyclerAdapter<RateItem.RateBean>(context, { _adapter, parent, t ->
                 ProjectHolderNoTitle(_adapter.getView(R.layout.item_rate, parent))
             })
-            sub_adapter.onItemClick = { v, p ->
+            inner_adapter.onItemClick = { v, p ->
             }
             val layoutManager = LinearLayoutManager(context)
             layoutManager.orientation = LinearLayoutManager.VERTICAL
             data_list.layoutManager = layoutManager
             data_list.addItemDecoration(SpaceItemDecoration(25))
-            data_list.adapter = sub_adapter
+            data_list.adapter = inner_adapter
 
-            sub_adapter.dataList.addAll(data.list)
-            sub_adapter.notifyDataSetChanged()
+            inner_adapter.dataList.addAll(data.list)
+            inner_adapter.notifyDataSetChanged()
         }
     }
 

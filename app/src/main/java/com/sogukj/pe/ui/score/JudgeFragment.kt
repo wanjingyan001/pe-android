@@ -106,8 +106,10 @@ class JudgeFragment : BaseFragment() {
             } else if (type1 == TYPE_MANAGE) {
                 if (p == 0) {
                     callback.judgeFinish()
-                } else {
+                } else if (p == 1) {
                     RateActivity.start(context)
+                } else if (p == 2) {
+                    //JudgeActivity.start(context, TYPE_MANAGE)
                 }
             }
         }

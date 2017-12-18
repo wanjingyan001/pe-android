@@ -1,6 +1,7 @@
 package com.sogukj.pe.ui.score
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -25,7 +26,7 @@ import org.jetbrains.anko.textColor
 class JudgeActivity : ToolbarActivity(), JudgeFragment.judgeInterface {
 
     companion object {
-        fun start(ctx: Activity?, type: Int? = null) {
+        fun start(ctx: Context?, type: Int? = null) {
             val intent = Intent(ctx, JudgeActivity::class.java)
             intent.putExtra(Extras.FLAG, type)
             ctx?.startActivity(intent)
