@@ -1,6 +1,5 @@
 package com.sogukj.pe.ui.score
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -37,7 +36,8 @@ class RateActivity : ToolbarActivity() {
 
     val fragments = arrayOf(
             //RateFragment.newInstance(TYPE_RATE),
-            FengKongFragment.newInstance(),
+            //FengKongFragment.newInstance(),
+            InvestManageFragment.newInstance(),
             RateFragment.newInstance(TYPE_JOB)
     )
 
