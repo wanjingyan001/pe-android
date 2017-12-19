@@ -1,28 +1,21 @@
 package com.sogukj.pe.ui.score
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.text.Html
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.R
-import com.sogukj.pe.util.Utils
 import kotlinx.android.synthetic.main.activity_feng_kong.*
 import org.jetbrains.anko.textColor
-import android.databinding.adapters.TextViewBindingAdapter.setText
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.text.SpannableString
 import android.view.LayoutInflater
-import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.EditText
+import android.widget.*
+import com.sogukj.pe.view.Bean
+import com.sogukj.pe.view.FengKongAdapter
 
 
 class FengKongActivity : ToolbarActivity() {
@@ -33,16 +26,6 @@ class FengKongActivity : ToolbarActivity() {
             ctx?.startActivity(intent)
         }
     }
-
-//    //radii单位是px
-//    fun setRadii(view: View, radii: Float) {
-//        var array = floatArrayOf(radii, radii, radii, radii, radii, radii, radii, radii)
-//        var gd = GradientDrawable()//创建drawable
-//        gd.cornerRadii = array
-//        //gd.setStroke(Utils.dpToPx(context, 1), Color.argb(54, 238, 240, 245))
-//        gd.setStroke(Utils.dpToPx(context, 1), Color.BLACK)
-//        view.setBackgroundDrawable(gd)
-//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,51 +58,14 @@ class FengKongActivity : ToolbarActivity() {
         list.adapter = adapter
 
         adapter.addAll(arrayListOf(Bean(), Bean(), Bean()))
-    }
 
-    class FengKongAdapter(val context: Context) : BaseAdapter() {
+        inflater = LayoutInflater.from(context)
 
-        val datalist = ArrayList<Bean>()
-
-        fun addAll(list: ArrayList<Bean>) {
-            datalist.addAll(list)
-            notifyDataSetChanged()
-        }
-
-        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-            var view = convertView
-            var holder: Holder? = null
-            if (view == null) {
-                holder = Holder()
-                view = LayoutInflater.from(context).inflate(R.layout.item_fengkong, null)
-                holder?.title = view.findViewById(R.id.item_title) as TextView
-                holder?.content = view.findViewById(R.id.item_content) as EditText
-                view.setTag(holder)
-            } else {
-                holder = view.tag as Holder
-            }
-            return view!!
-        }
-
-        override fun getItem(position: Int): Any {
-            return datalist.get(position)
-        }
-
-        override fun getItemId(position: Int): Long {
-            return position.toLong()
-        }
-
-        override fun getCount(): Int {
-            return datalist.size
+        add_item.setOnClickListener {
+            var item = inflater.inflate(R.layout.fengkong_item, null) as LinearLayout
+            items.addView(item)
         }
     }
 
-    class Bean {
-
-    }
-
-    class Holder {
-        var title: TextView? = null
-        var content: EditText? = null
-    }
+    lateinit var inflater: LayoutInflater
 }

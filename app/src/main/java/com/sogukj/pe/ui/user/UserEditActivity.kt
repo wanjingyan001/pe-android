@@ -22,9 +22,7 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.DepartmentBean
 import com.sogukj.pe.bean.UserBean
-import com.sogukj.pe.ui.score.FengKongActivity
-import com.sogukj.pe.ui.score.JudgeActivity
-import com.sogukj.pe.ui.score.TotalScoreActivity
+import com.sogukj.pe.ui.score.*
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
@@ -138,7 +136,9 @@ class UserEditActivity : ToolbarActivity() {
         tr_rate.setOnClickListener {
             //JudgeActivity.start(context, TYPE_MANAGE)
             //FengKongActivity.start(context)
-            TotalScoreActivity.start(context, 1)
+            //RateActivity.start(context)
+            InvestManageActivity.start(context)
+            //TotalScoreActivity.start(context, 1)
         }
     }
 
