@@ -155,7 +155,7 @@ class RateFragment : BaseFragment() {
     }
 
     val observable_List = ArrayList<Observable<Int>>()
-    var num = 0;
+    var num = 0
 
     inner class ProjectHolderNoTitle(view: View)
         : RecyclerHolder<RateItem.RateBean>(view) {

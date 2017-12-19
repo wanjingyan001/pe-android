@@ -2,6 +2,7 @@ package com.sogukj.pe.ui.score
 
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -22,6 +23,7 @@ import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.pe.view.SpaceItemDecoration
 import kotlinx.android.synthetic.main.fragment_judge.*
+import org.jetbrains.anko.textColor
 
 
 /**
@@ -81,6 +83,11 @@ class JudgeFragment : BaseFragment() {
                 val tvTime = convertView.findViewById(R.id.time) as TextView
 
                 override fun setData(view: View, data: JudgeBean, position: Int) {
+                    if (type1 == TYPE_MANAGE && type == TYPE_END) {
+                        tvProgress.textColor = Color.parseColor("#FFA1CEA9")
+                    } else if (type1 == TYPE_EMPLOYEE && type == TYPE_WAIT) {
+                        tvProgress.textColor = Color.parseColor("#FFCEA1A1")
+                    }
                     if (type == TYPE_WAIT && type1 == TYPE_EMPLOYEE) {
                         tvProgress.visibility = View.GONE
                         tvTime.visibility = View.GONE

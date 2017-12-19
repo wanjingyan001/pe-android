@@ -38,9 +38,9 @@ public class SpaceItemDecoration extends ItemDecoration {
         outRect.left = 0;
         outRect.right = 0;
         outRect.bottom = mSpace;
-//        if (parent.getChildAdapterPosition(view) == 0) {
-//            outRect.top = mSpace;
-//        }
+        if (parent.getChildAdapterPosition(view) == 0) {
+            outRect.top = mSpace;
+        }
 
     }
 

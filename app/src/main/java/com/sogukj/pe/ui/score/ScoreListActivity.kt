@@ -12,6 +12,7 @@ import android.widget.TextView
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.WeeklySendBean
+import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.pe.view.SpaceItemDecoration
@@ -57,7 +58,7 @@ class ScoreListActivity : ToolbarActivity() {
         val layoutManager = LinearLayoutManager(context)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         score_list.layoutManager = layoutManager
-        score_list.addItemDecoration(SpaceItemDecoration(30))
+        score_list.addItemDecoration(SpaceItemDecoration(Utils.dpToPx(context, 30)))
         score_list.adapter = adapter
 
         adapter.dataList.add(WeeklySendBean())

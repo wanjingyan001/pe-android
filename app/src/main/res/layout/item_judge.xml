@@ -22,7 +22,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:text="投资部"
-        android:textColor="#ff808080"
+        android:textColor="@color/text_1"
         android:textSize="12sp" />
 
     <TextView
@@ -32,7 +32,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:text="100%"
-        android:textColor="#ff808080"
+        android:textColor="#FFA1CEA9"
         android:textSize="12sp" />
 
     <TextView
@@ -42,7 +42,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:text="9月11日 14:00"
-        android:textColor="#ff808080"
+        android:textColor="@color/text_3"
         android:textSize="12sp" />
 
 </LinearLayout>
