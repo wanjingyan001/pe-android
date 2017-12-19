@@ -11,7 +11,6 @@ import com.framework.base.BaseFragment
 import com.sogukj.pe.Extras
 
 import com.sogukj.pe.R
-import com.sogukj.pe.bean.WeeklySendBean
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.pe.view.SpaceItemDecoration
@@ -19,11 +18,10 @@ import kotlinx.android.synthetic.main.fragment_rate.*
 import android.graphics.Color
 import android.support.v7.widget.RecyclerView
 import android.widget.TextView
+import com.sogukj.pe.util.Utils
 import io.reactivex.Observable
 import io.reactivex.functions.Consumer
 import io.reactivex.functions.Function
-import kotlinx.android.synthetic.main.activity_calendar_mian.*
-import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -69,12 +67,19 @@ class RateFragment : BaseFragment() {
             sub_adapter = RecyclerAdapter<RateItem.RateBean>(context, { _adapter, parent, t ->
                 ProjectHolderNoTitle(_adapter.getView(R.layout.item_rate, parent))
             })
+            val layoutManager = LinearLayoutManager(context)
+            layoutManager.orientation = LinearLayoutManager.VERTICAL
+            rate_list.layoutManager = layoutManager
+            rate_list.addItemDecoration(SpaceItemDecoration(30))
             rate_list.adapter = sub_adapter
         } else if (type == TYPE_RATE) {
             ItemType = 1
             head_adapter = RecyclerAdapter<RateItem>(context, { _adapter, parent, t ->
                 ProjectHolderTitle(_adapter.getView(R.layout.item_rate_title, parent))
             })
+            val layoutManager = LinearLayoutManager(context)
+            layoutManager.orientation = LinearLayoutManager.VERTICAL
+            rate_list.layoutManager = layoutManager
             rate_list.adapter = head_adapter
         }
 //        adapter.onItemClick = { v, p ->
@@ -174,7 +179,11 @@ class RateFragment : BaseFragment() {
             if (type == TYPE_JOB) {
                 lll.visibility = View.GONE
             } else if (type == TYPE_RATE) {
-                sub_title.text = data.subtitle
+                if (data.subtitle == "") {
+                    sub_title.visibility = View.GONE
+                } else {
+                    sub_title.text = data.subtitle
+                }
                 desc.text = data.desc
             }
 
@@ -234,7 +243,7 @@ class RateFragment : BaseFragment() {
             val layoutManager = LinearLayoutManager(context)
             layoutManager.orientation = LinearLayoutManager.VERTICAL
             data_list.layoutManager = layoutManager
-            data_list.addItemDecoration(SpaceItemDecoration(25))
+            data_list.addItemDecoration(SpaceItemDecoration(Utils.dpToPx(context, 30)))
             data_list.adapter = inner_adapter
 
             inner_adapter.dataList.addAll(data.list)
