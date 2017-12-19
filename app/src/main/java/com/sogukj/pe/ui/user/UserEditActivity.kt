@@ -136,8 +136,8 @@ class UserEditActivity : ToolbarActivity() {
         tr_rate.setOnClickListener {
             //JudgeActivity.start(context, TYPE_MANAGE)
             //FengKongActivity.start(context)
-            //RateActivity.start(context)
-            InvestManageActivity.start(context)
+            RateActivity.start(context)
+            //InvestManageActivity.start(context)
             //TotalScoreActivity.start(context, 1)
         }
     }

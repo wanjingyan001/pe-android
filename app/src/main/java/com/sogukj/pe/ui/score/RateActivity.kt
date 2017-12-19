@@ -35,9 +35,9 @@ class RateActivity : ToolbarActivity() {
     val TYPE_RATE = 2
 
     val fragments = arrayOf(
-            //RateFragment.newInstance(TYPE_RATE),
+            RateFragment.newInstance(TYPE_RATE),
             //FengKongFragment.newInstance(),
-            InvestManageFragment.newInstance(),
+            //InvestManageFragment.newInstance(),
             RateFragment.newInstance(TYPE_JOB)
     )
 

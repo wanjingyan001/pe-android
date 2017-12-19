@@ -3,19 +3,14 @@ package com.sogukj.pe.ui.score;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.design.widget.TabLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bigkoo.pickerview.OptionsPickerView;
-import com.bigkoo.pickerview.listener.CustomListener;
 import com.sogukj.pe.R;
 
 import java.lang.reflect.Field;
@@ -120,7 +115,7 @@ class TextViewClickObservable extends Observable<Integer> {
                     RelativeLayout layout = (RelativeLayout) field.get(pvOptions);
                     layout.removeViewAt(1);
 
-                    TabLayout tabs = (TabLayout) LayoutInflater.from(context).inflate(R.layout.picker_title, null);
+                    final TabLayout tabs = (TabLayout) LayoutInflater.from(context).inflate(R.layout.picker_title, null);
                     layout.addView(tabs, 1);
                     tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                         @Override
@@ -143,7 +138,6 @@ class TextViewClickObservable extends Observable<Integer> {
 
                         @Override
                         public void onTabUnselected(TabLayout.Tab tab) {
-
                         }
 
                         @Override
