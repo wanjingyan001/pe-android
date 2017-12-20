@@ -522,7 +522,8 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity android:name=".ui.score.InvestManageActivity" />
-        <activity android:name=".ui.score.LeaderActivity"></activity>
+        <activity android:name=".ui.score.LeaderActivity" />
+        <activity android:name=".ui.score.JiXiaoActivity"></activity>
     </application>
 
 </manifest>

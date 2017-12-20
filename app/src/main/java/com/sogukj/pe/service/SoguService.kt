@@ -999,4 +999,8 @@ interface SoguService {
     @FormUrlEncoded
     @POST("/api/grade/check")
     fun check(@Field("type") type: Int): Observable<Payload<GradeCheckBean>>
+
+    //全员考评分数总览
+    @POST("/api/grade/grade_pandect")
+    fun grade_pandect(): Observable<Payload<ArrayList<ScoreBean>>>
 }

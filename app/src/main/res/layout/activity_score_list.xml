@@ -28,6 +28,7 @@
                 android:layout_height="90dp">
 
                 <com.sogukj.pe.view.CircleImageView
+                    android:id="@+id/head_1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/rect_orange"
@@ -43,6 +44,7 @@
             </FrameLayout>
 
             <TextView
+                android:id="@+id/name_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
@@ -51,6 +53,7 @@
                 android:textSize="14sp" />
 
             <TextView
+                android:id="@+id/final_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -58,27 +61,24 @@
                 android:textColor="#FFFFA69D"
                 android:textSize="14sp" />
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/finishing_task_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:orientation="horizontal">
+                android:text="KPI考核：83.00"
+                android:textColor="#FFEA796E"
+                android:textSize="8sp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="KPI考核：83.00"
-                    android:textColor="#FFEA796E"
-                    android:textSize="8sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:text="员工互评得分：83.00"
-                    android:textColor="#FFEA796E"
-                    android:textSize="8sp" />
-            </LinearLayout>
+            <TextView
+                android:id="@+id/kpi_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="4dp"
+                android:text="员工互评得分：83.00"
+                android:textColor="#FFEA796E"
+                android:textSize="8sp" />
 
         </LinearLayout>
 
@@ -96,6 +96,7 @@
                 android:layout_height="70dp">
 
                 <com.sogukj.pe.view.CircleImageView
+                    android:id="@+id/head_2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/rect_orange"
@@ -111,6 +112,7 @@
             </FrameLayout>
 
             <TextView
+                android:id="@+id/name_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -119,6 +121,7 @@
                 android:textSize="12sp" />
 
             <TextView
+                android:id="@+id/final_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
@@ -126,27 +129,24 @@
                 android:textColor="#FFFFA69D"
                 android:textSize="12sp" />
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/finishing_task_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:orientation="horizontal">
+                android:text="KPI考核：83.00"
+                android:textColor="#FFEA796E"
+                android:textSize="6sp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="KPI考核：83.00"
-                    android:textColor="#FFEA796E"
-                    android:textSize="6sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:text="员工互评得分：83.00"
-                    android:textColor="#FFEA796E"
-                    android:textSize="6sp" />
-            </LinearLayout>
+            <TextView
+                android:id="@+id/kpi_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="4dp"
+                android:text="员工互评得分：83.00"
+                android:textColor="#FFEA796E"
+                android:textSize="6sp" />
 
         </LinearLayout>
 
@@ -164,6 +164,7 @@
                 android:layout_height="70dp">
 
                 <com.sogukj.pe.view.CircleImageView
+                    android:id="@+id/head_3"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/rect_orange"
@@ -179,6 +180,7 @@
             </FrameLayout>
 
             <TextView
+                android:id="@+id/name_3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -187,6 +189,7 @@
                 android:textSize="12sp" />
 
             <TextView
+                android:id="@+id/final_3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
@@ -194,27 +197,24 @@
                 android:textColor="#FFFFA69D"
                 android:textSize="12sp" />
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/finishing_task_3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:orientation="horizontal">
+                android:text="KPI考核：83.00"
+                android:textColor="#FFEA796E"
+                android:textSize="6sp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="KPI考核：83.00"
-                    android:textColor="#FFEA796E"
-                    android:textSize="6sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:text="员工互评得分：83.00"
-                    android:textColor="#FFEA796E"
-                    android:textSize="6sp" />
-            </LinearLayout>
+            <TextView
+                android:id="@+id/kpi_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="4dp"
+                android:text="员工互评得分：83.00"
+                android:textColor="#FFEA796E"
+                android:textSize="6sp" />
 
         </LinearLayout>
 

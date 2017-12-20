@@ -162,21 +162,19 @@ class UserEditActivity : ToolbarActivity() {
         tr_rate.setOnClickListener {
 
             // TODO
-            TYPE = 3
+            TYPE = 1
 
-            LeaderActivity.start(context)
-
-//            if (TYPE == 0) {
-//                return@setOnClickListener
-//            } else if (TYPE == 1) {
-//
-//            } else if (TYPE == 2) {
-//
-//            } else if (TYPE == 3) {
-//                FengKongActivity.start(context)
-//            } else if (TYPE == 4) {
-//                InvestManageActivity.start(context)
-//            }
+            if (TYPE == 0) {
+                return@setOnClickListener
+            } else if (TYPE == 1) {
+                LeaderActivity.start(context)
+            } else if (TYPE == 2) {
+                JudgeActivity.start(context)
+            } else if (TYPE == 3) {
+                FengKongActivity.start(context)
+            } else if (TYPE == 4) {
+                InvestManageActivity.start(context)
+            }
             //JudgeActivity.start(context, TYPE_MANAGE)
             //FengKongActivity.start(context)
             //RateActivity.start(context)
@@ -185,7 +183,7 @@ class UserEditActivity : ToolbarActivity() {
         }
     }
 
-    var TYPE = 0
+    var TYPE = 0   //0=>暂未开启  1=>管理层，2=>普通员工，3=>普通员工风控部，4=>普通员工投资部
     val TYPE_EMPLOYEE = 3
     val TYPE_MANAGE = 4
 

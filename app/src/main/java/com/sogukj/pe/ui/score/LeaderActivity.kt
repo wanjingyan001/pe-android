@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.R
+import kotlinx.android.synthetic.main.activity_leader.*
 import org.jetbrains.anko.textColor
 
 class LeaderActivity : ToolbarActivity() {
@@ -19,6 +20,9 @@ class LeaderActivity : ToolbarActivity() {
             ctx?.startActivity(intent)
         }
     }
+
+    val TYPE_EMPLOYEE = 3
+    val TYPE_MANAGE = 4
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +37,26 @@ class LeaderActivity : ToolbarActivity() {
             val back = this.findViewById(R.id.toolbar_back) as ImageView
             back?.visibility = View.VISIBLE
             back.setImageResource(R.drawable.grey_back)
+        }
+
+        gangwei_pingfenxiaozu.setOnClickListener {
+            JudgeActivity.start(context, TYPE_MANAGE)
+        }
+
+        gangwei_huping.setOnClickListener {
+            ScoreDetailActivity.start(context)
+        }
+
+        jixiao_pingfen.setOnClickListener {
+            JudgeActivity.start(context, TYPE_MANAGE)
+        }
+
+        jixiao_kaohejieguo.setOnClickListener {
+            JiXiaoActivity.start(context)
+        }
+
+        zonglan.setOnClickListener {
+            ScoreListActivity.start(context)
         }
     }
 }

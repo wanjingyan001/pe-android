@@ -77,10 +77,10 @@ class JudgeFragment : BaseFragment() {
             val convertView = _adapter.getView(R.layout.item_judge, parent) as LinearLayout
             object : RecyclerHolder<JudgeBean>(convertView) {
 
-                val tvName = convertView.findViewById(R.id.name) as TextView
-                val tvDepart = convertView.findViewById(R.id.depart) as TextView
-                val tvProgress = convertView.findViewById(R.id.progress) as TextView
-                val tvTime = convertView.findViewById(R.id.time) as TextView
+                val tvName = convertView.findViewById(R.id.tag1) as TextView
+                val tvDepart = convertView.findViewById(R.id.tag2) as TextView
+                val tvProgress = convertView.findViewById(R.id.tag3) as TextView
+                val tvTime = convertView.findViewById(R.id.tag4) as TextView
 
                 override fun setData(view: View, data: JudgeBean, position: Int) {
                     if (type1 == TYPE_MANAGE && type == TYPE_END) {
