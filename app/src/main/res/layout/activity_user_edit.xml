@@ -186,7 +186,7 @@
             <TextView
                 android:id="@+id/tv_rate"
                 style="@style/TableTextValue"
-                android:hint="暂未开启" />
+                android:hint="" />
 
             <ImageView
                 android:layout_gravity="center_vertical"

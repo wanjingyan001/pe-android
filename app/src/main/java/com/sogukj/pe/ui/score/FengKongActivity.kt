@@ -14,8 +14,17 @@ import android.text.style.ForegroundColorSpan
 import android.text.SpannableString
 import android.view.LayoutInflater
 import android.widget.*
+import com.google.gson.JsonSyntaxException
+import com.sogukj.pe.bean.JinDiaoItem
+import com.sogukj.pe.bean.TouHouManageItem
+import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.Bean
 import com.sogukj.pe.view.FengKongAdapter
+import com.sogukj.service.SoguApi
+import com.sogukj.util.Store
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import java.net.UnknownHostException
 
 
 class FengKongActivity : ToolbarActivity() {
@@ -26,6 +35,9 @@ class FengKongActivity : ToolbarActivity() {
             ctx?.startActivity(intent)
         }
     }
+
+    var jin = ArrayList<JinDiaoItem>()
+    var touhou = ArrayList<TouHouManageItem>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +77,34 @@ class FengKongActivity : ToolbarActivity() {
             var item = inflater.inflate(R.layout.fengkong_item, null) as LinearLayout
             items.addView(item)
         }
+
+        btn_commit.setOnClickListener {
+            preparePrams()
+            SoguApi.getService(application)
+                    .risk_add(jin, touhou)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (payload.isOk) {
+                            payload.payload?.apply {
+
+                            }
+                        } else
+                            showToast(payload.message)
+                    }, { e ->
+                        Trace.e(e)
+                        when (e) {
+                            is JsonSyntaxException -> showToast("后台数据出错")
+                            is UnknownHostException -> showToast("网络出错")
+                            else -> showToast("未知错误")
+                        }
+                    })
+        }
     }
 
     lateinit var inflater: LayoutInflater
+
+    fun preparePrams() {
+
+    }
 }

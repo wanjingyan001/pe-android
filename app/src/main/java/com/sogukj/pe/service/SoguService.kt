@@ -10,6 +10,7 @@ import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by qinfei on 17/6/2.
@@ -853,7 +854,7 @@ interface SoguService {
 
     @FormUrlEncoded
     @POST("/api/Calendar/deleteTask")
-    fun deleteTask(@Field("data_id")data_id:Int): Observable<Payload<Any>>
+    fun deleteTask(@Field("data_id") data_id: Int): Observable<Payload<Any>>
 
     /**
      * 重大事件
@@ -887,7 +888,7 @@ interface SoguService {
 
     @FormUrlEncoded
     @POST("/api/News/singleCom")
-    fun singleCompany(@Field("cId")cId:Int):Observable<Payload<ProjectBean>>
+    fun singleCompany(@Field("cId") cId: Int): Observable<Payload<ProjectBean>>
 
     companion object {
         const val APPKEY_NAME = "appkey"
@@ -983,4 +984,19 @@ interface SoguService {
     fun assess(@Field("company_id") company_id: Int,
                @Field("is_business") is_business: Int,
                @Field("is_ability") is_ability: Int): Observable<Payload<Object>>
+
+    //进入考评系统判断角色
+    @POST("/api/grade/getType")
+    fun getType(): Observable<Payload<TypeBean>>
+
+    //风控部填写页提交
+    @FormUrlEncoded
+    @POST("/api/grade/risk_add")
+    fun risk_add(@Field("jin_project") jin_project: ArrayList<JinDiaoItem>,
+                 @Field("invest_manage") invest_manage: ArrayList<TouHouManageItem>): Observable<Payload<Object>>
+
+    //(领导)年总考核中心   	1=>进入绩效考核列表页面，2=>进入岗位胜任力列表 3=>进入风控部填写页，4=>进入投资部填写页
+    @FormUrlEncoded
+    @POST("/api/grade/check")
+    fun check(@Field("type") type: Int): Observable<Payload<GradeCheckBean>>
 }

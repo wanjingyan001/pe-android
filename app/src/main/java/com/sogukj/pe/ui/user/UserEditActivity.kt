@@ -9,6 +9,7 @@ import android.media.ExifInterface
 import android.os.Bundle
 import android.os.Environment
 import android.text.TextUtils
+import android.util.Log
 import android.view.MenuItem
 import cn.finalteam.rxgalleryfinal.RxGalleryFinal
 import cn.finalteam.rxgalleryfinal.imageloader.ImageLoaderType
@@ -18,6 +19,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
 import com.framework.base.ToolbarActivity
+import com.google.gson.JsonSyntaxException
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.DepartmentBean
@@ -33,6 +35,7 @@ import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.*
+import java.net.UnknownHostException
 
 
 /**
@@ -133,15 +136,56 @@ class UserEditActivity : ToolbarActivity() {
                     .openGallery()
         }
 
+        SoguApi.getService(application)
+                .getType()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        payload.payload?.apply {
+                            TYPE = this.type as Int //0=>暂未开启  1=>管理层，2=>普通员工，3=>普通员工风控部，4=>普通员工投资部
+                            if (TYPE == 0) {
+                                tv_rate.text = "暂未开启"
+                            }
+                        }
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    when (e) {
+                        is JsonSyntaxException -> showToast("后台数据出错")
+                        is UnknownHostException -> showToast("网络出错")
+                        else -> showToast("未知错误")
+                    }
+                })
+
         tr_rate.setOnClickListener {
+
+            // TODO
+            TYPE = 3
+
+            LeaderActivity.start(context)
+
+//            if (TYPE == 0) {
+//                return@setOnClickListener
+//            } else if (TYPE == 1) {
+//
+//            } else if (TYPE == 2) {
+//
+//            } else if (TYPE == 3) {
+//                FengKongActivity.start(context)
+//            } else if (TYPE == 4) {
+//                InvestManageActivity.start(context)
+//            }
             //JudgeActivity.start(context, TYPE_MANAGE)
             //FengKongActivity.start(context)
-            RateActivity.start(context)
+            //RateActivity.start(context)
             //InvestManageActivity.start(context)
             //TotalScoreActivity.start(context, 1)
         }
     }
 
+    var TYPE = 0
     val TYPE_EMPLOYEE = 3
     val TYPE_MANAGE = 4
 
