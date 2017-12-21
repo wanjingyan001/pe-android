@@ -12,11 +12,13 @@ class GradeCheckBean : Serializable { //1=>进入绩效考核列表页面，2=>�
     var touzhi: ArrayList<TouZiItem>? = null//投资部填写页 type为4返回：
 
     class ScoreItem : Serializable {
+        var user_id: Int? = null
         var name: String? = null
         var department: String? = null
-        var plan: String? = null
+        var position: String? = null
+        var url: String? = null
         var grade_date: String? = null
-        var type: Int? = null
+        var type: Int? = null //1=>其他模版 2=>风控部模版 3=>投资部模版
     }
 
     class FengKongItem : Serializable {
@@ -28,7 +30,6 @@ class GradeCheckBean : Serializable { //1=>进入绩效考核列表页面，2=>�
         class FengKongInnerItem : Serializable {
             var performance_id: Int? = null
             var zhibiao: String? = null
-            var info: String? = null
         }
     }
 

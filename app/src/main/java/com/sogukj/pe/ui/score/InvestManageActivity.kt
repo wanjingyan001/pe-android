@@ -27,7 +27,6 @@ import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_invest_manage.*
-import okhttp3.FormBody
 import org.jetbrains.anko.textColor
 import java.net.UnknownHostException
 
@@ -116,7 +115,7 @@ class InvestManageActivity : ToolbarActivity() {
                     .subscribeOn(Schedulers.io())
                     .subscribe({ payload ->
                         if (payload.isOk) {
-                            finish()
+                            JudgeActivity.start(context, 3, 0)
                         } else
                             showToast(payload.message)
                     }, { e ->

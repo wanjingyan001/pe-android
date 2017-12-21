@@ -32,9 +32,13 @@ import java.net.UnknownHostException
 class JudgeActivity : ToolbarActivity(), JudgeFragment.judgeInterface {
 
     companion object {
-        fun start(ctx: Context?, type: Int) {
+        //type---员工或者领导，type1专门是领导的  岗位胜任力或者关键绩效
+        //type=TYPE_MANAGE---   type1= TYPE_GANGWEI   TYPE_JIXIAO
+        //type=TYPE_EMPLOYEE    type1= NORMAL, FK, TZ
+        fun start(ctx: Context?, type: Int, type1: Int) {
             val intent = Intent(ctx, JudgeActivity::class.java)
-            intent.putExtra(Extras.FLAG, type)
+            intent.putExtra(Extras.TYPE, type)
+            intent.putExtra(Extras.TYPE1, type1)
             ctx?.startActivity(intent)
         }
     }
@@ -44,19 +48,31 @@ class JudgeActivity : ToolbarActivity(), JudgeFragment.judgeInterface {
     val TYPE_EMPLOYEE = 3
     val TYPE_MANAGE = 4
 
+    val TYPE_GANGWEI = 18
+    val TYPE_JIXIAO = 19
+
+    val NORMAL = 100
+    val FK = 101
+    val TZ = 102
+
     var fragments = arrayOf<JudgeFragment>()
+    var type = 0
+    var type1 = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_judge)
 
-        var type = intent.getIntExtra(Extras.FLAG, 0)
+        type = intent.getIntExtra(Extras.TYPE, 0)
+        type1 = intent.getIntExtra(Extras.TYPE1, 0)
 
         setBack(true)
-        if (type == TYPE_EMPLOYEE) {
+        if (type == TYPE_MANAGE && type1 == TYPE_GANGWEI) {
             setTitle("岗位胜任力评价")
-        } else if (type == TYPE_MANAGE) {
-            setTitle("年终考核评价中心")
+        } else if (type == TYPE_MANAGE && type1 == TYPE_JIXIAO) {
+            setTitle("关键绩效考核")
+        } else if (type == TYPE_EMPLOYEE) {
+            setTitle("岗位胜任力评价")
         }
         toolbar?.setBackgroundColor(Color.WHITE)
         toolbar?.apply {
@@ -67,17 +83,42 @@ class JudgeActivity : ToolbarActivity(), JudgeFragment.judgeInterface {
             back.setImageResource(R.drawable.grey_back)
         }
 
+        // 1=>进入绩效考核列表页面，2=>进入岗位胜任力列表 3=>进入风控部填写页，4=>进入投资部填写页
+        var pageType = 0
+        if (type == TYPE_MANAGE) {
+            if (type1 == TYPE_GANGWEI) {
+                pageType = 2
+            } else if (type1 == TYPE_JIXIAO) {
+                pageType = 1
+            }
+        } else if (type == TYPE_EMPLOYEE) {
+            if (type1 == FK) {
+                pageType = 3
+            } else if (type1 == TZ) {
+                pageType = 4
+            } else if (type1 == NORMAL) {
+                pageType = 2
+            }
+        }
+
         SoguApi.getService(application)
-                .check(2)
+                .check(pageType)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         payload.payload?.apply {
-                            fragments = arrayOf(
-                                    JudgeFragment.newInstance(TYPE_WAIT, type, ready_grade!!),
-                                    JudgeFragment.newInstance(TYPE_END, type, finish_grade!!)
-                            )
+                            if (pageType == 1) {
+                                fragments = arrayOf(
+                                        JudgeFragment.newInstance(TYPE_WAIT, type, ready_grade!!),
+                                        JudgeFragment.newInstance(TYPE_END, type, finish_grade!!)
+                                )
+                            } else if (pageType == 2) {
+                                fragments = arrayOf(
+                                        JudgeFragment.newInstance(TYPE_WAIT, type, ready_grade!!),
+                                        JudgeFragment.newInstance(TYPE_END, type, finish_grade!!)
+                                )
+                            }
                             var adapter = ArrayPagerAdapter(supportFragmentManager, fragments)
                             view_pager.adapter = adapter
                         }

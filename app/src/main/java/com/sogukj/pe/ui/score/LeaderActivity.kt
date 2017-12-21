@@ -24,6 +24,9 @@ class LeaderActivity : ToolbarActivity() {
     val TYPE_EMPLOYEE = 3
     val TYPE_MANAGE = 4
 
+    val TYPE_GANGWEI = 18
+    val TYPE_JIXIAO = 19
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_leader)
@@ -40,7 +43,7 @@ class LeaderActivity : ToolbarActivity() {
         }
 
         gangwei_pingfenxiaozu.setOnClickListener {
-            JudgeActivity.start(context, TYPE_MANAGE)
+            JudgeActivity.start(context, TYPE_MANAGE, TYPE_GANGWEI)
         }
 
         gangwei_huping.setOnClickListener {
@@ -48,7 +51,7 @@ class LeaderActivity : ToolbarActivity() {
         }
 
         jixiao_pingfen.setOnClickListener {
-            JudgeActivity.start(context, TYPE_MANAGE)
+            JudgeActivity.start(context, TYPE_MANAGE, TYPE_JIXIAO)
         }
 
         jixiao_kaohejieguo.setOnClickListener {

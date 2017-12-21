@@ -990,22 +990,44 @@ interface SoguService {
     @POST("/api/grade/getType")
     fun getType(): Observable<Payload<TypeBean>>
 
-    //风控部填写页提交
-    @FormUrlEncoded
-    @POST("/api/grade/risk_add")
-    fun risk_add(@Field("jin_project") jin_project: ArrayList<JinDiaoItem>,
-                 @Field("invest_manage") invest_manage: ArrayList<TouHouManageItem>): Observable<Payload<Object>>
+    //全员考评分数总览
+    @POST("/api/grade/grade_pandect")
+    fun grade_pandect(): Observable<Payload<ArrayList<ScoreBean>>>
 
     //(领导)年总考核中心   	1=>进入绩效考核列表页面，2=>进入岗位胜任力列表 3=>进入风控部填写页，4=>进入投资部填写页
     @FormUrlEncoded
     @POST("/api/grade/check")
     fun check(@Field("type") type: Int): Observable<Payload<GradeCheckBean>>
 
-    //全员考评分数总览
-    @POST("/api/grade/grade_pandect")
-    fun grade_pandect(): Observable<Payload<ArrayList<ScoreBean>>>
-
     //投资部填写页提交
     @POST("/api/grade/invest_add")
     fun invest_add(@Body map: HashMap<String, ArrayList<HashMap<String, String>>>): Observable<Payload<Object>>
+
+    //投资部打分显示页面
+    //user_id被打分人id
+    @FormUrlEncoded
+    @POST("/api/grade/perAppraisal")
+    fun perAppraisal(@Field("user_id") user_id: Int, @Field("type") type: Int): Observable<Payload<ArrayList<InvestManageItem>>>
+
+    //提交关键绩效和岗位胜任力打分   type  1:提交关键绩效打分 2:提交岗位胜任力打分
+    @POST("/api/grade/giveGrade")
+    fun giveGrade(@Body map: HashMap<String, Any>): Observable<Payload<Any>>
+
+    //风控部填写页提交
+    @POST("/api/grade/risk_add")
+    fun risk_add(@Body map: HashMap<String, ArrayList<HashMap<String, String>>>): Observable<Payload<Object>>
+
+    //(领导)岗位胜任力互评详情页面|员工互评结果      可空 为空则是查看员工互评结果 传入user_id则是互评详情
+    @FormUrlEncoded
+    @POST("/api/grade/info")
+    fun grade_info(@Field("user_id") user_id: Int? = null): Observable<Payload<ArrayList<EmployeeInteractBean>>>
+
+    //(领导)关键绩效考核结果
+    @POST("/api/grade/achievement")
+    fun achievement(): Observable<Payload<ArrayList<EmployeeInteractBean.EmployeeItem>>>
+
+    //岗位胜任力评价页面  普通员工
+    @FormUrlEncoded
+    @POST("/api/grade/each_comment")
+    fun each_comment(@Field("user_id") user_id: Int): Observable<Payload<ArrayList<EmployeeInteractBean.EmployeeItem>>>
 }

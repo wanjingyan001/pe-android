@@ -9,13 +9,24 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.framework.base.BaseFragment
+import com.google.gson.JsonSyntaxException
+import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.bean.GradeCheckBean
+import com.sogukj.pe.bean.InvestManageItem
+import com.sogukj.pe.bean.JinDiaoItem
+import com.sogukj.pe.bean.TouHouManageItem
+import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.*
+import com.sogukj.service.SoguApi
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Consumer
 import io.reactivex.functions.Function
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_feng_kong.*
+import java.net.UnknownHostException
 
 /**
  * A simple [Fragment] subclass.
@@ -24,29 +35,31 @@ class FengKongFragment : BaseFragment() {
     override val containerViewId: Int
         get() = R.layout.fragment_feng_kong
 
-    lateinit var sub_adapter: RecyclerAdapter<RateFragment.RateItem.RateBean>
+    lateinit var sub_adapter: RecyclerAdapter<InvestManageItem>
 
     companion object {
 
-        fun newInstance(): FengKongFragment {
+        fun newInstance(check_person: GradeCheckBean.ScoreItem): FengKongFragment {
             val fragment = FengKongFragment()
             val intent = Bundle()
-            //intent.putInt(Extras.TYPE, type)
+            intent.putSerializable(Extras.DATA, check_person)
             fragment.arguments = intent
             return fragment
         }
     }
 
+    lateinit var person: GradeCheckBean.ScoreItem
+
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var adapter = FengKongAdapter(context, 0)
+        var adapter = FengKongAdapter(context, 0, ArrayList<JinDiaoItem>(), ArrayList<TouHouManageItem>())
         list_.adapter = adapter
 
 //        adapter.addAll(arrayListOf(Bean(), Bean(), Bean()))
 //        adapter.notifyDataSetChanged()
 
-        sub_adapter = RecyclerAdapter<RateFragment.RateItem.RateBean>(context, { _adapter, parent, t ->
+        sub_adapter = RecyclerAdapter<InvestManageItem>(context, { _adapter, parent, t ->
             ProjectHolderNoTitle(_adapter.getView(R.layout.item_rate, parent))
         })
         val layoutManager = LinearLayoutManager(context)
@@ -55,15 +68,38 @@ class FengKongFragment : BaseFragment() {
         rate_list_FK.addItemDecoration(SpaceItemDecoration(Utils.dpToPx(context, 30)))
         rate_list_FK.adapter = sub_adapter
 
-        sub_adapter.dataList.addAll(arrayListOf(RateFragment.RateItem.RateBean(), RateFragment.RateItem.RateBean(), RateFragment.RateItem.RateBean()))
-        sub_adapter.notifyDataSetChanged()
+        person = arguments.getSerializable(Extras.DATA) as GradeCheckBean.ScoreItem
+        SoguApi.getService(baseActivity!!.application)
+                .perAppraisal(person.user_id!!, person.type!!)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        payload.payload?.apply {
+                            sub_adapter.dataList.addAll(this)
+                            sub_adapter.notifyDataSetChanged()
+
+                            this?.forEach {
+                                //maxItem += it.data!!.size
+                            }
+                        }
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    when (e) {
+                        is JsonSyntaxException -> showToast("后台数据出错")
+                        is UnknownHostException -> showToast("网络出错")
+                        else -> showToast("未知错误")
+                    }
+                })
     }
 
     val observable_List = ArrayList<Observable<Int>>()
     var num = 0
 
     inner class ProjectHolderNoTitle(view: View)
-        : RecyclerHolder<RateFragment.RateItem.RateBean>(view) {
+        : RecyclerHolder<InvestManageItem>(view) {
 
         var bar = convertView.findViewById(R.id.progressBar) as ProgressBar
         var judge = convertView.findViewById(R.id.text) as TextView
@@ -72,7 +108,7 @@ class FengKongFragment : BaseFragment() {
         var desc = convertView.findViewById(R.id.desc) as TextView
         var lll = convertView.findViewById(R.id.lll) as LinearLayout
 
-        override fun setData(view: View, data: RateFragment.RateItem.RateBean, position: Int) {
+        override fun setData(view: View, data: InvestManageItem, position: Int) {
 
 //            title.text = "${data.title}(${data.percentage}%)"
 //

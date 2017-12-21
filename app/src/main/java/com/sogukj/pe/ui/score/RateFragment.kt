@@ -72,6 +72,7 @@ class RateFragment : BaseFragment() {
             rate_list.layoutManager = layoutManager
             rate_list.addItemDecoration(SpaceItemDecoration(30))
             rate_list.adapter = sub_adapter
+            doRequest()
         } else if (type == TYPE_RATE) {
             ItemType = 1
             head_adapter = RecyclerAdapter<RateItem>(context, { _adapter, parent, t ->
@@ -86,81 +87,81 @@ class RateFragment : BaseFragment() {
 //        }
 
 
-//        adapter.dataList.add(WeeklySendBean())
-//        adapter.dataList.add(WeeklySendBean())
-//        adapter.dataList.add(WeeklySendBean())
-//        adapter.dataList.add(WeeklySendBean())
-//        adapter.dataList.add(WeeklySendBean())
-//        adapter.notifyDataSetChanged()
-
-        if (ItemType == 0) {
-            maxItem = 0
-        } else if (ItemType == 1) {
-            var rateItem = RateItem()
-            rateItem.head_title = ""
-            var rate1 = RateItem.RateBean()
-            rate1.title = "基金募集"
-            rate1.percentage = "20"
-            rate1.subtitle = "描述:"
-            rate1.desc = "完成基金募集，包括：潜在投资人挖掘、编写募集说明书、制作公司宣传材料、基础法律文件等。"
-            rateItem.list.add(rate1)
-            var rate2 = RateItem.RateBean()
-            rate2.title = "渠道开发"
-            rate2.percentage = "15"
-            rate2.subtitle = "描述:"
-            rate2.desc = "对外开发外部渠道，包括：拜访潜在上市公司、机构投资人及高净值客户。"
-            rateItem.list.add(rate2)
-            var rate3 = RateItem.RateBean()
-            rate3.title = "基金业务"
-            rate3.percentage = "15"
-            rate3.subtitle = "描述:"
-            rate3.desc = "完成基金募集说明书、合伙协议、路演等材料的制作；协助完成基金设立工作，包括政策信息搜集、各地政府机关、基金投资的沟通、工商注册等。"
-            rateItem.list.add(rate3)
-            var rate4 = RateItem.RateBean()
-            rate4.title = "现有渠道维护"
-            rate4.percentage = "10"
-            rate4.subtitle = "描述:"
-            rate4.desc = "维护现有投资人渠道"
-            rateItem.list.add(rate4)
-            var rate5 = RateItem.RateBean()
-            rate5.title = "其他"
-            rate5.percentage = "10"
-            rate5.subtitle = "描述:"
-            rate5.desc = "PPT材料制作、政策信息搜集、参加行业论坛及会议。"
-            rateItem.list.add(rate5)
-
-            var rateItem1 = RateItem()
-            rateItem1.head_title = "加分项"
-            var rateBean1 = RateItem.RateBean()
-            rateBean1.title = "承担岗位外任务"
-            rateBean1.percentage = "20"
-            rateBean1.subtitle = ""
-            rateBean1.desc = "每个岗位外任务 5分，最高10分"
-            rateItem1.list.add(rateBean1)
-
-            var rateItem2 = RateItem()
-            rateItem2.head_title = "扣分项"
-            var rateBean2 = RateItem.RateBean()
-            rateBean2.title = "尽调不充分"
-            rateBean2.percentage = "20"
-            rateBean2.subtitle = ""
-            rateBean2.desc = "每个扣20分，最高扣20分"
-            rateItem2.list.add(rateBean2)
-
-
-            var list = ArrayList<RateItem>()
-            list.add(rateItem)
-            list.add(rateItem1)
-            list.add(rateItem2)
-            head_adapter.dataList.addAll(list)
-            head_adapter.notifyDataSetChanged()
-
-            maxItem = 7
-        }
+//        if (ItemType == 0) {
+//            maxItem = 0
+//        } else if (ItemType == 1) {
+//            var rateItem = RateItem()
+//            rateItem.head_title = ""
+//            var rate1 = RateItem.RateBean()
+//            rate1.title = "基金募集"
+//            rate1.percentage = "20"
+//            rate1.subtitle = "描述:"
+//            rate1.desc = "完成基金募集，包括：潜在投资人挖掘、编写募集说明书、制作公司宣传材料、基础法律文件等。"
+//            rateItem.list.add(rate1)
+//            var rate2 = RateItem.RateBean()
+//            rate2.title = "渠道开发"
+//            rate2.percentage = "15"
+//            rate2.subtitle = "描述:"
+//            rate2.desc = "对外开发外部渠道，包括：拜访潜在上市公司、机构投资人及高净值客户。"
+//            rateItem.list.add(rate2)
+//            var rate3 = RateItem.RateBean()
+//            rate3.title = "基金业务"
+//            rate3.percentage = "15"
+//            rate3.subtitle = "描述:"
+//            rate3.desc = "完成基金募集说明书、合伙协议、路演等材料的制作；协助完成基金设立工作，包括政策信息搜集、各地政府机关、基金投资的沟通、工商注册等。"
+//            rateItem.list.add(rate3)
+//            var rate4 = RateItem.RateBean()
+//            rate4.title = "现有渠道维护"
+//            rate4.percentage = "10"
+//            rate4.subtitle = "描述:"
+//            rate4.desc = "维护现有投资人渠道"
+//            rateItem.list.add(rate4)
+//            var rate5 = RateItem.RateBean()
+//            rate5.title = "其他"
+//            rate5.percentage = "10"
+//            rate5.subtitle = "描述:"
+//            rate5.desc = "PPT材料制作、政策信息搜集、参加行业论坛及会议。"
+//            rateItem.list.add(rate5)
+//
+//            var rateItem1 = RateItem()
+//            rateItem1.head_title = "加分项"
+//            var rateBean1 = RateItem.RateBean()
+//            rateBean1.title = "承担岗位外任务"
+//            rateBean1.percentage = "20"
+//            rateBean1.subtitle = ""
+//            rateBean1.desc = "每个岗位外任务 5分，最高10分"
+//            rateItem1.list.add(rateBean1)
+//
+//            var rateItem2 = RateItem()
+//            rateItem2.head_title = "扣分项"
+//            var rateBean2 = RateItem.RateBean()
+//            rateBean2.title = "尽调不充分"
+//            rateBean2.percentage = "20"
+//            rateBean2.subtitle = ""
+//            rateBean2.desc = "每个扣20分，最高扣20分"
+//            rateItem2.list.add(rateBean2)
+//
+//
+//            var list = ArrayList<RateItem>()
+//            list.add(rateItem)
+//            list.add(rateItem1)
+//            list.add(rateItem2)
+//            head_adapter.dataList.addAll(list)
+//            head_adapter.notifyDataSetChanged()
+//
+//            maxItem = 7
+//        }
     }
 
-    val observable_List = ArrayList<Observable<Int>>()
+    fun doRequest() {
+        //ItemType = 0  岗位胜任力
+        // 1
+
+    }
+
     var num = 0
+
+    val observable_List = ArrayList<Observable<Int>>()
 
     inner class ProjectHolderNoTitle(view: View)
         : RecyclerHolder<RateItem.RateBean>(view) {
@@ -190,11 +191,8 @@ class RateFragment : BaseFragment() {
             var obser = TextViewClickObservable(context, judge, bar)
             observable_List.add(obser)
 
-            num++
-
             if (type == TYPE_JOB) {
-            } else if (type == TYPE_RATE) {
-                if (num == maxItem) {
+                if (observable_List.size == num) {
                     Observable.combineLatest(observable_List, object : Function<Array<Any>, Double> {
                         override fun apply(str: Array<Any>): Double {
                             var result = 0.00
@@ -215,6 +213,28 @@ class RateFragment : BaseFragment() {
                         }
                     })
                 }
+            } else if (type == TYPE_RATE) {
+//                if (num == maxItem) {
+//                    Observable.combineLatest(observable_List, object : Function<Array<Any>, Double> {
+//                        override fun apply(str: Array<Any>): Double {
+//                            var result = 0.00
+//                            var date = ArrayList<Int>()
+//                            for (ites in str) {
+//                                date.add(ites as Int)
+//                            }
+//                            result = date[0] * 0.2 + date[1] * 0.15 + date[2] * 0.15 + date[3] * 0.1 + date[4] * 0.1 + date[5] * 0.2 - date[6] * 0.2
+//                            return result//isEmailValid(str[0].toString()) && isPasswordValid(str[1].toString())
+//                        }
+//                    }).subscribe(object : Consumer<Double> {
+//                        override fun accept(t: Double) {
+//                            tv_socre.text = "${String.format("%1$.2f", t)}"
+//                            btn_commit.setBackgroundColor(Color.parseColor("#FFE95C4A"))
+//                            btn_commit.setOnClickListener {
+//
+//                            }
+//                        }
+//                    })
+//                }
             }
         }
 

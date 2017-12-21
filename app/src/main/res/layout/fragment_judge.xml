@@ -42,7 +42,8 @@
             android:gravity="center"
             android:text="进度"
             android:textColor="#ff808080"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tag_time"

@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
+import android.text.Editable
 import android.view.View
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.R
@@ -14,19 +14,17 @@ import org.jetbrains.anko.textColor
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.text.SpannableString
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.*
-import com.bumptech.glide.Glide
 import com.google.gson.JsonSyntaxException
 import com.sogukj.pe.bean.GradeCheckBean
 import com.sogukj.pe.bean.JinDiaoItem
 import com.sogukj.pe.bean.TouHouManageItem
 import com.sogukj.pe.util.Trace
-import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.*
 import com.sogukj.service.SoguApi
-import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.net.UnknownHostException
@@ -43,7 +41,10 @@ class FengKongActivity : ToolbarActivity() {
 
     var jin = ArrayList<JinDiaoItem>()
     var touhou = ArrayList<TouHouManageItem>()
-    lateinit var adapter: RecyclerAdapter<GradeCheckBean>
+    lateinit var adapter: FengKongHeadAdapter
+
+    val TYPE_EMPLOYEE = 3
+    val FK = 101
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,38 +61,56 @@ class FengKongActivity : ToolbarActivity() {
             back.setImageResource(R.drawable.grey_back)
         }
 
-//        val spannableString = SpannableString("评分标准:每个参与尽调项目得20分;最高分数:120分")
-//        spannableString.setSpan(ForegroundColorSpan(Color.parseColor("#FFE95C4A")), 0, 5, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
-//        spannableString.setSpan(ForegroundColorSpan(Color.parseColor("#FF323232")), 5, spannableString.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
-//        std1.text = spannableString
-//
-//        val spannable1 = SpannableString("评分标准:优秀101~120分/良好81~100分/合格61~80分/不称职0~60分")
-//        spannable1.setSpan(ForegroundColorSpan(Color.parseColor("#FFE95C4A")), 0, 5, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
-//        spannable1.setSpan(ForegroundColorSpan(Color.parseColor("#FF323232")), 5, spannable1.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
-//        std2.text = spannable1
-
-//        var adapter = FengKongAdapter(context)
-//        list.adapter = adapter
-//
-//        adapter.addAll(arrayListOf(Bean(), Bean(), Bean()))
-//
-//        inflater = LayoutInflater.from(context)
-//
-//        add_item.setOnClickListener {
-//            var item = inflater.inflate(R.layout.fengkong_item, null) as LinearLayout
-//            items.addView(item)
-//        }
-
         btn_commit.setOnClickListener {
+            var sub_jin = ArrayList<JinDiaoItem>()
+            var sub_touhou = ArrayList<TouHouManageItem>()
+            for (item in jin) {
+                if (item.info.isNullOrEmpty() || item.title.isNullOrEmpty()) {
+                    if (sub_jin.size == 0) {
+                        return@setOnClickListener
+                    }
+                } else {
+                    sub_jin.add(item)
+                }
+            }
+            for (item in touhou) {
+                if (item.info.isNullOrEmpty()) {
+                    if (sub_touhou.size == 0) {
+                        return@setOnClickListener
+                    }
+                } else {
+                    sub_touhou.add(item)
+                }
+            }
+
+            var jin__ = ArrayList<HashMap<String, String>>()
+            for (item in sub_jin) {
+                var jin_item = HashMap<String, String>()
+                jin_item.put("target", item.title!!)
+                jin_item.put("info", item.info!!)
+                jin__.add(jin_item)
+            }
+
+            var touhou__ = ArrayList<HashMap<String, String>>()
+            for (item in sub_touhou) {
+                var touhou_item = HashMap<String, String>()
+                touhou_item.put("performance_id", "${item.performance_id}")
+                touhou_item.put("info", item.info!!)
+                touhou__.add(touhou_item)
+            }
+
+            var total = HashMap<String, ArrayList<HashMap<String, String>>>()
+            total.put("jdxm", jin__)
+            total.put("thgl", touhou__)
+
             SoguApi.getService(application)
-                    .risk_add(jin, touhou)
+                    .risk_add(total)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe({ payload ->
                         if (payload.isOk) {
-                            payload.payload?.apply {
-
-                            }
+                            JudgeActivity.start(context, TYPE_EMPLOYEE, FK)
+                            finish()
                         } else
                             showToast(payload.message)
                     }, { e ->
@@ -112,7 +131,7 @@ class FengKongActivity : ToolbarActivity() {
                     if (payload.isOk) {
                         payload.payload?.apply {
                             fengkong?.let {
-                                var adapter = FengKongHeadAdapter(context, it)
+                                adapter = FengKongHeadAdapter(context, it, jin, touhou)
                                 list.adapter = adapter
                             }
                         }
@@ -128,37 +147,45 @@ class FengKongActivity : ToolbarActivity() {
                 })
     }
 
-    class FengKongHeadAdapter(val context: Context, val list: ArrayList<GradeCheckBean.FengKongItem>) : BaseAdapter() {
+    class FengKongHeadAdapter(val context: Context, val list: ArrayList<GradeCheckBean.FengKongItem>,
+                              val jin: ArrayList<JinDiaoItem>, val touhou: ArrayList<TouHouManageItem>) : BaseAdapter() {
+
+        lateinit var jindiao_adapter: FengKongAdapter
+        lateinit var touhou_adapter: FengKongAdapter
+
+        fun getAdapter(): FengKongAdapter {
+            return jindiao_adapter
+        }
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             var view = convertView
-            if (getItemViewType(position) == 1) {
+            if (getItemViewType(position) == 1) {// jin  diao
                 view = LayoutInflater.from(context).inflate(R.layout.fengkong_head_1, null)
 
                 var std = view.findViewById(R.id.std1) as TextView
                 std.text = initString(list.get(position).biaozhun!!)
 
                 var listView = view.findViewById(R.id.myList) as MyListView
-                var inner_adapter = FengKongAdapter(context, 1)
-                listView.adapter = inner_adapter
-                inner_adapter.add(GradeCheckBean.FengKongItem.FengKongInnerItem())
+                jindiao_adapter = FengKongAdapter(context, 1, jin, ArrayList<TouHouManageItem>())
+                listView.adapter = jindiao_adapter
+                jindiao_adapter.add(GradeCheckBean.FengKongItem.FengKongInnerItem())
 
                 var add_item = view.findViewById(R.id.add_item) as TextView
                 add_item.setOnClickListener {
-                    inner_adapter.add(GradeCheckBean.FengKongItem.FengKongInnerItem())
+                    jindiao_adapter.add(GradeCheckBean.FengKongItem.FengKongInnerItem())
                 }
 
-            } else if (getItemViewType(position) == 0) {
+            } else if (getItemViewType(position) == 0) {//tou  hou
                 view = LayoutInflater.from(context).inflate(R.layout.fengkong_head_2, null)
 
                 var std = view.findViewById(R.id.std2) as TextView
                 std.text = initString(list.get(position).biaozhun!!)
 
                 var listView = view.findViewById(R.id.mylist) as MyListView
-                var inner_adapter = FengKongAdapter(context, 0)
-                listView.adapter = inner_adapter
+                touhou_adapter = FengKongAdapter(context, 0, ArrayList<JinDiaoItem>(), touhou)
+                listView.adapter = touhou_adapter
 
-                inner_adapter.addAll(list.get(position).data!!)
+                touhou_adapter.addAll(list.get(position).data!!)
             }
             return view!!
         }

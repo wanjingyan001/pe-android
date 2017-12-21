@@ -100,28 +100,37 @@ class JudgeFragment : BaseFragment() {
                     } else if (type == TYPE_WAIT && type1 == TYPE_MANAGE) {
                         tvTime.visibility = View.GONE
                     }
+                    tvProgress.visibility = View.GONE
                     tvName.text = data.name
                     tvDepart.text = data.department
-                    tvProgress.text = data.plan
+                    //tvProgress.text = data.plan
                     tvTime.text = data.grade_date
                 }
             }
         })
         adapter.onItemClick = { v, p ->
             if (type1 == TYPE_EMPLOYEE) {
-                if (p == 0) {
-                    callback.judgeFinish()
-                } else {
-                    RateActivity.start(context, TYPE_JOB, TYPE_EMPLOYEE)
+                if (type == TYPE_WAIT) {
+                    RateActivity.start(context, adapter.dataList.get(p), TYPE_EMPLOYEE)
+                } else if (type == TYPE_END) {
+
                 }
+//                if (p == 0) {
+//                    callback.judgeFinish()
+//                } else {
+//                    RateActivity.start(context, adapter.dataList.get(p), TYPE_EMPLOYEE)
+//                }
             } else if (type1 == TYPE_MANAGE) {
-                if (p == 0) {
-                    callback.judgeFinish()
-                } else if (p == 1) {
-                    RateActivity.start(context, TYPE_JOB, TYPE_MANAGE)
-                } else if (p == 2) {
-                    //JudgeActivity.start(context, TYPE_MANAGE)
+                if (type == TYPE_WAIT) {
+                    RateActivity.start(context, adapter.dataList.get(p), TYPE_MANAGE)
+                } else if (type == TYPE_END) {
+
                 }
+//                if (p == 0) {
+//                    callback.judgeFinish()
+//                } else {
+//                    RateActivity.start(context, adapter.dataList.get(p), TYPE_MANAGE)
+//                }
             }
         }
         val layoutManager = LinearLayoutManager(context)

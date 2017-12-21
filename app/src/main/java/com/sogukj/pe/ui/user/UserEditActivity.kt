@@ -11,6 +11,7 @@ import android.os.Environment
 import android.text.TextUtils
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import cn.finalteam.rxgalleryfinal.RxGalleryFinal
 import cn.finalteam.rxgalleryfinal.imageloader.ImageLoaderType
 import cn.finalteam.rxgalleryfinal.rxbus.RxBusResultDisposable
@@ -136,40 +137,13 @@ class UserEditActivity : ToolbarActivity() {
                     .openGallery()
         }
 
-        SoguApi.getService(application)
-                .getType()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ payload ->
-                    if (payload.isOk) {
-                        payload.payload?.apply {
-                            TYPE = this.type as Int //0=>暂未开启  1=>管理层，2=>普通员工，3=>普通员工风控部，4=>普通员工投资部
-                            if (TYPE == 0) {
-                                tv_rate.text = "暂未开启"
-                            }
-                        }
-                    } else
-                        showToast(payload.message)
-                }, { e ->
-                    Trace.e(e)
-                    when (e) {
-                        is JsonSyntaxException -> showToast("后台数据出错")
-                        is UnknownHostException -> showToast("网络出错")
-                        else -> showToast("未知错误")
-                    }
-                })
-
         tr_rate.setOnClickListener {
-
-            // TODO
-            TYPE = 4
-
             if (TYPE == 0) {
                 return@setOnClickListener
             } else if (TYPE == 1) {
                 LeaderActivity.start(context)
             } else if (TYPE == 2) {
-                JudgeActivity.start(context, TYPE_EMPLOYEE)
+                JudgeActivity.start(context, TYPE_EMPLOYEE, 0)
             } else if (TYPE == 3) {
                 FengKongActivity.start(context)
             } else if (TYPE == 4) {
@@ -181,6 +155,35 @@ class UserEditActivity : ToolbarActivity() {
             //InvestManageActivity.start(context)
             //TotalScoreActivity.start(context, 1)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        SoguApi.getService(application)
+                .getType()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        payload.payload?.apply {
+                            TYPE = this.type as Int //0=>暂未开启  1=>管理层，2=>普通员工，3=>普通员工风控部，4=>普通员工投资部
+                            if (TYPE == 0) {
+                                tv_rate.text = "暂未开启"
+                            }
+                            if (TYPE == -1) {
+                                tv_rate.visibility = View.GONE
+                            }
+                        }
+                    } //else
+                    //showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    when (e) {
+                        is JsonSyntaxException -> showToast("后台数据出错")
+                        is UnknownHostException -> showToast("网络出错")
+                        else -> showToast("未知错误")
+                    }
+                })
     }
 
     var TYPE = 0   //0=>暂未开启  1=>管理层，2=>普通员工，3=>普通员工风控部，4=>普通员工投资部

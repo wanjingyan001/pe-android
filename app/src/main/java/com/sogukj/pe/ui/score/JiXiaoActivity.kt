@@ -10,13 +10,21 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.framework.base.ToolbarActivity
+import com.google.gson.JsonSyntaxException
 import com.sogukj.pe.R
+import com.sogukj.pe.bean.EmployeeInteractBean.EmployeeItem
 import com.sogukj.pe.bean.JudgeBean
+import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.pe.view.SpaceItemDecoration
+import com.sogukj.service.SoguApi
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_ji_xiao.*
+import kotlinx.android.synthetic.main.activity_user_edit.*
 import org.jetbrains.anko.textColor
+import java.net.UnknownHostException
 
 class JiXiaoActivity : ToolbarActivity() {
 
@@ -27,7 +35,7 @@ class JiXiaoActivity : ToolbarActivity() {
         }
     }
 
-    lateinit var adapter: RecyclerAdapter<JudgeBean>
+    lateinit var adapter: RecyclerAdapter<EmployeeItem>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,16 +53,20 @@ class JiXiaoActivity : ToolbarActivity() {
         }
 
 
-        adapter = RecyclerAdapter<JudgeBean>(context, { _adapter, parent, type0 ->
-            val convertView = _adapter.getView(R.layout.item_judge, parent) as LinearLayout
-            object : RecyclerHolder<JudgeBean>(convertView) {
+        adapter = RecyclerAdapter<EmployeeItem>(context, { _adapter, parent, type0 ->
+            val convertView = _adapter.getView(R.layout.item_child, parent) as LinearLayout
+            object : RecyclerHolder<EmployeeItem>(convertView) {
 
-                val tvSeq = convertView.findViewById(R.id.tag1) as TextView
-                val tvDepart = convertView.findViewById(R.id.tag2) as TextView
-                val tvName = convertView.findViewById(R.id.tag3) as TextView
-                val tvScore = convertView.findViewById(R.id.tag4) as TextView
+                var seq = convertView.findViewById(R.id.seq) as TextView
+                var depart = convertView.findViewById(R.id.depart) as TextView
+                var name = convertView.findViewById(R.id.name) as TextView
+                var score = convertView.findViewById(R.id.score) as TextView
 
-                override fun setData(view: View, data: JudgeBean, position: Int) {
+                override fun setData(view: View, data: EmployeeItem, position: Int) {
+                    seq.text = "${data.sort}"
+                    depart.text = data.department
+                    name.text = data.name
+                    score.text = data.grade_case
                 }
             }
         })
@@ -64,14 +76,25 @@ class JiXiaoActivity : ToolbarActivity() {
         jixiao_list.addItemDecoration(SpaceItemDecoration(10))
         jixiao_list.adapter = adapter
 
-        var bean = JudgeBean()
-        bean.name = "1"
-        bean.depart = "投资部"
-        bean.progress = "张三"
-        bean.time = "60.80"
-        adapter.dataList.add(bean)
-        adapter.dataList.add(bean)
-        adapter.dataList.add(bean)
-        adapter.notifyDataSetChanged()
+        SoguApi.getService(application)
+                .achievement()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        payload.payload?.apply {
+                            adapter.dataList.addAll(this)
+                            adapter.notifyDataSetChanged()
+                        }
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    when (e) {
+                        is JsonSyntaxException -> showToast("后台数据出错")
+                        is UnknownHostException -> showToast("网络出错")
+                        else -> showToast("未知错误")
+                    }
+                })
     }
 }
