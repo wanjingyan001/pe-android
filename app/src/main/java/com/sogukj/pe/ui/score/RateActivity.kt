@@ -18,28 +18,40 @@ import com.lcodecore.tkrefreshlayout.utils.DensityUtil
 import android.support.v4.view.MarginLayoutParamsCompat.setMarginEnd
 import android.support.v4.view.MarginLayoutParamsCompat.setMarginStart
 import android.widget.LinearLayout
+import com.framework.base.BaseFragment
+import com.sogukj.pe.Extras
 import com.sogukj.pe.util.Utils
+import kotlinx.android.synthetic.main.item_comment_list.*
 import java.lang.reflect.AccessibleObject.setAccessible
 
 
 class RateActivity : ToolbarActivity() {
 
     companion object {
-        fun start(ctx: Context?) {
+        /**
+         * type决定哪个界面，type1决定是员工还是领导
+         */
+        fun start(ctx: Context?, type: Int, type1: Int) {
             val intent = Intent(ctx, RateActivity::class.java)
+            intent.putExtra(Extras.TYPE, type)
+            intent.putExtra(Extras.TYPE1, type1)
             ctx?.startActivity(intent)
         }
     }
 
     val TYPE_JOB = 1
     val TYPE_RATE = 2
+    val TYPE_EMPLOYEE = 3
+    val TYPE_MANAGE = 4
 
-    val fragments = arrayOf(
-            RateFragment.newInstance(TYPE_RATE),
-            //FengKongFragment.newInstance(),
-            //InvestManageFragment.newInstance(),
-            RateFragment.newInstance(TYPE_JOB)
-    )
+//    val fragments = arrayOf(
+//            //RateFragment.newInstance(TYPE_RATE),
+//            //FengKongFragment.newInstance(),
+//            //InvestManageFragment.newInstance(),
+//            RateFragment.newInstance(TYPE_JOB)
+//    )
+
+    lateinit var fragments: Array<BaseFragment>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +66,14 @@ class RateActivity : ToolbarActivity() {
             val back = this.findViewById(R.id.toolbar_back) as ImageView
             back?.visibility = View.VISIBLE
             back.setImageResource(R.drawable.grey_back)
+        }
+
+        var type = intent.getIntExtra(Extras.TYPE, 0)
+        var type1 = intent.getIntExtra(Extras.TYPE1, 0)
+        if (type == TYPE_JOB && type1 == TYPE_EMPLOYEE) {
+            fragments = arrayOf(
+                    RateFragment.newInstance(TYPE_JOB)
+            )
         }
 
         var adapter = ArrayPagerAdapter(supportFragmentManager, fragments)

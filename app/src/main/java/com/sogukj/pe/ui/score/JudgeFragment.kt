@@ -16,6 +16,7 @@ import com.framework.base.BaseFragment
 import com.sogukj.pe.Extras
 
 import com.sogukj.pe.R
+import com.sogukj.pe.bean.GradeCheckBean
 import com.sogukj.pe.bean.JudgeBean
 import com.sogukj.pe.bean.WeeklySendBean
 import com.sogukj.pe.view.MyGridView
@@ -31,7 +32,7 @@ import org.jetbrains.anko.textColor
  */
 class JudgeFragment : BaseFragment() {
 
-    lateinit var adapter: RecyclerAdapter<JudgeBean>
+    lateinit var adapter: RecyclerAdapter<GradeCheckBean.ScoreItem>
 
     override val containerViewId: Int
         get() = R.layout.fragment_judge
@@ -40,11 +41,12 @@ class JudgeFragment : BaseFragment() {
         /**
          * type决定哪个界面，type1决定是员工还是领导
          */
-        fun newInstance(type: Int, type1: Int): JudgeFragment {
+        fun newInstance(type: Int, type1: Int, data: ArrayList<GradeCheckBean.ScoreItem>): JudgeFragment {
             val fragment = JudgeFragment()
             val intent = Bundle()
             intent.putInt(Extras.TYPE, type)
             intent.putInt(Extras.TYPE1, type1)
+            intent.putSerializable(Extras.DATA, data)
             fragment.arguments = intent
             return fragment
         }
@@ -54,6 +56,8 @@ class JudgeFragment : BaseFragment() {
     val TYPE_END = 2
     val TYPE_EMPLOYEE = 3
     val TYPE_MANAGE = 4
+    val TYPE_JOB = 1
+    val TYPE_RATE = 2
 
     var type: Int? = null
     var type1: Int? = null
@@ -73,16 +77,16 @@ class JudgeFragment : BaseFragment() {
             tag_time.visibility = View.GONE
         }
 
-        adapter = RecyclerAdapter<JudgeBean>(context, { _adapter, parent, type0 ->
+        adapter = RecyclerAdapter<GradeCheckBean.ScoreItem>(context, { _adapter, parent, type0 ->
             val convertView = _adapter.getView(R.layout.item_judge, parent) as LinearLayout
-            object : RecyclerHolder<JudgeBean>(convertView) {
+            object : RecyclerHolder<GradeCheckBean.ScoreItem>(convertView) {
 
                 val tvName = convertView.findViewById(R.id.tag1) as TextView
                 val tvDepart = convertView.findViewById(R.id.tag2) as TextView
                 val tvProgress = convertView.findViewById(R.id.tag3) as TextView
                 val tvTime = convertView.findViewById(R.id.tag4) as TextView
 
-                override fun setData(view: View, data: JudgeBean, position: Int) {
+                override fun setData(view: View, data: GradeCheckBean.ScoreItem, position: Int) {
                     if (type1 == TYPE_MANAGE && type == TYPE_END) {
                         tvProgress.textColor = Color.parseColor("#FFA1CEA9")
                     } else if (type1 == TYPE_EMPLOYEE && type == TYPE_WAIT) {
@@ -97,9 +101,9 @@ class JudgeFragment : BaseFragment() {
                         tvTime.visibility = View.GONE
                     }
                     tvName.text = data.name
-                    tvDepart.text = data.depart
-                    tvProgress.text = data.progress
-                    tvTime.text = data.time
+                    tvDepart.text = data.department
+                    tvProgress.text = data.plan
+                    tvTime.text = data.grade_date
                 }
             }
         })
@@ -108,13 +112,13 @@ class JudgeFragment : BaseFragment() {
                 if (p == 0) {
                     callback.judgeFinish()
                 } else {
-                    EmployeeInteractActivity.start(context)
+                    RateActivity.start(context, TYPE_JOB, TYPE_EMPLOYEE)
                 }
             } else if (type1 == TYPE_MANAGE) {
                 if (p == 0) {
                     callback.judgeFinish()
                 } else if (p == 1) {
-                    RateActivity.start(context)
+                    RateActivity.start(context, TYPE_JOB, TYPE_MANAGE)
                 } else if (p == 2) {
                     //JudgeActivity.start(context, TYPE_MANAGE)
                 }
@@ -126,14 +130,10 @@ class JudgeFragment : BaseFragment() {
         list.addItemDecoration(SpaceItemDecoration(10))
         list.adapter = adapter
 
-        var bean = JudgeBean()
-        bean.name = "张三"
-        bean.depart = "投资部"
-        bean.progress = "50%"
-        bean.time = "9月11日 14:00"
-        adapter.dataList.add(bean)
-        adapter.dataList.add(bean)
-        adapter.dataList.add(bean)
+        var data = arguments.getSerializable(Extras.DATA) as ArrayList<GradeCheckBean.ScoreItem>
+        data.forEach {
+            adapter.dataList.add(it)
+        }
         adapter.notifyDataSetChanged()
     }
 

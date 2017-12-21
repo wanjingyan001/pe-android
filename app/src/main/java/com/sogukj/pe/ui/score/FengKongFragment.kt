@@ -40,11 +40,11 @@ class FengKongFragment : BaseFragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var adapter = FengKongAdapter(context)
+        var adapter = FengKongAdapter(context, 0)
         list_.adapter = adapter
 
-        adapter.addAll(arrayListOf(Bean(), Bean(), Bean()))
-        adapter.notifyDataSetChanged()
+//        adapter.addAll(arrayListOf(Bean(), Bean(), Bean()))
+//        adapter.notifyDataSetChanged()
 
         sub_adapter = RecyclerAdapter<RateFragment.RateItem.RateBean>(context, { _adapter, parent, t ->
             ProjectHolderNoTitle(_adapter.getView(R.layout.item_rate, parent))

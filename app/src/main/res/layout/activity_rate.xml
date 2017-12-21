@@ -16,6 +16,7 @@
         android:layout_centerInParent="true"
         android:layout_gravity="center"
         android:gravity="center"
+        android:visibility="gone"
         app:tabGravity="fill"
         app:tabIndicatorColor="#FFE95C4A"
         app:tabIndicatorHeight="2dp"

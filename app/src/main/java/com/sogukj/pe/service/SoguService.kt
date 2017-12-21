@@ -11,6 +11,7 @@ import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 /**
  * Created by qinfei on 17/6/2.
@@ -1003,4 +1004,8 @@ interface SoguService {
     //全员考评分数总览
     @POST("/api/grade/grade_pandect")
     fun grade_pandect(): Observable<Payload<ArrayList<ScoreBean>>>
+
+    //投资部填写页提交
+    @POST("/api/grade/invest_add")
+    fun invest_add(@Body map: HashMap<String, ArrayList<HashMap<String, String>>>): Observable<Payload<Object>>
 }

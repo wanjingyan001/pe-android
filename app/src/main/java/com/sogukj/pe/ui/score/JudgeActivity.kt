@@ -15,18 +15,24 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.framework.base.ToolbarActivity
+import com.google.gson.JsonSyntaxException
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.ArrayPagerAdapter
+import com.sogukj.service.SoguApi
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_judge.*
 import org.jetbrains.anko.textColor
+import java.net.UnknownHostException
 
 
 class JudgeActivity : ToolbarActivity(), JudgeFragment.judgeInterface {
 
     companion object {
-        fun start(ctx: Context?, type: Int? = null) {
+        fun start(ctx: Context?, type: Int) {
             val intent = Intent(ctx, JudgeActivity::class.java)
             intent.putExtra(Extras.FLAG, type)
             ctx?.startActivity(intent)
@@ -38,7 +44,7 @@ class JudgeActivity : ToolbarActivity(), JudgeFragment.judgeInterface {
     val TYPE_EMPLOYEE = 3
     val TYPE_MANAGE = 4
 
-    lateinit var fragments: Array<JudgeFragment>
+    var fragments = arrayOf<JudgeFragment>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,13 +67,31 @@ class JudgeActivity : ToolbarActivity(), JudgeFragment.judgeInterface {
             back.setImageResource(R.drawable.grey_back)
         }
 
-        fragments = arrayOf(
-                JudgeFragment.newInstance(TYPE_WAIT, type),
-                JudgeFragment.newInstance(TYPE_END, type)
-        )
+        SoguApi.getService(application)
+                .check(2)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        payload.payload?.apply {
+                            fragments = arrayOf(
+                                    JudgeFragment.newInstance(TYPE_WAIT, type, ready_grade!!),
+                                    JudgeFragment.newInstance(TYPE_END, type, finish_grade!!)
+                            )
+                            var adapter = ArrayPagerAdapter(supportFragmentManager, fragments)
+                            view_pager.adapter = adapter
+                        }
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    when (e) {
+                        is JsonSyntaxException -> showToast("后台数据出错")
+                        is UnknownHostException -> showToast("网络出错")
+                        else -> showToast("未知错误")
+                    }
+                })
 
-        var adapter = ArrayPagerAdapter(supportFragmentManager, fragments)
-        view_pager.adapter = adapter
         view_pager.offscreenPageLimit = fragments.size
 
         tabs?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {

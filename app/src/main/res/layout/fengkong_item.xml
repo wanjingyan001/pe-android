@@ -15,6 +15,7 @@
         android:textSize="14sp" />
 
     <EditText
+        android:id="@+id/zhibiao"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
@@ -39,6 +40,7 @@
         android:textSize="14sp" />
 
     <EditText
+        android:id="@+id/condi"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"

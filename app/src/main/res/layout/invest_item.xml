@@ -5,6 +5,7 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/zhibiao"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
@@ -22,13 +23,14 @@
         android:textSize="14sp" />
 
     <EditText
+        android:id="@+id/standard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="5dp"
         android:background="#FFF7F9FC"
-        android:hint="请填写请填写请填写请填写请填写请填写请填写请填写请填写请填写请填写请填写请填写请填写请填写请填写请填写请填写请填写请填写请填写"
+        android:hint="请填写"
         android:lineSpacingExtra="1dp"
         android:maxLines="3"
         android:paddingBottom="8dp"
@@ -48,13 +50,14 @@
         android:textSize="14sp" />
 
     <EditText
+        android:id="@+id/info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="5dp"
         android:background="#FFF7F9FC"
-        android:hint="请填写请填写请填写请填写请填写请填写请填写请填写请填写请填写请填写请填写请填写请填写请填写请填写请填写请填写请填写请填写请填写"
+        android:hint="请填写"
         android:lineSpacingExtra="1dp"
         android:maxLines="3"
         android:paddingBottom="8dp"

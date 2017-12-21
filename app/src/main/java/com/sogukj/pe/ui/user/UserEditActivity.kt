@@ -162,14 +162,14 @@ class UserEditActivity : ToolbarActivity() {
         tr_rate.setOnClickListener {
 
             // TODO
-            TYPE = 1
+            TYPE = 4
 
             if (TYPE == 0) {
                 return@setOnClickListener
             } else if (TYPE == 1) {
                 LeaderActivity.start(context)
             } else if (TYPE == 2) {
-                JudgeActivity.start(context)
+                JudgeActivity.start(context, TYPE_EMPLOYEE)
             } else if (TYPE == 3) {
                 FengKongActivity.start(context)
             } else if (TYPE == 4) {
