@@ -24,6 +24,7 @@ import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.pe.view.SpaceItemDecoration
 import kotlinx.android.synthetic.main.fragment_judge.*
+import kotlinx.android.synthetic.main.fragment_main_project.*
 import org.jetbrains.anko.textColor
 
 
@@ -39,13 +40,14 @@ class JudgeFragment : BaseFragment() {
 
     companion object {
         /**
-         * type决定哪个界面，type1决定是员工还是领导
+         * type决定哪个界面，type1决定是员工还是领导，type2  岗位胜任力和关键绩效
          */
-        fun newInstance(type: Int, type1: Int, data: ArrayList<GradeCheckBean.ScoreItem>): JudgeFragment {
+        fun newInstance(type: Int, type1: Int, type2: Int, data: ArrayList<GradeCheckBean.ScoreItem>): JudgeFragment {
             val fragment = JudgeFragment()
             val intent = Bundle()
             intent.putInt(Extras.TYPE, type)
             intent.putInt(Extras.TYPE1, type1)
+            intent.putInt(Extras.TYPE2, type2)
             intent.putSerializable(Extras.DATA, data)
             fragment.arguments = intent
             return fragment
@@ -56,17 +58,20 @@ class JudgeFragment : BaseFragment() {
     val TYPE_END = 2
     val TYPE_EMPLOYEE = 3
     val TYPE_MANAGE = 4
+
     val TYPE_JOB = 1
     val TYPE_RATE = 2
 
     var type: Int? = null
     var type1: Int? = null
+    var type2 = 0
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         type = arguments.getInt(Extras.TYPE)
         type1 = arguments.getInt(Extras.TYPE1)
+        type2 = arguments.getInt(Extras.TYPE2)
 
         if (type == TYPE_WAIT && type1 == TYPE_EMPLOYEE) {
             tag_progress.visibility = View.GONE
@@ -111,7 +116,7 @@ class JudgeFragment : BaseFragment() {
         adapter.onItemClick = { v, p ->
             if (type1 == TYPE_EMPLOYEE) {
                 if (type == TYPE_WAIT) {
-                    RateActivity.start(context, adapter.dataList.get(p), TYPE_EMPLOYEE)
+                    RateActivity.start(context, adapter.dataList.get(p), type2,TYPE_EMPLOYEE, false)
                 } else if (type == TYPE_END) {
 
                 }
@@ -122,7 +127,7 @@ class JudgeFragment : BaseFragment() {
 //                }
             } else if (type1 == TYPE_MANAGE) {
                 if (type == TYPE_WAIT) {
-                    RateActivity.start(context, adapter.dataList.get(p), TYPE_MANAGE)
+                    RateActivity.start(context, adapter.dataList.get(p), type2, TYPE_MANAGE, false)
                 } else if (type == TYPE_END) {
 
                 }
@@ -144,6 +149,10 @@ class JudgeFragment : BaseFragment() {
             adapter.dataList.add(it)
         }
         adapter.notifyDataSetChanged()
+
+        if (adapter.dataList.size == 0) {
+            callback.judgeFinish()
+        }
     }
 
     interface judgeInterface {

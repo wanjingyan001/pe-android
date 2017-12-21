@@ -18,6 +18,7 @@ import com.sogukj.pe.R
 import com.sogukj.pe.bean.GradeCheckBean
 import com.sogukj.pe.bean.InvestManageItem
 import com.sogukj.pe.bean.TouZiUpload
+import com.sogukj.pe.ui.score.RateFragment.Companion.TYPE_JOB
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.RecyclerAdapter
@@ -34,7 +35,7 @@ import java.net.UnknownHostException
 
 
 /**
- * A simple [Fragment] subclass.
+ * A simple [Fragment] subclass.投资部关键绩效
  */
 class InvestManageFragment : BaseFragment() {
 
@@ -42,10 +43,12 @@ class InvestManageFragment : BaseFragment() {
         get() = R.layout.fragment_invest_manage
 
     companion object {
-        fun newInstance(check_person: GradeCheckBean.ScoreItem): InvestManageFragment {
+        //type 决定是岗位胜任力和关键绩效
+        fun newInstance(check_person: GradeCheckBean.ScoreItem, type: Int): InvestManageFragment {
             val fragment = InvestManageFragment()
             val intent = Bundle()
             intent.putSerializable(Extras.DATA, check_person)
+            intent.putInt(Extras.TYPE, type)
             fragment.arguments = intent
             return fragment
         }
@@ -53,6 +56,10 @@ class InvestManageFragment : BaseFragment() {
 
     lateinit var invest_adapter: RecyclerAdapter<InvestManageItem>
     lateinit var person: GradeCheckBean.ScoreItem
+
+    var type = 0
+    val TYPE_WAIT = 1
+    val TYPE_END = 2
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -202,10 +209,16 @@ class InvestManageFragment : BaseFragment() {
             data.add(inner)
         }
 
+        var type = arguments.getInt(Extras.TYPE)
+
         val params = HashMap<String, Any>()
         params.put("data", data)
         params.put("user_id", person.user_id!!)
-        params.put("type", 1)
+        if (type == 18) {//TYPE_GANGWEI
+            params.put("type", 2)
+        } else if (type == 19) {//TYPE_JIXIAO
+            params.put("type", 1)
+        }
         params.put("total", result)
 
         SoguApi.getService(baseActivity!!.application)

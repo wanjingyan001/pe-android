@@ -115,7 +115,8 @@ class InvestManageActivity : ToolbarActivity() {
                     .subscribeOn(Schedulers.io())
                     .subscribe({ payload ->
                         if (payload.isOk) {
-                            JudgeActivity.start(context, 3, 0)
+                            JudgeActivity.start(context, 3, 100)
+                            finish()
                         } else
                             showToast(payload.message)
                     }, { e ->

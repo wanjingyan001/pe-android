@@ -1030,4 +1030,13 @@ interface SoguService {
     @FormUrlEncoded
     @POST("/api/grade/each_comment")
     fun each_comment(@Field("user_id") user_id: Int): Observable<Payload<ArrayList<EmployeeInteractBean.EmployeeItem>>>
+
+    //岗位胜任力评分|查看评分  可空（若传递则查看评分）
+    @FormUrlEncoded
+    @POST("/api/grade/showJobPage")
+    fun showJobPage(@Field("user_id") user_id: Int? = null): Observable<Payload<JobPageBean>>
+
+    //岗位胜任力评分|查看评分  可空（若传递则查看评分）
+    @POST("/api/grade/showSumScore")
+    fun showSumScore(): Observable<Payload<TotalScoreBean>>
 }

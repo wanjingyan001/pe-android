@@ -32,12 +32,16 @@ class RateActivity : ToolbarActivity() {
         /**
          * check_person 被评分人信息
          * //type  1=>其他模版 2=>风控部模版 3=>投资部模版
-         * type决定哪个界面，type1决定是员工还是领导
+         * person.type决定哪个界面，type1决定是员工还是领导
+         * isShow = false 打分界面，true展示界面
+         * type 决定是岗位胜任力和关键绩效
          */
-        fun start(ctx: Context?, check_person: GradeCheckBean.ScoreItem, type1: Int) {
+        fun start(ctx: Context?, check_person: GradeCheckBean.ScoreItem, type: Int, type1: Int, isShow: Boolean) {
             val intent = Intent(ctx, RateActivity::class.java)
             intent.putExtra(Extras.DATA, check_person)
+            intent.putExtra(Extras.TYPE, type)
             intent.putExtra(Extras.TYPE1, type1)
+            intent.putExtra(Extras.FLAG, isShow)
             ctx?.startActivity(intent)
         }
     }
@@ -56,6 +60,9 @@ class RateActivity : ToolbarActivity() {
 
     lateinit var fragments: Array<BaseFragment>
 
+    val TYPE_GANGWEI = 18
+    val TYPE_JIXIAO = 19
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_rate)
@@ -73,17 +80,34 @@ class RateActivity : ToolbarActivity() {
 
         var person = intent.getSerializableExtra(Extras.DATA) as GradeCheckBean.ScoreItem
         var type1 = intent.getIntExtra(Extras.TYPE1, 0)
+        var type = intent.getIntExtra(Extras.TYPE, 0) //决定是岗位胜任力和关键绩效
         if (person.type == 3 && type1 == TYPE_MANAGE) {
-            fragments = arrayOf(
-                    InvestManageFragment.newInstance(person)
-            )
+            if (type == TYPE_GANGWEI) {
+                fragments = arrayOf(
+                        RateFragment.newInstance(RateFragment.TYPE_JOB, person.user_id!!)
+                )
+            } else if (type == TYPE_JIXIAO) {
+                fragments = arrayOf(
+                        InvestManageFragment.newInstance(person, type)
+                )
+            }
         } else if (person.type == 2 && type1 == TYPE_MANAGE) {
-            fragments = arrayOf(
-                    FengKongFragment.newInstance(person)
-            )
+            if (type == TYPE_GANGWEI) {
+                fragments = arrayOf(
+                        RateFragment.newInstance(RateFragment.TYPE_JOB, person.user_id!!)
+                )
+            } else if (type == TYPE_JIXIAO) {
+                fragments = arrayOf(
+                        FengKongFragment.newInstance(person)
+                )
+            }
         } else if (person.type == 1 && type1 == TYPE_MANAGE) {
             fragments = arrayOf(
-                    RateFragment.newInstance(RateFragment.TYPE_JOB)
+                    RateFragment.newInstance(RateFragment.TYPE_JOB, person.user_id!!)
+            )
+        } else if (type1 == TYPE_EMPLOYEE) {
+            fragments = arrayOf(
+                    RateFragment.newInstance(RateFragment.TYPE_JOB, person.user_id!!)
             )
         }
 

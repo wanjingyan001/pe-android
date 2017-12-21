@@ -84,7 +84,6 @@ class JudgeActivity : ToolbarActivity(), JudgeFragment.judgeInterface {
         }
 
         // 1=>进入绩效考核列表页面，2=>进入岗位胜任力列表 3=>进入风控部填写页，4=>进入投资部填写页
-        var pageType = 0
         if (type == TYPE_MANAGE) {
             if (type1 == TYPE_GANGWEI) {
                 pageType = 2
@@ -100,38 +99,6 @@ class JudgeActivity : ToolbarActivity(), JudgeFragment.judgeInterface {
                 pageType = 2
             }
         }
-
-        SoguApi.getService(application)
-                .check(pageType)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ payload ->
-                    if (payload.isOk) {
-                        payload.payload?.apply {
-                            if (pageType == 1) {
-                                fragments = arrayOf(
-                                        JudgeFragment.newInstance(TYPE_WAIT, type, ready_grade!!),
-                                        JudgeFragment.newInstance(TYPE_END, type, finish_grade!!)
-                                )
-                            } else if (pageType == 2) {
-                                fragments = arrayOf(
-                                        JudgeFragment.newInstance(TYPE_WAIT, type, ready_grade!!),
-                                        JudgeFragment.newInstance(TYPE_END, type, finish_grade!!)
-                                )
-                            }
-                            var adapter = ArrayPagerAdapter(supportFragmentManager, fragments)
-                            view_pager.adapter = adapter
-                        }
-                    } else
-                        showToast(payload.message)
-                }, { e ->
-                    Trace.e(e)
-                    when (e) {
-                        is JsonSyntaxException -> showToast("后台数据出错")
-                        is UnknownHostException -> showToast("网络出错")
-                        else -> showToast("未知错误")
-                    }
-                })
 
         view_pager.offscreenPageLimit = fragments.size
 
@@ -162,16 +129,61 @@ class JudgeActivity : ToolbarActivity(), JudgeFragment.judgeInterface {
 
         })
 
+        //TODO
+        toolbar_menu.text = "我的分数"
+        canClick = true
+        //TODO
+
         toolbar_menu.setOnClickListener {
             if (canClick) {
                 if (type == TYPE_EMPLOYEE) {
-                    //0-未完成，1-已完成
-                    TotalScoreActivity.start(context, 0)
+                    TotalScoreActivity.start(context)
                 } else if (type == TYPE_MANAGE) {
-                    ScoreListActivity.start(context)
+                    //ScoreListActivity.start(context)
                 }
             }
         }
+    }
+
+    var pageType = 0
+
+    override fun onResume() {
+        super.onResume()
+        SoguApi.getService(application)
+                .check(pageType)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        payload.payload?.apply {
+                            if (pageType == 1) {
+                                fragments = arrayOf(
+                                        //type员工领导
+                                        JudgeFragment.newInstance(TYPE_WAIT, type, type1, ready_grade!!),
+                                        JudgeFragment.newInstance(TYPE_END, type, type1, finish_grade!!)
+                                )
+                            } else if (pageType == 2) {
+                                fragments = arrayOf(
+                                        JudgeFragment.newInstance(TYPE_WAIT, type, type1, ready_grade!!),
+                                        JudgeFragment.newInstance(TYPE_END, type, type1, finish_grade!!)
+                                )
+                            } else {
+                                fragments = arrayOf(
+                                )
+                            }
+                            var adapter = ArrayPagerAdapter(supportFragmentManager, fragments)
+                            view_pager.adapter = adapter
+                        }
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    when (e) {
+                        is JsonSyntaxException -> showToast("后台数据出错")
+                        is UnknownHostException -> showToast("网络出错")
+                        else -> showToast("未知错误")
+                    }
+                })
     }
 
     var canClick = false

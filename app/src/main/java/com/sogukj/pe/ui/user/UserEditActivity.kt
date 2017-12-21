@@ -143,7 +143,7 @@ class UserEditActivity : ToolbarActivity() {
             } else if (TYPE == 1) {
                 LeaderActivity.start(context)
             } else if (TYPE == 2) {
-                JudgeActivity.start(context, TYPE_EMPLOYEE, 0)
+                JudgeActivity.start(context, TYPE_EMPLOYEE, 100)
             } else if (TYPE == 3) {
                 FengKongActivity.start(context)
             } else if (TYPE == 4) {

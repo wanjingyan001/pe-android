@@ -27,4 +27,5 @@ object Extras {
     val TIME2 = "ext.e_time"
 
     val TYPE1 = "ext.type1"
+    val TYPE2 = "ext.type2"
 }
