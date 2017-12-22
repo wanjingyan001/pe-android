@@ -66,11 +66,6 @@ class JudgeFragment : BaseFragment() {
     var type1: Int? = null
     var type2 = 0
 
-    override fun onResume() {
-        super.onResume()
-
-    }
-
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -119,28 +114,19 @@ class JudgeFragment : BaseFragment() {
             }
         })
         adapter.onItemClick = { v, p ->
+            //type2  岗位胜任力和关键绩效
             if (type1 == TYPE_EMPLOYEE) {
                 if (type == TYPE_WAIT) {
                     RateActivity.start(context, adapter.dataList.get(p), type2, TYPE_EMPLOYEE, false)
                 } else if (type == TYPE_END) {
 
                 }
-//                if (p == 0) {
-//                    callback.judgeFinish()
-//                } else {
-//                    RateActivity.start(context, adapter.dataList.get(p), TYPE_EMPLOYEE)
-//                }
             } else if (type1 == TYPE_MANAGE) {
                 if (type == TYPE_WAIT) {
                     RateActivity.start(context, adapter.dataList.get(p), type2, TYPE_MANAGE, false)
                 } else if (type == TYPE_END) {
-
+                    RateActivity.start(context, adapter.dataList.get(p), type2, TYPE_MANAGE, true)
                 }
-//                if (p == 0) {
-//                    callback.judgeFinish()
-//                } else {
-//                    RateActivity.start(context, adapter.dataList.get(p), TYPE_MANAGE)
-//                }
             }
         }
         val layoutManager = LinearLayoutManager(context)
@@ -150,6 +136,7 @@ class JudgeFragment : BaseFragment() {
         list.adapter = adapter
 
         var data = arguments.getSerializable(Extras.DATA) as ArrayList<GradeCheckBean.ScoreItem>
+        adapter.dataList.clear()
         data.forEach {
             adapter.dataList.add(it)
         }
@@ -158,6 +145,10 @@ class JudgeFragment : BaseFragment() {
         if (adapter.dataList.size == 0) {
             callback.judgeFinish()
         }
+    }
+
+    fun load() {
+
     }
 
     interface judgeInterface {

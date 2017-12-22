@@ -16,6 +16,7 @@ import com.sogukj.pe.bean.TouHouManageItem
 
 /**
  * Created by sogubaby on 2017/12/21.
+ * 0--touhou   1   jindiao
  */
 class FengKongAdapter(val context: Context, val type: Int, val jin_tmp: ArrayList<JinDiaoItem>, val touhou_tmp: ArrayList<TouHouManageItem>) : BaseAdapter() {
 

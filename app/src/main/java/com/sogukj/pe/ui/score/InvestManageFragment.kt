@@ -44,7 +44,8 @@ class InvestManageFragment : BaseFragment() {
 
     companion object {
         //type 决定是岗位胜任力和关键绩效
-        fun newInstance(check_person: GradeCheckBean.ScoreItem, type: Int): InvestManageFragment {
+        //isShow  = false 打分界面，true展示界面
+        fun newInstance(check_person: GradeCheckBean.ScoreItem, type: Int, isShow: Boolean): InvestManageFragment {
             val fragment = InvestManageFragment()
             val intent = Bundle()
             intent.putSerializable(Extras.DATA, check_person)
@@ -60,6 +61,7 @@ class InvestManageFragment : BaseFragment() {
     var type = 0
     val TYPE_WAIT = 1
     val TYPE_END = 2
+    var isShown = false
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -74,6 +76,7 @@ class InvestManageFragment : BaseFragment() {
         invest_list_fragment.adapter = invest_adapter
 
         person = arguments.getSerializable(Extras.DATA) as GradeCheckBean.ScoreItem
+        isShown = arguments.getBoolean(Extras.FLAG) // false 打分界面，true展示界面
         SoguApi.getService(baseActivity!!.application)
                 .perAppraisal(person.user_id!!, person.type!!)
                 .observeOn(AndroidSchedulers.mainThread())

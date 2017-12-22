@@ -1009,6 +1009,12 @@ interface SoguService {
     @POST("/api/grade/perAppraisal")
     fun perAppraisal(@Field("user_id") user_id: Int, @Field("type") type: Int): Observable<Payload<ArrayList<InvestManageItem>>>
 
+    //关键绩效指标评价----------风控部
+    //user_id被打分人id
+    @FormUrlEncoded
+    @POST("/api/grade/perAppraisal")
+    fun perAppraisal_FK(@Field("user_id") user_id: Int, @Field("type") type: Int): Observable<Payload<FKItem>>
+
     //提交关键绩效和岗位胜任力打分   type  1:提交关键绩效打分 2:提交岗位胜任力打分
     @POST("/api/grade/giveGrade")
     fun giveGrade(@Body map: HashMap<String, Any>): Observable<Payload<Any>>

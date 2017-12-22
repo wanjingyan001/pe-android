@@ -130,7 +130,12 @@ class JudgeActivity : ToolbarActivity(), JudgeFragment.judgeInterface {
         })
 
         //TODO
-        toolbar_menu.text = "我的分数"
+        var type = intent.getIntExtra(Extras.FLAG, 0)
+        if (view_pager.currentItem == 0 && type == TYPE_EMPLOYEE) {
+            toolbar_menu.text = "我的分数"
+        } else if (view_pager.currentItem == 0 && type == TYPE_MANAGE) {
+            toolbar_menu.text = "查看分数"
+        }
         canClick = true
         //TODO
 
@@ -165,22 +170,37 @@ class JudgeActivity : ToolbarActivity(), JudgeFragment.judgeInterface {
                                 var adapter = ArrayPagerAdapter(supportFragmentManager, fragments)
                                 view_pager.adapter = adapter
                             } else if (pageType == 2) {
-                                if (fragments == null || fragments.size == 0) {
-                                    fragments = arrayOf(
-                                            JudgeFragment.newInstance(TYPE_WAIT, type, type1, ready_grade!!),
-                                            JudgeFragment.newInstance(TYPE_END, type, type1, finish_grade!!)
-                                    )
-                                    var adapter = ArrayPagerAdapter(supportFragmentManager, fragments)
-                                    view_pager.adapter = adapter
-                                } else {
-                                    val intent = Bundle()
-                                    intent.putSerializable(Extras.DATA, ready_grade!!)
-                                    fragments[0].arguments = intent
+//                                if (fragments == null || fragments.size == 0) {
+//                                    fragments = arrayOf(
+//                                            JudgeFragment.newInstance(TYPE_WAIT, type, type1, ready_grade!!),
+//                                            JudgeFragment.newInstance(TYPE_END, type, type1, finish_grade!!)
+//                                    )
+//                                    var adapter = ArrayPagerAdapter(supportFragmentManager, fragments)
+//                                    view_pager.adapter = adapter
+//                                } else {
+//                                    val intent = Bundle()
+//                                    intent.putSerializable(Extras.DATA, ready_grade!!)
+//                                    fragments[0].arguments = intent
+//                                    fragments[0].adapter.dataList.clear()
+//                                    fragments[0].adapter.dataList = ready_grade!!
+//                                    fragments[0].adapter.notifyDataSetChanged()
+//
+//                                    val intent2 = Bundle()
+//                                    intent2.putSerializable(Extras.DATA, finish_grade!!)
+//                                    fragments[1].arguments = intent
+//                                    fragments[1].adapter.dataList.clear()
+//                                    fragments[1].adapter.dataList = ready_grade!!
+//                                    fragments[1].adapter.notifyDataSetChanged()
+//                                }
 
-                                    val intent2 = Bundle()
-                                    intent2.putSerializable(Extras.DATA, finish_grade!!)
-                                    fragments[1].arguments = intent
-                                }
+                                view_pager.adapter = null
+                                fragments = arrayOf<JudgeFragment>()
+                                fragments = arrayOf(
+                                        JudgeFragment.newInstance(TYPE_WAIT, type, type1, ready_grade!!),
+                                        JudgeFragment.newInstance(TYPE_END, type, type1, finish_grade!!)
+                                )
+                                var adapter = ArrayPagerAdapter(supportFragmentManager, fragments)
+                                view_pager.adapter = adapter
                             } else {
                                 fragments = arrayOf(
                                 )

@@ -121,6 +121,7 @@
                     android:background="#FFF3F5F7" />
 
                 <TextView
+                    android:id="@+id/fk_score"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="120"
