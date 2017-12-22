@@ -83,13 +83,14 @@ class CalendarMainActivity : ToolbarActivity(), MonthSelectListener, ViewPager.O
             }
             2 -> {
                 title = "日历"
-                addSchedule.visibility = View.VISIBLE
+                addSchedule.visibility = View.GONE
                 addSchedule.setOnClickListener {
                     ModifyTaskActivity.startForCreate(this, "")
                 }
             }
             3 -> {
                 title = teamScheduleFragment.date
+                addSchedule.visibility = View.GONE
                 addSchedule.setOnClickListener {
                     ModifyTaskActivity.startForCreate(this, ModifyTaskActivity.Schedule)
                 }

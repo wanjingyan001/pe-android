@@ -4,12 +4,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.sogukj.pe.R;
 import com.sogukj.pe.service.Payload;
 import com.sogukj.pe.util.Utils;
@@ -89,17 +92,7 @@ public class TaskAdapter extends RecyclerView.Adapter {
             ((InfoHolder) holder).finishBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (listener != null) {
-                        ((InfoHolder) holder).finishBox.setSelected(!v.isSelected());
-                        if (v.isSelected()) {
-                            ((InfoHolder) holder).content.setPaintFlags(
-                                    ((InfoHolder) holder).content.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                        } else {
-                            ((InfoHolder) holder).content.setPaintFlags(
-                                    ((InfoHolder) holder).content.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-                        }
-                        finishTask(bean.getData_id(), v.isSelected());
-                    }
+                    finishTask(bean.getId(), ((InfoHolder) holder).finishBox, ((InfoHolder) holder).content);
                 }
             });
 
@@ -115,23 +108,34 @@ public class TaskAdapter extends RecyclerView.Adapter {
         }
     }
 
-    private void finishTask(int id, final boolean isChecked) {
+    private void finishTask(int id, final ImageView finishBox, final TextView content) {
         SoguApi.Companion.getService(((Activity) context).getApplication())
                 .finishTask(id)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Observer<Payload<Object>>() {
+                .subscribe(new Observer<Payload<Integer>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(Payload<Object> objectPayload) {
+                    public void onNext(Payload<Integer> objectPayload) {
+                        Log.d("WJY", new Gson().toJson(objectPayload));
                         if (objectPayload.isOk()) {
-                            if (listener!=null){
-                                listener.finishCheck(isChecked, 0);
+                            if (listener != null && objectPayload.getPayload() != null) {
+                                listener.finishCheck(objectPayload.getPayload() == 1, 0);
+                                finishBox.setSelected(objectPayload.getPayload() == 1);
+                                if (objectPayload.getPayload() == 1) {
+                                    content.setPaintFlags(
+                                            content.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                                } else {
+                                    content.setPaintFlags(
+                                            content.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                                }
                             }
+                        } else {
+                            Toast.makeText(context, objectPayload.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
 

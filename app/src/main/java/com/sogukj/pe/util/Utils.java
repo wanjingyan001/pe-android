@@ -3,7 +3,6 @@ package com.sogukj.pe.util;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.AlarmManager;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -11,7 +10,9 @@ import android.graphics.Rect;
 import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewCompat;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -21,6 +22,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
+import android.widget.Scroller;
+
+import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
+import com.ldf.calendar.view.MonthPager;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -308,6 +313,45 @@ public class Utils {
         }
         return false;
 
+    }
+
+    private static int top;
+    public static void scrollTo(final CoordinatorLayout parent, final TwinklingRefreshLayout child, final int y, int duration) {
+        final Scroller scroller = new Scroller(parent.getContext());
+        scroller.startScroll(0, top, 0, y - top, duration);   //设置scroller的滚动偏移量
+        ViewCompat.postOnAnimation(child, new Runnable() {
+            @Override
+            public void run() {
+                //返回值为boolean，true说明滚动尚未完成，false说明滚动已经完成。
+                // 这是一个很重要的方法，通常放在View.computeScroll()中，用来判断是否滚动是否结束。
+                if (scroller.computeScrollOffset()) {
+                    int delta = scroller.getCurrY() - child.getTop();
+                    child.offsetTopAndBottom(delta);
+                    saveTop(child.getTop());
+                    parent.dispatchDependentViewsChanged(child);
+                    ViewCompat.postOnAnimation(child, this);
+                } else {
+                    MonthPager monthPager = (MonthPager) parent.getChildAt(0);
+                    if (monthPager.getTop() < 0) {
+//                        if (monthPager.getTop() + monthPager.getTopMovableDistance() >= 0) {
+//                            monthPager.offsetTopAndBottom(-monthPager.getTop()
+//                                    - monthPager.getTopMovableDistance());
+//                        } else {
+//                            monthPager.offsetTopAndBottom(-monthPager.getTop());
+//                        }
+                        parent.dispatchDependentViewsChanged(child);
+                    }
+                }
+            }
+        });
+    }
+
+    public static void saveTop(int y) {
+        top = y;
+    }
+
+    public static int loadTop() {
+        return top;
     }
 //
 //    public static void setAlarmClock(Activity activity){

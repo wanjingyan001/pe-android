@@ -4,9 +4,15 @@ package com.sogukj.pe.ui.calendar
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.View
 import com.framework.base.BaseFragment
+import com.google.gson.Gson
 import com.sogukj.pe.R
+import com.sogukj.pe.ui.approve.SealApproveActivity
+import com.sogukj.pe.ui.approve.SignApproveActivity
+import com.sogukj.pe.ui.project.ProjectActivity
+import com.sogukj.pe.ui.project.RecordTraceActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -41,7 +47,8 @@ class TodoFragment : BaseFragment(), ScheduleItemClickListener {
         super.onViewCreated(view, savedInstanceState)
         adapter = TodoAdapter(data, context)
         adapter.setListener(this)
-        todoList.layoutManager = LinearLayoutManager(context)
+        todoList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        todoList.setHasFixedSize(true)
         todoList.adapter = adapter
         companyId?.let { doRequest(it) }
     }
@@ -55,13 +62,17 @@ class TodoFragment : BaseFragment(), ScheduleItemClickListener {
                     if (payload.isOk) {
                         data.clear()
                         payload.payload?.let {
+                            Log.d("WJY", Gson().toJson(it))
                             val yearList = ArrayList<String>()
                             val dayList = ArrayList<String>()
                             val infoList = ArrayList<KeyNode>()
                             it.forEachIndexed { index, matterDetails ->
                                 yearList.add(matterDetails.year)
                                 matterDetails.data.forEach {
-                                    dayList.add(it.end_time?.split(" ")?.get(0)!!)
+                                    val day = it.end_time?.split(" ")?.get(0)!!
+                                    if (!dayList.contains(day)) {
+                                        dayList.add(day)
+                                    }
                                     infoList.add(it)
                                 }
                             }
@@ -70,10 +81,10 @@ class TodoFragment : BaseFragment(), ScheduleItemClickListener {
                                 dayList.forEachIndexed { _, s ->
                                     if (s.substring(0, 4) == it) {
                                         data.add(TodoDay(s))
-                                    }
-                                    infoList.forEachIndexed { _, keyNode ->
-                                        if (keyNode.end_time?.split(" ")?.get(0).equals(s)) {
-                                            data.add(keyNode)
+                                        infoList.forEachIndexed { _, keyNode ->
+                                            if (keyNode.end_time?.split(" ")?.get(0).equals(s)) {
+                                                data.add(keyNode)
+                                            }
                                         }
                                     }
                                 }
@@ -88,23 +99,65 @@ class TodoFragment : BaseFragment(), ScheduleItemClickListener {
     }
 
     override fun onItemClick(view: View, position: Int) {
+        val bean = data[position] as KeyNode
+        when (bean.type) {
+            0 -> {
+                //日程
+                TaskDetailActivity.start(activity, bean.data_id!!, bean.title!!, ModifyTaskActivity.Task)
+            }
+            1 -> {
+                //任务
+                TaskDetailActivity.start(activity, bean.data_id!!, bean.title!!, ModifyTaskActivity.Task)
+            }
+            2 -> {
+                //会议
+            }
+            3 -> {
+                //用印审批
+                SealApproveActivity.start(activity, bean.data_id!!, "用印审批")
+            }
+            4 -> {
+                //签字审批
+                SignApproveActivity.start(activity, bean.data_id!!, "签字审批")
+            }
+            5 -> {
+                //跟踪记录
+                getCompanyDetail(bean.data_id!!, 5)
+            }
+            6 -> {
+                //项目
+                getCompanyDetail(bean.data_id!!, 6)
+            }
+            7 -> {
+                //请假
+            }
+            8 -> {
+                // 出差
+            }
+        }
+    }
+
+    override fun finishCheck(isChecked: Boolean, position: Int) {
 
     }
 
-    override fun finishCheck( isChecked: Boolean, position: Int) {
-        val keyNode = data[position] as KeyNode
-        keyNode.data_id?.let { finishTask(it) }
-    }
-
-
-    fun finishTask(id: Int) {
+    fun getCompanyDetail(cId: Int, type: Int) {
         SoguApi.getService(activity.application)
-                .finishTask(id)
+                .singleCompany(cId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        companyId?.let { doRequest(it) }
+                        payload.payload?.let {
+                            when (type) {
+                                5 -> {
+                                    RecordTraceActivity.start(activity, it)
+                                }
+                                6 -> {
+                                    ProjectActivity.start(activity, it)
+                                }
+                            }
+                        }
                     } else {
                         showToast(payload.message)
                     }

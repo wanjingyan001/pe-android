@@ -4,10 +4,9 @@ package com.sogukj.pe.ui.calendar
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.framework.base.BaseFragment
-import com.google.gson.Gson
 import com.ldf.calendar.component.CalendarAttr
 import com.ldf.calendar.component.CalendarViewAdapter
 import com.ldf.calendar.interf.OnSelectDateListener
@@ -29,6 +28,7 @@ import kotlinx.android.synthetic.main.fragment_schedule.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.properties.Delegates
 
 
 /**
@@ -78,6 +78,7 @@ class ScheduleFragment : BaseFragment() {
                 //选中日期监听
                 val calendar = java.util.Calendar.getInstance()
                 calendar.set(date?.year!!, date.month - 1, date.day)
+                page = 1
                 selectDate = Utils.getTime(calendar.time.time, "yyyy-MM-dd")
                 doRequest(page, selectDate)
             }
@@ -143,11 +144,13 @@ class ScheduleFragment : BaseFragment() {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        data.clear()
+                        if (page == 1) {
+                            data.clear()
+                        }
                         payload.payload?.let {
                             if (it.isNotEmpty()) {
                                 val bean = ScheduleBean()
-                                bean.start_time = it[0].start_time
+                                bean.start_time = date
                                 data.add(bean)
                             }
                             data.addAll(it)
@@ -159,6 +162,8 @@ class ScheduleFragment : BaseFragment() {
                     Trace.e(e)
                 }, {
                     adapter.notifyDataSetChanged()
+                    isLoading = false
+                    isRefreshing = false
                 })
     }
 
@@ -170,7 +175,6 @@ class ScheduleFragment : BaseFragment() {
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         payload.payload?.let {
-                            Log.d("WJY", Gson().toJson(payload.payload))
                             val map = HashMap<String, String>()
                             it.forEach {
                                 map.put(it, "1")
@@ -191,10 +195,13 @@ class ScheduleFragment : BaseFragment() {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        if (isChecked) {
-                            showToast("您完成了该日程")
-                        } else {
-                            showToast("您重新打开了该日程")
+
+                        payload.payload?.let {
+                            if (it == 1) {
+                                showToast("您完成了该日程")
+                            } else {
+                                showToast("您重新打开了该日程")
+                            }
                         }
                     } else {
                         showToast(payload.message)
@@ -204,6 +211,8 @@ class ScheduleFragment : BaseFragment() {
                 })
     }
 
+    var isLoading = false
+    var isRefreshing = false
     private fun initList() {
         adapter = ScheduleAdapter(context, data)
         list.layoutManager = LinearLayoutManager(context)
@@ -214,7 +223,7 @@ class ScheduleFragment : BaseFragment() {
                 when (scheduleBean.type) {
                     0 -> {
                         //日程
-                        TaskDetailActivity.start(activity, scheduleBean.data_id!!, scheduleBean.title!!, ModifyTaskActivity.Schedule)
+                        TaskDetailActivity.startSchedule(activity, scheduleBean, ModifyTaskActivity.Schedule)
                     }
                     1 -> {
                         //任务
@@ -233,6 +242,7 @@ class ScheduleFragment : BaseFragment() {
                     }
                     5 -> {
                         //跟踪记录
+                        getCompanyDetail(scheduleBean.data_id!!, 5)
                     }
                     6 -> {
                         //项目
@@ -250,6 +260,32 @@ class ScheduleFragment : BaseFragment() {
             override fun finishCheck(isChecked: Boolean, position: Int) {
                 val scheduleBean = data[position]
                 scheduleBean.id?.let { finishTask(it, isChecked) }
+            }
+        })
+        list.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            var lastItemPosition: Int by Delegates.notNull()
+            var firstItemPosition: Int by Delegates.notNull()
+            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val manager = list.layoutManager as LinearLayoutManager
+                lastItemPosition = manager.findLastVisibleItemPosition()
+                firstItemPosition = manager.findFirstVisibleItemPosition()
+            }
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    if (!isLoading && adapter.itemCount == (lastItemPosition + 1)) {
+                        page += 1
+                        isLoading = true
+                        doRequest(page, selectDate)
+                    }
+                    if (!isRefreshing && firstItemPosition == 0) {
+                        page = 1
+                        isRefreshing = true
+                        doRequest(page, selectDate)
+                    }
+                }
             }
         })
     }

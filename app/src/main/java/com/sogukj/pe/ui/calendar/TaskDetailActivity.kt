@@ -18,8 +18,8 @@ import com.bumptech.glide.Glide
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.bean.ScheduleBean
 import com.sogukj.pe.util.Trace
-import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.CircleImageView
 import com.sogukj.pe.view.CommentWindow
 import com.sogukj.pe.view.RecyclerAdapter
@@ -49,6 +49,13 @@ class TaskDetailActivity : ToolbarActivity(), CommentListener, View.OnClickListe
             intent.putExtra(Extras.TITLE, title)
             ctx?.startActivity(intent)
         }
+
+        fun startSchedule(ctx: Activity?, scheduleBean: ScheduleBean, name: String) {
+            val intent = Intent(ctx, TaskDetailActivity::class.java)
+            intent.putExtra(Extras.DATA, scheduleBean)
+            intent.putExtra(Extras.NAME, name)
+            ctx?.startActivity(intent)
+        }
     }
 
     override val menuId: Int
@@ -57,57 +64,77 @@ class TaskDetailActivity : ToolbarActivity(), CommentListener, View.OnClickListe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task_detail)
-        data_id = intent.getIntExtra(Extras.ID, -1)
-        titleStr = intent.getStringExtra(Extras.TITLE)
-        title = "任务详情"
+        val name = intent.getStringExtra(Extras.NAME)
         setBack(true)
-        delete.setOnClickListener(this)
+        when (name) {
+            ModifyTaskActivity.Schedule -> {
+                title = "日程详情"
+                val bean = intent.getSerializableExtra(Extras.DATA) as ScheduleBean
+                taskTitle.text = bean.title
+                data_id = bean.data_id!!
 
-        adapter = RecyclerAdapter(this, { _adapter, parent, position ->
-            val convertView = _adapter.getView(R.layout.item_comment_list, parent)
-            object : RecyclerHolder<TaskDetailBean.Record>(convertView) {
-                val headerImage = convertView.find<CircleImageView>(R.id.headerImage)
-                val commentName = convertView.find<TextView>(R.id.commentName)
-                val info = convertView.find<TextView>(R.id.info)
-                val time = convertView.find<TextView>(R.id.time)
-                val type = convertView.find<TextView>(R.id.type)
-                override fun setData(view: View, data: TaskDetailBean.Record, position: Int) {
-                    Glide.with(this@TaskDetailActivity)
-                            .load(data.url)
-                            .into(headerImage)
-                    commentName.text = data.name
-                    when (data.type) {
-                        "1" -> {
-                            info.text = "布置任务"
-                            type.visibility = View.GONE
-                        }
-                        "2" -> {
-                            info.text = "接受任务"
-                            type.text = TextStrSplice("意见:${data.content}", 3)
-                        }
-                        "3" -> {
-                            info.text = "拒绝任务"
-                            type.text = TextStrSplice("原因:${data.content}", 3)
-                        }
-                        else -> {
-                            info.text = "评价任务"
-                            type.text = TextStrSplice("评论:${data.content}", 3)
+                taskNumber.text = TextStrSplice("日程编号: ${bean.id}", 5)
+                arrangeTime.text = TextStrSplice("安排时间: ${bean.start_time} - ${bean.end_time}", 5)
+                taskPublisher.text = TextStrSplice("任务发布者: ${bean.publisher}", 6)
+                related_project.visibility = View.GONE
+                taskExecutive.text = TextStrSplice("日程执行者: ${bean.name}", 6)
+                taskCcPerson.visibility = View.GONE
+                taskDetail.visibility = View.GONE
+                delete.visibility = View.GONE
+                commentLayout.visibility = View.GONE
+            }
+            ModifyTaskActivity.Task -> {
+                title = "任务详情"
+                data_id = intent.getIntExtra(Extras.ID, -1)
+                titleStr = intent.getStringExtra(Extras.TITLE)
+                adapter = RecyclerAdapter(this, { _adapter, parent, position ->
+                    val convertView = _adapter.getView(R.layout.item_comment_list, parent)
+                    object : RecyclerHolder<TaskDetailBean.Record>(convertView) {
+                        val headerImage = convertView.find<CircleImageView>(R.id.headerImage)
+                        val commentName = convertView.find<TextView>(R.id.commentName)
+                        val info = convertView.find<TextView>(R.id.info)
+                        val time = convertView.find<TextView>(R.id.time)
+                        val type = convertView.find<TextView>(R.id.type)
+                        override fun setData(view: View, data: TaskDetailBean.Record, position: Int) {
+                            Glide.with(this@TaskDetailActivity)
+                                    .load(data.url)
+                                    .into(headerImage)
+                            commentName.text = data.name
+                            when (data.type) {
+                                "1" -> {
+                                    info.text = "布置任务"
+                                    type.visibility = View.GONE
+                                }
+                                "2" -> {
+                                    info.text = "接受任务"
+                                    type.text = TextStrSplice("意见:${data.content}", 3)
+                                }
+                                "3" -> {
+                                    info.text = "拒绝任务"
+                                    type.text = TextStrSplice("原因:${data.content}", 3)
+                                }
+                                else -> {
+                                    info.text = "评价任务"
+                                    type.text = TextStrSplice("评论:${data.content}", 3)
+                                }
+                            }
+                            time.text = data.time
                         }
                     }
-                    time.text = data.time
+                })
+                commentList.layoutManager = LinearLayoutManager(this)
+                commentList.adapter = adapter
+                doRequest(data_id)
+                taskTitle.text = titleStr
+                delete.setOnClickListener(this)
+                window = CommentWindow(this, this)
+                commentTv.setOnClickListener {
+                    window.showAtLocation(find(R.id.task_detail_main), Gravity.BOTTOM, 0, 0)
                 }
             }
-        })
-        commentList.layoutManager = LinearLayoutManager(this)
-        commentList.adapter = adapter
-
-        window = CommentWindow(this, this)
-        commentTv.setOnClickListener {
-            window.showAtLocation(find(R.id.task_detail_main), Gravity.BOTTOM, 0, 0)
         }
 
-        doRequest(data_id)
-        taskTitle.text = titleStr
+
     }
 
     fun doRequest(data_id: Int) {
@@ -133,6 +160,7 @@ class TaskDetailActivity : ToolbarActivity(), CommentListener, View.OnClickListe
                             }
                             it.record?.let {
                                 adapter.dataList.addAll(it)
+                                adapter.notifyDataSetChanged()
                             }
                             it.info?.let {
                                 taskNumber.text = TextStrSplice("任务编号: ${it.number}", 5)
@@ -161,7 +189,6 @@ class TaskDetailActivity : ToolbarActivity(), CommentListener, View.OnClickListe
     }
 
     override fun confirmListener(comment: String) {
-        Utils.closeInput(this, commentTv)
         SoguApi.getService(application)
                 .addComment(data_id, comment)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -211,6 +238,7 @@ class TaskDetailActivity : ToolbarActivity(), CommentListener, View.OnClickListe
         when (item?.itemId) {
             R.id.task_modify -> {
                 ModifyTaskActivity.startForModify(this, data_id, intent.getStringExtra(Extras.NAME))
+                finish()
             }
         }
         return super.onOptionsItemSelected(item)

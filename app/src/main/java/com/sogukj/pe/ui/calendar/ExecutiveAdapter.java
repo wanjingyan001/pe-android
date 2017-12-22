@@ -12,6 +12,7 @@ import com.sogukj.pe.R;
 import com.sogukj.pe.bean.UserBean;
 import com.sogukj.pe.view.CircleImageView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -76,6 +77,16 @@ public class ExecutiveAdapter extends RecyclerView.Adapter<ExecutiveAdapter.Exec
         if (!exPersons.contains(userBean)) {
             exPersons.add(userBean);
             notifyDataSetChanged();
+        }
+    }
+
+    public void addAllData(ArrayList<UserBean> selects) {
+        exPersons.clear();
+        for (UserBean bean : selects) {
+            if (!exPersons.contains(bean)) {
+                exPersons.add(bean);
+                notifyDataSetChanged();
+            }
         }
     }
 

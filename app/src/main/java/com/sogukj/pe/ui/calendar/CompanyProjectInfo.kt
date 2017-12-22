@@ -10,6 +10,8 @@ class KeyNode : Serializable {
     var title: String? = null//标题
     var type: Int? = 0//类别
     var data_id: Int? = 0//
+    var name: String? = null//姓名 当project_type=3时，多人名以逗号隔开
+    var finish_time: String? = null//完成时间  仅当project_type=2返回
 }
 
 

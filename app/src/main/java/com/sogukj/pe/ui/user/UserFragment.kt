@@ -6,9 +6,9 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
-import android.view.MenuItem
+import android.view.View
 import com.bumptech.glide.Glide
-import com.framework.base.ToolbarActivity
+import com.framework.base.ToolbarFragment
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.DepartmentBean
 import com.sogukj.pe.bean.UserBean
@@ -24,29 +24,15 @@ import kotlinx.android.synthetic.main.activity_user.*
  * Created by qinfei on 17/7/18.
  */
 
-class UserActivity : ToolbarActivity() {
-    override val menuId: Int
-        get() = R.menu.menu_logout
+class UserFragment : ToolbarFragment() {
+    override val containerViewId: Int
+        get() = R.layout.activity_user
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
-            R.id.action_logout -> {
-                val user = Store.store.getUser(this@UserActivity)
-                user?.let {
-                    CardActivity.start(this, it)
-                }
-            }
-        }
-        return false
-    }
 
-    val departList = ArrayList<DepartmentBean>()
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_user)
-        title = "个人中心"
-        setBack(true)
-        SoguApi.getService(application)
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        toolbar_title.text = "个人中心"
+        SoguApi.getService(activity.application)
                 .userDepart()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -63,17 +49,17 @@ class UserActivity : ToolbarActivity() {
                     showToast("数据获取失败")
                 })
 
-        val user = Store.store.getUser(this)
+        val user = Store.store.getUser(context)
         updateUser(user)
         if (null != user?.uid) {
-            SoguApi.getService(application)
+            SoguApi.getService(activity.application)
                     .userInfo(user.uid!!)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe({ payload ->
                         if (payload.isOk) {
                             val user = payload.payload
-                            user?.apply { Store.store.setUser(this@UserActivity, this) }
+                            user?.apply { Store.store.setUser(context, this) }
                             updateUser(user)
                         } else showToast(payload.message)
                     }, { e ->
@@ -84,20 +70,26 @@ class UserActivity : ToolbarActivity() {
 
 
         ll_user.setOnClickListener {
-            UserEditActivity.start(this@UserActivity, departList)
+            UserEditActivity.start(activity, departList)
         }
         structure.setOnClickListener {
-            OrganizationActivity.start(this, departList)
+            OrganizationActivity.start(activity, departList)
         }
         setting.setOnClickListener {
-            SettingActivity.start(this)
+            SettingActivity.start(context)
         }
-
+        toolbar_menu.setOnClickListener {
+            user?.let {
+                CardActivity.start(activity, it)
+            }
+        }
     }
+
+    val departList = ArrayList<DepartmentBean>()
 
 
     fun getBelongBean(userId: Int) {
-        SoguApi.getService(application)
+        SoguApi.getService(activity.application)
                 .getBelongProject(userId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -120,7 +112,7 @@ class UserActivity : ToolbarActivity() {
 
     override fun onResume() {
         super.onResume()
-        val user = Store.store.getUser(this)
+        val user = Store.store.getUser(context)
         updateUser(user)
         user?.uid?.let { getBelongBean(it) }
     }
@@ -136,7 +128,7 @@ class UserActivity : ToolbarActivity() {
 //        if (!TextUtils.isEmpty(user.depart_name))
 //            tv_job?.text = user.position
         if (!TextUtils.isEmpty(user.url))
-            Glide.with(this@UserActivity)
+            Glide.with(this@UserFragment)
                     .load(user.headImage())
                     .into(iv_user)
     }
@@ -144,7 +136,14 @@ class UserActivity : ToolbarActivity() {
 
     companion object {
         fun start(ctx: Activity?) {
-            ctx?.startActivity(Intent(ctx, UserActivity::class.java))
+            ctx?.startActivity(Intent(ctx, UserFragment::class.java))
+        }
+
+        fun newInstance(): UserFragment {
+            val fragment = UserFragment()
+            val args = Bundle()
+            fragment.arguments = args
+            return fragment
         }
     }
 }

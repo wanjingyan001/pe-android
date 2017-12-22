@@ -69,8 +69,6 @@ public class ProjectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            ((ProjectHolder) holder).Img1.setOnClickListener(listener);
-            ((ProjectHolder) holder).Img2.setOnClickListener(listener);
         } else if (holder instanceof MatterHolder) {
             final ProjectMatterCompany company = (ProjectMatterCompany) o;
             ((MatterHolder) holder).companyName.setText(company.getCompanyName());
@@ -92,27 +90,33 @@ public class ProjectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
 
             ((BeanHolder) holder).contentTv.setText(info.getTitle());
-            if (info.is_finish() == 1) {
-                ((BeanHolder) holder).finishBox.setSelected(true);
-                ((BeanHolder) holder).contentTv.setPaintFlags(
-                        ((BeanHolder) holder).contentTv.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-            } else {
-                ((BeanHolder) holder).finishBox.setSelected(false);
-                ((BeanHolder) holder).contentTv.setPaintFlags(
-                        ((BeanHolder) holder).contentTv.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-            }
+
             if (info.is_collect() != null) {
                 //noinspection ConstantConditions
                 if (info.is_collect() == 1) {
-                    ((BeanHolder) holder).finishBox.setVisibility(View.INVISIBLE);
-                    ((BeanHolder) holder).contentTv.getPaint().setTextSkewX(0);
+//                    ((BeanHolder) holder).finishBox.setVisibility(View.INVISIBLE);
+                    ((BeanHolder) holder).contentTv.setPaintFlags(
+                            ((BeanHolder) holder).contentTv.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
                 } else {
-                    ((BeanHolder) holder).finishBox.setVisibility(View.VISIBLE);
-                    ((BeanHolder) holder).finishBox.setSelected(true);
-                    ((BeanHolder) holder).contentTv.getPaint().setTextSkewX(-0.4f);
+//                    ((BeanHolder) holder).finishBox.setVisibility(View.INVISIBLE);
+                    if (info.is_finish() == 1) {
+//                        ((BeanHolder) holder).finishBox.setSelected(true);
+                        ((BeanHolder) holder).contentTv.setPaintFlags(
+                                ((BeanHolder) holder).contentTv.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    } else {
+//                        ((BeanHolder) holder).finishBox.setSelected(false);
+                        ((BeanHolder) holder).contentTv.setPaintFlags(
+                                ((BeanHolder) holder).contentTv.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                    }
                 }
-            }else {
-                ((BeanHolder) holder).contentTv.getPaint().setTextSkewX(0);
+            }
+            if (info.getPublisher() != null) {
+                ((BeanHolder) holder).icCreater.setVisibility(View.VISIBLE);
+                ((BeanHolder) holder).creator.setVisibility(View.VISIBLE);
+                ((BeanHolder) holder).creator.setText(info.getPublisher());
+            } else {
+                ((BeanHolder) holder).icCreater.setVisibility(View.GONE);
+                ((BeanHolder) holder).creator.setVisibility(View.GONE);
             }
             ((BeanHolder) holder).view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -120,29 +124,27 @@ public class ProjectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     itemClickListener.onItemClick(v, position);
                 }
             });
-            ((BeanHolder) holder).finishBox.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ((BeanHolder) holder).finishBox.setSelected(!v.isSelected());
-                    if (v.isSelected()) {
-                        ((BeanHolder) holder).contentTv.setPaintFlags(
-                                ((BeanHolder) holder).contentTv.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                    } else {
-                        ((BeanHolder) holder).contentTv.setPaintFlags(
-                                ((BeanHolder) holder).contentTv.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-                    }
-                    itemClickListener.finishCheck(v.isSelected(), position);
-                }
-            });
+//            ((BeanHolder) holder).finishBox.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    ((BeanHolder) holder).finishBox.setSelected(!v.isSelected());
+//                    if (v.isSelected()) {
+//                        ((BeanHolder) holder).contentTv.setPaintFlags(
+//                                ((BeanHolder) holder).contentTv.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+//                    } else {
+//                        ((BeanHolder) holder).contentTv.setPaintFlags(
+//                                ((BeanHolder) holder).contentTv.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+//                    }
+//                    itemClickListener.finishCheck(v.isSelected(), position);
+//                }
+//            });
 
         }
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (data.get(position) instanceof ProjectMatterMD) {
-            return DATE;
-        } else if (data.get(position) instanceof ProjectMatterCompany) {
+        if (data.get(position) instanceof ProjectMatterCompany) {
             return COMPANY;
         } else if (data.get(position) instanceof ScheduleBean) {
             return INFO;
@@ -184,17 +186,21 @@ public class ProjectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     class BeanHolder extends RecyclerView.ViewHolder {
+        private ImageView icCreater;
+        private TextView creator;
         private View view;
         private TextView timeTv;
         private TextView contentTv;
-        private ImageView finishBox;
+//        private ImageView finishBox;
 
         public BeanHolder(View itemView) {
             super(itemView);
             view = itemView;
             timeTv = ((TextView) itemView.findViewById(R.id.timeTv));
             contentTv = ((TextView) itemView.findViewById(R.id.contentTv));
-            finishBox = ((ImageView) itemView.findViewById(R.id.finishBox));
+//            finishBox = ((ImageView) itemView.findViewById(R.id.finishBox));
+            icCreater = ((ImageView) itemView.findViewById(R.id.ic_creater));
+            creator = ((TextView) itemView.findViewById(R.id.creator));
         }
     }
 }

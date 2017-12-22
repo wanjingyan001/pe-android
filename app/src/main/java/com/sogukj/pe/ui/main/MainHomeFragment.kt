@@ -10,7 +10,6 @@ import com.sogukj.pe.R
 import com.sogukj.pe.ui.approve.EntryApproveActivity
 import com.sogukj.pe.ui.calendar.CalendarMainActivity
 import com.sogukj.pe.ui.news.NewsListActivity
-import com.sogukj.pe.ui.user.UserActivity
 import com.sogukj.pe.ui.weekly.WeeklyActivity
 import kotlinx.android.synthetic.main.fragment_home.*
 
@@ -26,9 +25,9 @@ class MainHomeFragment : BaseFragment() {
         tv_zx.setOnClickListener {
             NewsListActivity.start(baseActivity)
         }
-        tv_me.setOnClickListener {
-            UserActivity.start(baseActivity)
-        }
+//        tv_me.setOnClickListener {
+//            UserFragment.start(baseActivity)
+//        }
         tv_sp.setOnClickListener {
             EntryApproveActivity.start(baseActivity)
         }

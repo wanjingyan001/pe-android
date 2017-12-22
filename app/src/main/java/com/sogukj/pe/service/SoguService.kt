@@ -869,7 +869,7 @@ interface SoguService {
      */
     @FormUrlEncoded
     @POST("/api/Calendar/finishTask")
-    fun finishTask(@Field("rid") rid: Int): Observable<Payload<Any>>
+    fun finishTask(@Field("rid") rid: Int): Observable<Payload<Int>>
 
     /**
      * 意见反馈

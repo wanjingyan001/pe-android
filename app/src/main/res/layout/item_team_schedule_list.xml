@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/teamItemLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/teamItemLayout"
     android:background="@color/white">
 
     <TextView
@@ -23,6 +23,7 @@
         android:layout_marginLeft="70dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="15dp"
+        android:layout_marginBottom="10dp"
         android:layout_toLeftOf="@+id/right_arrow"
         android:text="完成对同花顺的立项尽调完成完成完..."
         android:textColor="@color/text_1"
@@ -33,10 +34,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/scheduleContent"
-        android:layout_alignEnd="@+id/view"
-        android:layout_alignRight="@+id/view"
-        android:foregroundGravity="center_vertical"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
         android:layout_alignTop="@+id/scheduleContent"
+        android:foregroundGravity="center_vertical"
         android:src="@drawable/ic_right" />
 
 
@@ -47,7 +48,6 @@
         android:layout_alignLeft="@+id/scheduleContent"
         android:layout_below="@+id/scheduleContent"
         android:layout_marginBottom="15dp"
-        android:layout_marginTop="10dp"
         android:src="@drawable/ic_schedule_creater" />
 
     <TextView
@@ -65,10 +65,9 @@
     <View
         android:id="@+id/view"
         android:layout_width="match_parent"
-        android:layout_height="1.5dp"
+        android:layout_height="1dp"
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="70dp"
         android:layout_marginRight="20dp"
         android:background="@color/divider2" />
-
 </RelativeLayout>

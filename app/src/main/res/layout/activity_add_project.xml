@@ -161,8 +161,7 @@
 
                     <EditText
                         android:id="@+id/et_name"
-                        style="@style/ItemTextValue"
-                        android:singleLine="true" />
+                        style="@style/ItemTextValue" />
                 </TableRow>
 
                 <TableRow
@@ -176,8 +175,7 @@
 
                     <EditText
                         android:id="@+id/et_short_name"
-                        style="@style/ItemTextValue"
-                        android:singleLine="true" />
+                        style="@style/ItemTextValue" />
                 </TableRow>
 
                 <TableRow
@@ -191,8 +189,7 @@
 
                     <EditText
                         android:id="@+id/et_faren"
-                        style="@style/ItemTextValue"
-                        android:singleLine="true" />
+                        style="@style/ItemTextValue" />
                 </TableRow>
 
                 <TableRow
@@ -220,8 +217,7 @@
 
                     <EditText
                         android:id="@+id/et_credit_code"
-                        style="@style/ItemTextValue"
-                        android:singleLine="true" />
+                        style="@style/ItemTextValue" />
                 </TableRow>
 
                 <TableRow

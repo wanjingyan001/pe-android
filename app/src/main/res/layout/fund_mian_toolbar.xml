@@ -19,15 +19,15 @@
         android:background="@android:color/transparent"
         android:orientation="horizontal">
 
-        <com.sogukj.pe.view.CircleImageView
-            android:id="@+id/iv_user"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_centerVertical="true"
-            android:layout_gravity="left|center"
-            android:layout_marginLeft="20dp"
-            android:gravity="center"
-            android:src="@drawable/img_logo_user" />
+        <!--<com.sogukj.pe.view.CircleImageView-->
+            <!--android:id="@+id/iv_user"-->
+            <!--android:layout_width="30dp"-->
+            <!--android:layout_height="30dp"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_gravity="left|center"-->
+            <!--android:layout_marginLeft="20dp"-->
+            <!--android:gravity="center"-->
+            <!--android:src="@drawable/img_logo_user" />-->
 
         <TextView
             android:id="@+id/fundTitle"

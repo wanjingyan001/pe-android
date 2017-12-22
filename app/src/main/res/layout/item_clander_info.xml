@@ -25,33 +25,53 @@
         android:src="@drawable/ic_right" />
 
 
-    <ImageView
-        android:id="@+id/finishBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="10dp"
-        android:layout_toLeftOf="@+id/right_arrow"
-        android:src="@drawable/bg_finish_box" />
+    <!--<ImageView-->
+    <!--android:id="@+id/finishBox"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_centerVertical="true"-->
+    <!--android:layout_marginRight="10dp"-->
+    <!--android:layout_toLeftOf="@+id/right_arrow"-->
+    <!--android:src="@drawable/bg_finish_box" />-->
 
-    <TextView
-        android:id="@+id/content"
+    <LinearLayout
+        android:id="@+id/contentLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/finishBox"
+        android:layout_alignRight="@+id/right_arrow"
         android:layout_centerVertical="true"
         android:layout_marginLeft="70dp"
         android:layout_marginRight="35dp"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:textColor="@color/text_1"
-        android:textSize="14sp" />
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/text_1"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/todoPerson"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_schedule_creater"
+            android:drawablePadding="6dp"
+            android:layout_marginTop="4dp"
+            android:gravity="center_vertical"
+            android:textColor="@color/color_main"
+            android:textSize="10sp" />
+    </LinearLayout>
+
 
     <View
+        android:id="@+id/view10"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_alignLeft="@+id/content"
-        android:layout_alignRight="@+id/right_arrow"
+        android:layout_alignLeft="@+id/contentLayout"
         android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/right_arrow"
         android:background="@color/divider2" />
 </RelativeLayout>

@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sogukj.pe.R;
@@ -69,14 +68,15 @@ public class TodoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 Date parse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(info.getEnd_time());
                 ((InfoHolder) holder).time.setText(Utils.getTime(parse, "HH:mm"));
                 ((InfoHolder) holder).content.setText(info.getTitle());
-                ((InfoHolder) holder).finishBox.setOnClickListener(new View.OnClickListener() {
+                ((InfoHolder) holder).view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (listener != null) {
-                            listener.finishCheck(v.isSelected(), position);
-                        }
+                        listener.onItemClick(v, position);
                     }
                 });
+                if (info.getName() != null) {
+                    ((InfoHolder) holder).todoPerson.setText(info.getName());
+                }
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -123,15 +123,19 @@ public class TodoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     class InfoHolder extends RecyclerView.ViewHolder {
+        private TextView todoPerson;
         private TextView time;
-        private ImageView finishBox;
+        //        private ImageView finishBox;
         private TextView content;
+        private View view;
 
         public InfoHolder(View itemView) {
             super(itemView);
+            view = itemView;
             time = ((TextView) itemView.findViewById(R.id.time));
-            finishBox = ((ImageView) itemView.findViewById(R.id.finishBox));
+//            finishBox = ((ImageView) itemView.findViewById(R.id.finishBox));
             content = ((TextView) itemView.findViewById(R.id.content));
+            todoPerson = ((TextView) itemView.findViewById(R.id.todoPerson));
         }
     }
 }

@@ -5,8 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import com.framework.base.BaseActivity
+import com.mcxtzhang.swipemenulib.SwipeMenuLayout
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.EducationBean
@@ -54,7 +56,9 @@ class ResumeEditorActivity : BaseActivity(), View.OnClickListener {
         setContentView(R.layout.activity_resume_editor)
         Utils.setWindowStatusBarColor(this, R.color.white)
         toolbar_title.text = "个人简历"
-        addTv.visibility = View.GONE
+        addTv.text = "编辑"
+        back.setOnClickListener(this)
+        addTv.setOnClickListener(this)
         intExtra = intent.getIntExtra(Extras.TYPE, -1)
         when (intExtra) {
             EDU -> {
@@ -66,6 +70,8 @@ class ResumeEditorActivity : BaseActivity(), View.OnClickListener {
                         val name = convertView.find<TextView>(R.id.name)
                         val time = convertView.find<TextView>(R.id.time)
                         val delete = convertView.find<TextView>(R.id.delete)
+                        val deleteImg = convertView.find<ImageView>(R.id.deleteImg)
+                        val educationLayout = convertView.find<SwipeMenuLayout>(R.id.educationLayout)
                         override fun setData(view: View, data: EducationBean, position: Int) {
                             name.text = data.school
                             time.text = "${data.toSchoolDate}-${data.graduationDate}"
@@ -74,7 +80,12 @@ class ResumeEditorActivity : BaseActivity(), View.OnClickListener {
                                     deleteExperience(it, 1, position)
                                 }
                             }
+                            deleteImg.visibility = if (data.isShow) View.VISIBLE else View.GONE
+                            deleteImg.setOnClickListener {
+                                educationLayout.smoothExpand()
+                            }
                         }
+
                     }
                 })
                 resume.eduction?.let {
@@ -104,6 +115,8 @@ class ResumeEditorActivity : BaseActivity(), View.OnClickListener {
                         val name = convertView.find<TextView>(R.id.name)
                         val time = convertView.find<TextView>(R.id.time)
                         val delete = convertView.find<TextView>(R.id.delete)
+                        val deleteImg = convertView.find<ImageView>(R.id.deleteImg)
+                        val educationLayout = convertView.find<SwipeMenuLayout>(R.id.educationLayout)
                         override fun setData(view: View, data: WorkEducationBean, position: Int) {
                             name.text = data.company
                             time.text = "${data.employDate}-${data.leaveDate}"
@@ -111,6 +124,10 @@ class ResumeEditorActivity : BaseActivity(), View.OnClickListener {
                                 data.id.let {
                                     deleteExperience(it, 2, position)
                                 }
+                            }
+                            deleteImg.visibility = if (data.isShow) View.VISIBLE else View.GONE
+                            deleteImg.setOnClickListener {
+                                educationLayout.smoothExpand()
                             }
                         }
                     }
@@ -160,9 +177,11 @@ class ResumeEditorActivity : BaseActivity(), View.OnClickListener {
                 }, {
                     when (intExtra) {
                         EDU -> {
+                            eduadapter.dataList.removeAt(position)
                             eduadapter.notifyItemRemoved(position)
                         }
                         WORK -> {
+                            workAdapter.dataList.removeAt(position)
                             workAdapter.notifyItemRemoved(position)
                         }
                     }
@@ -178,6 +197,27 @@ class ResumeEditorActivity : BaseActivity(), View.OnClickListener {
             }
             R.id.tv_add_work_expericence -> {
                 WorkExpericenceAddActivity.start(this)
+            }
+            R.id.back -> {
+                onBackPressed()
+            }
+            R.id.addTv -> {
+                addTv.isSelected = !addTv.isSelected
+                addTv.text = if (addTv.isSelected) "完成" else "编辑"
+                when (intExtra) {
+                    EDU -> {
+                        eduadapter.dataList.forEach {
+                            it.isShow = addTv.isSelected
+                        }
+                        eduadapter.notifyDataSetChanged()
+                    }
+                    WORK -> {
+                        workAdapter.dataList.forEach {
+                            it.isShow = addTv.isSelected
+                        }
+                        workAdapter.notifyDataSetChanged()
+                    }
+                }
             }
         }
     }

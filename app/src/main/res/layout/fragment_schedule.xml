@@ -76,6 +76,7 @@
             <!-- RecyclerView的高度必须是MatchParent-->
             <!-- RecyclerView的background必须是非透明-->
 
+
         </android.support.design.widget.CoordinatorLayout>
 
     </LinearLayout>

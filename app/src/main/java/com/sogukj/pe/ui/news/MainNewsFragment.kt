@@ -10,6 +10,7 @@ import android.text.Html
 import android.text.InputType
 import android.text.TextUtils
 import android.view.View
+import android.widget.RadioGroup
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.framework.base.BaseFragment
@@ -19,8 +20,8 @@ import com.lcodecore.tkrefreshlayout.footer.BallPulseView
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.NewsBean
+import com.sogukj.pe.ui.main.MainActivity
 import com.sogukj.pe.ui.project.ProjectAddActivity
-import com.sogukj.pe.ui.user.UserActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.ArrayPagerAdapter
@@ -34,6 +35,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_main_news.*
 import kotlinx.android.synthetic.main.search_view.*
 import kotlinx.android.synthetic.main.sogu_toolbar_main_news.*
+import org.jetbrains.anko.find
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -53,7 +55,7 @@ class MainNewsFragment : BaseFragment() {
     lateinit var hisAdapter: RecyclerAdapter<String>
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbar_back.setOnClickListener { baseActivity?.finish() }
+        toolbar_back.visibility = View.GONE
         adapter = RecyclerAdapter<NewsBean>(baseActivity!!, { _adapter, parent, type ->
             val convertView = _adapter.getView(R.layout.item_main_news, parent) as View
             object : RecyclerHolder<NewsBean>(convertView) {
@@ -141,7 +143,9 @@ class MainNewsFragment : BaseFragment() {
         tv_result_title.text = Html.fromHtml(getString(R.string.tv_title_result_news, 0))
 
         iv_user.setOnClickListener {
-            UserActivity.start(baseActivity);
+            val activity = activity as MainActivity
+            activity.find<RadioGroup>(R.id.rg_tab_main).check(R.id.rb_my)
+//            UserFragment.start(baseActivity);
         }
 
         Store.store.getUser(baseActivity!!)?.apply {

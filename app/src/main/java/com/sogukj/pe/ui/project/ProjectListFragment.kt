@@ -1,6 +1,5 @@
 package com.sogukj.pe.ui.project
 
-import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -171,8 +170,13 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
         super.setUserVisibleHint(isVisibleToUser)
         if (isVisibleToUser == true && isViewCreated == true) {
             Log.e("setUserVisibleHint", "${type}")
-            doRequest()
+
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        doRequest()
     }
 
     override fun onDestroyView() {

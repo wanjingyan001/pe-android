@@ -12,7 +12,6 @@ import android.text.InputType
 import android.text.TextUtils
 import android.view.View
 import android.widget.TextView
-import com.bumptech.glide.Glide
 import com.framework.base.BaseFragment
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
@@ -20,7 +19,6 @@ import com.lcodecore.tkrefreshlayout.footer.BallPulseView
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.ProjectBean
-import com.sogukj.pe.ui.user.UserActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.ArrayPagerAdapter
@@ -155,27 +153,27 @@ class MainProjectFragment : BaseFragment() {
         }
         tv_result_title.text = Html.fromHtml(getString(R.string.tv_title_result_project, 0))
 
-        iv_user.setOnClickListener {
-            UserActivity.start(baseActivity);
-        }
-
-        Store.store.getUser(baseActivity!!)?.apply {
-            if (null != url) {
-                val ch = name?.first()
-                iv_user.setChar(ch)
-                Glide.with(baseActivity)
-                        .load(headImage())
-                        .into(iv_user)
-            }
-
-        }
+//        iv_user.setOnClickListener {
+//            val activity = activity as MainActivity
+//            activity.find<RadioGroup>(R.id.rg_tab_main).check(R.id.rb_my)
+//        }
+//        Store.store.getUser(baseActivity!!)?.apply {
+//            if (null != url) {
+//                val ch = name?.first()
+//                iv_user.setChar(ch)
+//                Glide.with(baseActivity)
+//                        .load(headImage())
+//                        .into(iv_user)
+//            }
+//
+//        }
 
 //        iv_add.setOnClickListener {
 //            ProjectAddActivity.start(baseActivity)
 //        }
-        iv_focus.setOnClickListener {
-            ProjectFocusActivity.start(baseActivity)
-        }
+//        iv_focus.setOnClickListener {
+//            ProjectFocusActivity.start(baseActivity)
+//        }
         search_view.onTextChange = { text ->
             if (TextUtils.isEmpty(text)) {
                 ll_history.visibility = View.VISIBLE

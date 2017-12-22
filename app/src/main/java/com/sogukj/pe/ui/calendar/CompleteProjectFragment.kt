@@ -53,6 +53,7 @@ class CompleteProjectFragment : BaseFragment() {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
+                        data.clear()
                         Log.d("WJY", Gson().toJson(payload.payload))
                         payload.payload?.let {
                             it.forEach {

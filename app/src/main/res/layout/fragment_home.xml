@@ -39,22 +39,6 @@
                     app:layout_columnWeight="1" />
 
                 <com.sogukj.pe.view.TipsView
-                    android:id="@+id/tv_zx"
-                    style="@style/ItemGridMain"
-                    android:layout_width="0dp"
-                    android:drawableTop="@drawable/ic_main_zx"
-                    android:text="资讯"
-                    app:layout_columnWeight="1" />
-
-                <!--<com.sogukj.pe.view.TipsView-->
-                    <!--android:id="@+id/tv_jj"-->
-                    <!--style="@style/ItemGridMain"-->
-                    <!--android:layout_width="0dp"-->
-                    <!--android:drawableTop="@drawable/ic_main_jj"-->
-                    <!--android:text="基金"-->
-                    <!--app:layout_columnWeight="1" />-->
-
-                <com.sogukj.pe.view.TipsView
                     android:id="@+id/tv_rl"
                     style="@style/ItemGridMain"
                     android:layout_width="0dp"
@@ -62,6 +46,23 @@
                     android:tag="announcement"
                     android:text="日历"
                     app:layout_columnWeight="1" />
+
+                <com.sogukj.pe.view.TipsView
+                    android:id="@+id/tv_zx"
+                    style="@style/ItemGridMain"
+                    android:layout_width="0dp"
+                    android:drawableTop="@drawable/ic_main_msg"
+                    android:text="消息"
+                    app:layout_columnWeight="1" />
+
+                <!--<com.sogukj.pe.view.TipsView-->
+                <!--android:id="@+id/tv_jj"-->
+                <!--style="@style/ItemGridMain"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:drawableTop="@drawable/ic_main_jj"-->
+                <!--android:text="基金"-->
+                <!--app:layout_columnWeight="1" />-->
+
 
                 <com.sogukj.pe.view.TipsView
                     android:id="@+id/tv_lxr"
@@ -72,14 +73,14 @@
                     android:text="联系人"
                     app:layout_columnWeight="1" />
 
-                <com.sogukj.pe.view.TipsView
-                    android:id="@+id/tv_me"
-                    style="@style/ItemGridMain"
-                    android:layout_width="0dp"
-                    android:drawableTop="@drawable/ic_main_me"
-                    android:tag="shareholder"
-                    android:text="我的"
-                    app:layout_columnWeight="1" />
+                <!--<com.sogukj.pe.view.TipsView-->
+                <!--android:id="@+id/tv_me"-->
+                <!--style="@style/ItemGridMain"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:drawableTop="@drawable/ic_main_me"-->
+                <!--android:tag="shareholder"-->
+                <!--android:text="我的"-->
+                <!--app:layout_columnWeight="1" />-->
 
                 <com.sogukj.pe.view.TipsView
                     android:id="@+id/tv_weekly"

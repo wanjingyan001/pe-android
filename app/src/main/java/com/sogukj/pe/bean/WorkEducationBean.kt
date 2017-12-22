@@ -20,6 +20,7 @@ class WorkEducationBean() : Parcelable {
         dest?.writeString(trade_name)
         dest?.writeInt(trade)
         dest?.writeInt(pid)
+        dest?.writeValue(isShow)
     }
 
     override fun describeContents(): Int = 0
@@ -36,6 +37,7 @@ class WorkEducationBean() : Parcelable {
     var trade: Int = 0//行业id
     var trade_name: String? = null//行业名
     var pid: Int = 0//行业父id
+    var isShow:Boolean = false//是否展示删除按钮
 
     constructor(parcel: Parcel) : this() {
         id = parcel.readInt()
@@ -50,6 +52,7 @@ class WorkEducationBean() : Parcelable {
         trade = parcel.readInt()
         trade_name = parcel.readString()
         pid = parcel.readInt()
+        isShow = parcel.readValue(Boolean::class.java.classLoader) as Boolean
     }
 
     companion object CREATOR : Parcelable.Creator<WorkEducationBean> {

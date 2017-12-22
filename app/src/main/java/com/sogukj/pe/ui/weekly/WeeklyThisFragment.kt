@@ -4,11 +4,13 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.framework.base.BaseFragment
+import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
@@ -22,6 +24,7 @@ import com.sogukj.pe.ui.project.ProjectActivity
 import com.sogukj.pe.ui.project.RecordTraceActivity
 import com.sogukj.pe.ui.user.OrganizationActivity
 import com.sogukj.pe.util.Trace
+import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.CircleImageView
 import com.sogukj.pe.view.MyListView
 import com.sogukj.pe.view.WeeklyDotView
@@ -33,6 +36,8 @@ import kotlinx.android.synthetic.main.buchong_full.*
 import kotlinx.android.synthetic.main.fragment_weekly_this.*
 import kotlinx.android.synthetic.main.send.*
 import java.net.UnknownHostException
+import java.text.SimpleDateFormat
+import java.util.*
 
 class WeeklyThisFragment : BaseFragment() {
 
@@ -53,7 +58,7 @@ class WeeklyThisFragment : BaseFragment() {
         val arr_adapter = ArrayAdapter<String>(context, R.layout.spinner_item, mItems)
         arr_adapter.setDropDownViewResource(R.layout.spinner_dropdown)
         spinner_this.adapter = arr_adapter
-        spinner_this.setSelection(0, true)
+//        spinner_this.setSelection(0, true) 会重复请求导致列表数据重复
         spinner_this.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View,
                                         pos: Int, id: Long) {
@@ -125,6 +130,7 @@ class WeeklyThisFragment : BaseFragment() {
                     .subscribe({ payload ->
                         if (payload.isOk) {
                             payload.payload?.apply {
+                                Log.d("WJY", Gson().toJson(this.week))
                                 initView(this)
                             }
                         } else
@@ -146,7 +152,6 @@ class WeeklyThisFragment : BaseFragment() {
     lateinit var chaosong_adapter: MyAdapter
 
     fun initView(loaded: WeeklyThisBean) {
-
         if (spinner_this.visibility == View.VISIBLE) {
             childs = 1
         }
@@ -162,7 +167,7 @@ class WeeklyThisFragment : BaseFragment() {
                 var str = items.date!!.split("-")
                 index.text = str[2].toInt().toString()
                 date.text = "${str[0]}年${str[1]}月"
-                weekday.text = items.week_day
+                weekday.text = Utils.getTime(SimpleDateFormat("yyyy-MM-dd").parse(items.date), "E")
 
                 val adapter = WeeklyEventAdapter(context, items.data!!)
                 event_list.adapter = adapter
@@ -171,7 +176,7 @@ class WeeklyThisFragment : BaseFragment() {
                     when (weeklyData?.type) {
                         0 -> {
                             //日程
-                            TaskDetailActivity.start(activity, weeklyData.data_id!!, weeklyData.title!!, ModifyTaskActivity.Schedule)
+                            TaskDetailActivity.start(activity, weeklyData.data_id!!, weeklyData.title!!, ModifyTaskActivity.Task)
                         }
                         1 -> {
                             //任务
@@ -213,10 +218,10 @@ class WeeklyThisFragment : BaseFragment() {
             return
         }
 
-        if (loaded.week?.is_send_week == 0) {
-            send_layout.visibility = View.VISIBLE
-        } else {
+        if (loaded.week?.is_send_week == 1) {
             send_layout.visibility = View.GONE
+        } else {
+            send_layout.visibility = View.VISIBLE
         }
 
         if (loaded.week?.week_id == null) {
@@ -369,8 +374,8 @@ class WeeklyThisFragment : BaseFragment() {
 
     inner class WeeklyEventAdapter(var context: Context, val list: ArrayList<WeeklyThisBean.Automatic.WeeklyData>) : BaseAdapter() {
 
-        val EVENT = 0x001
-        val LEAVE = 0x002
+        val EVENT = 0x001//AI采集
+        val LEAVE = 0x002//非AI采集
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             var conView = convertView
@@ -409,7 +414,7 @@ class WeeklyThisFragment : BaseFragment() {
         }
 
         override fun getItemViewType(position: Int): Int {
-            if (list.get(position).start_time.isNullOrEmpty()) {
+            if (list[position].is_collect == 1) {
                 return EVENT
             }
             return LEAVE

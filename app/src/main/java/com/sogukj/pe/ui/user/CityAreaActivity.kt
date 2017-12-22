@@ -45,7 +45,7 @@ class CityAreaActivity : BaseActivity(), View.OnClickListener {
         toolbar_title.text = "城市列表"
         addTv.text = "完成"
         addTv.setOnClickListener(this)
-
+        back.setOnClickListener(this)
         areaAdpater = RecyclerAdapter(this, { _adapter, parent, type ->
             val convertView = _adapter.getView(R.layout.item_city_area_list, parent)
             object : RecyclerHolder<CityArea>(convertView) {
@@ -136,6 +136,9 @@ class CityAreaActivity : BaseActivity(), View.OnClickListener {
                 intent.putExtra(Extras.DATA, city)
                 setResult(Extras.RESULTCODE3, intent)
                 finish()
+            }
+            R.id.back -> {
+                onBackPressed()
             }
         }
     }

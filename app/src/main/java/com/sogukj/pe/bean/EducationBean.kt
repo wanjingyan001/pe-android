@@ -2,7 +2,6 @@ package com.sogukj.pe.bean
 
 import android.os.Parcel
 import android.os.Parcelable
-import java.io.Serializable
 
 /**
  * Created by admin on 2017/12/4.
@@ -17,6 +16,7 @@ class EducationBean() : Parcelable {
         dest?.writeString(education)
         dest?.writeString(major)
         dest?.writeString(majorInfo)
+        dest?.writeValue(isShow)
     }
 
     override fun describeContents(): Int = 0
@@ -28,6 +28,7 @@ class EducationBean() : Parcelable {
     var education: String = ""//学历
     var major: String = ""//专业
     var majorInfo: String? = null//专业描述
+    var isShow: Boolean = false//是否展示删除按钮
 
     constructor(parcel: Parcel) : this() {
         id = parcel.readValue(Int::class.java.classLoader) as? Int
@@ -37,6 +38,7 @@ class EducationBean() : Parcelable {
         education = parcel.readString()
         major = parcel.readString()
         majorInfo = parcel.readString()
+        isShow = parcel.readValue(Boolean::class.java.classLoader) as Boolean
     }
 
     companion object CREATOR : Parcelable.Creator<EducationBean> {

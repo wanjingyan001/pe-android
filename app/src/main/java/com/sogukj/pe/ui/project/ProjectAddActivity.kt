@@ -68,7 +68,8 @@ class ProjectAddActivity : ToolbarActivity() {
                         , creditCode = project.creditCode
                         , legalPersonName = project.legalPersonName
                         , regLocation = project.regLocation
-                        , info = project.info, type = 6)
+                        , info = project.info
+                        , type = 6)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -82,6 +83,10 @@ class ProjectAddActivity : ToolbarActivity() {
                 }, { e ->
                     Trace.e(e)
                     showToast("保存失败")
+                }, {
+                    showProgress("正在提交")
+                }, {
+                    showProgress("正在提交")
                 })
     }
 

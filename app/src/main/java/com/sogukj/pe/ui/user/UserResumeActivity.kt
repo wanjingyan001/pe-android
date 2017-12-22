@@ -65,6 +65,11 @@ class UserResumeActivity : BaseActivity(), View.OnClickListener {
         tv_education.setOnClickListener(this)
         educationLayout.setOnClickListener(this)
         workLayout.setOnClickListener(this)
+
+    }
+
+    override fun onResume() {
+        super.onResume()
         if (isSelf) {
             user.uid?.let { doRequest(it) }
         } else {
@@ -82,7 +87,7 @@ class UserResumeActivity : BaseActivity(), View.OnClickListener {
                 2 -> tv_sex.text = "女"
             }
             tv_language.text = it.language
-            tv_woek_experience.text = it.workYear
+            tv_woek_experience.text = if (it.workYear == "0") null else it.workYear
             tv_city.text = it.cityName
             tv_education.text = it.educationLevel
             tv_mail.setText(it.email)
@@ -101,6 +106,7 @@ class UserResumeActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun setEducationListData(listData: List<Resume.EductionBean>) {
+        educationAdapter.dataList.clear()
         listData.forEach {
             val education = EducationBean()
             education.toSchoolDate = it.toSchoolDate!!
@@ -119,6 +125,7 @@ class UserResumeActivity : BaseActivity(), View.OnClickListener {
     }
 
     fun setWorkListData(listData: List<Resume.WorkBean>) {
+        workAdapter.dataList.clear()
         listData.forEach {
             val workeducation = WorkEducationBean()
             workeducation.employDate = it.employDate

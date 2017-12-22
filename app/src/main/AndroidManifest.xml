@@ -79,10 +79,10 @@
             android:name=".ui.news.NewsDetailActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.user.UserActivity"
-            android:configChanges="orientation|screenSize"
-            android:screenOrientation="portrait" />
+        <!-- <activity -->
+        <!-- android:name=".ui.user.UserFragment" -->
+        <!-- android:configChanges="orientation|screenSize" -->
+        <!-- android:screenOrientation="portrait" /> -->
         <activity
             android:name=".ui.user.UserEditActivity"
             android:configChanges="orientation|screenSize"
@@ -524,6 +524,7 @@
         <activity android:name=".ui.score.InvestManageActivity" />
         <activity android:name=".ui.score.LeaderActivity" />
         <activity android:name=".ui.score.JiXiaoActivity"></activity>
+        <activity android:name=".ui.calendar.SelectUserActivity"></activity>
     </application>
 
 </manifest>

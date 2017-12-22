@@ -2,18 +2,13 @@ package com.sogukj.pe.ui.score;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.design.widget.TabLayout;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bigkoo.pickerview.OptionsPickerView;
 import com.sogukj.pe.R;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import io.reactivex.Observable;
@@ -39,6 +34,7 @@ class TextViewClickObservableMinus extends Observable<Integer> {
         for (int i = 0; i <= total; i += offset) {
             mSelected.add(i);
         }
+        bar.setMax(total);
     }
 
     @Override

@@ -12,6 +12,7 @@ import com.sogukj.pe.R;
 import com.sogukj.pe.bean.UserBean;
 import com.sogukj.pe.view.CircleImageView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -68,12 +69,21 @@ public class CcPersonAdapter extends RecyclerView.Adapter<CcPersonAdapter.CCHold
     }
 
     public void addData(UserBean userBean) {
-        if (!ccPersons.contains(userBean)){
+        if (!ccPersons.contains(userBean)) {
             ccPersons.add(userBean);
             notifyDataSetChanged();
         }
     }
 
+    public void addAllData(ArrayList<UserBean> selects) {
+        ccPersons.clear();
+        for (UserBean bean : selects) {
+            if (!ccPersons.contains(bean)) {
+                ccPersons.add(bean);
+                notifyDataSetChanged();
+            }
+        }
+    }
 
 
     private AddPersonListener listener;

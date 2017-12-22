@@ -18,25 +18,25 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
-        <com.sogukj.pe.view.CircleImageView
-            android:id="@+id/iv_user"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_centerVertical="true"
-            android:layout_gravity="left|center"
-            android:layout_marginLeft="20dp"
-            android:gravity="center"
-            android:src="@drawable/img_logo_user" />
+        <!--<com.sogukj.pe.view.CircleImageView-->
+            <!--android:id="@+id/iv_user"-->
+            <!--android:layout_width="30dp"-->
+            <!--android:layout_height="30dp"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_gravity="left|center"-->
+            <!--android:layout_marginLeft="20dp"-->
+            <!--android:gravity="center"-->
+            <!--android:src="@drawable/img_logo_user" />-->
 
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
-            android:layout_width="220dp"
+            android:layout_width="250dp"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
             android:gravity="center"
-            app:tabGravity="fill"
+            app:tabGravity="center"
             app:tabIndicatorColor="@color/white"
             app:tabIndicatorHeight="2dp"
             app:tabMode="scrollable"
@@ -83,16 +83,16 @@
             <!--android:src="@drawable/ic_action_add"-->
             <!--android:visibility="gone" />-->
 
-        <ImageView
-            android:id="@+id/iv_focus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_gravity="right|center"
-            android:layout_marginRight="10dp"
-            android:gravity="center"
-            android:src="@drawable/ic_menu_focus" />
+        <!--<ImageView-->
+            <!--android:id="@+id/iv_focus"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_gravity="right|center"-->
+            <!--android:layout_marginRight="10dp"-->
+            <!--android:gravity="center"-->
+            <!--android:src="@drawable/ic_menu_focus" />-->
 
         <!--<ImageView-->
             <!--android:id="@+id/iv_search"-->

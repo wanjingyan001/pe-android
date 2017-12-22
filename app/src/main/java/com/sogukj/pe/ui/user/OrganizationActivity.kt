@@ -20,6 +20,7 @@ import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.CircleImageView
 import com.sogukj.pe.view.LinkSpan
 import com.sogukj.service.SoguApi
+import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_organization.*
@@ -31,6 +32,7 @@ class OrganizationActivity : ToolbarActivity() {
     lateinit var alreadyList: ArrayList<UserBean>
     //    var departList = ArrayList<DepartmentBean>()
     var tag: String? = null
+    val mine = Store.store.getUser(this)
 
     companion object {
         fun start(ctx: Activity?, departList: ArrayList<DepartmentBean>) {
@@ -162,6 +164,7 @@ class OrganizationActivity : ToolbarActivity() {
         val iv_user = item_content.find<ImageView>(R.id.iv_user) as CircleImageView
         val tv_name = item_content.find<TextView>(R.id.tv_name)
         val tv_job = item_content.find<TextView>(R.id.tv_job)
+        val select_box = item_content.find<ImageView>(R.id.select_box)
         if (TextUtils.isEmpty(userBean.name)) {
             userBean.name = "--"
         }
@@ -188,6 +191,16 @@ class OrganizationActivity : ToolbarActivity() {
         }
 
 
+        if (flag == "SelectUser") {
+            select_box.visibility = View.VISIBLE
+            select_box.setOnClickListener { v ->
+                select_box.isSelected = !v.isSelected
+            }
+        } else {
+            select_box.visibility = View.GONE
+        }
+
+
         item_content.setOnClickListener {
             if (flag == "WEEKLY") {
                 var intent = Intent()
@@ -203,10 +216,25 @@ class OrganizationActivity : ToolbarActivity() {
                     setResult(Extras.RESULTCODE2, intent)
                 }
                 finish()
-            }else{
-                UserResumeActivity.start(this, userBean)
+            } else {
+                userBean.user_id?.let {
+                    doRequest(it, userBean)
+                }
             }
         }
+    }
 
+    fun doRequest(uId: Int, userBean: UserBean) {
+        SoguApi.getService(application)
+                .getPersonalResume(user_id = uId)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        UserResumeActivity.start(this, userBean)
+                    } else {
+                        showToast(payload.message)
+                    }
+                })
     }
 }

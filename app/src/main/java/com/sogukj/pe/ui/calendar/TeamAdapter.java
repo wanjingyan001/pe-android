@@ -10,7 +10,9 @@ import android.widget.TextView;
 
 import com.sogukj.pe.R;
 import com.sogukj.pe.bean.ScheduleBean;
+import com.sogukj.pe.bean.UserBean;
 import com.sogukj.pe.util.Utils;
+import com.sogukj.util.Store;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -53,7 +55,7 @@ public class TeamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ScheduleBean bean = data.get(position);
             if (bean != null)
                 try {
-                    long startTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(bean.getStart_time()).getTime();
+                    long startTime = new SimpleDateFormat("yyyy-MM-dd").parse(bean.getStart_time()).getTime();
                     if (holder instanceof HeadHolder) {
                         if (Utils.getTime(new Date(startTime), "yyyy年MM月dd日")
                                 .equals(Utils.getTime(System.currentTimeMillis(), "yyyy年MM月dd日"))) {
@@ -71,9 +73,18 @@ public class TeamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                             }
                         });
                     } else if (holder instanceof ItemHolder) {
-                        ((ItemHolder) holder).scheduleTime.setText(Utils.getTime(startTime));
+
+                        ((ItemHolder) holder).scheduleTime.setText(Utils.getTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(bean.getStart_time()).getTime()));
                         ((ItemHolder) holder).scheduleContent.setText(bean.getTitle());
-                        ((ItemHolder) holder).creator.setText(bean.getName());
+                        UserBean user = Store.Companion.getStore().getUser(context);
+                        if (user.getName().equals(bean.getName())) {
+                            ((ItemHolder) holder).creator.setVisibility(View.GONE);
+                            ((ItemHolder) holder).creatorImg.setVisibility(View.GONE);
+                        }else {
+                            ((ItemHolder) holder).creator.setVisibility(View.VISIBLE);
+                            ((ItemHolder) holder).creatorImg.setVisibility(View.VISIBLE);
+                            ((ItemHolder) holder).creator.setText(bean.getName());
+                        }
                         ((ItemHolder) holder).view.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -124,6 +135,7 @@ public class TeamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     class ItemHolder extends RecyclerView.ViewHolder {
+        private ImageView creatorImg;
         private TextView scheduleTime;
         private TextView scheduleContent;
         private TextView creator;
@@ -135,6 +147,7 @@ public class TeamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             scheduleTime = ((TextView) itemView.findViewById(R.id.scheduleTime));
             scheduleContent = ((TextView) itemView.findViewById(R.id.scheduleContent));
             creator = ((TextView) itemView.findViewById(R.id.creator));
+            creatorImg = ((ImageView) itemView.findViewById(R.id.ic_schedule_creater));
         }
     }
 

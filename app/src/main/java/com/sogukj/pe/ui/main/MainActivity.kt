@@ -12,8 +12,10 @@ import com.sogukj.pe.R
 import com.sogukj.pe.bean.NewsBean
 import com.sogukj.pe.ui.LoginActivity
 import com.sogukj.pe.ui.fund.FundMainFragment
+import com.sogukj.pe.ui.news.MainNewsFragment
 import com.sogukj.pe.ui.news.NewsDetailActivity
 import com.sogukj.pe.ui.project.MainProjectFragment
+import com.sogukj.pe.ui.user.UserFragment
 import com.sogukj.util.Store
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -23,9 +25,11 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : BaseActivity() {
 
     val fgProj = MainProjectFragment.newInstance()
-    val fgMsg = MainMsgFragment.newInstance()
+//    val fgMsg = MainMsgFragment.newInstance()
+    val fgMsg = MainNewsFragment.newInstance()
     val fgHome = MainHomeFragment.newInstance()
     val fgFund = FundMainFragment.newInstance()
+    val fgMine = UserFragment.newInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,6 +73,7 @@ class MainActivity : BaseActivity() {
             R.id.rb_msg -> fgMsg
             R.id.rb_project -> fgProj
             R.id.rb_fund -> fgFund
+            R.id.rb_my -> fgMine
             else -> fgHome
         }
         supportFragmentManager.beginTransaction()

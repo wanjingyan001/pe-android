@@ -17,7 +17,6 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.CustomSealBean
 import com.sogukj.pe.bean.UserBean
-import com.sogukj.pe.ui.user.OrganizationActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
@@ -35,10 +34,10 @@ import kotlin.properties.Delegates
 class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonListener {
     var type: Long by Delegates.notNull()
     var name: String? = null
-    var selectT:Int by Delegates.notNull()
+    var selectT: Int by Delegates.notNull()
     var data_id: Int? = null
     var companyId: Int? = null
-    var time: Long by Delegates.notNull()
+    var time: Long? = null
     lateinit var adapter: CcPersonAdapter
     lateinit var exAdapter: ExecutiveAdapter
     val data = ArrayList<UserBean>()
@@ -66,8 +65,6 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
             intent.putExtra(Extras.DATA, data_id)
             ctx?.startActivity(intent)
         }
-
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -95,6 +92,7 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                         selectTypeLayout.visibility = View.GONE
                         selectT = 1
                         title = "添加任务"
+                        missionTV.text = "任务描述"
                     }
                     Schedule -> {
                         executiveLayout.visibility = View.GONE
@@ -103,6 +101,7 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                         selectTypeLayout.visibility = View.GONE
                         selectT = 0
                         title = "添加日程"
+                        missionTV.text = "日程描述"
                     }
                     else -> {
                         title = "添加"
@@ -119,6 +118,7 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                         selectTypeLayout.visibility = View.GONE
                         selectT = 1
                         title = "修改任务"
+                        missionTV.text = "任务描述"
                     }
                     Schedule -> {
                         executiveLayout.visibility = View.GONE
@@ -127,6 +127,7 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                         selectTypeLayout.visibility = View.GONE
                         selectT = 0
                         title = "修改日程"
+                        missionTV.text = "日程描述"
                     }
                     else -> {
                         title = "修改"
@@ -156,8 +157,10 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                                 companyId = it.company_id
                                 relatedProject.text = it.cName
                                 missionDetails.setText(it.info)
-                                startTime.text = Utils.getTime(SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(it.start_time), "MM月dd日 E HH:mm")
-                                deadline.text = Utils.getTime(SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(it.end_time), "MM月dd日 E HH:mm")
+                                start = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(it.start_time)
+                                endTime = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(it.end_time)
+                                startTime.text = Utils.getTime(start, "MM月dd日 E HH:mm")
+                                deadline.text = Utils.getTime(endTime, "MM月dd日 E HH:mm")
                                 remind.text = "截止前${(it.clock)?.div(60)}分钟"
                                 it.executor?.forEach {
                                     val bean = UserBean()
@@ -187,7 +190,7 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
             showToast("请填写日程描述")
             return
         }
-        if (startTime.text.isEmpty() || deadline.text.isEmpty()) {
+        if (start == null || endTime == null) {
             showToast("请选择时间")
             return
         }
@@ -200,24 +203,34 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
         reqBean.data_id = data_id
         reqBean.type = selectT
         bean.info = missionDetails.text.toString()
-        if (companyBean.id != null) {
-            bean.company_id = companyBean.id
+        if (companyBean != null && companyBean?.id != null) {
+            bean.company_id = companyBean?.id
         } else {
             bean.company_id = companyId
         }
         bean.start_time = Utils.getTime(start, "yyyy-MM-dd HH:mm:ss")
         bean.end_time = Utils.getTime(endTime, "yyyy-MM-dd HH:mm:ss")
-        bean.clock = (time / 1000).toInt()
+        time?.let {
+            bean.clock = (it / 1000).toInt()
+        }
         val exusers = StringBuilder()
-        data2.forEach {
-            exusers.append(it.user_id.toString() + ",")
+        if (data2.isNotEmpty()) {
+            data2.forEach {
+                if (it.user_id != null) {
+                    exusers.append(it.user_id.toString() + ",")
+                }
+            }
         }
         if (exusers.isNotEmpty()) {
             bean.executor = exusers.toString().substring(0, exusers.length - 1)
         }
         val watchusers = StringBuilder()
-        data.forEach {
-            watchusers.append(it.user_id.toString() + ",")
+        if (data.isNotEmpty()) {
+            data.forEach {
+                if (it.user_id != null) {
+                    watchusers.append(it.user_id.toString() + ",")
+                }
+            }
         }
         if (watchusers.isNotEmpty()) {
             bean.watcher = watchusers.toString().substring(0, watchusers.length - 1)
@@ -229,6 +242,7 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
+                        Utils.closeInput(this, missionDetails)
                         showToast("提交成功")
                         finish()
                     } else {
@@ -343,11 +357,14 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                         Utils.getTime(start, "mm").toInt())
                 val timePicker = TimePickerView.Builder(this, { date, view ->
                     time = start!!.time - date.time
-                    if (time < 0) {
-                        showToast("提醒时间不能大于开始时间")
-                    } else {
-                        remind.text = "开始前${time / 1000 / 60}分钟"
+                    time?.let {
+                        if (it < 0) {
+                            showToast("提醒时间不能大于开始时间")
+                        } else {
+                            remind.text = "开始前${it / 1000 / 60}分钟"
+                        }
                     }
+
                 })
                         //年月日时分秒 的显示与否，不设置则默认全部显示
                         .setType(booleanArrayOf(true, true, true, true, true, false))
@@ -362,19 +379,31 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
         }
     }
 
-    lateinit var companyBean: CustomSealBean.ValueBean
+    var companyBean: CustomSealBean.ValueBean? = null
+    var selectUser: Users? = null
+    var selectUser2: Users? = null
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == Extras.REQUESTCODE && data != null) {
-            if (resultCode == Extras.RESULTCODE) {
-                val userBean = data.getSerializableExtra(Extras.DATA) as UserBean
-                adapter.addData(userBean)
-            } else if (resultCode == Extras.RESULTCODE2) {
-                val userBean = data.getSerializableExtra(Extras.DATA) as UserBean
-                exAdapter.addData(userBean)
-            } else if (resultCode == Activity.RESULT_OK) {
-                companyBean = data.getSerializableExtra(Extras.DATA) as CustomSealBean.ValueBean
-                relatedProject.text = companyBean.name
+            when (resultCode) {
+                Extras.RESULTCODE -> {
+                    selectUser = data.getSerializableExtra(Extras.DATA) as Users
+                    selectUser?.selectUsers.let {
+                        adapter.addAllData(it)
+                    }
+                }
+                Extras.RESULTCODE2 -> {
+                    selectUser2 = data.getSerializableExtra(Extras.DATA) as Users
+                    selectUser2?.selectUsers.let {
+                        exAdapter.addAllData(it)
+                    }
+                }
+                Activity.RESULT_OK -> {
+                    companyBean = data.getSerializableExtra(Extras.DATA) as CustomSealBean.ValueBean
+                    companyBean?.let {
+                        relatedProject.text = it.name
+                    }
+                }
             }
         }
     }
@@ -390,6 +419,9 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
 
 
     override fun addPerson(tag: String) {
-        OrganizationActivity.startForResult(this@ModifyTaskActivity, tag)
+        when (tag) {
+            "CcPersonAdapter" -> SelectUserActivity.startForResult(this, tag, selectUser)
+            "ExecutiveAdapter" -> SelectUserActivity.startForResult(this, tag, selectUser2)
+        }
     }
 }

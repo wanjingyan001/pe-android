@@ -2,7 +2,6 @@ package com.sogukj.pe.ui.user
 
 import android.app.Activity
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
@@ -13,7 +12,6 @@ import com.framework.base.BaseActivity
 import com.google.gson.Gson
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
-import com.sogukj.pe.bean.CityArea
 import com.sogukj.pe.bean.Industry
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
@@ -22,7 +20,6 @@ import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_city_area.*
 import kotlinx.android.synthetic.main.activity_industry.*
 import kotlinx.android.synthetic.main.layout_shareholder_toolbar.*
 import org.jetbrains.anko.find
@@ -50,6 +47,7 @@ class IndustryActivity : BaseActivity(), View.OnClickListener {
         toolbar_title.text = "行业列表"
         addTv.text = "完成"
         addTv.setOnClickListener(this)
+        back.setOnClickListener(this)
 
         parentAdapter = RecyclerAdapter(this, { _adapter, parent, type ->
             val convertView = _adapter.getView(R.layout.item_city_area_list, parent)
@@ -64,8 +62,12 @@ class IndustryActivity : BaseActivity(), View.OnClickListener {
         })
         parentAdapter.onItemClick = { v, position ->
             val data = parentAdapter.dataList[position]
-            for (i in 0..parentAdapter.dataList.size) {
-                data.seclected = position == i
+            parentAdapter.dataList.forEachIndexed { index, industry ->
+                if (index == position) {
+                    parentAdapter.dataList[position].seclected = true
+                } else {
+                    parentAdapter.dataList[index].seclected = false
+                }
             }
             parentAdapter.notifyDataSetChanged()
             childrenAdapter.dataList.clear()
@@ -92,8 +94,12 @@ class IndustryActivity : BaseActivity(), View.OnClickListener {
         })
         childrenAdapter.onItemClick = { v, position ->
             selectPosition = position
-            for (i in 0..childrenAdapter.dataList.size) {
-                childrenAdapter.dataList[position]?.seclected = position == i
+            childrenAdapter.dataList.forEachIndexed { index, children ->
+                if (index == position) {
+                    childrenAdapter.dataList[position]?.seclected = true
+                } else {
+                    childrenAdapter.dataList[index]?.seclected = false
+                }
             }
             childrenAdapter.notifyDataSetChanged()
         }
@@ -133,6 +139,9 @@ class IndustryActivity : BaseActivity(), View.OnClickListener {
                 intent.putExtra(Extras.DATA, industry)
                 setResult(Extras.RESULTCODE, intent)
                 finish()
+            }
+            R.id.back -> {
+                onBackPressed()
             }
         }
     }

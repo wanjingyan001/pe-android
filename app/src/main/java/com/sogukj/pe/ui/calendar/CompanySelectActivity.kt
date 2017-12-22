@@ -18,6 +18,7 @@ import com.sogukj.pe.R
 import com.sogukj.pe.bean.CustomSealBean
 import com.sogukj.pe.ui.SupportEmptyView
 import com.sogukj.pe.util.Trace
+import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.service.SoguApi
@@ -54,6 +55,7 @@ class CompanySelectActivity : ToolbarActivity() {
         })
 
         adapter.onItemClick = { v, p ->
+            Utils.closeInput(this,v)
             val data = adapter.dataList[p]
             intent.putExtra(Extras.DATA, data)
             setResult(Activity.RESULT_OK, intent)

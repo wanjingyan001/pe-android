@@ -17,4 +17,5 @@ class ScheduleBean : Serializable {
     var is_finish: Int = 0//是否完成  （0=>未完成，1=>完成）仅当stat=3时返回
     var company_id: Int? = null//公司id  仅当stat=3时返回
     var is_collect: Int? = null//是否是自动采集(1隐藏复选框,0是自动采集已完成)
+    var publisher: String? = null//发起人
 }

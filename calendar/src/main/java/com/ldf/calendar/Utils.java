@@ -301,18 +301,19 @@ public final class Utils {
                 } else {
                     MonthPager monthPager = (MonthPager) parent.getChildAt(0);
                     if (monthPager.getTop() < 0) {
-                        if (monthPager.getTop() + monthPager.getTopMovableDistance() >= 0) {
-                            monthPager.offsetTopAndBottom(-monthPager.getTop()
-                                    - monthPager.getTopMovableDistance());
-                        } else {
-                            monthPager.offsetTopAndBottom(-monthPager.getTop());
-                        }
+//                        if (monthPager.getTop() + monthPager.getTopMovableDistance() >= 0) {
+//                            monthPager.offsetTopAndBottom(-monthPager.getTop()
+//                                    - monthPager.getTopMovableDistance());
+//                        } else {
+//                            monthPager.offsetTopAndBottom(-monthPager.getTop());
+//                        }
                         parent.dispatchDependentViewsChanged(child);
                     }
                 }
             }
         });
     }
+
 
     public static void saveTop(int y) {
         top = y;

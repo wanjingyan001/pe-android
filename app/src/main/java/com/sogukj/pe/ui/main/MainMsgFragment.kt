@@ -1,11 +1,9 @@
 package com.sogukj.pe.ui.main
 
-import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import android.text.Html
 import android.text.TextUtils
 import android.view.View
 import android.widget.TextView
@@ -16,7 +14,6 @@ import com.lcodecore.tkrefreshlayout.footer.BallPulseView
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.MessageIndexBean
-import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.ui.SupportEmptyView
 import com.sogukj.pe.ui.msg.MessageListActivity
 import com.sogukj.pe.util.Trace
@@ -26,6 +23,7 @@ import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_msg_center.*
+import kotlinx.android.synthetic.main.toolbar.*
 
 /**
  * Created by qinfei on 17/10/11.
@@ -38,6 +36,7 @@ class MainMsgFragment : ToolbarFragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setTitle("消息中心")
+        toolbar_back.visibility = View.VISIBLE
         adapter = RecyclerAdapter<MessageIndexBean>(baseActivity!!, { _adapter, parent, type ->
             val convertView = _adapter.getView(R.layout.item_msg_index, parent) as View
             object : RecyclerHolder<MessageIndexBean>(convertView) {
@@ -93,6 +92,7 @@ class MainMsgFragment : ToolbarFragment() {
         handler.postDelayed({
             doRequest()
         }, 100)
+        toolbar_back.setOnClickListener { activity.onBackPressed() }
     }
 
     var page = 1

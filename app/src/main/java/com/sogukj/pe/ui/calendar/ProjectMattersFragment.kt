@@ -30,6 +30,7 @@ import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_project_matters.*
+import kotlinx.android.synthetic.main.item_project_matters_list.*
 import kotlinx.android.synthetic.main.layout_empty.*
 import org.jetbrains.anko.support.v4.find
 import java.text.SimpleDateFormat
@@ -43,7 +44,7 @@ import kotlin.collections.HashMap
  * Use the [ProjectMattersFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ProjectMattersFragment : BaseFragment(), View.OnClickListener, ScheduleItemClickListener {
+class ProjectMattersFragment : BaseFragment(), ScheduleItemClickListener {
 
 
     override val containerViewId: Int
@@ -69,7 +70,6 @@ class ProjectMattersFragment : BaseFragment(), View.OnClickListener, ScheduleIte
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         projectAdapter = ProjectAdapter(context, data)
-        projectAdapter.setListener(this)
         projectAdapter.setItemClickListener(this)
         projectList.layoutManager = LinearLayoutManager(context)
         projectList.adapter = projectAdapter
@@ -98,10 +98,20 @@ class ProjectMattersFragment : BaseFragment(), View.OnClickListener, ScheduleIte
             page = 1
             val calendar = java.util.Calendar.getInstance()
             calendar.set(date?.year!!, date.month - 1, date.day)
+            MDTime.text = Utils.getTime(calendar.time, "MM月dd日")
             this.date = Utils.getTime(calendar.time.time, "yyyy-MM-dd")
             doRequest(page, this.date, companyId)
         })
         doRequest(page, date)
+        MDTime.text = Utils.getTime(System.currentTimeMillis(), "MM月dd日")
+        matters_img1.setOnClickListener {
+            //跳转公司列表
+            startActivityForResult(Intent(context, CompanySelectActivity::class.java), Extras.REQUESTCODE)
+        }
+        matters_img2.setOnClickListener {
+            //选择日期
+            window.showAtLocation(find(R.id.project_matter_main), Gravity.BOTTOM, 0, 0)
+        }
     }
 
 
@@ -117,16 +127,11 @@ class ProjectMattersFragment : BaseFragment(), View.OnClickListener, ScheduleIte
                         }
                         Log.d("WJY", Gson().toJson(payload.payload))
                         payload.payload?.let {
-                            val dayList = ArrayList<String>()
                             val companyList = ArrayList<ProjectMatterCompany>()
                             val infoList = ArrayList<ScheduleBean>()
                             it.forEachIndexed { index, projectMattersBean ->
                                 var companyid = ""
                                 projectMattersBean.item?.forEachIndexed { position, scheduleBean ->
-                                    val day = scheduleBean.start_time?.split(" ")?.get(0)
-                                    if (!dayList.contains(day) && day != null) {
-                                        dayList.add(day)
-                                    }
                                     if (!infoList.contains(scheduleBean)) {
                                         infoList.add(scheduleBean)
                                     }
@@ -139,29 +144,18 @@ class ProjectMattersFragment : BaseFragment(), View.OnClickListener, ScheduleIte
                                     }
                                 }
                             }
-                            dayList.forEachIndexed { index, s ->
-                                val map = HashMap<String, List<ScheduleBean>>()
-                                val md = ProjectMatterMD(s)
-                                data.add(md)
-                                companyList.forEachIndexed { position, name ->
-                                    val infos = ArrayList<ScheduleBean>()
-                                    data.add(name)
-                                    infoList.forEachIndexed { i, scheduleBean ->
-                                        val day = scheduleBean.start_time?.split(" ")?.get(0)
-                                        if (day.equals(s) && name.companyId == scheduleBean.company_id.toString()) {
-                                            data.add(scheduleBean)
-                                            infos.add(scheduleBean)
-                                        }
+                            val map = HashMap<String, List<ScheduleBean>>()
+                            companyList.forEachIndexed { position, name ->
+                                val infos = ArrayList<ScheduleBean>()
+                                data.add(name)
+                                infoList.forEachIndexed { i, scheduleBean ->
+                                    val day = scheduleBean.start_time?.split(" ")?.get(0)
+                                    if (name.companyId == scheduleBean.company_id.toString()) {
+                                        data.add(scheduleBean)
+                                        infos.add(scheduleBean)
                                     }
-                                    map.put(name.companyName, infos)
                                 }
-//                                data.forEachIndexed { index2, any ->
-//                                    if (any is ProjectMatterCompany){
-//                                        if (map.getValue(any.companyName).isEmpty()) {
-//                                            data.remove(index2)
-//                                        }
-//                                    }
-//                                }
+                                map.put(name.companyName, infos)
                             }
                             projectAdapter.notifyDataSetChanged()
                         }
@@ -192,18 +186,6 @@ class ProjectMattersFragment : BaseFragment(), View.OnClickListener, ScheduleIte
         doRequest(page, date)
     }
 
-    override fun onClick(v: View?) {
-        when (v?.id) {
-            R.id.matters_img1 -> {
-                //跳转公司列表
-                startActivityForResult(Intent(context, CompanySelectActivity::class.java), Extras.REQUESTCODE)
-            }
-            R.id.matters_img2 -> {
-                //选择日期
-                window.showAtLocation(find(R.id.project_matter_main), Gravity.BOTTOM, 0, 0)
-            }
-        }
-    }
 
     override fun onItemClick(view: View, position: Int) {
         val bean = data[position] as ScheduleBean
@@ -211,7 +193,7 @@ class ProjectMattersFragment : BaseFragment(), View.OnClickListener, ScheduleIte
         when (bean.type) {
             0 -> {
                 //日程
-                TaskDetailActivity.start(activity, bean.data_id!!, bean.title!!, ModifyTaskActivity.Schedule)
+                TaskDetailActivity.startSchedule(activity, bean, ModifyTaskActivity.Schedule)
             }
             1 -> {
                 //任务
@@ -230,6 +212,7 @@ class ProjectMattersFragment : BaseFragment(), View.OnClickListener, ScheduleIte
             }
             5 -> {
                 //跟踪记录
+                getCompanyDetail(bean.data_id!!, 5)
             }
             6 -> {
                 //项目
@@ -269,7 +252,7 @@ class ProjectMattersFragment : BaseFragment(), View.OnClickListener, ScheduleIte
                 })
     }
 
-    override fun finishCheck( isChecked: Boolean, position: Int) {
+    override fun finishCheck(isChecked: Boolean, position: Int) {
         val bean = data[position] as ScheduleBean
         bean.id?.let { finishTask(it, isChecked) }
     }
@@ -281,10 +264,12 @@ class ProjectMattersFragment : BaseFragment(), View.OnClickListener, ScheduleIte
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        if (isChecked) {
-                            showToast("您完成了该项目事项")
-                        } else {
-                            showToast("您重新打开了该项目事项")
+                        payload.payload?.let {
+                            if (it == 1) {
+                                showToast("您完成了该日程")
+                            } else {
+                                showToast("您重新打开了该日程")
+                            }
                         }
                     } else {
                         showToast(payload.message)

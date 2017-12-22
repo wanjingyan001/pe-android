@@ -6,8 +6,8 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.View
+import android.widget.RadioGroup
 import android.widget.TextView
-import com.bumptech.glide.Glide
 import com.framework.base.BaseFragment
 import com.google.gson.Gson
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
@@ -21,12 +21,11 @@ import com.sogukj.pe.bean.FundSmallBean.Companion.FundDesc
 import com.sogukj.pe.bean.FundSmallBean.Companion.RegTimeAsc
 import com.sogukj.pe.bean.FundSmallBean.Companion.RegTimeDesc
 import com.sogukj.pe.ui.SupportEmptyView
-import com.sogukj.pe.ui.user.UserActivity
+import com.sogukj.pe.ui.main.MainActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.service.SoguApi
-import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_fund_main.*
@@ -47,7 +46,7 @@ class FundMainFragment : BaseFragment(), View.OnClickListener {
     companion object {
         val TAG: String = FundMainFragment::class.java.simpleName
 
-        fun newInstance(): FundMainFragment{
+        fun newInstance(): FundMainFragment {
             val fragment = FundMainFragment()
             val args = Bundle()
             fragment.arguments = args
@@ -103,7 +102,7 @@ class FundMainFragment : BaseFragment(), View.OnClickListener {
         run {
             ll_order_name_1.setOnClickListener(this)
             ll_order_time_1.setOnClickListener(this)
-            iv_user.setOnClickListener(this)
+//            iv_user.setOnClickListener(this)
             iv_search.setOnClickListener(this)
         }
     }
@@ -111,15 +110,6 @@ class FundMainFragment : BaseFragment(), View.OnClickListener {
 
     override fun onStart() {
         super.onStart()
-        run {
-            //显示用户头像
-            Store.store.getUser(context)?.apply {
-                iv_user.mChar = name?.first()
-                Glide.with(this@FundMainFragment)
-                        .load(headImage())
-                        .into(iv_user)
-            }
-        }
         doRequest()
     }
 
@@ -182,7 +172,9 @@ class FundMainFragment : BaseFragment(), View.OnClickListener {
                 doRequest()
             }
             R.id.iv_user -> {
-                UserActivity.start(activity)
+                val activity = activity as MainActivity
+                activity.find<RadioGroup>(R.id.rg_tab_main).check(R.id.rb_my)
+//                UserFragment.start(activity)
             }
             R.id.iv_search -> {
                 FundSearchActivity.start(activity)

@@ -1,12 +1,13 @@
 package com.sogukj.pe.ui.calendar
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.View
-import android.widget.CompoundButton
 import com.framework.base.BaseFragment
 import com.google.gson.Gson
 import com.ldf.calendar.component.CalendarAttr
@@ -18,8 +19,6 @@ import com.ldf.calendar.view.MonthPager
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.ScheduleBean
-import com.sogukj.pe.bean.UserBean
-import com.sogukj.pe.ui.user.OrganizationActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
@@ -29,6 +28,7 @@ import kotlinx.android.synthetic.main.fragment_team_schedule.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.properties.Delegates
 
 /**
  * A simple [Fragment] subclass.
@@ -129,10 +129,6 @@ class TeamScheduleFragment : BaseFragment(), ScheduleItemClickListener {
         showGreatPoint("${Utils.getTime(timer[0], "yyyyMMdd")}-${Utils.getTime(timer1[1], "yyyyMMdd")}")
     }
 
-    override fun onResume() {
-        super.onResume()
-        doRequest(page, selectDate)
-    }
 
     fun doRequest(page: Int, date: String, filter: String? = null) {
         SoguApi.getService(activity.application)
@@ -142,11 +138,13 @@ class TeamScheduleFragment : BaseFragment(), ScheduleItemClickListener {
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         Log.d("WJY", Gson().toJson(payload.payload))
-                        data.clear()
+                        if (page == 1) {
+                            data.clear()
+                        }
                         payload.payload?.let {
                             if (it.isNotEmpty()) {
                                 val bean = ScheduleBean()
-                                bean.start_time = it[0].start_time
+                                bean.start_time = date
                                 data.add(bean)
                             }
                             data.addAll(it)
@@ -157,6 +155,8 @@ class TeamScheduleFragment : BaseFragment(), ScheduleItemClickListener {
                 }, { e ->
                     Trace.e(e)
                 }, {
+                    isLoading = false
+                    isRefreshing = false
                     teamAdapter.notifyDataSetChanged()
                 })
     }
@@ -184,11 +184,40 @@ class TeamScheduleFragment : BaseFragment(), ScheduleItemClickListener {
                 })
     }
 
+
+    var isLoading = false
+    var isRefreshing = false
     fun initList() {
         teamAdapter = TeamAdapter(context, data)
         teamList.layoutManager = LinearLayoutManager(context)
         teamList.adapter = teamAdapter
         teamAdapter.setListener(this)
+        teamList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            var lastItemPosition: Int by Delegates.notNull()
+            var firstItemPosition: Int by Delegates.notNull()
+            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    if (!isLoading && (lastItemPosition + 1) == teamAdapter.itemCount) {
+                        page += 1
+                        isLoading = true
+                        doRequest(page, selectDate, filter.toString())
+                    }
+                    if (!isRefreshing && firstItemPosition == 0) {
+                        page = 1
+                        isRefreshing = true
+                        doRequest(page, selectDate, filter.toString())
+                    }
+                }
+            }
+
+            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val manager = teamList.layoutManager as LinearLayoutManager
+                lastItemPosition = manager.findLastVisibleItemPosition()
+                firstItemPosition = manager.findFirstVisibleItemPosition()
+            }
+        })
     }
 
 
@@ -200,29 +229,31 @@ class TeamScheduleFragment : BaseFragment(), ScheduleItemClickListener {
     override fun onItemClick(view: View, position: Int) {
         when (view.id) {
             R.id.selectTv -> {
-                OrganizationActivity.startForResult(this)
+//                OrganizationActivity.startForResult(this)
+                SelectUserActivity.start(this, selectUser)
             }
             R.id.teamItemLayout -> {
-                TaskDetailActivity.start(activity, data[position].data_id!!, data[position].title!!, ModifyTaskActivity.Schedule)
+                TaskDetailActivity.startSchedule(activity, data[position], ModifyTaskActivity.Schedule)
             }
         }
     }
 
-    override fun finishCheck( isChecked: Boolean, position: Int) {
+    override fun finishCheck(isChecked: Boolean, position: Int) {
 
     }
 
-
+    var selectUser: Users? = null
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == Extras.REQUESTCODE && resultCode == Extras.RESULTCODE2 && data != null) {
-            val userBean = data.getSerializableExtra(Extras.DATA) as UserBean
-            Log.d("WJY", "${userBean.name}====>${userBean.user_id}")
-            userBean.user_id.let {
-                filter = filter.append("${userBean.user_id},")
-                val s = filter.toString()
-                doRequest(page, selectDate, s.substring(0, s.length - 1))
+        if (requestCode == Extras.REQUESTCODE && resultCode == Activity.RESULT_OK && data != null) {
+            selectUser = data.getSerializableExtra(Extras.DATA) as Users
+            selectUser?.selectUsers?.let {
+                it.forEachIndexed { index, userBean ->
+                    filter = filter.append("${userBean.user_id},")
+                }
             }
+            val s = filter.toString()
+            doRequest(page, selectDate, s.substring(0, s.length - 1))
         }
     }
 

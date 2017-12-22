@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.sogukj.pe.R;
 import com.sogukj.pe.ui.calendar.CommentListener;
+import com.sogukj.pe.util.Utils;
 
 /**
  * Created by admin on 2017/12/8.
@@ -33,7 +34,7 @@ public class CommentWindow extends PopupWindow {
         this.listener = listener;
     }
 
-    private void init(Context context) {
+    private void init(final Context context) {
         inflate = LayoutInflater.from(context).inflate(R.layout.layout_comment_window, null);
         cancel = ((TextView) inflate.findViewById(R.id.cancel));
         confirm = ((TextView) inflate.findViewById(R.id.confirm));
@@ -41,6 +42,7 @@ public class CommentWindow extends PopupWindow {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Utils.closeInput(context,commentEdt);
                 commentEdt.setText("");
                 dismiss();
             }
@@ -48,6 +50,7 @@ public class CommentWindow extends PopupWindow {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Utils.closeInput(context,commentEdt);
                 listener.confirmListener(commentEdt.getText().toString());
                 commentEdt.setText("");
                 dismiss();

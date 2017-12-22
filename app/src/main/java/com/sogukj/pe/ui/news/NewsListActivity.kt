@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.R
+import com.sogukj.pe.ui.main.MainMsgFragment
 
 class NewsListActivity : ToolbarActivity() {
 
@@ -13,7 +14,7 @@ class NewsListActivity : ToolbarActivity() {
         setContentView(R.layout.activity_news_list)
         supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.fl_container, MainNewsFragment.newInstance())
+                .replace(R.id.fl_container, MainMsgFragment.newInstance())
                 .commit()
     }
 
