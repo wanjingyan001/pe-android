@@ -11,7 +11,7 @@ class Payload<T>() {
     var code: Int = 0  // 200 is success other see errorCode list
     var message: String? = null
     var payload: T? = null
-    var total = 0
+    var total:Any? = null
     var exception: Throwable? = null
 
 

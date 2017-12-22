@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.framework.base.ToolbarActivity
+import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import kotlinx.android.synthetic.main.activity_leader.*
 import org.jetbrains.anko.textColor
@@ -20,12 +21,6 @@ class LeaderActivity : ToolbarActivity() {
             ctx?.startActivity(intent)
         }
     }
-
-    val TYPE_EMPLOYEE = 3
-    val TYPE_MANAGE = 4
-
-    val TYPE_GANGWEI = 18
-    val TYPE_JIXIAO = 19
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +38,7 @@ class LeaderActivity : ToolbarActivity() {
         }
 
         gangwei_pingfenxiaozu.setOnClickListener {
-            JudgeActivity.start(context, TYPE_MANAGE, TYPE_GANGWEI)
+            GangWeiListActivity.start(context, Extras.TYPE_MANAGE)
         }
 
         gangwei_huping.setOnClickListener {
@@ -51,7 +46,7 @@ class LeaderActivity : ToolbarActivity() {
         }
 
         jixiao_pingfen.setOnClickListener {
-            JudgeActivity.start(context, TYPE_MANAGE, TYPE_JIXIAO)
+            GuanJianJiXiaoListActivity.start(context)
         }
 
         jixiao_kaohejieguo.setOnClickListener {

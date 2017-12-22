@@ -21,7 +21,9 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_score_detail.*
 import java.net.UnknownHostException
 
-
+/**
+ * 员工互评考核结果
+ */
 class ScoreDetailActivity : ToolbarActivity() {
 
     companion object {

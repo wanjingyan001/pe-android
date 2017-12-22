@@ -15,6 +15,7 @@ import android.widget.TextView
 import com.framework.base.ToolbarActivity
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
+import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.GradeCheckBean.TouZiItem
 import com.sogukj.pe.bean.TouZiUpload
@@ -115,7 +116,8 @@ class InvestManageActivity : ToolbarActivity() {
                     .subscribeOn(Schedulers.io())
                     .subscribe({ payload ->
                         if (payload.isOk) {
-                            JudgeActivity.start(context, 3, 100)
+                            GangWeiListActivity.start(context, Extras.TYPE_EMPLOYEE)
+                            //JudgeActivity.start(context, 3, 100)
                             finish()
                         } else
                             showToast(payload.message)

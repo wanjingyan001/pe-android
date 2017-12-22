@@ -6,10 +6,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.framework.base.BaseFragment
@@ -17,14 +14,10 @@ import com.sogukj.pe.Extras
 
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.GradeCheckBean
-import com.sogukj.pe.bean.JudgeBean
-import com.sogukj.pe.bean.WeeklySendBean
-import com.sogukj.pe.view.MyGridView
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.pe.view.SpaceItemDecoration
 import kotlinx.android.synthetic.main.fragment_judge.*
-import kotlinx.android.synthetic.main.fragment_main_project.*
 import org.jetbrains.anko.textColor
 
 
@@ -115,11 +108,15 @@ class JudgeFragment : BaseFragment() {
         })
         adapter.onItemClick = { v, p ->
             //type2  岗位胜任力和关键绩效
+            if (type2 == 18) {
+
+            }
             if (type1 == TYPE_EMPLOYEE) {
                 if (type == TYPE_WAIT) {
-                    RateActivity.start(context, adapter.dataList.get(p), type2, TYPE_EMPLOYEE, false)
+                    GangWeiShengRenLiActivity.start(context, adapter.dataList.get(p).user_id!!, false)
+                    //RateActivity.start(context, adapter.dataList.get(p), type2, TYPE_EMPLOYEE, false)
                 } else if (type == TYPE_END) {
-
+                    GangWeiShengRenLiActivity.start(context, adapter.dataList.get(p).user_id!!, true)
                 }
             } else if (type1 == TYPE_MANAGE) {
                 if (type == TYPE_WAIT) {

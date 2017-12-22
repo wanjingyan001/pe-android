@@ -523,7 +523,10 @@
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity android:name=".ui.score.InvestManageActivity" />
         <activity android:name=".ui.score.LeaderActivity" />
-        <activity android:name=".ui.score.JiXiaoActivity"></activity>
+        <activity android:name=".ui.score.JiXiaoActivity" />
+        <activity android:name=".ui.score.GangWeiShengRenLiActivity" />
+        <activity android:name=".ui.score.GangWeiListActivity" />
+        <activity android:name=".ui.score.GuanJianJiXiaoListActivity"></activity>
     </application>
 
 </manifest>

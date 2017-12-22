@@ -19,6 +19,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.*
 import com.google.gson.JsonSyntaxException
+import com.sogukj.pe.Extras
 import com.sogukj.pe.bean.GradeCheckBean
 import com.sogukj.pe.bean.JinDiaoItem
 import com.sogukj.pe.bean.TouHouManageItem
@@ -109,7 +110,8 @@ class FengKongActivity : ToolbarActivity() {
                     .subscribeOn(Schedulers.io())
                     .subscribe({ payload ->
                         if (payload.isOk) {
-                            JudgeActivity.start(context, TYPE_EMPLOYEE, FK)
+                            GangWeiListActivity.start(context, Extras.TYPE_EMPLOYEE)
+                            //JudgeActivity.start(context, TYPE_EMPLOYEE, FK)
                             finish()
                         } else
                             showToast(payload.message)

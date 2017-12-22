@@ -167,7 +167,7 @@ class RateFragment : BaseFragment() {
         // 1
         var id = arguments.getInt(Extras.DATA, 0)
         SoguApi.getService(baseActivity!!.application)
-                .showJobPage()
+                .showJobPage(id)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->

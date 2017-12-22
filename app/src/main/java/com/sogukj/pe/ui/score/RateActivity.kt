@@ -108,7 +108,9 @@ class RateActivity : ToolbarActivity() {
                     RateFragment.newInstance(RateFragment.TYPE_JOB, person.user_id!!)
             )
         } else if (type1 == TYPE_EMPLOYEE) {
+            //GangWeiShengRenLiActivity.start(context, person.user_id!!)
             fragments = arrayOf(
+                    //GangWeiShengRenLiActivity.start(context, person.user_id!!)
                     RateFragment.newInstance(RateFragment.TYPE_JOB, person.user_id!!)
             )
         } else {
