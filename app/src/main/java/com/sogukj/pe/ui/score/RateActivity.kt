@@ -81,6 +81,7 @@ class RateActivity : ToolbarActivity() {
         var person = intent.getSerializableExtra(Extras.DATA) as GradeCheckBean.ScoreItem
         var type1 = intent.getIntExtra(Extras.TYPE1, 0)
         var type = intent.getIntExtra(Extras.TYPE, 0) //决定是岗位胜任力和关键绩效
+        var isShow = intent.getBooleanExtra(Extras.FLAG, false) // = false 打分界面，true展示界面
         if (person.type == 3 && type1 == TYPE_MANAGE) {
             if (type == TYPE_GANGWEI) {
                 fragments = arrayOf(
@@ -88,7 +89,7 @@ class RateActivity : ToolbarActivity() {
                 )
             } else if (type == TYPE_JIXIAO) {
                 fragments = arrayOf(
-                        InvestManageFragment.newInstance(person, type)
+                        InvestManageFragment.newInstance(person, type, isShow)
                 )
             }
         } else if (person.type == 2 && type1 == TYPE_MANAGE) {
@@ -103,11 +104,15 @@ class RateActivity : ToolbarActivity() {
             }
         } else if (person.type == 1 && type1 == TYPE_MANAGE) {
             fragments = arrayOf(
+                    // TYPE_JOB
                     RateFragment.newInstance(RateFragment.TYPE_JOB, person.user_id!!)
             )
         } else if (type1 == TYPE_EMPLOYEE) {
             fragments = arrayOf(
                     RateFragment.newInstance(RateFragment.TYPE_JOB, person.user_id!!)
+            )
+        } else {
+            fragments = arrayOf(
             )
         }
 

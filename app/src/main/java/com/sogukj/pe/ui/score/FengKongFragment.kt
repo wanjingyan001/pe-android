@@ -1,21 +1,21 @@
 package com.sogukj.pe.ui.score
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.LinearLayout
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.view.ViewGroup
+import android.widget.*
 import com.framework.base.BaseFragment
 import com.google.gson.JsonSyntaxException
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
-import com.sogukj.pe.bean.GradeCheckBean
-import com.sogukj.pe.bean.InvestManageItem
-import com.sogukj.pe.bean.JinDiaoItem
-import com.sogukj.pe.bean.TouHouManageItem
+import com.sogukj.pe.bean.*
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.*
@@ -35,7 +35,7 @@ class FengKongFragment : BaseFragment() {
     override val containerViewId: Int
         get() = R.layout.fragment_feng_kong
 
-    lateinit var sub_adapter: RecyclerAdapter<InvestManageItem>
+    lateinit var sub_adapter: RecyclerAdapter<FKItem.THGL.ItemData>
 
     companion object {
 
@@ -53,13 +53,11 @@ class FengKongFragment : BaseFragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var adapter = FengKongAdapter(context, 0, ArrayList<JinDiaoItem>(), ArrayList<TouHouManageItem>())
+        var adapter = InnerAdapter(context)
         list_.adapter = adapter
 
-//        adapter.addAll(arrayListOf(Bean(), Bean(), Bean()))
-//        adapter.notifyDataSetChanged()
 
-        sub_adapter = RecyclerAdapter<InvestManageItem>(context, { _adapter, parent, t ->
+        sub_adapter = RecyclerAdapter<FKItem.THGL.ItemData>(context, { _adapter, parent, t ->
             ProjectHolderNoTitle(_adapter.getView(R.layout.item_rate, parent))
         })
         val layoutManager = LinearLayoutManager(context)
@@ -70,18 +68,23 @@ class FengKongFragment : BaseFragment() {
 
         person = arguments.getSerializable(Extras.DATA) as GradeCheckBean.ScoreItem
         SoguApi.getService(baseActivity!!.application)
-                .perAppraisal(person.user_id!!, person.type!!)
+                .perAppraisal_FK(person.user_id!!, person.type!!)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         payload.payload?.apply {
-                            sub_adapter.dataList.addAll(this)
-                            sub_adapter.notifyDataSetChanged()
-
-                            this?.forEach {
-                                //maxItem += it.data!!.size
+                            jdxm?.data?.forEach {
+                                adapter.datalist.add(it)
                             }
+                            adapter.notifyDataSetChanged()
+
+                            fk_score.text = "${jdxm?.selfScore}"
+
+                            thgl?.data?.forEach {
+                                sub_adapter.dataList.add(it)
+                            }
+                            sub_adapter.notifyDataSetChanged()
                         }
                     } else
                         showToast(payload.message)
@@ -95,11 +98,11 @@ class FengKongFragment : BaseFragment() {
                 })
     }
 
+    val weight_list = ArrayList<Int>()
     val observable_List = ArrayList<Observable<Int>>()
-    var num = 0
 
     inner class ProjectHolderNoTitle(view: View)
-        : RecyclerHolder<InvestManageItem>(view) {
+        : RecyclerHolder<FKItem.THGL.ItemData>(view) {
 
         var bar = convertView.findViewById(R.id.progressBar) as ProgressBar
         var judge = convertView.findViewById(R.id.text) as TextView
@@ -108,51 +111,109 @@ class FengKongFragment : BaseFragment() {
         var desc = convertView.findViewById(R.id.desc) as TextView
         var lll = convertView.findViewById(R.id.lll) as LinearLayout
 
-        override fun setData(view: View, data: InvestManageItem, position: Int) {
+        override fun setData(view: View, data: FKItem.THGL.ItemData, position: Int) {
 
-//            title.text = "${data.title}(${data.percentage}%)"
-//
-//            if (type == RateFragment.TYPE_JOB) {
-//                lll.visibility = View.GONE
-//            } else if (type == RateFragment.TYPE_RATE) {
-//                if (data.subtitle == "") {
-//                    sub_title.visibility = View.GONE
-//                } else {
-//                    sub_title.text = data.subtitle
-//                }
-//                desc.text = data.desc
-//            }
-//
-//            var obser = TextViewClickObservable(context, judge, bar)
-//            observable_List.add(obser)
-//
-//            num++
-//
-//            if (type == RateFragment.TYPE_JOB) {
-//            } else if (type == RateFragment.TYPE_RATE) {
-//                if (num == maxItem) {
-//                    Observable.combineLatest(observable_List, object : Function<Array<Any>, Double> {
-//                        override fun apply(str: Array<Any>): Double {
-//                            var result = 0.00
-//                            var date = ArrayList<Int>()
-//                            for (ites in str) {
-//                                date.add(ites as Int)
-//                            }
-//                            result = date[0] * 0.2 + date[1] * 0.15 + date[2] * 0.15 + date[3] * 0.1 + date[4] * 0.1 + date[5] * 0.2 - date[6] * 0.2
-//                            return result//isEmailValid(str[0].toString()) && isPasswordValid(str[1].toString())
-//                        }
-//                    }).subscribe(object : Consumer<Double> {
-//                        override fun accept(t: Double) {
-//                            tv_socre.text = "${String.format("%1$.2f", t)}"
-//                            btn_commit.setBackgroundColor(Color.parseColor("#FFE95C4A"))
-//                            btn_commit.setOnClickListener {
-//
-//                            }
-//                        }
-//                    })
-//                }
-//            }
+            title.text = data.target
+            lll.visibility = View.GONE
+
+            var obser = TextViewClickObservable(context, judge, bar)
+            observable_List.add(obser)
+
+            weight_list.add(data.weight?.toInt()!!)
+
+            if (observable_List.size == sub_adapter.dataList.size) {
+                Observable.combineLatest(observable_List, object : Function<Array<Any>, Double> {
+                    override fun apply(str: Array<Any>): Double {
+                        var result = 0.0
+                        var date = ArrayList<Int>()//每项分数
+                        for (ites in str) {
+                            date.add(ites as Int)
+                        }
+                        for (i in weight_list.indices) {
+                            //dataList[i].score = date[i]
+                            var single = date[i].toDouble() * weight_list[i] / 100
+                            result += single
+                        }
+                        return result//isEmailValid(str[0].toString()) && isPasswordValid(str[1].toString())
+                    }
+                }).subscribe(object : Consumer<Double> {
+                    override fun accept(t: Double) {
+                        tv_socre.text = "${String.format("%1$.2f", t)}"
+                        btn_commit.setBackgroundColor(Color.parseColor("#FFE95C4A"))
+                        btn_commit.setOnClickListener {
+
+                        }
+                    }
+                })
+            }
         }
 
+    }
+
+    class InnerAdapter(val context: Context) : BaseAdapter() {
+
+        val datalist = ArrayList<FKItem.JDXM.InnerData>()
+
+        fun addAll(list: ArrayList<FKItem.JDXM.InnerData>) {
+            datalist.addAll(list)
+            notifyDataSetChanged()
+        }
+
+        fun add(item: FKItem.JDXM.InnerData) {
+            datalist.add(item)
+            notifyDataSetChanged()
+        }
+
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+            var view = convertView
+            var holder: Holder? = null
+            if (view == null) {
+                holder = Holder()
+                view = LayoutInflater.from(context).inflate(R.layout.item_fengkong, null)
+                holder?.title = view.findViewById(R.id.item_title) as TextView
+                holder?.content = view.findViewById(R.id.item_content) as EditText
+                view?.setTag(holder)
+            } else {
+                holder = view.tag as Holder
+            }
+            holder?.title?.text = datalist[position].target
+            holder?.content?.setText(datalist[position].info)
+//            var item = TouHouManageItem()
+//            item.performance_id = datalist[position].performance_id
+//            item.info = ""
+//            touhou_tmp.add(item)
+//            holder?.content?.addTextChangedListener(object : TextWatcher {
+//                override fun afterTextChanged(s: Editable?) {
+//                    touhou_tmp[position].info = s.toString()
+//                }
+//
+//                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+//                }
+//
+//                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+//                }
+//            })
+            return view!!
+        }
+
+        override fun getItem(position: Int): Any {
+            return datalist.get(position)
+        }
+
+        override fun getItemId(position: Int): Long {
+            return position.toLong()
+        }
+
+        override fun getCount(): Int {
+            return datalist.size
+        }
+
+        class Holder {
+            var title: TextView? = null
+            var content: EditText? = null
+
+            var zhibiao: EditText? = null
+            var condition: EditText? = null
+        }
     }
 }

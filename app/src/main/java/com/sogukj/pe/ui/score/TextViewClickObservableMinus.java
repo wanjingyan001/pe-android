@@ -39,6 +39,7 @@ class TextViewClickObservableMinus extends Observable<Integer> {
         for (int i = 0; i <= total; i += offset) {
             mSelected.add(i);
         }
+        bar.setMax(total);
     }
 
     @Override
