@@ -156,8 +156,17 @@ class InvestManageFragment : BaseFragment() {
                 layout.visibility = View.GONE
             }
 
-            var obser = TextViewClickObservable(context, txt_btn, progressBar)
-            observable_List.add(obser)
+            //1=>关键绩效指标评价 2=>岗位胜任力评价 3=>加分项 4=>减分项
+            if (data.type == 4) {
+                var obser = TextViewClickObservableMinus(context, txt_btn, progressBar, data.total_score!!, data.offset!!)
+                observable_List.add(obser)
+            } else if (data.type == 3) {
+                var obser = TextViewClickObservableAdd(context, txt_btn, progressBar, data.total_score!!, data.offset!!)
+                observable_List.add(obser)
+            } else {
+                var obser = TextViewClickObservable(context, txt_btn, progressBar)
+                observable_List.add(obser)
+            }
 
             if (data.type == 4) {//扣分项
                 weight_list.add(data.weight!! * -1)

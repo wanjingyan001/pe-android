@@ -1003,7 +1003,7 @@ interface SoguService {
     @POST("/api/grade/invest_add")
     fun invest_add(@Body map: HashMap<String, ArrayList<HashMap<String, String>>>): Observable<Payload<Object>>
 
-    //投资部打分显示页面
+    //关键绩效指标评价
     //user_id被打分人id
     @FormUrlEncoded
     @POST("/api/grade/perAppraisal")

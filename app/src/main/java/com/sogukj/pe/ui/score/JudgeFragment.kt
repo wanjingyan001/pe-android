@@ -66,6 +66,11 @@ class JudgeFragment : BaseFragment() {
     var type1: Int? = null
     var type2 = 0
 
+    override fun onResume() {
+        super.onResume()
+
+    }
+
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -116,7 +121,7 @@ class JudgeFragment : BaseFragment() {
         adapter.onItemClick = { v, p ->
             if (type1 == TYPE_EMPLOYEE) {
                 if (type == TYPE_WAIT) {
-                    RateActivity.start(context, adapter.dataList.get(p), type2,TYPE_EMPLOYEE, false)
+                    RateActivity.start(context, adapter.dataList.get(p), type2, TYPE_EMPLOYEE, false)
                 } else if (type == TYPE_END) {
 
                 }

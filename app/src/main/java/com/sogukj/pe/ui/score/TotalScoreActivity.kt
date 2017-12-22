@@ -82,17 +82,17 @@ class TotalScoreActivity : ToolbarActivity() {
     class MyCountDownTimer(var millisInFuture: Long, var countDownInterval: Long, var view: View, var score: Double) : CountDownTimer(millisInFuture, countDownInterval) {
         override fun onFinish() {
             if (view is TotalCircleScoreBoard) {
-                (view as TotalCircleScoreBoard).setDate(0, 108.99 / 100)
+                (view as TotalCircleScoreBoard).setDate(0, score / 100)
             } else {
-                (view as SingleCircleScoreBoard).setDate(0, 42.00 / 100)
+                (view as SingleCircleScoreBoard).setDate(0, score / 100)
             }
         }
 
         override fun onTick(millisUntilFinished: Long) {
             if (view is TotalCircleScoreBoard) {
-                (view as TotalCircleScoreBoard).setDate(millisUntilFinished.toInt() / 10, 108.99 / 100)
+                (view as TotalCircleScoreBoard).setDate(millisUntilFinished.toInt() / 10, score / 100)
             } else {
-                (view as SingleCircleScoreBoard).setDate(millisUntilFinished.toInt() / 10, 42.00 / 100)
+                (view as SingleCircleScoreBoard).setDate(millisUntilFinished.toInt() / 10, score / 100)
             }
         }
     }

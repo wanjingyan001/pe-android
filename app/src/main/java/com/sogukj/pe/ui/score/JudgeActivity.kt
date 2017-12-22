@@ -83,7 +83,7 @@ class JudgeActivity : ToolbarActivity(), JudgeFragment.judgeInterface {
             back.setImageResource(R.drawable.grey_back)
         }
 
-        // 1=>进入绩效考核列表页面，2=>进入岗位胜任力列表 3=>进入风控部填写页，4=>进入投资部填写页
+        // 1=>进入绩效考核列表页面，2=>进入岗位胜任力列表 3=>进入风控部填写页，4=>进入投资部填写页----之前风控部投资部填写页已完成，所以只有1，2来两种可能
         if (type == TYPE_MANAGE) {
             if (type1 == TYPE_GANGWEI) {
                 pageType = 2
@@ -162,17 +162,31 @@ class JudgeActivity : ToolbarActivity(), JudgeFragment.judgeInterface {
                                         JudgeFragment.newInstance(TYPE_WAIT, type, type1, ready_grade!!),
                                         JudgeFragment.newInstance(TYPE_END, type, type1, finish_grade!!)
                                 )
+                                var adapter = ArrayPagerAdapter(supportFragmentManager, fragments)
+                                view_pager.adapter = adapter
                             } else if (pageType == 2) {
-                                fragments = arrayOf(
-                                        JudgeFragment.newInstance(TYPE_WAIT, type, type1, ready_grade!!),
-                                        JudgeFragment.newInstance(TYPE_END, type, type1, finish_grade!!)
-                                )
+                                if (fragments == null || fragments.size == 0) {
+                                    fragments = arrayOf(
+                                            JudgeFragment.newInstance(TYPE_WAIT, type, type1, ready_grade!!),
+                                            JudgeFragment.newInstance(TYPE_END, type, type1, finish_grade!!)
+                                    )
+                                    var adapter = ArrayPagerAdapter(supportFragmentManager, fragments)
+                                    view_pager.adapter = adapter
+                                } else {
+                                    val intent = Bundle()
+                                    intent.putSerializable(Extras.DATA, ready_grade!!)
+                                    fragments[0].arguments = intent
+
+                                    val intent2 = Bundle()
+                                    intent2.putSerializable(Extras.DATA, finish_grade!!)
+                                    fragments[1].arguments = intent
+                                }
                             } else {
                                 fragments = arrayOf(
                                 )
+                                var adapter = ArrayPagerAdapter(supportFragmentManager, fragments)
+                                view_pager.adapter = adapter
                             }
-                            var adapter = ArrayPagerAdapter(supportFragmentManager, fragments)
-                            view_pager.adapter = adapter
                         }
                     } else
                         showToast(payload.message)
