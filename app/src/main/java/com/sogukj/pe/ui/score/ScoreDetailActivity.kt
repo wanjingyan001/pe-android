@@ -15,6 +15,7 @@ import android.widget.*
 import com.google.gson.JsonSyntaxException
 import com.sogukj.pe.bean.EmployeeInteractBean
 import com.sogukj.pe.util.Trace
+import com.sogukj.pe.view.MyListView
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -128,7 +129,8 @@ class ScoreDetailActivity : ToolbarActivity() {
         }
 
         override fun getChildrenCount(groupPosition: Int): Int {
-            return childs[groupPosition].size
+            //return childs[groupPosition].size
+            return 1
         }
 
         override fun getChild(groupPosition: Int, childPosition: Int): Any {
@@ -141,44 +143,35 @@ class ScoreDetailActivity : ToolbarActivity() {
 
         override fun getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean, convertView: View?, parent: ViewGroup?): View {
             var view = convertView
-            var holder: ChildHolder? = null
+            var holder: FatherHolder? = null
             if (view == null) {
                 view = LayoutInflater.from(context).inflate(R.layout.item_child, null)
-                holder = ChildHolder()
+                holder = FatherHolder()
                 holder.seq = view.findViewById(R.id.seq) as TextView
                 holder.depart = view.findViewById(R.id.depart) as TextView
                 holder.name = view.findViewById(R.id.name) as TextView
                 holder.score = view.findViewById(R.id.score) as TextView
+                holder.list = view.findViewById(R.id.listview) as MyListView
                 view.setTag(holder)
             } else {
-                holder = view.getTag() as ChildHolder
+                holder = view.getTag() as FatherHolder
             }
 
-            holder.seq?.text = "${childs[groupPosition][childPosition].sort}"
-            holder.depart?.text = childs[groupPosition][childPosition].department
-            holder.name?.text = childs[groupPosition][childPosition].name
-            holder.score?.text = childs[groupPosition][childPosition].grade_case
-
-            if (childPosition == 0) {
-                holder.seq?.setBackgroundColor(Color.TRANSPARENT)
-                holder.depart?.setBackgroundColor(Color.TRANSPARENT)
-                holder.name?.setBackgroundColor(Color.TRANSPARENT)
-                holder.score?.setBackgroundColor(Color.TRANSPARENT)
-            } else {
-                holder.seq?.setBackgroundColor(Color.WHITE)
-                holder.depart?.setBackgroundColor(Color.WHITE)
-                holder.name?.setBackgroundColor(Color.WHITE)
-                holder.score?.setBackgroundColor(Color.WHITE)
-            }
+            holder.seq?.setBackgroundColor(Color.TRANSPARENT)
+            holder.depart?.setBackgroundColor(Color.TRANSPARENT)
+            holder.name?.setBackgroundColor(Color.TRANSPARENT)
+            holder.score?.setBackgroundColor(Color.TRANSPARENT)
+            holder.list?.adapter = MyListAdapter(context, childs.get(groupPosition))
 
             return view!!
         }
 
-        class ChildHolder {
+        class FatherHolder {
             var seq: TextView? = null
             var depart: TextView? = null
             var name: TextView? = null
             var score: TextView? = null
+            var list: MyListView? = null
         }
 
         override fun getChildId(groupPosition: Int, childPosition: Int): Long {
@@ -187,6 +180,55 @@ class ScoreDetailActivity : ToolbarActivity() {
 
         override fun getGroupCount(): Int {
             return group.size
+        }
+
+        class MyListAdapter(val context: Context, val datalist: ArrayList<EmployeeInteractBean.EmployeeItem>) : BaseAdapter() {
+            override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+                var view = convertView
+                var holder: ChildHolder? = null
+                if (view == null) {
+                    view = LayoutInflater.from(context).inflate(R.layout.item_child, null)
+                    holder = ChildHolder()
+                    holder.seq = view.findViewById(R.id.seq) as TextView
+                    holder.depart = view.findViewById(R.id.depart) as TextView
+                    holder.name = view.findViewById(R.id.name) as TextView
+                    holder.score = view.findViewById(R.id.score) as TextView
+                    view.setTag(holder)
+                } else {
+                    holder = view.getTag() as ChildHolder
+                }
+
+                holder.seq?.text = "${datalist[position].sort}"
+                holder.depart?.text = datalist[position].department
+                holder.name?.text = datalist[position].name
+                holder.score?.text = datalist[position].grade_case
+
+                holder.seq?.setBackgroundColor(Color.WHITE)
+                holder.depart?.setBackgroundColor(Color.WHITE)
+                holder.name?.setBackgroundColor(Color.WHITE)
+                holder.score?.setBackgroundColor(Color.WHITE)
+
+                return view!!
+            }
+
+            override fun getItem(position: Int): Any {
+                return datalist.get(position)
+            }
+
+            override fun getItemId(position: Int): Long {
+                return position.toLong()
+            }
+
+            override fun getCount(): Int {
+                return datalist.size
+            }
+
+            class ChildHolder {
+                var seq: TextView? = null
+                var depart: TextView? = null
+                var name: TextView? = null
+                var score: TextView? = null
+            }
         }
     }
 }

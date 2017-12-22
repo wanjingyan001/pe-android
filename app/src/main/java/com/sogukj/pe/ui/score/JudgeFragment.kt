@@ -120,9 +120,9 @@ class JudgeFragment : BaseFragment() {
                 }
             } else if (type1 == TYPE_MANAGE) {
                 if (type == TYPE_WAIT) {
-                    RateActivity.start(context, adapter.dataList.get(p), type2, TYPE_MANAGE, false)
+                    //RateActivity.start(context, adapter.dataList.get(p), type2, TYPE_MANAGE, false)
                 } else if (type == TYPE_END) {
-                    RateActivity.start(context, adapter.dataList.get(p), type2, TYPE_MANAGE, true)
+                    //RateActivity.start(context, adapter.dataList.get(p), type2, TYPE_MANAGE, true)
                 }
             }
         }

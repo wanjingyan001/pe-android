@@ -31,37 +31,20 @@ class RateActivity : ToolbarActivity() {
     companion object {
         /**
          * check_person 被评分人信息
-         * //type  1=>其他模版 2=>风控部模版 3=>投资部模版
-         * person.type决定哪个界面，type1决定是员工还是领导
-         * isShow = false 打分界面，true展示界面
-         * type 决定是岗位胜任力和关键绩效
+         * isShow-- 是否展示页面  true为展示页面，false是打分界面
          */
-        fun start(ctx: Context?, check_person: GradeCheckBean.ScoreItem, type: Int, type1: Int, isShow: Boolean) {
+        fun start(ctx: Context?, check_person: GradeCheckBean.ScoreItem, isShow: Boolean) {
             val intent = Intent(ctx, RateActivity::class.java)
             intent.putExtra(Extras.DATA, check_person)
-            intent.putExtra(Extras.TYPE, type)
-            intent.putExtra(Extras.TYPE1, type1)
             intent.putExtra(Extras.FLAG, isShow)
             ctx?.startActivity(intent)
         }
     }
 
-    val TYPE_JOB = 1
-    val TYPE_RATE = 2
-    val TYPE_EMPLOYEE = 3
-    val TYPE_MANAGE = 4
-
-//    val fragments = arrayOf(
-//            //RateFragment.newInstance(TYPE_RATE),
-//            //FengKongFragment.newInstance(),
-//            //InvestManageFragment.newInstance(),
-//            RateFragment.newInstance(TYPE_JOB)
-//    )
+    lateinit var person: GradeCheckBean.ScoreItem
+    var isShow = false
 
     lateinit var fragments: Array<BaseFragment>
-
-    val TYPE_GANGWEI = 18
-    val TYPE_JIXIAO = 19
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,39 +61,20 @@ class RateActivity : ToolbarActivity() {
             back.setImageResource(R.drawable.grey_back)
         }
 
-        var person = intent.getSerializableExtra(Extras.DATA) as GradeCheckBean.ScoreItem
-        var type1 = intent.getIntExtra(Extras.TYPE1, 0)
-        var type = intent.getIntExtra(Extras.TYPE, 0) //决定是岗位胜任力和关键绩效
-        var isShow = intent.getBooleanExtra(Extras.FLAG, false) // = false 打分界面，true展示界面
-        if (person.type == 3 && type1 == TYPE_MANAGE) {
-            if (type == TYPE_GANGWEI) {
-                fragments = arrayOf(
-                        RateFragment.newInstance(RateFragment.TYPE_JOB, person.user_id!!)
-                )
-            } else if (type == TYPE_JIXIAO) {
-                fragments = arrayOf(
-                        InvestManageFragment.newInstance(person, type, isShow)
-                )
-            }
-        } else if (person.type == 2 && type1 == TYPE_MANAGE) {
-            if (type == TYPE_GANGWEI) {
-                fragments = arrayOf(
-                        RateFragment.newInstance(RateFragment.TYPE_JOB, person.user_id!!)
-                )
-            } else if (type == TYPE_JIXIAO) {
-                fragments = arrayOf(
-                        FengKongFragment.newInstance(person)
-                )
-            }
-        } else if (person.type == 1 && type1 == TYPE_MANAGE) {
+        person = intent.getSerializableExtra(Extras.DATA) as GradeCheckBean.ScoreItem
+        isShow = intent.getBooleanExtra(Extras.FLAG, false) // = false 打分界面，true展示界面
+
+        //1=>其他模版 2=>风控部模版 3=>投资部模版
+        if (person.type == 3) {
             fragments = arrayOf(
-                    // TYPE_JOB
-                    RateFragment.newInstance(RateFragment.TYPE_JOB, person.user_id!!)
+                    InvestManageFragment.newInstance(person, isShow)
             )
-        } else if (type1 == TYPE_EMPLOYEE) {
-            //GangWeiShengRenLiActivity.start(context, person.user_id!!)
+        } else if (person.type == 2) {
             fragments = arrayOf(
-                    //GangWeiShengRenLiActivity.start(context, person.user_id!!)
+                    FengKongFragment.newInstance(person, isShow)
+            )
+        } else if (person.type == 1) {
+            fragments = arrayOf(
                     RateFragment.newInstance(RateFragment.TYPE_JOB, person.user_id!!)
             )
         } else {
@@ -120,51 +84,5 @@ class RateActivity : ToolbarActivity() {
 
         var adapter = ArrayPagerAdapter(supportFragmentManager, fragments)
         view_pager.adapter = adapter
-        view_pager.offscreenPageLimit = fragments.size
-
-        tabs?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-
-            }
-
-            override fun onTabSelected(tab: TabLayout.Tab) {
-                view_pager?.currentItem = tab.position
-            }
-
-        })
-        view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrollStateChanged(state: Int) {
-            }
-
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-            }
-
-            override fun onPageSelected(position: Int) {
-                tabs?.getTabAt(position)?.select()
-            }
-
-        })
-    }
-
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-        if (hasFocus) {
-            val tabStrip = tabs::class.java.getDeclaredField("mTabStrip")
-            tabStrip.setAccessible(true)
-            val ll_tab = tabStrip.get(tabs) as LinearLayout
-            for (i in 0 until ll_tab.childCount) {
-                val child = ll_tab.getChildAt(i)
-                child.setPadding(0, 0, 0, 0)
-                val params = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f)
-//                params.leftMargin = 170
-//                params.rightMargin = 170
-                child.layoutParams = params
-//                child.invalidate()
-            }
-        }
     }
 }

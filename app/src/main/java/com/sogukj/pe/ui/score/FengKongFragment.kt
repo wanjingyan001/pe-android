@@ -38,10 +38,11 @@ class FengKongFragment : BaseFragment() {
     lateinit var sub_adapter: RecyclerAdapter<FKItem.THGL.ItemData>
 
     companion object {
-
-        fun newInstance(check_person: GradeCheckBean.ScoreItem): FengKongFragment {
+        //isShow  = false 打分界面，true展示界面
+        fun newInstance(check_person: GradeCheckBean.ScoreItem, isShow: Boolean): FengKongFragment {
             val fragment = FengKongFragment()
             val intent = Bundle()
+            intent.putBoolean(Extras.FLAG, isShow)
             intent.putSerializable(Extras.DATA, check_person)
             fragment.arguments = intent
             return fragment
@@ -49,6 +50,7 @@ class FengKongFragment : BaseFragment() {
     }
 
     lateinit var person: GradeCheckBean.ScoreItem
+    var isShown = false
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -67,6 +69,8 @@ class FengKongFragment : BaseFragment() {
         rate_list_FK.adapter = sub_adapter
 
         person = arguments.getSerializable(Extras.DATA) as GradeCheckBean.ScoreItem
+        isShown = arguments.getBoolean(Extras.FLAG) // false 打分界面，true展示界面
+
         SoguApi.getService(baseActivity!!.application)
                 .perAppraisal_FK(person.user_id!!, person.type!!)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -85,6 +89,10 @@ class FengKongFragment : BaseFragment() {
                                 sub_adapter.dataList.add(it)
                             }
                             sub_adapter.notifyDataSetChanged()
+                            if (isShown) {
+                                tv_socre.text = payload.total as String
+                                btn_commit.visibility = View.GONE
+                            }
                         }
                     } else
                         showToast(payload.message)
@@ -116,38 +124,90 @@ class FengKongFragment : BaseFragment() {
             title.text = data.target
             lll.visibility = View.GONE
 
-            var obser = TextViewClickObservable(context, judge, bar)
-            observable_List.add(obser)
+            if (isShown) {
+                bar.progress = data.score?.toInt()!!
+                judge.setText(data.score)
+                judge.setTextColor(Color.parseColor("#ffa0a4aa"))
+                judge.setTextSize(16f)
+                judge.setBackgroundDrawable(null)
+            } else {
+                var obser = TextViewClickObservable(context, judge, bar)
+                observable_List.add(obser)
 
-            weight_list.add(data.weight?.toInt()!!)
+                weight_list.add(data.weight?.toInt()!!)
 
-            if (observable_List.size == sub_adapter.dataList.size) {
-                Observable.combineLatest(observable_List, object : Function<Array<Any>, Double> {
-                    override fun apply(str: Array<Any>): Double {
-                        var result = 0.0
-                        var date = ArrayList<Int>()//每项分数
-                        for (ites in str) {
-                            date.add(ites as Int)
-                        }
-                        for (i in weight_list.indices) {
-                            //dataList[i].score = date[i]
-                            var single = date[i].toDouble() * weight_list[i] / 100
-                            result += single
-                        }
-                        return result//isEmailValid(str[0].toString()) && isPasswordValid(str[1].toString())
-                    }
-                }).subscribe(object : Consumer<Double> {
-                    override fun accept(t: Double) {
-                        tv_socre.text = "${String.format("%1$.2f", t)}"
-                        btn_commit.setBackgroundColor(Color.parseColor("#FFE95C4A"))
-                        btn_commit.setOnClickListener {
+                var upload = TouZiUpload()
+                upload.performance_id = data.id
+                upload.type = data.type
+                dataList.add(upload)
 
+                if (observable_List.size == sub_adapter.dataList.size) {
+                    Observable.combineLatest(observable_List, object : Function<Array<Any>, Double> {
+                        override fun apply(str: Array<Any>): Double {
+                            var result = 0.0
+                            var date = ArrayList<Int>()//每项分数
+                            for (ites in str) {
+                                date.add(ites as Int)
+                            }
+                            for (i in weight_list.indices) {
+                                dataList[i].score = date[i]
+                                var single = date[i].toDouble() * weight_list[i] / 100
+                                result += single
+                            }
+                            return result//isEmailValid(str[0].toString()) && isPasswordValid(str[1].toString())
                         }
-                    }
-                })
+                    }).subscribe(object : Consumer<Double> {
+                        override fun accept(t: Double) {
+                            tv_socre.text = "${String.format("%1$.2f", t)}"
+                            btn_commit.setBackgroundColor(Color.parseColor("#FFE95C4A"))
+                            btn_commit.setOnClickListener {
+                                upload(t)
+                            }
+                        }
+                    })
+                }
             }
         }
+    }
 
+    var dataList = ArrayList<TouZiUpload>()
+
+    fun upload(result: Double) {
+
+        var data = ArrayList<HashMap<String, Int>>()
+        for (item in dataList) {
+            val inner = HashMap<String, Int>()
+            inner.put("performance_id", item.performance_id!!)
+            inner.put("score", item.score!!)
+            inner.put("type", item.type!!)
+            data.add(inner)
+        }
+
+        var type = arguments.getInt(Extras.TYPE)
+
+        val params = HashMap<String, Any>()
+        params.put("data", data)
+        params.put("user_id", person.user_id!!)
+        params.put("type", 1)
+        params.put("total", result)
+
+        SoguApi.getService(baseActivity!!.application)
+                .giveGrade(params)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        baseActivity?.finish()
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    when (e) {
+                        is JsonSyntaxException -> showToast("后台数据出错")
+                        is UnknownHostException -> showToast("网络出错")
+                        else -> showToast("未知错误")
+                    }
+                })
     }
 
     class InnerAdapter(val context: Context) : BaseAdapter() {
@@ -178,21 +238,6 @@ class FengKongFragment : BaseFragment() {
             }
             holder?.title?.text = datalist[position].target
             holder?.content?.setText(datalist[position].info)
-//            var item = TouHouManageItem()
-//            item.performance_id = datalist[position].performance_id
-//            item.info = ""
-//            touhou_tmp.add(item)
-//            holder?.content?.addTextChangedListener(object : TextWatcher {
-//                override fun afterTextChanged(s: Editable?) {
-//                    touhou_tmp[position].info = s.toString()
-//                }
-//
-//                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-//                }
-//
-//                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//                }
-//            })
             return view!!
         }
 

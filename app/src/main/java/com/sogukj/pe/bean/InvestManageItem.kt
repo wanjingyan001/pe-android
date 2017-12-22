@@ -17,5 +17,7 @@ class InvestManageItem {
         var offset: Int? = null
         var info: String? = null
         var standard: String? = null
+        var score: String? = null//score	string	小项得分	查看分数时显示
+        var selfScore: Double? = null//selfScore	number	个人得分	风控部 尽调项目数量type=>2时所得总分(已加权)
     }
 }

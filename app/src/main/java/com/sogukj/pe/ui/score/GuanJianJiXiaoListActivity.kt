@@ -133,10 +133,29 @@ class GuanJianJiXiaoListActivity : ToolbarActivity() {
         //type: Int? = null //1=>其他模版 2=>风控部模版 3=>投资部模版
         adapter.onItemClick = { v, p ->
             var person = adapter.dataList.get(p)
+//            if (person.type == 3) {
+//                if (currentIndex == 0) {
+//                    RateActivity.start(context, person, false)
+//                } else if (currentIndex == 1) {
+//                    RateActivity.start(context, person, true)
+//                }
+//            } else if (person.type == 2) {
+//                if (currentIndex == 0) {
+//                    RateActivity.start(context, person, false)
+//                } else if (currentIndex == 1) {
+//                    RateActivity.start(context, person, true)
+//                }
+//            } else if (person.type == 1) {
+//                if (currentIndex == 0) {
+//                    RateActivity.start(context, person, false)
+//                } else if (currentIndex == 1) {
+//                    RateActivity.start(context, person, true)
+//                }
+//            }
             if (currentIndex == 0) {
-                GangWeiShengRenLiActivity.start(context, adapter.dataList.get(p).user_id!!, false)
+                RateActivity.start(context, person, false)
             } else if (currentIndex == 1) {
-                GangWeiShengRenLiActivity.start(context, adapter.dataList.get(p).user_id!!, true)
+                RateActivity.start(context, person, true)
             }
         }
 
