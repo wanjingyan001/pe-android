@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.bumptech.glide.Glide
 import com.framework.base.BaseFragment
 import com.google.gson.JsonSyntaxException
 import com.sogukj.pe.Extras
@@ -26,6 +27,7 @@ import io.reactivex.functions.Consumer
 import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_feng_kong.*
+import kotlinx.android.synthetic.main.header.*
 import java.net.UnknownHostException
 
 /**
@@ -69,6 +71,12 @@ class FengKongFragment : BaseFragment() {
         rate_list_FK.adapter = sub_adapter
 
         person = arguments.getSerializable(Extras.DATA) as GradeCheckBean.ScoreItem
+        person?.let {
+            Glide.with(context).load(it.url).into(icon)
+            name.text = it.name
+            depart.text = it.department
+            position.text = it.position
+        }
         isShown = arguments.getBoolean(Extras.FLAG) // false 打分界面，true展示界面
 
         SoguApi.getService(baseActivity!!.application)

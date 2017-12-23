@@ -113,10 +113,10 @@ class JudgeFragment : BaseFragment() {
             }
             if (type1 == TYPE_EMPLOYEE) {
                 if (type == TYPE_WAIT) {
-                    GangWeiShengRenLiActivity.start(context, adapter.dataList.get(p).user_id!!, false)
+                    GangWeiShengRenLiActivity.start(context, adapter.dataList.get(p), false)
                     //RateActivity.start(context, adapter.dataList.get(p), type2, TYPE_EMPLOYEE, false)
                 } else if (type == TYPE_END) {
-                    GangWeiShengRenLiActivity.start(context, adapter.dataList.get(p).user_id!!, true)
+                    GangWeiShengRenLiActivity.start(context, adapter.dataList.get(p), true)
                 }
             } else if (type1 == TYPE_MANAGE) {
                 if (type == TYPE_WAIT) {

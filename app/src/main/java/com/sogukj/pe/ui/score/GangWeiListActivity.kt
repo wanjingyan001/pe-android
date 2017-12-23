@@ -169,9 +169,9 @@ class GangWeiListActivity : ToolbarActivity() {
         adapter.onItemClick = { v, p ->
             //领导员工进同一个界面
             if (currentIndex == 0) {
-                GangWeiShengRenLiActivity.start(context, adapter.dataList.get(p).user_id!!, false)
+                GangWeiShengRenLiActivity.start(context, adapter.dataList.get(p), false)
             } else if (currentIndex == 1) {
-                GangWeiShengRenLiActivity.start(context, adapter.dataList.get(p).user_id!!, true)
+                GangWeiShengRenLiActivity.start(context, adapter.dataList.get(p), true)
             }
         }
 

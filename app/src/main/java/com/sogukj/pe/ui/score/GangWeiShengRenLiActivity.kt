@@ -10,10 +10,12 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.framework.base.ToolbarActivity
 import com.google.gson.JsonSyntaxException
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.bean.GradeCheckBean
 import com.sogukj.pe.bean.JobPageBean
 import com.sogukj.pe.bean.TouZiUpload
 import com.sogukj.pe.util.Trace
@@ -21,12 +23,14 @@ import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.pe.view.SpaceItemDecoration
 import com.sogukj.service.SoguApi
+import com.sogukj.util.Store
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Consumer
 import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_gang_wei_sheng_ren_li.*
+import kotlinx.android.synthetic.main.header.*
 import org.jetbrains.anko.textColor
 import java.net.UnknownHostException
 
@@ -34,9 +38,9 @@ class GangWeiShengRenLiActivity : ToolbarActivity() {
 
     companion object {
         //id person.id, isShow-- 是否展示页面  true为展示页面，false是打分界面
-        fun start(ctx: Context?, id: Int, isShow: Boolean) {
+        fun start(ctx: Context?, person: GradeCheckBean.ScoreItem, isShow: Boolean) {
             val intent = Intent(ctx, GangWeiShengRenLiActivity::class.java)
-            intent.putExtra(Extras.ID, id)
+            intent.putExtra(Extras.DATA, person)
             intent.putExtra(Extras.FLAG, isShow)
             ctx?.startActivity(intent)
         }
@@ -50,7 +54,15 @@ class GangWeiShengRenLiActivity : ToolbarActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gang_wei_sheng_ren_li)
 
-        id = intent.getIntExtra(Extras.ID, 0)
+        var person = intent.getSerializableExtra(Extras.DATA) as GradeCheckBean.ScoreItem
+        id = person.user_id!!
+        person?.let {
+            Glide.with(context).load(it.url).into(icon)
+            name.text = it.name
+            depart.text = it.department
+            position.text = it.position
+        }
+
         isShow = intent.getBooleanExtra(Extras.FLAG, false)
 
         setBack(true)
@@ -76,7 +88,7 @@ class GangWeiShengRenLiActivity : ToolbarActivity() {
     }
 
     var pinfen = ArrayList<JobPageBean.PFBZ>()
-    
+
     fun initPinFen() {
 
     }

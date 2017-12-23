@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.framework.base.BaseFragment
 import com.google.gson.JsonSyntaxException
 import com.sogukj.pe.Extras
@@ -30,6 +31,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_invest_manage.*
+import kotlinx.android.synthetic.main.header.*
 import java.net.UnknownHostException
 
 
@@ -71,6 +73,12 @@ class InvestManageFragment : BaseFragment() {
         invest_list_fragment.adapter = invest_adapter
 
         person = arguments.getSerializable(Extras.DATA) as GradeCheckBean.ScoreItem
+        person?.let {
+            Glide.with(context).load(it.url).into(icon)
+            name.text = it.name
+            depart.text = it.department
+            position.text = it.position
+        }
         isShown = arguments.getBoolean(Extras.FLAG) // false 打分界面，true展示界面
         SoguApi.getService(baseActivity!!.application)
                 .perAppraisal_TZ(person.user_id!!, person.type!!)

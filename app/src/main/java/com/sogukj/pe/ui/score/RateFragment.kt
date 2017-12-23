@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.fragment_rate.*
 import android.graphics.Color
 import android.support.v7.widget.RecyclerView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.google.gson.JsonSyntaxException
 import com.sogukj.pe.bean.GradeCheckBean
 import com.sogukj.pe.bean.JobPageBean
@@ -31,6 +32,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Consumer
 import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.header.*
 import java.net.UnknownHostException
 import kotlin.collections.ArrayList
 
@@ -72,6 +74,12 @@ class RateFragment : BaseFragment() {
         rate_list.addItemDecoration(SpaceItemDecoration(25))
 
         person = arguments.getSerializable(Extras.DATA) as GradeCheckBean.ScoreItem
+        person?.let {
+            Glide.with(context).load(it.url).into(icon)
+            name.text = it.name
+            depart.text = it.department
+            position.text = it.position
+        }
         isShown = arguments.getBoolean(Extras.FLAG) // false 打分界面，true展示界面
 
         SoguApi.getService(baseActivity!!.application)
