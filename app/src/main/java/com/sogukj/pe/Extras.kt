@@ -5,7 +5,7 @@ package com.sogukj.pe
  */
 
 object Extras {
-    val FLAG="ext.flag"
+    val FLAG = "ext.flag"
     val ID = "ext.id"
     val TYPE = "ext.type"
     val TITLE = "ext.title"
@@ -37,4 +37,8 @@ object Extras {
 
     val RED = 70
     val BLACK = 71
+
+
+    val RED_BLACK = 75
+    val JIXIAO = 76
 }

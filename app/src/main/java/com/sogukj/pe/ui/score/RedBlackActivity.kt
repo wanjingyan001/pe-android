@@ -154,7 +154,7 @@ class RedBlackActivity : ToolbarActivity() {
 
 
             holder?.chakan?.setOnClickListener {
-
+                JiXiaoActivity.start(context, Extras.RED_BLACK, data[position])
             }
             return view!!
         }

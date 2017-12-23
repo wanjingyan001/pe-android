@@ -50,7 +50,7 @@ class LeaderActivity : ToolbarActivity() {
         }
 
         jixiao_kaohejieguo.setOnClickListener {
-            JiXiaoActivity.start(context)
+            JiXiaoActivity.start(context, Extras.JIXIAO, null)
         }
 
         kaohejieguo.setOnClickListener {
