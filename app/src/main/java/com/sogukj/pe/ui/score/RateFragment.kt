@@ -19,7 +19,9 @@ import android.graphics.Color
 import android.support.v7.widget.RecyclerView
 import android.widget.TextView
 import com.google.gson.JsonSyntaxException
+import com.sogukj.pe.bean.GradeCheckBean
 import com.sogukj.pe.bean.JobPageBean
+import com.sogukj.pe.bean.NormalItemBean
 import com.sogukj.pe.bean.TouZiUpload
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
@@ -38,18 +40,17 @@ import kotlin.collections.ArrayList
  */
 class RateFragment : BaseFragment() {
 
-    //lateinit var head_adapter: RecyclerAdapter<RateItem>
-    lateinit var sub_adapter: RecyclerAdapter<JobPageBean.PageItem>
+    lateinit var head_adapter: RecyclerAdapter<NormalItemBean.NormalItem>
+    lateinit var sub_adapter: RecyclerAdapter<NormalItemBean.NormalItem.BeanItem>
 
     companion object {
-        const val TYPE_JOB = 1
-        const val TYPE_RATE = 2
 
-        fun newInstance(type: Int, id: Int): RateFragment {
+        //isShow  = false 打分界面，true展示界面
+        fun newInstance(check_person: GradeCheckBean.ScoreItem, isShow: Boolean): RateFragment {
             val fragment = RateFragment()
             val intent = Bundle()
-            intent.putInt(Extras.TYPE, type)
-            intent.putInt(Extras.DATA, id)
+            intent.putBoolean(Extras.FLAG, isShow)
+            intent.putSerializable(Extras.DATA, check_person)
             fragment.arguments = intent
             return fragment
         }
@@ -58,9 +59,9 @@ class RateFragment : BaseFragment() {
     override val containerViewId: Int
         get() = R.layout.fragment_rate
 
-    var type = 0
-    var ItemType = 0//0--无title，1-有title
-    var maxItem = 0
+    lateinit var person: GradeCheckBean.ScoreItem
+    var isShown = false
+    var hasTitle = false
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -70,113 +71,51 @@ class RateFragment : BaseFragment() {
         rate_list.layoutManager = layoutManager
         rate_list.addItemDecoration(SpaceItemDecoration(25))
 
-        type = arguments.getInt(Extras.TYPE)
-        if (type == TYPE_JOB) {
-            ItemType = 0
-            sub_adapter = RecyclerAdapter<JobPageBean.PageItem>(context, { _adapter, parent, t ->
-                ProjectHolderNoTitle(_adapter.getView(R.layout.item_rate, parent))
-            })
-            val layoutManager = LinearLayoutManager(context)
-            layoutManager.orientation = LinearLayoutManager.VERTICAL
-            rate_list.layoutManager = layoutManager
-            rate_list.addItemDecoration(SpaceItemDecoration(30))
-            rate_list.adapter = sub_adapter
-            doRequest()
-        } else if (type == TYPE_RATE) {
-//            ItemType = 1
-//            head_adapter = RecyclerAdapter<RateItem>(context, { _adapter, parent, t ->
-//                ProjectHolderTitle(_adapter.getView(R.layout.item_rate_title, parent))
-//            })
-//            val layoutManager = LinearLayoutManager(context)
-//            layoutManager.orientation = LinearLayoutManager.VERTICAL
-//            rate_list.layoutManager = layoutManager
-//            rate_list.adapter = head_adapter
-        }
-//        adapter.onItemClick = { v, p ->
-//        }
+        person = arguments.getSerializable(Extras.DATA) as GradeCheckBean.ScoreItem
+        isShown = arguments.getBoolean(Extras.FLAG) // false 打分界面，true展示界面
 
-
-//        if (ItemType == 0) {
-//            maxItem = 0
-//        } else if (ItemType == 1) {
-//            var rateItem = RateItem()
-//            rateItem.head_title = ""
-//            var rate1 = RateItem.RateBean()
-//            rate1.title = "基金募集"
-//            rate1.percentage = "20"
-//            rate1.subtitle = "描述:"
-//            rate1.desc = "完成基金募集，包括：潜在投资人挖掘、编写募集说明书、制作公司宣传材料、基础法律文件等。"
-//            rateItem.list.add(rate1)
-//            var rate2 = RateItem.RateBean()
-//            rate2.title = "渠道开发"
-//            rate2.percentage = "15"
-//            rate2.subtitle = "描述:"
-//            rate2.desc = "对外开发外部渠道，包括：拜访潜在上市公司、机构投资人及高净值客户。"
-//            rateItem.list.add(rate2)
-//            var rate3 = RateItem.RateBean()
-//            rate3.title = "基金业务"
-//            rate3.percentage = "15"
-//            rate3.subtitle = "描述:"
-//            rate3.desc = "完成基金募集说明书、合伙协议、路演等材料的制作；协助完成基金设立工作，包括政策信息搜集、各地政府机关、基金投资的沟通、工商注册等。"
-//            rateItem.list.add(rate3)
-//            var rate4 = RateItem.RateBean()
-//            rate4.title = "现有渠道维护"
-//            rate4.percentage = "10"
-//            rate4.subtitle = "描述:"
-//            rate4.desc = "维护现有投资人渠道"
-//            rateItem.list.add(rate4)
-//            var rate5 = RateItem.RateBean()
-//            rate5.title = "其他"
-//            rate5.percentage = "10"
-//            rate5.subtitle = "描述:"
-//            rate5.desc = "PPT材料制作、政策信息搜集、参加行业论坛及会议。"
-//            rateItem.list.add(rate5)
-//
-//            var rateItem1 = RateItem()
-//            rateItem1.head_title = "加分项"
-//            var rateBean1 = RateItem.RateBean()
-//            rateBean1.title = "承担岗位外任务"
-//            rateBean1.percentage = "20"
-//            rateBean1.subtitle = ""
-//            rateBean1.desc = "每个岗位外任务 5分，最高10分"
-//            rateItem1.list.add(rateBean1)
-//
-//            var rateItem2 = RateItem()
-//            rateItem2.head_title = "扣分项"
-//            var rateBean2 = RateItem.RateBean()
-//            rateBean2.title = "尽调不充分"
-//            rateBean2.percentage = "20"
-//            rateBean2.subtitle = ""
-//            rateBean2.desc = "每个扣20分，最高扣20分"
-//            rateItem2.list.add(rateBean2)
-//
-//
-//            var list = ArrayList<RateItem>()
-//            list.add(rateItem)
-//            list.add(rateItem1)
-//            list.add(rateItem2)
-//            head_adapter.dataList.addAll(list)
-//            head_adapter.notifyDataSetChanged()
-//
-//            maxItem = 7
-//        }
-    }
-
-    fun doRequest() {
-        //ItemType = 0  岗位胜任力
-        // 1
-        var id = arguments.getInt(Extras.DATA, 0)
         SoguApi.getService(baseActivity!!.application)
-                .showJobPage(id)
+                .perAppraisal_NORMAL(person.user_id!!, person.type!!)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         payload.payload?.apply {
-                            data?.forEach {
-                                sub_adapter.dataList.add(it)
+                            if (item!![0].pName.isNullOrEmpty()) {
+                                //没有title
+                                sub_adapter = RecyclerAdapter<NormalItemBean.NormalItem.BeanItem>(context, { _adapter, parent, t ->
+                                    ProjectHolderNoTitle(_adapter.getView(R.layout.item_rate, parent))
+                                })
+                                val layoutManager = LinearLayoutManager(context)
+                                layoutManager.orientation = LinearLayoutManager.VERTICAL
+                                rate_list.layoutManager = layoutManager
+                                rate_list.addItemDecoration(SpaceItemDecoration(30))
+                                rate_list.adapter = sub_adapter
+
+                                item!![0].data?.forEach {
+                                    sub_adapter.dataList.add(it)
+                                }
+                                sub_adapter.notifyDataSetChanged()
+
+                                num = sub_adapter.dataList.size
+
+                                hasTitle = false
+                            } else {
+                                //有title
+                                head_adapter = RecyclerAdapter<NormalItemBean.NormalItem>(context, { _adapter, parent, t ->
+                                    ProjectHolderTitle(_adapter.getView(R.layout.item_rate_title, parent))
+                                })
+                                val layoutManager = LinearLayoutManager(context)
+                                layoutManager.orientation = LinearLayoutManager.VERTICAL
+                                rate_list.layoutManager = layoutManager
+                                rate_list.adapter = head_adapter
+
+                                for (list in head_adapter.dataList) {
+                                    num += list.data!!.size
+                                }
+
+                                hasTitle = true
                             }
-                            sub_adapter.notifyDataSetChanged()
                         }
                     } else
                         showToast(payload.message)
@@ -207,16 +146,10 @@ class RateFragment : BaseFragment() {
             data.add(inner)
         }
 
-        var type = arguments.getInt(Extras.TYPE)
-
         val params = HashMap<String, Any>()
         params.put("data", data)
-        params.put("user_id", arguments.getInt(Extras.DATA, 0))
-        if (type == 1) {//TYPE_JOB
-            params.put("type", 2)
-        } else if (type == 2) {//TYPE_RATE
-            params.put("type", 1)
-        }
+        params.put("user_id", person.user_id!!)
+        params.put("type", 1)
         params.put("total", result)
 
         SoguApi.getService(baseActivity!!.application)
@@ -239,7 +172,7 @@ class RateFragment : BaseFragment() {
     }
 
     inner class ProjectHolderNoTitle(view: View)
-        : RecyclerHolder<JobPageBean.PageItem>(view) {
+        : RecyclerHolder<NormalItemBean.NormalItem.BeanItem>(view) {
 
         var bar = convertView.findViewById(R.id.progressBar) as ProgressBar
         var judge = convertView.findViewById(R.id.text) as TextView
@@ -248,38 +181,42 @@ class RateFragment : BaseFragment() {
         var desc = convertView.findViewById(R.id.desc) as TextView
         var lll = convertView.findViewById(R.id.lll) as LinearLayout
 
-        override fun setData(view: View, data: JobPageBean.PageItem, position: Int) {
+        override fun setData(view: View, data: NormalItemBean.NormalItem.BeanItem, position: Int) {
 
-            title.text = data.name
+            title.text = data.target
 
-            if (type == TYPE_JOB) {
+            if (hasTitle == false) {
                 lll.visibility = View.GONE
-            } else if (type == TYPE_RATE) {
-//                if (data.subtitle == "") {
-//                    sub_title.visibility = View.GONE
-//                } else {
-//                    sub_title.text = data.subtitle
-//                }
-//                desc.text = data.desc
+            } else if (hasTitle == true) {
+                if (data.info.isNullOrEmpty()) {
+                    lll.visibility = View.GONE
+                } else {
+                    sub_title.text = data.info
+                }
+                //desc.text = data.desc
             }
 
-            var obser = TextViewClickObservable(context, judge, bar)
-            observable_List.add(obser)
-
-            if (data.type == 4) {//扣分项
-                weight_list.add(data.weight!!.toInt() * -1)
+            if (isShown) {
+                bar.progress = data.score?.toInt()!!
+                judge.setText(data.score)
+                judge.setTextColor(Color.parseColor("#ffa0a4aa"))
+                judge.setTextSize(16f)
+                judge.setBackgroundDrawable(null)
             } else {
-                weight_list.add(data.weight!!.toInt())
-            }
+                var obser = TextViewClickObservable(context, judge, bar)
+                observable_List.add(obser)
 
-            var upload = TouZiUpload()
-            upload.performance_id = data.id!!.toInt()
-            upload.type = data.type
-            dataList.add(upload)
+                if (data.type == 4) {//扣分项
+                    weight_list.add(data.weight!!.toInt() * -1)
+                } else {
+                    weight_list.add(data.weight!!.toInt())
+                }
 
-            num++
+                var upload = TouZiUpload()
+                upload.performance_id = data.id!!.toInt()
+                upload.type = data.type
+                dataList.add(upload)
 
-            if (type == TYPE_JOB) {
                 if (observable_List.size == num) {
                     Observable.combineLatest(observable_List, object : Function<Array<Any>, Double> {
                         override fun apply(str: Array<Any>): Double {
@@ -305,61 +242,40 @@ class RateFragment : BaseFragment() {
                         }
                     })
                 }
-            } else if (type == TYPE_RATE) {
-//                if (num == maxItem) {
-//                    Observable.combineLatest(observable_List, object : Function<Array<Any>, Double> {
-//                        override fun apply(str: Array<Any>): Double {
-//                            var result = 0.00
-//                            var date = ArrayList<Int>()
-//                            for (ites in str) {
-//                                date.add(ites as Int)
-//                            }
-//                            result = date[0] * 0.2 + date[1] * 0.15 + date[2] * 0.15 + date[3] * 0.1 + date[4] * 0.1 + date[5] * 0.2 - date[6] * 0.2
-//                            return result//isEmailValid(str[0].toString()) && isPasswordValid(str[1].toString())
-//                        }
-//                    }).subscribe(object : Consumer<Double> {
-//                        override fun accept(t: Double) {
-//                            tv_socre.text = "${String.format("%1$.2f", t)}"
-//                            btn_commit.setBackgroundColor(Color.parseColor("#FFE95C4A"))
-//                            btn_commit.setOnClickListener {
-//
-//                            }
-//                        }
-//                    })
-//                }
             }
         }
-
     }
 
-//    inner class ProjectHolderTitle(view: View)
-//        : RecyclerHolder<RateItem>(view) {
-//
-//        var head_ll = convertView.findViewById(R.id.ll_head) as LinearLayout
-//        var head_title = convertView.findViewById(R.id.head_title) as TextView
-//        var data_list = convertView.findViewById(R.id.listview) as RecyclerView
-//
-//        override fun setData(view: View, data: RateItem, position: Int) {
-//
-//            if (data.head_title == "") {
-//                head_ll.visibility = View.GONE
-//            } else {
-//                head_title.text = data.head_title
-//            }
-//
-//            var inner_adapter = RecyclerAdapter<RateItem.RateBean>(context, { _adapter, parent, t ->
-//                ProjectHolderNoTitle(_adapter.getView(R.layout.item_rate, parent))
-//            })
-//            inner_adapter.onItemClick = { v, p ->
-//            }
-//            val layoutManager = LinearLayoutManager(context)
-//            layoutManager.orientation = LinearLayoutManager.VERTICAL
-//            data_list.layoutManager = layoutManager
-//            data_list.addItemDecoration(SpaceItemDecoration(Utils.dpToPx(context, 30)))
-//            data_list.adapter = inner_adapter
-//
-//            inner_adapter.dataList.addAll(data.list)
-//            inner_adapter.notifyDataSetChanged()
-//        }
-//    }
+    inner class ProjectHolderTitle(view: View)
+        : RecyclerHolder<NormalItemBean.NormalItem>(view) {
+
+        var head_ll = convertView.findViewById(R.id.ll_head) as LinearLayout
+        var head_title = convertView.findViewById(R.id.head_title) as TextView
+        var data_list = convertView.findViewById(R.id.listview) as RecyclerView
+
+        override fun setData(view: View, data: NormalItemBean.NormalItem, position: Int) {
+
+            if (data.pName == "") {
+                head_ll.visibility = View.GONE
+            } else {
+                head_title.text = data.pName
+            }
+
+            var inner_adapter = RecyclerAdapter<NormalItemBean.NormalItem.BeanItem>(context, { _adapter, parent, t ->
+                ProjectHolderNoTitle(_adapter.getView(R.layout.item_rate, parent))
+            })
+            inner_adapter.onItemClick = { v, p ->
+            }
+            val layoutManager = LinearLayoutManager(context)
+            layoutManager.orientation = LinearLayoutManager.VERTICAL
+            data_list.layoutManager = layoutManager
+            data_list.addItemDecoration(SpaceItemDecoration(Utils.dpToPx(context, 30)))
+            data_list.adapter = inner_adapter
+
+            data.data?.forEach {
+                inner_adapter.dataList.add(it)
+            }
+            inner_adapter.notifyDataSetChanged()
+        }
+    }
 }

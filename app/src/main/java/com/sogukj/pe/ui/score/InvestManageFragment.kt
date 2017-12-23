@@ -18,7 +18,6 @@ import com.sogukj.pe.R
 import com.sogukj.pe.bean.GradeCheckBean
 import com.sogukj.pe.bean.InvestManageItem
 import com.sogukj.pe.bean.TouZiUpload
-import com.sogukj.pe.ui.score.RateFragment.Companion.TYPE_JOB
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.RecyclerAdapter
@@ -74,7 +73,7 @@ class InvestManageFragment : BaseFragment() {
         person = arguments.getSerializable(Extras.DATA) as GradeCheckBean.ScoreItem
         isShown = arguments.getBoolean(Extras.FLAG) // false 打分界面，true展示界面
         SoguApi.getService(baseActivity!!.application)
-                .perAppraisal(person.user_id!!, person.type!!)
+                .perAppraisal_TZ(person.user_id!!, person.type!!)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->

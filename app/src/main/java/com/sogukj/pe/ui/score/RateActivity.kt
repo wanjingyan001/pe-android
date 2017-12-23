@@ -75,7 +75,7 @@ class RateActivity : ToolbarActivity() {
             )
         } else if (person.type == 1) {
             fragments = arrayOf(
-                    RateFragment.newInstance(RateFragment.TYPE_JOB, person.user_id!!)
+                    RateFragment.newInstance(person, isShow)
             )
         } else {
             fragments = arrayOf(
