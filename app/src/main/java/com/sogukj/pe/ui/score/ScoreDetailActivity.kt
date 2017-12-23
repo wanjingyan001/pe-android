@@ -13,13 +13,17 @@ import org.jetbrains.anko.textColor
 import android.view.LayoutInflater
 import android.widget.*
 import com.google.gson.JsonSyntaxException
+import com.sogukj.pe.Extras
 import com.sogukj.pe.bean.EmployeeInteractBean
+import com.sogukj.pe.bean.ScoreBean
+import com.sogukj.pe.ui.SupportEmptyView
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.MyListView
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_score_detail.*
+import kotlinx.android.synthetic.main.item_empty.*
 import java.net.UnknownHostException
 
 /**
@@ -28,24 +32,45 @@ import java.net.UnknownHostException
 class ScoreDetailActivity : ToolbarActivity() {
 
     companion object {
-        fun start(ctx: Activity?) {
+        //type员工互评结果
+        // TYPE_INTERACT---第三个参数无用
+        // TYPE_LISTITEM---第三个参数有用
+        fun start(ctx: Activity?, type: Int, bean: ScoreBean? = null) {
             val intent = Intent(ctx, ScoreDetailActivity::class.java)
+            intent.putExtra(Extras.TYPE, type)
+            intent.putExtra(Extras.DATA, bean)
             ctx?.startActivity(intent)
         }
     }
 
     //设置组视图的显示文字
     val group = ArrayList<String>()
+    val average = ArrayList<String>()
 
     //子视图显示文字
     val childs = ArrayList<ArrayList<EmployeeInteractBean.EmployeeItem>>()
+
+    var type = 0
+    var bean: ScoreBean? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_score_detail)
 
+        type = intent.getIntExtra(Extras.TYPE, 0)
+        var data = intent.getSerializableExtra(Extras.DATA)
+        if (data == null) {
+            bean = null
+        } else {
+            bean = data as ScoreBean
+        }
+
         setBack(true)
-        setTitle("员工互评考核结果")
+        if (type == Extras.TYPE_INTERACT) {
+            setTitle("员工互评考核结果")
+        } else if (type == Extras.TYPE_LISTITEM) {
+            setTitle("打分详情页")
+        }
         toolbar?.setBackgroundColor(Color.WHITE)
         toolbar?.apply {
             val title = this.findViewById(R.id.toolbar_title) as TextView?
@@ -62,18 +87,26 @@ class ScoreDetailActivity : ToolbarActivity() {
                 return false
             }
         })
-
+        //员工互评考核结果不用传，领导打分详情页要传
         SoguApi.getService(application)
-                .grade_info()
+                .grade_info(if (bean == null) null else bean!!.user_id)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         payload.payload?.forEach {
                             group.add(it.title!!)
+                            average.add(it.per_grade!!)
                             childs.add(it.data!!)
                         }
-                        score_list.setAdapter(MyExpAdapter(context, group, childs))
+                        var adapter = MyExpAdapter(context, group, average, childs, type)
+                        score_list.setAdapter(adapter)
+                        if (payload.payload == null || group.size == 0) {
+                            //暂无数据
+                            score_list.visibility = View.GONE
+                            empty.visibility = View.VISIBLE
+                            tv_empty.visibility = View.GONE
+                        }
                     } else
                         showToast(payload.message)
                 }, { e ->
@@ -86,7 +119,8 @@ class ScoreDetailActivity : ToolbarActivity() {
                 })
     }
 
-    class MyExpAdapter(val context: Context, val group: ArrayList<String>, val childs: ArrayList<ArrayList<EmployeeInteractBean.EmployeeItem>>) : BaseExpandableListAdapter() {
+    class MyExpAdapter(val context: Context, val group: ArrayList<String>, val average: ArrayList<String>,
+                       val childs: ArrayList<ArrayList<EmployeeInteractBean.EmployeeItem>>, val type: Int) : BaseExpandableListAdapter() {
 
         override fun getGroup(groupPosition: Int): Any {
             return group[groupPosition]
@@ -107,10 +141,18 @@ class ScoreDetailActivity : ToolbarActivity() {
                 view = LayoutInflater.from(context).inflate(R.layout.item_group, null)
                 holder = GroupHolder()
                 holder.title = view.findViewById(R.id.title) as TextView
+                holder.average = view.findViewById(R.id.average) as TextView
                 holder.direction = view.findViewById(R.id.direction) as ImageView
                 view.setTag(holder)
             } else {
                 holder = view.getTag() as GroupHolder
+            }
+
+            if (type == Extras.TYPE_INTERACT) {
+                holder.average?.visibility = View.GONE
+            } else if (type == Extras.TYPE_LISTITEM) {
+                holder.average?.visibility = View.VISIBLE
+                holder.average?.text = average[groupPosition]
             }
 
             holder.title?.text = group[groupPosition]
@@ -125,6 +167,7 @@ class ScoreDetailActivity : ToolbarActivity() {
 
         class GroupHolder {
             var title: TextView? = null
+            var average: TextView? = null
             var direction: ImageView? = null
         }
 
@@ -161,7 +204,15 @@ class ScoreDetailActivity : ToolbarActivity() {
             holder.depart?.setBackgroundColor(Color.TRANSPARENT)
             holder.name?.setBackgroundColor(Color.TRANSPARENT)
             holder.score?.setBackgroundColor(Color.TRANSPARENT)
-            holder.list?.adapter = MyListAdapter(context, childs.get(groupPosition))
+            holder.list?.adapter = MyListAdapter(context, childs.get(groupPosition), type)
+
+            if (type == Extras.TYPE_INTERACT) {
+                holder.seq?.visibility = View.VISIBLE
+                holder.depart?.visibility = View.VISIBLE
+            } else if (type == Extras.TYPE_LISTITEM) {
+                holder.seq?.visibility = View.GONE
+                holder.depart?.visibility = View.GONE
+            }
 
             return view!!
         }
@@ -182,7 +233,7 @@ class ScoreDetailActivity : ToolbarActivity() {
             return group.size
         }
 
-        class MyListAdapter(val context: Context, val datalist: ArrayList<EmployeeInteractBean.EmployeeItem>) : BaseAdapter() {
+        class MyListAdapter(val context: Context, val datalist: ArrayList<EmployeeInteractBean.EmployeeItem>, val type: Int) : BaseAdapter() {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
                 var view = convertView
                 var holder: ChildHolder? = null
@@ -207,6 +258,14 @@ class ScoreDetailActivity : ToolbarActivity() {
                 holder.depart?.setBackgroundColor(Color.WHITE)
                 holder.name?.setBackgroundColor(Color.WHITE)
                 holder.score?.setBackgroundColor(Color.WHITE)
+
+                if (type == Extras.TYPE_INTERACT) {
+                    holder.seq?.visibility = View.VISIBLE
+                    holder.depart?.visibility = View.VISIBLE
+                } else if (type == Extras.TYPE_LISTITEM) {
+                    holder.seq?.visibility = View.GONE
+                    holder.depart?.visibility = View.GONE
+                }
 
                 return view!!
             }

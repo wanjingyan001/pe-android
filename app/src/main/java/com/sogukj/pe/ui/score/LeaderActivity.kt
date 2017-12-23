@@ -42,7 +42,7 @@ class LeaderActivity : ToolbarActivity() {
         }
 
         gangwei_huping.setOnClickListener {
-            ScoreDetailActivity.start(context)
+            ScoreDetailActivity.start(context, Extras.TYPE_INTERACT, null)
         }
 
         jixiao_pingfen.setOnClickListener {
@@ -53,7 +53,7 @@ class LeaderActivity : ToolbarActivity() {
             JiXiaoActivity.start(context)
         }
 
-        zonglan.setOnClickListener {
+        kaohejieguo.setOnClickListener {
             ScoreListActivity.start(context)
         }
     }

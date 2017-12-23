@@ -23,6 +23,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_ji_xiao.*
 import kotlinx.android.synthetic.main.activity_user_edit.*
+import kotlinx.android.synthetic.main.item_empty.*
 import org.jetbrains.anko.textColor
 import java.net.UnknownHostException
 
@@ -85,6 +86,12 @@ class JiXiaoActivity : ToolbarActivity() {
                         payload.payload?.apply {
                             adapter.dataList.addAll(this)
                             adapter.notifyDataSetChanged()
+                        }
+                        if (adapter.dataList.size == 0) {
+                            //暂无数据
+                            jixiao_list.visibility = View.GONE
+                            empty.visibility = View.VISIBLE
+                            tv_empty.visibility = View.GONE
                         }
                     } else
                         showToast(payload.message)

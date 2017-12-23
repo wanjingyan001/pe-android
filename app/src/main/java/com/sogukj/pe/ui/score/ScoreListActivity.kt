@@ -13,6 +13,7 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.framework.base.ToolbarActivity
 import com.google.gson.JsonSyntaxException
+import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.ScoreBean
 import com.sogukj.pe.util.Trace
@@ -78,7 +79,7 @@ class ScoreListActivity : ToolbarActivity() {
             }
         })
         adapter.onItemClick = { v, p ->
-            ScoreDetailActivity.start(context)
+            ScoreDetailActivity.start(context, Extras.TYPE_LISTITEM, adapter.dataList.get(p))
         }
         val layoutManager = LinearLayoutManager(context)
         layoutManager.orientation = LinearLayoutManager.VERTICAL

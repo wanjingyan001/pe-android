@@ -29,15 +29,9 @@ object Extras {
     val TYPE1 = "ext.type1"
     val TYPE2 = "ext.type2"
 
-//    val TYPE_WAIT = 1
-//    val TYPE_END = 2
     val TYPE_EMPLOYEE = 3 //领导
     val TYPE_MANAGE = 4  // 员工
 
-//    val TYPE_GANGWEI = 18 //岗位胜任力
-//    val TYPE_JIXIAO = 19 //绩效考核
-//
-//    val NORMAL = 100
-//    val FK = 101
-//    val TZ = 102
+    val TYPE_INTERACT = 100
+    val TYPE_LISTITEM = 101
 }

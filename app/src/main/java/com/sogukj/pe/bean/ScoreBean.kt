@@ -1,9 +1,11 @@
 package com.sogukj.pe.bean
 
+import java.io.Serializable
+
 /**
  * Created by sogubaby on 2017/12/20.
  */
-class ScoreBean {
+class ScoreBean : Serializable {
     var name: String? = null//   姓名
     var url: String? = null// 头像链接
 

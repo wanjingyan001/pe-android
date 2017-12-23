@@ -8,6 +8,11 @@
 
     <include layout="@layout/toolbar" />
 
+    <include
+        android:id="@+id/empty"
+        layout="@layout/item_empty"
+        android:visibility="gone" />
+
     <ExpandableListView
         android:id="@+id/score_list"
         android:layout_width="match_parent"

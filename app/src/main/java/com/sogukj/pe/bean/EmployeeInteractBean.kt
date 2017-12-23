@@ -5,6 +5,7 @@ package com.sogukj.pe.bean
  */
 class EmployeeInteractBean {
     var title: String? = null
+    var per_grade: String? = null
     var data: ArrayList<EmployeeItem>? = null
 
     class EmployeeItem {

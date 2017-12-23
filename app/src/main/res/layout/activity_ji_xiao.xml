@@ -59,6 +59,11 @@
 
     </LinearLayout>
 
+    <include
+        android:id="@+id/empty"
+        layout="@layout/item_empty"
+        android:visibility="gone" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/jixiao_list"
         android:layout_width="match_parent"
