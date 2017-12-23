@@ -13,6 +13,7 @@ class EmployeeInteractBean {
         var name: String? = null
         var grade_case: String? = null
         var sort: Int? = null
+        var url: String? = null
         var department: String? = null
     }
 }

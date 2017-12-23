@@ -34,4 +34,7 @@ object Extras {
 
     val TYPE_INTERACT = 100
     val TYPE_LISTITEM = 101
+
+    val RED = 70
+    val BLACK = 71
 }

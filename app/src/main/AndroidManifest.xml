@@ -526,7 +526,8 @@
         <activity android:name=".ui.score.JiXiaoActivity" />
         <activity android:name=".ui.score.GangWeiShengRenLiActivity" />
         <activity android:name=".ui.score.GangWeiListActivity" />
-        <activity android:name=".ui.score.GuanJianJiXiaoListActivity"></activity>
+        <activity android:name=".ui.score.GuanJianJiXiaoListActivity" />
+        <activity android:name=".ui.score.RedBlackActivity"></activity>
     </application>
 
 </manifest>

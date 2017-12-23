@@ -56,5 +56,9 @@ class LeaderActivity : ToolbarActivity() {
         kaohejieguo.setOnClickListener {
             ScoreListActivity.start(context)
         }
+
+        zhnlbd.setOnClickListener {
+            RedBlackActivity.start(context)
+        }
     }
 }
