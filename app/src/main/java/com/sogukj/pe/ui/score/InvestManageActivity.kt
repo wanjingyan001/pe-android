@@ -12,9 +12,11 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.framework.base.ToolbarActivity
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
+import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.GradeCheckBean.TouZiItem
 import com.sogukj.pe.bean.TouZiUpload
@@ -24,9 +26,11 @@ import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.pe.view.SpaceItemDecoration
 import com.sogukj.service.SoguApi
+import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_invest_manage.*
+import kotlinx.android.synthetic.main.header.*
 import org.jetbrains.anko.textColor
 import java.net.UnknownHostException
 
@@ -46,8 +50,16 @@ class InvestManageActivity : ToolbarActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_invest_manage)
 
+        var bean = Store.store.getUser(context)
+        bean?.let {
+            Glide.with(context).load(it.url).into(icon)
+            name.text = it.name
+            depart.text = it.depart_name
+            position.text = it.position
+        }
+
         setBack(true)
-        setTitle("投资经理")
+        setTitle("投资经理评分标准填写")
         toolbar?.setBackgroundColor(Color.WHITE)
         toolbar?.apply {
             val title = this.findViewById(R.id.toolbar_title) as TextView?
@@ -115,7 +127,8 @@ class InvestManageActivity : ToolbarActivity() {
                     .subscribeOn(Schedulers.io())
                     .subscribe({ payload ->
                         if (payload.isOk) {
-                            JudgeActivity.start(context, 3, 100)
+                            GangWeiListActivity.start(context, Extras.TYPE_EMPLOYEE)
+                            //JudgeActivity.start(context, 3, 100)
                             finish()
                         } else
                             showToast(payload.message)

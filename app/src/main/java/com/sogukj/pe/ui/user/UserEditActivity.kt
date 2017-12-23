@@ -137,23 +137,19 @@ class UserEditActivity : ToolbarActivity() {
                     .openGallery()
         }
 
+        //0=>未开启  1=>管理层，2=>普通员工，3=>普通员工风控部，4=>普通员工投资部   (3,4都是填写的评分标准)
         tr_rate.setOnClickListener {
             if (TYPE == 0) {
                 return@setOnClickListener
             } else if (TYPE == 1) {
                 LeaderActivity.start(context)
             } else if (TYPE == 2) {
-                JudgeActivity.start(context, TYPE_EMPLOYEE, 100)
+                GangWeiListActivity.start(context, Extras.TYPE_EMPLOYEE)
             } else if (TYPE == 3) {
                 FengKongActivity.start(context)
             } else if (TYPE == 4) {
                 InvestManageActivity.start(context)
             }
-            //JudgeActivity.start(context, TYPE_MANAGE)
-            //FengKongActivity.start(context)
-            //RateActivity.start(context)
-            //InvestManageActivity.start(context)
-            //TotalScoreActivity.start(context, 1)
         }
     }
 
@@ -187,9 +183,6 @@ class UserEditActivity : ToolbarActivity() {
     }
 
     var TYPE = 0   //0=>暂未开启  1=>管理层，2=>普通员工，3=>普通员工风控部，4=>普通员工投资部
-    val TYPE_EMPLOYEE = 3
-    val TYPE_MANAGE = 4
-
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {

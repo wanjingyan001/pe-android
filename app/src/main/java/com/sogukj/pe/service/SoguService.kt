@@ -991,8 +991,8 @@ interface SoguService {
     fun getType(): Observable<Payload<TypeBean>>
 
     //全员考评分数总览
-    @POST("/api/grade/grade_pandect")
-    fun grade_pandect(): Observable<Payload<ArrayList<ScoreBean>>>
+    @POST("/api/grade/pointRank")
+    fun pointRank(): Observable<Payload<ArrayList<ScoreBean>>>
 
     //(领导)年总考核中心   	1=>进入绩效考核列表页面，2=>进入岗位胜任力列表 3=>进入风控部填写页，4=>进入投资部填写页
     @FormUrlEncoded
@@ -1007,13 +1007,19 @@ interface SoguService {
     //user_id被打分人id
     @FormUrlEncoded
     @POST("/api/grade/perAppraisal")
-    fun perAppraisal(@Field("user_id") user_id: Int, @Field("type") type: Int): Observable<Payload<ArrayList<InvestManageItem>>>
+    fun perAppraisal_TZ(@Field("user_id") user_id: Int, @Field("type") type: Int): Observable<Payload<ArrayList<InvestManageItem>>>
 
     //关键绩效指标评价----------风控部
     //user_id被打分人id
     @FormUrlEncoded
     @POST("/api/grade/perAppraisal")
     fun perAppraisal_FK(@Field("user_id") user_id: Int, @Field("type") type: Int): Observable<Payload<FKItem>>
+
+    //关键绩效指标评价----------风控部
+    //user_id被打分人id
+    @FormUrlEncoded
+    @POST("/api/grade/perAppraisal")
+    fun perAppraisal_NORMAL(@Field("user_id") user_id: Int, @Field("type") type: Int): Observable<Payload<NormalItemBean>>
 
     //提交关键绩效和岗位胜任力打分   type  1:提交关键绩效打分 2:提交岗位胜任力打分
     @POST("/api/grade/giveGrade")

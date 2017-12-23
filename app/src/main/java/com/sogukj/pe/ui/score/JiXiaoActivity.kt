@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.support.v7.widget.DialogTitle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.ImageView
@@ -11,7 +12,9 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.framework.base.ToolbarActivity
 import com.google.gson.JsonSyntaxException
+import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.bean.EmployeeInteractBean
 import com.sogukj.pe.bean.EmployeeInteractBean.EmployeeItem
 import com.sogukj.pe.bean.JudgeBean
 import com.sogukj.pe.util.Trace
@@ -23,17 +26,24 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_ji_xiao.*
 import kotlinx.android.synthetic.main.activity_user_edit.*
+import kotlinx.android.synthetic.main.item_empty.*
 import org.jetbrains.anko.textColor
 import java.net.UnknownHostException
 
 class JiXiaoActivity : ToolbarActivity() {
 
     companion object {
-        fun start(ctx: Context?) {
+        // JIXIAO    RED_BLACK
+        fun start(ctx: Context?, type: Int, data: EmployeeInteractBean? = null) {
             val intent = Intent(ctx, JiXiaoActivity::class.java)
+            intent.putExtra(Extras.TYPE, type)
+            intent.putExtra(Extras.DATA, data)
             ctx?.startActivity(intent)
         }
     }
+
+    var type = 0
+    lateinit var data: EmployeeInteractBean
 
     lateinit var adapter: RecyclerAdapter<EmployeeItem>
 
@@ -41,8 +51,18 @@ class JiXiaoActivity : ToolbarActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ji_xiao)
 
+        type = intent.getIntExtra(Extras.TYPE, 0)
+        var tmp = intent.getSerializableExtra(Extras.DATA)
+        if (tmp != null) {
+            data = tmp as EmployeeInteractBean
+        }
+
         setBack(true)
-        setTitle("关键绩效考核结果")
+        if (type == Extras.JIXIAO) {
+            setTitle("关键绩效考核结果")
+        } else if (type == Extras.RED_BLACK) {
+            setTitle(data.title)
+        }
         toolbar?.setBackgroundColor(Color.WHITE)
         toolbar?.apply {
             val title = this.findViewById(R.id.toolbar_title) as TextView?
@@ -76,25 +96,42 @@ class JiXiaoActivity : ToolbarActivity() {
         jixiao_list.addItemDecoration(SpaceItemDecoration(10))
         jixiao_list.adapter = adapter
 
-        SoguApi.getService(application)
-                .achievement()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ payload ->
-                    if (payload.isOk) {
-                        payload.payload?.apply {
-                            adapter.dataList.addAll(this)
-                            adapter.notifyDataSetChanged()
+        if (type == Extras.JIXIAO) {
+            SoguApi.getService(application)
+                    .achievement()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (payload.isOk) {
+                            payload.payload?.apply {
+                                adapter.dataList.addAll(this)
+                                adapter.notifyDataSetChanged()
+                            }
+                            if (adapter.dataList.size == 0) {
+                                //暂无数据
+                                jixiao_list.visibility = View.GONE
+                                empty.visibility = View.VISIBLE
+                                tv_empty.visibility = View.GONE
+                            }
+                        } else
+                            showToast(payload.message)
+                    }, { e ->
+                        Trace.e(e)
+                        when (e) {
+                            is JsonSyntaxException -> showToast("后台数据出错")
+                            is UnknownHostException -> showToast("网络出错")
+                            else -> showToast("未知错误")
                         }
-                    } else
-                        showToast(payload.message)
-                }, { e ->
-                    Trace.e(e)
-                    when (e) {
-                        is JsonSyntaxException -> showToast("后台数据出错")
-                        is UnknownHostException -> showToast("网络出错")
-                        else -> showToast("未知错误")
-                    }
-                })
+                    })
+        } else if (type == Extras.RED_BLACK) {
+            adapter.dataList = data.data!!
+            adapter.notifyDataSetChanged()
+            if (adapter.dataList.size == 0) {
+                //暂无数据
+                jixiao_list.visibility = View.GONE
+                empty.visibility = View.VISIBLE
+                tv_empty.visibility = View.GONE
+            }
+        }
     }
 }
