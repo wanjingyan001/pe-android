@@ -181,10 +181,10 @@ class InvestManageFragment : BaseFragment() {
             } else {
                 //1=>关键绩效指标评价 2=>岗位胜任力评价 3=>加分项 4=>减分项
                 if (data.type == 4) {
-                    var obser = TextViewClickObservableMinus(context, txt_btn, progressBar, data.total_score!!, data.offset!!)
+                    var obser = TextViewClickObservableAddOrMinus(context, txt_btn, progressBar, data.total_score!!, data.offset!!, R.drawable.pb_min)
                     observable_List.add(obser)
                 } else if (data.type == 3) {
-                    var obser = TextViewClickObservableAdd(context, txt_btn, progressBar, data.total_score!!, data.offset!!)
+                    var obser = TextViewClickObservableAddOrMinus(context, txt_btn, progressBar, data.total_score!!, data.offset!!, R.drawable.pb_add)
                     observable_List.add(obser)
                 } else {
                     var obser = TextViewClickObservable(context, txt_btn, progressBar)

@@ -2,18 +2,13 @@ package com.sogukj.pe.ui.score;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.design.widget.TabLayout;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bigkoo.pickerview.OptionsPickerView;
 import com.sogukj.pe.R;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import io.reactivex.Observable;
@@ -23,15 +18,16 @@ import io.reactivex.android.MainThreadDisposable;
 /**
  * Created by sogubaby on 2017/12/15.
  */
-
-class TextViewClickObservableMinus extends Observable<Integer> {
+//加减分项
+class TextViewClickObservableAddOrMinus extends Observable<Integer> {
     private TextView view;
     private ProgressBar bar;
     private Context context;
     private OptionsPickerView pvOptions;
     private ArrayList<Integer> mSelected;
+    private int drawableId;
 
-    TextViewClickObservableMinus(Context context, TextView view, ProgressBar bar, int total, int offset) {
+    TextViewClickObservableAddOrMinus(Context context, TextView view, ProgressBar bar, int total, int offset, int drawablwId) {
         this.context = context;
         this.view = view;
         this.bar = bar;
@@ -40,11 +36,12 @@ class TextViewClickObservableMinus extends Observable<Integer> {
             mSelected.add(i);
         }
         bar.setMax(total);
+        drawableId = drawablwId;
     }
 
     @Override
     protected void subscribeActual(Observer<? super Integer> observer) {
-        Listener listener = new Listener(view, observer);
+        Listener listener = new Listener(view, observer, drawableId);
         observer.onSubscribe(listener);
         view.setOnClickListener(listener);
     }
@@ -52,10 +49,12 @@ class TextViewClickObservableMinus extends Observable<Integer> {
     class Listener extends MainThreadDisposable implements View.OnClickListener {
         private final TextView view;
         private final Observer<? super Integer> observer;
+        private int drawableId;
 
-        Listener(TextView view, Observer<? super Integer> observer) {
+        Listener(TextView view, Observer<? super Integer> observer, int drawablwId) {
             this.view = view;
             this.observer = observer;
+            drawableId = drawablwId;
         }
 
         @Override
@@ -67,7 +66,7 @@ class TextViewClickObservableMinus extends Observable<Integer> {
                         //返回的分别是三个级别的选中位置
                         int pro = mSelected.get(options1);
                         bar.setProgress(pro);
-                        bar.setProgressDrawable(context.getResources().getDrawable(R.drawable.pb_min));
+                        bar.setProgressDrawable(context.getResources().getDrawable(drawableId));
                         view.setText(pro + "");
                         view.setTextColor(Color.parseColor("#ffa0a4aa"));
                         view.setTextSize(16);

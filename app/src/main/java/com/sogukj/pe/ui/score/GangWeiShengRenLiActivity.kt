@@ -75,6 +75,12 @@ class GangWeiShengRenLiActivity : ToolbarActivity() {
         doRequest()
     }
 
+    var pinfen = ArrayList<JobPageBean.PFBZ>()
+    
+    fun initPinFen() {
+
+    }
+
     fun doRequest() {
         SoguApi.getService(application)
                 .showJobPage(id)
@@ -87,6 +93,10 @@ class GangWeiShengRenLiActivity : ToolbarActivity() {
                                 sub_adapter.dataList.add(it)
                             }
                             sub_adapter.notifyDataSetChanged()
+
+                            pfbz?.forEach {
+                                pinfen.add(it)
+                            }
                         }
                         if (isShow) {
                             tv_socre.text = payload.total as String
