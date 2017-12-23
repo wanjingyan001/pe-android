@@ -991,8 +991,8 @@ interface SoguService {
     fun getType(): Observable<Payload<TypeBean>>
 
     //全员考评分数总览
-    @POST("/api/grade/grade_pandect")
-    fun grade_pandect(): Observable<Payload<ArrayList<ScoreBean>>>
+    @POST("/api/grade/pointRank")
+    fun pointRank(): Observable<Payload<ArrayList<ScoreBean>>>
 
     //(领导)年总考核中心   	1=>进入绩效考核列表页面，2=>进入岗位胜任力列表 3=>进入风控部填写页，4=>进入投资部填写页
     @FormUrlEncoded

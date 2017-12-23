@@ -156,7 +156,24 @@ class InvestManageFragment : BaseFragment() {
             }
 
             if (isShown) {
-                progressBar.progress = data.score?.toInt()!!
+                var score = data.score?.toInt()!!
+                progressBar.progress = score
+                //1=>关键绩效指标评价 2=>岗位胜任力评价 3=>加分项 4=>减分项
+                if (data.type == 4) {
+                    progressBar.progressDrawable = context.resources.getDrawable(R.drawable.pb_min)
+                } else if (data.type == 3) {
+                    progressBar.progressDrawable = context.resources.getDrawable(R.drawable.pb_add)
+                } else {
+                    if (score >= 101 && score <= 120) {
+                        progressBar.progressDrawable = context.resources.getDrawable(R.drawable.pb_a)
+                    } else if (score >= 81 && score <= 100) {
+                        progressBar.progressDrawable = context.resources.getDrawable(R.drawable.pb_b)
+                    } else if (score >= 61 && score <= 80) {
+                        progressBar.progressDrawable = context.resources.getDrawable(R.drawable.pb_c)
+                    } else if (score >= 0 && score <= 60) {
+                        progressBar.progressDrawable = context.resources.getDrawable(R.drawable.pb_d)
+                    }
+                }
                 txt_btn.setText(data.score)
                 txt_btn.setTextColor(Color.parseColor("#ffa0a4aa"))
                 txt_btn.setTextSize(16f)

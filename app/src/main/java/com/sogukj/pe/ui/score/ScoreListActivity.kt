@@ -1,6 +1,7 @@
 package com.sogukj.pe.ui.score
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -68,11 +69,11 @@ class ScoreListActivity : ToolbarActivity() {
 
                 override fun setData(view: View, data: ScoreBean, position: Int) {
                     tvSeq.text = "${position + 3}"
-                    Glide.with(context).load(data.img_url).into(Head)
+                    Glide.with(context).load(data.url).into(Head)
                     tvName.text = data.name
-                    final_score.text = "最终得分：${data.last_grade}"
-                    finishing_task.text = "岗位胜任力评价：${data.finishing_task}"
-                    kpi.text = "关键绩效指标评价：${data.kpi}"
+                    final_score.text = "最终得分：${data.total_grade}"
+                    finishing_task.text = "岗位胜任力评价：${data.resumption}"
+                    kpi.text = "关键绩效指标评价：${data.achieve_check}"
                 }
             }
         })
@@ -86,7 +87,7 @@ class ScoreListActivity : ToolbarActivity() {
         score_list.adapter = adapter
 
         SoguApi.getService(application)
-                .grade_pandect()
+                .pointRank()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -104,6 +105,9 @@ class ScoreListActivity : ToolbarActivity() {
                             }
                         }
                     } else {
+                        hide(0)
+                        hide(1)
+                        hide(2)
                         showToast(payload.message)
                     }
                 }, { e ->
@@ -116,13 +120,31 @@ class ScoreListActivity : ToolbarActivity() {
                 })
     }
 
+    fun hide(index: Int) {
+        var id_name = resources.getIdentifier("name_" + (index + 1), "id", context.packageName)
+        var name = findViewById(id_name) as TextView
+        name.visibility = View.GONE
+
+        var id_final = resources.getIdentifier("final_" + (index + 1), "id", context.packageName)
+        var final = findViewById(id_final) as TextView
+        final.visibility = View.GONE
+
+        var finishing_task_id = resources.getIdentifier("finishing_task_" + (index + 1), "id", context.packageName)
+        var finishing_task_ = findViewById(finishing_task_id) as TextView
+        finishing_task_.visibility = View.GONE
+
+        var kpi_id = resources.getIdentifier("kpi_" + (index + 1), "id", context.packageName)
+        var kpi = findViewById(kpi_id) as TextView
+        kpi.visibility = View.GONE
+    }
+
     /**
      * index对应ScoreBean下标
      */
     fun set(bean: ScoreBean, index: Int) {
         var id = resources.getIdentifier("head_" + (index + 1), "id", context.packageName)
         var headIcon = findViewById(id) as CircleImageView
-        Glide.with(context).load(bean.img_url).into(headIcon)
+        Glide.with(context).load(bean.url).into(headIcon)
 
         var id_name = resources.getIdentifier("name_" + (index + 1), "id", context.packageName)
         var name = findViewById(id_name) as TextView
@@ -130,14 +152,14 @@ class ScoreListActivity : ToolbarActivity() {
 
         var id_final = resources.getIdentifier("final_" + (index + 1), "id", context.packageName)
         var final = findViewById(id_final) as TextView
-        final.text = "最终得分：${bean.last_grade}"
+        final.text = "最终得分：${bean.total_grade}"
 
         var finishing_task_id = resources.getIdentifier("finishing_task_" + (index + 1), "id", context.packageName)
         var finishing_task_ = findViewById(finishing_task_id) as TextView
-        finishing_task_.text = "岗位胜任力评价：${bean.finishing_task}"
+        finishing_task_.text = "岗位胜任力评价：${bean.resumption}"
 
         var kpi_id = resources.getIdentifier("kpi_" + (index + 1), "id", context.packageName)
         var kpi = findViewById(kpi_id) as TextView
-        kpi.text = "关键绩效指标评价：${bean.kpi}"
+        kpi.text = "关键绩效指标评价：${bean.achieve_check}"
     }
 }
