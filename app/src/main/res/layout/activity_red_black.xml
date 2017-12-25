@@ -5,6 +5,7 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFD3513C"
     android:orientation="vertical"
     tools:context="com.sogukj.pe.ui.score.RedBlackActivity">
 
