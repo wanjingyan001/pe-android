@@ -92,6 +92,7 @@ class FengKongFragment : BaseFragment() {
                             adapter.notifyDataSetChanged()
 
                             fk_score.text = "${jdxm?.selfScore}"
+                            selfCore = jdxm?.selfScore!!
 
                             thgl?.data?.forEach {
                                 sub_adapter.dataList.add(it)
@@ -114,6 +115,7 @@ class FengKongFragment : BaseFragment() {
                 })
     }
 
+    var selfCore = 0
     val weight_list = ArrayList<Int>()
     val observable_List = ArrayList<Observable<Int>>()
 
@@ -130,7 +132,8 @@ class FengKongFragment : BaseFragment() {
         override fun setData(view: View, data: FKItem.THGL.ItemData, position: Int) {
 
             title.text = data.target
-            lll.visibility = View.GONE
+            //lll.visibility = View.GONE
+            desc.text = data.info
 
             if (isShown) {
                 var score = data.score?.toInt()!!
@@ -172,6 +175,8 @@ class FengKongFragment : BaseFragment() {
                                 var single = date[i].toDouble() * weight_list[i] / 100
                                 result += single
                             }
+                            //立项尽调
+                            result += selfCore
                             return result//isEmailValid(str[0].toString()) && isPasswordValid(str[1].toString())
                         }
                     }).subscribe(object : Consumer<Double> {
@@ -200,8 +205,6 @@ class FengKongFragment : BaseFragment() {
             inner.put("type", item.type!!)
             data.add(inner)
         }
-
-        var type = arguments.getInt(Extras.TYPE)
 
         val params = HashMap<String, Any>()
         params.put("data", data)
