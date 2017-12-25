@@ -45,7 +45,7 @@
         android:text="评分标准：每个参与尽调项目得20分；最高分数：120分"
         android:textSize="12sp" />
 
-    <com.sogukj.pe.view.MyListView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/myList1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
