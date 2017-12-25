@@ -75,6 +75,9 @@ class RedBlackActivity : ToolbarActivity() {
                             listview.adapter = adapter
                             adapter.red_or_black = type
                             adapter.notifyDataSetChanged()
+                            //有数据
+                            scroll.visibility = View.VISIBLE
+                            empty.visibility = View.GONE
                         }
                         if (payload.payload == null || payload.payload?.size == 0) {
                             //暂无数据

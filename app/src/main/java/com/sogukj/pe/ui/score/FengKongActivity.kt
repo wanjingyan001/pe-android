@@ -160,12 +160,8 @@ class FengKongActivity : ToolbarActivity() {
     class FengKongHeadAdapter(val context: Context, val list: ArrayList<GradeCheckBean.FengKongItem>,
                               val jin: ArrayList<JinDiaoItem>, val touhou: ArrayList<TouHouManageItem>) : BaseAdapter() {
 
-        lateinit var jindiao_adapter: FengKongAdapter
-        lateinit var touhou_adapter: FengKongAdapter
-
-        fun getAdapter(): FengKongAdapter {
-            return jindiao_adapter
-        }
+        //lateinit var jindiao_adapter: FengKongAdapter
+        //lateinit var touhou_adapter: FengKongAdapter
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             var view = convertView
@@ -176,13 +172,15 @@ class FengKongActivity : ToolbarActivity() {
                 std.text = initString(list.get(position).biaozhun!!)
 
                 var listView = view.findViewById(R.id.myList) as MyListView
-                jindiao_adapter = FengKongAdapter(context, 1, jin, ArrayList<TouHouManageItem>())
+                var jindiao_adapter = FengKongAdapter(context, 1, jin, ArrayList<TouHouManageItem>())
                 listView.adapter = jindiao_adapter
                 jindiao_adapter.add(GradeCheckBean.FengKongItem.FengKongInnerItem())
 
                 var add_item = view.findViewById(R.id.add_item) as TextView
                 add_item.setOnClickListener {
                     jindiao_adapter.add(GradeCheckBean.FengKongItem.FengKongInnerItem())
+
+                    var sie = jindiao_adapter.datalist.size
                 }
 
             } else if (getItemViewType(position) == 0) {//tou  hou
@@ -192,7 +190,7 @@ class FengKongActivity : ToolbarActivity() {
                 std.text = initString(list.get(position).biaozhun!!)
 
                 var listView = view.findViewById(R.id.mylist) as MyListView
-                touhou_adapter = FengKongAdapter(context, 0, ArrayList<JinDiaoItem>(), touhou)
+                var touhou_adapter = FengKongAdapter(context, 0, ArrayList<JinDiaoItem>(), touhou)
                 listView.adapter = touhou_adapter
 
                 touhou_adapter.addAll(list.get(position).data!!)

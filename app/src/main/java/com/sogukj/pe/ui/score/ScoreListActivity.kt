@@ -26,6 +26,8 @@ import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_score_list.*
+import kotlinx.android.synthetic.main.toolbar.*
+import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.textColor
 import java.net.UnknownHostException
 
@@ -69,7 +71,7 @@ class ScoreListActivity : ToolbarActivity() {
                 var kpi = convertView.findViewById(R.id.kpi) as TextView
 
                 override fun setData(view: View, data: ScoreBean, position: Int) {
-                    tvSeq.text = "${position + 3}"
+                    tvSeq.text = "${position + 4}"
                     Glide.with(context).load(data.url).into(Head)
                     tvName.text = data.name
                     final_score.text = "最终得分：${data.total_grade}"
@@ -93,22 +95,33 @@ class ScoreListActivity : ToolbarActivity() {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        payload.payload?.apply {
+                        var data = payload.payload as ArrayList<ScoreBean>
+                        if (data == null || data.size == 0) {
+                            hide(0)
+                            hide(1)
+                            hide(2)
+                            frame.backgroundColor = Color.WHITE
+                            toolbar_title.textColor = Color.parseColor("#ff000000")
+                            showToast(payload.message)
+                        } else {
                             //  前三名单独设置---不足三人
+                            var disIndex = 0
                             try {
-                                set(this.removeAt(0), 0)
-                                set(this.removeAt(1), 1)
-                                set(this.removeAt(2), 2)
+                                set(data.get(0), 0)
+                                disIndex++
+                                set(data.get(1), 1)
+                                disIndex++
+                                set(data.get(2), 2)
 
-                                adapter.dataList.addAll(this)
+                                adapter.dataList.addAll(data.subList(3, data.size))
                                 adapter.notifyDataSetChanged()
                             } catch (e: Exception) {
+                                for (i in disIndex until 3) {
+                                    hide(disIndex)
+                                }
                             }
                         }
                     } else {
-                        hide(0)
-                        hide(1)
-                        hide(2)
                         showToast(payload.message)
                     }
                 }, { e ->

@@ -96,7 +96,9 @@ class ScoreDetailActivity : ToolbarActivity() {
                     if (payload.isOk) {
                         payload.payload?.forEach {
                             group.add(it.title!!)
-                            average.add(it.per_grade!!)
+                            if (bean != null) {//员工互评考核=null，不需要平均分
+                                average.add(it.per_grade!!)
+                            }
                             childs.add(it.data!!)
                         }
                         var adapter = MyExpAdapter(context, group, average, childs, type)

@@ -146,7 +146,17 @@ class GangWeiShengRenLiActivity : ToolbarActivity() {
             lll.visibility = View.GONE
 
             if (isShow) {
-                bar.progress = data.score?.toInt()!!
+                var score = data.score?.toInt()!!
+                bar.progress = score
+                if (score >= 101 && score <= 120) {
+                    bar.progressDrawable = context.resources.getDrawable(R.drawable.pb_a)
+                } else if (score >= 81 && score <= 100) {
+                    bar.progressDrawable = context.resources.getDrawable(R.drawable.pb_b)
+                } else if (score >= 61 && score <= 80) {
+                    bar.progressDrawable = context.resources.getDrawable(R.drawable.pb_c)
+                } else if (score >= 0 && score <= 60) {
+                    bar.progressDrawable = context.resources.getDrawable(R.drawable.pb_d)
+                }
                 judge.setText(data.score)
                 judge.setTextColor(Color.parseColor("#ffa0a4aa"))
                 judge.setTextSize(16f)
