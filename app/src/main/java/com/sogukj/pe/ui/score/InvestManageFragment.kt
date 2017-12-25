@@ -150,8 +150,8 @@ class InvestManageFragment : BaseFragment() {
 
         override fun setData(view: View, data: InvestManageItem.InvestManageInnerItem, position: Int) {
             zhibiao.text = "指标${position + 1}：${data.target}"
-            touzibiaozhun.text = data.standard
-            shijiqingkuang.text = data.info
+            touzibiaozhun.text = "投资标准：${data.standard}"
+            shijiqingkuang.text = "实际情况：${data.info}"
 
             if (data.standard.isNullOrEmpty()) {
                 touzibiaozhun.visibility = View.GONE

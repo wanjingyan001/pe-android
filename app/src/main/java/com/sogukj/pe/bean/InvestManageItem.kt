@@ -15,6 +15,7 @@ class InvestManageItem {
         var target: String? = null
         var type: Int? = null //1=>关键绩效指标评价 2=>岗位胜任力评价 3=>加分项 4=>减分项
         var offset: Int? = null
+        var desc: String? = null
         var info: String? = null
         var standard: String? = null
         var score: String? = null//score	string	小项得分	查看分数时显示

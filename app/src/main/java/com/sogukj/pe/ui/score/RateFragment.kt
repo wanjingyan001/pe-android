@@ -202,16 +202,22 @@ class RateFragment : BaseFragment() {
 
             title.text = data.target
 
-            if (hasTitle == false) {
+            if (data.desc.isNullOrEmpty()) {
                 lll.visibility = View.GONE
-            } else if (hasTitle == true) {
-                if (data.info.isNullOrEmpty()) {
-                    lll.visibility = View.GONE
-                } else {
-                    sub_title.text = data.info
-                }
-                //desc.text = data.desc
+            } else {
+                sub_title.text = data.desc
+                desc.text = data.info
             }
+//            if (hasTitle == false) {
+//                lll.visibility = View.GONE
+//            } else if (hasTitle == true) {
+//                if (data.info.isNullOrEmpty()) {
+//                    lll.visibility = View.GONE
+//                } else {
+//                    sub_title.text = data.info
+//                }
+//                desc.text = data.desc
+//            }
 
             if (isShown) {
                 var score = data.score?.toInt()!!

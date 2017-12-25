@@ -32,6 +32,7 @@ class FKItem {
             var type: Int? = null
             var info: String? = null
             var offset: Int? = null
+            var desc: String? = null
             var score: String? = null
         }
     }

@@ -22,6 +22,7 @@ class NormalItemBean {
             var info: String? = null
             var standard: String? = null
             var score: String? = null//score	string	小项得分	查看分数时显示
+            var desc: String? = null
         }
     }
 
