@@ -68,7 +68,7 @@
     </LinearLayout>
 
     <com.sogukj.pe.view.MyListView
-        android:id="@+id/mylist"
+        android:id="@+id/mylist2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="15dp"

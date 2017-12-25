@@ -46,7 +46,7 @@
         android:textSize="12sp" />
 
     <com.sogukj.pe.view.MyListView
-        android:id="@+id/myList"
+        android:id="@+id/myList1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:divider="@null"/>

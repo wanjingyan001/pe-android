@@ -45,7 +45,6 @@ class FengKongActivity : ToolbarActivity() {
 
     var jin = ArrayList<JinDiaoItem>()
     var touhou = ArrayList<TouHouManageItem>()
-    lateinit var adapter: FengKongHeadAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -141,8 +140,27 @@ class FengKongActivity : ToolbarActivity() {
                     if (payload.isOk) {
                         payload.payload?.apply {
                             fengkong?.let {
-                                adapter = FengKongHeadAdapter(context, it, jin, touhou)
-                                list.adapter = adapter
+                                var std = findViewById(R.id.std1) as TextView
+                                std.text = initString(it.get(0).biaozhun!!)
+
+                                var listView = findViewById(R.id.myList1) as MyListView
+                                var jindiao_adapter = FengKongAdapter(context, 1, jin, ArrayList<TouHouManageItem>())
+                                listView.adapter = jindiao_adapter
+                                jindiao_adapter.add(GradeCheckBean.FengKongItem.FengKongInnerItem())
+
+                                var add_item = findViewById(R.id.add_item) as TextView
+                                add_item.setOnClickListener {
+                                    jindiao_adapter.add(GradeCheckBean.FengKongItem.FengKongInnerItem())
+                                }
+
+                                var std2 = findViewById(R.id.std2) as TextView
+                                std2.text = initString(it.get(1).biaozhun!!)
+
+                                var listView2 = findViewById(R.id.mylist2) as MyListView
+                                var touhou_adapter = FengKongAdapter(context, 0, ArrayList<JinDiaoItem>(), touhou)
+                                listView2.adapter = touhou_adapter
+
+                                touhou_adapter.addAll(it.get(1).data!!)
                             }
                         }
                     } else
@@ -157,71 +175,10 @@ class FengKongActivity : ToolbarActivity() {
                 })
     }
 
-    class FengKongHeadAdapter(val context: Context, val list: ArrayList<GradeCheckBean.FengKongItem>,
-                              val jin: ArrayList<JinDiaoItem>, val touhou: ArrayList<TouHouManageItem>) : BaseAdapter() {
-
-        //lateinit var jindiao_adapter: FengKongAdapter
-        //lateinit var touhou_adapter: FengKongAdapter
-
-        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-            var view = convertView
-            if (getItemViewType(position) == 1) {// jin  diao
-                view = LayoutInflater.from(context).inflate(R.layout.fengkong_head_1, null)
-
-                var std = view.findViewById(R.id.std1) as TextView
-                std.text = initString(list.get(position).biaozhun!!)
-
-                var listView = view.findViewById(R.id.myList) as MyListView
-                var jindiao_adapter = FengKongAdapter(context, 1, jin, ArrayList<TouHouManageItem>())
-                listView.adapter = jindiao_adapter
-                jindiao_adapter.add(GradeCheckBean.FengKongItem.FengKongInnerItem())
-
-                var add_item = view.findViewById(R.id.add_item) as TextView
-                add_item.setOnClickListener {
-                    jindiao_adapter.add(GradeCheckBean.FengKongItem.FengKongInnerItem())
-                }
-
-            } else if (getItemViewType(position) == 0) {//tou  hou
-                view = LayoutInflater.from(context).inflate(R.layout.fengkong_head_2, null)
-
-                var std = view.findViewById(R.id.std2) as TextView
-                std.text = initString(list.get(position).biaozhun!!)
-
-                var listView = view.findViewById(R.id.mylist) as MyListView
-                var touhou_adapter = FengKongAdapter(context, 0, ArrayList<JinDiaoItem>(), touhou)
-                listView.adapter = touhou_adapter
-
-                touhou_adapter.addAll(list.get(position).data!!)
-            }
-            return view!!
-        }
-
-        override fun getItemViewType(position: Int): Int {
-            return list.get(position).is_btn!!
-        }
-
-        //is_btn---0,1
-        override fun getViewTypeCount(): Int {
-            return 2
-        }
-
-        override fun getItem(position: Int): Any {
-            return list.get(position)
-        }
-
-        override fun getItemId(position: Int): Long {
-            return position.toLong()
-        }
-
-        override fun getCount(): Int {
-            return list.size
-        }
-
-        fun initString(str: String): SpannableString {
-            val spannable1 = SpannableString("评分标准:${str}")
-            spannable1.setSpan(ForegroundColorSpan(Color.parseColor("#FFE95C4A")), 0, 5, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
-            spannable1.setSpan(ForegroundColorSpan(Color.parseColor("#FF323232")), 5, spannable1.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
-            return spannable1
-        }
+    fun initString(str: String): SpannableString {
+        val spannable1 = SpannableString("评分标准:${str}")
+        spannable1.setSpan(ForegroundColorSpan(Color.parseColor("#FFE95C4A")), 0, 5, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+        spannable1.setSpan(ForegroundColorSpan(Color.parseColor("#FF323232")), 5, spannable1.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+        return spannable1
     }
 }

@@ -134,4 +134,5 @@ dependencies {
     compile project(':calendar')
     compile files('libs/umeng-analytics-v5.5.3.jar')
     compile files('libs/libammsdk.jar')
+    compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
 }
