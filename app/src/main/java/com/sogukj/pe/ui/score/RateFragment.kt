@@ -89,8 +89,8 @@ class RateFragment : BaseFragment() {
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         payload.payload?.apply {
-                            if (item!![0].pName.isNullOrEmpty()) {
-                                //没有title
+                            if (item!!.size == 1) {
+                                //
                                 sub_adapter = RecyclerAdapter<NormalItemBean.NormalItem.BeanItem>(context, { _adapter, parent, t ->
                                     ProjectHolderNoTitle(_adapter.getView(R.layout.item_rate, parent))
                                 })
@@ -108,8 +108,8 @@ class RateFragment : BaseFragment() {
                                 num = sub_adapter.dataList.size
 
                                 hasTitle = false
-                            } else {
-                                //有title
+                            } else if (item!!.size > 1) {
+                                //
                                 head_adapter = RecyclerAdapter<NormalItemBean.NormalItem>(context, { _adapter, parent, t ->
                                     ProjectHolderTitle(_adapter.getView(R.layout.item_rate_title, parent))
                                 })
@@ -128,6 +128,10 @@ class RateFragment : BaseFragment() {
                                 }
 
                                 hasTitle = true
+                            }
+                            if (isShown) {
+                                tv_socre.text = payload.total as String
+                                btn_commit.visibility = View.GONE
                             }
                         }
                     } else
@@ -212,22 +216,38 @@ class RateFragment : BaseFragment() {
             if (isShown) {
                 var score = data.score?.toInt()!!
                 bar.progress = score
-                if (score >= 101 && score <= 120) {
-                    bar.progressDrawable = context.resources.getDrawable(R.drawable.pb_a)
-                } else if (score >= 81 && score <= 100) {
-                    bar.progressDrawable = context.resources.getDrawable(R.drawable.pb_b)
-                } else if (score >= 61 && score <= 80) {
-                    bar.progressDrawable = context.resources.getDrawable(R.drawable.pb_c)
-                } else if (score >= 0 && score <= 60) {
-                    bar.progressDrawable = context.resources.getDrawable(R.drawable.pb_d)
+                //1=>关键绩效指标评价 2=>岗位胜任力评价 3=>加分项 4=>减分项
+                if (data.type == 4) {
+                    bar.progressDrawable = context.resources.getDrawable(R.drawable.pb_min)
+                } else if (data.type == 3) {
+                    bar.progressDrawable = context.resources.getDrawable(R.drawable.pb_add)
+                } else {
+                    if (score >= 101 && score <= 120) {
+                        bar.progressDrawable = context.resources.getDrawable(R.drawable.pb_a)
+                    } else if (score >= 81 && score <= 100) {
+                        bar.progressDrawable = context.resources.getDrawable(R.drawable.pb_b)
+                    } else if (score >= 61 && score <= 80) {
+                        bar.progressDrawable = context.resources.getDrawable(R.drawable.pb_c)
+                    } else if (score >= 0 && score <= 60) {
+                        bar.progressDrawable = context.resources.getDrawable(R.drawable.pb_d)
+                    }
                 }
                 judge.setText(data.score)
                 judge.setTextColor(Color.parseColor("#ffa0a4aa"))
                 judge.setTextSize(16f)
                 judge.setBackgroundDrawable(null)
             } else {
-                var obser = TextViewClickObservable(context, judge, bar)
-                observable_List.add(obser)
+                //1=>关键绩效指标评价 2=>岗位胜任力评价 3=>加分项 4=>减分项
+                if (data.type == 4) {
+                    var obser = TextViewClickObservableAddOrMinus(context, judge, bar, data.total_score!!, data.offset!!, R.drawable.pb_min)
+                    observable_List.add(obser)
+                } else if (data.type == 3) {
+                    var obser = TextViewClickObservableAddOrMinus(context, judge, bar, data.total_score!!, data.offset!!, R.drawable.pb_add)
+                    observable_List.add(obser)
+                } else {
+                    var obser = TextViewClickObservable(context, judge, bar)
+                    observable_List.add(obser)
+                }
 
                 if (data.type == 4) {//扣分项
                     weight_list.add(data.weight!!.toInt() * -1)

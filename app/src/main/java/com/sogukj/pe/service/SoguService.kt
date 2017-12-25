@@ -1012,7 +1012,7 @@ interface SoguService {
     @POST("/api/grade/perAppraisal")
     fun perAppraisal_FK(@Field("user_id") user_id: Int, @Field("type") type: Int): Observable<Payload<FKItem>>
 
-    //关键绩效指标评价----------风控部
+    //关键绩效指标评价----------普通部门
     //user_id被打分人id
     @FormUrlEncoded
     @POST("/api/grade/perAppraisal")
