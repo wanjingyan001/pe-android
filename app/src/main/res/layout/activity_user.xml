@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/user_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -127,6 +127,7 @@
             android:background="@color/divider2" />
 
         <LinearLayout
+            android:id="@+id/focus_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
@@ -218,6 +219,7 @@
             <TableRow>
 
                 <TextView
+                    android:id="@+id/tv_11"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="调研"
@@ -225,6 +227,7 @@
                     android:textSize="12sp" />
 
                 <TextView
+                    android:id="@+id/tv_22"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="储备"
@@ -232,6 +235,7 @@
                     android:textSize="12sp" />
 
                 <TextView
+                    android:id="@+id/tv_33"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="立项"
@@ -239,6 +243,7 @@
                     android:textSize="12sp" />
 
                 <TextView
+                    android:id="@+id/tv_44"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="已投"
@@ -246,6 +251,7 @@
                     android:textSize="12sp" />
 
                 <TextView
+                    android:id="@+id/tv_55"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="退出"

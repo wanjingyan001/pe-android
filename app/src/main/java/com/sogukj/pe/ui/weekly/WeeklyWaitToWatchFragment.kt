@@ -22,13 +22,13 @@ import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.ReceiveSpinnerBean
-import kotlinx.android.synthetic.main.fragment_weekly_wait_to_watch.*
 import com.sogukj.pe.bean.WeeklyWatchBean
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.*
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.fragment_weekly_wait_to_watch.*
 import org.jetbrains.anko.textColor
 import java.net.UnknownHostException
 import java.text.SimpleDateFormat
@@ -99,6 +99,7 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
                                 intent.putExtra(Extras.DATA, grid.adapter.getItem(position) as WeeklyWatchBean.BeanObj)
                                 intent.putExtra(Extras.TIME1, data.start_time)
                                 intent.putExtra(Extras.TIME2, data.end_time)
+                                intent.putExtra(Extras.NAME,"Other")
                                 startActivityForResult(intent, 0x011)
                             }
                         })
@@ -325,6 +326,9 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
+                        if (page == 1) {
+                            adapter.dataList.clear()
+                        }
                         payload.payload?.apply {
                             loadedData = this
                             adapter.dataList.addAll(this)

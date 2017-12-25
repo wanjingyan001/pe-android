@@ -69,6 +69,7 @@ class MainActivity : BaseActivity() {
 
     fun doCheck(checkedId: Int) {
         this.checkId = checkedId
+        rg_tab_main.check(checkId)
         val fragment = when (checkId) {
             R.id.rb_msg -> fgMsg
             R.id.rb_project -> fgProj

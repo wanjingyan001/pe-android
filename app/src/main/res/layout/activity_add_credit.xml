@@ -2,10 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/add_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/divider2"
-    android:id="@+id/add_layout"
     android:orientation="vertical"
     tools:context="com.sogukj.pe.ui.project.AddCreditActivity">
 
@@ -52,6 +52,7 @@
 
                         <EditText
                             android:id="@+id/nameEdt"
+                            android:singleLine="true"
                             style="@style/creditEdtStyle" />
 
                     </LinearLayout>
@@ -78,8 +79,9 @@
 
                         <EditText
                             android:id="@+id/phoneEdt"
-                            android:inputType="phone"
-                            style="@style/creditEdtStyle" />
+                            style="@style/creditEdtStyle"
+                            android:singleLine="true"
+                            android:inputType="phone" />
 
                     </LinearLayout>
 
@@ -105,6 +107,7 @@
 
                         <EditText
                             android:id="@+id/IDCardEdt"
+                            android:singleLine="true"
                             style="@style/creditEdtStyle" />
 
                     </LinearLayout>
@@ -193,18 +196,17 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/bg_shareholder_credit_item"
                         android:gravity="center"
-                        android:orientation="vertical"
-                    >
+                        android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/save"
-                            android:padding="13dp"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:text="保存"
-                            android:gravity="center"
-                            android:textColor="@color/white"
                             android:background="@color/color_main"
+                            android:gravity="center"
+                            android:padding="13dp"
+                            android:text="保存"
+                            android:textColor="@color/white"
                             android:textSize="@dimen/text_size_normal" />
 
                     </LinearLayout>
@@ -215,9 +217,9 @@
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/saveMsgList"
-                android:nestedScrollingEnabled="false"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false">
 
             </android.support.v7.widget.RecyclerView>
         </LinearLayout>

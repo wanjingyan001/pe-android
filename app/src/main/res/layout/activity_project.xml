@@ -180,7 +180,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
-                        android:text="创始人有无能力" />
+                        android:text="创始人是否靠谱" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -194,7 +194,7 @@
                             android:layout_height="25dp"
                             android:background="@drawable/bg_rectangle_blue"
                             android:gravity="center"
-                            android:text="有"
+                            android:text="是"
                             android:textSize="12sp" />
 
                         <Button
@@ -204,7 +204,7 @@
                             android:layout_marginLeft="15dp"
                             android:background="@drawable/bg_rectangle_white"
                             android:gravity="center"
-                            android:text="无"
+                            android:text="否"
                             android:textColor="@color/text_1"
                             android:textSize="12sp" />
                     </LinearLayout>

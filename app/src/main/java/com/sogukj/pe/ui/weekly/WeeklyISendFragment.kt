@@ -1,9 +1,8 @@
 package com.sogukj.pe.ui.weekly
 
 
-import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -12,25 +11,27 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
-import com.framework.base.BaseFragment
-import com.sogukj.pe.R
-import com.sogukj.pe.bean.WeeklySendBean
-import com.sogukj.pe.view.RecyclerAdapter
-import com.sogukj.pe.view.RecyclerHolder
-import kotlinx.android.synthetic.main.fragment_weekly_isend.*
+import android.widget.BaseAdapter
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.bigkoo.pickerview.TimePickerView
+import com.framework.base.BaseFragment
 import com.google.gson.JsonSyntaxException
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import com.lcodecore.tkrefreshlayout.footer.BallPulseView
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
+import com.sogukj.pe.Extras
+import com.sogukj.pe.R
+import com.sogukj.pe.bean.WeeklySendBean
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.MyGridView
+import com.sogukj.pe.view.RecyclerAdapter
+import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.fragment_weekly_isend.*
 import java.net.UnknownHostException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -61,6 +62,15 @@ class WeeklyISendFragment : BaseFragment() {
                         var adapter = MyAdapter(context, it)
                         grid.adapter = adapter
                         adapter.notifyDataSetChanged()
+                        grid.setOnItemClickListener { parent, view, position, id ->
+                            val sendBeanObj = it[position]
+                            val intent = Intent(context, PersonalWeeklyActivity::class.java)
+                            intent.putExtra(Extras.ID,sendBeanObj.week_id)
+                            intent.putExtra(Extras.NAME,"My")
+                            intent.putExtra(Extras.TIME1,sendBeanObj.start_time)
+                            intent.putExtra(Extras.TIME2,sendBeanObj.end_time)
+                            activity.startActivity(intent)
+                        }
                     }
                 }
             }
@@ -181,6 +191,9 @@ class WeeklyISendFragment : BaseFragment() {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
+                        if (page == 1){
+                            adapter.dataList.clear()
+                        }
                         payload.payload?.apply {
                             adapter.dataList.addAll(this)
                             //adapter.notifyDataSetChanged()

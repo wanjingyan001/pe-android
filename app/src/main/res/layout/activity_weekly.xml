@@ -45,7 +45,7 @@
                 android:layout_marginRight="5dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="待我查看"
+                android:text="我接收的"
                 android:textSize="16sp" />
 
             <TextView

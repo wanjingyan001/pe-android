@@ -181,10 +181,6 @@ class ProjectMattersFragment : BaseFragment(), ScheduleItemClickListener {
                 })
     }
 
-    override fun onResume() {
-        super.onResume()
-        doRequest(page, date)
-    }
 
 
     override fun onItemClick(view: View, position: Int) {

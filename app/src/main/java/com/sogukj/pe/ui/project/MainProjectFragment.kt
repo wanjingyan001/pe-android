@@ -1,5 +1,6 @@
 package com.sogukj.pe.ui.project
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.TabLayout
@@ -290,6 +291,7 @@ class MainProjectFragment : BaseFragment() {
     }
     var key = ""
     var offset = 0
+    @SuppressLint("StringFormatMatches")
     fun doSearch(text: String) {
         this.key = text
         if (TextUtils.isEmpty(key)) return
@@ -338,6 +340,16 @@ class MainProjectFragment : BaseFragment() {
 
 
                 })
+    }
+
+
+    fun setCurrentItem(position: Int) {
+        handler.postDelayed({
+            if (view_pager !== null) {
+                view_pager.currentItem = position
+            }
+        }, 200
+        )
     }
 
     companion object {

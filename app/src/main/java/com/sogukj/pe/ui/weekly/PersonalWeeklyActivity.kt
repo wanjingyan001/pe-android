@@ -1,10 +1,6 @@
 package com.sogukj.pe.ui.weekly
 
-import android.content.Context
-import android.content.Intent
 import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
-import android.graphics.drawable.GradientDrawable.RECTANGLE
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -16,28 +12,51 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.WeeklyWatchBean
 import com.sogukj.pe.util.Trace
-import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
+import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_personal_weekly.*
 import org.jetbrains.anko.textColor
 import java.net.UnknownHostException
+import kotlin.properties.Delegates
 
 class PersonalWeeklyActivity : BaseActivity() {
 
     lateinit var fragments: Array<Fragment>
 
     lateinit var manager: FragmentManager
+    var user_id: Int? = null
+    var startTime: String? = null
+    var endTime: String? = null
+    var week_id: Int by Delegates.notNull()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_personal_weekly)
+        val nameStr = intent.getStringExtra(Extras.NAME)
+        when (nameStr) {
+            "Other" -> {
+                var bean = intent.getSerializableExtra(Extras.DATA) as WeeklyWatchBean.BeanObj
+                user_id = bean.user_id
+                startTime = intent.getStringExtra(Extras.TIME1)
+                endTime = intent.getStringExtra(Extras.TIME2)
+                bean.week_id?.let {
+                    week_id = it
+                }
+                name.text = bean.name
+                Glide.with(context).load(bean.url).into(icon)
+            }
+            "My" -> {
+                week_id = intent.getIntExtra(Extras.ID,-1)
+                startTime = intent.getStringExtra(Extras.TIME1)
+                endTime = intent.getStringExtra(Extras.TIME2)
+                val user = Store.store.getUser(context)
+                name.text = user?.name
+                Glide.with(context).load(user?.headImage()).into(icon)
+            }
+        }
 
-        var bean = intent.getSerializableExtra(Extras.DATA) as WeeklyWatchBean.BeanObj
-
-        name.text = bean.name
-        Glide.with(context).load(bean.url).into(icon)
 
 
         back.setOnClickListener {
@@ -54,9 +73,12 @@ class PersonalWeeklyActivity : BaseActivity() {
         record_buchong.setOnClickListener {
             replace(1)
         }
+        doRequest(user_id, null, startTime, endTime, week_id)
+    }
 
+    fun doRequest(user_id: Int?, issue: Int?, start_time: String?, end_time: String?, week_id: Int) {
         SoguApi.getService(application)
-                .getWeekly(bean.user_id, null, intent.getStringExtra(Extras.TIME1), intent.getStringExtra(Extras.TIME2), bean.week_id)
+                .getWeekly(user_id, issue, start_time, end_time, week_id)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -64,7 +86,7 @@ class PersonalWeeklyActivity : BaseActivity() {
                         payload.payload?.apply {
 
                             fragments = arrayOf(
-                                    WeeklyThisFragment.newInstance("PERSONAL", this, intent.getStringExtra(Extras.TIME1), intent.getStringExtra(Extras.TIME2), bean.week_id!!),
+                                    WeeklyThisFragment.newInstance("PERSONAL", this, intent.getStringExtra(Extras.TIME1), intent.getStringExtra(Extras.TIME2), week_id),
                                     RecordBuChongFragment.newInstance(this.week)
                             )
 

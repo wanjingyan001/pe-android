@@ -30,7 +30,7 @@ class ManageDataActivity : ToolbarActivity() {
         setBack(true)
 
         //
-        project.company_id = 2
+//        project.company_id = 2
 
         project.company_id?.let {
             load(it)

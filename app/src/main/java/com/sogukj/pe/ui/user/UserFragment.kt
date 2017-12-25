@@ -12,6 +12,8 @@ import com.framework.base.ToolbarFragment
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.DepartmentBean
 import com.sogukj.pe.bean.UserBean
+import com.sogukj.pe.ui.main.MainActivity
+import com.sogukj.pe.ui.project.ProjectFocusActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
@@ -24,7 +26,7 @@ import kotlinx.android.synthetic.main.activity_user.*
  * Created by qinfei on 17/7/18.
  */
 
-class UserFragment : ToolbarFragment() {
+class UserFragment : ToolbarFragment(), View.OnClickListener {
     override val containerViewId: Int
         get() = R.layout.activity_user
 
@@ -78,11 +80,25 @@ class UserFragment : ToolbarFragment() {
         setting.setOnClickListener {
             SettingActivity.start(context)
         }
+        focus_layout.setOnClickListener {
+            ProjectFocusActivity.start(activity)
+        }
+        tv_1.setOnClickListener(this)
+        tv_11.setOnClickListener(this)
+        tv_2.setOnClickListener(this)
+        tv_22.setOnClickListener(this)
+        tv_3.setOnClickListener(this)
+        tv_33.setOnClickListener(this)
+        tv_4.setOnClickListener(this)
+        tv_44.setOnClickListener(this)
+        tv_5.setOnClickListener(this)
+        tv_55.setOnClickListener(this)
         toolbar_menu.setOnClickListener {
             user?.let {
                 CardActivity.start(activity, it)
             }
         }
+
     }
 
     val departList = ArrayList<DepartmentBean>()
@@ -131,6 +147,29 @@ class UserFragment : ToolbarFragment() {
             Glide.with(this@UserFragment)
                     .load(user.headImage())
                     .into(iv_user)
+    }
+
+    override fun onClick(view: View) {
+        val activity = activity as MainActivity
+        activity.doCheck(R.id.rb_project)
+//        activity.rg_tab_main.check(R.id.rb_project)
+        when (view.id) {
+            R.id.tv_1, R.id.tv_11 -> {
+                activity.fgProj.setCurrentItem(0)
+            }
+            R.id.tv_2, R.id.tv_22 -> {
+                activity.fgProj.setCurrentItem(1)
+            }
+            R.id.tv_3, R.id.tv_33 -> {
+                activity.fgProj.setCurrentItem(2)
+            }
+            R.id.tv_4, R.id.tv_44 -> {
+                activity.fgProj.setCurrentItem(3)
+            }
+            R.id.tv_5, R.id.tv_55 -> {
+                activity.fgProj.setCurrentItem(4)
+            }
+        }
     }
 
 

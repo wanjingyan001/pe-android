@@ -9,9 +9,6 @@ import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
-import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 /**
  * Created by qinfei on 17/6/2.
@@ -696,7 +693,7 @@ interface SoguService {
      */
     @FormUrlEncoded
     @POST("/api/Credit/showCreditInfo")
-    fun showCreditInfo(@Field("company_id") company_id: Int = 10): Observable<Payload<CreditInfo>>
+    fun showCreditInfo(@Field("company_id") company_id: Int): Observable<Payload<CreditInfo>>
 
     /**
      * 征信-敏感信息

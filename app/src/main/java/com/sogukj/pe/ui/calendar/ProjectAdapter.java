@@ -82,15 +82,8 @@ public class ProjectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             });
         } else if (holder instanceof BeanHolder) {
             ScheduleBean info = (ScheduleBean) o;
-            try {
-                Date parse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(info.getStart_time());
-                ((BeanHolder) holder).timeTv.setText(Utils.getTime(parse, "HH:mm"));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
+            ((BeanHolder) holder).timeTv.setText(info.getTiming());
             ((BeanHolder) holder).contentTv.setText(info.getTitle());
-
             if (info.is_collect() != null) {
                 //noinspection ConstantConditions
                 if (info.is_collect() == 1) {

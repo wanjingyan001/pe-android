@@ -30,7 +30,7 @@ class SurveyDataActivity : ToolbarActivity() {
         setBack(true)
 
         // test
-        project.company_id = 1
+//        project.company_id = 1
         //
 
         project.company_id?.let {

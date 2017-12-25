@@ -5,9 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Gravity
 import android.view.View
@@ -20,16 +18,11 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.CreditReqBean
 import com.sogukj.pe.bean.QueryReqBean
-import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.IOSPopwindow
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
-import com.sogukj.service.SoguApi
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_add_credit.*
-import kotlinx.android.synthetic.main.activity_shareholder_credit.*
 import kotlinx.android.synthetic.main.layout_shareholder_toolbar.*
 import org.jetbrains.anko.find
 import kotlin.properties.Delegates
@@ -38,7 +31,7 @@ import kotlin.properties.Delegates
 class AddCreditActivity : BaseActivity(), View.OnClickListener {
     private lateinit var popwin: IOSPopwindow
     lateinit var adapter: RecyclerAdapter<CreditReqBean>
-    private var selectType = 0
+    private var selectType = 1
     var id: Int by Delegates.notNull()
 
 
@@ -142,10 +135,10 @@ class AddCreditActivity : BaseActivity(), View.OnClickListener {
             showToast("请填写名字")
             return null
         }
-        if (selectType == 0) {
-            showToast("请选择职位")
-            return null
-        }
+//        if (selectType == 1 && postEdt.text.toString().isEmpty()) {
+//            showToast("请选择职位")
+//            return null
+//        }
 
         val creditReq = CreditReqBean()
         creditReq.company_id = id
@@ -183,8 +176,8 @@ class AddCreditActivity : BaseActivity(), View.OnClickListener {
                 }, 300)
             }
             R.id.save -> {
-                val bean = saveReqBean()
-                bean?.let {
+                val bean = saveReqBean() ?: return
+                bean.let {
                     adapter.dataList.add(it)
                     adapter.notifyDataSetChanged()
                 }

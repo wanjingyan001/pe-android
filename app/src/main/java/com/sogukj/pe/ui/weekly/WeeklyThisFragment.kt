@@ -130,7 +130,7 @@ class WeeklyThisFragment : BaseFragment() {
                     .subscribe({ payload ->
                         if (payload.isOk) {
                             payload.payload?.apply {
-                                Log.d("WJY", Gson().toJson(this.week))
+                                Log.d("WJY", "本周周报:"+Gson().toJson(this))
                                 initView(this)
                             }
                         } else

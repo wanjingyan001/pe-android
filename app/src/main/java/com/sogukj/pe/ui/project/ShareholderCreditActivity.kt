@@ -88,7 +88,7 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
     fun doRequest(companyId: Int?) {
         if (companyId != null) {
             SoguApi.getService(application)
-                    .showCreditInfo()
+                    .showCreditInfo(companyId)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe({ payload ->

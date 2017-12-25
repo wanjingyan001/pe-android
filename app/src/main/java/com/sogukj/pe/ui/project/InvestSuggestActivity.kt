@@ -30,7 +30,7 @@ class InvestSuggestActivity : ToolbarActivity() {
         setBack(true)
 
         //
-        project.company_id = 1
+//        project.company_id = 1
 
         project.company_id?.let {
             load(it)

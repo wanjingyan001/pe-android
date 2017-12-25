@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.Menu
@@ -46,8 +45,7 @@ class RecordTraceActivity : ToolbarActivity() {
         setTitle("跟踪记录")
         company_name.text = project.name
 
-        //
-        project.company_id = 1
+//        project.company_id = 1
 
         adapter = RecyclerAdapter<RecordInfoBean.ListBean>(this, { _adapter, parent, type ->
             val convertView = _adapter.getView(R.layout.item_recordtrace, parent) as LinearLayout
@@ -111,6 +109,7 @@ class RecordTraceActivity : ToolbarActivity() {
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         var data = payload.payload
+                        Log.d("WJY",Gson().toJson(payload.payload))
                         data?.apply {
                             tv_investCost.text = info?.investCost
                             tv_investDate.text = info?.investDate
