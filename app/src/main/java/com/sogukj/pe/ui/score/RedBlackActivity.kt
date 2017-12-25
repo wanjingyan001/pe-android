@@ -20,6 +20,7 @@ import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_red_black.*
+import kotlinx.android.synthetic.main.item_empty.*
 import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.backgroundResource
 import org.jetbrains.anko.textColor
@@ -75,6 +76,16 @@ class RedBlackActivity : ToolbarActivity() {
                             adapter.red_or_black = type
                             adapter.notifyDataSetChanged()
                         }
+                        if (payload.payload == null || payload.payload?.size == 0) {
+                            //暂无数据
+                            scroll.visibility = View.GONE
+                            empty.visibility = View.VISIBLE
+                            tv_empty.visibility = View.GONE
+                            toolbar_menu.text = ""
+                            toolbar_menu.setOnClickListener { null }
+                            toolbar_title.textColor = Color.parseColor("#ff000000")
+                            root.backgroundColor = Color.parseColor("#ffffffff")
+                        }
                     } else
                         showToast(payload.message)
                 }, { e ->
@@ -91,12 +102,12 @@ class RedBlackActivity : ToolbarActivity() {
         if (type == Extras.RED) {
             toolbar_menu.text = "黑榜"
             //root.backgroundResource = R.drawable.red
-            root.backgroundColor = Color.RED
+            root.backgroundColor = Color.parseColor("#FFD3513C")
             icon_title.backgroundResource = R.drawable.hong
         } else if (type == Extras.BLACK) {
             toolbar_menu.text = "红榜"
             //root.backgroundResource = R.drawable.black
-            root.backgroundColor = Color.BLUE
+            root.backgroundColor = Color.parseColor("#FF0C162E")
             icon_title.backgroundResource = R.drawable.hei
         }
         adapter.red_or_black = type

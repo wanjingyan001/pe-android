@@ -5,7 +5,7 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/red"
+    android:background="#FFD3513C"
     android:orientation="vertical"
     tools:context="com.sogukj.pe.ui.score.RedBlackActivity">
 
@@ -57,7 +57,13 @@
             android:textSize="14sp" />
     </android.support.v7.widget.Toolbar>
 
+    <include
+        android:id="@+id/empty"
+        layout="@layout/item_empty"
+        android:visibility="gone" />
+
     <ScrollView
+        android:id="@+id/scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/transparent"
