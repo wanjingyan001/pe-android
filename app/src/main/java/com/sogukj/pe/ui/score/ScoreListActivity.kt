@@ -23,6 +23,7 @@ import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.pe.view.SpaceItemDecoration
 import com.sogukj.service.SoguApi
+import com.sogukj.util.XmlDb
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_score_list.*
@@ -42,9 +43,14 @@ class ScoreListActivity : ToolbarActivity() {
 
     lateinit var adapter: RecyclerAdapter<ScoreBean>
 
+    var quanxian = -1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_score_list)
+
+        var qx = XmlDb.open(context).get(Extras.QUANXIAN) as String
+        quanxian = qx.toInt()
 
         setBack(true)
         setTitle("全员考评分数总览")
@@ -81,7 +87,10 @@ class ScoreListActivity : ToolbarActivity() {
             }
         })
         adapter.onItemClick = { v, p ->
-            ScoreDetailActivity.start(context, Extras.TYPE_LISTITEM, adapter.dataList.get(p))
+            if (quanxian == 1) {//0=>不能查看，1=>可以
+                //暂时有问题
+                ScoreDetailActivity.start(context, Extras.TYPE_LISTITEM, adapter.dataList.get(p))
+            }
         }
         val layoutManager = LinearLayoutManager(context)
         layoutManager.orientation = LinearLayoutManager.VERTICAL

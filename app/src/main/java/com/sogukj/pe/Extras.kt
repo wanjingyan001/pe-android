@@ -41,4 +41,6 @@ object Extras {
 
     val RED_BLACK = 75
     val JIXIAO = 76
+
+    val QUANXIAN = "ext.quanxian"
 }

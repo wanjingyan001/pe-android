@@ -29,6 +29,7 @@ import com.sogukj.pe.ui.score.*
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
+import com.sogukj.util.XmlDb
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_user_edit.*
@@ -169,6 +170,8 @@ class UserEditActivity : ToolbarActivity() {
                             if (TYPE == -1) {
                                 tv_rate.visibility = View.GONE
                             }
+                            //
+                            XmlDb.open(context).set(Extras.QUANXIAN, "${this.is_see}")
                         }
                     } //else
                     //showToast(payload.message)
