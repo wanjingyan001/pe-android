@@ -179,8 +179,6 @@ class FengKongActivity : ToolbarActivity() {
                 var add_item = view.findViewById(R.id.add_item) as TextView
                 add_item.setOnClickListener {
                     jindiao_adapter.add(GradeCheckBean.FengKongItem.FengKongInnerItem())
-
-                    var sie = jindiao_adapter.datalist.size
                 }
 
             } else if (getItemViewType(position) == 0) {//tou  hou
