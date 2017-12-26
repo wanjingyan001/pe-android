@@ -168,7 +168,7 @@ class UserEditActivity : ToolbarActivity() {
                                 tv_rate.text = "暂未开启"
                             }
                             if (TYPE == -1) {
-                                tv_rate.visibility = View.GONE
+                                tr_rate.visibility = View.GONE
                             }
                             //
                             XmlDb.open(context).set(Extras.QUANXIAN, "${this.is_see}")
