@@ -167,13 +167,13 @@ class FundSearchActivity : ToolbarActivity(), View.OnClickListener {
         tmplist.add(searchStr)
         Store.store.saveFundSearch(this, tmplist)
         SoguApi.getService(application)
-                .getAllFunds(page = page, sort = (currentNameOrder + currentTimeOrder),fuzzyQuery = searchStr)
+                .getAllFunds(page = page, sort = (currentNameOrder + currentTimeOrder), fuzzyQuery = searchStr)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         payload.apply {
-                            tv_result_title.text = Html.fromHtml(getString(R.string.tv_title_result_news, total))
+                            tv_result_title.text = Html.fromHtml(getString(R.string.tv_title_result_news, (total as Double).toInt()))
                         }
                         if (page == 0) {
                             adapter.dataList.clear()
@@ -227,7 +227,7 @@ class FundSearchActivity : ToolbarActivity(), View.OnClickListener {
             R.id.tv_cancel -> {
                 finish()
             }
-            R.id.iv_clear->{
+            R.id.iv_clear -> {
                 Store.store.clearFundSearch(this)
                 historyAdapter.dataList.clear()
                 historyAdapter.notifyDataSetChanged()

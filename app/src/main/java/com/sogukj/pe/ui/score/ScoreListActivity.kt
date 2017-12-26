@@ -49,7 +49,7 @@ class ScoreListActivity : ToolbarActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_score_list)
 
-        var qx = XmlDb.open(context).get(Extras.QUANXIAN) as String
+        var qx = XmlDb.open(context).get(Extras.QUANXIAN, "")
         quanxian = qx.toInt()
 
         setBack(true)

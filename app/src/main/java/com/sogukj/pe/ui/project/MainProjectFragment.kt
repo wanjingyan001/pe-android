@@ -315,7 +315,7 @@ class MainProjectFragment : BaseFragment() {
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         payload?.apply {
-                            tv_result_title.text = Html.fromHtml(getString(R.string.tv_title_result_project, total))
+                            tv_result_title.text = Html.fromHtml(getString(R.string.tv_title_result_project, (total as Double).toInt()))
                         }
                         if (offset == 0)
                             adapter.dataList.clear()
