@@ -459,9 +459,9 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                 }
 
                 if (data.is_ability == 1) {
-                    tv5.text = "创始人有能力"
+                    tv5.text = "创始人靠谱"
                 } else if (data.is_ability == 2) {
-                    tv5.text = "创始人无能力"
+                    tv5.text = "创始人不靠谱"
                 }
 
                 if (data.is_business == null && data.is_ability == null) {

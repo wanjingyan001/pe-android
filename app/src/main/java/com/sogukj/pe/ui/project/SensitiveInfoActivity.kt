@@ -2,7 +2,6 @@ package com.sogukj.pe.ui.project
 
 import android.content.Context
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -13,7 +12,6 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.CreditInfo
 import com.sogukj.pe.bean.SensitiveInfo
-import com.sogukj.pe.bean.SensitiveReqBean
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
@@ -53,16 +51,19 @@ class SensitiveInfoActivity : BaseActivity(), View.OnClickListener {
         name.text = data.name
         post.text = data.position
         data.piece?.let {
-            doRequest(data.id, Gson().toJson(it))
+            Log.d("WJY", Gson().toJson(it))
+            doRequest(data.id, it)
         }
         back.setOnClickListener(this)
     }
 
 
-    fun doRequest(id: Int, piece: String) {
-        val reqBean = SensitiveReqBean(id, piece)
+    fun doRequest(id: Int, piece: CreditInfo.Item.Piece) {
+        val map = HashMap<String, Any>()
+        map.put("id", id)
+        map.put("piece", piece)
         SoguApi.getService(application)
-                .sensitiveData(reqBean)
+                .sensitiveData(map)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->

@@ -135,10 +135,10 @@ class AddCreditActivity : BaseActivity(), View.OnClickListener {
             showToast("请填写名字")
             return null
         }
-//        if (selectType == 1 && postEdt.text.toString().isEmpty()) {
-//            showToast("请选择职位")
-//            return null
-//        }
+        if (selectType == 1 && postEdt.text.toString().isEmpty()) {
+            showToast("请填写职位")
+            return null
+        }
 
         val creditReq = CreditReqBean()
         creditReq.company_id = id
@@ -170,10 +170,7 @@ class AddCreditActivity : BaseActivity(), View.OnClickListener {
             }
             R.id.typeSelect -> {
                 Utils.closeInput(this, IDCardEdt)
-                handler.postDelayed({
-                    popwin.showAsDropDown(find(R.id.add_layout),
-                            0, 0, Gravity.BOTTOM.or(Gravity.CENTER_HORIZONTAL))
-                }, 300)
+                popwin.showAtLocation(find(R.id.add_layout),  Gravity.BOTTOM, 0,0)
             }
             R.id.save -> {
                 val bean = saveReqBean() ?: return

@@ -40,7 +40,7 @@ import java.net.UnknownHostException
 /**
  * Created by qinfei on 17/7/18.
  */
-class ProjectActivity : ToolbarActivity() {
+class ProjectActivity : ToolbarActivity(), View.OnClickListener {
     lateinit var adapterNeg: ListAdapter<NewsBean>
     lateinit var adapterYuqin: ListAdapter<NewsBean>
     lateinit var project: ProjectBean
@@ -156,6 +156,7 @@ class ProjectActivity : ToolbarActivity() {
                                     refresh(gl_qiyefazhan, this, Color.parseColor("#5785f3"))
                                     refresh(gl_jinyinzhuankuang, this, Color.parseColor("#fe5f39"))
                                     refresh(gl_zhishichanquan, this, Color.parseColor("#5785f3"))
+                                    refreshView()
                                 }
                     } else
                         showToast(payload.message)
@@ -318,7 +319,8 @@ class ProjectActivity : ToolbarActivity() {
                 if (count != null && count > 0) {
                     icon?.clearColorFilter()
                     child.display(count, color)
-                    child.setOnClickListener(this::onClick)
+                    child.setOnClickListener(this)
+//                    child.setOnClickListener(this::onClick)
                 } else {
                     icon?.setColorFilter(colorGray, PorterDuff.Mode.SRC_ATOP)
                     child.setOnClickListener(null)
@@ -330,13 +332,23 @@ class ProjectActivity : ToolbarActivity() {
         }
     }
 
+    fun refreshView() {
+        val size = gl_htdata.childCount
+        for (i in 0 until size) {
+            if (gl_htdata.getChildAt(i) != null) {
+                val child = gl_htdata.getChildAt(i) as TipsView
+                child.setOnClickListener(this)
+            }
+        }
+    }
+
     fun disable(view: TextView) {
         view.compoundDrawables[1]?.setColorFilter(colorGray, PorterDuff.Mode.SRC_ATOP)
         view.setOnClickListener(null)
     }
 
     val colorGray = Color.parseColor("#D9D9D9")
-    fun onClick(view: View) {
+    override fun onClick(view: View) {
         when (view.id) {
             R.id.tv_stock -> StockInfoActivity.start(this@ProjectActivity, project)
             R.id.tv_company -> CompanyInfoActivity.start(this@ProjectActivity, project)

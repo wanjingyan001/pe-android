@@ -166,22 +166,9 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
         @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
         @SuppressLint("SetTextI18n", "ResourceType")
         override fun setData(view: View, data: CreditInfo.Item, position: Int) {
-            saveReqBean(data, inquireStatus)
+            var changeAble = true
             directorName.text = data.name
             directorPosition.text = data.position
-            if (data.phone != null) {
-                data.phone?.let {
-                    if (it.isEmpty()) {
-                        phoneNumberEdt.hint = "点击填写"
-                        phoneNumberEdt.visibility = View.VISIBLE
-                        phoneNumberTv.visibility = View.GONE
-                    } else {
-                        phoneNumberEdt.visibility = View.GONE
-                        phoneNumberTv.visibility = View.VISIBLE
-                        phoneNumberTv.text = it
-                    }
-                }
-            }
             if (data.idCard != null) {
                 data.idCard?.let {
                     if (it.isEmpty()) {
@@ -195,23 +182,47 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
                     }
                 }
             }
-
             when (data.status) {
                 0 -> {
+                    changeAble = true
                     inquireStatus.text = "信息待填写"
                     inquireStatus.textColor = Color.parseColor("#ffa715")
                 }
                 1 -> {
+                    changeAble = false
                     inquireStatus.text = "查询中"
                     inquireStatus.textColor = Color.parseColor("#608cf8")
+
                 }
                 2 -> {
+                    changeAble = true
                     inquireStatus.text = "查询完成"
                     inquireStatus.textColor = Color.parseColor("#50d59d")
                 }
                 3 -> {
+                    changeAble = true
                     inquireStatus.text = "查询失败"
                     inquireStatus.textColor = Color.parseColor("#f7b62b")
+                }
+            }
+
+            if (data.phone != null) {
+                data.phone?.let {
+                    if (it.isEmpty()) {
+                        phoneNumberEdt.hint = "点击填写"
+                        phoneNumberEdt.visibility = View.VISIBLE
+                        phoneNumberTv.visibility = View.GONE
+                    } else {
+                        if (changeAble) {
+                            phoneNumberEdt.visibility = View.VISIBLE
+                            phoneNumberTv.visibility = View.GONE
+                            phoneNumberEdt.setText(it)
+                        } else {
+                            phoneNumberEdt.visibility = View.GONE
+                            phoneNumberTv.visibility = View.VISIBLE
+                            phoneNumberTv.text = it
+                        }
+                    }
                 }
             }
             if (data.error_info != null && !data.error_info?.isEmpty()!!) {
@@ -219,7 +230,7 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
                     if (!it.isEmpty()) {
                         sensitiveNews.visibility = View.VISIBLE
                         sensitiveNews.text = data.error_info
-                        sensitiveNews.textColor = R.color.shareholder_sensitive_text3
+                        sensitiveNews.textColor = Color.parseColor("#f7b62b")
                         sensitiveNews.background = resources.getDrawable(R.drawable.bg_shareholder_credit_item1)
                     }
                 }
@@ -229,12 +240,13 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
                         if (it != 0) {
                             sensitiveNews.visibility = View.VISIBLE
                             sensitiveNews.text = "${it}条敏感信息>"
-                            sensitiveNews.textColor = R.color.shareholder_sensitive_text1
+                            sensitiveNews.textColor = Color.parseColor("#ff3300")
                             sensitiveNews.backgroundColor = resources.getColor(R.color.shareholder_sensitive_bg)
+                            sensitiveNews.setOnClickListener { SensitiveInfoActivity.start(this@ShareholderCreditActivity, data) }
                         } else {
                             sensitiveNews.visibility = View.VISIBLE
                             sensitiveNews.text = "无敏感信息"
-                            sensitiveNews.textColor = R.color.shareholder_sensitive_text2
+                            sensitiveNews.textColor = Color.parseColor("#50d59d")
                             sensitiveNews.background = resources.getDrawable(R.drawable.bg_shareholder_credit_item2)
                         }
                     }
@@ -242,7 +254,7 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
                     sensitiveNews.visibility = View.GONE
                 }
             }
-            sensitiveNews.setOnClickListener { SensitiveInfoActivity.start(this@ShareholderCreditActivity, data) }
+            saveReqBean(data, inquireStatus)
         }
 
         /**
@@ -253,11 +265,11 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
                 override fun afterTextChanged(s: Editable?) {
                     data.phone = s.toString()
                     s?.let {
-                        if (it.isNotEmpty()) {
+                        if (!it.equals(data.phone)) {
                             inquireBtn.isEnabled = true
                             inquireBtn.text = "一键查询"
+                            data.isChange = true
                         }
-                        data.isChange = it.isNotEmpty()
                         if (data.isChange) {
                             inquireStatus.text = "待查询"
                             inquireStatus.textColor = Color.parseColor("#ffa715")
@@ -345,7 +357,7 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
                         reqBean.id = it.id
                         reqBean.company_id = it.company_id
                         reqBean.name = it.name
-                        reqBean.position = it.position
+                        reqBean.position = "股东"
                         reqBean.type = it.type
                         reqBean.phone = it.phone
                         reqBean.idCard = it.idCard

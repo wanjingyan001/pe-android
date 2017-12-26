@@ -41,7 +41,6 @@
                 android:background="@drawable/bg_director_position"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="执行董事、总经理、董事会秘书"
                 android:textColor="@color/text_3"
                 android:textSize="10sp" />
 
@@ -53,7 +52,6 @@
                 android:layout_marginRight="15dp"
                 android:layout_weight="1"
                 android:gravity="end"
-                android:text="信息待填写"
                 android:textColor="@color/shareholder_sensitive_text1"
                 android:textSize="@dimen/text_size_samll" />
         </LinearLayout>
@@ -134,12 +132,11 @@
             android:id="@+id/sensitiveNews"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/shareholder_sensitive_bg"
             android:gravity="center"
             android:padding="15dp"
-            android:text="150条敏感信息>"
-            android:textColor="@color/tag1"
+            android:text="0条敏感信息>"
             android:textSize="@dimen/text_size_medium" />
+        <!--android:background="@color/shareholder_sensitive_bg"-->
 
 
         <!--<LinearLayout-->
