@@ -155,15 +155,15 @@ class RedBlackActivity : ToolbarActivity() {
             if (red_or_black == Extras.RED) {
                 holder?.chakan?.textColor = Color.parseColor("#FFEA9C93")
                 var index = 0
-                fillOneItem(holder?.list[0], dataList?.get(index)!!, red_or_black)
-                fillOneItem(holder?.list[1], dataList?.get(index + 1)!!, red_or_black)
-                fillOneItem(holder?.list[2], dataList?.get(index + 2)!!, red_or_black)
+                fillOneItem(holder?.list[0], dataList?.get(index)!!, red_or_black, 0)
+                fillOneItem(holder?.list[1], dataList?.get(index + 1)!!, red_or_black, 1)
+                fillOneItem(holder?.list[2], dataList?.get(index + 2)!!, red_or_black, 2)
             } else if (red_or_black == Extras.BLACK) {
                 holder?.chakan?.textColor = Color.parseColor("#FFA0A4AA")
                 var index = dataList!!.size - 3
-                fillOneItem(holder?.list[0], dataList?.get(index)!!, red_or_black)
-                fillOneItem(holder?.list[1], dataList?.get(index + 1)!!, red_or_black)
-                fillOneItem(holder?.list[2], dataList?.get(index + 2)!!, red_or_black)
+                fillOneItem(holder?.list[0], dataList?.get(index)!!, red_or_black, 0)
+                fillOneItem(holder?.list[1], dataList?.get(index + 1)!!, red_or_black, 1)
+                fillOneItem(holder?.list[2], dataList?.get(index + 2)!!, red_or_black, 2)
             }
 
 
@@ -185,9 +185,21 @@ class RedBlackActivity : ToolbarActivity() {
             return data.size
         }
 
-        fun fillOneItem(item: InnerHolder.Item, itemData: EmployeeInteractBean.EmployeeItem, type: Int) {
-            item.seq?.text = "${itemData.sort}"
-            Glide.with(context).load(itemData.url).into(item.head_icon)
+        fun fillOneItem(item: InnerHolder.Item, itemData: EmployeeInteractBean.EmployeeItem, type: Int, index: Int) {
+            if (type == Extras.RED) {
+                item.seq?.text = ""
+                if (index == 0) {
+                    item.seq?.backgroundResource = R.drawable.no1
+                } else if (index == 1) {
+                    item.seq?.backgroundResource = R.drawable.no2
+                } else if (index == 2) {
+                    item.seq?.backgroundResource = R.drawable.no3
+                }
+            } else if (type == Extras.BLACK) {
+                item.seq?.backgroundColor = Color.WHITE
+                item.seq?.text = "${itemData.sort}"
+            }
+            //Glide.with(context).load(itemData.url).into(item.head_icon)
             item.name?.text = itemData.name
             item.depart?.text = itemData.department
             item.score?.text = itemData.grade_case
@@ -196,7 +208,7 @@ class RedBlackActivity : ToolbarActivity() {
         fun inflateOneItem(view: LinearLayout): InnerHolder.Item {
             var item = InnerHolder.Item()
             item.seq = view.findViewById(R.id.seq) as TextView
-            item.head_icon = view.findViewById(R.id.head_icon) as CircleImageView
+            //item.head_icon = view.findViewById(R.id.head_icon) as CircleImageView
             item.name = view.findViewById(R.id.name) as TextView
             item.depart = view.findViewById(R.id.depart) as TextView
             item.score = view.findViewById(R.id.score) as TextView
@@ -211,7 +223,7 @@ class RedBlackActivity : ToolbarActivity() {
 
             class Item {
                 var seq: TextView? = null
-                var head_icon: CircleImageView? = null
+                //var head_icon: CircleImageView? = null
                 var name: TextView? = null
                 var depart: TextView? = null
                 var score: TextView? = null

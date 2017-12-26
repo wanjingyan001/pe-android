@@ -89,7 +89,7 @@ class ScoreListActivity : ToolbarActivity() {
         adapter.onItemClick = { v, p ->
             if (quanxian == 1) {//0=>不能查看，1=>可以
                 //暂时有问题
-                ScoreDetailActivity.start(context, Extras.TYPE_LISTITEM, adapter.dataList.get(p))
+                //ScoreDetailActivity.start(context, Extras.TYPE_LISTITEM, adapter.dataList.get(p))
             }
         }
         val layoutManager = LinearLayoutManager(context)
