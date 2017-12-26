@@ -39,9 +39,9 @@ class SettingActivity : BaseActivity() {
                     .title("提示")
                     .content("确定要退出此帐号?")
                     .onPositive { materialDialog, dialogAction ->
+                        App.INSTANCE.resetPush(false)
                         Store.store.clearUser(this)
                         LoginActivity.start(this)
-                        App.INSTANCE.resetPush(false)
                         finish()
                     }
                     .positiveText("确定")

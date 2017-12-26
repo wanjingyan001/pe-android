@@ -3,7 +3,6 @@ package com.sogukj.pe
 import android.content.Context
 import android.content.Intent
 import android.support.multidex.MultiDexApplication
-import android.util.Log
 import com.framework.base.ActivityHelper
 import com.google.gson.Gson
 import com.mob.MobSDK
@@ -89,7 +88,6 @@ class App : MultiDexApplication() {
     fun resetPush(enable: Boolean) {
         val user = Store.store.getUser(this)
         val uToken = Store.store.getUToken(this)
-        Log.d("WJY", "uToken:$uToken"+"user_id:${user?.uid}")
         if (user?.uid != null && uToken != null) {
             val token = if (enable) uToken else ""
             SoguApi.getService(this)
