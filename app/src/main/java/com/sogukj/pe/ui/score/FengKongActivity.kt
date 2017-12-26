@@ -21,6 +21,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.*
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
 import com.google.gson.JsonSyntaxException
 import com.jakewharton.rxbinding2.widget.RxTextView
@@ -79,45 +81,54 @@ class FengKongActivity : ToolbarActivity() {
                 return@setOnClickListener
             }
 
-            var jin__ = ArrayList<HashMap<String, String>>()
-            for (item in jin) {
-                var jin_item = HashMap<String, String>()
-                jin_item.put("target", item.title!!)
-                jin_item.put("info", item.info!!)
-                jin__.add(jin_item)
-            }
-
-            var touhou__ = ArrayList<HashMap<String, String>>()
-            for (item in touhou) {
-                var touhou_item = HashMap<String, String>()
-                touhou_item.put("performance_id", "${item.performance_id}")
-                touhou_item.put("info", item.info!!)
-                touhou__.add(touhou_item)
-            }
-
-            var total = HashMap<String, ArrayList<HashMap<String, String>>>()
-            total.put("jdxm", jin__)
-            total.put("thgl", touhou__)
-
-            SoguApi.getService(application)
-                    .risk_add(total)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe({ payload ->
-                        if (payload.isOk) {
-                            GangWeiListActivity.start(context, Extras.TYPE_EMPLOYEE)
-                            //JudgeActivity.start(context, TYPE_EMPLOYEE, FK)
-                            finish()
-                        } else
-                            showToast(payload.message)
-                    }, { e ->
-                        Trace.e(e)
-                        when (e) {
-                            is JsonSyntaxException -> showToast("后台数据出错")
-                            is UnknownHostException -> showToast("网络出错")
-                            else -> showToast("未知错误")
+            MaterialDialog.Builder(context)
+                    .theme(Theme.LIGHT)
+                    .title("提示")
+                    .content("确定要提交此标准?")
+                    .onPositive { materialDialog, dialogAction ->
+                        var jin__ = ArrayList<HashMap<String, String>>()
+                        for (item in jin) {
+                            var jin_item = HashMap<String, String>()
+                            jin_item.put("target", item.title!!)
+                            jin_item.put("info", item.info!!)
+                            jin__.add(jin_item)
                         }
-                    })
+
+                        var touhou__ = ArrayList<HashMap<String, String>>()
+                        for (item in touhou) {
+                            var touhou_item = HashMap<String, String>()
+                            touhou_item.put("performance_id", "${item.performance_id}")
+                            touhou_item.put("info", item.info!!)
+                            touhou__.add(touhou_item)
+                        }
+
+                        var total = HashMap<String, ArrayList<HashMap<String, String>>>()
+                        total.put("jdxm", jin__)
+                        total.put("thgl", touhou__)
+
+                        SoguApi.getService(application)
+                                .risk_add(total)
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribeOn(Schedulers.io())
+                                .subscribe({ payload ->
+                                    if (payload.isOk) {
+                                        GangWeiListActivity.start(context, Extras.TYPE_EMPLOYEE)
+                                        //JudgeActivity.start(context, TYPE_EMPLOYEE, FK)
+                                        finish()
+                                    } else
+                                        showToast(payload.message)
+                                }, { e ->
+                                    Trace.e(e)
+                                    when (e) {
+                                        is JsonSyntaxException -> showToast("后台数据出错")
+                                        is UnknownHostException -> showToast("网络出错")
+                                        else -> showToast("未知错误")
+                                    }
+                                })
+                    }
+                    .positiveText("确定")
+                    .negativeText("取消")
+                    .show()
         }
 
         SoguApi.getService(application)

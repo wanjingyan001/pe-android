@@ -11,16 +11,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
 import com.framework.base.BaseFragment
 import com.google.gson.JsonSyntaxException
+import com.sogukj.pe.App
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.*
+import com.sogukj.pe.ui.LoginActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.*
 import com.sogukj.service.SoguApi
+import com.sogukj.util.Store
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Consumer
@@ -184,7 +189,16 @@ class FengKongFragment : BaseFragment() {
                             tv_socre.text = "${String.format("%1$.2f", t)}"
                             btn_commit.setBackgroundColor(Color.parseColor("#FFE95C4A"))
                             btn_commit.setOnClickListener {
-                                upload(t)
+                                MaterialDialog.Builder(context)
+                                        .theme(Theme.LIGHT)
+                                        .title("提示")
+                                        .content("确定要提交分数?")
+                                        .onPositive { materialDialog, dialogAction ->
+                                            upload(t)
+                                        }
+                                        .positiveText("确定")
+                                        .negativeText("取消")
+                                        .show()
                             }
                         }
                     })

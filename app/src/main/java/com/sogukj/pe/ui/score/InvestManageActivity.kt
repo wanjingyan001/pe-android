@@ -12,6 +12,8 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
 import com.framework.base.ToolbarActivity
 import com.google.gson.JsonSyntaxException
@@ -208,43 +210,16 @@ class InvestManageActivity : ToolbarActivity() {
                                 }
 
                                 btn_commit.setOnClickListener {
-
-                                    for (item in dataList) {
-                                        if (item.standard.toString() == "" || item.info.toString() == "") {
-                                            return@setOnClickListener
-                                        }
-                                    }
-
-                                    var data = ArrayList<HashMap<String, String>>()
-                                    for (item in dataList) {
-                                        val inner = HashMap<String, String>()
-                                        inner.put("performance_id", "${item.performance_id}")
-                                        inner.put("standard", item.standard!!)
-                                        inner.put("info", item.info!!)
-                                        data.add(inner)
-                                    }
-
-                                    val params = HashMap<String, ArrayList<HashMap<String, String>>>()
-                                    params.put("data", data)
-                                    SoguApi.getService(application)
-                                            .invest_add(params)
-                                            .observeOn(AndroidSchedulers.mainThread())
-                                            .subscribeOn(Schedulers.io())
-                                            .subscribe({ payload ->
-                                                if (payload.isOk) {
-                                                    GangWeiListActivity.start(context, Extras.TYPE_EMPLOYEE)
-                                                    //JudgeActivity.start(context, 3, 100)
-                                                    finish()
-                                                } else
-                                                    showToast(payload.message)
-                                            }, { e ->
-                                                Trace.e(e)
-                                                when (e) {
-                                                    is JsonSyntaxException -> showToast("后台数据出错")
-                                                    is UnknownHostException -> showToast("网络出错")
-                                                    else -> showToast("未知错误")
-                                                }
-                                            })
+                                    MaterialDialog.Builder(context)
+                                            .theme(Theme.LIGHT)
+                                            .title("提示")
+                                            .content("确定要提交此标准?")
+                                            .onPositive { materialDialog, dialogAction ->
+                                                upload()
+                                            }
+                                            .positiveText("确定")
+                                            .negativeText("取消")
+                                            .show()
                                 }
                             }
                         })
@@ -252,5 +227,44 @@ class InvestManageActivity : ToolbarActivity() {
                 })
             }
         }
+    }
+
+    fun upload() {
+        for (item in dataList) {
+            if (item.standard.toString() == "" || item.info.toString() == "") {
+                return
+            }
+        }
+
+        var data = ArrayList<HashMap<String, String>>()
+        for (item in dataList) {
+            val inner = HashMap<String, String>()
+            inner.put("performance_id", "${item.performance_id}")
+            inner.put("standard", item.standard!!)
+            inner.put("info", item.info!!)
+            data.add(inner)
+        }
+
+        val params = HashMap<String, ArrayList<HashMap<String, String>>>()
+        params.put("data", data)
+        SoguApi.getService(application)
+                .invest_add(params)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        GangWeiListActivity.start(context, Extras.TYPE_EMPLOYEE)
+                        //JudgeActivity.start(context, 3, 100)
+                        finish()
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    when (e) {
+                        is JsonSyntaxException -> showToast("后台数据出错")
+                        is UnknownHostException -> showToast("网络出错")
+                        else -> showToast("未知错误")
+                    }
+                })
     }
 }

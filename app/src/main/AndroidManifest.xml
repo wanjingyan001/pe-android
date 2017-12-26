@@ -509,7 +509,6 @@
             android:name=".ui.user.CardActivity"
             android:theme="@style/MyDialogActivity" />
         <activity android:name=".ui.calendar.ModifyScheduleActivity" />
-        <activity android:name=".ui.score.EmployeeInteractActivity" />
         <activity android:name=".ui.score.TotalScoreActivity" />
         <activity android:name=".ui.user.FeedBackActivity" />
         <activity android:name=".ui.score.JudgeActivity" />

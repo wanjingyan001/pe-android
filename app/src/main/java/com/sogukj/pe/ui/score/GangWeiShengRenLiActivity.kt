@@ -10,6 +10,8 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
 import com.framework.base.ToolbarActivity
 import com.google.gson.JsonSyntaxException
@@ -192,7 +194,16 @@ class GangWeiShengRenLiActivity : ToolbarActivity() {
                             tv_socre.text = "${String.format("%1$.2f", t)}"
                             btn_commit.setBackgroundColor(Color.parseColor("#FFE95C4A"))
                             btn_commit.setOnClickListener {
-                                upload(t)
+                                MaterialDialog.Builder(context)
+                                        .theme(Theme.LIGHT)
+                                        .title("提示")
+                                        .content("确定要提交分数?")
+                                        .onPositive { materialDialog, dialogAction ->
+                                            upload(t)
+                                        }
+                                        .positiveText("确定")
+                                        .negativeText("取消")
+                                        .show()
                             }
                         }
                     })
