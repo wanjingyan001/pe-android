@@ -699,7 +699,7 @@ interface SoguService {
      * 征信-敏感信息
      */
     @POST("/api/Credit/sensitiveData")
-    fun sensitiveData(@Body reqBean: SensitiveReqBean): Observable<Payload<SensitiveInfo>>
+    fun sensitiveData(@Body map: HashMap<String, Any>): Observable<Payload<SensitiveInfo>>
 
     /**
      * 涉诉信息相关

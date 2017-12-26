@@ -1,5 +1,6 @@
 package com.framework.base
 
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AppCompatActivity
@@ -55,13 +56,28 @@ abstract class BaseActivity : AppCompatActivity() {
     val screenWidth: Int
         get() = windowManager.defaultDisplay.width
 
+    var progressDialog: ProgressDialog? = null
     fun showProgress(msg: String) {
+        if (progressDialog == null) {
+            progressDialog = ProgressDialog(this)
+            progressDialog?.setMessage(msg)
+            progressDialog?.show()
+        }
     }
 
     fun showProgress(msg: String, theme: Int) {
+        if (progressDialog == null) {
+            progressDialog = ProgressDialog(this)
+            progressDialog?.setMessage(msg)
+            progressDialog?.setProgressStyle(theme)
+            progressDialog?.show()
+        }
     }
 
     fun hideProgress() {
+        if (progressDialog != null) {
+            progressDialog?.dismiss()
+        }
     }
 
 

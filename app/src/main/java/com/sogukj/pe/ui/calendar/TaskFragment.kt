@@ -108,7 +108,6 @@ class TaskFragment : BaseFragment(), View.OnClickListener, TaskFilterWindow.Filt
                         }
                         Log.d("WJY", Gson().toJson(payload.payload))
                         payload.payload.let {
-                            data.clear()
                             it?.forEachIndexed { index, taskItemBean ->
                                 data.add(TodoDay(taskItemBean.date))
                                 taskItemBean.data.forEach {

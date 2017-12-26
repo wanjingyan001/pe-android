@@ -82,9 +82,10 @@ class ProjectAddActivity : ToolbarActivity() {
 
                 }, { e ->
                     Trace.e(e)
+                    hideProgress()
                     showToast("保存失败")
                 }, {
-                    showProgress("正在提交")
+                   hideProgress()
                 }, {
                     showProgress("正在提交")
                 })
