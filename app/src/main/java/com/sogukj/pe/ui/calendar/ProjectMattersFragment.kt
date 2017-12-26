@@ -189,7 +189,7 @@ class ProjectMattersFragment : BaseFragment(), ScheduleItemClickListener {
         when (bean.type) {
             0 -> {
                 //日程
-                TaskDetailActivity.startSchedule(activity, bean, ModifyTaskActivity.Schedule)
+                TaskDetailActivity.start(activity, bean.data_id!!, bean.title!!, ModifyTaskActivity.Schedule)
             }
             1 -> {
                 //任务

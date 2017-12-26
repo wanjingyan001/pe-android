@@ -3,10 +3,13 @@ package com.sogukj.pe
 import android.content.Context
 import android.content.Intent
 import android.support.multidex.MultiDexApplication
+import android.util.Log
 import com.framework.base.ActivityHelper
 import com.google.gson.Gson
 import com.mob.MobSDK
 import com.sogukj.pe.bean.NewsBean
+import com.sogukj.pe.ui.calendar.ModifyTaskActivity
+import com.sogukj.pe.ui.calendar.TaskDetailActivity
 import com.sogukj.pe.ui.news.NewsDetailActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
@@ -44,12 +47,18 @@ class App : MultiDexApplication() {
         })
         PushAgent.getInstance(this).setNotificationClickHandler({ context, uMessage ->
             try {
+                Log.d("WJY", "推送==>${Gson().toJson(uMessage)}")
                 uMessage.custom?.apply {
+                    Log.d("WJY", "推送内容==>${Gson().toJson(uMessage.custom)}")
                     com.sogukj.pe.util.Trace.i("uPush", this)
                     val json = JSONObject(this)
                     val type = json.getInt("type")
+                    val data_id = json.getInt("data_id")
+                    //1.负面信息  2.任务  3.日程
                     when (type) {
                         1 -> handle(context, json)
+                        2 -> TaskDetailActivity.start(context, data_id, uMessage.title, ModifyTaskActivity.Task)
+                        3 -> TaskDetailActivity.start(context, data_id, uMessage.title, ModifyTaskActivity.Schedule)
                         else -> {
                         }
                     }

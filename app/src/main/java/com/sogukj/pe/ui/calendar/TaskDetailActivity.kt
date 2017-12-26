@@ -1,6 +1,7 @@
 package com.sogukj.pe.ui.calendar
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -33,16 +34,23 @@ import org.jetbrains.anko.find
 import kotlin.properties.Delegates
 
 class TaskDetailActivity : ToolbarActivity(), CommentListener, View.OnClickListener {
-
-
     lateinit var adapter: RecyclerAdapter<TaskDetailBean.Record>
     lateinit var window: CommentWindow
     var data_id: Int by Delegates.notNull()
     var titleStr: String = ""
+    var name: String = ""
 
 
     companion object {
         fun start(ctx: Activity?, data_id: Int, title: String, name: String) {
+            val intent = Intent(ctx, TaskDetailActivity::class.java)
+            intent.putExtra(Extras.ID, data_id)
+            intent.putExtra(Extras.NAME, name)
+            intent.putExtra(Extras.TITLE, title)
+            ctx?.startActivity(intent)
+        }
+
+        fun start(ctx: Context?, data_id: Int, title: String, name: String) {
             val intent = Intent(ctx, TaskDetailActivity::class.java)
             intent.putExtra(Extras.ID, data_id)
             intent.putExtra(Extras.NAME, name)
@@ -64,29 +72,20 @@ class TaskDetailActivity : ToolbarActivity(), CommentListener, View.OnClickListe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task_detail)
-        val name = intent.getStringExtra(Extras.NAME)
+        name = intent.getStringExtra(Extras.NAME)
+        data_id = intent.getIntExtra(Extras.ID, -1)
+        titleStr = intent.getStringExtra(Extras.TITLE)
         setBack(true)
         when (name) {
             ModifyTaskActivity.Schedule -> {
                 title = "日程详情"
-                val bean = intent.getSerializableExtra(Extras.DATA) as ScheduleBean
-                taskTitle.text = bean.title
-                data_id = bean.data_id!!
-
-                taskNumber.text = TextStrSplice("日程编号: ${bean.id}", 5)
-                arrangeTime.text = TextStrSplice("安排时间: ${bean.start_time} - ${bean.end_time}", 5)
-                taskPublisher.text = TextStrSplice("任务发布者: ${bean.publisher}", 6)
-                related_project.visibility = View.GONE
-                taskExecutive.text = TextStrSplice("日程执行者: ${bean.name}", 6)
-                taskCcPerson.visibility = View.GONE
-                taskDetail.visibility = View.GONE
-                delete.visibility = View.GONE
+                delete.text = "删除日程"
                 commentLayout.visibility = View.GONE
+                taskExecutive.visibility = View.GONE
+                doRequest2(data_id)
             }
             ModifyTaskActivity.Task -> {
                 title = "任务详情"
-                data_id = intent.getIntExtra(Extras.ID, -1)
-                titleStr = intent.getStringExtra(Extras.TITLE)
                 adapter = RecyclerAdapter(this, { _adapter, parent, position ->
                     val convertView = _adapter.getView(R.layout.item_comment_list, parent)
                     object : RecyclerHolder<TaskDetailBean.Record>(convertView) {
@@ -124,16 +123,15 @@ class TaskDetailActivity : ToolbarActivity(), CommentListener, View.OnClickListe
                 })
                 commentList.layoutManager = LinearLayoutManager(this)
                 commentList.adapter = adapter
-                doRequest(data_id)
-                taskTitle.text = titleStr
-                delete.setOnClickListener(this)
                 window = CommentWindow(this, this)
                 commentTv.setOnClickListener {
                     window.showAtLocation(find(R.id.task_detail_main), Gravity.BOTTOM, 0, 0)
                 }
+                doRequest(data_id)
             }
         }
-
+        taskTitle.text = titleStr
+        delete.setOnClickListener(this)
 
     }
 
@@ -158,19 +156,18 @@ class TaskDetailActivity : ToolbarActivity(), CommentListener, View.OnClickListe
                                 mMenu.getItem(0).isEnabled = true
                                 delete.visibility = View.VISIBLE
                             }
-                            it.record?.let {
-                                adapter.dataList.addAll(it)
-                                adapter.notifyDataSetChanged()
-                            }
                             it.info?.let {
                                 taskNumber.text = TextStrSplice("任务编号: ${it.number}", 5)
                                 arrangeTime.text = TextStrSplice("安排时间: ${it.timing}", 5)
                                 taskPublisher.text = TextStrSplice("任务发布者: ${it.publisher}", 6)
                                 related_project.text = TextStrSplice("关联项目: ${it.cName}", 5)
                                 taskExecutive.text = TextStrSplice("任务执行者: ${it.executor}", 6)
-                                val watchStr = if (it.watcher == null) "" else it.watcher
-                                taskCcPerson.text = TextStrSplice("抄送人: $watchStr", 4)
+                                taskCcPerson.text = TextStrSplice("抄送人: ${it.watcher}", 4)
                                 taskDetail.text = TextStrSplice("任务详情: ${it.info}", 5)
+                            }
+                            it.record?.let {
+                                adapter.dataList.addAll(it)
+                                adapter.notifyDataSetChanged()
                             }
                         }
                     } else {
@@ -180,6 +177,45 @@ class TaskDetailActivity : ToolbarActivity(), CommentListener, View.OnClickListe
                     Trace.e(e)
                 })
 
+    }
+
+    private fun doRequest2(data_id: Int){
+        if (data_id == 0) {
+            return
+        }
+        SoguApi.getService(application)
+                .showScheduleDetail(data_id)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        payload.payload?.let {
+                            val user = Store.store.getUser(this)
+                            if (user?.uid != it.info?.pub_id) {
+                                mMenu.getItem(0).isVisible = false
+                                mMenu.getItem(0).isEnabled = false
+                                delete.visibility = View.GONE
+                            } else {
+                                mMenu.getItem(0).isVisible = true
+                                mMenu.getItem(0).isEnabled = true
+                                delete.visibility = View.VISIBLE
+                            }
+                            it.info?.let {
+                                taskNumber.text = TextStrSplice("日程编号: ${it.number}", 5)
+                                arrangeTime.text = TextStrSplice("安排时间: ${it.timing}", 5)
+                                taskPublisher.text = TextStrSplice("日程发布者: ${it.publisher}", 6)
+                                related_project.text = TextStrSplice("关联项目: ${it.cName}", 5)
+                                taskExecutive.text = TextStrSplice("日程执行者: ${it.executor}", 6)
+                                taskCcPerson.visibility = View.GONE
+                                taskDetail.text = TextStrSplice("日程详情: ${it.info}", 5)
+                            }
+                        }
+                    } else {
+                        showToast(payload.message)
+                    }
+                }, { e ->
+                    Trace.e(e)
+                })
     }
 
     private fun TextStrSplice(text: String, start: Int): SpannableString {

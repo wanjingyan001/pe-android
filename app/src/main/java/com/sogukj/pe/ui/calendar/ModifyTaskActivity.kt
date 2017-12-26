@@ -154,6 +154,7 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                     .subscribe({ payload ->
                         if (payload.isOk) {
                             payload.payload?.let {
+                                Log.d("WJY",Gson().toJson(it))
                                 companyId = it.company_id
                                 relatedProject.text = it.cName
                                 missionDetails.setText(it.info)
@@ -250,7 +251,10 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                     }
                 }, { e ->
                     Trace.e(e)
-                }, {}, {
+                    hideProgress()
+                }, {
+                    hideProgress()
+                }, {
                     showProgress("正在提交")
                 })
 
@@ -350,21 +354,39 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                         selectedDate.get(Calendar.MINUTE)
                 )
                 val endDate = Calendar.getInstance()
-                endDate.set(Utils.getTime(start, "yyyy").toInt(),
-                        Utils.getTime(start, "MM").toInt() - 1,
-                        Utils.getTime(start, "dd").toInt(),
-                        Utils.getTime(start, "HH").toInt(),
-                        Utils.getTime(start, "mm").toInt())
+                if (selectT == 0 ){
+                    endDate.set(Utils.getTime(start, "yyyy").toInt(),
+                            Utils.getTime(start, "MM").toInt() - 1,
+                            Utils.getTime(start, "dd").toInt(),
+                            Utils.getTime(start, "HH").toInt(),
+                            Utils.getTime(start, "mm").toInt())
+                }else{
+                    endDate.set(Utils.getTime(endTime, "yyyy").toInt(),
+                            Utils.getTime(endTime, "MM").toInt() - 1,
+                            Utils.getTime(endTime, "dd").toInt(),
+                            Utils.getTime(endTime, "HH").toInt(),
+                            Utils.getTime(endTime, "mm").toInt())
+                }
                 val timePicker = TimePickerView.Builder(this, { date, view ->
-                    time = start!!.time - date.time
-                    time?.let {
-                        if (it < 0) {
-                            showToast("提醒时间不能大于开始时间")
-                        } else {
-                            remind.text = "开始前${it / 1000 / 60}分钟"
+                    if(selectT == 0){
+                        time = start!!.time - date.time
+                        time?.let {
+                            if (it < 0) {
+                                showToast("提醒时间不能大于开始时间")
+                            } else {
+                                remind.text = "开始前${it / 1000 / 60}分钟"
+                            }
+                        }
+                    }else{
+                        time = endTime!!.time - date.time
+                        time?.let {
+                            if (it < 0) {
+                                showToast("提醒时间不能大于结束时间")
+                            } else {
+                                remind.text = "结束前${it / 1000 / 60}分钟"
+                            }
                         }
                     }
-
                 })
                         //年月日时分秒 的显示与否，不设置则默认全部显示
                         .setType(booleanArrayOf(true, true, true, true, true, false))

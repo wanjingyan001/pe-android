@@ -829,6 +829,13 @@ interface SoguService {
     fun showTaskDetail(@Field("data_id") data_id: Int): Observable<Payload<TaskDetailBean>>
 
     /**
+     * 日程详情
+     */
+    @FormUrlEncoded
+    @POST("/api/Calendar/showTaskInfo")
+    fun showScheduleDetail(@Field("data_id") data_id: Int): Observable<Payload<ScheduleDetailsBean>>
+
+    /**
      * 添加评论
      */
     @FormUrlEncoded

@@ -18,10 +18,14 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.CreditReqBean
 import com.sogukj.pe.bean.QueryReqBean
+import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.IOSPopwindow
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
+import com.sogukj.service.SoguApi
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_add_credit.*
 import kotlinx.android.synthetic.main.layout_shareholder_toolbar.*
 import org.jetbrains.anko.find
@@ -152,18 +156,44 @@ class AddCreditActivity : BaseActivity(), View.OnClickListener {
         return creditReq
     }
 
+    private fun doInquire(list: List<CreditReqBean>) {
+        if (list.isNotEmpty()) {
+            val info = QueryReqBean()
+            info.info = list as ArrayList<CreditReqBean>
+            SoguApi.getService(application)
+                    .queryCreditInfo(info)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (payload.isOk) {
+                            val query = QueryReqBean()
+                            query.info = adapter.dataList as ArrayList<CreditReqBean>
+                            val intent = Intent()
+                            intent.putExtra(Extras.DATA, query)
+                            setResult(Extras.RESULTCODE, intent)
+                            finish()
+                        } else {
+                            showToast(payload.message)
+                        }
+                    }, { e ->
+                        Trace.e(e)
+                        hideProgress()
+                    },{
+                        hideProgress()
+                    },{
+                        showProgress("正在提交")
+                    })
+
+        }
+    }
+
     @TargetApi(Build.VERSION_CODES.KITKAT)
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.back -> finish()
             R.id.addTv -> {
                 if (adapter.dataList.isNotEmpty()) {
-                    val query = QueryReqBean()
-                    query.info = adapter.dataList as ArrayList<CreditReqBean>
-                    val intent = Intent()
-                    intent.putExtra(Extras.DATA, query)
-                    setResult(Extras.RESULTCODE, intent)
-                    finish()
+                    doInquire(adapter.dataList)
                 } else {
                     finish()
                 }

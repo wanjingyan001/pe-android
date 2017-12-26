@@ -40,7 +40,6 @@ class MainActivity : BaseActivity() {
             if (null != news) NewsDetailActivity.start(this@MainActivity, news)
         }
 
-        App.INSTANCE.resetPush(true)
         verifyPermissions(this)
         val dm = resources.displayMetrics
         val dp = dm.density
@@ -92,5 +91,10 @@ class MainActivity : BaseActivity() {
                 doCheck(checkedId)
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        App.INSTANCE.resetPush(true)
     }
 }

@@ -3,11 +3,11 @@ package com.sogukj.pe.ui.calendar
 import java.io.Serializable
 
 /**
- * Created by admin on 2017/12/10.
+ * Created by admin on 2017/12/26.
  */
-class TaskDetailBean : Serializable {
+class ScheduleDetailsBean : Serializable {
     var info: Info? = null
-    var record: List<Record>? = null
+    var record: String? = null
 
     inner class Info : Serializable {
         var number: String? = null//任务编号
@@ -30,4 +30,5 @@ class TaskDetailBean : Serializable {
         var name: String? = null//评论者
         var url: String? = null//图片链接
     }
+
 }

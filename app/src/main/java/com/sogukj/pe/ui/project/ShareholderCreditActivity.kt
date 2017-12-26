@@ -64,7 +64,7 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
         back.setOnClickListener(this)
         addTv.setOnClickListener(this)
         inquireBtn.setOnClickListener(this)
-        doRequest(bean.company_id)
+
     }
 
     private fun initAdapter() {
@@ -84,6 +84,11 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        doRequest(bean.company_id)
+    }
+
 
     fun doRequest(companyId: Int?) {
         if (companyId != null) {
@@ -95,6 +100,8 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
                         Log.d(TAG, Gson().toJson(payload))
                         if (payload.isOk) {
                             payload.payload?.apply {
+                                directorsAdapter.dataList.clear()
+                                shareholderAdapter.dataList.clear()
                                 this.item.forEach {
                                     when (it.type) {
                                         1 -> directorsAdapter.dataList.add(it)
@@ -141,7 +148,6 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
                         if (payload.isOk) {
                             inquireBtn.text = "查询中，请稍后再看"
                             inquireBtn.isEnabled = false
-
                         } else {
                             showToast(payload.message)
                         }
@@ -168,7 +174,11 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
         override fun setData(view: View, data: CreditInfo.Item, position: Int) {
             var changeAble = true
             directorName.text = data.name
-            directorPosition.text = data.position
+            if (data.position.isEmpty()) {
+                directorPosition.text = "股东"
+            } else {
+                directorPosition.text = data.position
+            }
             if (data.idCard != null) {
                 data.idCard?.let {
                     if (it.isEmpty()) {
@@ -373,30 +383,9 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == Extras.REQUESTCODE && resultCode == Extras.RESULTCODE && data != null) {
             val reqBean = data.getSerializableExtra(Extras.DATA) as QueryReqBean
-            reqBean.info.forEach {
-                val info = CreditInfo()
-                val item = info.Item()
-                item.company_id = it.company_id
-                item.name = it.name
-                if (it.position == null) {
-                    item.position = "股东"
-                }
-                it.position?.let {
-                    item.position = it
-                }
-
-                item.phone = it.phone
-                item.idCard = it.idCard
-                item.type = it.type
-                if (it.type == 1) {
-                    directorsAdapter.dataList.add(item)
-                } else {
-                    shareholderAdapter.dataList.add(item)
-                }
-                queryDataList.add(it)
-            }
-            directorsAdapter.notifyDataSetChanged()
-            shareholderAdapter.notifyDataSetChanged()
+//            if (reqBean.info.isNotEmpty()) {
+//                doInquire(reqBean.info)
+//            }
         }
     }
 }

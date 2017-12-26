@@ -19,6 +19,10 @@ import com.ldf.calendar.view.MonthPager
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.ScheduleBean
+import com.sogukj.pe.ui.approve.SealApproveActivity
+import com.sogukj.pe.ui.approve.SignApproveActivity
+import com.sogukj.pe.ui.project.ProjectActivity
+import com.sogukj.pe.ui.project.RecordTraceActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
@@ -233,9 +237,69 @@ class TeamScheduleFragment : BaseFragment(), ScheduleItemClickListener {
                 SelectUserActivity.start(this, selectUser)
             }
             R.id.teamItemLayout -> {
-                TaskDetailActivity.startSchedule(activity, data[position], ModifyTaskActivity.Schedule)
+                val scheduleBean = data[position]
+                when (scheduleBean.type) {
+                    0 -> {
+                        //日程
+                        TaskDetailActivity.start(activity,  scheduleBean.data_id!!, scheduleBean.title!!, ModifyTaskActivity.Schedule)
+                    }
+                    1 -> {
+                        //任务
+                        TaskDetailActivity.start(activity, scheduleBean.data_id!!, scheduleBean.title!!, ModifyTaskActivity.Task)
+                    }
+                    2 -> {
+                        //会议
+                    }
+                    3 -> {
+                        //用印审批
+                        SealApproveActivity.start(activity, scheduleBean.data_id!!, "用印审批")
+                    }
+                    4 -> {
+                        //签字审批
+                        SignApproveActivity.start(activity, scheduleBean.data_id!!, "签字审批")
+                    }
+                    5 -> {
+                        //跟踪记录
+                        getCompanyDetail(scheduleBean.data_id!!, 5)
+                    }
+                    6 -> {
+                        //项目
+                        getCompanyDetail(scheduleBean.data_id!!, 6)
+                    }
+                    7 -> {
+                        //请假
+                    }
+                    8 -> {
+                        // 出差
+                    }
+                }
             }
         }
+    }
+
+    fun getCompanyDetail(cId: Int, type: Int) {
+        SoguApi.getService(activity.application)
+                .singleCompany(cId)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        payload.payload?.let {
+                            when (type) {
+                                5 -> {
+                                    RecordTraceActivity.start(activity, it)
+                                }
+                                6 -> {
+                                    ProjectActivity.start(activity, it)
+                                }
+                            }
+                        }
+                    } else {
+                        showToast(payload.message)
+                    }
+                }, { e ->
+                    Trace.e(e)
+                })
     }
 
     override fun finishCheck(isChecked: Boolean, position: Int) {

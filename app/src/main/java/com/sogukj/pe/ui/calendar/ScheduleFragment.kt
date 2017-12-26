@@ -223,7 +223,7 @@ class ScheduleFragment : BaseFragment() {
                 when (scheduleBean.type) {
                     0 -> {
                         //日程
-                        TaskDetailActivity.startSchedule(activity, scheduleBean, ModifyTaskActivity.Schedule)
+                        TaskDetailActivity.start(activity,  scheduleBean.data_id!!, scheduleBean.title!!, ModifyTaskActivity.Schedule)
                     }
                     1 -> {
                         //任务
