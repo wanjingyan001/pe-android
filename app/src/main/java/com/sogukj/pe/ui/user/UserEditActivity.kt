@@ -172,6 +172,7 @@ class UserEditActivity : ToolbarActivity() {
                             }
                             //
                             XmlDb.open(context).set(Extras.QUANXIAN, "${this.is_see}")
+                            XmlDb.open(context).set(Extras.RULE, this.rule_url!!)
                         }
                     } //else
                     //showToast(payload.message)

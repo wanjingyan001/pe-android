@@ -60,5 +60,9 @@ class LeaderActivity : ToolbarActivity() {
         zhnlbd.setOnClickListener {
             RedBlackActivity.start(context)
         }
+
+        toolbar_menu.setOnClickListener {
+            RuleActivity.start(context)
+        }
     }
 }

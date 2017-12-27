@@ -25,7 +25,6 @@ import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.pe.view.SpaceItemDecoration
 import com.sogukj.service.SoguApi
-import com.sogukj.util.Store
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Consumer
@@ -55,6 +54,10 @@ class GangWeiShengRenLiActivity : ToolbarActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gang_wei_sheng_ren_li)
+
+        toolbar_menu.setOnClickListener {
+            RuleActivity.start(context)
+        }
 
         var person = intent.getSerializableExtra(Extras.DATA) as GradeCheckBean.ScoreItem
         id = person.user_id!!
