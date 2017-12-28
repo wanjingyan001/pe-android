@@ -44,4 +44,9 @@ object Extras {
 
     val QUANXIAN = "ext.quanxian"
     val RULE = "ext.rule"
+    val ROLE = "ext.role"
+    val ADJUST = "ext.adjust"
+
+    val TYPE_TIAOZHENG = 500
+    val TYPE_JIXIAO = 501
 }

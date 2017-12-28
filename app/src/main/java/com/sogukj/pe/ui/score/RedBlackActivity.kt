@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -152,18 +153,22 @@ class RedBlackActivity : ToolbarActivity() {
 
             holder?.title?.text = data[position].title
             var dataList = data[position].data
-            if (red_or_black == Extras.RED) {
-                holder?.chakan?.textColor = Color.parseColor("#FFEA9C93")
-                var index = 0
-                fillOneItem(holder?.list[0], dataList?.get(index)!!, red_or_black, 0)
-                fillOneItem(holder?.list[1], dataList?.get(index + 1)!!, red_or_black, 1)
-                fillOneItem(holder?.list[2], dataList?.get(index + 2)!!, red_or_black, 2)
-            } else if (red_or_black == Extras.BLACK) {
-                holder?.chakan?.textColor = Color.parseColor("#FFA0A4AA")
-                var index = dataList!!.size - 3
-                fillOneItem(holder?.list[0], dataList?.get(index)!!, red_or_black, 0)
-                fillOneItem(holder?.list[1], dataList?.get(index + 1)!!, red_or_black, 1)
-                fillOneItem(holder?.list[2], dataList?.get(index + 2)!!, red_or_black, 2)
+            try {
+                if (red_or_black == Extras.RED) {
+                    holder?.chakan?.textColor = Color.parseColor("#FFEA9C93")
+                    var index = 0
+                    fillOneItem(holder?.list[0], dataList?.get(index)!!, red_or_black, 0)
+                    fillOneItem(holder?.list[1], dataList?.get(index + 1)!!, red_or_black, 1)
+                    fillOneItem(holder?.list[2], dataList?.get(index + 2)!!, red_or_black, 2)
+                } else if (red_or_black == Extras.BLACK) {
+                    holder?.chakan?.textColor = Color.parseColor("#FFA0A4AA")
+                    var index = dataList!!.size - 3
+                    fillOneItem(holder?.list[0], dataList?.get(index)!!, red_or_black, 0)
+                    fillOneItem(holder?.list[1], dataList?.get(index + 1)!!, red_or_black, 1)
+                    fillOneItem(holder?.list[2], dataList?.get(index + 2)!!, red_or_black, 2)
+                }
+            } catch (e: Exception) {
+                Log.e("数据没满三个", "数据没满三个")
             }
 
 

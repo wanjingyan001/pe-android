@@ -88,7 +88,7 @@ public class SingleCircleScoreBoard extends View {
         /***********绘制圆弧*************/
         float pad = Utils.dpToPx(ctx, 1);
         RectF rectf_head = new RectF(pad, pad, getWidth() - pad, getHeight() - pad);//确定外切矩形范围
-        canvas.drawArc(rectf_head, 90, 3.6f * step, false, paint);//绘制圆弧，不含圆心
+        canvas.drawArc(rectf_head, 90, 3.6f * step * percent, false, paint);//绘制圆弧，不含圆心
         //一共300，分100次，每次3
     }
 
@@ -123,10 +123,12 @@ public class SingleCircleScoreBoard extends View {
 
     private int step = 0;
     private double txt = 0.00;
+    private float percent = 0.00f;
 
-    public void setDate(int step, double txt) {
+    public void setDate(int step, double txt, float percent) {
         this.step = 100 - step;
         this.txt = txt;
+        this.percent = percent;
         invalidate();
     }
 }

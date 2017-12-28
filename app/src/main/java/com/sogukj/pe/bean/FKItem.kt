@@ -6,6 +6,7 @@ package com.sogukj.pe.bean
 class FKItem {
     var jdxm: JDXM? = null
     var thgl: THGL? = null
+    var pfbz: ArrayList<PFBZ>? = null
 
     class JDXM {
         var pName: String? = null

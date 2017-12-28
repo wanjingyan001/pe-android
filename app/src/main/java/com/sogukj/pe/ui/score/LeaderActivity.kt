@@ -10,8 +10,11 @@ import android.widget.TextView
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.util.XmlDb
 import kotlinx.android.synthetic.main.activity_leader.*
+import org.jetbrains.anko.backgroundResource
 import org.jetbrains.anko.textColor
+import org.w3c.dom.Text
 
 class LeaderActivity : ToolbarActivity() {
 
@@ -22,9 +25,15 @@ class LeaderActivity : ToolbarActivity() {
         }
     }
 
+    var role = 0
+    var adjust = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_leader)
+
+        role = XmlDb.open(context).get(Extras.ROLE, "").toInt()//1=>领导班子 2=>部门负责人 3=>其他员工
+        adjust = XmlDb.open(context).get(Extras.ADJUST, "").toInt()//领导班子是否可以显示调整项	1显示 0不显示
 
         setBack(true)
         setTitle("评分中心")
@@ -37,32 +46,76 @@ class LeaderActivity : ToolbarActivity() {
             back.setImageResource(R.drawable.grey_back)
         }
 
-        gangwei_pingfenxiaozu.setOnClickListener {
-            GangWeiListActivity.start(context, Extras.TYPE_MANAGE)
+        if (role == 1 && adjust == 1) {
+            (ll_1_right.getChildAt(0) as ImageView).backgroundResource = R.drawable.yghpjg
+        } else if (role == 1 && adjust == 0) {
+            ll_3.visibility = View.GONE
+            ll_3_left.visibility = View.GONE
+            ll_3_right.visibility = View.GONE
+            (ll_1_right.getChildAt(0) as ImageView).backgroundResource = R.drawable.yghpjg
+        } else if (role == 2) {
+            ll_3.visibility = View.GONE
+            ll_3_left.visibility = View.GONE
+            ll_3_right.visibility = View.GONE
+            ll_4.visibility = View.GONE
+            ll_4_left.visibility = View.GONE
+            ll_4_right.visibility = View.GONE
+            ll_2_right.visibility = View.INVISIBLE
+            (ll_2_left.getChildAt(1) as TextView).text = "直线上级打分"
+            (ll_1_left.getChildAt(1) as TextView).text = "员工互评打分"
+            (ll_1_right.getChildAt(1) as TextView).text = "我的分数"
+            (ll_1_right.getChildAt(0) as ImageView).backgroundResource = R.drawable.khjg
+        } else if (role == 3) {
+            ll_2.visibility = View.GONE
+            ll_2_left.visibility = View.GONE
+            ll_2_right.visibility = View.GONE
+            ll_3.visibility = View.GONE
+            ll_3_left.visibility = View.GONE
+            ll_3_right.visibility = View.GONE
+            ll_4.visibility = View.GONE
+            ll_4_left.visibility = View.GONE
+            ll_4_right.visibility = View.GONE
+            (ll_1_left.getChildAt(1) as TextView).text = "员工互评打分"
+            (ll_1_right.getChildAt(1) as TextView).text = "我的分数"
+            (ll_1_right.getChildAt(0) as ImageView).backgroundResource = R.drawable.khjg
         }
 
-        gangwei_huping.setOnClickListener {
-            ScoreDetailActivity.start(context, Extras.TYPE_INTERACT, null)
+        ll_1_left.setOnClickListener {
+            //留着。免得又要变
+            GangWeiListActivity.start(context, Extras.TYPE_EMPLOYEE)
         }
 
-        jixiao_pingfen.setOnClickListener {
-            GuanJianJiXiaoListActivity.start(context)
+        ll_1_right.setOnClickListener {
+            if (role == 2) {
+                TotalScoreActivity.start(context)
+            } else {
+                ScoreDetailActivity.start(context, Extras.TYPE_INTERACT, null)
+            }
         }
 
-        jixiao_kaohejieguo.setOnClickListener {
+        ll_2_left.setOnClickListener {
+            GuanJianJiXiaoListActivity.start(context, Extras.TYPE_JIXIAO)
+        }
+
+        ll_2_right.setOnClickListener {
             JiXiaoActivity.start(context, Extras.JIXIAO, null)
         }
 
-        kaohejieguo.setOnClickListener {
+        ll_3_left.setOnClickListener {
+            GuanJianJiXiaoListActivity.start(context, Extras.TYPE_TIAOZHENG)
+        }
+
+        ll_4_left.setOnClickListener {
             ScoreListActivity.start(context)
         }
 
-        zhnlbd.setOnClickListener {
+        ll_4_right.setOnClickListener {
             RedBlackActivity.start(context)
         }
 
         toolbar_menu.setOnClickListener {
             RuleActivity.start(context)
         }
+
     }
 }

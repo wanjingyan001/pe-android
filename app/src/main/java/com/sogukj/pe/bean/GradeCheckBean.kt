@@ -8,8 +8,8 @@ import java.io.Serializable
 class GradeCheckBean : Serializable { //1=>进入绩效考核列表页面，2=>进入岗位胜任力列表 3=>进入风控部填写页，4=>进入投资部填写页
     var finish_grade: ArrayList<ScoreItem>? = null//打分界面  type为1或为2返回
     var ready_grade: ArrayList<ScoreItem>? = null//打分界面  type为1或为2返回
-    var fengkong: ArrayList<FengKongItem>? = null//风控填写页面   type为3返回：
-    var touzhi: ArrayList<TouZiItem>? = null//投资部填写页 type为4返回：
+    var fengkong: ArrayList<FengKongItem>? = null//风控填写页面   type为3返回：//废弃
+    var touzhi: ArrayList<TouZiItem>? = null//投资部填写页 type为4返回：//废弃
 
     class ScoreItem : Serializable {
         var user_id: Int? = null

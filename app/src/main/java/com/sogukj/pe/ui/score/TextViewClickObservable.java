@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import com.bigkoo.pickerview.OptionsPickerView;
 import com.sogukj.pe.R;
+import com.sogukj.pe.bean.JobPageBean;
+import com.sogukj.pe.bean.PFBZ;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -34,28 +36,30 @@ class TextViewClickObservable extends Observable<Integer> {
     private ArrayList<Integer> optionsItems_C;
     private ArrayList<Integer> optionsItems_D;
     private ArrayList<Integer> mSelected;
+    private ArrayList<PFBZ> biaozhun;
 
-    TextViewClickObservable(Context context, TextView view, ProgressBar bar) {
+    TextViewClickObservable(Context context, TextView view, ProgressBar bar, ArrayList<PFBZ> biaozhun) {
         this.context = context;
         this.view = view;
         this.bar = bar;
         optionsItems_A = new ArrayList<Integer>();
-        for (int i = 101; i <= 120; i++) {
+        for (int i = Integer.parseInt(biaozhun.get(0).getSs()); i <= Integer.parseInt(biaozhun.get(0).getEs()); i++) {
             optionsItems_A.add(i);
         }
         optionsItems_B = new ArrayList<Integer>();
-        for (int i = 81; i <= 100; i++) {
+        for (int i = Integer.parseInt(biaozhun.get(1).getSs()); i <= Integer.parseInt(biaozhun.get(1).getEs()); i++) {
             optionsItems_B.add(i);
         }
         optionsItems_C = new ArrayList<Integer>();
-        for (int i = 61; i <= 80; i++) {
+        for (int i = Integer.parseInt(biaozhun.get(2).getSs()); i <= Integer.parseInt(biaozhun.get(2).getEs()); i++) {
             optionsItems_C.add(i);
         }
         optionsItems_D = new ArrayList<Integer>();
-        for (int i = 0; i <= 60; i++) {
+        for (int i = Integer.parseInt(biaozhun.get(3).getSs()); i <= Integer.parseInt(biaozhun.get(3).getEs()); i++) {
             optionsItems_D.add(i);
         }
         mSelected = optionsItems_D;
+        this.biaozhun = biaozhun;
     }
 
     @Override
@@ -83,13 +87,13 @@ class TextViewClickObservable extends Observable<Integer> {
                         //返回的分别是三个级别的选中位置
                         int pro = mSelected.get(options1);
                         bar.setProgress(pro);
-                        if (pro >= 101 && pro <= 120) {
+                        if (pro >= Integer.parseInt(biaozhun.get(0).getSs()) && pro <= Integer.parseInt(biaozhun.get(0).getEs())) {
                             bar.setProgressDrawable(context.getResources().getDrawable(R.drawable.pb_a));
-                        } else if (pro >= 81 && pro <= 100) {
+                        } else if (pro >= Integer.parseInt(biaozhun.get(1).getSs()) && pro <= Integer.parseInt(biaozhun.get(1).getEs())) {
                             bar.setProgressDrawable(context.getResources().getDrawable(R.drawable.pb_b));
-                        } else if (pro >= 61 && pro <= 80) {
+                        } else if (pro >= Integer.parseInt(biaozhun.get(2).getSs()) && pro <= Integer.parseInt(biaozhun.get(2).getEs())) {
                             bar.setProgressDrawable(context.getResources().getDrawable(R.drawable.pb_c));
-                        } else if (pro >= 0 && pro <= 60) {
+                        } else if (pro >= Integer.parseInt(biaozhun.get(3).getSs()) && pro <= Integer.parseInt(biaozhun.get(3).getEs())) {
                             bar.setProgressDrawable(context.getResources().getDrawable(R.drawable.pb_d));
                         }
                         view.setText(pro + "");

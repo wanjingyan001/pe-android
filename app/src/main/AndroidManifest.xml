@@ -511,7 +511,6 @@
         <activity android:name=".ui.calendar.ModifyScheduleActivity" />
         <activity android:name=".ui.score.TotalScoreActivity" />
         <activity android:name=".ui.user.FeedBackActivity" />
-        <activity android:name=".ui.score.JudgeActivity" />
         <activity android:name=".ui.score.ScoreDetailActivity" />
         <activity android:name=".ui.score.RateActivity" />
         <activity android:name=".ui.score.ScoreListActivity" />
@@ -528,7 +527,12 @@
         <activity android:name=".ui.score.GangWeiListActivity" />
         <activity android:name=".ui.score.GuanJianJiXiaoListActivity" />
         <activity android:name=".ui.score.RedBlackActivity" />
-        <activity android:name=".ui.score.RuleActivity"></activity>
+        <activity android:name=".ui.score.RuleActivity" />
+        <activity
+            android:name=".ui.score.TemplateActivity"
+            android:configChanges="keyboard|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
     </application>
 
 </manifest>

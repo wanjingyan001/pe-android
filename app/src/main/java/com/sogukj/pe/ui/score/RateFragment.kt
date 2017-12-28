@@ -22,10 +22,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
 import com.google.gson.JsonSyntaxException
-import com.sogukj.pe.bean.GradeCheckBean
-import com.sogukj.pe.bean.JobPageBean
-import com.sogukj.pe.bean.NormalItemBean
-import com.sogukj.pe.bean.TouZiUpload
+import com.sogukj.pe.bean.*
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
@@ -44,17 +41,19 @@ import kotlin.collections.ArrayList
  */
 class RateFragment : BaseFragment() {
 
-    lateinit var head_adapter: RecyclerAdapter<NormalItemBean.NormalItem>
-    lateinit var sub_adapter: RecyclerAdapter<NormalItemBean.NormalItem.BeanItem>
+    lateinit var jixiao_adapter: RecyclerAdapter<NormalItemBean.NormalItem.BeanItem>
+    lateinit var add_adapter: RecyclerAdapter<NormalItemBean.NormalItem.BeanItem>
+    lateinit var minus_adapter: RecyclerAdapter<NormalItemBean.NormalItem.BeanItem>
 
     companion object {
 
         //isShow  = false 打分界面，true展示界面
-        fun newInstance(check_person: GradeCheckBean.ScoreItem, isShow: Boolean): RateFragment {
+        fun newInstance(check_person: GradeCheckBean.ScoreItem, isShow: Boolean, type: Int): RateFragment {
             val fragment = RateFragment()
             val intent = Bundle()
             intent.putBoolean(Extras.FLAG, isShow)
             intent.putSerializable(Extras.DATA, check_person)
+            intent.putInt(Extras.TYPE, type)
             fragment.arguments = intent
             return fragment
         }
@@ -66,14 +65,26 @@ class RateFragment : BaseFragment() {
     lateinit var person: GradeCheckBean.ScoreItem
     var isShown = false
     var hasTitle = false
+    var type = 0
+    var type111 = 0//
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val layoutManager = LinearLayoutManager(context)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
-        rate_list.layoutManager = layoutManager
-        rate_list.addItemDecoration(SpaceItemDecoration(25))
+        jixiao_list.layoutManager = layoutManager
+        jixiao_list.addItemDecoration(SpaceItemDecoration(25))
+
+        val layoutManager1 = LinearLayoutManager(context)
+        layoutManager1.orientation = LinearLayoutManager.VERTICAL
+        add_listview.layoutManager = layoutManager1
+        add_listview.addItemDecoration(SpaceItemDecoration(25))
+
+        val layoutManager2 = LinearLayoutManager(context)
+        layoutManager2.orientation = LinearLayoutManager.VERTICAL
+        minuse_listview.layoutManager = layoutManager2
+        minuse_listview.addItemDecoration(SpaceItemDecoration(25))
 
         person = arguments.getSerializable(Extras.DATA) as GradeCheckBean.ScoreItem
         person?.let {
@@ -83,54 +94,70 @@ class RateFragment : BaseFragment() {
             position.text = it.position
         }
         isShown = arguments.getBoolean(Extras.FLAG) // false 打分界面，true展示界面
+        type = arguments.getInt(Extras.TYPE)
 
+        //非空（1=>绩效，3=>加减项）
+        if (type == Extras.TYPE_JIXIAO) {
+            type111 = 1
+        } else if (type == Extras.TYPE_TIAOZHENG) {
+            type111 = 3
+        }
         SoguApi.getService(baseActivity!!.application)
-                .perAppraisal_NORMAL(person.user_id!!, person.type!!)
+                .perAppraisal(person.user_id!!, type111)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         payload.payload?.apply {
-                            if (item!!.size == 1) {
+                            if (type == Extras.TYPE_JIXIAO) {
                                 //
-                                sub_adapter = RecyclerAdapter<NormalItemBean.NormalItem.BeanItem>(context, { _adapter, parent, t ->
+                                jixiao_adapter = RecyclerAdapter<NormalItemBean.NormalItem.BeanItem>(context, { _adapter, parent, t ->
                                     ProjectHolderNoTitle(_adapter.getView(R.layout.item_rate, parent))
                                 })
-                                val layoutManager = LinearLayoutManager(context)
-                                layoutManager.orientation = LinearLayoutManager.VERTICAL
-                                rate_list.layoutManager = layoutManager
-                                rate_list.addItemDecoration(SpaceItemDecoration(30))
-                                rate_list.adapter = sub_adapter
+                                jixiao_list.adapter = jixiao_adapter
 
-                                item!![0].data?.forEach {
-                                    sub_adapter.dataList.add(it)
+                                data?.forEach {
+                                    jixiao_adapter.dataList.add(it)
                                 }
-                                sub_adapter.notifyDataSetChanged()
+                                jixiao_adapter.notifyDataSetChanged()
 
-                                num = sub_adapter.dataList.size
+                                num = jixiao_adapter.dataList.size
 
                                 hasTitle = false
-                            } else if (item!!.size > 1) {
+
+                                ll_add.visibility = View.GONE
+                                ll_minuse.visibility = View.GONE
+                            } else if (type == Extras.TYPE_TIAOZHENG) {
                                 //
-                                head_adapter = RecyclerAdapter<NormalItemBean.NormalItem>(context, { _adapter, parent, t ->
-                                    ProjectHolderTitle(_adapter.getView(R.layout.item_rate_title, parent))
+                                add_adapter = RecyclerAdapter<NormalItemBean.NormalItem.BeanItem>(context, { _adapter, parent, t ->
+                                    ProjectHolderNoTitle(_adapter.getView(R.layout.item_rate, parent))
                                 })
-                                val layoutManager = LinearLayoutManager(context)
-                                layoutManager.orientation = LinearLayoutManager.VERTICAL
-                                rate_list.layoutManager = layoutManager
-                                rate_list.adapter = head_adapter
+                                add_listview.adapter = add_adapter
 
-                                item?.forEach {
-                                    head_adapter.dataList.add(it)
+                                jf?.forEach {
+                                    jixiao_adapter.dataList.add(it)
                                 }
-                                head_adapter.notifyDataSetChanged()
+                                jixiao_adapter.notifyDataSetChanged()
 
-                                for (list in head_adapter.dataList) {
-                                    num += list.data!!.size
+                                num += jixiao_adapter.dataList.size
+
+                                //
+                                minus_adapter = RecyclerAdapter<NormalItemBean.NormalItem.BeanItem>(context, { _adapter, parent, t ->
+                                    ProjectHolderNoTitle(_adapter.getView(R.layout.item_rate, parent))
+                                })
+                                minuse_listview.adapter = minus_adapter
+
+                                kf?.forEach {
+                                    minus_adapter.dataList.add(it)
                                 }
+                                minus_adapter.notifyDataSetChanged()
 
+                                num += minus_adapter.dataList.size
+
+                                jixiao_list.visibility = View.GONE
                                 hasTitle = true
                             }
+                            pinfen = pfbz!!
                             if (isShown) {
                                 tv_socre.text = payload.total as String
                                 btn_commit.visibility = View.GONE
@@ -149,6 +176,7 @@ class RateFragment : BaseFragment() {
     }
 
     var num = 0
+    var pinfen = ArrayList<PFBZ>()
 
     val observable_List = ArrayList<Observable<Int>>()
     val weight_list = ArrayList<Int>()
@@ -168,7 +196,7 @@ class RateFragment : BaseFragment() {
         val params = HashMap<String, Any>()
         params.put("data", data)
         params.put("user_id", person.user_id!!)
-        params.put("type", 1)
+        params.put("type", type111)
         params.put("total", result)
 
         SoguApi.getService(baseActivity!!.application)
@@ -196,30 +224,12 @@ class RateFragment : BaseFragment() {
         var bar = convertView.findViewById(R.id.progressBar) as ProgressBar
         var judge = convertView.findViewById(R.id.text) as TextView
         var title = convertView.findViewById(R.id.title) as TextView
-        var sub_title = convertView.findViewById(R.id.subtitle) as TextView
         var desc = convertView.findViewById(R.id.desc) as TextView
-        var lll = convertView.findViewById(R.id.lll) as LinearLayout
 
         override fun setData(view: View, data: NormalItemBean.NormalItem.BeanItem, position: Int) {
 
-            title.text = data.target
-
-            if (data.desc.isNullOrEmpty()) {
-                lll.visibility = View.GONE
-            } else {
-                sub_title.text = data.desc
-                desc.text = data.info
-            }
-//            if (hasTitle == false) {
-//                lll.visibility = View.GONE
-//            } else if (hasTitle == true) {
-//                if (data.info.isNullOrEmpty()) {
-//                    lll.visibility = View.GONE
-//                } else {
-//                    sub_title.text = data.info
-//                }
-//                desc.text = data.desc
-//            }
+            title.text = data.name
+            desc.text = data.info
 
             if (isShown) {
                 var score = data.score?.toInt()!!
@@ -253,7 +263,7 @@ class RateFragment : BaseFragment() {
                     var obser = TextViewClickObservableAddOrMinus(context, judge, bar, data.total_score!!, data.offset!!, R.drawable.pb_add)
                     observable_List.add(obser)
                 } else {
-                    var obser = TextViewClickObservable(context, judge, bar)
+                    var obser = TextViewClickObservable(context, judge, bar, pinfen)
                     observable_List.add(obser)
                 }
 
@@ -306,36 +316,36 @@ class RateFragment : BaseFragment() {
         }
     }
 
-    inner class ProjectHolderTitle(view: View)
-        : RecyclerHolder<NormalItemBean.NormalItem>(view) {
-
-        var head_ll = convertView.findViewById(R.id.ll_head) as LinearLayout
-        var head_title = convertView.findViewById(R.id.head_title) as TextView
-        var data_list = convertView.findViewById(R.id.listview) as RecyclerView
-
-        override fun setData(view: View, data: NormalItemBean.NormalItem, position: Int) {
-
-            if (data.pName == "") {
-                head_ll.visibility = View.GONE
-            } else {
-                head_title.text = data.pName
-            }
-
-            var inner_adapter = RecyclerAdapter<NormalItemBean.NormalItem.BeanItem>(context, { _adapter, parent, t ->
-                ProjectHolderNoTitle(_adapter.getView(R.layout.item_rate, parent))
-            })
-            inner_adapter.onItemClick = { v, p ->
-            }
-            val layoutManager = LinearLayoutManager(context)
-            layoutManager.orientation = LinearLayoutManager.VERTICAL
-            data_list.layoutManager = layoutManager
-            data_list.addItemDecoration(SpaceItemDecoration(Utils.dpToPx(context, 30)))
-            data_list.adapter = inner_adapter
-
-            data.data?.forEach {
-                inner_adapter.dataList.add(it)
-            }
-            inner_adapter.notifyDataSetChanged()
-        }
-    }
+//    inner class ProjectHolderTitle(view: View)
+//        : RecyclerHolder<NormalItemBean.NormalItem>(view) {
+//
+//        var head_ll = convertView.findViewById(R.id.ll_head) as LinearLayout
+//        var head_title = convertView.findViewById(R.id.head_title) as TextView
+//        var data_list = convertView.findViewById(R.id.listview) as RecyclerView
+//
+//        override fun setData(view: View, data: NormalItemBean.NormalItem, position: Int) {
+//
+//            if (data.pName == "") {
+//                head_ll.visibility = View.GONE
+//            } else {
+//                head_title.text = data.pName
+//            }
+//
+//            var inner_adapter = RecyclerAdapter<NormalItemBean.NormalItem.BeanItem>(context, { _adapter, parent, t ->
+//                ProjectHolderNoTitle(_adapter.getView(R.layout.item_rate, parent))
+//            })
+//            inner_adapter.onItemClick = { v, p ->
+//            }
+//            val layoutManager = LinearLayoutManager(context)
+//            layoutManager.orientation = LinearLayoutManager.VERTICAL
+//            data_list.layoutManager = layoutManager
+//            data_list.addItemDecoration(SpaceItemDecoration(Utils.dpToPx(context, 30)))
+//            data_list.adapter = inner_adapter
+//
+//            data.data?.forEach {
+//                inner_adapter.dataList.add(it)
+//            }
+//            inner_adapter.notifyDataSetChanged()
+//        }
+//    }
 }

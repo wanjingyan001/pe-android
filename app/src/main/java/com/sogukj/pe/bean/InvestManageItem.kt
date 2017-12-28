@@ -6,6 +6,7 @@ package com.sogukj.pe.bean
 class InvestManageItem {
     var pName: String? = null
     var data: ArrayList<InvestManageInnerItem>? = null
+    var pfbz: ArrayList<PFBZ>? = null
 
     class InvestManageInnerItem {
         var id: Int? = null

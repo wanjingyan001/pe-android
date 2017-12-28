@@ -105,7 +105,7 @@ public class TotalCircleScoreBoard extends View {
         RectF rectf_head = new RectF(pad, pad, getWidth() - pad, getHeight() - pad);//确定外切矩形范围
 
         if (tag == "FINISH") {
-            canvas.drawArc(rectf_head, 120, 3 * step, false, paint);//绘制圆弧，不含圆心
+            canvas.drawArc(rectf_head, 120, 3 * percent * step, false, paint);//绘制圆弧，不含圆心
             //一共300，分100次，每次3
         } else if (tag == "UNFINISH") {
             int angle = 3 * step;
@@ -162,10 +162,12 @@ public class TotalCircleScoreBoard extends View {
 
     private int step = 0;
     private double txt = 0.00;
+    private float percent = 0.00f;
 
-    public void setDate(int step, double txt) {
+    public void setDate(int step, double txt, float percent) {
         this.step = 100 - step;
         this.txt = txt;
+        this.percent = percent;
         invalidate();
     }
 

@@ -10,4 +10,5 @@ class TotalScoreBean {
     var total_grade: String? = null
     var achieve_check: String? = null
     var resumption: String? = null
+    var adjust: String? = null
 }

@@ -19,6 +19,7 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.GradeCheckBean
 import com.sogukj.pe.bean.JobPageBean
+import com.sogukj.pe.bean.PFBZ
 import com.sogukj.pe.bean.TouZiUpload
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.RecyclerAdapter
@@ -92,11 +93,7 @@ class GangWeiShengRenLiActivity : ToolbarActivity() {
         doRequest()
     }
 
-    var pinfen = ArrayList<JobPageBean.PFBZ>()
-
-    fun initPinFen() {
-
-    }
+    var pinfen = ArrayList<PFBZ>()
 
     fun doRequest() {
         SoguApi.getService(application)
@@ -149,17 +146,18 @@ class GangWeiShengRenLiActivity : ToolbarActivity() {
 
             title.text = data.name
             lll.visibility = View.GONE
+            bar.max = data.total_score!!
 
             if (isShow) {
                 var score = data.score?.toInt()!!
                 bar.progress = score
-                if (score >= 101 && score <= 120) {
+                if (score >= pinfen.get(0).ss!!.toInt() && score <= pinfen.get(0).es!!.toInt()) {
                     bar.progressDrawable = context.resources.getDrawable(R.drawable.pb_a)
-                } else if (score >= 81 && score <= 100) {
+                } else if (score >= pinfen.get(1).ss!!.toInt() && score <= pinfen.get(1).es!!.toInt()) {
                     bar.progressDrawable = context.resources.getDrawable(R.drawable.pb_b)
-                } else if (score >= 61 && score <= 80) {
+                } else if (score >= pinfen.get(2).ss!!.toInt() && score <= pinfen.get(2).es!!.toInt()) {
                     bar.progressDrawable = context.resources.getDrawable(R.drawable.pb_c)
-                } else if (score >= 0 && score <= 60) {
+                } else if (score >= pinfen.get(3).ss!!.toInt() && score <= pinfen.get(3).es!!.toInt()) {
                     bar.progressDrawable = context.resources.getDrawable(R.drawable.pb_d)
                 }
                 judge.setText(data.score)
@@ -167,7 +165,7 @@ class GangWeiShengRenLiActivity : ToolbarActivity() {
                 judge.setTextSize(16f)
                 judge.setBackgroundDrawable(null)
             } else {
-                var obser = TextViewClickObservable(context, judge, bar)
+                var obser = TextViewClickObservable(context, judge, bar, pinfen)
                 observable_List.add(obser)
 
                 weight_list.add(data.weight!!.toInt())

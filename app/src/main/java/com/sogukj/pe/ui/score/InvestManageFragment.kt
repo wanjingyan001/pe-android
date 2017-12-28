@@ -20,6 +20,7 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.GradeCheckBean
 import com.sogukj.pe.bean.InvestManageItem
+import com.sogukj.pe.bean.PFBZ
 import com.sogukj.pe.bean.TouZiUpload
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
@@ -95,6 +96,7 @@ class InvestManageFragment : BaseFragment() {
                             this?.forEach {
                                 maxItem += it.data!!.size
                             }
+                            pinfen = this.get(0).pfbz!!
                         }
                         if (isShown) {
                             tv_socre.text = payload.total as String
@@ -113,6 +115,7 @@ class InvestManageFragment : BaseFragment() {
     }
 
     var maxItem = 0
+    var pinfen = ArrayList<PFBZ>()
 
     inner class ProjectHolder(view: View)
         : RecyclerHolder<InvestManageItem>(view) {
@@ -197,7 +200,7 @@ class InvestManageFragment : BaseFragment() {
                     var obser = TextViewClickObservableAddOrMinus(context, txt_btn, progressBar, data.total_score!!, data.offset!!, R.drawable.pb_add)
                     observable_List.add(obser)
                 } else {
-                    var obser = TextViewClickObservable(context, txt_btn, progressBar)
+                    var obser = TextViewClickObservable(context, txt_btn, progressBar, pinfen)
                     observable_List.add(obser)
                 }
 

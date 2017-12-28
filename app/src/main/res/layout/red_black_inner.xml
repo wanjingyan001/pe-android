@@ -51,7 +51,6 @@
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="50dp"
-        android:text="排名"
         android:gravity="center"
         android:textColor="#FF282828"
         android:textSize="14sp" />
@@ -62,7 +61,6 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="排名"
         android:textColor="#FFA0A4AA"
         android:textSize="14sp" />
 
@@ -72,7 +70,6 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="排名"
         android:textColor="#FFA0A4AA"
         android:textSize="14sp" />
 </LinearLayout>

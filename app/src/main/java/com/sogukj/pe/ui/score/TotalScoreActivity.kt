@@ -46,13 +46,9 @@ class TotalScoreActivity : ToolbarActivity() {
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         payload.payload?.apply {
-                            //1=>尚未完成打分，2=>已完成
+                            //-1=>还未打完分 1=>尚未完成打分，2=>已完成
                             var tag = this.status
-                            if (tag == 1) {
-                                ll_finish.visibility = View.GONE
-                                ll_unfinish.visibility = View.VISIBLE
-                                total.setTag()
-                            } else if (tag == 2) {
+                            if (tag == 2) {
                                 ll_finish.visibility = View.VISIBLE
                                 ll_unfinish.visibility = View.GONE
 
@@ -64,6 +60,13 @@ class TotalScoreActivity : ToolbarActivity() {
 
                                 var timer2 = MyCountDownTimer(1000, 10, single2, resumption!!.toDouble())
                                 timer2.start()
+
+                                var timer3 = MyCountDownTimer(1000, 10, single3, adjust!!.toDouble())
+                                timer3.start()
+                            } else {
+                                ll_finish.visibility = View.GONE
+                                ll_unfinish.visibility = View.VISIBLE
+                                total.setTag()
                             }
                         }
                     } else
@@ -82,17 +85,17 @@ class TotalScoreActivity : ToolbarActivity() {
     class MyCountDownTimer(var millisInFuture: Long, var countDownInterval: Long, var view: View, var score: Double) : CountDownTimer(millisInFuture, countDownInterval) {
         override fun onFinish() {
             if (view is TotalCircleScoreBoard) {
-                (view as TotalCircleScoreBoard).setDate(0, score / 100)
+                (view as TotalCircleScoreBoard).setDate(0, score / 100, (score / 100).toFloat())
             } else {
-                (view as SingleCircleScoreBoard).setDate(0, score / 100)
+                (view as SingleCircleScoreBoard).setDate(0, score / 100, (score / 100).toFloat())
             }
         }
 
         override fun onTick(millisUntilFinished: Long) {
             if (view is TotalCircleScoreBoard) {
-                (view as TotalCircleScoreBoard).setDate(millisUntilFinished.toInt() / 10, score / 100)
+                (view as TotalCircleScoreBoard).setDate(millisUntilFinished.toInt() / 10, score / 100, (score / 100).toFloat())
             } else {
-                (view as SingleCircleScoreBoard).setDate(millisUntilFinished.toInt() / 10, score / 100)
+                (view as SingleCircleScoreBoard).setDate(millisUntilFinished.toInt() / 10, score / 100, (score / 100).toFloat())
             }
         }
     }

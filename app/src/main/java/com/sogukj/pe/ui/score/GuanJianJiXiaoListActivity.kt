@@ -29,8 +29,10 @@ import java.net.UnknownHostException
 class GuanJianJiXiaoListActivity : ToolbarActivity() {
 
     companion object {
-        fun start(ctx: Context?) {
+        // TYPE_TIAOZHENG    TYPE_JIXIAO
+        fun start(ctx: Context?, type: Int) {
             val intent = Intent(ctx, GuanJianJiXiaoListActivity::class.java)
+            intent.putExtra(Extras.TYPE, type)
             ctx?.startActivity(intent)
         }
     }
@@ -38,13 +40,20 @@ class GuanJianJiXiaoListActivity : ToolbarActivity() {
     lateinit var adapter: RecyclerAdapter<GradeCheckBean.ScoreItem>
 
     var currentIndex = 0
+    var type = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_guan_jian_ji_xiao_list)
 
+        type = intent.getIntExtra(Extras.TYPE, 0)
+
         setBack(true)
-        setTitle("关键绩效考核评价")
+        if (type == Extras.TYPE_JIXIAO) {
+            setTitle("关键绩效考核评价")
+        } else {
+            setTitle("调整项考核评价")
+        }
         toolbar?.setBackgroundColor(Color.WHITE)
         toolbar?.apply {
             val title = this.findViewById(R.id.toolbar_title) as TextView?
@@ -153,9 +162,9 @@ class GuanJianJiXiaoListActivity : ToolbarActivity() {
 //                }
 //            }
             if (currentIndex == 0) {
-                RateActivity.start(context, person, false)
+                RateActivity.start(context, person, false, type)
             } else if (currentIndex == 1) {
-                RateActivity.start(context, person, true)
+                RateActivity.start(context, person, true, type)
             }
         }
 

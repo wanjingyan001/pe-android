@@ -33,16 +33,18 @@ class RateActivity : ToolbarActivity() {
          * check_person 被评分人信息
          * isShow-- 是否展示页面  true为展示页面，false是打分界面
          */
-        fun start(ctx: Context?, check_person: GradeCheckBean.ScoreItem, isShow: Boolean) {
+        fun start(ctx: Context?, check_person: GradeCheckBean.ScoreItem, isShow: Boolean, type: Int) {
             val intent = Intent(ctx, RateActivity::class.java)
             intent.putExtra(Extras.DATA, check_person)
             intent.putExtra(Extras.FLAG, isShow)
+            intent.putExtra(Extras.TYPE, type)
             ctx?.startActivity(intent)
         }
     }
 
     lateinit var person: GradeCheckBean.ScoreItem
     var isShow = false
+    var type = 0
 
     lateinit var fragments: Array<BaseFragment>
 
@@ -63,25 +65,27 @@ class RateActivity : ToolbarActivity() {
 
         person = intent.getSerializableExtra(Extras.DATA) as GradeCheckBean.ScoreItem
         isShow = intent.getBooleanExtra(Extras.FLAG, false) // = false 打分界面，true展示界面
+        type = intent.getIntExtra(Extras.TYPE, 0)
 
         //1=>其他模版 2=>风控部模版 3=>投资部模版
-        if (person.type == 3) {
-            fragments = arrayOf(
-                    InvestManageFragment.newInstance(person, isShow)
-            )
-        } else if (person.type == 2) {
-            fragments = arrayOf(
-                    FengKongFragment.newInstance(person, isShow)
-            )
-        } else if (person.type == 1) {
-            fragments = arrayOf(
-                    RateFragment.newInstance(person, isShow)
-            )
-        } else {
-            fragments = arrayOf(
-            )
-        }
+//        if (person.type == 3) {
+//            fragments = arrayOf(
+//                    InvestManageFragment.newInstance(person, isShow)
+//            )
+//        } else if (person.type == 2) {
+//            fragments = arrayOf(
+//                    FengKongFragment.newInstance(person, isShow)
+//            )
+//        } else if (person.type == 1) {
+//            fragments = arrayOf(
+//                    RateFragment.newInstance(person, isShow, type)
+//            )
+//        } else {
+//        }
 
+        fragments = arrayOf(
+                RateFragment.newInstance(person, isShow, type)
+        )
         var adapter = ArrayPagerAdapter(supportFragmentManager, fragments)
         view_pager.adapter = adapter
     }

@@ -8,12 +8,6 @@ class JobPageBean {
     var data: ArrayList<PageItem>? = null
     var groupScore: String? = null//	单人评总分	查看分数时显示
 
-    class PFBZ {
-        var level: String? = null//	评分等级
-        var ss: String? = null//开始分数
-        var es: String? = null//结束分数
-    }
-
     class PageItem {
         var id: String? = null //指标id
         var name: String? = null //指标名

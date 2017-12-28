@@ -1055,4 +1055,18 @@ interface SoguService {
     //岗位胜任力评分|查看评分  可空（若传递则查看评分）
     @POST("/api/grade/showSumScore")
     fun showSumScore(): Observable<Payload<TotalScoreBean>>
+
+    //填写页展示页
+    @POST("/api/grade/showWrite")
+    fun showWrite(): Observable<Payload<TemplateBean>>
+
+    //填写页提交
+    @POST("/api/grade/writeAdd")
+    fun writeAdd(@Body map: HashMap<String, ArrayList<HashMap<String, String>>>): Observable<Payload<Object>>
+
+
+    //关键绩效指标评价  ----非空（1=>绩效，3=>加减项）
+    @FormUrlEncoded
+    @POST("/api/grade/perAppraisal")
+    fun perAppraisal(@Field("user_id") user_id: Int, @Field("type") type: Int): Observable<Payload<NormalItemBean>>
 }

@@ -138,18 +138,12 @@ class UserEditActivity : ToolbarActivity() {
                     .openGallery()
         }
 
-        //0=>未开启  1=>管理层，2=>普通员工，3=>普通员工风控部，4=>普通员工投资部   (3,4都是填写的评分标准)
+        //-1=>隐藏入口 0=>未开启  1=>进入评分中心，2=>进入填写页面
         tr_rate.setOnClickListener {
-            if (TYPE == 0) {
-                return@setOnClickListener
-            } else if (TYPE == 1) {
+            if (TYPE == 1) {
                 LeaderActivity.start(context)
             } else if (TYPE == 2) {
-                GangWeiListActivity.start(context, Extras.TYPE_EMPLOYEE)
-            } else if (TYPE == 3) {
-                FengKongActivity.start(context)
-            } else if (TYPE == 4) {
-                InvestManageActivity.start(context)
+                TemplateActivity.start(context)
             }
         }
     }
@@ -163,7 +157,7 @@ class UserEditActivity : ToolbarActivity() {
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         payload.payload?.apply {
-                            TYPE = this.type as Int //0=>暂未开启  1=>管理层，2=>普通员工，3=>普通员工风控部，4=>普通员工投资部
+                            TYPE = this.type as Int //-1=>隐藏入口 0=>未开启  1=>进入评分中心，2=>进入填写页面
                             if (TYPE == 0) {
                                 tv_rate.text = "暂未开启"
                             }
@@ -173,6 +167,10 @@ class UserEditActivity : ToolbarActivity() {
                             //
                             XmlDb.open(context).set(Extras.QUANXIAN, "${this.is_see}")
                             XmlDb.open(context).set(Extras.RULE, this.rule_url!!)
+
+                            //
+                            XmlDb.open(context).set(Extras.ROLE, "${this.role}")//1=>领导班子 2=>部门负责人 3=>其他员工
+                            XmlDb.open(context).set(Extras.ADJUST, "${this.is_adjust}")//领导班子是否可以显示调整项	1显示 0不显示
                         }
                     } //else
                     //showToast(payload.message)
@@ -186,7 +184,9 @@ class UserEditActivity : ToolbarActivity() {
                 })
     }
 
-    var TYPE = 0   //0=>暂未开启  1=>管理层，2=>普通员工，3=>普通员工风控部，4=>普通员工投资部
+    var TYPE = 0   //-1=>隐藏入口 0=>未开启  1=>进入评分中心，2=>进入填写页面
+    var role = 0  // 1=>领导班子 2=>部门负责人 3=>其他员工
+    var is_adjust = 0// 领导班子是否可以显示调整项	1显示 0不显示
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {

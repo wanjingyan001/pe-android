@@ -4,7 +4,9 @@ package com.sogukj.pe.bean
  * Created by sogubaby on 2017/12/20.
  */
 class TouZiUpload {
+    //zuixin
     var performance_id: Int? = null
+    var actual: String? = null
     //填写页面
     var standard: String? = null  //standard	string		评分标准
     var info: String? = null        //info	string		实际情况

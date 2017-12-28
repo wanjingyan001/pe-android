@@ -62,7 +62,8 @@
             android:gravity="right"
             android:text="基准目标:"
             android:textColor="@color/text_3"
-            android:textSize="@dimen/text_size_samll" />
+            android:textSize="@dimen/text_size_samll"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/desc"

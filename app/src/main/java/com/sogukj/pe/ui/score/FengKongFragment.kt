@@ -107,6 +107,9 @@ class FengKongFragment : BaseFragment() {
                                 tv_socre.text = payload.total as String
                                 btn_commit.visibility = View.GONE
                             }
+                            pfbz?.forEach {
+                                pinfen.add(it)
+                            }
                         }
                     } else
                         showToast(payload.message)
@@ -123,6 +126,7 @@ class FengKongFragment : BaseFragment() {
     var selfCore = 0
     val weight_list = ArrayList<Int>()
     val observable_List = ArrayList<Observable<Int>>()
+    var pinfen = ArrayList<PFBZ>()
 
     inner class ProjectHolderNoTitle(view: View)
         : RecyclerHolder<FKItem.THGL.ItemData>(view) {
@@ -157,7 +161,7 @@ class FengKongFragment : BaseFragment() {
                 judge.setTextSize(16f)
                 judge.setBackgroundDrawable(null)
             } else {
-                var obser = TextViewClickObservable(context, judge, bar)
+                var obser = TextViewClickObservable(context, judge, bar, pinfen)
                 observable_List.add(obser)
 
                 weight_list.add(data.weight?.toInt()!!)
