@@ -97,7 +97,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center|left"
                         android:layout_marginLeft="16dp"
-                        android:text="加分项" />
+                        android:text="扣分项" />
 
                 </LinearLayout>
 

@@ -135,11 +135,11 @@ class RateFragment : BaseFragment() {
                                 add_listview.adapter = add_adapter
 
                                 jf?.forEach {
-                                    jixiao_adapter.dataList.add(it)
+                                    add_adapter.dataList.add(it)
                                 }
-                                jixiao_adapter.notifyDataSetChanged()
+                                add_adapter.notifyDataSetChanged()
 
-                                num += jixiao_adapter.dataList.size
+                                num += add_adapter.dataList.size
 
                                 //
                                 minus_adapter = RecyclerAdapter<NormalItemBean.NormalItem.BeanItem>(context, { _adapter, parent, t ->

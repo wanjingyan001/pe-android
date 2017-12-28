@@ -192,8 +192,14 @@ class GuanJianJiXiaoListActivity : ToolbarActivity() {
 
     override fun onResume() {
         super.onResume()
+        var type111 = 0
+        if (type == Extras.TYPE_JIXIAO) {
+            type111 = 1
+        } else if (type == Extras.TYPE_TIAOZHENG) {
+            type111 = 3
+        }
         SoguApi.getService(application)
-                .check(1)
+                .check(type111)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
