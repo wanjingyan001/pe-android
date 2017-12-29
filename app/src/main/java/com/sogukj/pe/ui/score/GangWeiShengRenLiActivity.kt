@@ -138,14 +138,14 @@ class GangWeiShengRenLiActivity : ToolbarActivity() {
         var bar = convertView.findViewById(R.id.progressBar) as ProgressBar
         var judge = convertView.findViewById(R.id.text) as TextView
         var title = convertView.findViewById(R.id.title) as TextView
-        var sub_title = convertView.findViewById(R.id.subtitle) as TextView
         var desc = convertView.findViewById(R.id.desc) as TextView
-        var lll = convertView.findViewById(R.id.lll) as LinearLayout
+        var jixiao = convertView.findViewById(R.id.jixiao) as LinearLayout
 
         override fun setData(view: View, data: JobPageBean.PageItem, position: Int) {
 
             title.text = data.name
-            lll.visibility = View.GONE
+            desc.visibility = View.GONE
+            jixiao.visibility = View.GONE
             bar.max = data.total_score!!
 
             if (isShow) {

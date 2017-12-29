@@ -106,7 +106,7 @@ class LeaderActivity : ToolbarActivity() {
                 return@setOnClickListener
             }
             isLoading = true
-            if (role == 2) {
+            if (role == 2 || role == 3) {
                 SoguApi.getService(application)
                         .showSumScore()
                         .observeOn(AndroidSchedulers.mainThread())
