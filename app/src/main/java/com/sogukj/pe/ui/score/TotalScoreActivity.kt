@@ -11,7 +11,9 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.framework.base.ToolbarActivity
 import com.google.gson.JsonSyntaxException
+import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.bean.TotalScoreBean
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.SingleCircleScoreBoard
 import com.sogukj.pe.view.TotalCircleScoreBoard
@@ -46,46 +48,29 @@ class TotalScoreActivity : ToolbarActivity() {
             name.text = it.name
         }
 
-        SoguApi.getService(application)
-                .showSumScore()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ payload ->
-                    if (payload.isOk) {
-                        payload.payload?.apply {
-                            //-1=>还未打完分 1=>尚未完成打分，2=>已完成
-                            var tag = this.status
-                            if (tag == 2) {
-                                ll_finish.visibility = View.VISIBLE
-                                ll_unfinish.visibility = View.GONE
+        var data = intent.getSerializableExtra(Extras.DATA) as TotalScoreBean
+        var tag = data.status
+        if (tag == 2) {
+            ll_finish.visibility = View.VISIBLE
+            ll_unfinish.visibility = View.GONE
 
-                                var timer = MyCountDownTimer(1000, 10, total, total_grade!!.toDouble())
-                                timer.start()
+            var timer = MyCountDownTimer(1000, 10, total, data.total_grade!!.toDouble())
+            timer.start()
 
-                                var timer1 = MyCountDownTimer(1000, 10, single1, achieve_check!!.toDouble())
-                                timer1.start()
+            var timer1 = MyCountDownTimer(1000, 10, single1, data.achieve_check!!.toDouble())
+            timer1.start()
 
-                                var timer2 = MyCountDownTimer(1000, 10, single2, resumption!!.toDouble())
-                                timer2.start()
+            var timer2 = MyCountDownTimer(1000, 10, single2, data.resumption!!.toDouble())
+            timer2.start()
 
-                                var timer3 = MyCountDownTimer(1000, 10, single3, adjust!!.toDouble())
-                                timer3.start()
-                            } else {
-                                ll_finish.visibility = View.GONE
-                                ll_unfinish.visibility = View.VISIBLE
-                                total.setTag()
-                            }
-                        }
-                    } else
-                        showToast(payload.message)
-                }, { e ->
-                    Trace.e(e)
-                    when (e) {
-                        is JsonSyntaxException -> showToast("后台数据出错")
-                        is UnknownHostException -> showToast("网络出错")
-                        else -> showToast("未知错误")
-                    }
-                })
+            var timer3 = MyCountDownTimer(1000, 10, single3, data.adjust!!.toDouble())
+            timer3.start()
+        } else {
+            ll_finish.visibility = View.GONE
+            ll_unfinish.visibility = View.VISIBLE
+            total.setTag()
+            showToast("请等待别人打完分")
+        }
     }
 
     //危险，不准确
@@ -108,8 +93,8 @@ class TotalScoreActivity : ToolbarActivity() {
     }
 
     companion object {
-        fun start(ctx: Context?) {
-            ctx?.startActivity(Intent(ctx, TotalScoreActivity::class.java))
+        fun start(ctx: Context?, bean: TotalScoreBean) {
+            ctx?.startActivity(Intent(ctx, TotalScoreActivity::class.java).putExtra(Extras.DATA, bean))
         }
     }
 }

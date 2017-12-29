@@ -8,12 +8,18 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.framework.base.ToolbarActivity
+import com.google.gson.JsonSyntaxException
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.util.Trace
+import com.sogukj.service.SoguApi
 import com.sogukj.util.XmlDb
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_leader.*
 import org.jetbrains.anko.backgroundResource
 import org.jetbrains.anko.textColor
+import java.net.UnknownHostException
 
 class LeaderActivity : ToolbarActivity() {
 
@@ -94,7 +100,7 @@ class LeaderActivity : ToolbarActivity() {
 
         ll_1_right.setOnClickListener {
             if (role == 2) {
-                TotalScoreActivity.start(context)
+                doRequest()
             } else {
                 ScoreDetailActivity.start(context, Extras.TYPE_INTERACT, null)
             }
@@ -124,5 +130,25 @@ class LeaderActivity : ToolbarActivity() {
             RuleActivity.start(context)
         }
 
+    }
+
+    fun doRequest() {
+        SoguApi.getService(application)
+                .showSumScore()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        TotalScoreActivity.start(context, payload.payload!!)
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    when (e) {
+                        is JsonSyntaxException -> showToast("后台数据出错")
+                        is UnknownHostException -> showToast("网络出错")
+                        else -> showToast("未知错误")
+                    }
+                })
     }
 }

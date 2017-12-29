@@ -1052,7 +1052,7 @@ interface SoguService {
     @POST("/api/grade/showJobPage")
     fun showJobPage(@Field("user_id") user_id: Int? = null): Observable<Payload<JobPageBean>>
 
-    //岗位胜任力评分|查看评分  可空（若传递则查看评分）
+    //岗位胜任力评分|查看评分  可空（若传递则查看评分）  -1=>还未打完分 1=>尚未完成打分，2=>已完成
     @POST("/api/grade/showSumScore")
     fun showSumScore(): Observable<Payload<TotalScoreBean>>
 

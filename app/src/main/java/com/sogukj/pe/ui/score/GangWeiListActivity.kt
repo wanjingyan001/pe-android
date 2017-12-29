@@ -234,7 +234,7 @@ class GangWeiListActivity : ToolbarActivity() {
         }
         toolbar_menu.setOnClickListener {
             if (type == Extras.TYPE_EMPLOYEE) {
-                TotalScoreActivity.start(context)
+                //TotalScoreActivity.start(context)
             } else if (type == Extras.TYPE_MANAGE) {
                 ScoreListActivity.start(context)
             }
