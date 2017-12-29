@@ -43,12 +43,19 @@ public class TotalCircleScoreBoard extends View {
     private Bitmap bitmap;
     private Context ctx;
 
+    private Paint outpaint;
+
     private void init(Context context) {
         this.paint = new Paint();
         this.paint.setAntiAlias(true); //消除锯齿
         this.paint.setStyle(Paint.Style.STROKE); //绘制空心圆
         ctx = context;
         bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.bg_red);
+
+        outpaint = new Paint();
+        outpaint.setColor(Color.parseColor("#EA5847"));
+        outpaint.setStyle(Paint.Style.STROKE);//设置画笔类型为STROKE类型（个人感觉是描边的意思）
+        outpaint.setStrokeWidth(Utils.dpToPx(ctx, 4));
     }
 
     @Override
@@ -103,6 +110,12 @@ public class TotalCircleScoreBoard extends View {
         /***********绘制圆弧*************/
         float pad = Utils.dpToPx(ctx, 2);
         RectF rectf_head = new RectF(pad, pad, getWidth() - pad, getHeight() - pad);//确定外切矩形范围
+
+        paint.setColor(Color.parseColor("#ff9b8f"));
+        paint.setStyle(Paint.Style.STROKE);//设置画笔类型为STROKE类型（个人感觉是描边的意思）
+        paint.setStrokeWidth(Utils.dpToPx(ctx, 4));
+
+        canvas.drawArc(rectf_head, 120, 300, false, outpaint);//绘制圆弧，不含圆心
 
         if (tag == "FINISH") {
             canvas.drawArc(rectf_head, 120, 3 * percent * step, false, paint);//绘制圆弧，不含圆心

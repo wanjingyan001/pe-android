@@ -52,7 +52,8 @@
             android:paddingRight="20dp"
             android:text="评分标准"
             android:textColor="#ff808080"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:visibility="gone" />
     </android.support.v7.widget.Toolbar>
 
     <View

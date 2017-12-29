@@ -50,7 +50,8 @@
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:textColor="@color/text_3"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:visibility="gone" />
     </android.support.v7.widget.Toolbar>
 
     <android.support.design.widget.TabLayout

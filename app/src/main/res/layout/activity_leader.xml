@@ -146,6 +146,7 @@
 
 
             <View
+                android:id="@+id/divider1"
                 android:layout_width="match_parent"
                 android:layout_height="8dp"
                 android:background="@drawable/divider2" />
@@ -227,6 +228,7 @@
 
 
             <View
+                android:id="@+id/divider2"
                 android:layout_width="match_parent"
                 android:layout_height="8dp"
                 android:background="@drawable/divider2" />
@@ -309,6 +311,7 @@
 
 
             <View
+                android:id="@+id/divider3"
                 android:layout_width="match_parent"
                 android:layout_height="8dp"
                 android:background="@drawable/divider2" />
@@ -389,6 +392,7 @@
             </LinearLayout>
 
             <View
+                android:id="@+id/divider4"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/divider2" />

@@ -210,7 +210,7 @@ class GangWeiListActivity : ToolbarActivity() {
                             finish = finish_grade!!
                             loadData()
                         }
-                        judgeFinish()
+                        //judgeFinish()
                     } else
                         showToast(payload.message)
                 }, { e ->

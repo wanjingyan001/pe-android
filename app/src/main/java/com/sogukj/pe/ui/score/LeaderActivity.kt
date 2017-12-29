@@ -14,7 +14,6 @@ import com.sogukj.util.XmlDb
 import kotlinx.android.synthetic.main.activity_leader.*
 import org.jetbrains.anko.backgroundResource
 import org.jetbrains.anko.textColor
-import org.w3c.dom.Text
 
 class LeaderActivity : ToolbarActivity() {
 
@@ -52,6 +51,7 @@ class LeaderActivity : ToolbarActivity() {
             ll_3.visibility = View.GONE
             ll_3_left.visibility = View.GONE
             ll_3_right.visibility = View.GONE
+            divider2.visibility = View.GONE
             (ll_1_right.getChildAt(0) as ImageView).backgroundResource = R.drawable.yghpjg
         } else if (role == 2) {
             ll_3.visibility = View.GONE
@@ -61,6 +61,9 @@ class LeaderActivity : ToolbarActivity() {
             ll_4_left.visibility = View.GONE
             ll_4_right.visibility = View.GONE
             ll_2_right.visibility = View.INVISIBLE
+            divider2.visibility = View.GONE
+            divider3.visibility = View.GONE
+            divider4.visibility = View.GONE
             (ll_2_left.getChildAt(1) as TextView).text = "直线上级打分"
             (ll_1_left.getChildAt(1) as TextView).text = "员工互评打分"
             (ll_1_right.getChildAt(1) as TextView).text = "我的分数"
@@ -75,6 +78,10 @@ class LeaderActivity : ToolbarActivity() {
             ll_4.visibility = View.GONE
             ll_4_left.visibility = View.GONE
             ll_4_right.visibility = View.GONE
+            divider1.visibility = View.GONE
+            divider2.visibility = View.GONE
+            divider3.visibility = View.GONE
+            divider4.visibility = View.GONE
             (ll_1_left.getChildAt(1) as TextView).text = "员工互评打分"
             (ll_1_right.getChildAt(1) as TextView).text = "我的分数"
             (ll_1_right.getChildAt(0) as ImageView).backgroundResource = R.drawable.khjg

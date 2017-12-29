@@ -8,14 +8,15 @@ import android.os.CountDownTimer
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.framework.base.ToolbarActivity
 import com.google.gson.JsonSyntaxException
-import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.SingleCircleScoreBoard
 import com.sogukj.pe.view.TotalCircleScoreBoard
 import com.sogukj.service.SoguApi
+import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_total_score.*
@@ -37,6 +38,12 @@ class TotalScoreActivity : ToolbarActivity() {
             val back = this.findViewById(R.id.toolbar_back) as ImageView
             back?.visibility = View.VISIBLE
             back.setImageResource(R.drawable.grey_back)
+        }
+
+        var bean = Store.store.getUser(context)
+        bean?.let {
+            Glide.with(context).load(it.url).into(icon)
+            name.text = it.name
         }
 
         SoguApi.getService(application)

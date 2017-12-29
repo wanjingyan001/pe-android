@@ -127,6 +127,8 @@ class RateFragment : BaseFragment() {
 
                                 ll_add.visibility = View.GONE
                                 ll_minuse.visibility = View.GONE
+
+                                pinfen = pfbz!!
                             } else if (type == Extras.TYPE_TIAOZHENG) {
                                 //
                                 add_adapter = RecyclerAdapter<NormalItemBean.NormalItem.BeanItem>(context, { _adapter, parent, t ->
@@ -157,7 +159,6 @@ class RateFragment : BaseFragment() {
                                 jixiao_list.visibility = View.GONE
                                 hasTitle = true
                             }
-                            pinfen = pfbz!!
                             if (isShown) {
                                 tv_socre.text = payload.total as String
                                 btn_commit.visibility = View.GONE

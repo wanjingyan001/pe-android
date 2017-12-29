@@ -75,6 +75,7 @@ class ScoreListActivity : ToolbarActivity() {
                 var final_score = convertView.findViewById(R.id.final_score) as TextView
                 var finishing_task = convertView.findViewById(R.id.finishing_task) as TextView
                 var kpi = convertView.findViewById(R.id.kpi) as TextView
+                var dengji = convertView.findViewById(R.id.dengji) as TextView
 
                 override fun setData(view: View, data: ScoreBean, position: Int) {
                     tvSeq.text = "${position + 4}"
@@ -83,6 +84,7 @@ class ScoreListActivity : ToolbarActivity() {
                     final_score.text = "最终得分：${data.total_grade}"
                     finishing_task.text = "岗位胜任力评价：${data.resumption}"
                     kpi.text = "关键绩效指标评价：${data.achieve_check}"
+                    dengji.text = data.dengji
                 }
             }
         })
@@ -91,6 +93,15 @@ class ScoreListActivity : ToolbarActivity() {
                 //暂时有问题
                 //ScoreDetailActivity.start(context, Extras.TYPE_LISTITEM, adapter.dataList.get(p))
             }
+        }
+        head_1.setOnClickListener {
+
+        }
+        head_2.setOnClickListener {
+
+        }
+        head_3.setOnClickListener {
+
         }
         val layoutManager = LinearLayoutManager(context)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
@@ -148,6 +159,10 @@ class ScoreListActivity : ToolbarActivity() {
         var name = findViewById(id_name) as TextView
         name.visibility = View.GONE
 
+        var id_dengji = resources.getIdentifier("dengji_" + (index + 1), "id", context.packageName)
+        var dengji = findViewById(id_dengji) as TextView
+        dengji.visibility = View.GONE
+
         var id_final = resources.getIdentifier("final_" + (index + 1), "id", context.packageName)
         var final = findViewById(id_final) as TextView
         final.visibility = View.GONE
@@ -168,6 +183,10 @@ class ScoreListActivity : ToolbarActivity() {
         var id = resources.getIdentifier("head_" + (index + 1), "id", context.packageName)
         var headIcon = findViewById(id) as CircleImageView
         Glide.with(context).load(bean.url).into(headIcon)
+
+        var id_dengji = resources.getIdentifier("dengji_" + (index + 1), "id", context.packageName)
+        var dengji = findViewById(id_dengji) as TextView
+        dengji.text = bean.dengji
 
         var id_name = resources.getIdentifier("name_" + (index + 1), "id", context.packageName)
         var name = findViewById(id_name) as TextView

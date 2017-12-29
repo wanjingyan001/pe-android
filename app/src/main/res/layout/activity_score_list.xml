@@ -55,15 +55,16 @@
                     android:id="@+id/name_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="张丹峰"
                     android:textColor="@color/white"
                     android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/dengji_1"
                     android:layout_width="12dp"
                     android:layout_height="12dp"
                     android:layout_marginLeft="5dp"
-                    android:background="@drawable/oval2_y" />
+                    android:background="@drawable/oval2_y"
+                    android:visibility="invisible" />
 
             </LinearLayout>
 
@@ -72,7 +73,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="最终得分：99.99"
                 android:textColor="#FFFFA69D"
                 android:textSize="14sp" />
 
@@ -81,7 +81,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="KPI考核：83.00"
                 android:textColor="#FFEA796E"
                 android:textSize="8sp" />
 
@@ -91,7 +90,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="4dp"
-                android:text="员工互评得分：83.00"
                 android:textColor="#FFEA796E"
                 android:textSize="8sp" />
 
@@ -137,15 +135,16 @@
                     android:id="@+id/name_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="张丹峰"
                     android:textColor="@color/white"
                     android:textSize="12sp" />
 
                 <TextView
+                    android:id="@+id/dengji_2"
                     android:layout_width="10dp"
                     android:layout_height="10dp"
                     android:layout_marginLeft="5dp"
-                    android:background="@drawable/oval2_y" />
+                    android:background="@drawable/oval2_y"
+                    android:visibility="invisible" />
 
             </LinearLayout>
 
@@ -154,7 +153,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                android:text="最终得分：99.99"
                 android:textColor="#FFFFA69D"
                 android:textSize="12sp" />
 
@@ -163,7 +161,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="KPI考核：83.00"
                 android:textColor="#FFEA796E"
                 android:textSize="6sp" />
 
@@ -173,7 +170,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="4dp"
-                android:text="员工互评得分：83.00"
                 android:textColor="#FFEA796E"
                 android:textSize="6sp" />
 
@@ -219,15 +215,16 @@
                     android:id="@+id/name_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="张丹峰"
                     android:textColor="@color/white"
                     android:textSize="12sp" />
 
                 <TextView
+                    android:id="@+id/dengji_3"
                     android:layout_width="10dp"
                     android:layout_height="10dp"
                     android:layout_marginLeft="5dp"
-                    android:background="@drawable/oval2_y" />
+                    android:background="@drawable/oval2_y"
+                    android:visibility="invisible" />
 
             </LinearLayout>
 
@@ -236,7 +233,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                android:text="最终得分：99.99"
                 android:textColor="#FFFFA69D"
                 android:textSize="12sp" />
 
@@ -245,7 +241,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="KPI考核：83.00"
                 android:textColor="#FFEA796E"
                 android:textSize="6sp" />
 
@@ -255,7 +250,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="4dp"
-                android:text="员工互评得分：83.00"
                 android:textColor="#FFEA796E"
                 android:textSize="6sp" />
 
