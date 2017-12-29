@@ -102,6 +102,10 @@ class LeaderActivity : ToolbarActivity() {
         }
 
         ll_1_right.setOnClickListener {
+            if (isLoading == true) {
+                return@setOnClickListener
+            }
+            isLoading = true
             if (role == 2) {
                 SoguApi.getService(application)
                         .showSumScore()
@@ -116,6 +120,7 @@ class LeaderActivity : ToolbarActivity() {
                                 }
                             } else
                                 showToast(payload.message)
+                            isLoading = false
                         }, { e ->
                             Trace.e(e)
                             when (e) {
@@ -140,6 +145,7 @@ class LeaderActivity : ToolbarActivity() {
                                 }
                             } else
                                 showToast(payload.message)
+                            isLoading = false
                         }, { e ->
                             Trace.e(e)
                             when (e) {
@@ -156,6 +162,10 @@ class LeaderActivity : ToolbarActivity() {
         }
 
         ll_2_right.setOnClickListener {
+            if (isLoading == true) {
+                return@setOnClickListener
+            }
+            isLoading = true
             SoguApi.getService(application)
                     .achievement()
                     .observeOn(AndroidSchedulers.mainThread())
@@ -171,6 +181,7 @@ class LeaderActivity : ToolbarActivity() {
                             }
                         } else
                             showToast(payload.message)
+                        isLoading = false
                     }, { e ->
                         Trace.e(e)
                         when (e) {
@@ -186,6 +197,10 @@ class LeaderActivity : ToolbarActivity() {
         }
 
         ll_4_left.setOnClickListener {
+            if (isLoading == true) {
+                return@setOnClickListener
+            }
+            isLoading = true
             SoguApi.getService(application)
                     .pointRank()
                     .observeOn(AndroidSchedulers.mainThread())
@@ -201,6 +216,7 @@ class LeaderActivity : ToolbarActivity() {
                         } else {
                             showToast(payload.message)
                         }
+                        isLoading = false
                     }, { e ->
                         Trace.e(e)
                         when (e) {
@@ -212,6 +228,10 @@ class LeaderActivity : ToolbarActivity() {
         }
 
         ll_4_right.setOnClickListener {
+            if (isLoading == true) {
+                return@setOnClickListener
+            }
+            isLoading = true
             SoguApi.getService(application)
                     .grade_info()
                     .observeOn(AndroidSchedulers.mainThread())
@@ -226,6 +246,7 @@ class LeaderActivity : ToolbarActivity() {
                             }
                         } else
                             showToast(payload.message)
+                        isLoading = false
                     }, { e ->
                         Trace.e(e)
                         when (e) {
