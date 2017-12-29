@@ -24,7 +24,7 @@
         android:layout_marginRight="20dp"
         android:layout_marginTop="10dp"
         android:background="#FFF7F9FC"
-        android:hint="请填写"
+        android:hint="@string/hint_add_minus"
         android:paddingBottom="8dp"
         android:paddingLeft="10dp"
         android:paddingTop="8dp"

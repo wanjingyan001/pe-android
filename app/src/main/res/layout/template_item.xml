@@ -51,10 +51,10 @@
             android:layout_marginRight="20dp"
             android:layout_marginTop="10dp"
             android:background="#FFF7F9FC"
+            android:hint="请填写"
             android:paddingBottom="8dp"
             android:paddingLeft="10dp"
             android:paddingTop="8dp"
-            android:text="请填写"
             android:textColor="#FF353535"
             android:textSize="14sp" />
 
@@ -77,7 +77,7 @@
             android:layout_marginRight="20dp"
             android:layout_marginTop="10dp"
             android:background="#FFF7F9FC"
-            android:hint="未有投资"
+            android:hint="请填写"
             android:paddingBottom="8dp"
             android:paddingLeft="10dp"
             android:paddingTop="8dp"
