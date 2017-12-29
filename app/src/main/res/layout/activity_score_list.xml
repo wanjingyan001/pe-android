@@ -92,7 +92,6 @@
                 android:id="@+id/kpi_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
                 android:layout_marginTop="4dp"
                 android:textColor="#FFEA796E"
                 android:textSize="8sp" />
@@ -176,7 +175,6 @@
                 android:id="@+id/kpi_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
                 android:layout_marginTop="4dp"
                 android:textColor="#FFEA796E"
                 android:textSize="6sp" />
@@ -232,10 +230,7 @@
                     android:layout_height="10dp"
                     android:layout_marginLeft="5dp"
                     android:background="@drawable/oval2_y"
-                    android:gravity="center"
-                    android:text="A"
-                    android:textColor="#FFFFFFFF"
-                    android:textSize="8sp"
+
                     android:visibility="invisible" />
 
             </LinearLayout>
@@ -260,7 +255,6 @@
                 android:id="@+id/kpi_3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
                 android:layout_marginTop="4dp"
                 android:textColor="#FFEA796E"
                 android:textSize="6sp" />
