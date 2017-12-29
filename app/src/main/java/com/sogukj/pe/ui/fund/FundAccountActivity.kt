@@ -7,6 +7,7 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
+import android.view.View
 import android.widget.TextView
 import com.framework.base.ToolbarActivity
 import com.google.gson.Gson
@@ -20,7 +21,7 @@ import org.jetbrains.anko.find
 
 class FundAccountActivity : ToolbarActivity() {
     private lateinit var adapter: FundAccountAdapter
-    private var map = HashMap<String, String>()
+    private var map = HashMap<String, String?>()
 
     companion object {
         val TAG = FundAccountActivity::class.java.simpleName
@@ -65,14 +66,51 @@ class FundAccountActivity : ToolbarActivity() {
                             map.put("PE已上市项目浮盈/亏", profitLoss)
                             map.put("定增项目浮盈/亏", fixProfit)
                             map.put("估值", valuations)
-                            adapter.setData(map)
-                            val con = contributeSize.toFloat()
-                            val act = actualSize.toFloat()
-                            fund_histogram.setData(floatArrayOf(fundSize.toFloat(), con, act))
-                            fundPie.setDatas(floatArrayOf(RaiseFunds.toFloat(), freeFunds.toFloat()))
-                            progressChart.setData(floatArrayOf(quitAll.toFloat(),quitNum.toFloat(),investedNum.toFloat()))
-                            fund_pie2.setColor(intArrayOf(R.color.fund_deep_blue,R.color.fund_light_blue))
-                            fund_pie2.setDatas(floatArrayOf(investedMoney.toFloat(),fundSize.toFloat()))
+                            if (quitIncome == null
+                                    && investmentAmount == null
+                                    && profitLoss == null
+                                    && fixProfit == null
+                                    && valuations == null) {
+                                accountList.visibility = View.GONE
+                                unit4.visibility = View.GONE
+                            } else {
+                                accountList.visibility = View.VISIBLE
+                                unit4.visibility = View.VISIBLE
+                                adapter.setData(map)
+                            }
+                            if (fundSize == "0" && contributeSize == "0" && actualSize == "0") {
+                                fund_histogram_layout.visibility = View.GONE
+                                empty1.visibility = View.VISIBLE
+                            } else {
+                                fund_histogram_layout.visibility = View.VISIBLE
+                                empty1.visibility = View.GONE
+                                fund_histogram.setData(floatArrayOf(fundSize.toFloat(), contributeSize.toFloat(), actualSize.toFloat()))
+                            }
+                            if (RaiseFunds == "0" && freeFunds == "0") {
+                                fundPie_layout.visibility = View.GONE
+                                empty2.visibility = View.VISIBLE
+                            } else {
+                                fundPie_layout.visibility = View.VISIBLE
+                                empty2.visibility = View.GONE
+                                fundPie.setDatas(floatArrayOf(RaiseFunds.toFloat(), freeFunds.toFloat()))
+                            }
+                            if (quitAll == 0 && quitNum == 0 && investedNum == 0) {
+                                progressChartLayout.visibility = View.GONE
+                                empty3.visibility = View.VISIBLE
+                            } else {
+                                progressChartLayout.visibility = View.VISIBLE
+                                empty3.visibility = View.GONE
+                                progressChart.setData(floatArrayOf(quitAll.toFloat(), quitNum.toFloat(), investedNum.toFloat()))
+                            }
+                            if (investedMoney == "0" && fundSize == "0") {
+                                fund_pie2_layout.visibility = View.GONE
+                                empty4.visibility = View.VISIBLE
+                            } else {
+                                fund_pie2_layout.visibility = View.VISIBLE
+                                empty4.visibility = View.GONE
+                                fund_pie2.setColor(intArrayOf(R.color.fund_deep_blue, R.color.fund_light_blue))
+                                fund_pie2.setDatas(floatArrayOf(investedMoney.toFloat(), fundSize.toFloat()))
+                            }
                         }
                     } else {
                         showToast(payload.message)

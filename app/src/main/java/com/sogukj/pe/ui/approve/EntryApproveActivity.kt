@@ -62,9 +62,9 @@ class EntryApproveActivity : ToolbarActivity() {
             val groupView = inflater.inflate(R.layout.cs_group, null, false) as LinearLayout
             ll_custom.addView(groupView)
             groupView.removeAllViews()
-            val groupDivider = inflater.inflate(R.layout.cs_group_divider, null, false)
-            val groupHeader = inflater.inflate(R.layout.cs_group_header, null, false)
-            groupView.addView(groupDivider)
+//            val groupDivider = inflater.inflate(R.layout.cs_group_divider, null, false) as View
+            val groupHeader = inflater.inflate(R.layout.cs_group_header, null, false) as LinearLayout
+//            groupView.addView(groupDivider)
             groupView.addView(groupHeader)
             val tv_title = groupHeader.findViewById(R.id.tv_title) as TextView
             tv_title.text = spGroupBean.title

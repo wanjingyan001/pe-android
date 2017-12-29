@@ -131,13 +131,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            android:gravity="center_vertical"
+
             android:orientation="horizontal"
             android:padding="20dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:text="我关注的公司"
                 android:textColor="@color/text_1"
                 android:textSize="14sp" />
@@ -146,11 +147,19 @@
                 android:id="@+id/tv_6"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:gravity="right"
                 android:paddingRight="10dp"
                 android:textColor="#bdbdbd"
                 android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/point"
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:src="@drawable/red_point"
+                />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -175,45 +184,119 @@
 
             <TableRow>
 
-                <TextView
-                    android:id="@+id/tv_1"
+                <RelativeLayout
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="0"
-                    android:textColor="@color/text_1"
-                    android:textSize="18sp" />
+                    android:gravity="center">
 
-                <TextView
-                    android:id="@+id/tv_2"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="0"
-                    android:textColor="@color/text_1"
-                    android:textSize="18sp" />
+                    <TextView
+                        android:id="@+id/tv_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="0"
+                        android:textColor="@color/text_1"
+                        android:textSize="18sp" />
 
-                <TextView
-                    android:id="@+id/tv_3"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="0"
-                    android:textColor="@color/text_1"
-                    android:textSize="18sp" />
+                    <ImageView
+                        android:id="@+id/point1"
+                        android:layout_width="6dp"
+                        android:layout_height="6dp"
+                        android:layout_toRightOf="@+id/tv_1"
+                        android:src="@drawable/red_point" />
+                </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/tv_4"
+                <RelativeLayout
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="0"
-                    android:textColor="@color/text_1"
-                    android:textSize="18sp" />
+                    android:gravity="center">
 
-                <TextView
-                    android:id="@+id/tv_5"
+                    <TextView
+                        android:id="@+id/tv_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="0"
+                        android:textColor="@color/text_1"
+                        android:textSize="18sp" />
+
+                    <ImageView
+                        android:id="@+id/point2"
+                        android:layout_width="6dp"
+                        android:layout_height="6dp"
+                        android:layout_toRightOf="@+id/tv_2"
+                        android:src="@drawable/red_point"
+                        />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="0"
-                    android:textColor="@color/text_1"
-                    android:textSize="18sp" />
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/tv_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="0"
+                        android:textColor="@color/text_1"
+                        android:textSize="18sp" />
+
+                    <ImageView
+                        android:id="@+id/point3"
+                        android:layout_width="6dp"
+                        android:layout_height="6dp"
+                        android:layout_toRightOf="@+id/tv_3"
+                        android:src="@drawable/red_point"
+                         />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/tv_4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="0"
+                        android:textColor="@color/text_1"
+                        android:textSize="18sp" />
+
+                    <ImageView
+                        android:id="@+id/point4"
+                        android:layout_width="6dp"
+                        android:layout_height="6dp"
+                        android:layout_toRightOf="@+id/tv_4"
+                        android:src="@drawable/red_point"
+                        />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/tv_5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="0"
+                        android:textColor="@color/text_1"
+                        android:textSize="18sp" />
+
+                    <ImageView
+                        android:id="@+id/point5"
+                        android:layout_width="6dp"
+                        android:layout_height="6dp"
+                        android:layout_toRightOf="@+id/tv_5"
+                        android:src="@drawable/red_point"
+                         />
+                </RelativeLayout>
             </TableRow>
 
             <TableRow>

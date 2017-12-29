@@ -8,16 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.sogukj.pe.R
-import java.util.*
-import kotlin.collections.ArrayList
 
 
 /**
  * Created by admin on 2017/11/24.
  */
-class FundAccountAdapter(val ctx: Context?, val dataList: Map<String, String>) : Adapter<FundAccountAdapter.FundAccountHolder>() {
+class FundAccountAdapter(val ctx: Context?, val dataList: Map<String, String?>) : Adapter<FundAccountAdapter.FundAccountHolder>() {
     private var keyList = ArrayList<String>()
-    private var valueList = ArrayList<String>()
+    private var valueList = ArrayList<String?>()
 
     init {
         val iterator = dataList.entries.iterator()
@@ -40,7 +38,7 @@ class FundAccountAdapter(val ctx: Context?, val dataList: Map<String, String>) :
 
     override fun getItemCount(): Int = dataList.size
 
-    fun setData(dataList: Map<String, String>) {
+    fun setData(dataList: Map<String, String?>) {
         keyList.clear()
         valueList.clear()
         val iterator = dataList.entries.iterator()

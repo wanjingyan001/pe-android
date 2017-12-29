@@ -70,7 +70,7 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
 //            divide1.visibility = View.GONE
 //            divide2.visibility = View.VISIBLE
 //        }
-        divide1.visibility = View.GONE
+        divide1.visibility = View.VISIBLE
         divide2.visibility = View.VISIBLE
 
         ll_shangshi.visibility = if (project.is_volatility == 0) View.GONE else View.VISIBLE

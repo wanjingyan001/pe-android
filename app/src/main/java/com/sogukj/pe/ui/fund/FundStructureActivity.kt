@@ -66,29 +66,37 @@ class FundStructureActivity : ToolbarActivity() {
     }
 
     private fun addEntry(datas: Collection<String>, group: ViewGroup) {
-        for (it in datas) {
-            val entry = layoutInflater.inflate(R.layout.item_fund_structure_list, null)
-            val view = entry.find<TextView>(R.id.list_item_tv)
-            view.text = it
-            val layoutParams: LinearLayout.LayoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-            layoutParams.bottomMargin = Utils.dpToPx(this, 10)
-            group.addView(entry,layoutParams)
+        if (datas.isNotEmpty()) {
+            for (it in datas) {
+                val entry = layoutInflater.inflate(R.layout.item_fund_structure_list, null)
+                val view = entry.find<TextView>(R.id.list_item_tv)
+                view.text = it
+                val layoutParams: LinearLayout.LayoutParams = LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                layoutParams.bottomMargin = Utils.dpToPx(this, 10)
+                group.addView(entry, layoutParams)
+            }
+        } else {
+            empty2.visibility = View.VISIBLE
         }
     }
 
     private fun addEntry1(datas: Collection<String>, group: ViewGroup) {
-        datas.forEachIndexed { index, s ->
-            val entry = layoutInflater.inflate(R.layout.item_fund_structure_list, null)
-            val view = entry.find<TextView>(R.id.list_item_tv)
-            view.text = s
-            view.gravity = Gravity.CENTER
-            val rowSpec: GridLayout.Spec = GridLayout.spec(index / 4, 1f)
-            val columnSpec: GridLayout.Spec = GridLayout.spec(index % 4, 1f)
-            val gridManage: GridLayout.LayoutParams = GridLayout.LayoutParams(rowSpec, columnSpec)
-            gridManage.width = 0
-            gridManage.bottomMargin = Utils.dpToPx(this, 10)
-            group.addView(entry, gridManage)
+        if (datas.isNotEmpty()) {
+            datas.forEachIndexed { index, s ->
+                val entry = layoutInflater.inflate(R.layout.item_fund_structure_list, null)
+                val view = entry.find<TextView>(R.id.list_item_tv)
+                view.text = s
+                view.gravity = Gravity.CENTER
+                val rowSpec: GridLayout.Spec = GridLayout.spec(index / 4, 1f)
+                val columnSpec: GridLayout.Spec = GridLayout.spec(index % 4, 1f)
+                val gridManage: GridLayout.LayoutParams = GridLayout.LayoutParams(rowSpec, columnSpec)
+                gridManage.width = 0
+                gridManage.bottomMargin = Utils.dpToPx(this, 10)
+                group.addView(entry, gridManage)
+            }
+        } else {
+            empty1.visibility = View.VISIBLE
         }
     }
 
@@ -101,13 +109,44 @@ class FundStructureActivity : ToolbarActivity() {
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         payload.payload?.apply {
-                            Log.d(TAG, Gson().toJson(this))
-                            addEntry1(director.split(","), directorList)
-                            addEntry(gd, shareholderList)
-                            adapter.dataList.addAll(bl)
-                            adapter.notifyDataSetChanged()
-                            supervisorName.text = supervisor
-                            totalTv.text = total
+                            if (director == null) {
+                                empty1.visibility = View.VISIBLE
+                            } else {
+                                empty1.visibility = View.GONE
+                                addEntry1(director!!.split(","), directorList)
+                            }
+                            if (gd == null) {
+                                empty2.visibility = View.VISIBLE
+                            } else {
+                                empty2.visibility = View.GONE
+                                addEntry(gd!!, shareholderList)
+                            }
+                            Log.d("WJY", Gson().toJson(payload.payload))
+                            if (bl != null && bl!!.isNotEmpty()) {
+                                blList.visibility = View.VISIBLE
+                                empty5.visibility = View.GONE
+                                adapter.dataList.addAll(bl!!)
+                                adapter.notifyDataSetChanged()
+                            } else {
+                                blList.visibility = View.GONE
+                                empty5.visibility = View.VISIBLE
+                            }
+                            if (supervisor == null) {
+                                supervisorName.visibility = View.GONE
+                                empty3.visibility = View.VISIBLE
+                            } else {
+                                supervisorName.visibility = View.VISIBLE
+                                empty3.visibility = View.GONE
+                                supervisorName.text = supervisor
+                            }
+                            if (total == null) {
+                                totalLayout.visibility = View.GONE
+                                empty4.visibility = View.VISIBLE
+                            } else {
+                                find<LinearLayout>(R.id.totalLayout).visibility = View.VISIBLE
+                                empty4.visibility = View.GONE
+                                totalTv.text = total
+                            }
                         }
                     } else {
                         showToast(payload.message)

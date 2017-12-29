@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.View
 import com.framework.base.BaseFragment
 import com.ldf.calendar.component.CalendarAttr
@@ -63,16 +64,17 @@ class ScheduleFragment : BaseFragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        calendar_view.setViewheight(Utils.dpToPx(context, 270))
+        Log.d("WJY","onViewCreated")
+        calendar_view.setViewheight(Utils.dpToPx(activity.application, 270))
         initCalendarView()
         initList()
-
         selectDate = SimpleDateFormat("yyyy-MM-dd").format(Date(System.currentTimeMillis()))
+        calendarAdapter.notifyDataChanged(CalendarDate())
     }
 
 
     private fun initCalendarView() {
-        val dayView = CustomDayView(context, R.layout.custom_day)
+        val dayView = CustomDayView(activity.applicationContext, R.layout.custom_day)
         calendarAdapter = CalendarViewAdapter(context, object : OnSelectDateListener {
             override fun onSelectDate(date: CalendarDate?) {
                 //选中日期监听

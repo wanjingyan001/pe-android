@@ -11,9 +11,14 @@ import android.support.v7.widget.LinearLayoutManager
 import android.text.Html
 import android.text.InputType
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.Theme
 import com.framework.base.BaseFragment
+import com.google.gson.Gson
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import com.lcodecore.tkrefreshlayout.footer.BallPulseView
@@ -63,7 +68,11 @@ class MainProjectFragment : BaseFragment() {
 
                 override fun setData(view: View, data: ProjectBean, position: Int) {
                     var label = data.name
-                    data.shortName?.apply { label = this }
+                    data.shortName?.apply {
+                        if (this != ""){
+                            label = this
+                        }
+                    }
                     if (!TextUtils.isEmpty(label) && !TextUtils.isEmpty(key)) {
                         label = label!!.replaceFirst(key, "<font color='#ff3300'>${key}</font>")
                     }
@@ -116,14 +125,18 @@ class MainProjectFragment : BaseFragment() {
             }
         })
         hisAdapter = RecyclerAdapter<String>(baseActivity!!, { _adapter, parent, type ->
-            val convertView = _adapter.getView(R.layout.item_main_project_search, parent) as View
+            val convertView = _adapter.getView(R.layout.item_project_search_item, parent) as View
             object : RecyclerHolder<String>(convertView) {
                 val tv1 = convertView.findViewById(R.id.tv1) as TextView
-                val tv2 = convertView.findViewById(R.id.tv2) as TextView
-                val tv3 = convertView.findViewById(R.id.tv3) as TextView
+                val delete = convertView.findViewById(R.id.delete) as ImageView
 
                 override fun setData(view: View, data: String, position: Int) {
                     tv1.text = data
+                    delete.setOnClickListener {
+                        hisAdapter.dataList.removeAt(position)
+                        hisAdapter.notifyDataSetChanged()
+                        Store.store.projectSearchRemover(baseActivity!!, position)
+                    }
                 }
 
             }
@@ -175,37 +188,51 @@ class MainProjectFragment : BaseFragment() {
 //        iv_focus.setOnClickListener {
 //            ProjectFocusActivity.start(baseActivity)
 //        }
-        search_view.onTextChange = { text ->
-            if (TextUtils.isEmpty(text)) {
-                ll_history.visibility = View.VISIBLE
-            } else {
-                offset = 0
-                handler.removeCallbacks(searchTask)
-                handler.postDelayed(searchTask, 100)
-            }
-        }
+        //不做实时查询,只有点击软键盘上的查询时才进行查询
+//        search_view.onTextChange = { text ->
+//            if (TextUtils.isEmpty(text)) {
+//                ll_history.visibility = View.VISIBLE
+//            } else {
+//                offset = 0
+//                handler.removeCallbacks(searchTask)
+//                handler.postDelayed(searchTask, 100)
+//            }
+//        }
+
+
         search_view.tv_cancel.visibility = View.VISIBLE
+        val search = Store.store.projectSearch(baseActivity!!)
+
+
         search_view.tv_cancel.setOnClickListener {
             this.key = ""
             search_view.search = ""
             ll_search.visibility = View.GONE
 
             hisAdapter.dataList.clear()
-            hisAdapter.dataList.addAll(Store.store.projectSearch(baseActivity!!))
+            hisAdapter.dataList.addAll(search)
             hisAdapter.notifyDataSetChanged()
             ll_history.visibility = View.VISIBLE
         }
         iv_clear.setOnClickListener {
-            Store.store.projectSearchClear(baseActivity!!)
-            hisAdapter.dataList.clear()
-            hisAdapter.dataList.addAll(Store.store.projectSearch(baseActivity!!))
-            hisAdapter.notifyDataSetChanged()
+            MaterialDialog.Builder(activity)
+                    .theme(Theme.LIGHT)
+                    .title("提示")
+                    .content("确认全部删除?")
+                    .positiveText("确认")
+                    .negativeText("取消")
+                    .onPositive { dialog, which ->
+                        Store.store.projectSearchClear(baseActivity!!)
+                        hisAdapter.dataList.clear()
+                        hisAdapter.notifyDataSetChanged()
+                        last_search_layout.visibility = View.GONE
+                    }
+                    .show()
         }
         search_view.onSearch = { text ->
             if (null != text && !TextUtils.isEmpty(text))
                 doSearch(text!!)
         }
-
 
         fb_add.setOnClickListener {
             if (view_pager.currentItem == 0) {
@@ -223,6 +250,11 @@ class MainProjectFragment : BaseFragment() {
                 et_search.requestFocus()
                 Utils.toggleSoftInput(baseActivity, et_search)
             }, 100)
+            if (Store.store.projectSearch(baseActivity!!).isEmpty()) {
+                last_search_layout.visibility = View.GONE
+            } else {
+                last_search_layout.visibility = View.VISIBLE
+            }
         }
         var adapter = ArrayPagerAdapter(childFragmentManager, fragments)
         view_pager.adapter = adapter
@@ -259,7 +291,7 @@ class MainProjectFragment : BaseFragment() {
 
         })
         hisAdapter.dataList.clear()
-        hisAdapter.dataList.addAll(Store.store.projectSearch(baseActivity!!))
+        hisAdapter.dataList.addAll(search)
         hisAdapter.notifyDataSetChanged()
 
 
@@ -309,11 +341,12 @@ class MainProjectFragment : BaseFragment() {
         tmplist.add(text)
         Store.store.projectSearch(baseActivity!!, tmplist)
         SoguApi.getService(baseActivity!!.application)
-                .listProject(offset = offset, pageSize = 20, uid = user?.uid, type = 0, fuzzyQuery = text)
+                .listProject(offset = offset, pageSize = 20, uid = user?.uid, type = type, fuzzyQuery = text)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
+                        Log.d("WJY", Gson().toJson(payload.payload))
                         payload?.apply {
                             tv_result_title.text = Html.fromHtml(getString(R.string.tv_title_result_project, (total as Double).toInt()))
                         }
@@ -337,20 +370,15 @@ class MainProjectFragment : BaseFragment() {
                     hisAdapter.dataList.clear()
                     hisAdapter.dataList.addAll(Store.store.projectSearch(baseActivity!!))
                     hisAdapter.notifyDataSetChanged()
-
+                    if (Store.store.projectSearch(baseActivity!!).isEmpty()) {
+                        last_search_layout.visibility = View.GONE
+                    } else {
+                        last_search_layout.visibility = View.VISIBLE
+                    }
 
                 })
     }
 
-
-    fun setCurrentItem(position: Int) {
-        handler.postDelayed({
-            if (view_pager !== null) {
-                view_pager.currentItem = position
-            }
-        }, 200
-        )
-    }
 
     companion object {
         val TAG = MainProjectFragment::class.java.simpleName
