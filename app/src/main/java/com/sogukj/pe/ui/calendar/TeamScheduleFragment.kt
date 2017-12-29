@@ -74,13 +74,14 @@ class TeamScheduleFragment : BaseFragment(), ScheduleItemClickListener {
         initCalendarView()
         initList()
         selectDate = SimpleDateFormat("yyyy-MM-dd").format(Date(System.currentTimeMillis()))
+        calendarAdapter.notifyDataChanged(CalendarDate())
         doRequest(page, selectDate)
     }
 
 
     private fun initCalendarView() {
-        calendar_view.setViewheight(Utils.dpToPx(context, 270))
-        val dayView = CustomDayView(context, R.layout.custom_day)
+        calendar_view.setViewheight(Utils.dpToPx(activity.application, 270))
+        val dayView = CustomDayView(activity.applicationContext, R.layout.custom_day)
         calendarAdapter = CalendarViewAdapter(context, object : OnSelectDateListener {
             override fun onSelectDate(date: CalendarDate?) {
                 //选中日期监听

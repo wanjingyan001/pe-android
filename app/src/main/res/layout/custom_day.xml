@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/date"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="2dp"
         android:background="@drawable/view_syllabus_mark_bg" />
 
 </RelativeLayout>

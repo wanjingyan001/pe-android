@@ -15,6 +15,8 @@ import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.Theme
 import com.framework.base.BaseActivity
 import com.google.gson.Gson
 import com.sogukj.pe.Extras
@@ -31,7 +33,6 @@ import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_shareholder_credit.*
-import kotlinx.android.synthetic.main.layout_shareholder_toolbar.*
 import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.find
 import org.jetbrains.anko.textColor
@@ -56,7 +57,6 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shareholder_credit)
-        Utils.setWindowStatusBarColor(this, R.color.white)
         bean = intent.getSerializableExtra(Extras.DATA) as ProjectBean
         cardCompanyName.text = bean.name
         toolbar_title.text = "征信"
@@ -123,14 +123,28 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
                                     }
                                 }
                             }
-                            directorsAdapter.notifyDataSetChanged()
-                            shareholderAdapter.notifyDataSetChanged()
+
                         } else {
                             showToast(payload.message)
                         }
                     }, { e ->
                         Log.e(TAG, e.message)
                         Trace.e(e)
+                    }, {
+                        if (directorsAdapter.dataList.isEmpty()) {
+                            empty1.visibility = View.VISIBLE
+                        } else {
+                            empty1.visibility = View.GONE
+                            directorsAdapter.notifyDataSetChanged()
+                        }
+                        if (shareholderAdapter.dataList.isEmpty()) {
+                            empty2.visibility = View.VISIBLE
+                        } else {
+                            empty2.visibility = View.GONE
+                            shareholderAdapter.notifyDataSetChanged()
+                        }
+                        inquireBtn.isEnabled = !(directorsAdapter.dataList.isEmpty()
+                                && shareholderAdapter.dataList.isEmpty())
                     })
         }
     }
@@ -172,7 +186,9 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
         @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
         @SuppressLint("SetTextI18n", "ResourceType")
         override fun setData(view: View, data: CreditInfo.Item, position: Int) {
-            var changeAble = true
+            phoneNumberEdt.visibility = View.GONE
+            IDCardEdt.visibility = View.GONE
+
             directorName.text = data.name
             if (data.position.isEmpty()) {
                 directorPosition.text = "股东"
@@ -182,35 +198,27 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
             if (data.idCard != null) {
                 data.idCard?.let {
                     if (it.isEmpty()) {
-                        IDCardEdt.hint = "点击填写"
-                        IDCardEdt.visibility = View.VISIBLE
-                        IDCardTv.visibility = View.GONE
+                        IDCardTv.hint = "点击填写"
                     } else {
-                        IDCardEdt.visibility = View.GONE
-                        IDCardTv.visibility = View.VISIBLE
                         IDCardTv.text = it
                     }
                 }
             }
             when (data.status) {
                 0 -> {
-                    changeAble = true
                     inquireStatus.text = "信息待填写"
                     inquireStatus.textColor = Color.parseColor("#ffa715")
                 }
                 1 -> {
-                    changeAble = false
                     inquireStatus.text = "查询中"
                     inquireStatus.textColor = Color.parseColor("#608cf8")
 
                 }
                 2 -> {
-                    changeAble = true
                     inquireStatus.text = "查询完成"
                     inquireStatus.textColor = Color.parseColor("#50d59d")
                 }
                 3 -> {
-                    changeAble = true
                     inquireStatus.text = "查询失败"
                     inquireStatus.textColor = Color.parseColor("#f7b62b")
                 }
@@ -219,19 +227,9 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
             if (data.phone != null) {
                 data.phone?.let {
                     if (it.isEmpty()) {
-                        phoneNumberEdt.hint = "点击填写"
-                        phoneNumberEdt.visibility = View.VISIBLE
-                        phoneNumberTv.visibility = View.GONE
+                        phoneNumberTv.hint = "点击填写"
                     } else {
-                        if (changeAble) {
-                            phoneNumberEdt.visibility = View.VISIBLE
-                            phoneNumberTv.visibility = View.GONE
-                            phoneNumberEdt.setText(it)
-                        } else {
-                            phoneNumberEdt.visibility = View.GONE
-                            phoneNumberTv.visibility = View.VISIBLE
-                            phoneNumberTv.text = it
-                        }
+                        phoneNumberTv.text = it
                     }
                 }
             }
@@ -264,7 +262,78 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
                     sensitiveNews.visibility = View.GONE
                 }
             }
-            saveReqBean(data, inquireStatus)
+            phoneNumberTv.setOnClickListener {
+                val phoneEdt = EditText(this@ShareholderCreditActivity)
+                phoneEdt.background = null
+                phoneEdt.setText(phoneNumberTv.text)
+                val i = Utils.dpToPx(this@ShareholderCreditActivity, 24)
+                phoneEdt.setPadding(i, 0, 0, i)
+                phoneEdt.textColor = Color.parseColor("#282828")
+                phoneEdt.setSelection(phoneNumberTv.text.length)
+                MaterialDialog.Builder(this@ShareholderCreditActivity)
+                        .title("修改手机号")
+                        .theme(Theme.LIGHT)
+                        .customView(phoneEdt, false)
+                        .onPositive { dialog, which ->
+                            val phone = phoneEdt.text.toString()
+                            if (Utils.isMobileExact(phone)) {
+                                if (phone != phoneNumberTv.text) {
+                                    inquireBtn.isEnabled = true
+                                    inquireBtn.text = "一键查询"
+                                    data.isChange = true
+                                }
+                                if (data.isChange) {
+                                    inquireStatus.text = "待查询"
+                                    inquireStatus.textColor = Color.parseColor("#ffa715")
+                                }
+                                phoneNumberTv.text = phone
+                                Utils.closeInput(this@ShareholderCreditActivity, phoneEdt)
+                                dialog.dismiss()
+                            } else {
+                                phoneEdt.setText("")
+                                showToast("请输入正确的手机号")
+                            }
+                        }
+                        .positiveText("确定")
+                        .negativeText("取消")
+                        .show()
+            }
+            IDCardTv.setOnClickListener {
+                val idEdt = EditText(this@ShareholderCreditActivity)
+                idEdt.background = null
+                idEdt.setText(IDCardTv.text)
+                val i = Utils.dpToPx(this@ShareholderCreditActivity, 24)
+                idEdt.setPadding(i, 0, 0, i)
+                idEdt.textColor = Color.parseColor("#282828")
+                idEdt.setSelection(IDCardTv.text.length)
+                MaterialDialog.Builder(this@ShareholderCreditActivity)
+                        .title("修改身份证号")
+                        .theme(Theme.LIGHT)
+                        .customView(idEdt, false)
+                        .onPositive { dialog, which ->
+                            val idCard = idEdt.text.toString()
+                            if (Utils.isIDCard18(idCard)) {
+                                if (IDCardTv.text != idCard) {
+                                    inquireBtn.isEnabled = true
+                                    inquireBtn.text = "一键查询"
+                                    data.isChange = true
+                                }
+                                if (data.isChange) {
+                                    inquireStatus.text = "待查询"
+                                    inquireStatus.textColor = Color.parseColor("#ffa715")
+                                }
+                                Utils.closeInput(this@ShareholderCreditActivity, idEdt)
+                                IDCardTv.text = idCard
+                            } else {
+                                idEdt.setText("")
+                                showToast("请输入正确的身份证号")
+                            }
+                        }
+                        .positiveText("确定")
+                        .negativeText("取消")
+                        .show()
+            }
+//            saveReqBean(data, inquireStatus)
         }
 
         /**

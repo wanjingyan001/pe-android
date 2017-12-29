@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DividerItemDecoration
@@ -170,13 +171,8 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
         super.setUserVisibleHint(isVisibleToUser)
         if (isVisibleToUser == true && isViewCreated == true) {
             Log.e("setUserVisibleHint", "${type}")
-
+            doRequest()
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        doRequest()
     }
 
     override fun onDestroyView() {
@@ -450,34 +446,32 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
             } else if (type == TYPE_DY) {
                 tv_pingjia.visibility = View.GONE
             }
-            if (type == TYPE_CB) {
-                //convertView.findViewById(R.id.suffix).visibility = View.VISIBLE
-                if (data.is_business == 1) {
-                    tv4.text = "有商业价值"
-                } else if (data.is_business == 2) {
-                    tv4.text = "无商业价值"
-                }
+            //convertView.findViewById(R.id.suffix).visibility = View.VISIBLE
+            if (data.is_business == 1) {
+                tv4.text = "有商业价值"
+            } else if (data.is_business == 2) {
+                tv4.text = "无商业价值"
+            }
 
-                if (data.is_ability == 1) {
-                    tv5.text = "创始人靠谱"
-                } else if (data.is_ability == 2) {
-                    tv5.text = "创始人不靠谱"
-                }
+            if (data.is_ability == 1) {
+                tv5.text = "创始人靠谱"
+            } else if (data.is_ability == 2) {
+                tv5.text = "创始人不靠谱"
+            }
 
-                if (data.is_business == null && data.is_ability == null) {
-                    tv_pingjia.visibility = View.GONE
+            if (data.is_business == null && data.is_ability == null) {
+                tv_pingjia.visibility = View.GONE
+            } else {
+                tv_pingjia.visibility = View.VISIBLE
+                if (data.is_business == null) {
+                    tv4.visibility = View.GONE
                 } else {
-                    tv_pingjia.visibility = View.VISIBLE
-                    if (data.is_business == null) {
-                        tv4.visibility = View.GONE
-                    } else {
-                        tv4.visibility = View.VISIBLE
-                    }
-                    if (data.is_ability == null) {
-                        tv5.visibility = View.GONE
-                    } else {
-                        tv5.visibility = View.VISIBLE
-                    }
+                    tv4.visibility = View.VISIBLE
+                }
+                if (data.is_ability == null) {
+                    tv5.visibility = View.GONE
+                } else {
+                    tv5.visibility = View.VISIBLE
                 }
             }
         }
@@ -566,7 +560,12 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                 else -> data.next_time
             }
 
-            if (tv2.text.isNullOrEmpty()) tv2.text = "--"
+            if (tv2.text.isNullOrEmpty()) {
+                tv2.text = "--"
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    tv2.background = null
+                }
+            }
             if (tv3.text.isNullOrEmpty()) tv3.text = "--"
 
             if (data.is_business == 1) {
@@ -576,9 +575,9 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
             }
 
             if (data.is_ability == 1) {
-                tv5.text = "创始人有能力"
+                tv5.text = "创始人靠谱"
             } else if (data.is_ability == 2) {
-                tv5.text = "创始人无能力"
+                tv5.text = "创始人不靠谱"
             }
 
             if (data.is_business == null && data.is_ability == null) {

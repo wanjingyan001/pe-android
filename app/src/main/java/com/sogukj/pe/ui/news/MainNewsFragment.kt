@@ -10,8 +10,11 @@ import android.text.Html
 import android.text.InputType
 import android.text.TextUtils
 import android.view.View
+import android.widget.ImageView
 import android.widget.RadioGroup
 import android.widget.TextView
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
 import com.framework.base.BaseFragment
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
@@ -103,16 +106,18 @@ class MainNewsFragment : BaseFragment() {
             }
         })
         hisAdapter = RecyclerAdapter<String>(baseActivity!!, { _adapter, parent, type ->
-            val convertView = _adapter.getView(R.layout.item_main_project_search, parent) as View
+            val convertView = _adapter.getView(R.layout.item_project_search_item, parent) as View
             object : RecyclerHolder<String>(convertView) {
                 val tv1 = convertView.findViewById(R.id.tv1) as TextView
-                val tv2 = convertView.findViewById(R.id.tv2) as TextView
-                val tv3 = convertView.findViewById(R.id.tv3) as TextView
-
+                val delete = convertView.findViewById(R.id.delete) as ImageView
                 override fun setData(view: View, data: String, position: Int) {
                     tv1.text = data
+                    delete.setOnClickListener {
+                        hisAdapter.dataList.removeAt(position)
+                        hisAdapter.notifyDataSetChanged()
+                        Store.store.newsSearchRemover(baseActivity!!, position)
+                    }
                 }
-
             }
         })
         run {
@@ -158,15 +163,16 @@ class MainNewsFragment : BaseFragment() {
         iv_add.setOnClickListener {
             ProjectAddActivity.startAdd(baseActivity)
         }
-        search_view.onTextChange = { text ->
-            if (TextUtils.isEmpty(text)) {
-                ll_history.visibility = View.VISIBLE
-            } else {
-                page = 1
-                handler.removeCallbacks(searchTask)
-                handler.postDelayed(searchTask, 100)
-            }
-        }
+        //不做实时查询,只有点击软键盘上的查询时才进行查询
+//        search_view.onTextChange = { text ->
+//            if (TextUtils.isEmpty(text)) {
+//                ll_history.visibility = View.VISIBLE
+//            } else {
+//                page = 1
+//                handler.removeCallbacks(searchTask)
+//                handler.postDelayed(searchTask, 100)
+//            }
+//        }
         search_view.tv_cancel.visibility = View.VISIBLE
         search_view.tv_cancel.setOnClickListener {
             this.key = ""
@@ -179,10 +185,20 @@ class MainNewsFragment : BaseFragment() {
             ll_history.visibility = View.VISIBLE
         }
         iv_clear.setOnClickListener {
-            Store.store.newsSearchClear(baseActivity!!)
-            hisAdapter.dataList.clear()
-            hisAdapter.dataList.addAll(Store.store.newsSearch(baseActivity!!))
-            hisAdapter.notifyDataSetChanged()
+            MaterialDialog.Builder(activity)
+                    .theme(Theme.LIGHT)
+                    .title("提示")
+                    .content("确认全部删除?")
+                    .positiveText("确认")
+                    .negativeText("取消")
+                    .onPositive { dialog, which ->
+                        Store.store.newsSearchClear(baseActivity!!)
+                        hisAdapter.dataList.clear()
+                        hisAdapter.dataList.addAll(Store.store.newsSearch(baseActivity!!))
+                        hisAdapter.notifyDataSetChanged()
+                        last_search_layout.visibility = View.GONE
+                    }
+                    .show()
         }
         search_view.onSearch = { text ->
             if (null != text && !TextUtils.isEmpty(text))
@@ -197,6 +213,11 @@ class MainNewsFragment : BaseFragment() {
                 et_search.requestFocus()
                 Utils.toggleSoftInput(baseActivity, et_search)
             }, 100)
+            if (Store.store.newsSearch(baseActivity!!).isEmpty()) {
+                last_search_layout.visibility = View.GONE
+            } else {
+                last_search_layout.visibility = View.VISIBLE
+            }
         }
         var adapter = ArrayPagerAdapter(childFragmentManager, fragments)
         view_pager.adapter = adapter
@@ -226,8 +247,9 @@ class MainNewsFragment : BaseFragment() {
             }
 
         })
+        val search = Store.store.newsSearch(baseActivity!!)
         hisAdapter.dataList.clear()
-        hisAdapter.dataList.addAll(Store.store.newsSearch(baseActivity!!))
+        hisAdapter.dataList.addAll(search)
         hisAdapter.notifyDataSetChanged()
         ll_history.visibility = View.VISIBLE
 
@@ -253,6 +275,8 @@ class MainNewsFragment : BaseFragment() {
         })
         refresh.setAutoLoadMore(true)
     }
+
+
 
     val searchTask = Runnable {
         doSearch(search_view.search)

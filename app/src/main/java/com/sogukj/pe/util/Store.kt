@@ -2,6 +2,7 @@ package com.sogukj.util
 
 import android.content.Context
 import android.text.TextUtils
+import android.util.Log
 import com.google.gson.Gson
 import com.sogukj.pe.bean.UserBean
 import java.util.*
@@ -60,6 +61,13 @@ class Store private constructor() {
         return resultNews
     }
 
+    fun newsSearchRemover(ctx: Context, position: Int){
+        if (position<resultNews.size){
+            resultNews.removeAt(position)
+            XmlDb.open(ctx).set("his.news", GSON.toJson(this.resultNews.toArray()))
+        }
+    }
+
     private val resultProject = LinkedList<String>()
     fun projectSearch(ctx: Context): Collection<String> {
         this.resultProject.clear()
@@ -77,7 +85,8 @@ class Store private constructor() {
     }
 
     fun projectSearch(ctx: Context, resultProject: Collection<String>): Collection<String> {
-        if (resultProject.size > 0)
+        Log.d("WJY", "resultProject:${resultProject.size}")
+        if (resultProject.isNotEmpty())
             for (info in resultProject) {
                 if (!this.resultProject.contains(info)) this.resultProject.addFirst(info)
             }
@@ -91,6 +100,13 @@ class Store private constructor() {
     fun projectSearchClear(ctx: Context): Collection<String> {
         XmlDb.open(ctx).set("his.project", "[]")
         return resultProject
+    }
+
+    fun projectSearchRemover(ctx: Context, position: Int) {
+        if (position < resultProject.size) {
+            resultProject.removeAt(position)
+            XmlDb.open(ctx).set("his.project", GSON.toJson(this.resultProject.toArray()))
+        }
     }
 
     var readList = HashSet<String>();
@@ -170,7 +186,7 @@ class Store private constructor() {
         XmlDb.open(ctx).set("fund.search", GSON.toJson(this.fundSearchList.toArray()))
     }
 
-    fun clearFundSearch(ctx: Context){
+    fun clearFundSearch(ctx: Context) {
         fundSearchList.clear()
         XmlDb.open(ctx).set("fund.search", GSON.toJson(this.fundSearchList.toArray()))
     }

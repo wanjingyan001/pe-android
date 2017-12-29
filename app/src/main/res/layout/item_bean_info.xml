@@ -80,6 +80,8 @@
         android:layout_marginRight="10dp"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="10dp"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:layout_toLeftOf="@+id/right_arrow"
         android:text="完成对同花顺的立项尽调完成完成完..."
         android:textColor="@color/text_1"

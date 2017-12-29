@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/project_main_layout3"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/project_main_layout3"
     android:background="@drawable/bg_item_list"
     android:orientation="vertical">
 
@@ -14,6 +14,13 @@
         android:orientation="horizontal"
         android:paddingLeft="20dp"
         android:paddingRight="20dp">
+
+        <ImageView
+            android:id="@+id/point"
+            android:layout_width="6dp"
+            android:layout_height="6dp"
+            android:src="@drawable/red_point"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tv_title"

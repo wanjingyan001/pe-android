@@ -157,11 +157,12 @@
 
                     <TextView
                         style="@style/ItemTextLabel"
-                        android:text="公司名称" />
+                        android:text="公司名称(必填)" />
 
                     <EditText
                         android:id="@+id/et_name"
-                        style="@style/ItemTextValue" />
+                        style="@style/ItemTextValue"
+                        android:hint="请输入公司全称"/>
                 </TableRow>
 
                 <TableRow

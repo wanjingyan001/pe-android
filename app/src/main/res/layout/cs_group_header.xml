@@ -2,20 +2,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:padding="10dp">
+    android:orientation="vertical">
 
-    <View
-        android:layout_width="5dp"
+    <View xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
         android:layout_height="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@color/color_main" />
+        android:background="@color/divider2" />
 
-    <TextView
-        android:id="@+id/tv_title"
-        style="@style/SoguTextNormal"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="出勤休假" />
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <View
+            android:layout_width="5dp"
+            android:layout_height="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/color_main" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            style="@style/SoguTextNormal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="出勤休假" />
+    </LinearLayout>
+
 </LinearLayout>

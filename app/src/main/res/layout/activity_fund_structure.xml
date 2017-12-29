@@ -19,20 +19,23 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:background="@color/bg_record" />
 
             <TextView
                 android:id="@+id/fundCompanyName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="20dp"
-                android:paddingTop="25dp"
                 android:textColor="@color/text_1"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
                 android:orientation="vertical"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp">
@@ -49,6 +52,36 @@
 
                 </android.support.v7.widget.GridLayout>
 
+                <LinearLayout
+                    android:id="@+id/empty1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingBottom="20dp"
+                    android:paddingTop="20dp"
+                    android:visibility="gone">
+
+                    <View
+                        android:layout_width="80dp"
+                        android:layout_height="1dp"
+                        android:background="@color/divider2" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:text="暂无数据"
+                        android:textColor="#dcdee6"
+                        android:textSize="14sp" />
+
+                    <View
+                        android:layout_width="80dp"
+                        android:layout_height="1dp"
+                        android:background="@color/divider2" />
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -72,6 +105,36 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/empty2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingBottom="20dp"
+                    android:paddingTop="20dp"
+                    android:visibility="gone">
+
+                    <View
+                        android:layout_width="80dp"
+                        android:layout_height="1dp"
+                        android:background="@color/divider2" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:text="暂无数据"
+                        android:textColor="#dcdee6"
+                        android:textSize="14sp" />
+
+                    <View
+                        android:layout_width="80dp"
+                        android:layout_height="1dp"
+                        android:background="@color/divider2" />
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -94,12 +157,48 @@
                     android:textColor="@color/text_1"
                     android:textSize="@dimen/text_size_medium" />
 
+                <LinearLayout
+                    android:id="@+id/empty3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingBottom="20dp"
+                    android:paddingTop="20dp"
+                    android:visibility="gone">
+
+                    <View
+                        android:layout_width="80dp"
+                        android:layout_height="1dp"
+                        android:background="@color/divider2" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:text="暂无数据"
+                        android:textColor="#dcdee6"
+                        android:textSize="14sp" />
+
+                    <View
+                        android:layout_width="80dp"
+                        android:layout_height="1dp"
+                        android:background="@color/divider2" />
+                </LinearLayout>
             </LinearLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_marginTop="30dp"
+                android:background="@color/bg_record" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="38dp"
-                android:layout_marginTop="30dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -119,18 +218,19 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <android.support.v7.widget.CardView
+            <LinearLayout
+                android:id="@+id/totalLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="15dp">
+                android:layout_height="90dp"
+                android:background="@drawable/card_bg">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:paddingBottom="15dp"
-                    android:paddingLeft="20dp"
-                    android:paddingTop="15dp">
+                    android:paddingLeft="30dp"
+                    android:paddingTop="20dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -148,12 +248,48 @@
                         android:textSize="14sp" />
 
                 </LinearLayout>
-            </android.support.v7.widget.CardView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/empty4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingBottom="20dp"
+                android:paddingTop="20dp"
+                android:visibility="gone">
+
+                <View
+                    android:layout_width="80dp"
+                    android:layout_height="1dp"
+                    android:background="@color/divider2" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:text="暂无数据"
+                    android:textColor="#dcdee6"
+                    android:textSize="14sp" />
+
+                <View
+                    android:layout_width="80dp"
+                    android:layout_height="1dp"
+                    android:background="@color/divider2" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_marginTop="25dp"
+                android:background="@color/bg_record" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="38dp"
-                android:layout_marginTop="25dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -176,9 +312,42 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/blList"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:paddingBottom="70dp">
 
             </android.support.v7.widget.RecyclerView>
+
+            <LinearLayout
+                android:id="@+id/empty5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="48dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingBottom="20dp"
+                android:paddingTop="20dp"
+                android:visibility="gone">
+
+                <View
+                    android:layout_width="80dp"
+                    android:layout_height="1dp"
+                    android:background="@color/divider2" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:text="暂无数据"
+                    android:textColor="#dcdee6"
+                    android:textSize="14sp" />
+
+                <View
+                    android:layout_width="80dp"
+                    android:layout_height="1dp"
+                    android:background="@color/divider2" />
+            </LinearLayout>
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
