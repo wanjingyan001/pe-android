@@ -16,5 +16,5 @@ class ScoreBean : Serializable {
     var user_id: Int? = null  // 被评论人id
 
 
-    var dengji: String? = null//   最终得分
+    var level: String? = null//   最终得分
 }

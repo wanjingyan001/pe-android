@@ -211,7 +211,6 @@ class GangWeiListActivity : ToolbarActivity() {
                             finish = finish_grade!!
                             loadData()
                         }
-                        //judgeFinish()
                     } else
                         showToast(payload.message)
                 }, { e ->
@@ -222,23 +221,5 @@ class GangWeiListActivity : ToolbarActivity() {
                         else -> showToast("未知错误")
                     }
                 })
-    }
-
-    fun judgeFinish() {
-        if (unfinish.size != 0) {
-            return
-        }
-        if (type == Extras.TYPE_EMPLOYEE) {
-            toolbar_menu.text = "我的分数"
-        } else if (type == Extras.TYPE_MANAGE) {
-            toolbar_menu.text = "查看分数"
-        }
-        toolbar_menu.setOnClickListener {
-            if (type == Extras.TYPE_EMPLOYEE) {
-                //TotalScoreActivity.start(context)
-            } else if (type == Extras.TYPE_MANAGE) {
-                ScoreListActivity.start(context)
-            }
-        }
     }
 }

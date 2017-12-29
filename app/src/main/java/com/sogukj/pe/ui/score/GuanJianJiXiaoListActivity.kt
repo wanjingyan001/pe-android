@@ -210,7 +210,6 @@ class GuanJianJiXiaoListActivity : ToolbarActivity() {
                             finish = finish_grade!!
                             loadData()
                         }
-                        //judgeFinish()
                     } else
                         showToast(payload.message)
                 }, { e ->
@@ -221,15 +220,5 @@ class GuanJianJiXiaoListActivity : ToolbarActivity() {
                         else -> showToast("未知错误")
                     }
                 })
-    }
-
-    fun judgeFinish() {
-        if (unfinish.size != 0) {
-            return
-        }
-        toolbar_menu.text = "查看分数"
-        toolbar_menu.setOnClickListener {
-            ScoreListActivity.start(context)
-        }
     }
 }

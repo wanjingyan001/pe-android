@@ -30,8 +30,9 @@ import java.net.UnknownHostException
 class RedBlackActivity : ToolbarActivity() {
 
     companion object {
-        fun start(ctx: Context?) {
+        fun start(ctx: Context?, data: ArrayList<EmployeeInteractBean>) {
             val intent = Intent(ctx, RedBlackActivity::class.java)
+            intent.putExtra(Extras.DATA, data)
             ctx?.startActivity(intent)
         }
     }
@@ -65,41 +66,14 @@ class RedBlackActivity : ToolbarActivity() {
             }
         }
 
-        SoguApi.getService(application)
-                .grade_info()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ payload ->
-                    if (payload.isOk) {
-                        payload.payload?.apply {
-                            adapter = MyAdapter(context, this)
-                            listview.adapter = adapter
-                            adapter.red_or_black = type
-                            adapter.notifyDataSetChanged()
-                            //有数据
-                            scroll.visibility = View.VISIBLE
-                            empty.visibility = View.GONE
-                        }
-                        if (payload.payload == null || payload.payload?.size == 0) {
-                            //暂无数据
-                            scroll.visibility = View.GONE
-                            empty.visibility = View.VISIBLE
-                            tv_empty.visibility = View.GONE
-                            toolbar_menu.text = ""
-                            toolbar_menu.setOnClickListener { null }
-                            toolbar_title.textColor = Color.parseColor("#ff000000")
-                            root.backgroundColor = Color.parseColor("#ffffffff")
-                        }
-                    } else
-                        showToast(payload.message)
-                }, { e ->
-                    Trace.e(e)
-                    when (e) {
-                        is JsonSyntaxException -> showToast("后台数据出错")
-                        is UnknownHostException -> showToast("网络出错")
-                        else -> showToast("未知错误")
-                    }
-                })
+        var data = intent.getSerializableExtra(Extras.DATA) as ArrayList<EmployeeInteractBean>
+        adapter = MyAdapter(context, data)
+        listview.adapter = adapter
+        adapter.red_or_black = type
+        adapter.notifyDataSetChanged()
+        //有数据
+        scroll.visibility = View.VISIBLE
+        empty.visibility = View.GONE
     }
 
     fun initView() {

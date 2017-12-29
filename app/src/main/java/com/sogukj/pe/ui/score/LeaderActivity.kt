@@ -11,6 +11,8 @@ import com.framework.base.ToolbarActivity
 import com.google.gson.JsonSyntaxException
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.bean.EmployeeInteractBean
+import com.sogukj.pe.bean.ScoreBean
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import com.sogukj.util.XmlDb
@@ -32,6 +34,7 @@ class LeaderActivity : ToolbarActivity() {
 
     var role = 0
     var adjust = 0
+    var isLoading = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -100,9 +103,51 @@ class LeaderActivity : ToolbarActivity() {
 
         ll_1_right.setOnClickListener {
             if (role == 2) {
-                doRequest()
+                SoguApi.getService(application)
+                        .showSumScore()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({ payload ->
+                            if (payload.isOk) {
+                                if (payload.payload != null) {
+                                    TotalScoreActivity.start(context, payload.payload!!)
+                                } else {
+                                    showToast("暂无数据")
+                                }
+                            } else
+                                showToast(payload.message)
+                        }, { e ->
+                            Trace.e(e)
+                            when (e) {
+                                is JsonSyntaxException -> showToast("后台数据出错")
+                                is UnknownHostException -> showToast("网络出错")
+                                else -> showToast("未知错误")
+                            }
+                        })
             } else {
-                ScoreDetailActivity.start(context, Extras.TYPE_INTERACT, null)
+                //员工互评考核结果不用传，领导打分详情页要传
+                SoguApi.getService(application)
+                        .grade_info()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({ payload ->
+                            if (payload.isOk) {
+                                if (payload.payload == null || payload.payload!!.size == 0) {
+                                    //暂无数据
+                                    showToast("暂无数据")
+                                } else {
+                                    ScoreDetailActivity.start(context, Extras.TYPE_INTERACT, null)
+                                }
+                            } else
+                                showToast(payload.message)
+                        }, { e ->
+                            Trace.e(e)
+                            when (e) {
+                                is JsonSyntaxException -> showToast("后台数据出错")
+                                is UnknownHostException -> showToast("网络出错")
+                                else -> showToast("未知错误")
+                            }
+                        })
             }
         }
 
@@ -111,7 +156,29 @@ class LeaderActivity : ToolbarActivity() {
         }
 
         ll_2_right.setOnClickListener {
-            JiXiaoActivity.start(context, Extras.JIXIAO, null)
+            SoguApi.getService(application)
+                    .achievement()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (payload.isOk) {
+                            if (payload.payload == null || payload.payload!!.size == 0) {
+                                showToast("暂无数据")
+                            } else {
+                                var bean = EmployeeInteractBean()
+                                bean.data = payload.payload
+                                JiXiaoActivity.start(context, Extras.JIXIAO, bean)
+                            }
+                        } else
+                            showToast(payload.message)
+                    }, { e ->
+                        Trace.e(e)
+                        when (e) {
+                            is JsonSyntaxException -> showToast("后台数据出错")
+                            is UnknownHostException -> showToast("网络出错")
+                            else -> showToast("未知错误")
+                        }
+                    })
         }
 
         ll_3_left.setOnClickListener {
@@ -119,36 +186,59 @@ class LeaderActivity : ToolbarActivity() {
         }
 
         ll_4_left.setOnClickListener {
-            ScoreListActivity.start(context)
+            SoguApi.getService(application)
+                    .pointRank()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (payload.isOk) {
+                            var data = payload.payload as ArrayList<ScoreBean>
+                            if (data == null || data.size == 0) {
+                                showToast("暂无数据")
+                            } else {
+                                ScoreListActivity.start(context, data)
+                            }
+                        } else {
+                            showToast(payload.message)
+                        }
+                    }, { e ->
+                        Trace.e(e)
+                        when (e) {
+                            is JsonSyntaxException -> showToast("后台数据出错")
+                            is UnknownHostException -> showToast("网络出错")
+                            else -> showToast("未知错误")
+                        }
+                    })
         }
 
         ll_4_right.setOnClickListener {
-            RedBlackActivity.start(context)
+            SoguApi.getService(application)
+                    .grade_info()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (payload.isOk) {
+                            if (payload.payload == null || payload.payload?.size == 0) {
+                                //暂无数据
+                                showToast("暂无数据")
+                            } else {
+                                RedBlackActivity.start(context, payload.payload!!)
+                            }
+                        } else
+                            showToast(payload.message)
+                    }, { e ->
+                        Trace.e(e)
+                        when (e) {
+                            is JsonSyntaxException -> showToast("后台数据出错")
+                            is UnknownHostException -> showToast("网络出错")
+                            else -> showToast("未知错误")
+                        }
+                    })
         }
 
         toolbar_menu.setOnClickListener {
             RuleActivity.start(context)
         }
 
-    }
-
-    fun doRequest() {
-        SoguApi.getService(application)
-                .showSumScore()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ payload ->
-                    if (payload.isOk) {
-                        TotalScoreActivity.start(context, payload.payload!!)
-                    } else
-                        showToast(payload.message)
-                }, { e ->
-                    Trace.e(e)
-                    when (e) {
-                        is JsonSyntaxException -> showToast("后台数据出错")
-                        is UnknownHostException -> showToast("网络出错")
-                        else -> showToast("未知错误")
-                    }
-                })
     }
 }

@@ -35,8 +35,9 @@ import java.net.UnknownHostException
 class ScoreListActivity : ToolbarActivity() {
 
     companion object {
-        fun start(ctx: Activity?) {
+        fun start(ctx: Activity?, data: ArrayList<ScoreBean>) {
             val intent = Intent(ctx, ScoreListActivity::class.java)
+            intent.putExtra(Extras.DATA, data)
             ctx?.startActivity(intent)
         }
     }
@@ -84,7 +85,7 @@ class ScoreListActivity : ToolbarActivity() {
                     final_score.text = "最终得分：${data.total_grade}"
                     finishing_task.text = "岗位胜任力评价：${data.resumption}"
                     kpi.text = "关键绩效指标评价：${data.achieve_check}"
-                    dengji.text = data.dengji
+                    dengji.text = data.level
                 }
             }
         })
@@ -109,49 +110,31 @@ class ScoreListActivity : ToolbarActivity() {
         score_list.addItemDecoration(SpaceItemDecoration(Utils.dpToPx(context, 30)))
         score_list.adapter = adapter
 
-        SoguApi.getService(application)
-                .pointRank()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ payload ->
-                    if (payload.isOk) {
-                        var data = payload.payload as ArrayList<ScoreBean>
-                        if (data == null || data.size == 0) {
-                            hide(0)
-                            hide(1)
-                            hide(2)
-                            frame.backgroundColor = Color.WHITE
-                            toolbar_title.textColor = Color.parseColor("#ff000000")
-                            showToast(payload.message)
-                        } else {
-                            //  前三名单独设置---不足三人
-                            var disIndex = 0
-                            try {
-                                set(data.get(0), 0)
-                                disIndex++
-                                set(data.get(1), 1)
-                                disIndex++
-                                set(data.get(2), 2)
+        var data = intent.getSerializableExtra(Extras.DATA) as ArrayList<ScoreBean>
+        if (data == null || data.size == 0) {
+            hide(0)
+            hide(1)
+            hide(2)
+            frame.backgroundColor = Color.WHITE
+            toolbar_title.textColor = Color.parseColor("#ff000000")
+        } else {
+            //  前三名单独设置---不足三人
+            var disIndex = 0
+            try {
+                set(data.get(0), 0)
+                disIndex++
+                set(data.get(1), 1)
+                disIndex++
+                set(data.get(2), 2)
 
-                                adapter.dataList.addAll(data.subList(3, data.size))
-                                adapter.notifyDataSetChanged()
-                            } catch (e: Exception) {
-                                for (i in disIndex until 3) {
-                                    hide(disIndex)
-                                }
-                            }
-                        }
-                    } else {
-                        showToast(payload.message)
-                    }
-                }, { e ->
-                    Trace.e(e)
-                    when (e) {
-                        is JsonSyntaxException -> showToast("后台数据出错")
-                        is UnknownHostException -> showToast("网络出错")
-                        else -> showToast("未知错误")
-                    }
-                })
+                adapter.dataList.addAll(data.subList(3, data.size))
+                adapter.notifyDataSetChanged()
+            } catch (e: Exception) {
+                for (i in disIndex until 3) {
+                    hide(disIndex)
+                }
+            }
+        }
     }
 
     fun hide(index: Int) {
@@ -186,7 +169,8 @@ class ScoreListActivity : ToolbarActivity() {
 
         var id_dengji = resources.getIdentifier("dengji_" + (index + 1), "id", context.packageName)
         var dengji = findViewById(id_dengji) as TextView
-        dengji.text = bean.dengji
+        dengji.text = bean.level
+        dengji.visibility = View.VISIBLE
 
         var id_name = resources.getIdentifier("name_" + (index + 1), "id", context.packageName)
         var name = findViewById(id_name) as TextView

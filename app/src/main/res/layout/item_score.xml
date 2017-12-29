@@ -91,6 +91,10 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginRight="20dp"
+        android:text="A"
+        android:textColor="#FFFFFFFF"
+        android:textSize="20sp"
+        android:gravity="center"
         android:background="@drawable/oval" />
 
 </LinearLayout>
