@@ -12,9 +12,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@color/transparent"
+        android:background="#FFF7F9FC"
         android:orientation="horizontal">
 
         <TextView
@@ -68,7 +66,6 @@
         android:id="@+id/jixiao_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp" />
+        android:background="#FFF7F9FC" />
 
 </LinearLayout>

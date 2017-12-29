@@ -64,7 +64,6 @@ class RateFragment : BaseFragment() {
 
     lateinit var person: GradeCheckBean.ScoreItem
     var isShown = false
-    var hasTitle = false
     var type = 0
     var type111 = 0//
 
@@ -123,8 +122,6 @@ class RateFragment : BaseFragment() {
 
                                 num = jixiao_adapter.dataList.size
 
-                                hasTitle = false
-
                                 ll_add.visibility = View.GONE
                                 ll_minuse.visibility = View.GONE
 
@@ -157,7 +154,6 @@ class RateFragment : BaseFragment() {
                                 num += minus_adapter.dataList.size
 
                                 jixiao_list.visibility = View.GONE
-                                hasTitle = true
                             }
                             if (isShown) {
                                 tv_socre.text = payload.total as String
@@ -219,18 +215,32 @@ class RateFragment : BaseFragment() {
                 })
     }
 
+    //加分项，减分项---只有actual有用
     inner class ProjectHolderNoTitle(view: View)
         : RecyclerHolder<NormalItemBean.NormalItem.BeanItem>(view) {
 
         var bar = convertView.findViewById(R.id.progressBar) as ProgressBar
         var judge = convertView.findViewById(R.id.text) as TextView
         var title = convertView.findViewById(R.id.title) as TextView
+        //jiajianfen
         var desc = convertView.findViewById(R.id.desc) as TextView
+        //jixiao
+        var jixiao = convertView.findViewById(R.id.jixiao) as LinearLayout
+        var title1 = convertView.findViewById(R.id.title1) as TextView
+        var title2 = convertView.findViewById(R.id.title2) as TextView
 
         override fun setData(view: View, data: NormalItemBean.NormalItem.BeanItem, position: Int) {
 
             title.text = data.name
-            desc.text = data.info
+
+            if (type == Extras.TYPE_JIXIAO) {
+                desc.visibility = View.GONE
+                title1.text = data.info
+                title2.text = data.actual
+            } else if (type == Extras.TYPE_TIAOZHENG) {
+                desc.text = data.actual
+                jixiao.visibility = View.GONE
+            }
 
             if (isShown) {
                 var score = data.score?.toInt()!!
@@ -316,37 +326,4 @@ class RateFragment : BaseFragment() {
             }
         }
     }
-
-//    inner class ProjectHolderTitle(view: View)
-//        : RecyclerHolder<NormalItemBean.NormalItem>(view) {
-//
-//        var head_ll = convertView.findViewById(R.id.ll_head) as LinearLayout
-//        var head_title = convertView.findViewById(R.id.head_title) as TextView
-//        var data_list = convertView.findViewById(R.id.listview) as RecyclerView
-//
-//        override fun setData(view: View, data: NormalItemBean.NormalItem, position: Int) {
-//
-//            if (data.pName == "") {
-//                head_ll.visibility = View.GONE
-//            } else {
-//                head_title.text = data.pName
-//            }
-//
-//            var inner_adapter = RecyclerAdapter<NormalItemBean.NormalItem.BeanItem>(context, { _adapter, parent, t ->
-//                ProjectHolderNoTitle(_adapter.getView(R.layout.item_rate, parent))
-//            })
-//            inner_adapter.onItemClick = { v, p ->
-//            }
-//            val layoutManager = LinearLayoutManager(context)
-//            layoutManager.orientation = LinearLayoutManager.VERTICAL
-//            data_list.layoutManager = layoutManager
-//            data_list.addItemDecoration(SpaceItemDecoration(Utils.dpToPx(context, 30)))
-//            data_list.adapter = inner_adapter
-//
-//            data.data?.forEach {
-//                inner_adapter.dataList.add(it)
-//            }
-//            inner_adapter.notifyDataSetChanged()
-//        }
-//    }
 }

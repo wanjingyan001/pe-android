@@ -45,32 +45,47 @@
         android:paddingRight="20dp"
         android:text="投资项目尽调（20%）" />
 
-    <LinearLayout
-        android:id="@+id/lll"
+    <TextView
+        android:id="@+id/desc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:orientation="horizontal"
+        android:lineSpacingExtra="2dp"
         android:paddingLeft="20dp"
-        android:paddingRight="20dp">
+        android:paddingRight="20dp"
+        android:text="协助投资经理完成公司、行业的尽调材料信息搜集，协助投资经理完成项目尽调材料、投资建议书等报告制作；协助投资经理完成对拟投企业管理层的访谈。"
+        android:textColor="@color/text_3"
+        android:textSize="@dimen/text_size_samll" />
+
+    <LinearLayout
+        android:id="@+id/jixiao"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/bg_border_r4"
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/subtitle"
-            android:layout_width="55dp"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
-            android:gravity="right"
-            android:text="基准目标:"
-            android:textColor="@color/text_3"
-            android:textSize="@dimen/text_size_samll"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/desc"
+            android:id="@+id/title1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:lineSpacingExtra="2dp"
-            android:text="协助投资经理完成公司、行业的尽调材料信息搜集，协助投资经理完成项目尽调材料、投资建议书等报告制作；协助投资经理完成对拟投企业管理层的访谈。"
+            android:text="协助投资经理完成公司"
+            android:textColor="@color/text_3"
+            android:textSize="@dimen/text_size_samll" />
+
+        <TextView
+            android:id="@+id/title2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:lineSpacingExtra="2dp"
+            android:text="协助投资经理完成公司"
             android:textColor="@color/text_3"
             android:textSize="@dimen/text_size_samll" />
 

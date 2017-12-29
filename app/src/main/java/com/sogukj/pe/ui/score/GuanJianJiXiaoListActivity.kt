@@ -16,6 +16,7 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.GradeCheckBean
 import com.sogukj.pe.util.Trace
+import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.pe.view.SpaceItemDecoration
@@ -171,7 +172,7 @@ class GuanJianJiXiaoListActivity : ToolbarActivity() {
         val layoutManager = LinearLayoutManager(context)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         list.layoutManager = layoutManager
-        list.addItemDecoration(SpaceItemDecoration(10))
+        list.addItemDecoration(SpaceItemDecoration(Utils.dpToPx(context, 10)))
         list.adapter = adapter
     }
 
