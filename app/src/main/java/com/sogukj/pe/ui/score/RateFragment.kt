@@ -100,6 +100,7 @@ class RateFragment : BaseFragment() {
             type111 = 1
         } else if (type == Extras.TYPE_TIAOZHENG) {
             type111 = 3
+            standard.visibility = View.GONE
         }
         SoguApi.getService(baseActivity!!.application)
                 .perAppraisal(person.user_id!!, type111)
@@ -232,6 +233,7 @@ class RateFragment : BaseFragment() {
         override fun setData(view: View, data: NormalItemBean.NormalItem.BeanItem, position: Int) {
 
             title.text = data.name
+            bar.max = data.total_score!!
 
             if (type == Extras.TYPE_JIXIAO) {
                 desc.visibility = View.GONE

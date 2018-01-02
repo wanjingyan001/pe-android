@@ -15,6 +15,7 @@
     <include layout="@layout/header" />
 
     <TextView
+        android:id="@+id/standard"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginLeft="10dp"

@@ -91,7 +91,7 @@ class TemplateActivity : ToolbarActivity() {
         val layoutManager2 = LinearLayoutManager(context)
         layoutManager2.orientation = LinearLayoutManager.VERTICAL
         minus_list.layoutManager = layoutManager2
-        minus_list.adapter = add_adapter
+        minus_list.adapter = minus_adapter
 
         SoguApi.getService(application)
                 .showWrite()
