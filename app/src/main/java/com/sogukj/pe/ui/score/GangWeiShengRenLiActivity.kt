@@ -10,8 +10,10 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
+
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
+
 import com.bumptech.glide.Glide
 import com.framework.base.ToolbarActivity
 import com.google.gson.JsonSyntaxException
@@ -26,6 +28,7 @@ import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.pe.view.SpaceItemDecoration
 import com.sogukj.service.SoguApi
+import com.sogukj.util.Store
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Consumer
@@ -59,7 +62,6 @@ class GangWeiShengRenLiActivity : ToolbarActivity() {
         toolbar_menu.setOnClickListener {
             RuleActivity.start(context)
         }
-
         var person = intent.getSerializableExtra(Extras.DATA) as GradeCheckBean.ScoreItem
         id = person.user_id!!
         person?.let {
@@ -94,6 +96,7 @@ class GangWeiShengRenLiActivity : ToolbarActivity() {
     }
 
     var pinfen = ArrayList<PFBZ>()
+
 
     fun doRequest() {
         SoguApi.getService(application)
@@ -160,92 +163,102 @@ class GangWeiShengRenLiActivity : ToolbarActivity() {
                 } else if (score >= pinfen.get(3).ss!!.toInt() && score <= pinfen.get(3).es!!.toInt()) {
                     bar.progressDrawable = context.resources.getDrawable(R.drawable.pb_d)
                 }
-                judge.setText(data.score)
-                judge.setTextColor(Color.parseColor("#ffa0a4aa"))
-                judge.setTextSize(16f)
-                judge.setBackgroundDrawable(null)
-            } else {
-                var obser = TextViewClickObservable(context, judge, bar, pinfen)
-                observable_List.add(obser)
 
-                weight_list.add(data.weight!!.toInt())
 
-                var upload = TouZiUpload()
-                upload.performance_id = data.id!!.toInt()
-                upload.type = data.type
-                dataList.add(upload)
+                if (isShow) {
+                    bar.progress = data.score?.toInt()!!
 
-                if (observable_List.size == sub_adapter.dataList.size) {
-                    Observable.combineLatest(observable_List, object : Function<Array<Any>, Double> {
-                        override fun apply(str: Array<Any>): Double {
-                            var result = 0.0
-                            var date = ArrayList<Int>()//每项分数
-                            for (ites in str) {
-                                date.add(ites as Int)
+                    judge.setText(data.score)
+                    judge.setTextColor(Color.parseColor("#ffa0a4aa"))
+                    judge.setTextSize(16f)
+                    judge.setBackgroundDrawable(null)
+                } else {
+
+                    var obser = TextViewClickObservable(context, judge, bar, pinfen)
+
+                    observable_List.add(obser)
+
+                    weight_list.add(data.weight!!.toInt())
+
+                    var upload = TouZiUpload()
+                    upload.performance_id = data.id!!.toInt()
+                    upload.type = data.type
+                    dataList.add(upload)
+
+                    if (observable_List.size == sub_adapter.dataList.size) {
+                        Observable.combineLatest(observable_List, object : Function<Array<Any>, Double> {
+                            override fun apply(str: Array<Any>): Double {
+                                var result = 0.0
+                                var date = ArrayList<Int>()//每项分数
+                                for (ites in str) {
+                                    date.add(ites as Int)
+                                }
+                                for (i in weight_list.indices) {
+                                    dataList[i].score = date[i]
+                                    var single = date[i].toDouble() * weight_list[i] / 100
+                                    result += single
+                                }
+                                return result//isEmailValid(str[0].toString()) && isPasswordValid(str[1].toString())
                             }
-                            for (i in weight_list.indices) {
-                                dataList[i].score = date[i]
-                                var single = date[i].toDouble() * weight_list[i] / 100
-                                result += single
+                        }).subscribe(object : Consumer<Double> {
+                            override fun accept(t: Double) {
+                                tv_socre.text = "${String.format("%1$.2f", t)}"
+                                btn_commit.setBackgroundColor(Color.parseColor("#FFE95C4A"))
+                                btn_commit.setOnClickListener {
+
+                                    MaterialDialog.Builder(context)
+                                            .theme(Theme.LIGHT)
+                                            .title("提示")
+                                            .content("确定要提交分数?")
+                                            .onPositive { materialDialog, dialogAction ->
+                                                upload(t)
+                                            }
+                                            .positiveText("确定")
+                                            .negativeText("取消")
+                                            .show()
+                                    upload(t)
+                                }
                             }
-                            return result//isEmailValid(str[0].toString()) && isPasswordValid(str[1].toString())
-                        }
-                    }).subscribe(object : Consumer<Double> {
-                        override fun accept(t: Double) {
-                            tv_socre.text = "${String.format("%1$.2f", t)}"
-                            btn_commit.setBackgroundColor(Color.parseColor("#FFE95C4A"))
-                            btn_commit.setOnClickListener {
-                                MaterialDialog.Builder(context)
-                                        .theme(Theme.LIGHT)
-                                        .title("提示")
-                                        .content("确定要提交分数?")
-                                        .onPositive { materialDialog, dialogAction ->
-                                            upload(t)
-                                        }
-                                        .positiveText("确定")
-                                        .negativeText("取消")
-                                        .show()
-                            }
-                        }
-                    })
+                        })
+                    }
                 }
             }
         }
-    }
 
-    fun upload(result: Double) {
+        fun upload(result: Double) {
 
-        var data = ArrayList<HashMap<String, Int>>()
-        for (item in dataList) {
-            val inner = HashMap<String, Int>()
-            inner.put("performance_id", item.performance_id!!)
-            inner.put("score", item.score!!)
-            inner.put("type", item.type!!)
-            data.add(inner)
+            var data = ArrayList<HashMap<String, Int>>()
+            for (item in dataList) {
+                val inner = HashMap<String, Int>()
+                inner.put("performance_id", item.performance_id!!)
+                inner.put("score", item.score!!)
+                inner.put("type", item.type!!)
+                data.add(inner)
+            }
+
+            val params = HashMap<String, Any>()
+            params.put("data", data)
+            params.put("user_id", id)
+            params.put("type", 2)
+            params.put("total", result)
+
+            SoguApi.getService(application)
+                    .giveGrade(params)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (payload.isOk) {
+                            finish()
+                        } else
+                            showToast(payload.message)
+                    }, { e ->
+                        Trace.e(e)
+                        when (e) {
+                            is JsonSyntaxException -> showToast("后台数据出错")
+                            is UnknownHostException -> showToast("网络出错")
+                            else -> showToast("未知错误")
+                        }
+                    })
         }
-
-        val params = HashMap<String, Any>()
-        params.put("data", data)
-        params.put("user_id", id)
-        params.put("type", 2)
-        params.put("total", result)
-
-        SoguApi.getService(application)
-                .giveGrade(params)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ payload ->
-                    if (payload.isOk) {
-                        finish()
-                    } else
-                        showToast(payload.message)
-                }, { e ->
-                    Trace.e(e)
-                    when (e) {
-                        is JsonSyntaxException -> showToast("后台数据出错")
-                        is UnknownHostException -> showToast("网络出错")
-                        else -> showToast("未知错误")
-                    }
-                })
     }
 }

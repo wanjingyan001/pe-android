@@ -22,27 +22,27 @@
     </LinearLayout>
 
     <!--<LinearLayout-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_marginBottom="10dp"-->
-        <!--android:layout_marginTop="10dp"-->
-        <!--android:layout_weight="1"-->
-        <!--android:gravity="center"-->
-        <!--android:orientation="horizontal">-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_marginBottom="10dp"-->
+    <!--android:layout_marginTop="10dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:gravity="center"-->
+    <!--android:orientation="horizontal">-->
 
-        <!--<com.sogukj.pe.view.CircleImageView-->
-            <!--android:id="@+id/head_icon"-->
-            <!--android:layout_width="30dp"-->
-            <!--android:layout_height="30dp" />-->
+    <!--<com.sogukj.pe.view.CircleImageView-->
+    <!--android:id="@+id/head_icon"-->
+    <!--android:layout_width="30dp"-->
+    <!--android:layout_height="30dp" />-->
 
-        <!--<TextView-->
-            <!--android:id="@+id/name"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginLeft="10dp"-->
-            <!--android:text="排名"-->
-            <!--android:textColor="#FF282828"-->
-            <!--android:textSize="14sp" />-->
+    <!--<TextView-->
+    <!--android:id="@+id/name"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginLeft="10dp"-->
+    <!--android:text="排名"-->
+    <!--android:textColor="#FF282828"-->
+    <!--android:textSize="14sp" />-->
 
     <!--</LinearLayout>-->
 

@@ -98,5 +98,43 @@ class JiXiaoActivity : ToolbarActivity() {
 
         adapter.dataList.addAll(data.data!!)
         adapter.notifyDataSetChanged()
+
+        if (type == Extras.JIXIAO) {
+            SoguApi.getService(application)
+                    .achievement()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (payload.isOk) {
+                            payload.payload?.apply {
+                                adapter.dataList.addAll(this)
+                                adapter.notifyDataSetChanged()
+                            }
+                            if (adapter.dataList.size == 0) {
+                                //暂无数据
+                                jixiao_list.visibility = View.GONE
+                                empty.visibility = View.VISIBLE
+                                tv_empty.visibility = View.GONE
+                            }
+                        } else
+                            showToast(payload.message)
+                    }, { e ->
+                        Trace.e(e)
+                        when (e) {
+                            is JsonSyntaxException -> showToast("后台数据出错")
+                            is UnknownHostException -> showToast("网络出错")
+                            else -> showToast("未知错误")
+                        }
+                    })
+        } else if (type == Extras.RED_BLACK) {
+            adapter.dataList = data.data!!
+            adapter.notifyDataSetChanged()
+            if (adapter.dataList.size == 0) {
+                //暂无数据
+                jixiao_list.visibility = View.GONE
+                empty.visibility = View.VISIBLE
+                tv_empty.visibility = View.GONE
+            }
+        }
     }
 }
