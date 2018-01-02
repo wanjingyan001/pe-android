@@ -151,6 +151,7 @@ class GangWeiShengRenLiActivity : ToolbarActivity() {
             jixiao.visibility = View.GONE
             bar.max = data.total_score!!
 
+
             if (isShow) {
                 var score = data.score?.toInt()!!
                 bar.progress = score
@@ -163,64 +164,58 @@ class GangWeiShengRenLiActivity : ToolbarActivity() {
                 } else if (score >= pinfen.get(3).ss!!.toInt() && score <= pinfen.get(3).es!!.toInt()) {
                     bar.progressDrawable = context.resources.getDrawable(R.drawable.pb_d)
                 }
+                judge.setText(data.score)
+                judge.setTextColor(Color.parseColor("#ffa0a4aa"))
+                judge.setTextSize(16f)
+                judge.setBackgroundDrawable(null)
+            } else {
 
+                var obser = TextViewClickObservable(context, judge, bar, pinfen)
 
-                if (isShow) {
-                    bar.progress = data.score?.toInt()!!
+                observable_List.add(obser)
 
-                    judge.setText(data.score)
-                    judge.setTextColor(Color.parseColor("#ffa0a4aa"))
-                    judge.setTextSize(16f)
-                    judge.setBackgroundDrawable(null)
-                } else {
+                weight_list.add(data.weight!!.toInt())
 
-                    var obser = TextViewClickObservable(context, judge, bar, pinfen)
+                var upload = TouZiUpload()
+                upload.performance_id = data.id!!.toInt()
+                upload.type = data.type
+                dataList.add(upload)
 
-                    observable_List.add(obser)
-
-                    weight_list.add(data.weight!!.toInt())
-
-                    var upload = TouZiUpload()
-                    upload.performance_id = data.id!!.toInt()
-                    upload.type = data.type
-                    dataList.add(upload)
-
-                    if (observable_List.size == sub_adapter.dataList.size) {
-                        Observable.combineLatest(observable_List, object : Function<Array<Any>, Double> {
-                            override fun apply(str: Array<Any>): Double {
-                                var result = 0.0
-                                var date = ArrayList<Int>()//每项分数
-                                for (ites in str) {
-                                    date.add(ites as Int)
-                                }
-                                for (i in weight_list.indices) {
-                                    dataList[i].score = date[i]
-                                    var single = date[i].toDouble() * weight_list[i] / 100
-                                    result += single
-                                }
-                                return result//isEmailValid(str[0].toString()) && isPasswordValid(str[1].toString())
+                if (observable_List.size == sub_adapter.dataList.size) {
+                    Observable.combineLatest(observable_List, object : Function<Array<Any>, Double> {
+                        override fun apply(str: Array<Any>): Double {
+                            var result = 0.0
+                            var date = ArrayList<Int>()//每项分数
+                            for (ites in str) {
+                                date.add(ites as Int)
                             }
-                        }).subscribe(object : Consumer<Double> {
-                            override fun accept(t: Double) {
-                                tv_socre.text = "${String.format("%1$.2f", t)}"
-                                btn_commit.setBackgroundColor(Color.parseColor("#FFE95C4A"))
-                                btn_commit.setOnClickListener {
-
-                                    MaterialDialog.Builder(context)
-                                            .theme(Theme.LIGHT)
-                                            .title("提示")
-                                            .content("确定要提交分数?")
-                                            .onPositive { materialDialog, dialogAction ->
-                                                upload(t)
-                                            }
-                                            .positiveText("确定")
-                                            .negativeText("取消")
-                                            .show()
-                                    upload(t)
-                                }
+                            for (i in weight_list.indices) {
+                                dataList[i].score = date[i]
+                                var single = date[i].toDouble() * weight_list[i] / 100
+                                result += single
                             }
-                        })
-                    }
+                            return result//isEmailValid(str[0].toString()) && isPasswordValid(str[1].toString())
+                        }
+                    }).subscribe(object : Consumer<Double> {
+                        override fun accept(t: Double) {
+                            tv_socre.text = "${String.format("%1$.2f", t)}"
+                            btn_commit.setBackgroundColor(Color.parseColor("#FFE95C4A"))
+                            btn_commit.setOnClickListener {
+
+                                MaterialDialog.Builder(context)
+                                        .theme(Theme.LIGHT)
+                                        .title("提示")
+                                        .content("确定要提交分数?")
+                                        .onPositive { materialDialog, dialogAction ->
+                                            upload(t)
+                                        }
+                                        .positiveText("确定")
+                                        .negativeText("取消")
+                                        .show()
+                                upload(t)
+                            }
+                        }
+                    })
                 }
             }
         }
