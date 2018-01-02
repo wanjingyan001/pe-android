@@ -209,6 +209,9 @@ class TemplateActivity : ToolbarActivity() {
                         }
 
                         btn_commit.setOnClickListener {
+                            if (flag) {
+                                return@setOnClickListener
+                            }
                             MaterialDialog.Builder(context)
                                     .theme(Theme.LIGHT)
                                     .title("提示")
