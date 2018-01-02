@@ -212,7 +212,6 @@ class GangWeiShengRenLiActivity : ToolbarActivity() {
                                         .positiveText("确定")
                                         .negativeText("取消")
                                         .show()
-                                upload(t)
                             }
                         }
                     })
