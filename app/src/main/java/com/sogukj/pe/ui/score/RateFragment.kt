@@ -98,9 +98,11 @@ class RateFragment : BaseFragment() {
         //非空（1=>绩效，3=>加减项）
         if (type == Extras.TYPE_JIXIAO) {
             type111 = 1
+            final_score.text = "最后得分(总分70)"
         } else if (type == Extras.TYPE_TIAOZHENG) {
             type111 = 3
             standard.visibility = View.GONE
+            final_score.text = "最后得分(最低-20，最高20)"
         }
         SoguApi.getService(baseActivity!!.application)
                 .perAppraisal(person.user_id!!, type111)
