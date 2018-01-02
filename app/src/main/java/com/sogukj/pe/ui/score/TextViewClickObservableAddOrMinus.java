@@ -67,7 +67,11 @@ class TextViewClickObservableAddOrMinus extends Observable<Integer> {
                         int pro = mSelected.get(options1);
                         bar.setProgress(pro);
                         bar.setProgressDrawable(context.getResources().getDrawable(drawableId));
-                        view.setText(pro + "");
+                        if (drawableId == R.drawable.pb_min) {
+                            view.setText(-pro + "");
+                        } else {
+                            view.setText(pro + "");
+                        }
                         view.setTextColor(Color.parseColor("#ffa0a4aa"));
                         view.setTextSize(16);
                         view.setBackgroundDrawable(null);

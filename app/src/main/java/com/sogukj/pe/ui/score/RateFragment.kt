@@ -265,7 +265,12 @@ class RateFragment : BaseFragment() {
                         bar.progressDrawable = context.resources.getDrawable(R.drawable.pb_d)
                     }
                 }
-                judge.setText(data.score)
+                //3=>加分项 4=>减分项
+                if (data.type == 4) {
+                    judge.setText("-${data.score}")
+                } else {
+                    judge.setText(data.score)
+                }
                 judge.setTextColor(Color.parseColor("#ffa0a4aa"))
                 judge.setTextSize(16f)
                 judge.setBackgroundDrawable(null)

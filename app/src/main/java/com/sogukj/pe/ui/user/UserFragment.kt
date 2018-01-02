@@ -94,7 +94,8 @@ class UserFragment : ToolbarFragment(), View.OnClickListener {
         tv_5.setOnClickListener(this)
         tv_55.setOnClickListener(this)
         toolbar_menu.setOnClickListener {
-            user?.let {
+            //切换用户没有正确显示
+            Store.store.getUser(context)?.let {
                 CardActivity.start(activity, it)
             }
         }
