@@ -159,6 +159,7 @@
                 android:layout_width="6dp"
                 android:layout_height="6dp"
                 android:src="@drawable/red_point"
+                android:visibility="gone"
                 />
 
             <ImageView
@@ -202,6 +203,7 @@
                         android:id="@+id/point1"
                         android:layout_width="6dp"
                         android:layout_height="6dp"
+                        android:visibility="gone"
                         android:layout_toRightOf="@+id/tv_1"
                         android:src="@drawable/red_point" />
                 </RelativeLayout>
@@ -224,6 +226,7 @@
                         android:id="@+id/point2"
                         android:layout_width="6dp"
                         android:layout_height="6dp"
+                        android:visibility="gone"
                         android:layout_toRightOf="@+id/tv_2"
                         android:src="@drawable/red_point"
                         />
@@ -247,6 +250,7 @@
                         android:id="@+id/point3"
                         android:layout_width="6dp"
                         android:layout_height="6dp"
+                        android:visibility="gone"
                         android:layout_toRightOf="@+id/tv_3"
                         android:src="@drawable/red_point"
                          />
@@ -270,6 +274,7 @@
                         android:id="@+id/point4"
                         android:layout_width="6dp"
                         android:layout_height="6dp"
+                        android:visibility="gone"
                         android:layout_toRightOf="@+id/tv_4"
                         android:src="@drawable/red_point"
                         />
@@ -293,6 +298,7 @@
                         android:id="@+id/point5"
                         android:layout_width="6dp"
                         android:layout_height="6dp"
+                        android:visibility="gone"
                         android:layout_toRightOf="@+id/tv_5"
                         android:src="@drawable/red_point"
                          />

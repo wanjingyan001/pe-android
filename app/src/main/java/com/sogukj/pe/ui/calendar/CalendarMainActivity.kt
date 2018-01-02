@@ -46,6 +46,7 @@ class CalendarMainActivity : ToolbarActivity(), MonthSelectListener, ViewPager.O
         Utils.setUpIndicatorWidth(tabLayout, 12, 12, this)
 
         contentPager.addOnPageChangeListener(this)
+        contentPager.offscreenPageLimit = 3
         contentPager.currentItem = 0
         title = SimpleDateFormat("yyyy年MM月").format(Date(System.currentTimeMillis()))
         addSchedule.setOnClickListener {
