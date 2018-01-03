@@ -98,7 +98,7 @@ class LeaderActivity : ToolbarActivity() {
 
         ll_1_left.setOnClickListener {
             //留着。免得又要变
-            GangWeiListActivity.start(context, Extras.TYPE_EMPLOYEE)
+            GangWeiListActivity.start(context, Extras.TYPE_MANAGE)
         }
 
         ll_1_right.setOnClickListener {

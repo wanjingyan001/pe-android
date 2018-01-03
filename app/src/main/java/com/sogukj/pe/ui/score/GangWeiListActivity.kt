@@ -74,12 +74,12 @@ class GangWeiListActivity : ToolbarActivity() {
         } else if (currentIndex == 0 && type == Extras.TYPE_MANAGE) {
             tag_1.visibility = View.VISIBLE
             tag_2.visibility = View.VISIBLE
-            tag_3.visibility = View.GONE
-            tag_4.visibility = View.VISIBLE
+            tag_3.visibility = View.VISIBLE
+            tag_4.visibility = View.GONE
         } else if (currentIndex == 1 && type == Extras.TYPE_MANAGE) {
             tag_1.visibility = View.VISIBLE
             tag_2.visibility = View.VISIBLE
-            tag_3.visibility = View.VISIBLE
+            tag_3.visibility = View.GONE
             tag_4.visibility = View.VISIBLE
         }
 
@@ -106,12 +106,12 @@ class GangWeiListActivity : ToolbarActivity() {
                 } else if (tab.position == 0 && type == Extras.TYPE_MANAGE) {
                     tag_1.visibility = View.VISIBLE
                     tag_2.visibility = View.VISIBLE
-                    tag_3.visibility = View.GONE
-                    tag_4.visibility = View.VISIBLE
+                    tag_3.visibility = View.VISIBLE
+                    tag_4.visibility = View.GONE
                 } else if (tab.position == 1 && type == Extras.TYPE_MANAGE) {
                     tag_1.visibility = View.VISIBLE
                     tag_2.visibility = View.VISIBLE
-                    tag_3.visibility = View.VISIBLE
+                    tag_3.visibility = View.GONE
                     tag_4.visibility = View.VISIBLE
                 }
                 if (tab.position == 0) {
@@ -157,7 +157,7 @@ class GangWeiListActivity : ToolbarActivity() {
                     } else if (currentIndex == 1 && type == Extras.TYPE_MANAGE) {
                         tvTag1.visibility = View.VISIBLE
                         tvTag2.visibility = View.VISIBLE
-                        tvTag3.visibility = View.VISIBLE
+                        tvTag3.visibility = View.GONE
                         tvTag4.visibility = View.VISIBLE
                     }
                     tvTag1.text = data.name
