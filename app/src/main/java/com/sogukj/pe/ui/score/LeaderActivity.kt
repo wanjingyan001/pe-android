@@ -44,7 +44,7 @@ class LeaderActivity : ToolbarActivity() {
         adjust = XmlDb.open(context).get(Extras.ADJUST, "").toInt()//领导班子是否可以显示调整项	1显示 0不显示
 
         setBack(true)
-        setTitle("评分细则")
+        setTitle("评分中心")
         toolbar?.setBackgroundColor(Color.WHITE)
         toolbar?.apply {
             val title = this.findViewById(R.id.toolbar_title) as TextView?

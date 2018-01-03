@@ -50,7 +50,7 @@
             android:gravity="center"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:text="评分标准"
+            android:text="评分细则"
             android:textColor="#ff808080"
             android:textSize="14sp" />
     </android.support.v7.widget.Toolbar>
