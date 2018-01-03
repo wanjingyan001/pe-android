@@ -28,7 +28,7 @@ class RuleActivity : ToolbarActivity() {
         setContentView(R.layout.activity_rule)
 
         setBack(true)
-        setTitle("评分标准")
+        setTitle("评分细则")
         toolbar?.setBackgroundColor(Color.WHITE)
         toolbar?.apply {
             val title = this.findViewById(R.id.toolbar_title) as TextView?
