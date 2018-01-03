@@ -35,8 +35,8 @@ class SoguApi {
                     Trace.i("http", "${request.url()} => ${response.code()}:${response.message()}")
                     response
                 }
-                .readTimeout(10, TimeUnit.SECONDS)
-                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(15, TimeUnit.SECONDS)
+                .connectTimeout(15, TimeUnit.SECONDS)
                 .build()
 
         val retrofit = Retrofit.Builder()
