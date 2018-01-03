@@ -230,7 +230,10 @@
                     android:layout_height="10dp"
                     android:layout_marginLeft="5dp"
                     android:background="@drawable/oval2_y"
-
+                    android:gravity="center"
+                    android:text="A"
+                    android:textColor="#FFFFFFFF"
+                    android:textSize="8sp"
                     android:visibility="invisible" />
 
             </LinearLayout>

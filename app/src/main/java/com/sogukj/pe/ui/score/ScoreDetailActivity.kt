@@ -97,7 +97,7 @@ class ScoreDetailActivity : ToolbarActivity() {
                         payload.payload?.forEach {
                             group.add(it.title!!)
                             if (bean != null) {//员工互评考核=null，不需要平均分
-                                average.add(it.per_grade!!)
+                                average.add(it.pev_grade!!)
                             }
                             childs.add(it.data!!)
                         }

@@ -6,6 +6,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -89,20 +90,30 @@ class ScoreListActivity : ToolbarActivity() {
                 }
             }
         })
-        adapter.onItemClick = { v, p ->
-            if (quanxian == 1) {//0=>不能查看，1=>可以
-                //暂时有问题
-                //ScoreDetailActivity.start(context, Extras.TYPE_LISTITEM, adapter.dataList.get(p))
+        try {
+            adapter.onItemClick = { v, p ->
+                if (quanxian == 1) {//0=>不能查看，1=>可以
+                    ScoreDetailActivity.start(context, Extras.TYPE_LISTITEM, adapter.dataList.get(p))
+                }
             }
-        }
-        head_1.setOnClickListener {
-
-        }
-        head_2.setOnClickListener {
-
-        }
-        head_3.setOnClickListener {
-
+            head_1.setOnClickListener {
+                if (quanxian == 1) {
+                    ScoreDetailActivity.start(context, Extras.TYPE_LISTITEM, adapter.dataList.get(0))
+                }
+            }
+            head_2.setOnClickListener {
+                if (quanxian == 1) {
+                    ScoreDetailActivity.start(context, Extras.TYPE_LISTITEM, adapter.dataList.get(1))
+                }
+            }
+            head_3.setOnClickListener {
+                if (quanxian == 1) {
+                    ScoreDetailActivity.start(context, Extras.TYPE_LISTITEM, adapter.dataList.get(2))
+                }
+            }
+        } catch (e: Exception) {
+            //可能数据个数小于3个
+            Log.e("Exception", e.localizedMessage)
         }
         val layoutManager = LinearLayoutManager(context)
         layoutManager.orientation = LinearLayoutManager.VERTICAL

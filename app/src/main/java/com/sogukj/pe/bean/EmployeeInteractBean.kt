@@ -7,7 +7,7 @@ import java.io.Serializable
  */
 class EmployeeInteractBean : Serializable {
     var title: String? = null
-    var per_grade: String? = null
+    var pev_grade: String? = null
     var data: ArrayList<EmployeeItem>? = null
 
     class EmployeeItem : Serializable {
