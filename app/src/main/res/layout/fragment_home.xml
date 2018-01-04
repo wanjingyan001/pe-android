@@ -1,97 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="#fff7f7f7">
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="215dp"
-        android:background="@mipmap/pe_banner" />
+        android:layout_height="240dp"
+        android:background="@mipmap/banner" />
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:overScrollMode="never"
-        android:scrollbars="none">
+        android:clipChildren="false"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <com.fashare.stack_layout.StackLayout
+            android:id="@+id/stack_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="150dp" />
 
-            <android.support.v7.widget.GridLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:padding="20dp"
-                app:columnCount="3"
-                app:orientation="horizontal"
-                app:rowCount="3">
+        <android.support.v7.widget.GridLayout
+            android:id="@+id/grid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:columnCount="2"
+            app:orientation="horizontal"
+            app:rowCount="2">
 
-                <com.sogukj.pe.view.TipsView
-                    android:id="@+id/tv_sp"
-                    style="@style/ItemGridMain"
-                    android:layout_width="0dp"
-                    android:drawableTop="@drawable/ic_main_sp"
-                    android:text="审批"
-                    app:layout_columnWeight="1" />
+            <com.sogukj.pe.view.TipsViewMain
+                android:id="@+id/tv_sp"
+                android:layout_width="0dp"
+                android:layout_height="85dp"
+                app:bg="@drawable/ic_sp"
+                app:icon_main="@drawable/ic_main_sp"
+                app:layout_columnWeight="1"
+                app:layout_rowWeight="1"
+                app:sub_title="用印、签字、请假等"
+                app:title="审批" />
 
-                <com.sogukj.pe.view.TipsView
-                    android:id="@+id/tv_rl"
-                    style="@style/ItemGridMain"
-                    android:layout_width="0dp"
-                    android:drawableTop="@drawable/ic_main_rl"
-                    android:tag="announcement"
-                    android:text="日历"
-                    app:layout_columnWeight="1" />
+            <com.sogukj.pe.view.TipsViewMain
+                android:id="@+id/tv_rl"
+                android:layout_width="0dp"
+                android:layout_height="85dp"
+                app:bg="@drawable/ic_rl"
+                app:icon_main="@drawable/ic_main_rl"
+                app:layout_columnWeight="1"
+                app:layout_rowWeight="1"
+                app:sub_title="用印、签字、请假等"
+                app:title="日历" />
 
-                <com.sogukj.pe.view.TipsView
-                    android:id="@+id/tv_zx"
-                    style="@style/ItemGridMain"
-                    android:layout_width="0dp"
-                    android:drawableTop="@drawable/ic_main_msg"
-                    android:text="消息"
-                    app:layout_columnWeight="1" />
+            <com.sogukj.pe.view.TipsViewMain
+                android:id="@+id/tv_lxr"
+                android:layout_width="0dp"
+                android:layout_height="85dp"
+                app:bg="@drawable/ic_lxr"
+                app:icon_main="@drawable/ic_main_lxr"
+                app:layout_columnWeight="1"
+                app:layout_rowWeight="1"
+                app:sub_title="用印、签字、请假等"
+                app:title="联系人" />
 
-                <!--<com.sogukj.pe.view.TipsView-->
-                <!--android:id="@+id/tv_jj"-->
-                <!--style="@style/ItemGridMain"-->
-                <!--android:layout_width="0dp"-->
-                <!--android:drawableTop="@drawable/ic_main_jj"-->
-                <!--android:text="基金"-->
-                <!--app:layout_columnWeight="1" />-->
+            <com.sogukj.pe.view.TipsViewMain
+                android:id="@+id/tv_weekly"
+                android:layout_width="0dp"
+                android:layout_height="85dp"
+                app:bg="@drawable/ic_lxr"
+                app:icon_main="@drawable/ic_main_weekly"
+                app:layout_columnWeight="1"
+                app:layout_rowWeight="1"
+                app:sub_title="用印、签字、请假等"
+                app:title="周报" />
 
+        </android.support.v7.widget.GridLayout>
 
-                <com.sogukj.pe.view.TipsView
-                    android:id="@+id/tv_lxr"
-                    style="@style/ItemGridMain"
-                    android:layout_width="0dp"
-                    android:drawableTop="@drawable/ic_main_lxr"
-                    android:tag="shareholder"
-                    android:text="联系人"
-                    app:layout_columnWeight="1" />
+    </LinearLayout>
 
-                <!--<com.sogukj.pe.view.TipsView-->
-                <!--android:id="@+id/tv_me"-->
-                <!--style="@style/ItemGridMain"-->
-                <!--android:layout_width="0dp"-->
-                <!--android:drawableTop="@drawable/ic_main_me"-->
-                <!--android:tag="shareholder"-->
-                <!--android:text="我的"-->
-                <!--app:layout_columnWeight="1" />-->
-
-                <com.sogukj.pe.view.TipsView
-                    android:id="@+id/tv_weekly"
-                    style="@style/ItemGridMain"
-                    android:layout_width="0dp"
-                    android:drawableTop="@drawable/ic_main_weekly"
-                    android:tag="shareholder"
-                    android:text="周报"
-                    app:layout_columnWeight="1" />
-            </android.support.v7.widget.GridLayout>
-        </LinearLayout>
-
-    </ScrollView>
-</LinearLayout>
+</FrameLayout>
