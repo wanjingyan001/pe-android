@@ -3,8 +3,10 @@ package com.sogukj.pe.ui.main
 import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
+import android.graphics.Rect
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
+import android.widget.RadioButton
 import com.framework.base.BaseActivity
 import com.sogukj.pe.App
 import com.sogukj.pe.Extras
@@ -18,6 +20,10 @@ import com.sogukj.pe.ui.project.MainProjectFragment
 import com.sogukj.pe.ui.user.UserFragment
 import com.sogukj.util.Store
 import kotlinx.android.synthetic.main.activity_main.*
+import android.support.v4.view.ViewCompat.getMinimumHeight
+import android.support.v4.view.ViewCompat.getMinimumWidth
+import com.sogukj.pe.util.Utils
+
 
 /**
  * Created by qinfei on 17/7/18.
@@ -25,7 +31,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : BaseActivity() {
 
     val fgProj = MainProjectFragment.newInstance()
-//    val fgMsg = MainMsgFragment.newInstance()
+    //    val fgMsg = MainMsgFragment.newInstance()
     val fgMsg = MainNewsFragment.newInstance()
     val fgHome = MainHomeFragment.newInstance()
     val fgFund = FundMainFragment.newInstance()
@@ -44,7 +50,7 @@ class MainActivity : BaseActivity() {
         val dm = resources.displayMetrics
         val dp = dm.density
         val w = dm.widthPixels
-        val h=dm.heightPixels
+        val h = dm.heightPixels
 
     }
 
@@ -87,6 +93,17 @@ class MainActivity : BaseActivity() {
             LoginActivity.start(this)
         } else {
             doCheck(checkId)
+
+            var rb_home = rg_tab_main.getChildAt(2) as RadioButton
+            var draws = rb_home.compoundDrawables
+            // top = draws[1]
+            //获取drawables
+            var r = Rect(0, 0, Utils.dpToPx(context, 57), Utils.dpToPx(context, 57))
+            //定义一个Rect边界
+            draws[1].setBounds(r)
+            //给drawable设置边界
+            rb_home.setCompoundDrawables(null, draws[1], null, null)
+
             rg_tab_main.setOnCheckedChangeListener { group, checkedId ->
                 doCheck(checkedId)
             }

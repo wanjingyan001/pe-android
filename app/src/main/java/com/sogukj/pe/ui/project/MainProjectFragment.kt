@@ -28,6 +28,7 @@ import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.ArrayPagerAdapter
+import com.sogukj.pe.view.ProjectPageTransformer
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.service.SoguApi
@@ -69,7 +70,7 @@ class MainProjectFragment : BaseFragment() {
                 override fun setData(view: View, data: ProjectBean, position: Int) {
                     var label = data.name
                     data.shortName?.apply {
-                        if (this != ""){
+                        if (this != "") {
                             label = this
                         }
                     }
@@ -259,6 +260,8 @@ class MainProjectFragment : BaseFragment() {
         var adapter = ArrayPagerAdapter(childFragmentManager, fragments)
         view_pager.adapter = adapter
         view_pager.offscreenPageLimit = fragments.size
+        var transFormer = ProjectPageTransformer()
+        view_pager.setPageTransformer(true, transFormer)
 
         val user = Store.store.getUser(baseActivity!!)
         tabs?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -280,6 +283,8 @@ class MainProjectFragment : BaseFragment() {
             }
 
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+                // TODO
+                Log.e("111111", "${position}")
             }
 
             override fun onPageSelected(position: Int) {
@@ -287,6 +292,13 @@ class MainProjectFragment : BaseFragment() {
                 fb_add.visibility = if (position == 0 || position == 1) View.VISIBLE else View.GONE
 //                iv_search?.visibility = if (position == 2) View.VISIBLE else View.GONE
 //                iv_add?.visibility = if (position == 1 && user?.is_admin == 1) View.VISIBLE else View.GONE
+                if (position > saveIndex) {
+                    transFormer.setDirection(false)
+                    saveIndex = position
+                } else if (position < saveIndex) {
+                    transFormer.setDirection(true)
+                    saveIndex = position
+                }
             }
 
         })
@@ -317,6 +329,8 @@ class MainProjectFragment : BaseFragment() {
         refresh.setAutoLoadMore(true)
 
     }
+
+    var saveIndex = 0
 
     val searchTask = Runnable {
         doSearch(search_view.search)

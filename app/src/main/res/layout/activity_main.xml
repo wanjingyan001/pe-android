@@ -125,7 +125,7 @@
             android:background="@null"
             android:button="@null"
             android:checked="true"
-            android:drawableTop="@drawable/ic_main_home"
+            android:drawableTop="@drawable/bg_main_home"
             android:gravity="center"
             android:textColor="@color/tx_checkable" />
 
