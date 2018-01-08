@@ -60,11 +60,13 @@ public class MyStackPageTransformer extends StackLayout.PageTransformer {
             view.setVisibility(View.VISIBLE);
             // 从上至下, 调整堆叠位置
             Log.e("" + position, "" + (float) (-pageHeight) * (1.0F - this.mMaxScale) * (bottomPos - position) / bottomPos);
-            view.setTranslationY((float) (-pageHeight) * (1.0F - this.mMaxScale) * (bottomPos - position) / bottomPos);
+            //view.setTranslationY((float) (-pageHeight) * (1.0F - this.mMaxScale) * (bottomPos - position) / bottomPos);
+            view.setTranslationY((float) (-pageHeight) * (1.0F - this.mMaxScale) * position / bottomPos);
             // 从上至下, 调整卡片大小
             float scaleFactor = minScale + (maxScale - minScale) * (1.0F - Math.abs(position - (float) index));
             view.setScaleX(scaleFactor);
-            view.setScaleY(scaleFactor);
+            //view.setScaleY(scaleFactor);
+            view.setScaleY(this.mMaxScale);
             // 只有最上面一张可点击
             if (position == 0.0F && !view.isClickable()) {
                 view.setClickable(true);
