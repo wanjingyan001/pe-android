@@ -2,6 +2,7 @@ package com.sogukj.pe.ui.main
 
 import android.graphics.Color
 import android.graphics.PorterDuff
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -34,6 +35,7 @@ import com.fashare.stack_layout.transformer.AlphaTransformer
 import com.fashare.stack_layout.transformer.StackPageTransformer
 import com.sogukj.pe.bean.MessageBean
 import com.sogukj.pe.util.ColorUtil
+import com.sogukj.pe.view.MyStackPageTransformer
 
 
 /**
@@ -68,9 +70,7 @@ class MainHomeFragment : BaseFragment() {
         stack_layout.adapter = adapter
 
         stack_layout.addPageTransformer(
-                //StackPageTransformer(), // 堆叠
-                //AlphaTransformer(), // 渐变
-                //AngleTransformer()          // 角度
+                MyStackPageTransformer()
         )
 
         stack_layout.setOnSwipeListener(object : StackLayout.OnSwipeListener() {
@@ -125,14 +125,13 @@ class MainHomeFragment : BaseFragment() {
                 3 -> "签字审批"
                 else -> ""
             }
-            if (data.status == 1) {
-                holder.ll_content?.setBackgroundResource(R.drawable.bg_pop_msg_left_1)
-            } else {
-                holder.ll_content?.setBackgroundResource(R.drawable.bg_pop_msg_left)
-            }
+//            if (data.status == 1) {
+//                holder.ll_content?.setBackgroundResource(R.drawable.bg_pop_msg_left_1)
+//            } else {
+//                holder.ll_content?.setBackgroundResource(R.drawable.bg_pop_msg_left)
+//            }
             ColorUtil.setColorStatus(holder.tvState!!, data)
             holder.tvTitle?.text = data.title
-            holder.tvTime?.text = data.time
             holder.tvFrom?.text = "发起人:" + data.username
             holder.tvType?.text = "类型:" + data.type_name
             holder.tvMsg?.text = "审批事由:" + data.reasons
@@ -156,7 +155,6 @@ class MainHomeFragment : BaseFragment() {
 
         inner class MyViewHolder(view: View) : StackLayout.ViewHolder(view) {
 
-            var tvTime: TextView? = null
             var tvTitle: TextView? = null
             var tvNum: TextView? = null
             var tvState: TextView? = null
@@ -167,7 +165,6 @@ class MainHomeFragment : BaseFragment() {
             var ll_content: LinearLayout? = null
 
             init {
-                tvTime = view.findViewById(R.id.tv_time) as TextView
                 tvTitle = view.findViewById(R.id.tv_title) as TextView
                 tvNum = view.findViewById(R.id.tv_num) as TextView
                 tvState = view.findViewById(R.id.tv_state) as TextView

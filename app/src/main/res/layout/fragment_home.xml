@@ -19,7 +19,7 @@
         <com.fashare.stack_layout.StackLayout
             android:id="@+id/stack_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="150dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="150dp" />
@@ -28,6 +28,8 @@
             android:id="@+id/grid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             app:columnCount="2"
             app:orientation="horizontal"
