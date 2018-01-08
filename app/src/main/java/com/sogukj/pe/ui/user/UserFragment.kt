@@ -81,7 +81,7 @@ class UserFragment : ToolbarFragment(), View.OnClickListener {
             SettingActivity.start(context)
         }
         focus_layout.setOnClickListener {
-            ProjectFocusActivity.start(activity,ProjectListFragment.TYPE_GZ)
+            ProjectFocusActivity.start(activity, ProjectListFragment.TYPE_GZ)
         }
         tv_1.setOnClickListener(this)
         tv_11.setOnClickListener(this)
@@ -113,12 +113,30 @@ class UserFragment : ToolbarFragment(), View.OnClickListener {
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         payload.payload?.let {
-                            tv_1.text = it.dy.toString()
-                            tv_2.text = it.cb.toString()
-                            tv_3.text = it.lx.toString()
-                            tv_4.text = it.yt.toString()
-                            tv_5.text = it.tc.toString()
-                            tv_6.text = it.gz.toString()
+                            it.dy?.let {
+                                tv_1.text = it.count.toString()
+                                point1.visibility = if (it.red == 0) View.GONE else View.VISIBLE
+                            }
+                            it.cb?.let {
+                                tv_2.text = it.count.toString()
+                                point2.visibility = if (it.red == 0) View.GONE else View.VISIBLE
+                            }
+                            it.lx?.let {
+                                tv_3.text = it.count.toString()
+                                point3.visibility = if (it.red == 0) View.GONE else View.VISIBLE
+                            }
+                            it.yt?.let {
+                                tv_4.text = it.count.toString()
+                                point4.visibility = if (it.red == 0) View.GONE else View.VISIBLE
+                            }
+                            it.tc?.let {
+                                tv_5.text = it.count.toString()
+                                point5.visibility = if (it.red == 0) View.GONE else View.VISIBLE
+                            }
+                            it.gz?.let {
+                                tv_6.text = it.count.toString()
+                                point.visibility = if (it.red == 0) View.GONE else View.VISIBLE
+                            }
                         }
                     } else {
                         showToast(payload.message)
@@ -153,23 +171,23 @@ class UserFragment : ToolbarFragment(), View.OnClickListener {
     override fun onClick(view: View) {
         when (view.id) {
             R.id.tv_1, R.id.tv_11 -> {
-                ProjectFocusActivity.start(activity,ProjectListFragment.TYPE_DY)
+                ProjectFocusActivity.start(activity, ProjectListFragment.TYPE_DY)
 //                activity.fgProj.setCurrentItem(0)
             }
             R.id.tv_2, R.id.tv_22 -> {
-                ProjectFocusActivity.start(activity,ProjectListFragment.TYPE_CB)
+                ProjectFocusActivity.start(activity, ProjectListFragment.TYPE_CB)
 //                activity.fgProj.setCurrentItem(1)
             }
             R.id.tv_3, R.id.tv_33 -> {
-                ProjectFocusActivity.start(activity,ProjectListFragment.TYPE_LX)
+                ProjectFocusActivity.start(activity, ProjectListFragment.TYPE_LX)
 //                activity.fgProj.setCurrentItem(2)
             }
             R.id.tv_4, R.id.tv_44 -> {
-                ProjectFocusActivity.start(activity,ProjectListFragment.TYPE_YT)
+                ProjectFocusActivity.start(activity, ProjectListFragment.TYPE_YT)
 //                activity.fgProj.setCurrentItem(3)
             }
             R.id.tv_5, R.id.tv_55 -> {
-                ProjectFocusActivity.start(activity,ProjectListFragment.TYPE_TC)
+                ProjectFocusActivity.start(activity, ProjectListFragment.TYPE_TC)
 //                activity.fgProj.setCurrentItem(4)
             }
         }

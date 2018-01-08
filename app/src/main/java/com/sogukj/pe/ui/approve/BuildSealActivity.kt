@@ -3,43 +3,36 @@ package com.sogukj.pe.ui.approve
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
 import android.text.TextUtils
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
-import com.framework.base.ToolbarActivity
-import com.google.gson.Gson
-import com.sogukj.pe.Extras
-import com.sogukj.pe.R
-import com.sogukj.pe.util.Trace
-import com.sogukj.service.SoguApi
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_build_seal.*
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.Theme
-import com.sogukj.pe.view.FlowLayout
-import android.widget.TextView
 import cn.finalteam.rxgalleryfinal.RxGalleryFinal
 import cn.finalteam.rxgalleryfinal.imageloader.ImageLoaderType
 import cn.finalteam.rxgalleryfinal.rxbus.RxBusResultDisposable
 import cn.finalteam.rxgalleryfinal.rxbus.event.ImageRadioResultEvent
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
+import com.framework.base.ToolbarActivity
+import com.google.gson.Gson
 import com.nbsp.materialfilepicker.MaterialFilePicker
 import com.nbsp.materialfilepicker.ui.FilePickerActivity
+import com.sogukj.pe.Extras
+import com.sogukj.pe.R
 import com.sogukj.pe.bean.*
+import com.sogukj.pe.util.Trace
+import com.sogukj.pe.view.FlowLayout
+import com.sogukj.service.SoguApi
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.activity_build_seal.*
 import okhttp3.FormBody
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import org.jetbrains.anko.sdk25.coroutines.onFocusChange
 import java.io.File
 import java.io.Serializable
-import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 /**
  * Created by qinfei on 17/10/18.
@@ -605,6 +598,10 @@ class BuildSealActivity : ToolbarActivity() {
             MaterialFilePicker()
                     .withActivity(this)
                     .withRequestCode(REQ_SELECT_FILE)
+                    .withTitle("内部存储")
+                    .withFilterDirectories(true)
+                    .withHiddenFiles(true)
+                    .withCloseMenu(false)
 //                    .withFilter(Pattern.compile(".*\\.txt$")) // Filtering files and directories by file name using regexp
                     .start()
         }
