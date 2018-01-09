@@ -9,4 +9,5 @@ class TypeBean {
     var rule_url: String? = null
     var role: Int? = null  // 1=>领导班子 2=>部门负责人 3=>其他员工
     var is_adjust: Int? = null// 领导班子是否可以显示调整项	1显示 0不显示
+    var time: Int? = null// 截止时间，秒
 }

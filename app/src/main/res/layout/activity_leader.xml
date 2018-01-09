@@ -64,10 +64,15 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <View
+            <TextView
+                android:id="@+id/timeTick"
                 android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:background="@drawable/divider2" />
+                android:layout_height="40dp"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:background="@color/fund_pink"
+                android:gravity="center"
+                android:text="距离结束还有5分钟" />
 
             <LinearLayout
                 android:id="@+id/ll_1"
@@ -130,7 +135,8 @@
 
                     <ImageView
                         android:layout_width="30dp"
-                        android:layout_height="30dp" />
+                        android:layout_height="30dp"
+                        android:src="@drawable/yghpjg" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -344,7 +350,7 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:id="@+id/ll_4_left"
+                    android:id="@+id/ll_4_new"
                     android:layout_width="0dp"
                     android:layout_height="90dp"
                     android:layout_weight="1"
@@ -360,11 +366,40 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
+                        android:text="全员打分进度"
+                        android:textColor="#FF808080"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_4_left"
+                    android:layout_width="0dp"
+                    android:layout_height="90dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
                         android:text="考核结果"
                         android:textColor="#FF808080"
                         android:textSize="14sp" />
 
                 </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:id="@+id/ll_4_right"
@@ -373,6 +408,29 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/gwsrlbd" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="综合能力榜单"
+                        android:textColor="#FF808080"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="90dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="invisible">
 
                     <ImageView
                         android:layout_width="30dp"

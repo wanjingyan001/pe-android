@@ -6,12 +6,12 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.media.ExifInterface
-import android.os.Bundle
-import android.os.Environment
+import android.os.*
 import android.text.TextUtils
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
 import cn.finalteam.rxgalleryfinal.RxGalleryFinal
 import cn.finalteam.rxgalleryfinal.imageloader.ImageLoaderType
 import cn.finalteam.rxgalleryfinal.rxbus.RxBusResultDisposable
@@ -148,8 +148,56 @@ class UserEditActivity : ToolbarActivity() {
         }
     }
 
+    private val mHandler = object : Handler() {
+
+        override fun handleMessage(msg: Message) {
+            if (msg.what == 0x001) {
+                synchronized(this) {
+                    var leftSec = msg.obj as Int
+                    tv_rate.text = "距离结束还有${formatSec(leftSec)}"
+                    leftSec--
+                    if (leftSec == -1) {
+                        tv_rate.text = "超时"
+                    } else {
+                        sendMessageDelayed(obtainMessage(0x001, leftSec), 1000)
+                    }
+                }
+            }
+        }
+    }
+
+    fun formatSec(sec: Int): String {
+        var second = sec - sec / 60 * 60
+        var minute = sec / 60 - sec / 60 / 60 * 60
+        var hour = sec / 60 / 60 - sec / 60 / 60 / 24 * 24
+        var day = sec / 60 / 60 / 24
+
+        var str = ""
+        if (day > 0) {
+            str = "${str}${day}天"
+        }
+        if (hour > 0) {
+            str = "${str}${hour}小时"
+        }
+        if (minute > 0) {
+            str = "${str}${minute}分钟"
+        }
+        if (second > 0) {
+            str = "${str}${second}秒"
+        }
+
+        return str
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mHandler.removeMessages(0x001)
+    }
+
     override fun onResume() {
         super.onResume()
+        mHandler.removeMessages(0x001)
+        tv_rate.text = ""
         SoguApi.getService(application)
                 .getType()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -160,9 +208,12 @@ class UserEditActivity : ToolbarActivity() {
                             TYPE = this.type as Int //-1=>隐藏入口 0=>未开启  1=>进入评分中心，2=>进入填写页面
                             if (TYPE == 0) {
                                 tv_rate.text = "暂未开启"
-                            }
-                            if (TYPE == -1) {
+                            } else if (TYPE == -1) {
                                 tr_rate.visibility = View.GONE
+                            } else {
+                                if (this.time != null) {
+                                    mHandler.sendMessageDelayed(mHandler.obtainMessage(0x001, this.time), 1000)
+                                }
                             }
                             //
                             XmlDb.open(context).set(Extras.QUANXIAN, "${this.is_see}")

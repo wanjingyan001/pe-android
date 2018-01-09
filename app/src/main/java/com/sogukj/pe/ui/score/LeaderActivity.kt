@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -55,28 +57,31 @@ class LeaderActivity : ToolbarActivity() {
         }
 
         if (role == 1 && adjust == 1) {
-            (ll_1_right.getChildAt(0) as ImageView).backgroundResource = R.drawable.yghpjg
+            //(ll_1_right.getChildAt(0) as ImageView).backgroundResource = R.drawable.yghpjg
+            (ll_4_left.getChildAt(0) as ImageView).backgroundResource = R.drawable.gwsrlbd
         } else if (role == 1 && adjust == 0) {
             ll_3.visibility = View.GONE
             ll_3_left.visibility = View.GONE
             ll_3_right.visibility = View.GONE
             divider2.visibility = View.GONE
-            (ll_1_right.getChildAt(0) as ImageView).backgroundResource = R.drawable.yghpjg
+            //(ll_1_right.getChildAt(0) as ImageView).backgroundResource = R.drawable.yghpjg
+            (ll_4_left.getChildAt(0) as ImageView).backgroundResource = R.drawable.gwsrlbd
         } else if (role == 2) {
             ll_3.visibility = View.GONE
             ll_3_left.visibility = View.GONE
             ll_3_right.visibility = View.GONE
-            ll_4.visibility = View.GONE
-            ll_4_left.visibility = View.GONE
+            //ll_4.visibility = View.GONE
+            //ll_4_left.visibility = View.GONE
             ll_4_right.visibility = View.GONE
             ll_2_right.visibility = View.INVISIBLE
             divider2.visibility = View.GONE
-            divider3.visibility = View.GONE
+            //divider3.visibility = View.GONE
             divider4.visibility = View.GONE
             (ll_2_left.getChildAt(1) as TextView).text = "直线上级打分"
             (ll_1_left.getChildAt(1) as TextView).text = "员工互评打分"
-            (ll_1_right.getChildAt(1) as TextView).text = "我的分数"
-            (ll_1_right.getChildAt(0) as ImageView).backgroundResource = R.drawable.khjg
+            (ll_4_left.getChildAt(1) as TextView).text = "我的分数"
+            (ll_4_left.getChildAt(0) as ImageView).backgroundResource = R.drawable.khjg
+            ll_1_right.visibility = View.INVISIBLE
         } else if (role == 3) {
             ll_2.visibility = View.GONE
             ll_2_left.visibility = View.GONE
@@ -84,16 +89,17 @@ class LeaderActivity : ToolbarActivity() {
             ll_3.visibility = View.GONE
             ll_3_left.visibility = View.GONE
             ll_3_right.visibility = View.GONE
-            ll_4.visibility = View.GONE
-            ll_4_left.visibility = View.GONE
+            //ll_4.visibility = View.GONE
+            //ll_4_left.visibility = View.GONE
             ll_4_right.visibility = View.GONE
             divider1.visibility = View.GONE
             divider2.visibility = View.GONE
-            divider3.visibility = View.GONE
+            //divider3.visibility = View.GONE
             divider4.visibility = View.GONE
             (ll_1_left.getChildAt(1) as TextView).text = "员工互评打分"
-            (ll_1_right.getChildAt(1) as TextView).text = "我的分数"
-            (ll_1_right.getChildAt(0) as ImageView).backgroundResource = R.drawable.khjg
+            ll_1_right.visibility = View.INVISIBLE
+            (ll_4_left.getChildAt(1) as TextView).text = "我的分数"
+            (ll_4_left.getChildAt(0) as ImageView).backgroundResource = R.drawable.khjg
         }
 
         ll_1_left.setOnClickListener {
@@ -106,30 +112,7 @@ class LeaderActivity : ToolbarActivity() {
                 return@setOnClickListener
             }
             isLoading = true
-            if (role == 2 || role == 3) {
-                SoguApi.getService(application)
-                        .showSumScore()
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeOn(Schedulers.io())
-                        .subscribe({ payload ->
-                            if (payload.isOk) {
-                                if (payload.payload != null) {
-                                    TotalScoreActivity.start(context, payload.payload!!)
-                                } else {
-                                    showToast("暂无数据")
-                                }
-                            } else
-                                showToast(payload.message)
-                            isLoading = false
-                        }, { e ->
-                            Trace.e(e)
-                            when (e) {
-                                is JsonSyntaxException -> showToast("后台数据出错")
-                                is UnknownHostException -> showToast("网络出错")
-                                else -> showToast("未知错误")
-                            }
-                        })
-            } else {
+            if (role == 1) {
                 //员工互评考核结果不用传，领导打分详情页要传
                 SoguApi.getService(application)
                         .grade_info()
@@ -201,30 +184,55 @@ class LeaderActivity : ToolbarActivity() {
                 return@setOnClickListener
             }
             isLoading = true
-            SoguApi.getService(application)
-                    .pointRank()
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe({ payload ->
-                        if (payload.isOk) {
-                            var data = payload.payload as ArrayList<ScoreBean>
-                            if (data == null || data.size == 0) {
-                                showToast("暂无数据")
+            if (role == 1) {
+                SoguApi.getService(application)
+                        .pointRank()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({ payload ->
+                            if (payload.isOk) {
+                                var data = payload.payload as ArrayList<ScoreBean>
+                                if (data == null || data.size == 0) {
+                                    showToast("暂无数据")
+                                } else {
+                                    ScoreListActivity.start(context, data)
+                                }
                             } else {
-                                ScoreListActivity.start(context, data)
+                                showToast(payload.message)
                             }
-                        } else {
-                            showToast(payload.message)
-                        }
-                        isLoading = false
-                    }, { e ->
-                        Trace.e(e)
-                        when (e) {
-                            is JsonSyntaxException -> showToast("后台数据出错")
-                            is UnknownHostException -> showToast("网络出错")
-                            else -> showToast("未知错误")
-                        }
-                    })
+                            isLoading = false
+                        }, { e ->
+                            Trace.e(e)
+                            when (e) {
+                                is JsonSyntaxException -> showToast("后台数据出错")
+                                is UnknownHostException -> showToast("网络出错")
+                                else -> showToast("未知错误")
+                            }
+                        })
+            } else if (role == 2 || role == 3) {
+                SoguApi.getService(application)
+                        .showSumScore()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({ payload ->
+                            if (payload.isOk) {
+                                if (payload.payload != null) {
+                                    TotalScoreActivity.start(context, payload.payload!!)
+                                } else {
+                                    showToast("暂无数据")
+                                }
+                            } else
+                                showToast(payload.message)
+                            isLoading = false
+                        }, { e ->
+                            Trace.e(e)
+                            when (e) {
+                                is JsonSyntaxException -> showToast("后台数据出错")
+                                is UnknownHostException -> showToast("网络出错")
+                                else -> showToast("未知错误")
+                            }
+                        })
+            }
         }
 
         ll_4_right.setOnClickListener {
@@ -261,5 +269,86 @@ class LeaderActivity : ToolbarActivity() {
             RuleActivity.start(context)
         }
 
+        ll_4_new.setOnClickListener {
+            PointProgressActivity.start(context)
+        }
+
+    }
+
+    //下面是倒计时
+    private val mHandler = object : Handler() {
+
+        override fun handleMessage(msg: Message) {
+            if (msg.what == 0x001) {
+                synchronized(this) {
+                    var leftSec = msg.obj as Int
+                    timeTick.text = "距离结束还有${formatSec(leftSec)}"
+                    leftSec--
+                    if (leftSec == -1) {
+                        timeTick.text = "超时"
+                    } else {
+                        sendMessageDelayed(obtainMessage(0x001, leftSec), 1000)
+                    }
+                }
+            }
+        }
+    }
+
+    fun formatSec(sec: Int): String {
+        var second = sec - sec / 60 * 60
+        var minute = sec / 60 - sec / 60 / 60 * 60
+        var hour = sec / 60 / 60 - sec / 60 / 60 / 24 * 24
+        var day = sec / 60 / 60 / 24
+
+        var str = ""
+        if (day > 0) {
+            str = "${str}${day}天"
+        }
+        if (hour > 0) {
+            str = "${str}${hour}小时"
+        }
+        if (minute > 0) {
+            str = "${str}${minute}分钟"
+        }
+        if (second > 0) {
+            str = "${str}${second}秒"
+        }
+
+        return str
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mHandler.removeMessages(0x001)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mHandler.removeMessages(0x001)
+        timeTick.text = ""
+        SoguApi.getService(application)
+                .getType()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        payload.payload?.apply {
+                            var TYPE = this.type as Int //-1=>隐藏入口 0=>未开启  1=>进入评分中心，2=>进入填写页面
+                            if (TYPE == 1 || TYPE == 2) {
+                                if (this.time != null) {
+                                    mHandler.sendMessageDelayed(mHandler.obtainMessage(0x001, this.time), 1000)
+                                }
+                            }
+                        }
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    when (e) {
+                        is JsonSyntaxException -> showToast("后台数据出错")
+                        is UnknownHostException -> showToast("网络出错")
+                        else -> showToast("未知错误")
+                    }
+                })
     }
 }
