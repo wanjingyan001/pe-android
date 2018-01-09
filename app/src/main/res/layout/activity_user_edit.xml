@@ -182,7 +182,7 @@
 
             <TextView
                 style="@style/TableTextLabel"
-                android:text="年终评分" />
+                android:text="绩效考核" />
 
             <TextView
                 android:id="@+id/tv_rate"

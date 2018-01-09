@@ -5,6 +5,8 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Build;
@@ -271,6 +273,17 @@ public class Utils {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    public static String getVersionName(Context context) {
+        try {
+            PackageManager manager = context.getPackageManager();
+            PackageInfo info = manager.getPackageInfo(context.getPackageName(), PackageManager.GET_CONFIGURATIONS);
+            return info.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**

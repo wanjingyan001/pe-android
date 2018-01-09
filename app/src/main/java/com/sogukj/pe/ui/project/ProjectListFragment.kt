@@ -16,6 +16,7 @@ import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
@@ -254,12 +255,16 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                     iv_loading?.visibility = View.GONE
                 }, { e ->
                     Trace.e(e)
-//                    showToast("暂无可用数据")
+                    showToast("暂无可用数据")
                     iv_loading?.visibility = View.GONE
                     SupportEmptyView.checkEmpty(this, adapter)
                 }, {
                     SupportEmptyView.checkEmpty(this, adapter)
-//                    refresh?.setEnableLoadmore(adapter.dataList.size >= offset + 20)
+                    val b = adapter.dataList.size >= offset + 20
+                    refresh?.setEnableLoadmore(b)
+//                    if (!b) {
+//                        refresh?.setBottomView(LoadMoreView(baseActivity))
+//                    }
                     adapter.notifyDataSetChanged()
                     if (offset == 0)
                         refresh?.finishRefreshing()
@@ -369,6 +374,7 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
         val tv4: TextView
         val tv5: TextView
         val tv_pingjia: LinearLayout
+        val point: ImageView
 
         init {
             tvTitle = convertView.findViewById(R.id.tv_title) as TextView
@@ -380,6 +386,7 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
             tv4 = convertView.findViewById(R.id.business) as TextView
             tv5 = convertView.findViewById(R.id.ability) as TextView
             tv_pingjia = convertView.findViewById(R.id.pingjia) as LinearLayout
+            point = convertView.findViewById(R.id.point) as ImageView
         }
 
         override fun setData(view: View, data: ProjectBean, position: Int) {
@@ -480,6 +487,13 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                     tv5.visibility = View.VISIBLE
                 }
             }
+            data.red?.let {
+                if (it == 0) {
+                    point.visibility = View.GONE
+                } else {
+                    point.visibility = View.VISIBLE
+                }
+            }
         }
 
     }
@@ -510,6 +524,7 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
         val tv4: TextView
         val tv5: TextView
         val pingjia: LinearLayout
+        val point: ImageView
 
         init {
             tv1 = view.find(R.id.tv1)
@@ -518,6 +533,7 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
             tv4 = view.find(R.id.business)
             tv5 = view.find(R.id.ability)
             pingjia = view.find(R.id.pingjia)
+            point = view.find(R.id.point)
         }
 
         override fun setData(view: View, data: ProjectBean, position: Int) {
@@ -599,6 +615,13 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                     tv5.visibility = View.GONE
                 } else {
                     tv5.visibility = View.VISIBLE
+                }
+            }
+            data.red?.let {
+                if (it == 0) {
+                    point.visibility = View.GONE
+                } else {
+                    point.visibility = View.VISIBLE
                 }
             }
         }

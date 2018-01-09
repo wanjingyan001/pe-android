@@ -513,6 +513,9 @@ class BuildSignActivity : ToolbarActivity() {
                     .withActivity(this)
                     .withRequestCode(REQ_SELECT_FILE)
                     .withTitle("内部存储")
+                    .withFilterDirectories(true)
+                    .withHiddenFiles(true)
+                    .withCloseMenu(false)
 //                    .withFilter(Pattern.compile(".*\\.txt$")) // Filtering files and directories by file name using regexp
                     .start()
         }

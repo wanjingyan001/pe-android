@@ -3,7 +3,6 @@ package com.sogukj.pe.ui.htdata
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
@@ -98,6 +97,10 @@ class ProjectBookUploadActivity : ToolbarActivity() {
             MaterialFilePicker()
                     .withActivity(this)
                     .withRequestCode(REQ_SELECT_FILE)
+                    .withTitle("内部存储")
+                    .withFilterDirectories(true)
+                    .withHiddenFiles(true)
+                    .withCloseMenu(false)
                     .start()
         }
 
