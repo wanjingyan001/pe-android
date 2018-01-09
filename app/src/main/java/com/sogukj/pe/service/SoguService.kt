@@ -1069,4 +1069,8 @@ interface SoguService {
     @FormUrlEncoded
     @POST("/api/grade/perAppraisal")
     fun perAppraisal(@Field("user_id") user_id: Int, @Field("type") type: Int): Observable<Payload<NormalItemBean>>
+
+    //全员互评进度表
+    @POST("/api/Grade/progress")
+    fun GradeProgress(): Observable<Payload<ProgressBean>>
 }

@@ -1,6 +1,5 @@
 package com.sogukj.pe.ui.score
 
-import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -26,14 +25,13 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_point_progress.*
 import org.jetbrains.anko.textColor
 import java.net.UnknownHostException
-import android.content.DialogInterface
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
-import android.util.Log
 import com.afollestad.materialdialogs.GravityEnum
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
+import com.sogukj.pe.bean.ProgressBean
 
 
 class PointProgressActivity : ToolbarActivity() {
@@ -80,25 +78,43 @@ class PointProgressActivity : ToolbarActivity() {
             }
         })
 
-        adapter = RecyclerAdapter<GradeCheckBean.ScoreItem>(context, { _adapter, parent, type0 ->
+        adapter = RecyclerAdapter<ProgressBean.ProgressItem>(context, { _adapter, parent, type0 ->
             val convertView = _adapter.getView(R.layout.item_judge, parent) as LinearLayout
-            object : RecyclerHolder<GradeCheckBean.ScoreItem>(convertView) {
+            object : RecyclerHolder<ProgressBean.ProgressItem>(convertView) {
 
                 val tvTag1 = convertView.findViewById(R.id.tag1) as TextView
                 val tvTag2 = convertView.findViewById(R.id.tag2) as TextView
                 val tvTag3 = convertView.findViewById(R.id.tag3) as TextView
                 val tvTag4 = convertView.findViewById(R.id.tag4) as TextView
 
-                override fun setData(view: View, data: GradeCheckBean.ScoreItem, position: Int) {
+                override fun setData(view: View, data: ProgressBean.ProgressItem, position: Int) {
                     tvTag1.visibility = View.VISIBLE
                     tvTag2.visibility = View.VISIBLE
                     tvTag3.visibility = View.VISIBLE
                     tvTag4.visibility = View.VISIBLE
 
                     tvTag1.text = data.name
-                    tvTag2.text = data.department
-                    tvTag3.text = data.position
-                    tvTag4.text = data.grade_date
+                    fill(tvTag2, data.wri!!)
+                    fill(tvTag3, data.gws!!)
+                    fill(tvTag4, data.jxs!!)
+
+//                    var name: String? = null//	姓名
+//                    var wri: Int? = null// 个人是否输入填写项    0=>未完成，1=>已完成，2=>延时完成
+//                    var gws: Int? = null//是否为别人打岗位分    同上
+//                    var jxs: Int? = null//上级是否为我打绩效分    同上
+//                    var status: Int? = null//1--已完成，2-未完成
+                }
+
+                fun fill(view: TextView, dataIndex: Int) {
+                    if (dataIndex == 0) {
+                        view.text = "未完成"
+                        view.textColor = Color.RED
+                    } else if (dataIndex == 1) {
+                        view.text = "已完成"
+                    } else if (dataIndex == 2) {
+                        view.text = "延时完成"
+                        view.textColor = Color.RED
+                    }
                 }
             }
         })
@@ -123,7 +139,6 @@ class PointProgressActivity : ToolbarActivity() {
                     .content(content1)
                     .contentColor(Color.parseColor("#ffa0a4aa"))
                     .neutralText("知道了")
-                    .neutralColor(Color.parseColor("#ff282828"))
                     .buttonsGravity(GravityEnum.CENTER)
                     .onNeutral { dialog, which ->
 
@@ -132,19 +147,19 @@ class PointProgressActivity : ToolbarActivity() {
         }
     }
 
-    lateinit var adapter: RecyclerAdapter<GradeCheckBean.ScoreItem>
+    lateinit var adapter: RecyclerAdapter<ProgressBean.ProgressItem>
     var currentIndex = 0
-    var unfinish = ArrayList<GradeCheckBean.ScoreItem>()
-    var finish = ArrayList<GradeCheckBean.ScoreItem>()
+    var _unfinish = ArrayList<ProgressBean.ProgressItem>()
+    var _finish = ArrayList<ProgressBean.ProgressItem>()
 
     fun loadData() {
         if (currentIndex == 0) {
             adapter.dataList.clear()
-            adapter.dataList.addAll(unfinish)
+            adapter.dataList.addAll(_unfinish)
             adapter.notifyDataSetChanged()
         } else if (currentIndex == 1) {
             adapter.dataList.clear()
-            adapter.dataList.addAll(finish)
+            adapter.dataList.addAll(_finish)
             adapter.notifyDataSetChanged()
         }
     }
@@ -152,14 +167,18 @@ class PointProgressActivity : ToolbarActivity() {
     override fun onResume() {
         super.onResume()
         SoguApi.getService(application)
-                .check(2)
+                .GradeProgress()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         payload.payload?.apply {
-                            unfinish = ready_grade!!
-                            finish = finish_grade!!
+                            finish?.let {
+                                _finish = it
+                            }
+                            unfinish?.let {
+                                _unfinish = it
+                            }
                             loadData()
                         }
                     } else
