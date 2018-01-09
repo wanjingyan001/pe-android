@@ -77,7 +77,7 @@ class LeaderActivity : ToolbarActivity() {
             divider2.visibility = View.GONE
             //divider3.visibility = View.GONE
             divider4.visibility = View.GONE
-            (ll_2_left.getChildAt(1) as TextView).text = "直线上级打分"
+            (ll_2_left.getChildAt(1) as TextView).text = "上级打分"
             (ll_1_left.getChildAt(1) as TextView).text = "员工互评打分"
             (ll_4_left.getChildAt(1) as TextView).text = "我的分数"
             (ll_4_left.getChildAt(0) as ImageView).backgroundResource = R.drawable.khjg
@@ -297,13 +297,14 @@ class LeaderActivity : ToolbarActivity() {
     fun formatSec(sec: Int): String {
         var second = sec - sec / 60 * 60
         var minute = sec / 60 - sec / 60 / 60 * 60
-        var hour = sec / 60 / 60 - sec / 60 / 60 / 24 * 24
-        var day = sec / 60 / 60 / 24
+//        var hour = sec / 60 / 60 - sec / 60 / 60 / 24 * 24
+//        var day = sec / 60 / 60 / 24
+        var hour = sec / 60 / 60
 
         var str = ""
-        if (day > 0) {
-            str = "${str}${day}天"
-        }
+//        if (day > 0) {
+//            str = "${str}${day}天"
+//        }
         if (hour > 0) {
             str = "${str}${hour}小时"
         }

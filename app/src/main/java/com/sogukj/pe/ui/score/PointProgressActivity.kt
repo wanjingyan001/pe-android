@@ -1,5 +1,6 @@
 package com.sogukj.pe.ui.score
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -12,7 +13,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.framework.base.ToolbarActivity
 import com.google.gson.JsonSyntaxException
-import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.GradeCheckBean
 import com.sogukj.pe.util.Trace
@@ -26,6 +26,15 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_point_progress.*
 import org.jetbrains.anko.textColor
 import java.net.UnknownHostException
+import android.content.DialogInterface
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
+import android.util.Log
+import com.afollestad.materialdialogs.GravityEnum
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.Theme
+
 
 class PointProgressActivity : ToolbarActivity() {
 
@@ -93,20 +102,34 @@ class PointProgressActivity : ToolbarActivity() {
                 }
             }
         })
-        adapter.onItemClick = { v, p ->
-            //            //领导员工进同一个界面
-//            if (currentIndex == 0) {
-//                GangWeiShengRenLiActivity.start(context, adapter.dataList.get(p), false)
-//            } else if (currentIndex == 1) {
-//                GangWeiShengRenLiActivity.start(context, adapter.dataList.get(p), true)
-//            }
-        }
 
         val layoutManager = LinearLayoutManager(context)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         list.layoutManager = layoutManager
         list.addItemDecoration(SpaceItemDecoration(Utils.dpToPx(context, 10)))
         list.adapter = adapter
+
+        toolbar_menu.setOnClickListener {
+            var content1 = SpannableString("本页中的三个状态含义如下：\n" +
+                    "工作结果：指员工自己是否填写了绩效考核中的工作结果。\n" +
+                    "岗位互评：指员工自己是否为全公司人员评分完毕。\n" +
+                    "直线上级评分：此处上级包含直线上级与班子两部分，只有两部分都完成打分才会显示完成打分。")
+            content1.setSpan(ForegroundColorSpan(Color.parseColor("#ff282828")), 14, 19, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+            content1.setSpan(ForegroundColorSpan(Color.parseColor("#ff282828")), 41, 46, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+            content1.setSpan(ForegroundColorSpan(Color.parseColor("#ff282828")), 65, 72, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+            MaterialDialog.Builder(this)
+                    .theme(Theme.LIGHT)
+                    .title("提示")
+                    .content(content1)
+                    .contentColor(Color.parseColor("#ffa0a4aa"))
+                    .neutralText("知道了")
+                    .neutralColor(Color.parseColor("#ff282828"))
+                    .buttonsGravity(GravityEnum.CENTER)
+                    .onNeutral { dialog, which ->
+
+                    }
+                    .show()
+        }
     }
 
     lateinit var adapter: RecyclerAdapter<GradeCheckBean.ScoreItem>

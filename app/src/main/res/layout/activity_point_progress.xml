@@ -49,6 +49,7 @@
             android:gravity="center"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
+            android:text="帮助"
             android:textColor="@color/text_3"
             android:textSize="14sp" />
     </android.support.v7.widget.Toolbar>
