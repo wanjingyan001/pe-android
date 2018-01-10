@@ -374,7 +374,7 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
         val tv4: TextView
         val tv5: TextView
         val tv_pingjia: LinearLayout
-        val point: ImageView
+        val point: TextView
 
         init {
             tvTitle = convertView.findViewById(R.id.tv_title) as TextView
@@ -386,7 +386,7 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
             tv4 = convertView.findViewById(R.id.business) as TextView
             tv5 = convertView.findViewById(R.id.ability) as TextView
             tv_pingjia = convertView.findViewById(R.id.pingjia) as LinearLayout
-            point = convertView.findViewById(R.id.point) as ImageView
+            point = convertView.findViewById(R.id.point) as TextView
         }
 
         override fun setData(view: View, data: ProjectBean, position: Int) {
@@ -487,12 +487,12 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                     tv5.visibility = View.VISIBLE
                 }
             }
-            data.red?.let {
-                if (it == 0) {
-                    point.visibility = View.GONE
-                } else {
-                    point.visibility = View.VISIBLE
-                }
+
+            if (data.red != null && data.red != 0) {
+                point.visibility = View.VISIBLE
+                point.text = data.red.toString()
+            } else {
+                point.visibility = View.GONE
             }
         }
 
@@ -524,7 +524,7 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
         val tv4: TextView
         val tv5: TextView
         val pingjia: LinearLayout
-        val point: ImageView
+        val point: TextView
 
         init {
             tv1 = view.find(R.id.tv1)
@@ -617,12 +617,11 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                     tv5.visibility = View.VISIBLE
                 }
             }
-            data.red?.let {
-                if (it == 0) {
-                    point.visibility = View.GONE
-                } else {
-                    point.visibility = View.VISIBLE
-                }
+            if (data.red != null && data.red != 0) {
+                point.visibility = View.VISIBLE
+                point.text = data.red.toString()
+            } else {
+                point.visibility = View.GONE
             }
         }
 

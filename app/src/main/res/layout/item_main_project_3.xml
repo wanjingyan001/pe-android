@@ -15,12 +15,19 @@
         android:paddingLeft="20dp"
         android:paddingRight="20dp">
 
-        <ImageView
+        <TextView
             android:id="@+id/point"
-            android:layout_width="6dp"
-            android:layout_height="6dp"
-            android:src="@drawable/red_point"
-            android:visibility="gone" />
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_gravity="top"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/red_point"
+            android:gravity="center"
+            android:text="3"
+            android:textColor="@color/white"
+            android:textSize="8sp"
+            android:visibility="gone"
+            />
 
         <TextView
             android:id="@+id/tv_title"
