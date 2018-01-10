@@ -55,6 +55,17 @@
             android:textSize="14sp" />
     </android.support.v7.widget.Toolbar>
 
+    <TextView
+        android:id="@+id/timeTick"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/fund_pink"
+        android:gravity="center"
+        android:text="距离结束还有5分钟"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:visibility="gone" />
+
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -63,17 +74,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/timeTick"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:textSize="18sp"
-                android:textColor="@color/white"
-                android:background="@color/fund_pink"
-                android:gravity="center"
-                android:text="距离结束还有5分钟"
-                android:visibility="gone"/>
 
             <LinearLayout
                 android:id="@+id/ll_1"

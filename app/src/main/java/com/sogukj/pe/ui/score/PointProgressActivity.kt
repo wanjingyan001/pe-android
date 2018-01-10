@@ -28,6 +28,7 @@ import java.net.UnknownHostException
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
+import com.afollestad.materialdialogs.DialogAction
 import com.afollestad.materialdialogs.GravityEnum
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
@@ -133,17 +134,20 @@ class PointProgressActivity : ToolbarActivity() {
             content1.setSpan(ForegroundColorSpan(Color.parseColor("#ff282828")), 14, 19, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
             content1.setSpan(ForegroundColorSpan(Color.parseColor("#ff282828")), 41, 46, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
             content1.setSpan(ForegroundColorSpan(Color.parseColor("#ff282828")), 65, 72, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
-            MaterialDialog.Builder(this)
+            var dialog = MaterialDialog.Builder(this)
                     .theme(Theme.LIGHT)
-                    .title("提示")
-                    .content(content1)
-                    .contentColor(Color.parseColor("#ffa0a4aa"))
-                    .neutralText("知道了")
-                    .buttonsGravity(GravityEnum.CENTER)
-                    .onNeutral { dialog, which ->
-
-                    }
+                    .customView(R.layout.help, false)
                     .show()
+
+            val customeView = dialog.getCustomView() as LinearLayout
+            var content = customeView.findViewById(R.id.content) as TextView
+            content.text = content1
+            var button = customeView.findViewById(R.id.btn_OK) as TextView
+            button.setOnClickListener(object : View.OnClickListener {
+                override fun onClick(v: View?) {
+                    dialog.dismiss()
+                }
+            })
         }
     }
 
