@@ -13,7 +13,6 @@ import android.widget.TextView
 import com.framework.base.ToolbarActivity
 import com.google.gson.JsonSyntaxException
 import com.sogukj.pe.R
-import com.sogukj.pe.bean.GradeCheckBean
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.RecyclerAdapter
@@ -28,11 +27,10 @@ import java.net.UnknownHostException
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
-import com.afollestad.materialdialogs.DialogAction
-import com.afollestad.materialdialogs.GravityEnum
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.sogukj.pe.bean.ProgressBean
+import org.jetbrains.anko.backgroundResource
 
 
 class PointProgressActivity : ToolbarActivity() {
@@ -140,6 +138,7 @@ class PointProgressActivity : ToolbarActivity() {
                     .show()
 
             val customeView = dialog.getCustomView() as LinearLayout
+            customeView.backgroundResource = R.drawable.bg_help
             var content = customeView.findViewById(R.id.content) as TextView
             content.text = content1
             var button = customeView.findViewById(R.id.btn_OK) as TextView
