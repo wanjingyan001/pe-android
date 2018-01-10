@@ -110,6 +110,7 @@ class PointProgressActivity : ToolbarActivity() {
                         view.textColor = Color.RED
                     } else if (dataIndex == 1) {
                         view.text = "已完成"
+                        view.textColor = Color.parseColor("#FF282828")
                     } else if (dataIndex == 2) {
                         view.text = "延时完成"
                         view.textColor = Color.RED
