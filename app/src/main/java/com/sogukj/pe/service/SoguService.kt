@@ -652,7 +652,7 @@ interface SoguService {
     fun msgIndex(): Observable<Payload<MessageIndexBean>>
 
     @POST("/api/Message/getMessageList")
-    fun msgList(): Observable<Payload<List<MessageBean>>>
+    fun msgList(): Observable<Payload<ArrayList<MessageBean>>>
 
     //    @FormUrlEncoded
 //    @POST("/api/Approve/applyUrgent")

@@ -337,7 +337,9 @@ class LeaderActivity : ToolbarActivity() {
                             var TYPE = this.type as Int //-1=>隐藏入口 0=>未开启  1=>进入评分中心，2=>进入填写页面
                             if (TYPE == 1 || TYPE == 2) {
                                 if (this.time != null) {
-                                    mHandler.sendMessageDelayed(mHandler.obtainMessage(0x001, this.time), 1000)
+                                    Thread.sleep(1000)
+                                    timeTick.visibility = View.VISIBLE
+                                    mHandler.sendMessageDelayed(mHandler.obtainMessage(0x001, this.time), 0)
                                 }
                             }
                         }

@@ -1,0 +1,154 @@
+package com.sogukj.pe.util;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.os.Build;
+import android.os.Environment;
+import android.os.StatFs;
+import android.support.v4.util.LruCache;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
+import com.sogukj.pe.bean.MessageBean;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
+
+
+/**
+ * Created by sogubaby on 2018/1/9.
+ */
+
+public class CacheUtils {
+
+    public CacheUtils(Context mContext) {
+        final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+        int cacheSize = maxMemory / 8;
+        mMemoryCache = new LruCache<String, ArrayList<MessageBean>>(cacheSize) {
+            @Override
+            protected int sizeOf(String key, ArrayList<MessageBean> value) {
+                //return value.getByteCount() / 1024;
+                return value.size();
+            }
+        };
+
+
+        // 初始化DiskLruCache
+        File diskCacheDir = getDiskCacheDir(mContext, "data");
+        if (!diskCacheDir.exists()) {
+            diskCacheDir.mkdirs();
+        }
+
+        if (getUsableSpace(diskCacheDir) > DISK_CACHE_SIZE) {
+            try {
+                mDiskLruCache = DiskLruCache.open(diskCacheDir, 1, 1,
+                        DISK_CACHE_SIZE);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public ArrayList<MessageBean> getMemoryCache(String key) {
+        return mMemoryCache.get(key);
+    }
+
+    private LruCache<String, ArrayList<MessageBean>> mMemoryCache;
+
+    public void addToMemoryCache(String key, ArrayList<MessageBean> data) {
+        mMemoryCache.put(key, data);
+    }
+
+    private DiskLruCache mDiskLruCache;
+    private static final long DISK_CACHE_SIZE = 1024 * 1024 * 50;// 50M
+    private Gson gson = new Gson();
+
+    public ArrayList<MessageBean> getDiskCache(String key) {
+        ArrayList<MessageBean> retData = new ArrayList<MessageBean>();
+        try {
+            //若snapshot为空，表明该key对应的文件不在缓存中
+            DiskLruCache.Snapshot snapshot = mDiskLruCache.get(key);
+            if (snapshot != null) {
+                FileInputStream fileInputStream = (FileInputStream) snapshot
+                        .getInputStream(DISK_CACHE_INDEX);
+                byte[] buffer = new byte[1024];//尽可能大
+                int len = 0;
+                ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+                while ((len = fileInputStream.read(buffer)) != -1) {
+                    outStream.write(buffer, 0, len);
+                }
+                String data = new String(outStream.toByteArray(), "UTF-8");
+                outStream.close();
+                snapshot.close();
+
+                //snapshot.getString(DISK_CACHE_INDEX);
+
+                retData = gson.fromJson(data, new TypeToken<ArrayList<MessageBean>>() {
+                }.getType());//把JSON格式的字符串转为List
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return retData;
+    }
+
+    public void addToDiskCache(String key, ArrayList<MessageBean> data) {
+        try {
+            DiskLruCache.Editor editor = mDiskLruCache.edit(key);
+            if (editor != null) {
+
+//                editor.set(DISK_CACHE_INDEX, gson.toJson(data));
+//                editor.commit();
+
+                OutputStream outputStream = editor
+                        .newOutputStream(DISK_CACHE_INDEX);
+                outputStream.write(gson.toJson(data).getBytes("UTF-8"));
+                editor.commit();
+                mDiskLruCache.flush();
+            }
+        } catch (IOException e) {
+        }
+    }
+
+    public void close() {
+        if (mDiskLruCache != null && !mDiskLruCache.isClosed()) {
+            try {
+                mDiskLruCache.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private static final int DISK_CACHE_INDEX = 0;
+
+    private File getDiskCacheDir(Context context, String name) {
+        boolean externalStorageAvailable = Environment
+                .getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
+        String cachePath;
+        if (externalStorageAvailable) {
+            cachePath = context.getExternalCacheDir().getPath();
+        } else {
+            cachePath = context.getCacheDir().getPath();
+        }
+        return new File(cachePath + File.separator + name);
+    }
+
+    private long getUsableSpace(File path) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
+            return path.getUsableSpace();
+        }
+        StatFs statFs = new StatFs(path.getPath());
+        return statFs.getBlockSizeLong() * statFs.getAvailableBlocksLong();
+    }
+}

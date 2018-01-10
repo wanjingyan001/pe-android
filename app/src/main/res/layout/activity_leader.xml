@@ -72,7 +72,8 @@
                 android:textColor="@color/white"
                 android:background="@color/fund_pink"
                 android:gravity="center"
-                android:text="距离结束还有5分钟" />
+                android:text="距离结束还有5分钟"
+                android:visibility="gone"/>
 
             <LinearLayout
                 android:id="@+id/ll_1"

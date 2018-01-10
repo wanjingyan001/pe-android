@@ -34,8 +34,10 @@ import com.fashare.stack_layout.transformer.AngleTransformer
 import com.fashare.stack_layout.transformer.AlphaTransformer
 import com.fashare.stack_layout.transformer.StackPageTransformer
 import com.sogukj.pe.bean.MessageBean
+import com.sogukj.pe.util.CacheUtils
 import com.sogukj.pe.util.ColorUtil
 import com.sogukj.pe.view.MyStackPageTransformer
+import com.sogukj.util.Store
 
 
 /**
@@ -84,12 +86,27 @@ class MainHomeFragment : BaseFragment() {
             }
         })
 
+        cache = CacheUtils(context)
+
         doRequest()
     }
 
     lateinit var adapter: HomeAdapter
+    lateinit var cache: CacheUtils
+
+    override fun onDestroy() {
+        super.onDestroy()
+        cache.close()
+    }
 
     fun doRequest() {
+        var cacheData = cache.getDiskCache("${Store.store.getUser(context)?.uid}")
+        if (cacheData != null) {
+            Log.e("有数据", "有数据")
+            adapter.dataList.clear()
+            adapter.dataList.addAll(cacheData)
+            adapter.notifyDataSetChanged()
+        }
         SoguApi.getService(baseActivity!!.application)
                 .msgList()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -97,8 +114,11 @@ class MainHomeFragment : BaseFragment() {
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         payload.payload?.apply {
+                            adapter.dataList.clear()
                             adapter.dataList.addAll(this)
                             adapter.notifyDataSetChanged()
+
+                            cache.addToDiskCache("${Store.store.getUser(context)?.uid}", this)
                         }
                     } else
                         showToast(payload.message)
