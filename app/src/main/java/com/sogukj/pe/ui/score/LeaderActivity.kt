@@ -58,14 +58,14 @@ class LeaderActivity : ToolbarActivity() {
 
         if (role == 1 && adjust == 1) {
             //(ll_1_right.getChildAt(0) as ImageView).backgroundResource = R.drawable.yghpjg
-            (ll_4_left.getChildAt(0) as ImageView).backgroundResource = R.drawable.gwsrlbd
+            (ll_4_left.getChildAt(0) as ImageView).backgroundResource = R.drawable.khjg
         } else if (role == 1 && adjust == 0) {
             ll_3.visibility = View.GONE
             ll_3_left.visibility = View.GONE
             ll_3_right.visibility = View.GONE
             divider2.visibility = View.GONE
             //(ll_1_right.getChildAt(0) as ImageView).backgroundResource = R.drawable.yghpjg
-            (ll_4_left.getChildAt(0) as ImageView).backgroundResource = R.drawable.gwsrlbd
+            (ll_4_left.getChildAt(0) as ImageView).backgroundResource = R.drawable.khjg
         } else if (role == 2) {
             ll_3.visibility = View.GONE
             ll_3_left.visibility = View.GONE
