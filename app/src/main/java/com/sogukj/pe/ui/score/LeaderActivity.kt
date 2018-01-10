@@ -297,14 +297,13 @@ class LeaderActivity : ToolbarActivity() {
     fun formatSec(sec: Int): String {
         var second = sec - sec / 60 * 60
         var minute = sec / 60 - sec / 60 / 60 * 60
-//        var hour = sec / 60 / 60 - sec / 60 / 60 / 24 * 24
-//        var day = sec / 60 / 60 / 24
-        var hour = sec / 60 / 60
+        var hour = sec / 60 / 60 - sec / 60 / 60 / 24 * 24
+        var day = sec / 60 / 60 / 24
 
         var str = ""
-//        if (day > 0) {
-//            str = "${str}${day}天"
-//        }
+        if (day > 0) {
+            str = "${str}${day}天"
+        }
         if (hour > 0) {
             str = "${str}${hour}小时"
         }

@@ -59,7 +59,7 @@
         android:id="@+id/timeTick"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="@color/fund_pink"
+        android:background="#FFE95C4A"
         android:gravity="center"
         android:text="距离结束还有5分钟"
         android:textColor="@color/white"
