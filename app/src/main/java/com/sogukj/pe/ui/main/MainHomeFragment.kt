@@ -87,7 +87,7 @@ class MainHomeFragment : BaseFragment() {
         })
 
         cache = CacheUtils(context)
-
+        pb.visibility = View.VISIBLE
         doRequest()
     }
 
@@ -102,7 +102,6 @@ class MainHomeFragment : BaseFragment() {
     fun doRequest() {
         var cacheData = cache.getDiskCache("${Store.store.getUser(context)?.uid}")
         if (cacheData != null) {
-            Log.e("有数据", "有数据")
             adapter.dataList.clear()
             adapter.dataList.addAll(cacheData)
             adapter.notifyDataSetChanged()
@@ -122,9 +121,17 @@ class MainHomeFragment : BaseFragment() {
                         }
                     } else
                         showToast(payload.message)
+                    pb.visibility = View.GONE
                 }, { e ->
                     Trace.e(e)
-                    showToast("暂无可用数据")
+                    showToast("暂无新数据")
+                    pb.visibility = View.GONE
+                }, {
+                    pb.visibility = View.GONE
+                    if (adapter.dataList.size == 0) {
+                        iv_empty.visibility = View.VISIBLE
+                        stack_layout.visibility = View.GONE
+                    }
                 })
     }
 
