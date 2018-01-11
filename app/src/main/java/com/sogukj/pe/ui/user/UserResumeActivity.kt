@@ -181,7 +181,6 @@ class UserResumeActivity : BaseActivity(), View.OnClickListener {
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         payload.payload?.apply {
-                            Log.d("WJY", Gson().toJson(this))
                             resume = this
                             this.baseInfo?.apply {
                                 setData(this)
@@ -196,6 +195,8 @@ class UserResumeActivity : BaseActivity(), View.OnClickListener {
                     } else {
                         showToast(payload.message)
                     }
+                }, { e ->
+                    Trace.e(e)
                 })
     }
 
