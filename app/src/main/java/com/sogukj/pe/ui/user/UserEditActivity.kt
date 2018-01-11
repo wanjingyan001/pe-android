@@ -55,31 +55,6 @@ class UserEditActivity : ToolbarActivity() {
         setBack(true)
         title = "个人信息"
         val departList = intent.getSerializableExtra(Extras.DATA) as ArrayList<DepartmentBean>?
-        Store.store.getUser(this)?.apply {
-            user = this
-            if (!TextUtils.isEmpty(name)) {
-                tv_name?.setText(name)
-                tv_name?.isEnabled = false
-            }
-            if (!TextUtils.isEmpty(phone))
-                tv_phone?.text = phone
-            if (!TextUtils.isEmpty(email))
-                tv_email?.setText(email)
-            if (!TextUtils.isEmpty(position))
-                tv_posotion?.setText(position)
-            if (!TextUtils.isEmpty(depart_name))
-                tv_depart?.text = depart_name
-            if (!TextUtils.isEmpty(memo))
-                tv_note?.setText(memo)
-            if (!TextUtils.isEmpty(url))
-                Glide.with(this@UserEditActivity)
-                        .load(headImage())
-//                        .error(R.drawable.img_logo_user)
-                        .into(iv_user)
-            if (full != null) {
-                tv_resume.text = "简历完整度:${full}"
-            }
-        }
 
         tr_resume.setOnClickListener {
             UserResumeActivity.start(this, Store.store.getUser(this)!!)
@@ -194,8 +169,38 @@ class UserEditActivity : ToolbarActivity() {
         mHandler.removeMessages(0x001)
     }
 
+
+    fun setUserInfo(){
+        Store.store.getUser(this)?.apply {
+            user = this
+            if (!TextUtils.isEmpty(name)) {
+                tv_name?.setText(name)
+                tv_name?.isEnabled = false
+            }
+            if (!TextUtils.isEmpty(phone))
+                tv_phone?.text = phone
+            if (!TextUtils.isEmpty(email))
+                tv_email?.setText(email)
+            if (!TextUtils.isEmpty(position))
+                tv_posotion?.setText(position)
+            if (!TextUtils.isEmpty(depart_name))
+                tv_depart?.text = depart_name
+            if (!TextUtils.isEmpty(memo))
+                tv_note?.setText(memo)
+            if (!TextUtils.isEmpty(url))
+                Glide.with(this@UserEditActivity)
+                        .load(headImage())
+//                        .error(R.drawable.img_logo_user)
+                        .into(iv_user)
+            if (full != null) {
+                tv_resume.text = "简历完整度:${full}"
+            }
+        }
+    }
+
     override fun onResume() {
         super.onResume()
+        setUserInfo()
         mHandler.removeMessages(0x001)
         tv_rate.text = ""
         SoguApi.getService(application)

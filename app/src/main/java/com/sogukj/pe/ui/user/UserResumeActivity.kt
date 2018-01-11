@@ -4,11 +4,13 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.framework.base.BaseActivity
+import com.google.gson.Gson
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.*
@@ -65,17 +67,13 @@ class UserResumeActivity : BaseActivity(), View.OnClickListener {
         tv_education.setOnClickListener(this)
         educationLayout.setOnClickListener(this)
         workLayout.setOnClickListener(this)
-
-    }
-
-    override fun onResume() {
-        super.onResume()
         if (isSelf) {
             user.uid?.let { doRequest(it) }
         } else {
             user.user_id?.let { doRequest(it) }
         }
     }
+
 
     fun setData(baseInfo: Resume.BaseInfoBean) {
         baseInfo.let {
@@ -115,6 +113,7 @@ class UserResumeActivity : BaseActivity(), View.OnClickListener {
             education.education = it.education!!
             education.major = it.major!!
             education.majorInfo = it.majorInfo
+            education.id = it.id
             educationAdapter.dataList.add(education)
         }
         educationAdapter.notifyDataSetChanged()
@@ -137,6 +136,7 @@ class UserResumeActivity : BaseActivity(), View.OnClickListener {
             workeducation.department = it.department
             workeducation.companyScale = it.companyScale
             workeducation.companyProperty = it.companyProperty
+            workeducation.id = it.id
             workAdapter.dataList.add(workeducation)
         }
         workAdapter.notifyDataSetChanged()
@@ -155,6 +155,7 @@ class UserResumeActivity : BaseActivity(), View.OnClickListener {
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         payload.payload?.apply {
+                            Log.d("WJY", Gson().toJson(this))
                             resume = this
                             this.baseInfo?.apply {
                                 setData(this)
@@ -173,21 +174,50 @@ class UserResumeActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun editResumeBaseInfo(reqBean: UserResumeReqBean) {
+        val userReq = UserReq()
+        userReq.ae = reqBean
         SoguApi.getService(application)
-                .editResumeBaseInfo(reqBean)
+                .editResumeBaseInfo(userReq)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         showToast("修改成功")
+                        changeUserInfo()
                     } else {
                         showToast(payload.message)
                     }
                 }, { e ->
                     Trace.e(e)
-                }, {}, {
+                    hideProgress()
+                }, {
+                    hideProgress()
+                }, {
                     showProgress("正在提交,请稍等")
                 })
+    }
+
+
+    private fun changeUserInfo() {
+        val user = Store.store.getUser(context)
+        if (null != user?.uid) {
+            SoguApi.getService(application)
+                    .userInfo(user.uid!!)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (payload.isOk) {
+                            val user = payload.payload
+                            user?.apply {
+                                Store.store.setUser(context, this)
+                                finish()
+                            }
+                        } else showToast(payload.message)
+                    }, { e ->
+                        Trace.e(e)
+                        showToast("提交失败")
+                    })
+        }
     }
 
 
@@ -225,6 +255,7 @@ class UserResumeActivity : BaseActivity(), View.OnClickListener {
             }
         })
         workAdapter.onItemClick = { v, position ->
+            WorkExpericenceAddActivity.start(this, workAdapter.dataList[position])
         }
         workList.layoutManager = LinearLayoutManager(this)
         workList.adapter = workAdapter
@@ -338,13 +369,46 @@ class UserResumeActivity : BaseActivity(), View.OnClickListener {
                     city?.let { tv_city.text = it.name }
                 }
                 Extras.RESULTCODE -> {
+                    var needChange = false
                     val list = data.getParcelableExtra<WorkEducationBean>(Extras.LIST)
-                    workAdapter.dataList.add(list)
+                    workAdapter.dataList.forEach {
+                        if (it.id == list.id) {
+                            it.employDate = list.employDate
+                            it.leaveDate = list.leaveDate
+                            it.company = list.company
+                            it.responsibility = list.responsibility
+                            it.jobInfo = list.jobInfo
+                            it.department = list.department
+                            it.companyScale = list.companyScale
+                            it.companyProperty = list.companyProperty
+                            it.trade = list.trade
+                            it.trade_name = list.trade_name
+                            it.pid = list.pid
+                            needChange = true
+                        }
+                    }
+                    if (!needChange) {
+                        workAdapter.dataList.add(list)
+                    }
                     workAdapter.notifyDataSetChanged()
                 }
                 Extras.RESULTCODE2 -> {
+                    var needChange = false
                     val list = data.getParcelableExtra<EducationBean>(Extras.LIST2)
-                    educationAdapter.dataList.add(list)
+                    educationAdapter.dataList.forEach {
+                        if (it.id == list.id) {
+                            it.toSchoolDate = list.toSchoolDate
+                            it.graduationDate = list.graduationDate
+                            it.school = list.school
+                            it.education = list.education
+                            it.major = list.major
+                            it.majorInfo = list.majorInfo
+                            needChange = true
+                        }
+                    }
+                    if (!needChange) {
+                        educationAdapter.dataList.add(list)
+                    }
                     educationAdapter.notifyDataSetChanged()
                 }
             }

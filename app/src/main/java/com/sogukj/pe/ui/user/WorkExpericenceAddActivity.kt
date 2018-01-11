@@ -4,13 +4,16 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.bigkoo.pickerview.TimePickerView
 import com.framework.base.BaseActivity
+import com.google.gson.Gson
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.bean.EducationReqBean
 import com.sogukj.pe.bean.Industry
 import com.sogukj.pe.bean.WorkEducationBean
 import com.sogukj.pe.bean.WorkReqBean
@@ -24,6 +27,7 @@ import kotlinx.android.synthetic.main.layout_shareholder_toolbar.*
 import java.util.*
 
 class WorkExpericenceAddActivity : BaseActivity(), View.OnClickListener {
+    private var workEducationBean: WorkEducationBean? = null
 
     companion object {
         fun start(ctx: Activity?) {
@@ -42,13 +46,13 @@ class WorkExpericenceAddActivity : BaseActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_work_expericence_add)
         Utils.setWindowStatusBarColor(this, R.color.white)
-        val workEducationBean = intent.getParcelableExtra<WorkEducationBean?>(Extras.DATA)
+        workEducationBean = intent.getParcelableExtra<WorkEducationBean?>(Extras.DATA)
         workEducationBean?.let {
             setData(it)
         }
-        if (workEducationBean==null){
+        if (workEducationBean == null) {
             toolbar_title.text = "添加工作经历"
-        }else{
+        } else {
             toolbar_title.text = "修改工作经历"
         }
         addTv.text = "保存"
@@ -132,9 +136,17 @@ class WorkExpericenceAddActivity : BaseActivity(), View.OnClickListener {
                 workeducation.department = tv_depart.text.toString()
                 workeducation.companyScale = tv_workers.text.toString()
                 workeducation.companyProperty = tv_nature.text.toString()
-                reqBean.ae = workeducation
-                reqBean.type = 2
-                doRequest(reqBean)
+                if (workEducationBean == null) {
+                    reqBean.ae = workeducation
+                    reqBean.type = 2
+                    doRequest(reqBean)
+                } else {
+                    workeducation.id = workEducationBean!!.id
+                    reqBean.ae = workeducation
+                    reqBean.type = 2
+                    Log.d("WJY",Gson().toJson(reqBean))
+                    doRequest2(reqBean)
+                }
             }
             R.id.tv_start_date -> {
                 //入职时间
@@ -223,6 +235,31 @@ class WorkExpericenceAddActivity : BaseActivity(), View.OnClickListener {
                 }, {}, {
                     showProgress("正在保存,请稍后")
                 })
+    }
+
+
+    fun doRequest2(reqBean: WorkReqBean) {
+        SoguApi.getService(application)
+                .editExperience(reqBean)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        payload.payload?.apply {
+                            val intent = Intent()
+                            intent.putExtra(Extras.LIST, this)
+                            setResult(Extras.RESULTCODE, intent)
+                            finish()
+                        }
+                    } else {
+                        showToast(payload.message)
+                    }
+                }, { e ->
+                    Trace.e(e)
+                }, {}, {
+                    showProgress("正在保存修改,请稍后")
+                })
+
     }
 
     lateinit var industry: Industry.Children
