@@ -51,24 +51,7 @@ class UserFragment : ToolbarFragment(), View.OnClickListener {
                     showToast("数据获取失败")
                 })
 
-        val user = Store.store.getUser(context)
-        updateUser(user)
-        if (null != user?.uid) {
-            SoguApi.getService(activity.application)
-                    .userInfo(user.uid!!)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe({ payload ->
-                        if (payload.isOk) {
-                            val user = payload.payload
-                            user?.apply { Store.store.setUser(context, this) }
-                            updateUser(user)
-                        } else showToast(payload.message)
-                    }, { e ->
-                        Trace.e(e)
-                        showToast("提交失败")
-                    })
-        }
+
 
 
         ll_user.setOnClickListener {
@@ -149,6 +132,22 @@ class UserFragment : ToolbarFragment(), View.OnClickListener {
         super.onResume()
         val user = Store.store.getUser(context)
         updateUser(user)
+        if (null != user?.uid) {
+            SoguApi.getService(activity.application)
+                    .userInfo(user.uid!!)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (payload.isOk) {
+                            val user = payload.payload
+                            user?.apply { Store.store.setUser(context, this) }
+                            updateUser(user)
+                        } else showToast(payload.message)
+                    }, { e ->
+                        Trace.e(e)
+                        showToast("提交失败")
+                    })
+        }
         user?.uid?.let { getBelongBean(it) }
     }
 
