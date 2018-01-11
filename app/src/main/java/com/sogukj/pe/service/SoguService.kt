@@ -752,7 +752,20 @@ interface SoguService {
      * 简历-修改个人简历基本信息
      */
     @POST("/api/Userfont/editResumeBaseInfo")
-    fun editResumeBaseInfo(@Body ae: UserResumeReqBean): Observable<Payload<Any>>
+    fun editResumeBaseInfo(@Body ae: UserReq): Observable<Payload<Any>>
+
+
+    /**
+     * 简历-修改教育经历
+     */
+    @POST("/api/Userfont/editExperience")
+    fun editExperience(@Body reqBean: EducationReqBean): Observable<Payload<EducationBean>>
+
+    /**
+     * 简历-修改工作经历
+     */
+    @POST("/api/Userfont/editExperience")
+    fun editExperience(@Body reqBean: WorkReqBean): Observable<Payload<WorkEducationBean>>
 
     /**
      * 删除（教育|工作）经历

@@ -4,11 +4,13 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.bigkoo.pickerview.TimePickerView
 import com.framework.base.BaseActivity
+import com.google.gson.Gson
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.EducationBean
@@ -23,6 +25,7 @@ import kotlinx.android.synthetic.main.layout_shareholder_toolbar.*
 import java.util.*
 
 class EducationActivity : BaseActivity(), View.OnClickListener {
+    private var educationBean: EducationBean? = null
 
     companion object {
         fun start(ctx: Activity?) {
@@ -41,13 +44,13 @@ class EducationActivity : BaseActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_education)
         Utils.setWindowStatusBarColor(this, R.color.white)
-        val educationBean = intent.getParcelableExtra<EducationBean?>(Extras.DATA)
+        educationBean = intent.getParcelableExtra<EducationBean?>(Extras.DATA)
         educationBean?.let {
             setData(it)
         }
-        if (educationBean==null){
+        if (educationBean == null) {
             toolbar_title.text = "添加教育经历"
-        }else{
+        } else {
             toolbar_title.text = "修改教育经历"
         }
         addTv.text = "保存"
@@ -107,9 +110,18 @@ class EducationActivity : BaseActivity(), View.OnClickListener {
                 education.education = tv_education.text.toString()
                 education.major = tv_profession.text.toString()
                 education.majorInfo = tv_description.text.toString()
-                reqBean.ae = education
-                reqBean.type = 1
-                doRequest(reqBean)
+                if (educationBean == null) {
+                    reqBean.ae = education
+                    reqBean.type = 1
+                    doRequest(reqBean)
+                } else {
+                    education.id = educationBean!!.id
+                    reqBean.ae = education
+                    reqBean.type = 1
+                    Log.d("WJY",Gson().toJson(educationBean))
+                    Log.d("WJY",Gson().toJson(reqBean))
+                    doRequest2(reqBean)
+                }
             }
             R.id.tv_start_date -> {
                 //入学时间
@@ -176,8 +188,38 @@ class EducationActivity : BaseActivity(), View.OnClickListener {
                     }
                 }, { e ->
                     Trace.e(e)
-                }, {}, {
+                    hideProgress()
+                }, {
+                    hideProgress()
+                }, {
                     showProgress("正在保存,请稍后")
                 })
+    }
+
+    private fun doRequest2(reqBean: EducationReqBean) {
+        SoguApi.getService(application)
+                .editExperience(reqBean)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        payload.payload?.apply {
+                            val intent = Intent()
+                            intent.putExtra(Extras.LIST2, this)
+                            setResult(Extras.RESULTCODE2, intent)
+                            finish()
+                        }
+                    } else {
+                        showToast(payload.message)
+                    }
+                }, { e ->
+                    Trace.e(e)
+                    hideProgress()
+                }, {
+                    hideProgress()
+                }, {
+                    showProgress("正在保存修改,请稍后")
+                })
+
     }
 }

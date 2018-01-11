@@ -185,6 +185,7 @@ class ResumeEditorActivity : BaseActivity(), View.OnClickListener {
                             workAdapter.notifyItemRemoved(position)
                         }
                     }
+                    hideProgress()
                 }, {
                     showProgress("正在提交删除")
                 })

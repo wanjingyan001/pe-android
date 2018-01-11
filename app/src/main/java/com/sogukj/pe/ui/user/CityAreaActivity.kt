@@ -35,7 +35,7 @@ class CityAreaActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
-    var selectPosition: Int by Delegates.notNull()
+    var selectPosition: Int? = null
     lateinit var areaAdpater: RecyclerAdapter<CityArea>
     lateinit var cityAdapter: RecyclerAdapter<CityArea.City?>
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -131,11 +131,15 @@ class CityAreaActivity : BaseActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.addTv -> {
-                val city = cityAdapter.dataList[selectPosition]
-                val intent = Intent()
-                intent.putExtra(Extras.DATA, city)
-                setResult(Extras.RESULTCODE3, intent)
-                finish()
+                if (selectPosition != null) {
+                    val city = cityAdapter.dataList[selectPosition!!]
+                    val intent = Intent()
+                    intent.putExtra(Extras.DATA, city)
+                    setResult(Extras.RESULTCODE3, intent)
+                    finish()
+                } else {
+                    finish()
+                }
             }
             R.id.back -> {
                 onBackPressed()
