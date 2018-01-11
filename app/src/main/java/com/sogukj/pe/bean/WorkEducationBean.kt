@@ -52,7 +52,7 @@ class WorkEducationBean() : Parcelable {
         trade = parcel.readInt()
         trade_name = parcel.readString()
         pid = parcel.readInt()
-        isShow = parcel.readInt() != 1
+        isShow = parcel.readInt() == 0
     }
 
     companion object CREATOR : Parcelable.Creator<WorkEducationBean> {
