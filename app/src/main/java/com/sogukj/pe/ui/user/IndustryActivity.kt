@@ -36,7 +36,7 @@ class IndustryActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
-    var selectPosition: Int by Delegates.notNull()
+    var selectPosition: Int? = null
     lateinit var parentAdapter: RecyclerAdapter<Industry>
     lateinit var childrenAdapter: RecyclerAdapter<Industry.Children?>
 
@@ -134,11 +134,13 @@ class IndustryActivity : BaseActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.addTv -> {
-                val industry = childrenAdapter.dataList[selectPosition]
-                val intent = Intent()
-                intent.putExtra(Extras.DATA, industry)
-                setResult(Extras.RESULTCODE, intent)
-                finish()
+                if (selectPosition != null) {
+                    val industry = childrenAdapter.dataList[selectPosition!!]
+                    val intent = Intent()
+                    intent.putExtra(Extras.DATA, industry)
+                    setResult(Extras.RESULTCODE, intent)
+                    finish()
+                }
             }
             R.id.back -> {
                 onBackPressed()

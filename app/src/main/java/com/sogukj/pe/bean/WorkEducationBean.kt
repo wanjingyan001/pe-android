@@ -20,7 +20,7 @@ class WorkEducationBean() : Parcelable {
         dest?.writeString(trade_name)
         dest?.writeInt(trade)
         dest?.writeInt(pid)
-        dest?.writeValue(isShow)
+        dest?.writeInt(if(isShow) 0 else 1)
     }
 
     override fun describeContents(): Int = 0
@@ -52,7 +52,7 @@ class WorkEducationBean() : Parcelable {
         trade = parcel.readInt()
         trade_name = parcel.readString()
         pid = parcel.readInt()
-        isShow = parcel.readValue(Boolean::class.java.classLoader) as Boolean
+        isShow = parcel.readInt() != 1
     }
 
     companion object CREATOR : Parcelable.Creator<WorkEducationBean> {

@@ -85,7 +85,7 @@ class UserResumeActivity : BaseActivity(), View.OnClickListener {
                 2 -> tv_sex.text = "女"
             }
             tv_language.text = it.language
-            tv_woek_experience.text = if (it.workYear == "0") null else it.workYear
+            tv_woek_experience.text = if (it.workYear == "0") null else "${it.workYear}年"
             tv_city.text = it.cityName
             tv_education.text = it.educationLevel
             tv_mail.setText(it.email)
@@ -269,11 +269,16 @@ class UserResumeActivity : BaseActivity(), View.OnClickListener {
                 reqBean.position = tv_job.text.toString()
                 if (tv_sex.text.toString() == "男") {
                     reqBean.sex = 1
-                } else {
+                } else if (tv_sex.text.toString() == "女") {
                     reqBean.sex = 2
+                } else {
+                    reqBean.sex = 3
                 }
                 reqBean.language = tv_language.text.toString()
-                reqBean.workYear = tv_woek_experience.text.toString().replace("年", "").toInt()
+                try {
+                    reqBean.workYear = tv_woek_experience.text.toString().replace("年", "").toInt()
+                } catch (e: Exception) {
+                }
                 reqBean.city = city?.id
                 reqBean.educationLevel = tv_education.text.toString()
                 reqBean.email = tv_mail.text.toString()

@@ -16,7 +16,7 @@ class EducationBean() : Parcelable {
         dest?.writeString(education)
         dest?.writeString(major)
         dest?.writeString(majorInfo)
-        dest?.writeValue(isShow)
+        dest?.writeInt(if(isShow) 0 else 1)
     }
 
     override fun describeContents(): Int = 0
@@ -38,7 +38,7 @@ class EducationBean() : Parcelable {
         education = parcel.readString()
         major = parcel.readString()
         majorInfo = parcel.readString()
-        isShow = parcel.readValue(Boolean::class.java.classLoader) as Boolean
+        isShow = parcel.readInt() != 1
     }
 
     companion object CREATOR : Parcelable.Creator<EducationBean> {
