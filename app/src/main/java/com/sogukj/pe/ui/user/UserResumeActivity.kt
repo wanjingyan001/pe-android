@@ -4,14 +4,12 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.View
 import android.widget.TextView
 import cn.finalteam.rxgalleryfinal.rxbus.RxBus
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.framework.base.BaseActivity
-import com.google.gson.Gson
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.*
@@ -111,7 +109,7 @@ class UserResumeActivity : BaseActivity(), View.OnClickListener {
                 2 -> tv_sex.text = "女"
             }
             tv_language.text = it.language
-            tv_woek_experience.text = if (it.workYear == "0") null else "${it.workYear}年"
+            tv_woek_experience.text = if (it.workYear == "0" || it.workYear == null) "" else "${it.workYear}年"
             tv_city.text = it.cityName
             tv_education.text = it.educationLevel
             tv_mail.setText(it.email)
