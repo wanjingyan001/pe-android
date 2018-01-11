@@ -144,7 +144,6 @@ class WorkExpericenceAddActivity : BaseActivity(), View.OnClickListener {
                     workeducation.id = workEducationBean!!.id
                     reqBean.ae = workeducation
                     reqBean.type = 2
-                    Log.d("WJY",Gson().toJson(reqBean))
                     doRequest2(reqBean)
                 }
             }

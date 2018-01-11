@@ -9,18 +9,18 @@ import android.os.Parcelable
 class WorkEducationBean() : Parcelable {
     override fun writeToParcel(dest: Parcel?, flags: Int) {
         dest?.writeInt(id)
-        dest?.writeString(employDate)
-        dest?.writeString(leaveDate)
-        dest?.writeString(company)
-        dest?.writeString(responsibility)
-        dest?.writeString(jobInfo)
-        dest?.writeString(department)
-        dest?.writeString(companyScale)
-        dest?.writeString(companyProperty)
-        dest?.writeString(trade_name)
+        dest?.writeString(if (employDate == null) "" else employDate)
+        dest?.writeString(if (leaveDate == null) "" else leaveDate)
+        dest?.writeString(if (company == null) "" else company)
+        dest?.writeString(if (responsibility == null) "" else responsibility)
+        dest?.writeString(if (jobInfo == null) "" else jobInfo)
+        dest?.writeString(if (department == null) "" else department)
+        dest?.writeString(if (companyScale == null) "" else companyScale)
+        dest?.writeString(if (companyProperty == null) "" else companyProperty)
+        dest?.writeString(if (trade_name == null) "" else trade_name)
         dest?.writeInt(trade)
         dest?.writeInt(pid)
-        dest?.writeInt(if(isShow) 0 else 1)
+        dest?.writeInt(if (isShow) 0 else 1)
     }
 
     override fun describeContents(): Int = 0
@@ -37,7 +37,7 @@ class WorkEducationBean() : Parcelable {
     var trade: Int = 0//行业id
     var trade_name: String? = null//行业名
     var pid: Int = 0//行业父id
-    var isShow:Boolean = false//是否展示删除按钮
+    var isShow: Boolean = false//是否展示删除按钮
 
     constructor(parcel: Parcel) : this() {
         id = parcel.readInt()

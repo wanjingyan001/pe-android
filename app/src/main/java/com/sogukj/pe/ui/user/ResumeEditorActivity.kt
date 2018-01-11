@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import cn.finalteam.rxgalleryfinal.rxbus.RxBus
 import com.framework.base.BaseActivity
 import com.mcxtzhang.swipemenulib.SwipeMenuLayout
 import com.sogukj.pe.Extras
@@ -36,17 +37,18 @@ class ResumeEditorActivity : BaseActivity(), View.OnClickListener {
     companion object {
         val EDU = 1
         val WORK = 2
-        fun start(ctx: Activity?, resume: Resume) {
+
+        fun start2(ctx: Activity?, dataList: ArrayList<WorkEducationBean>) {
             val intent = Intent(ctx, ResumeEditorActivity::class.java)
-            intent.putExtra(Extras.TYPE, EDU)
-            intent.putExtra(Extras.DATA, resume)
+            intent.putExtra(Extras.TYPE, WORK)
+            intent.putParcelableArrayListExtra(Extras.LIST, dataList)
             ctx?.startActivity(intent)
         }
 
-        fun start2(ctx: Activity?, resume: Resume) {
+        fun start(ctx: Activity?, dataList: ArrayList<EducationBean>) {
             val intent = Intent(ctx, ResumeEditorActivity::class.java)
-            intent.putExtra(Extras.TYPE, WORK)
-            intent.putExtra(Extras.DATA, resume)
+            intent.putExtra(Extras.TYPE, EDU)
+            intent.putParcelableArrayListExtra(Extras.LIST, dataList)
             ctx?.startActivity(intent)
         }
     }
@@ -63,7 +65,7 @@ class ResumeEditorActivity : BaseActivity(), View.OnClickListener {
         when (intExtra) {
             EDU -> {
                 tv_add_work_expericence.visibility = View.GONE
-                val resume = intent.getSerializableExtra(Extras.DATA) as Resume
+                val list = intent.getParcelableArrayListExtra<EducationBean>(Extras.LIST)
                 eduadapter = RecyclerAdapter(this, { _adapter, parent, position ->
                     val convertView = _adapter.getView(R.layout.item_resume_editlist, parent)
                     object : RecyclerHolder<EducationBean>(convertView) {
@@ -88,19 +90,7 @@ class ResumeEditorActivity : BaseActivity(), View.OnClickListener {
 
                     }
                 })
-                resume.eduction?.let {
-                    it.forEachIndexed { index, eductionBean ->
-                        val edu = EducationBean()
-                        edu.id = eductionBean.id
-                        edu.graduationDate = eductionBean.graduationDate.toString()
-                        edu.toSchoolDate = eductionBean.toSchoolDate.toString()
-                        edu.education = eductionBean.education.toString()
-                        edu.major = eductionBean.major.toString()
-                        edu.majorInfo = eductionBean.majorInfo
-                        edu.school = eductionBean.school.toString()
-                        eduadapter.dataList.add(edu)
-                    }
-                }
+                eduadapter.dataList.addAll(list)
                 resumeList.layoutManager = LinearLayoutManager(this)
                 resumeList.adapter = eduadapter
 
@@ -108,7 +98,7 @@ class ResumeEditorActivity : BaseActivity(), View.OnClickListener {
             }
             WORK -> {
                 tv_add_education.visibility = View.GONE
-                val resume = intent.getSerializableExtra(Extras.DATA) as Resume
+                val list = intent.getParcelableArrayListExtra<WorkEducationBean>(Extras.LIST)
                 workAdapter = RecyclerAdapter(this, { _adapter, parent, position ->
                     val convertView = _adapter.getView(R.layout.item_resume_editlist, parent)
                     object : RecyclerHolder<WorkEducationBean>(convertView) {
@@ -132,26 +122,7 @@ class ResumeEditorActivity : BaseActivity(), View.OnClickListener {
                         }
                     }
                 })
-                resume.work?.let {
-                    val works = ArrayList<WorkEducationBean>()
-                    it.forEachIndexed { i, workBean ->
-                        val work = WorkEducationBean()
-                        work.id = workBean.id
-                        work.company = workBean.company
-                        work.companyProperty = workBean.companyProperty
-                        work.companyScale = workBean.companyScale
-                        work.department = workBean.department
-                        work.employDate = workBean.employDate
-                        work.jobInfo = workBean.jobInfo
-                        work.leaveDate = workBean.leaveDate
-                        work.pid = workBean.pid
-                        work.responsibility = workBean.responsibility
-                        work.trade = workBean.trade
-                        work.trade_name = workBean.trade_name
-                        works.add(work)
-                    }
-                    workAdapter.dataList.addAll(works)
-                }
+                workAdapter.dataList.addAll(list)
                 resumeList.layoutManager = LinearLayoutManager(this)
                 resumeList.adapter = workAdapter
 
@@ -177,12 +148,16 @@ class ResumeEditorActivity : BaseActivity(), View.OnClickListener {
                 }, {
                     when (intExtra) {
                         EDU -> {
+                            RxBus.getDefault().post(eduadapter.dataList[position])
                             eduadapter.dataList.removeAt(position)
                             eduadapter.notifyItemRemoved(position)
+                            eduadapter.notifyDataSetChanged()
                         }
                         WORK -> {
+                            RxBus.getDefault().post(workAdapter.dataList[position])
                             workAdapter.dataList.removeAt(position)
                             workAdapter.notifyItemRemoved(position)
+                            workAdapter.notifyDataSetChanged()
                         }
                     }
                     hideProgress()

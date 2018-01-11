@@ -38,7 +38,7 @@ class EducationBean() : Parcelable {
         education = parcel.readString()
         major = parcel.readString()
         majorInfo = parcel.readString()
-        isShow = parcel.readInt() != 1
+        isShow = parcel.readInt()!= 1
     }
 
     companion object CREATOR : Parcelable.Creator<EducationBean> {

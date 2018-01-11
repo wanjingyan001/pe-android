@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.View
 import android.widget.TextView
+import cn.finalteam.rxgalleryfinal.rxbus.RxBus
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.framework.base.BaseActivity
@@ -72,6 +73,31 @@ class UserResumeActivity : BaseActivity(), View.OnClickListener {
         } else {
             user.user_id?.let { doRequest(it) }
         }
+        registeredRxbus()
+    }
+
+
+    private fun registeredRxbus() {
+        val subscribe = RxBus.getDefault().toObservable(EducationBean::class.java).subscribe({ educationBean ->
+            val bean = educationAdapter.dataList.find {
+                it.id == educationBean.id
+            }
+            educationAdapter.dataList.remove(bean)
+            educationAdapter.notifyDataSetChanged()
+        }
+        )
+        val subscribe1 = RxBus.getDefault().toObservable(WorkEducationBean::class.java).subscribe({ workEducationBean ->
+            val bean = workAdapter.dataList.find { it.id == workEducationBean.id }
+            workAdapter.dataList.remove(bean)
+            workAdapter.notifyDataSetChanged()
+        })
+        RxBus.getDefault().add(subscribe)
+        RxBus.getDefault().add(subscribe1)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        RxBus.getDefault().clear()
     }
 
 
@@ -356,10 +382,12 @@ class UserResumeActivity : BaseActivity(), View.OnClickListener {
                         .show()
             }
             R.id.educationLayout -> {
-                ResumeEditorActivity.start(this, resume)
+                val dataList = educationAdapter.dataList as ArrayList<EducationBean>
+                ResumeEditorActivity.start(this, dataList)
             }
             R.id.workLayout -> {
-                ResumeEditorActivity.start2(this, resume)
+                val dataList = workAdapter.dataList as ArrayList<WorkEducationBean>
+                ResumeEditorActivity.start2(this, dataList)
             }
         }
     }
