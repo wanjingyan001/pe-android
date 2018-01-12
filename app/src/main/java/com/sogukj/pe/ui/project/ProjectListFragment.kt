@@ -33,8 +33,10 @@ import com.sogukj.pe.R
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.ui.SupportEmptyView
 import com.sogukj.pe.util.Trace
+import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
+import com.sogukj.pe.view.SpaceItemDecoration
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -105,7 +107,8 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
             }
         val layoutManager = LinearLayoutManager(baseActivity)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
-        recycler_view.addItemDecoration(DividerItemDecoration(baseActivity, DividerItemDecoration.VERTICAL))
+        //recycler_view.addItemDecoration(DividerItemDecoration(baseActivity, DividerItemDecoration.VERTICAL))
+        recycler_view.addItemDecoration(SpaceItemDecoration(Utils.dpToPx(context, 25)))
         recycler_view.layoutManager = layoutManager
         recycler_view.adapter = adapter
 

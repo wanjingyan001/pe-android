@@ -27,17 +27,13 @@ import com.sogukj.pe.R
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
-import com.sogukj.pe.view.ArrayPagerAdapter
-import com.sogukj.pe.view.ProjectPageTransformer
-import com.sogukj.pe.view.RecyclerAdapter
-import com.sogukj.pe.view.RecyclerHolder
+import com.sogukj.pe.view.*
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_main_project.*
 import kotlinx.android.synthetic.main.search_view.*
-import kotlinx.android.synthetic.main.sogu_toolbar_main_proj.*
 import org.jetbrains.anko.textColor
 import java.util.*
 
@@ -209,6 +205,7 @@ class MainProjectFragment : BaseFragment() {
             this.key = ""
             search_view.search = ""
             ll_search.visibility = View.GONE
+            toolbar.visibility = View.VISIBLE
 
             hisAdapter.dataList.clear()
             hisAdapter.dataList.addAll(search)
@@ -243,6 +240,7 @@ class MainProjectFragment : BaseFragment() {
             }
         }
         fb_search.setOnClickListener {
+            toolbar.visibility = View.GONE
             ll_search.visibility = View.VISIBLE
             et_search.postDelayed({
                 et_search.inputType = InputType.TYPE_CLASS_TEXT
