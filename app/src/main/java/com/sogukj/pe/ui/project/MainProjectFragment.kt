@@ -278,25 +278,32 @@ class MainProjectFragment : BaseFragment() {
         })
         view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
+                //Log.e("PageScrollState", "${state}")
+                if (state == ViewPager.SCROLL_STATE_DRAGGING) {
+                    judgeOncce = 0
+                }
             }
 
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-                // TODO
-                Log.e("111111", "${position}")
+                //position永远都是两个的左边一个，viewpager往右滑，positionOffset从0到1（到达1以后position++）
+                //Log.e("onPageScrolled", "${position} +++ ${positionOffset} +++ ${positionOffsetPixels}")
+                if (judgeOncce == 0) {
+                    if (positionOffset > 0.5f) {
+                        transFormer.setDirection(true)
+                    } else if (positionOffset < 0.5f) {
+                        transFormer.setDirection(false)
+                    }
+                    judgeOncce = 1
+                }
             }
 
+            //滑到新页面才算，没滑到又返回不算
             override fun onPageSelected(position: Int) {
+                //Log.e("onPageSelected", "onPageSelected")
                 tabs?.getTabAt(position)?.select()
                 fb_add.visibility = if (position == 0 || position == 1) View.VISIBLE else View.GONE
 //                iv_search?.visibility = if (position == 2) View.VISIBLE else View.GONE
 //                iv_add?.visibility = if (position == 1 && user?.is_admin == 1) View.VISIBLE else View.GONE
-                if (position > saveIndex) {
-                    transFormer.setDirection(false)
-                    saveIndex = position
-                } else if (position < saveIndex) {
-                    transFormer.setDirection(true)
-                    saveIndex = position
-                }
             }
 
         })
@@ -328,7 +335,7 @@ class MainProjectFragment : BaseFragment() {
 
     }
 
-    var saveIndex = 0
+    var judgeOncce = 0
 
     val searchTask = Runnable {
         doSearch(search_view.search)
