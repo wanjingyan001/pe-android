@@ -32,11 +32,12 @@ public class ProjectPageTransformer implements ViewPager.PageTransformer {
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         int itemCount = recyclerView.getChildCount();
 
-        Log.e("isLeft", "" + isLeft);
+//        Log.e("isLeft", "" + isLeft);
 //        Log.e("TAG", view + " , " + position + "");
 
         if (isLeft) {
             if (position < 0) {//-1到0
+                Log.e("item往右---已存在", position + "");
                 //半透明->不透明
                 for (int i = 0; i < itemCount; i++) {
                     //tab往左，item往右
@@ -50,6 +51,7 @@ public class ProjectPageTransformer implements ViewPager.PageTransformer {
                 }
             } else {//  0到1
                 //不透明->半透明
+                Log.e("item往右---即将出现", position + "");
                 for (int i = 0; i < itemCount; i++) {
                     //tab往左，item往右---从屏幕外进来
                     //随着i增加，setTranslationX绝对值变大，一直为负
@@ -64,6 +66,7 @@ public class ProjectPageTransformer implements ViewPager.PageTransformer {
         } else {
             //不透明->半透明
             if (position < 0) {//0到-1
+                Log.e("item往左---已存在", position + "");
                 for (int i = 0; i < itemCount; i++) {
                     //tab往右，item往左
                     //随着i增加，setTranslationX绝对值变大，一直为正
@@ -76,6 +79,7 @@ public class ProjectPageTransformer implements ViewPager.PageTransformer {
                 }
             } else {//  1到0
                 //半透明->不透明
+                Log.e("item往左---即将出现", position + "");
                 for (int i = 0; i < itemCount; i++) {
                     //tab往右，item往左---从屏幕外进来
                     //随着i增加，setTranslationX绝对值变大，一直为正
