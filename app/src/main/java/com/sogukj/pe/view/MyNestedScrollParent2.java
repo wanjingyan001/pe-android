@@ -28,7 +28,7 @@ import com.sogukj.pe.util.Utils;
  */
 public class MyNestedScrollParent2 extends LinearLayout implements NestedScrollingParent {
     private String Tag = "MyNestedScrollParent";
-    private Toolbar mToolBar;
+    private LinearLayout mToolBar;
     private FrameLayout mFrame;
     private ViewGroup currentContentView;
     private ViewPager viewPager;
@@ -59,7 +59,7 @@ public class MyNestedScrollParent2 extends LinearLayout implements NestedScrolli
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        mToolBar = (Toolbar) getChildAt(0);
+        mToolBar = (LinearLayout) getChildAt(0);
         mFrame = (FrameLayout) getChildAt(1);
         viewPager = (ViewPager) getChildAt(2);
         mToolBar.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {

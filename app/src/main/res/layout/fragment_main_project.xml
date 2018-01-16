@@ -13,65 +13,77 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@id/toolbar"
+        <LinearLayout
+            android:id="@+id/toolbarLayout"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/toolbar_height"
-            android:background="?attr/colorPrimary"
-            app:contentInsetEnd="0dp"
-            app:contentInsetLeft="0dp"
-            app:contentInsetRight="0dp"
-            app:contentInsetStart="0dp"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:theme="@style/AppTheme.AppBarOverlay">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/toolbar_back"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="left"
-                android:gravity="center"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:src="@drawable/sogu_ic_back"
-                android:visibility="gone" />
+            <android.support.v7.widget.Toolbar
+                android:id="@id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/toolbar_height"
+                android:background="?attr/colorPrimary"
+                app:contentInsetEnd="0dp"
+                app:contentInsetLeft="0dp"
+                app:contentInsetRight="0dp"
+                app:contentInsetStart="0dp"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:theme="@style/AppTheme.AppBarOverlay">
 
-            <TextView
-                android:id="@id/toolbar_title"
-                style="@style/SoguTextTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_marginTop="2dp"
-                android:gravity="center"
-                android:singleLine="true"
-                android:text="项目管理" />
+                <ImageView
+                    android:id="@+id/toolbar_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="left"
+                    android:gravity="center"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:src="@drawable/sogu_ic_back"
+                    android:visibility="gone" />
 
-            <LinearLayout
-                android:id="@+id/toolbar_menu"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="right"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp">
+                <TextView
+                    android:id="@id/toolbar_title"
+                    style="@style/SoguTextTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="2dp"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="项目管理" />
 
-                <ImageButton
-                    android:id="@+id/fb_add"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:background="@drawable/tj_main" />
+                <LinearLayout
+                    android:id="@+id/toolbar_menu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="right"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp">
 
-                <ImageButton
-                    android:id="@+id/fb_search"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginLeft="10dp"
-                    android:background="@drawable/search_main" />
-            </LinearLayout>
-        </android.support.v7.widget.Toolbar>
+                    <ImageButton
+                        android:id="@+id/fb_add"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:background="@drawable/tj_main" />
+
+                    <ImageButton
+                        android:id="@+id/fb_search"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/search_main" />
+                </LinearLayout>
+            </android.support.v7.widget.Toolbar>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@color/colorPrimary" />
+        </LinearLayout>
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -79,14 +91,13 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="30dp"
                 android:background="@color/colorPrimary" />
 
             <android.support.design.widget.TabLayout
                 android:id="@+id/tabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
                 android:background="@drawable/tab_bg_1"
                 app:tabGravity="center"
                 app:tabIndicatorHeight="0dp"
@@ -133,14 +144,14 @@
             android:layout_height="match_parent" />
 
         <!--<com.sogukj.pe.view.MyNestedScrollChild-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:orientation="vertical">-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:orientation="vertical">-->
 
-            <!--<android.support.v4.view.ViewPager-->
-                <!--android:id="@+id/view_pager"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent" />-->
+        <!--<android.support.v4.view.ViewPager-->
+        <!--android:id="@+id/view_pager"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent" />-->
         <!--</com.sogukj.pe.view.MyNestedScrollChild>-->
     </com.sogukj.pe.view.MyNestedScrollParent2>
 
