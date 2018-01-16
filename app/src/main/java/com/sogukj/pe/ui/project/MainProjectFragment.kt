@@ -304,6 +304,7 @@ class MainProjectFragment : BaseFragment() {
                 fb_add.visibility = if (position == 0 || position == 1) View.VISIBLE else View.GONE
 //                iv_search?.visibility = if (position == 2) View.VISIBLE else View.GONE
 //                iv_add?.visibility = if (position == 1 && user?.is_admin == 1) View.VISIBLE else View.GONE
+                MyNestedScrollParent2.setCurrentContentView(fragments.get(position).getRecycleView())
             }
 
         })

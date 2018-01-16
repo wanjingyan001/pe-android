@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.text.Html
 import android.text.TextUtils
 import android.util.Log
@@ -58,6 +59,10 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         type = arguments.getInt(Extras.TYPE)
+    }
+
+    fun getRecycleView() : RecyclerView {
+        return recycler_view
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {

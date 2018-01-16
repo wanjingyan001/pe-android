@@ -7,7 +7,8 @@
     android:background="#fff7f9fc"
     android:fitsSystemWindows="true">
 
-    <com.sogukj.pe.view.MyNestedScrollParent
+    <com.sogukj.pe.view.MyNestedScrollParent2
+        android:id="@+id/MyNestedScrollParent2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -126,17 +127,22 @@
             </android.support.design.widget.TabLayout>
         </FrameLayout>
 
-        <com.sogukj.pe.view.MyNestedScrollChild
+        <android.support.v4.view.ViewPager
+            android:id="@+id/view_pager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent" />
 
-            <android.support.v4.view.ViewPager
-                android:id="@+id/view_pager"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </com.sogukj.pe.view.MyNestedScrollChild>
-    </com.sogukj.pe.view.MyNestedScrollParent>
+        <!--<com.sogukj.pe.view.MyNestedScrollChild-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:orientation="vertical">-->
+
+            <!--<android.support.v4.view.ViewPager-->
+                <!--android:id="@+id/view_pager"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent" />-->
+        <!--</com.sogukj.pe.view.MyNestedScrollChild>-->
+    </com.sogukj.pe.view.MyNestedScrollParent2>
 
     <RelativeLayout
         android:id="@+id/ll_search"
