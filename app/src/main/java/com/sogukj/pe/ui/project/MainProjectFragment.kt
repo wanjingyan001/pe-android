@@ -343,7 +343,11 @@ class MainProjectFragment : BaseFragment() {
         //RecycleView可能还没渲染，这样第一个setCurrentContentView失效
         view.getViewTreeObserver().addOnGlobalLayoutListener(ViewTreeObserver.OnGlobalLayoutListener {
             if (view.height > 0) {
-                MyNestedScrollParent2.setCurrentContentView(view)
+                try {
+                    MyNestedScrollParent2.setCurrentContentView(view)//莫名其妙报null错
+                } catch (e: Exception) {
+                }
+                view.getViewTreeObserver().removeOnGlobalLayoutListener { this }
             }
         })
     }

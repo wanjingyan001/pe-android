@@ -56,6 +56,7 @@
                 app:layout_columnWeight="1"
                 app:layout_rowWeight="1"
                 app:sub_title="用印、签字、请假等"
+                app:tag_text="1"
                 app:title="审批" />
 
             <com.sogukj.pe.view.TipsViewMain
@@ -67,18 +68,20 @@
                 app:layout_columnWeight="1"
                 app:layout_rowWeight="1"
                 app:sub_title="用印、签字、请假等"
+                app:tag_text="2"
                 app:title="日历" />
 
             <com.sogukj.pe.view.TipsViewMain
-                android:id="@+id/tv_lxr"
+                android:id="@+id/tv_msg"
                 android:layout_width="0dp"
                 android:layout_height="85dp"
                 app:bg="@drawable/ic_lxr"
-                app:icon_main="@drawable/ic_main_lxr"
+                app:icon_main="@drawable/ic_main_msg1"
                 app:layout_columnWeight="1"
                 app:layout_rowWeight="1"
                 app:sub_title="用印、签字、请假等"
-                app:title="联系人" />
+                app:tag_text="3"
+                app:title="消息" />
 
             <com.sogukj.pe.view.TipsViewMain
                 android:id="@+id/tv_weekly"
@@ -89,6 +92,7 @@
                 app:layout_columnWeight="1"
                 app:layout_rowWeight="1"
                 app:sub_title="用印、签字、请假等"
+                app:tag_text="4"
                 app:title="周报" />
 
         </android.support.v7.widget.GridLayout>

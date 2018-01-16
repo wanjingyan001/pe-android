@@ -55,18 +55,19 @@ public class TipsViewMain extends LinearLayout {
         mTitle.setText(title);
         String subtitle = ta.getString(R.styleable.title_main_sub_title);
         mSubTitle.setText(subtitle);
+        int tag_id = ta.getInt(R.styleable.title_main_tag_text, 0);
         ta.recycle();
 
-        if (title.equals("审批")) {
+        if (tag_id == 1) {//审批
             mTitle.setTextColor(Color.parseColor("#FFFFFFFF"));
             mSubTitle.setTextColor(Color.parseColor("#FFFFB5AF"));
-        } else if (title.equals("日历")) {
+        } else if (tag_id == 2) {//日历
             mTitle.setTextColor(Color.parseColor("#FFFFFFFF"));
             mSubTitle.setTextColor(Color.parseColor("#FFA3B2FF"));
-        } else if (title.equals("联系人")) {
+        } else if (tag_id == 3) {//消息
             mTitle.setTextColor(Color.parseColor("#FF0A0E1F"));
             mSubTitle.setTextColor(Color.parseColor("#FFA0A4AA"));
-        } else if (title.equals("周报")) {
+        } else if (tag_id == 4) {//周报
             mTitle.setTextColor(Color.parseColor("#FF0A0E1F"));
             mSubTitle.setTextColor(Color.parseColor("#FFA0A4AA"));
         }

@@ -20,6 +20,7 @@ import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import com.sogukj.pe.bean.MessageBean
+import com.sogukj.pe.ui.news.NewsListActivity
 import com.sogukj.pe.util.CacheUtils
 import com.sogukj.pe.util.ColorUtil
 import com.sogukj.pe.view.MyStackPageTransformer
@@ -52,6 +53,9 @@ class MainHomeFragment : BaseFragment() {
 //        disable(tv_jj)
 //        disable(tv_rl)
         //disable(tv_lxr)
+        tv_msg.setOnClickListener {
+            //NewsListActivity.start(baseActivity)
+        }
 
 
         adapter = HomeAdapter()
