@@ -72,9 +72,11 @@ public class MyStackPageTransformer extends StackLayout.PageTransformer {
                 view.setClickable(true);
             }
             //背景色
-            LinearLayout content = (LinearLayout) ((LinearLayout) view).getChildAt(0);
-            GradientDrawable myGrad = (GradientDrawable) content.getBackground();
-            //myGrad.setColor((mStackCount - (int) position) * (Color.WHITE - Color.BLACK) / mStackCount + Color.BLACK);
+//            LinearLayout content = (LinearLayout) ((LinearLayout) view).getChildAt(0);
+//            GradientDrawable myGrad = (GradientDrawable) content.getBackground();
+//            //myGrad.setColor((mStackCount - (int) position) * (Color.WHITE - Color.BLACK) / mStackCount + Color.BLACK);
+//            myGrad.setAlpha(255 / mStackCount * (mStackCount - (int) position));
+            GradientDrawable myGrad = (GradientDrawable) view.getBackground();
             myGrad.setAlpha(255 / mStackCount * (mStackCount - (int) position));
         } else {// (mStackCount-1, +Infinity]: 待显示(堆栈中展示不下)
             view.setVisibility(View.GONE);

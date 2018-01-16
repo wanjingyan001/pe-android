@@ -148,7 +148,11 @@ class MainHomeFragment : BaseFragment() {
 //                holder.ll_content?.setBackgroundResource(R.drawable.bg_pop_msg_left)
 //            }
             ColorUtil.setColorStatus(holder.tvState!!, data)
-            holder.tvTitle?.text = data.title
+            try {
+                holder.tvTitle?.text = data.title!!.split(" ")[0]
+                holder.tvSeq?.text = data.title!!.split(" ")[1]
+            } catch (e: Exception) {
+            }
             holder.tvFrom?.text = "发起人:" + data.username
             holder.tvType?.text = "类型:" + data.type_name
             holder.tvMsg?.text = "审批事由:" + data.reasons
@@ -173,6 +177,7 @@ class MainHomeFragment : BaseFragment() {
         inner class MyViewHolder(view: View) : StackLayout.ViewHolder(view) {
 
             var tvTitle: TextView? = null
+            var tvSeq: TextView? = null
             var tvNum: TextView? = null
             var tvState: TextView? = null
             var tvFrom: TextView? = null
@@ -183,6 +188,7 @@ class MainHomeFragment : BaseFragment() {
 
             init {
                 tvTitle = view.findViewById(R.id.tv_title) as TextView
+                tvSeq = view.findViewById(R.id.sequense) as TextView
                 tvNum = view.findViewById(R.id.tv_num) as TextView
                 tvState = view.findViewById(R.id.tv_state) as TextView
                 tvFrom = view.findViewById(R.id.tv_from) as TextView

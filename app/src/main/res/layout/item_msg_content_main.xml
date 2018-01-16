@@ -2,139 +2,146 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_content"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/msg_border"
+    android:gravity="center"
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/ll_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="@drawable/msg_border"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:paddingLeft="20dp"
-        android:paddingRight="15dp"
-        android:paddingTop="15dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:lineSpacingExtra="0sp"
-                android:text="消息"
-                android:textColor="#0a0e1f"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/tv_num"
-                android:layout_width="wrap_content"
-                android:layout_height="15dp"
-                android:layout_marginLeft="5dp"
-                android:background="@drawable/bg_tag_num"
-                android:gravity="center"
-                android:minWidth="15dp"
-                android:paddingLeft="3dp"
-                android:paddingRight="3dp"
-                android:textColor="@color/white"
-                android:textSize="10sp"
-                tools:text="9+" />
-
-            <TextView
-                android:id="@+id/tv_urgent"
-                android:layout_width="wrap_content"
-                android:layout_height="12dp"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/bg_tag_urgent"
-                android:drawableLeft="@drawable/ic_urgent"
-                android:gravity="left"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:textColor="@color/white"
-                android:textSize="8sp"
-                tools:text="07/07 12:00" />
-
-            <TextView
-                android:id="@+id/tv_state"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="right"
-                android:textColor="@color/textColorBlue"
-                android:textSize="12sp"
-                tools:text="07/07 12:00" />
-
-        </LinearLayout>
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="15dp"
+        android:gravity="center">
 
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:layout_marginTop="15dp"
-            android:lineSpacingExtra="0sp"
-            android:text="用印审批 No.021"
-            android:textColor="#282828"
-            android:textSize="14sp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/tv_from"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:singleLine="true"
-                android:text="系统消息助手"
-                android:textColor="@color/text_3"
-                android:textSize="12sp" />
-
-
-            <TextView
-                android:id="@+id/tv_type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:singleLine="true"
-                android:text="系统消息助手"
-                android:textColor="@color/text_3"
-                android:textSize="12sp" />
-        </LinearLayout>
+            android:gravity="left"
+            android:lineSpacingExtra="2sp"
+            android:singleLine="true"
+            android:text="系统消息助手"
+            android:textColor="@color/text_1"
+            android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/tv_msg"
-            android:layout_width="match_parent"
+            android:id="@+id/tv_num"
+            android:layout_width="wrap_content"
+            android:layout_height="15dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/bg_tag_num"
+            android:gravity="center"
+            android:minWidth="15dp"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:textColor="@color/white"
+            android:textSize="10sp"
+            android:visibility="gone"
+            tools:text="9+" />
+
+        <TextView
+            android:id="@+id/sequense"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:ellipsize="end"
+            android:layout_marginLeft="8dp"
+            android:background="@drawable/seq_bg"
+            android:lineSpacingExtra="0sp"
+            android:paddingBottom="3dp"
+            android:paddingLeft="6dp"
+            android:paddingRight="6dp"
+            android:paddingTop="3dp"
+            android:textColor="#a0a4aa"
+            android:textSize="10sp"
+            tools:text="YYXZ029384756 " />
+
+        <TextView
+            android:id="@+id/tv_urgent"
+            android:layout_width="wrap_content"
+            android:layout_height="12dp"
+            android:layout_marginLeft="8dp"
+            android:background="@drawable/bg_tag_urgent"
+            android:drawableLeft="@drawable/ic_urgent"
             android:gravity="left"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:textColor="@color/white"
+            android:textSize="8sp"
+            tools:text="07/07 12:00" />
+
+        <TextView
+            android:id="@+id/tv_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:textColor="@color/textColorBlue"
+            android:textSize="12sp"
+            tools:text="07/07 12:00" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="15dp">
+
+        <TextView
+            android:id="@+id/tv_from"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:singleLine="true"
             android:text="系统消息助手"
             android:textColor="@color/text_3"
             android:textSize="12sp" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_marginTop="15dp"
-            android:background="@color/divider" />
 
         <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/tv_type"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="8dp"
-            android:text="更多消息"
-            android:textColor="#a8a9ac"
+            android:layout_weight="1"
+            android:singleLine="true"
+            android:text="系统消息助手"
+            android:textColor="@color/text_3"
             android:textSize="12sp" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_msg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:gravity="left"
+        android:singleLine="true"
+        android:text="系统消息助手"
+        android:textColor="@color/text_3"
+        android:textSize="12sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="15dp"
+        android:background="@color/divider" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="更多消息"
+        android:textColor="@color/text_3"
+        android:textSize="14sp" />
 </LinearLayout>
