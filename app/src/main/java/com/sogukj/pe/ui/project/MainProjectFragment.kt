@@ -13,6 +13,7 @@ import android.text.InputType
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
+import android.view.ViewTreeObserver
 import android.widget.ImageView
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
@@ -334,6 +335,17 @@ class MainProjectFragment : BaseFragment() {
         })
         refresh.setAutoLoadMore(true)
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        var view = fragments.get(view_pager.currentItem).getRecycleView()
+        //RecycleView可能还没渲染，这样第一个setCurrentContentView失效
+        view.getViewTreeObserver().addOnGlobalLayoutListener(ViewTreeObserver.OnGlobalLayoutListener {
+            if (view.height > 0) {
+                MyNestedScrollParent2.setCurrentContentView(view)
+            }
+        })
     }
 
     var judgeOncce = 0
