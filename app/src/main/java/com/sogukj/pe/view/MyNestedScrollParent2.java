@@ -200,16 +200,14 @@ public class MyNestedScrollParent2 extends LinearLayout implements NestedScrolli
         Log.e("上拉", dy + "+++" + getScrollY());//dy > 0,getScrollY()从0开始变大
         if (dy > 0) {
             if (getScrollY() < mToolBarHeight) {//如果parent外框，还可以往下滑动
-                return true;
-            }
-            if (getScrollY() < mToolBarHeight - 3) {
                 mTabs.setBackgroundResource(R.drawable.tab_bg_1);
                 mTabs.setTabTextColors(Color.parseColor("#282828"), Color.parseColor("#a0a4aa"));
                 return true;
-            } else if (getScrollY() >= mToolBarHeight - 3) {
+            } else if (getScrollY() == mToolBarHeight) {
                 mTabs.setBackgroundResource(R.drawable.tab_bg_2);
                 mTabs.setTabTextColors(Color.parseColor("#ff7bb4fc"), Color.parseColor("#ffffff"));
             }
+
         }
         return false;
     }
