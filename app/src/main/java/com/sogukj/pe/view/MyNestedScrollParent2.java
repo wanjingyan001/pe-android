@@ -197,18 +197,24 @@ public class MyNestedScrollParent2 extends LinearLayout implements NestedScrolli
     private void changeView() {
         if (getScrollY() < mToolBarHeight) {//如果parent外框，还可以往下滑动
             mTabs.setBackgroundResource(R.drawable.tab_bg_1);
-            mTabs.setTabTextColors(Color.parseColor("#282828"), Color.parseColor("#a0a4aa"));
+            mTabs.setTabTextColors(Color.parseColor("#a0a4aa"), Color.parseColor("#282828"));
             for (int i = 0; i < mTabs.getTabCount(); i++) {
-                setDrawable(i, "1", false);
+                if (i == mTabs.getSelectedTabPosition()) {
+                    setDrawable(i, "1", true);
+                } else {
+                    setDrawable(i, "1", false);
+                }
             }
-            setDrawable(mTabs.getSelectedTabPosition(), "1", true);
         } else if (getScrollY() >= mToolBarHeight) {
             mTabs.setBackgroundResource(R.drawable.tab_bg_2);
             mTabs.setTabTextColors(Color.parseColor("#ff7bb4fc"), Color.parseColor("#ffffff"));
             for (int i = 0; i < mTabs.getTabCount(); i++) {
-                setDrawable(i, "2", false);
+                if (i == mTabs.getSelectedTabPosition()) {
+                    setDrawable(i, "2", true);
+                } else {
+                    setDrawable(i, "2", false);
+                }
             }
-            setDrawable(mTabs.getSelectedTabPosition(), "2", true);
         }
     }
 
@@ -332,8 +338,8 @@ public class MyNestedScrollParent2 extends LinearLayout implements NestedScrolli
         if (mScroller.computeScrollOffset()) {
             postInvalidate();
             int dy = mScroller.getFinalY() - mScroller.getCurrY();
-            changeView();
-            if (yVelocity > 0) {
+            if (yVelocity > 0) {//下拉
+                Log.e("getScrollY", "" + getScrollY());
                 if (getScrollY() >= mToolBarHeight) {//此时top完全隐藏
 
                     if (isChildScrollToTop()) {//如果子view已经滑动到顶部，这个时候父亲自己滑动
@@ -349,8 +355,8 @@ public class MyNestedScrollParent2 extends LinearLayout implements NestedScrolli
                 } else {//此时top没有完全显示，让parent自己滑动
                     scrollBy(0, dy);
                 }
-            } else if (yVelocity < 0) {
-
+            } else if (yVelocity < 0) {//上拉
+                changeView();
                 if (getScrollY() >= mToolBarHeight) {//此时top完全隐藏
                     scrollContentView(dy);
                 } else {

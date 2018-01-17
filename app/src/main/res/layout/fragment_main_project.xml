@@ -101,10 +101,9 @@
                 android:background="@drawable/tab_bg_1"
                 app:tabGravity="center"
                 app:tabIndicatorHeight="0dp"
-                app:tabMaxWidth="0dp"
                 app:tabMode="scrollable"
-                app:tabSelectedTextColor="@color/text_3"
-                app:tabTextColor="@color/text_1">
+                app:tabSelectedTextColor="@color/text_1"
+                app:tabTextColor="@color/text_3">
 
                 <android.support.design.widget.TabItem
                     android:layout_width="match_parent"
