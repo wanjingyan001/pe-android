@@ -26,4 +26,8 @@ class ProjectBean : Serializable {
     var is_ability: Int? = null//有无能力 1 有能力 2 无能力
     var is_business: Int? = null//有无商业价值  1有价值  2无价值
     var red :Int? = null//大于0显示红点
+
+    var url: String? = null
+    var is_shoucang: Int? = null//是否收藏 1 收藏 2 不收藏
+    var dsz: String? = null
 }

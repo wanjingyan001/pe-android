@@ -35,6 +35,7 @@ import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.ui.SupportEmptyView
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
+import com.sogukj.pe.view.ProjectBeanLayout
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.pe.view.SpaceItemDecoration
@@ -61,7 +62,7 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
         type = arguments.getInt(Extras.TYPE)
     }
 
-    fun getRecycleView() : RecyclerView {
+    fun getRecycleView(): RecyclerView {
         return recycler_view
     }
 
@@ -79,13 +80,13 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
         ll_header3.visibility = View.GONE
 
         adapter = RecyclerAdapter<ProjectBean>(baseActivity!!, { _adapter, parent, t ->
-            when (type) {
-                TYPE_GZ, TYPE_YT, TYPE_TC -> ProjectHolder(_adapter.getView(R.layout.item_main_project, parent))
-                TYPE_LX -> ProjectHolder(_adapter.getView(R.layout.item_main_project_2, parent))
-                TYPE_CB, TYPE_DY -> StoreProjectHolder(_adapter.getView(R.layout.item_main_project_3, parent))
-                else -> throw IllegalArgumentException()
-            }
-
+            //            when (type) {
+//                TYPE_GZ, TYPE_YT, TYPE_TC -> ProjectHolder(_adapter.getView(R.layout.item_main_project, parent))
+//                TYPE_LX -> ProjectHolder(_adapter.getView(R.layout.item_main_project_2, parent))
+//                TYPE_CB, TYPE_DY -> StoreProjectHolder(_adapter.getView(R.layout.item_main_project_3, parent))
+//                else -> throw IllegalArgumentException()
+//            }
+            ProjectHolderNew(_adapter.getView(R.layout.item_main_project_new, parent))
         })
         adapter.onItemClick = { v, p ->
             val project = adapter.getItem(p);
@@ -651,5 +652,100 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
             fragment.arguments = intent
             return fragment
         }
+    }
+
+
+    //StoreProjectHolder
+    inner class ProjectHolderNew(convertView: View)
+        : RecyclerHolder<ProjectBean>(convertView) {
+
+        val ivIcon: ImageView
+        val ivSC: ImageView
+        val tvTitle: TextView
+        val tvDSZ: TextView
+        val tvDate: TextView
+        val tvTime: TextView
+        val tvStage: TextView
+        val tvBusiness: TextView
+        val tvAbility: TextView
+        val tvState: TextView
+
+        val bean1: ProjectBeanLayout
+        val bean2: ProjectBeanLayout
+        //val point: TextView
+
+        init {
+            ivIcon = convertView.findViewById(R.id.company_icon) as ImageView
+            ivSC = convertView.findViewById(R.id.shoucang) as ImageView
+            tvTitle = convertView.findViewById(R.id.tv_title) as TextView
+            tvDSZ = convertView.findViewById(R.id.tv_dsz) as TextView
+            tvDate = convertView.findViewById(R.id.tv_date) as TextView
+            tvTime = convertView.findViewById(R.id.tv_time) as TextView
+            tvStage = convertView.findViewById(R.id.stage) as TextView
+            tvBusiness = convertView.findViewById(R.id.business) as TextView
+            tvAbility = convertView.findViewById(R.id.ability) as TextView
+            tvState = convertView.findViewById(R.id.state) as TextView
+            bean1 = convertView.findViewById(R.id.layout1) as ProjectBeanLayout
+            bean2 = convertView.findViewById(R.id.layout2) as ProjectBeanLayout
+            //point = convertView.findViewById(R.id.point) as TextView
+        }
+
+        override fun setData(view: View, data: ProjectBean, position: Int) {
+            Glide.with(context).load(data.url).into(ivIcon)
+
+            if (data.is_shoucang == 1) {
+                Glide.with(context).load(R.drawable.sc_yes).into(ivSC)
+            } else if (data.is_shoucang == 2) {
+                Glide.with(context).load(R.drawable.sc_no).into(ivSC)
+            }
+
+            var label = data.shortName
+            if (TextUtils.isEmpty(label))
+                label = data.name
+            tvTitle.text = label
+
+            tvDSZ.text = "董事长：${data.dsz}"
+
+            val strTime = data.add_time
+            tvTime.visibility = View.GONE
+            if (!TextUtils.isEmpty(strTime)) {
+                val strs = strTime!!.trim().split(" ")
+                if (!TextUtils.isEmpty(strs.getOrNull(1))) {
+                    tvTime.visibility = View.VISIBLE
+                }
+                tvDate.text = strs
+                        .getOrNull(0)
+                tvTime.text = strs
+                        .getOrNull(1)
+            }
+
+            tvStage.text = data.state
+
+            if (data.is_business == 1) {
+                tvBusiness.text = "有商业价值"
+            } else if (data.is_business == 2) {
+                tvBusiness.text = "无商业价值"
+            }
+
+            if (data.is_ability == 1) {
+                tvAbility.text = "创始人靠谱"
+            } else if (data.is_ability == 2) {
+                tvAbility.text = "创始人不靠谱"
+            }
+
+            // 立项页面时显示（已完成或准备中）两个状态，   退出显示（部分退出或全部退出）两个状态
+            tvState.text = "${data.status}"
+
+            bean1.setData(true, 1, "暂未")
+            bean2.setData(true, 2, "暂未")
+
+//            if (data.red != null && data.red != 0) {
+//                point.visibility = View.VISIBLE
+//                point.text = data.red.toString()
+//            } else {
+//                point.visibility = View.GONE
+//            }
+        }
+
     }
 }
