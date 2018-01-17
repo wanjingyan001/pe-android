@@ -73,7 +73,6 @@ public class MyNestedScrollParent2 extends LinearLayout implements NestedScrolli
                 if (mToolBarHeight <= 0) {
                     mToolBarHeight = mToolBar.getMeasuredHeight();
                     Log.i(Tag, "mToolBarHeight:" + mToolBarHeight + ",mFrameHeight:" + mFrameHeight);
-                    limit = (int) (mToolBarHeight);
                 }
             }
         });
@@ -171,8 +170,6 @@ public class MyNestedScrollParent2 extends LinearLayout implements NestedScrolli
         super.scrollTo(x, y);
     }
 
-    private int limit = -1;
-
     /**
      * 下拉的时候是否要向下滑动显示图片
      */
@@ -180,14 +177,14 @@ public class MyNestedScrollParent2 extends LinearLayout implements NestedScrolli
         if (dy < 0) {
             //改变view
             Log.e("下拉", dy + "+++" + getScrollY());//dy<0;getScrollY()>0,变小
-            if (getScrollY() < limit) {//如果parent外框，还可以往下滑动
+            if (getScrollY() < mToolBarHeight) {//如果parent外框，还可以往下滑动
                 mTabs.setBackgroundResource(R.drawable.tab_bg_1);
                 mTabs.setTabTextColors(Color.parseColor("#282828"), Color.parseColor("#a0a4aa"));
                 for (int i = 0; i < mTabs.getTabCount(); i++) {
                     setDrawable(i, "1", false);
                 }
                 setDrawable(mTabs.getSelectedTabPosition(), "1", true);
-            } else if (getScrollY() >= limit) {
+            } else if (getScrollY() >= mToolBarHeight) {
                 mTabs.setBackgroundResource(R.drawable.tab_bg_2);
                 mTabs.setTabTextColors(Color.parseColor("#ff7bb4fc"), Color.parseColor("#ffffff"));
                 for (int i = 0; i < mTabs.getTabCount(); i++) {
@@ -220,14 +217,14 @@ public class MyNestedScrollParent2 extends LinearLayout implements NestedScrolli
         if (dy > 0) {
             Log.e("上拉", dy + "+++" + getScrollY());//dy>0;getScrollY()>0,变大
             //改变view
-            if (getScrollY() < limit) {//如果parent外框，还可以往下滑动
+            if (getScrollY() < mToolBarHeight) {//如果parent外框，还可以往下滑动
                 mTabs.setBackgroundResource(R.drawable.tab_bg_1);
                 mTabs.setTabTextColors(Color.parseColor("#282828"), Color.parseColor("#a0a4aa"));
                 for (int i = 0; i < mTabs.getTabCount(); i++) {
                     setDrawable(i, "1", false);
                 }
                 setDrawable(mTabs.getSelectedTabPosition(), "1", true);
-            } else if (getScrollY() >= limit) {
+            } else if (getScrollY() >= mToolBarHeight) {
                 mTabs.setBackgroundResource(R.drawable.tab_bg_2);
                 mTabs.setTabTextColors(Color.parseColor("#ff7bb4fc"), Color.parseColor("#ffffff"));
                 for (int i = 0; i < mTabs.getTabCount(); i++) {
