@@ -1,6 +1,8 @@
 package com.sogukj.pe.view;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.NestedScrollingParent;
 import android.support.v4.view.NestedScrollingParentHelper;
 import android.support.v4.view.ViewConfigurationCompat;
@@ -20,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.OverScroller;
 import android.widget.ScrollView;
 
+import com.sogukj.pe.R;
 import com.sogukj.pe.util.Utils;
 
 /**
@@ -30,6 +33,7 @@ public class MyNestedScrollParent2 extends LinearLayout implements NestedScrolli
     private String Tag = "MyNestedScrollParent";
     private LinearLayout mToolBar;
     private FrameLayout mFrame;
+    private TabLayout mTabs;
     private ViewGroup currentContentView;
     private ViewPager viewPager;
     private NestedScrollingParentHelper mParentHelper;
@@ -61,6 +65,7 @@ public class MyNestedScrollParent2 extends LinearLayout implements NestedScrolli
         super.onFinishInflate();
         mToolBar = (LinearLayout) getChildAt(0);
         mFrame = (FrameLayout) getChildAt(1);
+        mTabs = (TabLayout) mFrame.getChildAt(1);
         viewPager = (ViewPager) getChildAt(2);
         mToolBar.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -169,6 +174,7 @@ public class MyNestedScrollParent2 extends LinearLayout implements NestedScrolli
      * 下拉的时候是否要向下滑动显示图片
      */
     public boolean showImg(int dy) {
+        Log.e("下拉", dy + "+++" + getScrollY());//dy < 0,getScrollY()从最大开始变为0
         if (dy < 0) {
             if (getScrollY() > 0) {//如果parent外框，还可以往上滑动
                 if (currentContentView instanceof ScrollView && currentContentView.getScrollY() == 0) {
@@ -191,9 +197,18 @@ public class MyNestedScrollParent2 extends LinearLayout implements NestedScrolli
      * @return
      */
     public boolean hideImg(int dy) {
+        Log.e("上拉", dy + "+++" + getScrollY());//dy > 0,getScrollY()从0开始变大
         if (dy > 0) {
             if (getScrollY() < mToolBarHeight) {//如果parent外框，还可以往下滑动
                 return true;
+            }
+            if (getScrollY() < mToolBarHeight - 3) {
+                mTabs.setBackgroundResource(R.drawable.tab_bg_1);
+                mTabs.setTabTextColors(Color.parseColor("#282828"), Color.parseColor("#a0a4aa"));
+                return true;
+            } else if (getScrollY() >= mToolBarHeight - 3) {
+                mTabs.setBackgroundResource(R.drawable.tab_bg_2);
+                mTabs.setTabTextColors(Color.parseColor("#ff7bb4fc"), Color.parseColor("#ffffff"));
             }
         }
         return false;
