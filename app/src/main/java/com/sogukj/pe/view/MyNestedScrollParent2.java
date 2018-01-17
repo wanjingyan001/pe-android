@@ -332,6 +332,7 @@ public class MyNestedScrollParent2 extends LinearLayout implements NestedScrolli
         if (mScroller.computeScrollOffset()) {
             postInvalidate();
             int dy = mScroller.getFinalY() - mScroller.getCurrY();
+            changeView();
             if (yVelocity > 0) {
                 if (getScrollY() >= mToolBarHeight) {//此时top完全隐藏
 
