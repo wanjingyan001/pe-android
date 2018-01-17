@@ -202,14 +202,58 @@ public class MyNestedScrollParent2 extends LinearLayout implements NestedScrolli
             if (getScrollY() < mToolBarHeight) {//如果parent外框，还可以往下滑动
                 mTabs.setBackgroundResource(R.drawable.tab_bg_1);
                 mTabs.setTabTextColors(Color.parseColor("#282828"), Color.parseColor("#a0a4aa"));
+                for (int i = 0; i < mTabs.getTabCount(); i++) {
+                    setDrawable(i, "1", false);
+                }
+                setDrawable(mTabs.getSelectedTabPosition(), "1", true);
                 return true;
             } else if (getScrollY() == mToolBarHeight) {
                 mTabs.setBackgroundResource(R.drawable.tab_bg_2);
                 mTabs.setTabTextColors(Color.parseColor("#ff7bb4fc"), Color.parseColor("#ffffff"));
+                for (int i = 0; i < mTabs.getTabCount(); i++) {
+                    setDrawable(i, "2", false);
+                }
+                setDrawable(mTabs.getSelectedTabPosition(), "2", true);
             }
 
         }
         return false;
+    }
+
+    //dy_1_unselect
+
+    /**
+     * @param index--------(tabs对应的index，分别对应dy,cb等)
+     * @param state---------（1，2）
+     * @param isSelect--------是否选中
+     */
+    private void setDrawable(int index, String state, boolean isSelect) {
+        String name = "";
+        switch (index) {
+            case 0:
+                name += "dy_";
+                break;
+            case 1:
+                name += "cb_";
+                break;
+            case 2:
+                name += "lx_";
+                break;
+            case 3:
+                name += "yt_";
+                break;
+            case 4:
+                name += "tc_";
+                break;
+        }
+        name += state;
+        if (isSelect) {
+            name += "_select";
+        } else {
+            name += "_unselect";
+        }
+        int id = getResources().getIdentifier(name, "drawable", context.getPackageName());
+        mTabs.getTabAt(index).setIcon(id);
     }
 
     @Override
