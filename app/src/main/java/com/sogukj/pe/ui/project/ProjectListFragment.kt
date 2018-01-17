@@ -313,13 +313,13 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
         pop.isOutsideTouchable = true
         pop.setBackgroundDrawable(BitmapDrawable(resources, null as Bitmap?))
         val location = IntArray(2)
-        if (view.id != R.id.project_main_layout3) {
-            val view = view.find<View>(R.id.tv1)
-            view.getLocationInWindow(location)
-            val x = location[0]
-            val y = location[1]
-            pop.showAtLocation(view, Gravity.CENTER_HORIZONTAL or Gravity.TOP, 0, y - view.getMeasuredHeight())
-        }
+//        if (view.id != R.id.project_main_layout3) {
+//            val view = view.find<View>(R.id.tv1)
+//            view.getLocationInWindow(location)
+//            val x = location[0]
+//            val y = location[1]
+//            pop.showAtLocation(view, Gravity.CENTER_HORIZONTAL or Gravity.TOP, 0, y - view.getMeasuredHeight())
+//        }
     }
 
     fun doDel(position: Int) {
@@ -707,12 +707,8 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
             tvDSZ.text = "董事长：${data.dsz}"
 
             val strTime = data.add_time
-            tvTime.visibility = View.GONE
             if (!TextUtils.isEmpty(strTime)) {
                 val strs = strTime!!.trim().split(" ")
-                if (!TextUtils.isEmpty(strs.getOrNull(1))) {
-                    tvTime.visibility = View.VISIBLE
-                }
                 tvDate.text = strs
                         .getOrNull(0)
                 tvTime.text = strs
