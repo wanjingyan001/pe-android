@@ -1,144 +1,209 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/project_main_layout3"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/bg_item_list"
-    android:orientation="vertical">
+    android:layout_height="170dp"
+    android:background="@drawable/bg_item"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="25dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/company_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/red_point" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/shoucang"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:src="@drawable/sc_no" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp">
-
-        <ImageView
-            android:id="@+id/point"
-            android:layout_width="6dp"
-            android:layout_height="6dp"
-            android:src="@drawable/red_point"
-            android:visibility="gone" />
+        android:layout_height="match_parent"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="25dp"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/tv_title"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="left"
+            android:letterSpacing="0.04"
+            android:lineSpacingExtra="-1sp"
             android:singleLine="true"
-            android:textColor="@color/text_1"
+            android:textColor="#282828"
             android:textSize="16sp"
-            tools:text="@string/tools_text_title" />
+            tools:text="上海有兴资产信息股份有限限公司" />
 
-
-        <TextView
-            android:id="@+id/btn_add"
-            android:layout_width="45dp"
-            android:layout_height="20dp"
-            android:background="@drawable/bg_btn_setup"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:gravity="center"
-            android:text="+立项"
-            android:textColor="@color/colorBlue"
-            android:textSize="12sp" />
-    </LinearLayout>
+            android:orientation="horizontal">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/icon_dsz"
+                android:drawablePadding="4dp"
+                android:gravity="center"
+                android:lineSpacingExtra="0sp"
+                android:text="董事长：张三"
+                android:textColor="#a0a4aa"
+                android:textSize="10sp" />
 
-        <TextView
-            android:id="@+id/tv_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:drawableLeft="@drawable/icon_date"
-            android:drawablePadding="4dp"
-            android:textColor="@color/text_3"
-            android:textSize="12sp"
-            tools:text="2017/07/07" />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
 
-        <TextView
-            android:id="@+id/tv_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            <TextView
+                android:id="@+id/tv_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/icon_date"
+                android:drawablePadding="4dp"
+                android:gravity="center"
+                android:text="2017/07/07"
+                android:textColor="@color/text_3"
+                android:textSize="10sp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/icon_time"
+                android:drawablePadding="4dp"
+                android:gravity="center"
+                android:text="12:00"
+                android:textColor="@color/text_3"
+                android:textSize="10sp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
-            android:drawableLeft="@drawable/icon_time"
-            android:drawablePadding="4dp"
-            android:textColor="@color/text_3"
-            android:textSize="12sp"
-            tools:text="12:00" />
+            android:orientation="horizontal">
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
+            <com.sogukj.pe.view.ProjectBeanLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
 
-        <TextView
-            android:id="@+id/tv_edit"
-            android:layout_width="58dp"
-            android:layout_height="20dp"
-            android:layout_marginRight="12dp"
-            android:background="@drawable/bg_border_text3"
-            android:drawableLeft="@drawable/ic_edit_15"
-            android:drawablePadding="3dp"
-            android:gravity="center"
-            android:paddingLeft="3dp"
-            android:text="编辑"
-            android:textColor="@color/text_3"
-            android:textSize="12sp" />
+            <com.sogukj.pe.view.ProjectBeanLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/tv_del"
-            android:layout_width="58dp"
-            android:layout_height="20dp"
-            android:background="@drawable/bg_border_text3"
-            android:drawableLeft="@drawable/ic_delete_15"
-            android:drawablePadding="3dp"
-            android:gravity="center"
-            android:paddingLeft="3dp"
-            android:text="删除"
-            android:textColor="@color/text_3"
-            android:textSize="12sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/pingjia"
-        android:layout_width="match_parent"
-        android:layout_height="15dp"
-        android:layout_marginBottom="10dp"
-        android:orientation="horizontal"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp">
-
-        <TextView
-            android:id="@+id/business"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/rect_orange"
-            android:gravity="center"
-            android:text="有商业价值"
-            android:textColor="@color/white"
-            android:textSize="10sp" />
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/ability"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:background="@drawable/rect_blue"
-            android:gravity="center"
-            android:text="创始人无能力"
-            android:textColor="@color/white"
-            android:textSize="10sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/shape"
+                android:drawablePadding="4dp"
+                android:gravity="center"
+                android:letterSpacing="0.04"
+                android:lineSpacingExtra="0sp"
+                android:text="IPO"
+                android:textColor="#9f9f9f"
+                android:textSize="10sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:letterSpacing="0.03"
+                android:text="|"
+                android:textColor="#9f9f9f"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/business"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:letterSpacing="0.03"
+                android:lineSpacingExtra="0sp"
+                android:text="有商业价值"
+                android:textColor="#9f9f9f"
+                android:textSize="10sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:letterSpacing="0.03"
+                android:text="|"
+                android:textColor="#9f9f9f"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/ability"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:letterSpacing="0.03"
+                android:lineSpacingExtra="0sp"
+                android:text="创始人不靠谱"
+                android:textColor="#9f9f9f"
+                android:textSize="10sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:letterSpacing="0.03"
+                android:text="|"
+                android:textColor="#9f9f9f"
+                android:textSize="10sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:letterSpacing="0.03"
+                android:lineSpacingExtra="0sp"
+                android:text="已完成"
+                android:textColor="#9f9f9f"
+                android:textSize="10sp" />
+
+        </LinearLayout>
+
     </LinearLayout>
-
 
 </LinearLayout>

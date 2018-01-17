@@ -258,10 +258,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
             app:layoutManager="LinearLayoutManager"
-            tools:listitem="@layout/item_main_project_3" />
+            tools:listitem="@layout/item_main_project_new" />
 
 
         <include layout="@layout/layout_empty" />

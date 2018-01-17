@@ -113,7 +113,7 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
         val layoutManager = LinearLayoutManager(baseActivity)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         //recycler_view.addItemDecoration(DividerItemDecoration(baseActivity, DividerItemDecoration.VERTICAL))
-        recycler_view.addItemDecoration(SpaceItemDecoration(Utils.dpToPx(context, 25)))
+        recycler_view.addItemDecoration(SpaceItemDecoration(Utils.dpToPx(context, 10)))
         recycler_view.layoutManager = layoutManager
         recycler_view.adapter = adapter
 
