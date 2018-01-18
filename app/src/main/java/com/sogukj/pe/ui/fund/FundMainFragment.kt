@@ -1,7 +1,10 @@
 package com.sogukj.pe.ui.fund
 
+import android.graphics.Color
 import android.os.Bundle
+import android.support.design.widget.TabLayout
 import android.support.v4.content.ContextCompat
+import android.support.v4.view.ViewPager
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.text.SpannableString
@@ -28,9 +31,7 @@ import com.sogukj.pe.bean.FundSmallBean.Companion.RegTimeDesc
 import com.sogukj.pe.ui.SupportEmptyView
 import com.sogukj.pe.ui.main.MainActivity
 import com.sogukj.pe.util.Trace
-import com.sogukj.pe.view.ProgressView
-import com.sogukj.pe.view.RecyclerAdapter
-import com.sogukj.pe.view.RecyclerHolder
+import com.sogukj.pe.view.*
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -43,12 +44,6 @@ class FundMainFragment : BaseFragment(), View.OnClickListener {
     override val containerViewId: Int
         get() = R.layout.activity_fund_main
 
-
-    lateinit var adapter: RecyclerAdapter<FundSmallBean>
-    private var page = 0
-    private var currentNameOrder = FundDesc
-    private var currentTimeOrder = RegTimeAsc
-
     companion object {
         val TAG: String = FundMainFragment::class.java.simpleName
 
@@ -60,73 +55,15 @@ class FundMainFragment : BaseFragment(), View.OnClickListener {
         }
     }
 
+    val fragments = arrayOf(
+            FundListFragment.newInstance(FundListFragment.TYPE_CB),
+            FundListFragment.newInstance(FundListFragment.TYPE_CX),
+            FundListFragment.newInstance(FundListFragment.TYPE_TC)
+    )
+
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         fundTitle.text = "基金"
-
-        run {
-            //列表和adapter的初始化
-            adapter = RecyclerAdapter(context, { _adapter, parent, type ->
-                val convertView = _adapter.getView(R.layout.item_fund_main_list, parent)
-                object : RecyclerHolder<FundSmallBean>(convertView) {
-                    val icon = convertView.find<ImageView>(R.id.imageIcon)
-                    val fundName = convertView.find<TextView>(R.id.fundName)
-                    val regTime = convertView.find<TextView>(R.id.regTime)
-                    val ytc = convertView.find<TextView>(R.id.ytc)
-                    val total = convertView.find<TextView>(R.id.total)
-                    val progress = convertView.find<ProgressView>(R.id.progess)
-                    override fun setData(view: View, data: FundSmallBean, position: Int) {
-                        Glide.with(context).load(data.url).into(icon)
-                        fundName.text = data.fundName
-                        regTime.text = data.regTime
-
-                        data.ytc = "1000"
-                        data.total = "2000"
-
-                        var spannableString = SpannableString("${data.ytc} 万")
-                        var sizeSpan1 = AbsoluteSizeSpan(16, false)
-                        var sizeSpan2 = AbsoluteSizeSpan(9, false)
-                        spannableString.setSpan(sizeSpan1, 0, data.ytc.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
-                        spannableString.setSpan(sizeSpan2, data.ytc.length, spannableString.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
-                        ytc.text = spannableString
-
-                        total.text = "总额：${data.total}万"
-
-                        try {
-                            progress.setPercent(data.ytc.toInt() * 100 / data.total.toInt())
-                        } catch (e: Exception) {
-                            progress.setPercent(0)
-                        }
-                    }
-                }
-            })
-            adapter.onItemClick = { _, position ->
-                FundDetailActivity.start(activity, adapter.dataList[position])
-            }
-            recycler_view.layoutManager = LinearLayoutManager(context)
-            //recycler_view.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-            recycler_view.adapter = adapter
-            val header = ProgressLayout(context)
-            header.setColorSchemeColors(ContextCompat.getColor(context, R.color.color_main))
-            refresh.setHeaderView(header)
-            val footer = BallPulseView(context)
-            footer.setAnimatingColor(ContextCompat.getColor(context, R.color.color_main))
-            refresh.setBottomView(footer)
-            refresh.setOverScrollRefreshShow(false)
-            refresh.setEnableLoadmore(true)
-            refresh.setOnRefreshListener(object : RefreshListenerAdapter() {
-                override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
-                    page = 0
-                    doRequest()
-                }
-
-                override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
-                    ++page
-                    doRequest()
-                }
-
-            })
-        }
 
         run {
             ll_order_name_1.setOnClickListener(this)
@@ -134,77 +71,168 @@ class FundMainFragment : BaseFragment(), View.OnClickListener {
 //            iv_user.setOnClickListener(this)
             iv_search.setOnClickListener(this)
         }
+
+        run {
+            var adapter = ArrayPagerAdapter(childFragmentManager, fragments)
+            view_pager.adapter = adapter
+            view_pager.offscreenPageLimit = fragments.size
+            var transFormer = ProjectPageTransformer()
+            view_pager.setPageTransformer(true, transFormer)
+
+            tabs?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+                override fun onTabReselected(tab: TabLayout.Tab?) {
+
+                }
+
+                override fun onTabUnselected(tab: TabLayout.Tab?) {
+
+                }
+
+                override fun onTabSelected(tab: TabLayout.Tab) {
+                    view_pager?.currentItem = tab.position
+                }
+
+            })
+            view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+                override fun onPageScrollStateChanged(state: Int) {
+                    //Log.e("PageScrollState", "${state}")
+                    if (state == ViewPager.SCROLL_STATE_DRAGGING) {
+                        judgeOncce = 0
+                    }
+                }
+
+                override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+                    //position永远都是两个的左边一个，viewpager往右滑，positionOffset从0到1（到达1以后position++）
+                    //Log.e("onPageScrolled", "${position} +++ ${positionOffset} +++ ${positionOffsetPixels}")
+                    if (judgeOncce == 0) {
+                        if (positionOffset > 0.5f) {
+                            transFormer.setDirection(true)
+                        } else if (positionOffset < 0.5f) {
+                            transFormer.setDirection(false)
+                        }
+                        judgeOncce = 1
+                    }
+                }
+
+                //滑到新页面才算，没滑到又返回不算
+                override fun onPageSelected(position: Int) {
+                    //Log.e("onPageSelected", "onPageSelected")
+                    tabs?.getTabAt(position)?.select()
+                    changeView()
+                    setContent()
+                }
+
+            })
+        }
     }
 
+    override fun onResume() {
+        super.onResume()
+        setContent()
+    }
 
-    override fun onStart() {
-        super.onStart()
-        doRequest()
+    private fun changeView() {
+        if (MyNestedScrollParentFund.scrollY < toolbarLayout.height) {//如果parent外框，还可以往下滑动
+            tabs.setBackgroundResource(R.drawable.tab_bg_1)
+            tabs.setTabTextColors(Color.parseColor("#a0a4aa"), Color.parseColor("#282828"))
+            for (i in 0 until tabs.getTabCount()) {
+                if (i == tabs.getSelectedTabPosition()) {
+                    setDrawable(i, "1", true)
+                } else {
+                    setDrawable(i, "1", false)
+                }
+            }
+        } else if (MyNestedScrollParentFund.scrollY > toolbarLayout.height) {
+            tabs.setBackgroundResource(R.drawable.tab_bg_2)
+            tabs.setTabTextColors(Color.parseColor("#ff7bb4fc"), Color.parseColor("#ffffff"))
+            for (i in 0 until tabs.getTabCount()) {
+                if (i == tabs.getSelectedTabPosition()) {
+                    setDrawable(i, "2", true)
+                } else {
+                    setDrawable(i, "2", false)
+                }
+            }
+        } else {//toolbarLayout.height=0  fragment来回切换导致toolbarLayout还没有宽高就要
+            tabs.setBackgroundResource(R.drawable.tab_bg_1)
+            tabs.setTabTextColors(Color.parseColor("#a0a4aa"), Color.parseColor("#282828"))
+            for (i in 0 until tabs.getTabCount()) {
+                if (i == tabs.getSelectedTabPosition()) {
+                    setDrawable(i, "1", true)
+                } else {
+                    setDrawable(i, "1", false)
+                }
+            }
+        }
     }
 
     /**
-     * 获取基金公司列表
+     * @param index--------(tabs对应的index，分别对应dy,cb等)
+     * @param state---------（1，2）
+     * @param isSelect--------是否选中
      */
-    fun doRequest() {
-        SoguApi.getService(activity.application)
-                .getAllFunds(page = page, sort = (currentNameOrder + currentTimeOrder))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ payload ->
-                    if (payload.isOk) {
-                        if (page == 0) {
-                            adapter.dataList.clear()
-                        }
-                        payload.payload?.apply {
-                            Log.d(TAG, Gson().toJson(this))
-                            adapter.dataList.addAll(this)
-                        }
-                    } else
-                        showToast(payload.message)
-                }, { e ->
-                    Trace.e(e)
-                    showToast("暂无可用数据")
-                }, {
-                    SupportEmptyView.checkEmpty(this, adapter)
-                    refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
-                    adapter.notifyDataSetChanged()
-                    if (page == 0) {
-                        refresh?.finishRefreshing()
-                    } else {
-                        refresh?.finishLoadmore()
-                    }
-                })
+    private fun setDrawable(index: Int, state: String, isSelect: Boolean) {
+        var name = ""
+        when (index) {
+            0 -> name += "cb_"
+            1 -> name += "cx_"
+            2 -> name += "tc_"
+        }
+        name += state
+        if (isSelect) {
+            name += "_select"
+        } else {
+            name += "_unselect"
+        }
+        val id = resources.getIdentifier(name, "drawable", context.packageName)
+        tabs.getTabAt(index)!!.setIcon(id)
     }
+
+    /**
+     * 不知道为啥能成功
+     */
+    private fun setContent() {
+        var view = fragments.get(view_pager.currentItem).getRecycleView()
+        //RecycleView可能还没渲染，这样第一个setCurrentContentView失效
+        view.post(object : Runnable {
+            override fun run() {
+                if (view.height > 0) {
+                    MyNestedScrollParentFund.setCurrentContentView(view)
+                }
+            }
+        })
+    }
+
+    var judgeOncce = 0
 
     override fun onClick(p0: View?) {
         when (p0?.id) {
-            R.id.ll_order_name_1 -> {
-                if (currentNameOrder == FundDesc) {
-                    currentNameOrder = FundAsc
-                    iv_sort_name_1.imageResource = R.drawable.ic_up
-                } else {
-                    currentNameOrder = FundDesc
-                    iv_sort_name_1.imageResource = R.drawable.ic_down
-                }
-                page = 0
-                doRequest()
-            }
-            R.id.ll_order_time_1 -> {
-                if (currentTimeOrder == RegTimeAsc) {
-                    currentTimeOrder = RegTimeDesc
-                    iv_sort_time_1.imageResource = R.drawable.ic_down
-                } else {
-                    currentTimeOrder = RegTimeAsc
-                    iv_sort_time_1.imageResource = R.drawable.ic_up
-                }
-                page = 0
-                doRequest()
-            }
-            R.id.iv_user -> {
-                val activity = activity as MainActivity
-                activity.find<RadioGroup>(R.id.rg_tab_main).check(R.id.rb_my)
-//                UserFragment.start(activity)
-            }
+//            R.id.ll_order_name_1 -> {
+//                if (currentNameOrder == FundDesc) {
+//                    currentNameOrder = FundAsc
+//                    iv_sort_name_1.imageResource = R.drawable.ic_up
+//                } else {
+//                    currentNameOrder = FundDesc
+//                    iv_sort_name_1.imageResource = R.drawable.ic_down
+//                }
+//                page = 0
+//                doRequest()
+//            }
+//            R.id.ll_order_time_1 -> {
+//                if (currentTimeOrder == RegTimeAsc) {
+//                    currentTimeOrder = RegTimeDesc
+//                    iv_sort_time_1.imageResource = R.drawable.ic_down
+//                } else {
+//                    currentTimeOrder = RegTimeAsc
+//                    iv_sort_time_1.imageResource = R.drawable.ic_up
+//                }
+//                page = 0
+//                doRequest()
+//            }
+//            R.id.iv_user -> {
+//                val activity = activity as MainActivity
+//                activity.find<RadioGroup>(R.id.rg_tab_main).check(R.id.rb_my)
+////                UserFragment.start(activity)
+//            }
             R.id.iv_search -> {
                 FundSearchActivity.start(activity)
             }
