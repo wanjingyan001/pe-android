@@ -91,9 +91,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/tab_bg_1"
-            app:tabGravity="center"
+            app:tabGravity="fill"
             app:tabIndicatorHeight="0dp"
-            app:tabMode="scrollable"
+            app:tabMode="fixed"
             app:tabSelectedTextColor="@color/text_1"
             app:tabTextColor="@color/text_3">
 
