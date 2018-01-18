@@ -306,7 +306,7 @@ class MainProjectFragment : BaseFragment() {
                 fb_add.visibility = if (position == 0 || position == 1) View.VISIBLE else View.GONE
 //                iv_search?.visibility = if (position == 2) View.VISIBLE else View.GONE
 //                iv_add?.visibility = if (position == 1 && user?.is_admin == 1) View.VISIBLE else View.GONE
-                MyNestedScrollParent2.setCurrentContentView(fragments.get(position).getRecycleView())
+                setContent()
             }
 
         })
@@ -386,8 +386,10 @@ class MainProjectFragment : BaseFragment() {
         tabs.getTabAt(index)!!.setIcon(id)
     }
 
-    override fun onResume() {
-        super.onResume()
+    /**
+     * 不知道为啥能成功
+     */
+    private fun setContent() {
         var view = fragments.get(view_pager.currentItem).getRecycleView()
         //RecycleView可能还没渲染，这样第一个setCurrentContentView失效
         view.getViewTreeObserver().addOnGlobalLayoutListener(ViewTreeObserver.OnGlobalLayoutListener {
@@ -399,6 +401,11 @@ class MainProjectFragment : BaseFragment() {
                 view.getViewTreeObserver().removeOnGlobalLayoutListener { this }
             }
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setContent()
     }
 
     var judgeOncce = 0

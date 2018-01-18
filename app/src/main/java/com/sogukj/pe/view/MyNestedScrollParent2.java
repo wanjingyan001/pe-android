@@ -91,7 +91,8 @@ public class MyNestedScrollParent2 extends LinearLayout implements NestedScrolli
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        currentContentView = (ViewGroup) viewPager.getChildAt(0);
+        LinearLayout layout = (LinearLayout) viewPager.getChildAt(0);//fragment_list_project
+        currentContentView = (ViewGroup) ((ViewGroup) layout.getChildAt(5)).getChildAt(0);
     }
 
     @Override
@@ -399,13 +400,8 @@ public class MyNestedScrollParent2 extends LinearLayout implements NestedScrolli
         if (currentContentView instanceof ScrollView && currentContentView.getScrollY() == 0) {
             return true;
         } else if (currentContentView instanceof RecyclerView) {
-            Log.e("canScrollVertically", "" + currentContentView.canScrollVertically(-1));
-            LinearLayoutManager manager = (LinearLayoutManager) ((RecyclerView) currentContentView).getLayoutManager();
-            Log.e("findFirstVisibleItem", "" + manager.findFirstCompletelyVisibleItemPosition());
-//            if (!currentContentView.canScrollVertically(-1)) {
-//                return true;
-//            }
-            if (manager.findFirstCompletelyVisibleItemPosition() == 0) {
+
+            if (!currentContentView.canScrollVertically(-1)) {
                 return true;
             }
 
