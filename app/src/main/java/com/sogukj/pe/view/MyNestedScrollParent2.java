@@ -295,7 +295,7 @@ public class MyNestedScrollParent2 extends LinearLayout implements NestedScrolli
                 }
                 break;
             case MotionEvent.ACTION_UP:
-                mVelocityTracker.computeCurrentVelocity(300, maxVelocity);
+                mVelocityTracker.computeCurrentVelocity(1000, maxVelocity);
                 yVelocity = (int) mVelocityTracker.getYVelocity();
                 Log.i(Tag, "getYVelocity:" + yVelocity + ",minVelocity:" + minVelocity);
                 if (Math.abs(yVelocity) > minVelocity) {
@@ -340,6 +340,10 @@ public class MyNestedScrollParent2 extends LinearLayout implements NestedScrolli
             int dy = mScroller.getFinalY() - mScroller.getCurrY();
             if (yVelocity > 0) {//下拉
                 Log.e("getScrollY", "" + getScrollY());
+                Log.e("isChildScrollToTop", "" + isChildScrollToTop());
+                //172 false 滑动内部
+                //172 true 滑动父亲
+                //0 true 不变
                 if (getScrollY() >= mToolBarHeight) {//此时top完全隐藏
 
                     if (isChildScrollToTop()) {//如果子view已经滑动到顶部，这个时候父亲自己滑动
