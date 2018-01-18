@@ -7,6 +7,7 @@ import android.support.v4.view.NestedScrollingParent;
 import android.support.v4.view.NestedScrollingParentHelper;
 import android.support.v4.view.ViewConfigurationCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
@@ -347,6 +348,7 @@ public class MyNestedScrollParent2 extends LinearLayout implements NestedScrolli
                 if (getScrollY() >= mToolBarHeight) {//此时top完全隐藏
 
                     if (isChildScrollToTop()) {//如果子view已经滑动到顶部，这个时候父亲自己滑动
+                        //changeView();
                         scrollBy(0, dy);
                     } else {
                         scrollContentView(dy);
@@ -397,8 +399,13 @@ public class MyNestedScrollParent2 extends LinearLayout implements NestedScrolli
         if (currentContentView instanceof ScrollView && currentContentView.getScrollY() == 0) {
             return true;
         } else if (currentContentView instanceof RecyclerView) {
-
-            if (!currentContentView.canScrollVertically(-1)) {
+            Log.e("canScrollVertically", "" + currentContentView.canScrollVertically(-1));
+            LinearLayoutManager manager = (LinearLayoutManager) ((RecyclerView) currentContentView).getLayoutManager();
+            Log.e("findFirstVisibleItem", "" + manager.findFirstCompletelyVisibleItemPosition());
+//            if (!currentContentView.canScrollVertically(-1)) {
+//                return true;
+//            }
+            if (manager.findFirstCompletelyVisibleItemPosition() == 0) {
                 return true;
             }
 
