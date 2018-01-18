@@ -92,7 +92,7 @@ public class MyNestedScrollParent2 extends LinearLayout implements NestedScrolli
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         LinearLayout layout = (LinearLayout) viewPager.getChildAt(0);//fragment_list_project
-        currentContentView = (ViewGroup) ((ViewGroup) layout.getChildAt(5)).getChildAt(0);
+        currentContentView = (ViewGroup) ((ViewGroup) layout.getChildAt(0)).getChildAt(0);
     }
 
     @Override
@@ -349,7 +349,6 @@ public class MyNestedScrollParent2 extends LinearLayout implements NestedScrolli
                 if (getScrollY() >= mToolBarHeight) {//此时top完全隐藏
 
                     if (isChildScrollToTop()) {//如果子view已经滑动到顶部，这个时候父亲自己滑动
-                        //changeView();
                         scrollBy(0, dy);
                     } else {
                         scrollContentView(dy);
@@ -358,6 +357,8 @@ public class MyNestedScrollParent2 extends LinearLayout implements NestedScrolli
                 } else if (getScrollY() == 0) {//parent自己完全显示，交给子view滑动
                     if (!isChildScrollToTop()) {
                         scrollContentView(dy);
+                    } else {
+                        changeView();
                     }
                 } else {//此时top没有完全显示，让parent自己滑动
                     scrollBy(0, dy);

@@ -149,8 +149,8 @@ class MainHomeFragment : BaseFragment() {
 //            }
             ColorUtil.setColorStatus(holder.tvState!!, data)
             try {
-                holder.tvTitle?.text = data.title!!.split(" ")[0]
-                holder.tvSeq?.text = data.title!!.split(" ")[1]
+                holder.tvTitle?.text = strType
+                holder.tvSeq?.text = data.title
             } catch (e: Exception) {
             }
             holder.tvFrom?.text = "发起人:" + data.username

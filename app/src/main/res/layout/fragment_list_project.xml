@@ -5,6 +5,31 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <!--这里的TwinklingRefreshLayout位置不要动，如果要动，请修改MyNestedScrollParent2的onSizeChanged函数里的内容-->
+    <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layoutManager="LinearLayoutManager"
+            tools:listitem="@layout/item_main_project_new" />
+
+
+        <include layout="@layout/layout_empty" />
+
+        <include layout="@layout/layout_loading" />
+
+
+    </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/ll_header"
@@ -244,28 +269,4 @@
         android:paddingTop="10dp"
         android:text="添加储备项目+"
         android:visibility="gone" />
-
-    <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/refresh"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            app:layoutManager="LinearLayoutManager"
-            tools:listitem="@layout/item_main_project_new" />
-
-
-        <include layout="@layout/layout_empty" />
-
-        <include layout="@layout/layout_loading" />
-
-
-    </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
 </LinearLayout>
