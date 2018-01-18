@@ -4,10 +4,15 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.AbsoluteSizeSpan
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.RadioGroup
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.framework.base.BaseFragment
 import com.google.gson.Gson
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
@@ -23,6 +28,7 @@ import com.sogukj.pe.bean.FundSmallBean.Companion.RegTimeDesc
 import com.sogukj.pe.ui.SupportEmptyView
 import com.sogukj.pe.ui.main.MainActivity
 import com.sogukj.pe.util.Trace
+import com.sogukj.pe.view.ProgressView
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.service.SoguApi
@@ -63,11 +69,34 @@ class FundMainFragment : BaseFragment(), View.OnClickListener {
             adapter = RecyclerAdapter(context, { _adapter, parent, type ->
                 val convertView = _adapter.getView(R.layout.item_fund_main_list, parent)
                 object : RecyclerHolder<FundSmallBean>(convertView) {
+                    val icon = convertView.find<ImageView>(R.id.imageIcon)
                     val fundName = convertView.find<TextView>(R.id.fundName)
                     val regTime = convertView.find<TextView>(R.id.regTime)
+                    val ytc = convertView.find<TextView>(R.id.ytc)
+                    val total = convertView.find<TextView>(R.id.total)
+                    val progress = convertView.find<ProgressView>(R.id.progess)
                     override fun setData(view: View, data: FundSmallBean, position: Int) {
+                        Glide.with(context).load(data.url).into(icon)
                         fundName.text = data.fundName
                         regTime.text = data.regTime
+
+                        data.ytc = "1000"
+                        data.total = "2000"
+
+                        var spannableString = SpannableString("${data.ytc} 万")
+                        var sizeSpan1 = AbsoluteSizeSpan(16, false)
+                        var sizeSpan2 = AbsoluteSizeSpan(9, false)
+                        spannableString.setSpan(sizeSpan1, 0, data.ytc.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                        spannableString.setSpan(sizeSpan2, data.ytc.length, spannableString.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                        ytc.text = spannableString
+
+                        total.text = "总额：${data.total}万"
+
+                        try {
+                            progress.setPercent(data.ytc.toInt() * 100 / data.total.toInt())
+                        } catch (e: Exception) {
+                            progress.setPercent(0)
+                        }
                     }
                 }
             })
@@ -75,7 +104,7 @@ class FundMainFragment : BaseFragment(), View.OnClickListener {
                 FundDetailActivity.start(activity, adapter.dataList[position])
             }
             recycler_view.layoutManager = LinearLayoutManager(context)
-            recycler_view.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+            //recycler_view.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
             recycler_view.adapter = adapter
             val header = ProgressLayout(context)
             header.setColorSchemeColors(ContextCompat.getColor(context, R.color.color_main))
