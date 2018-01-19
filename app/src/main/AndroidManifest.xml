@@ -533,7 +533,9 @@
             android:configChanges="keyboard|orientation|screenSize"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity android:name=".ui.score.PointProgressActivity"></activity>
+        <activity android:name=".ui.score.PointProgressActivity" />
+        <activity android:name=".ui.fund.FundBookActivity" />
+        <activity android:name=".ui.fund.FundUploadActivity"></activity>
     </application>
 
 </manifest>

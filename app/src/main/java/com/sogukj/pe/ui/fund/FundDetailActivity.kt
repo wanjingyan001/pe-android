@@ -72,6 +72,7 @@ class FundDetailActivity : ToolbarActivity() {
         run {
             structure.setOnClickListener({ FundStructureActivity.start(this, data) })
             fundsDetail.setOnClickListener({ FundAccountActivity.start(this, data) })
+            fundsWenShu.setOnClickListener({ FundBookActivity.start(this, data) })
         }
     }
 

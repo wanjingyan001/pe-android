@@ -83,7 +83,9 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="#FFF7F9FC"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
 
         <TextView
             android:id="@+id/tag_1"
@@ -121,7 +123,17 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="直线上级评分"
+            android:text="直线上级"
+            android:textColor="#ff808080"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tag_5"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="领导班子"
             android:textColor="#ff808080"
             android:textSize="12sp" />
 

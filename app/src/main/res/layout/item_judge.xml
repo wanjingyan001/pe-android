@@ -46,4 +46,15 @@
         android:textColor="@color/text_1"
         android:textSize="12sp" />
 
+    <TextView
+        android:id="@+id/tag5"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="9月11日 14:00"
+        android:textColor="@color/text_1"
+        android:textSize="12sp"
+        android:visibility="gone" />
+
 </LinearLayout>

@@ -384,8 +384,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="55dp">
+                android:layout_marginBottom="55dp"
+                android:orientation="horizontal">
 
                 <com.sogukj.pe.view.TipsView
                     android:id="@+id/structure"
@@ -408,6 +408,28 @@
                     android:paddingBottom="13dp"
                     android:paddingTop="13dp"
                     android:text="基金总台账" />
+
+                <com.sogukj.pe.view.TipsView
+                    android:id="@+id/fundsWenShu"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/ic_proj_jjws"
+                    android:gravity="center"
+                    android:paddingBottom="13dp"
+                    android:paddingTop="13dp"
+                    android:text="基金文书" />
+
+                <com.sogukj.pe.view.TipsView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/ic_proj_jyyc"
+                    android:gravity="center"
+                    android:paddingBottom="13dp"
+                    android:paddingTop="13dp"
+                    android:text="基金文书111"
+                    android:visibility="invisible" />
             </LinearLayout>
 
         </LinearLayout>

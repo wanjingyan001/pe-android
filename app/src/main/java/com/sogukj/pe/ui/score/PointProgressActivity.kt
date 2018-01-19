@@ -85,17 +85,20 @@ class PointProgressActivity : ToolbarActivity() {
                 val tvTag2 = convertView.findViewById(R.id.tag2) as TextView
                 val tvTag3 = convertView.findViewById(R.id.tag3) as TextView
                 val tvTag4 = convertView.findViewById(R.id.tag4) as TextView
+                val tvTag5 = convertView.findViewById(R.id.tag5) as TextView
 
                 override fun setData(view: View, data: ProgressBean.ProgressItem, position: Int) {
                     tvTag1.visibility = View.VISIBLE
                     tvTag2.visibility = View.VISIBLE
                     tvTag3.visibility = View.VISIBLE
                     tvTag4.visibility = View.VISIBLE
+                    tvTag5.visibility = View.VISIBLE
 
                     tvTag1.text = data.name
                     fill(tvTag2, data.wri!!)
                     fill(tvTag3, data.gws!!)
                     fill(tvTag4, data.jxs!!)
+                    fill(tvTag5, data.les!!)
 
 //                    var name: String? = null//	姓名
 //                    var wri: Int? = null// 个人是否输入填写项    0=>未完成，1=>已完成，2=>延时完成
@@ -114,6 +117,9 @@ class PointProgressActivity : ToolbarActivity() {
                     } else if (dataIndex == 2) {
                         view.text = "延时完成"
                         view.textColor = Color.RED
+                    } else if (dataIndex == -1) {
+                        view.text = "无"
+                        view.textColor = Color.parseColor("#FF282828")
                     }
                 }
             }
