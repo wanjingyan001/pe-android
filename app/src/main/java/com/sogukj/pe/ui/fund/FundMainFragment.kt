@@ -234,7 +234,8 @@ class FundMainFragment : BaseFragment(), View.OnClickListener {
 ////                UserFragment.start(activity)
 //            }
             R.id.iv_search -> {
-                FundSearchActivity.start(activity)
+                var type = view_pager.currentItem + 1
+                FundSearchActivity.start(activity, type)
             }
         }
 

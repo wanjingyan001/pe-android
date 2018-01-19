@@ -17,6 +17,7 @@ import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import com.lcodecore.tkrefreshlayout.footer.BallPulseView
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
+import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.FundSmallBean
 import com.sogukj.pe.ui.SupportEmptyView
@@ -44,8 +45,8 @@ class FundSearchActivity : ToolbarActivity(), View.OnClickListener {
     companion object {
         val TAG = FundSearchActivity::class.java.simpleName
 
-        fun start(ctx: Context?) {
-            ctx?.startActivity(Intent(ctx, FundSearchActivity::class.java))
+        fun start(ctx: Context?, type: Int) {
+            ctx?.startActivity(Intent(ctx, FundSearchActivity::class.java).putExtra(Extras.TYPE, type))
         }
     }
 
@@ -167,7 +168,7 @@ class FundSearchActivity : ToolbarActivity(), View.OnClickListener {
         tmplist.add(searchStr)
         Store.store.saveFundSearch(this, tmplist)
         SoguApi.getService(application)
-                .getAllFunds(page = page, sort = (currentNameOrder + currentTimeOrder), fuzzyQuery = searchStr)
+                .getAllFunds(page = page, sort = (currentNameOrder + currentTimeOrder), fuzzyQuery = searchStr, type = intent.getIntExtra(Extras.TYPE, 0))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->

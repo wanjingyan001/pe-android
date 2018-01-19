@@ -665,7 +665,8 @@ interface SoguService {
     fun getAllFunds(@Field("page") page: Int = 1,
                     @Field("pageSize") pageSize: Int = 20,
                     @Field("sort") sort: Int,
-                    @Field("fuzzyQuery") fuzzyQuery: String = ""): Observable<Payload<List<FundSmallBean>>>
+                    @Field("fuzzyQuery") fuzzyQuery: String = "",
+                    @Field("type") type: Int): Observable<Payload<List<FundSmallBean>>>
 
     /**
      * 获取指定基金的详情

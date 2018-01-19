@@ -91,9 +91,6 @@ class FundListFragment : BaseFragment() {
                     fundName.text = data.fundName
                     regTime.text = data.regTime
 
-                    data.ytc = "1000"
-                    data.total = "2000"
-
                     var spannableString = SpannableString("${data.ytc} 万")
                     var sizeSpan1 = AbsoluteSizeSpan(16, false)
                     var sizeSpan2 = AbsoluteSizeSpan(9, false)
@@ -148,8 +145,17 @@ class FundListFragment : BaseFragment() {
      * 获取基金公司列表
      */
     fun doRequest() {
+        //非空（1=>储备，2=>存续，3=>退出）
+        var type = arguments.getInt(Extras.TYPE)
+        if (type == TYPE_CB) {
+            type = 1
+        } else if (type == TYPE_CX) {
+            type = 2
+        } else if (type == TYPE_TC) {
+            type = 3
+        }
         SoguApi.getService(activity.application)
-                .getAllFunds(page = page, sort = (currentNameOrder + currentTimeOrder))
+                .getAllFunds(page = page, sort = (currentNameOrder + currentTimeOrder), type = type)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->

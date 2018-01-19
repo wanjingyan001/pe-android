@@ -100,7 +100,7 @@
             <android.support.design.widget.TabItem
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:icon="@drawable/cb_1_unselect"
+                android:icon="@drawable/cb_1_select"
                 android:text="储备" />
 
             <android.support.design.widget.TabItem
