@@ -691,11 +691,11 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
         }
 
         override fun setData(view: View, data: ProjectBean, position: Int) {
-            Glide.with(context).load(data.url).into(ivIcon)
+            Glide.with(context).load(data.logo).into(ivIcon)
 
-            if (data.is_shoucang == 1) {
+            if (data.is_focus == 1) {
                 Glide.with(context).load(R.drawable.sc_yes).into(ivSC)
-            } else if (data.is_shoucang == 2) {
+            } else if (data.is_focus == 0) {
                 Glide.with(context).load(R.drawable.sc_no).into(ivSC)
             }
 
@@ -704,7 +704,7 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                 label = data.name
             tvTitle.text = label
 
-            tvDSZ.text = "董事长：${data.dsz}"
+            tvDSZ.text = "董事长：${data.chairman}"
 
             val strTime = data.add_time
             if (!TextUtils.isEmpty(strTime)) {
@@ -729,11 +729,23 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                 tvAbility.text = "创始人不靠谱"
             }
 
-            // 立项页面时显示（已完成或准备中）两个状态，   退出显示（部分退出或全部退出）两个状态
-            tvState.text = "${data.status}"
+            // 立项页面时显示（已完成或准备中）两个状态，   退出显示（部分退出或全部退出）两个状态   //1准备中  2已完成
+            if (data.status == 1) {
+                tvState.text = "准备中"
+            } else if (data.status == 2) {
+                tvState.text = "已完成"
+            }
 
-            bean1.setData(true, 1, "暂未")
-            bean2.setData(true, 2, "暂未")
+            if (data.update_time.isNullOrEmpty()) {
+                bean1.setData(false, 1, "暂无更新资讯")
+            } else {
+                bean1.setData(true, 1, data.update_time)
+            }
+            if (data.track_time.isNullOrEmpty()) {
+                bean2.setData(false, 2, "未进行跟踪")
+            } else {
+                bean2.setData(true, 2, data.track_time)
+            }
 
 //            if (data.red != null && data.red != 0) {
 //                point.visibility = View.VISIBLE

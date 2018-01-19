@@ -27,7 +27,7 @@ class ProjectBean : Serializable {
     var is_business: Int? = null//有无商业价值  1有价值  2无价值
     var red :Int? = null//大于0显示红点
 
-    var url: String? = null
-    var is_shoucang: Int? = null//是否收藏 1 收藏 2 不收藏
-    var dsz: String? = null
+    var logo: String? = null
+    var chairman: String? = null
+    var track_time: String? = null//	track_time	string	跟踪时间
 }
