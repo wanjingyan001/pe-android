@@ -19,7 +19,7 @@
             android:id="@+id/company_icon"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/red_point" />
+            android:src="@drawable/bg_border_r4_tm" />
 
         <View
             android:layout_width="match_parent"

@@ -4,10 +4,13 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -24,6 +27,8 @@ import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.animation.GlideAnimation
+import com.bumptech.glide.request.target.SimpleTarget
 import com.framework.base.BaseFragment
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
@@ -35,10 +40,7 @@ import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.ui.SupportEmptyView
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
-import com.sogukj.pe.view.ProjectBeanLayout
-import com.sogukj.pe.view.RecyclerAdapter
-import com.sogukj.pe.view.RecyclerHolder
-import com.sogukj.pe.view.SpaceItemDecoration
+import com.sogukj.pe.view.*
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -691,7 +693,13 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
         }
 
         override fun setData(view: View, data: ProjectBean, position: Int) {
-            Glide.with(context).load(data.logo).into(ivIcon)
+            Glide.with(context).load(data.logo).asBitmap().into(object : SimpleTarget<Bitmap>() {
+                override fun onResourceReady(bitmap: Bitmap?, glideAnimation: GlideAnimation<in Bitmap>?) {
+                    var draw = RoundedBitmapDrawableFactory.create(resources, bitmap) as RoundedBitmapDrawable
+                    draw.setCornerRadius(Utils.dpToPx(context, 4).toFloat())
+                    ivIcon.setBackgroundDrawable(draw)
+                }
+            })
 
             if (data.is_focus == 1) {
                 Glide.with(context).load(R.drawable.sc_yes).into(ivSC)

@@ -1,9 +1,12 @@
 package com.sogukj.pe.ui.fund
 
 
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.SpannableString
@@ -16,6 +19,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.animation.GlideAnimation
+import com.bumptech.glide.request.target.SimpleTarget
 import com.framework.base.BaseFragment
 import com.google.gson.Gson
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
@@ -28,6 +33,7 @@ import com.sogukj.pe.R
 import com.sogukj.pe.bean.FundSmallBean
 import com.sogukj.pe.ui.SupportEmptyView
 import com.sogukj.pe.util.Trace
+import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.ProgressView
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
@@ -87,7 +93,13 @@ class FundListFragment : BaseFragment() {
                 val total = convertView.find<TextView>(R.id.total)
                 val progress = convertView.find<ProgressView>(R.id.progess)
                 override fun setData(view: View, data: FundSmallBean, position: Int) {
-                    Glide.with(context).load(data.url).into(icon)
+                    Glide.with(context).load(data.url).asBitmap().into(object : SimpleTarget<Bitmap>() {
+                        override fun onResourceReady(bitmap: Bitmap?, glideAnimation: GlideAnimation<in Bitmap>?) {
+                            var draw = RoundedBitmapDrawableFactory.create(resources, bitmap) as RoundedBitmapDrawable
+                            draw.setCornerRadius(Utils.dpToPx(context, 4).toFloat())
+                            icon.setBackgroundDrawable(draw)
+                        }
+                    })
                     fundName.text = data.fundName
                     regTime.text = data.regTime
 
