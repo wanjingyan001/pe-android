@@ -93,12 +93,18 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
             history.visibility = View.GONE
             delete.visibility = View.GONE
         } else if (type == ProjectListFragment.TYPE_TC) {
-            proj_stage.text = "退 出"
+            proj_stage.visibility = View.GONE
             edit.visibility = View.GONE
             delete.visibility = View.GONE
         }
         proj_stage.setOnClickListener {
-            doAdd()
+            if (type == ProjectListFragment.TYPE_TC) {
+                //退出项目已经不需要退出了
+            } else if (type == ProjectListFragment.TYPE_YT) {
+                //进入新增的退出模块
+            } else {
+                doAdd()
+            }
         }
         delete.setOnClickListener {
             doDel()
@@ -335,8 +341,7 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
     }
 
     fun doAdd() {
-        var status = if (type == ProjectListFragment.TYPE_DY) 1 else if (type == ProjectListFragment.TYPE_CB) 2 else if (type == ProjectListFragment.TYPE_LX) 3
-        else if (type == ProjectListFragment.TYPE_YT) 4 else return
+        var status = if (type == ProjectListFragment.TYPE_DY) 1 else if (type == ProjectListFragment.TYPE_CB) 2 else if (type == ProjectListFragment.TYPE_LX) 3 else return
         SoguApi.getService(application)
                 //.editProject(project.company_id!!)
                 .changeStatus(project.company_id!!, status)
