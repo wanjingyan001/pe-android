@@ -4,15 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:orientation="vertical"
     tools:context="com.sogukj.pe.ui.user.OrganizationActivity">
 
     <include layout="@layout/toolbar" />
 
-    <ScrollView
+    <View
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/divider2">
+        android:layout_height="10dp"
+        android:background="#f3f5f7" />
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:id="@+id/ll_jobs"
@@ -21,6 +27,33 @@
             android:background="@color/white"
             android:orientation="vertical">
 
+            <com.sogukj.pe.view.MyExpandableListView
+                android:id="@+id/employee_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:childDivider="@color/transparent"
+                android:divider="@color/transparent" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="#f3f5f7" />
+
+            <TextView
+                android:id="@+id/title"
+                style="@style/SoguTextNormal"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center|left"
+                android:text="常用联系人" />
+
+            <com.sogukj.pe.view.MyListView
+                android:id="@+id/changyong"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
         </LinearLayout>
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
+
 </LinearLayout>
