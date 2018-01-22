@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.support.v7.widget.Toolbar
 import android.text.Html
 import android.text.TextUtils
 import android.util.Log
@@ -13,6 +14,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.framework.base.ToolbarActivity
 import com.google.gson.JsonSyntaxException
 import com.sogukj.pe.Extras
@@ -45,6 +47,7 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
     lateinit var adapterYuqin: ListAdapter<NewsBean>
     lateinit var project: ProjectBean
     var position = 0
+    var type = 0
 
     override fun onBackPressed() {
         var intent = Intent()
@@ -59,9 +62,54 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         project = intent.getSerializableExtra(Extras.DATA) as ProjectBean
         position = intent.getIntExtra(Extras.CODE, 0)
+        type = intent.getIntExtra(Extras.TYPE, 0)
         setContentView(R.layout.activity_project)
         setBack(true)
-        setTitle(project.name)
+        toolbar?.apply {
+            this.setBackgroundColor(resources.getColor(R.color.transparent))
+        }
+        //setTitle(project.name)
+        Glide.with(context).load(project.logo).into(imgIcon)
+        companyTitle.text = project.name
+        //const val TYPE_CB = 4
+        //const val TYPE_LX = 1
+        //const val TYPE_YT = 2
+        //const val TYPE_GZ = 3
+        //const val TYPE_DY = 6
+        //const val TYPE_TC = 5
+        if (type == ProjectListFragment.TYPE_DY) {
+            proj_stage.text = "储 备"
+            history.visibility = View.GONE
+        } else if (type == ProjectListFragment.TYPE_CB) {
+            proj_stage.text = "立 项"
+            history.visibility = View.GONE
+        } else if (type == ProjectListFragment.TYPE_LX) {
+            proj_stage.text = "已 投"
+            edit.visibility = View.GONE
+            history.visibility = View.GONE
+        } else if (type == ProjectListFragment.TYPE_YT) {
+            proj_stage.text = "退 出"
+            edit.visibility = View.GONE
+            history.visibility = View.GONE
+            delete.visibility = View.GONE
+        } else if (type == ProjectListFragment.TYPE_TC) {
+            proj_stage.text = "退 出"
+            edit.visibility = View.GONE
+            delete.visibility = View.GONE
+        }
+        proj_stage.setOnClickListener {
+            doAdd()
+        }
+        delete.setOnClickListener {
+            doDel()
+        }
+        edit.setOnClickListener {
+            if (type == ProjectListFragment.TYPE_CB) {
+                StoreProjectAddActivity.startEdit(context, project)
+            } else if (type == ProjectListFragment.TYPE_DY) {
+                ProjectAddActivity.startEdit(context, project)
+            }
+        }
 
 //        if (project.type == 6) {
 //            divide1.visibility = View.VISIBLE
@@ -268,6 +316,61 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
         }
     }
 
+    fun doDel() {
+        SoguApi.getService(application)
+                .delProject(project.company_id!!)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        showToast("删除成功")
+                        setResult(Activity.RESULT_OK)
+                        finish()
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    showToast("删除失败")
+                })
+    }
+
+    fun doAdd() {
+        var status = if (type == ProjectListFragment.TYPE_DY) 1 else if (type == ProjectListFragment.TYPE_CB) 2 else if (type == ProjectListFragment.TYPE_LX) 3
+        else if (type == ProjectListFragment.TYPE_YT) 4 else return
+        SoguApi.getService(application)
+                //.editProject(project.company_id!!)
+                .changeStatus(project.company_id!!, status)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        if (type == ProjectListFragment.TYPE_DY) {
+                            showToast("成功添加到储备")
+                        } else if (type == ProjectListFragment.TYPE_CB) {
+                            showToast("成功添加到立项")
+                        } else if (type == ProjectListFragment.TYPE_LX) {
+                            showToast("成功添加到已投")
+                        } else if (type == ProjectListFragment.TYPE_YT) {
+                            showToast("成功添加到退出")
+                        }
+                        setResult(Activity.RESULT_OK)
+                        finish()
+                    } else showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    if (type == ProjectListFragment.TYPE_DY) {
+                        showToast("添加到储备失败")
+                    } else if (type == ProjectListFragment.TYPE_CB) {
+                        showToast("添加到立项失败")
+                    } else if (type == ProjectListFragment.TYPE_LX) {
+                        showToast("添加到已投失败")
+                    } else if (type == ProjectListFragment.TYPE_YT) {
+                        showToast("添加到退出失败")
+                    }
+                })
+
+    }
+
     var is_business: Int? = null//非空(1=>有价值 ,2=>无价值)
     var is_ability: Int? = null//非空(1=>有能力,2=>无能力)
 
@@ -407,48 +510,48 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
         }
     }
 
-    override val menuId: Int
-        get() = R.menu.menu_mark
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val flag = super.onCreateOptionsMenu(menu)
-        val menuMark = menu.findItem(R.id.action_mark) as MenuItem
-        if (null != project) {
-            when (project?.is_focus) {
-                1 -> menuMark?.title = ("已关注")
-                else -> menuMark?.title = ("关注")
-            }
-        }
-        return flag
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
-            R.id.action_mark -> {
-                toggleMark(item!!)
-            }
-        }
-        return false
-    }
-
-    fun toggleMark(item: MenuItem) {
-        val user = Store.store.getUser(this)
-        if (null == user) return
-        val mark = if (project.is_focus == 1) 0 else 1
-        SoguApi.getService(application)
-                .mark(uid = user!!.uid!!, company_id = project.company_id!!, type = mark)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ payload ->
-                    if (payload.isOk) {
-                        project.is_focus = mark
-                        item.title = if (mark == 1) "已关注" else "关注"
-                    }
-                }, { e ->
-                    Trace.e(e)
-                })
-
-    }
+//    override val menuId: Int
+//        get() = R.menu.menu_mark
+//
+//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+//        val flag = super.onCreateOptionsMenu(menu)
+//        val menuMark = menu.findItem(R.id.action_mark) as MenuItem
+//        if (null != project) {
+//            when (project?.is_focus) {
+//                1 -> menuMark?.title = ("已关注")
+//                else -> menuMark?.title = ("关注")
+//            }
+//        }
+//        return flag
+//    }
+//
+//    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+//        when (item?.itemId) {
+//            R.id.action_mark -> {
+//                toggleMark(item!!)
+//            }
+//        }
+//        return false
+//    }
+//
+//    fun toggleMark(item: MenuItem) {
+//        val user = Store.store.getUser(this)
+//        if (null == user) return
+//        val mark = if (project.is_focus == 1) 0 else 1
+//        SoguApi.getService(application)
+//                .mark(uid = user!!.uid!!, company_id = project.company_id!!, type = mark)
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribeOn(Schedulers.io())
+//                .subscribe({ payload ->
+//                    if (payload.isOk) {
+//                        project.is_focus = mark
+//                        item.title = if (mark == 1) "已关注" else "关注"
+//                    }
+//                }, { e ->
+//                    Trace.e(e)
+//                })
+//
+//    }
 
     inner class NewsHolder
         : ListHolder<NewsBean> {

@@ -1,5 +1,6 @@
 package com.sogukj.pe.ui.project
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -100,6 +101,7 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
             //ProjectActivity.start(baseActivity, project)
             val intent = Intent(context, ProjectActivity::class.java)
             intent.putExtra(Extras.DATA, project)
+            intent.putExtra(Extras.TYPE, type)
             intent.putExtra(Extras.CODE, p)
             startActivityForResult(intent, 0x001)
         }
@@ -200,14 +202,15 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 0x001) {
-            data?.let {
-                Log.e("onActivityResult", "${type}")
-                var project = it.getSerializableExtra(Extras.DATA) as ProjectBean
-                var position = it.getIntExtra(Extras.CODE, 0)
-                adapter.dataList[position] = project
-                adapter.notifyDataSetChanged()
-            }
+        if (requestCode == 0x001 && resultCode == Activity.RESULT_OK) {
+//            data?.let {
+//                Log.e("onActivityResult", "${type}")
+//                var project = it.getSerializableExtra(Extras.DATA) as ProjectBean
+//                var position = it.getIntExtra(Extras.CODE, 0)
+//                adapter.dataList[position] = project
+//                adapter.notifyDataSetChanged()
+//            }
+            doRequest()
         }
     }
 
@@ -705,6 +708,27 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                 Glide.with(context).load(R.drawable.sc_yes).into(ivSC)
             } else if (data.is_focus == 0) {
                 Glide.with(context).load(R.drawable.sc_no).into(ivSC)
+            }
+            ivSC.setOnClickListener {
+                val user = Store.store.getUser(context)
+                if (null == user)
+                    return@setOnClickListener
+                SoguApi.getService(baseActivity!!.application)
+                        .mark(uid = user!!.uid!!, company_id = data.company_id!!, type = (1 - data.is_focus))
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({ payload ->
+                            if (payload.isOk) {
+                                data.is_focus = 1 - data.is_focus
+                                if (data.is_focus == 1) {
+                                    Glide.with(context).load(R.drawable.sc_yes).into(ivSC)
+                                } else if (data.is_focus == 0) {
+                                    Glide.with(context).load(R.drawable.sc_no).into(ivSC)
+                                }
+                            }
+                        }, { e ->
+                            Trace.e(e)
+                        })
             }
 
             var label = data.shortName
