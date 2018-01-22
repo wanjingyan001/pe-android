@@ -127,8 +127,10 @@ class ProjectBookUploadActivity : ToolbarActivity() {
             return
         }
         val file = File(uploadBean.file)
+        //type	number	1	档案类型	非空（1=>项目文书，2=>基金档案）
         SoguApi.getService(application)
                 .uploadBook(MultipartBody.Builder().setType(MultipartBody.FORM)
+                        .addFormDataPart("type", "1")
                         .addFormDataPart("file", file.getName(), RequestBody.create(MediaType.parse("*/*"), file))
                         .addFormDataPart("company_id", project.company_id?.toString())
                         .addFormDataPart("status", uploadBean.group)

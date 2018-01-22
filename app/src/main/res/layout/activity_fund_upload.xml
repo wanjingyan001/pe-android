@@ -25,13 +25,13 @@
             android:paddingRight="5dp">
 
             <TextView
-                android:id="@+id/tv_title"
+                android:id="@+id/tv_step"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textColor="@color/text_1"
                 android:textSize="18sp"
-                tools:text="上海诗襄科技项目" />
+                android:text="阶段：储备期档案" />
 
             <com.sogukj.pe.view.CircleImageView
                 android:id="@+id/iv_user"
@@ -52,7 +52,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingLeft="5dp"
-            android:paddingRight="5dp">
+            android:paddingRight="5dp"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -62,7 +63,7 @@
                 android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/tv_step"
+                android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="立项阶段"

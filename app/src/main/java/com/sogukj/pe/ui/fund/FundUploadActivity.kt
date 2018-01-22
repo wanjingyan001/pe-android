@@ -38,7 +38,7 @@ class FundUploadActivity : ToolbarActivity() {
         filterList.putAll(map)
         setContentView(R.layout.activity_fund_upload)
         setBack(true)
-        title = "项目文书上传"
+        title = project.fundName
         val user = Store.store.getUser(this)
         tv_user.text = user?.name
         Glide.with(this)
@@ -48,9 +48,10 @@ class FundUploadActivity : ToolbarActivity() {
         //tv_title.text = project.name
         tv_group.setOnClickListener {
             val items = ArrayList<String?>()
-            items.add("项目投资档案清单")
-            items.add("投资后项目跟踪管理清单")
-            items.add("项目推出档案清单")
+            items.add("储备期档案")
+            items.add("存续期档案")
+            items.add("退出期档案")
+            //1=>储备期档案,2=>  存续期档案,3=> 退出期档案
             MaterialDialog.Builder(this@FundUploadActivity)
                     .theme(Theme.LIGHT)
                     .items(items)
@@ -114,7 +115,7 @@ class FundUploadActivity : ToolbarActivity() {
         fun doCheck(): Boolean {
             if (file.isNullOrEmpty()) return false
             if (null == group) return false
-            if (type == null) return false
+            //if (type == null) return false
             return true
         }
     }
@@ -125,25 +126,27 @@ class FundUploadActivity : ToolbarActivity() {
             return
         }
         val file = File(uploadBean.file)
-//        SoguApi.getService(application)
-//                .uploadBook(MultipartBody.Builder().setType(MultipartBody.FORM)
-//                        .addFormDataPart("file", file.getName(), RequestBody.create(MediaType.parse("*/*"), file))
-//                        .addFormDataPart("company_id", project.company_id?.toString())
-//                        .addFormDataPart("status", uploadBean.group)
-//                        .addFormDataPart("fileClass", uploadBean.type)
-//                        .build())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribeOn(Schedulers.io())
-//                .subscribe({ payload ->
-//                    if (payload.isOk) {
-//                        showToast("上传成功")
-//                        finish()
-//                    } else
-//                        showToast(payload.message)
-//                }, { e ->
-//                    Trace.e(e)
-//                    showToast("上传失败")
-//                })
+        //type	number	1	档案类型	非空（1=>项目文书，2=>基金档案）
+        SoguApi.getService(application)
+                .uploadBook(MultipartBody.Builder().setType(MultipartBody.FORM)
+                        .addFormDataPart("type", "2")
+                        .addFormDataPart("file", file.getName(), RequestBody.create(MediaType.parse("*/*"), file))
+                        .addFormDataPart("company_id", project.id?.toString())
+                        .addFormDataPart("status", uploadBean.group)
+                        //.addFormDataPart("fileClass", uploadBean.type)//非空(当type=1时值为首次进入此页面返回的filter=>id,当type=2时无需传此字段)
+                        .build())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        showToast("上传成功")
+                        finish()
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    showToast("上传失败")
+                })
     }
 
     val REQ_SELECT_FILE = 0xf0;

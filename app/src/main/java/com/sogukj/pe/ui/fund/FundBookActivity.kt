@@ -20,11 +20,8 @@ import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.FundSmallBean
-import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.bean.ProjectBookBean
 import com.sogukj.pe.ui.SupportEmptyView
-import com.sogukj.pe.ui.htdata.ProjectBookMoreActivity
-import com.sogukj.pe.ui.htdata.ProjectBookUploadActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.ListAdapter
 import com.sogukj.pe.view.ListHolder
@@ -156,13 +153,13 @@ class FundBookActivity : ToolbarActivity(), SupportEmptyView {
             }
         }
         tv_more1.setOnClickListener {
-            //ProjectBookMoreActivity.start(this, bean, 1)
+            FundBookMoreActivity.start(this, bean, 1)
         }
         tv_more2.setOnClickListener {
-            //ProjectBookMoreActivity.start(this, bean, 2)
+            FundBookMoreActivity.start(this, bean, 2)
         }
         tv_more3.setOnClickListener {
-            //ProjectBookMoreActivity.start(this, bean, 2)
+            FundBookMoreActivity.start(this, bean, 3)
         }
         list1.setOnItemClickListener { parent, view, position, id ->
             val data = adapter1.dataList[position]
@@ -254,106 +251,105 @@ class FundBookActivity : ToolbarActivity(), SupportEmptyView {
         this.key = text
         val user = Store.store.getUser(this)
         val filter = if (checkedFilter.isEmpty()) null else checkedFilter.joinToString(",")
-//        project.company_id = 325
-        //TODO
-//        SoguApi.getService(application)
-//                .projectBookSearch(company_id = bean.company_id!!,
-//                        fuzzyQuery = text
-//                        , fileClass = filter, page = page)
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribeOn(Schedulers.io())
-//                .subscribe({ payload ->
-//                    if (payload.isOk) {
-//                        if (page == 1)
-//                            adapter.dataList.clear()
-//                        payload.payload?.apply {
-//                            adapter.dataList.addAll(this)
-//                        }
-//                    } else
-//                        showToast(payload.message)
-//                }, { e ->
-//                    Trace.e(e)
-//                }, {
-//                    tv_result_title.text = Html.fromHtml(getString(R.string.tv_title_result_search, adapter.dataList.size))
-//                    adapter.notifyDataSetChanged()
-//                    if (page == 1)
-//                        refresh?.finishRefreshing()
-//                    else
-//                        refresh?.finishLoadmore()
-//                })
+        SoguApi.getService(application)
+                .projectBookSearch(company_id = bean.id!!,
+                        type = 2,
+                        fuzzyQuery = text
+                        , fileClass = filter, page = page)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        if (page == 1)
+                            adapter.dataList.clear()
+                        payload.payload?.apply {
+                            adapter.dataList.addAll(this)
+                        }
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                }, {
+                    tv_result_title.text = Html.fromHtml(getString(R.string.tv_title_result_search, adapter.dataList.size))
+                    adapter.notifyDataSetChanged()
+                    if (page == 1)
+                        refresh?.finishRefreshing()
+                    else
+                        refresh?.finishLoadmore()
+                })
 
     }
 
     fun doRequest() {
-//        project.company_id = 325
-//        SoguApi.getService(application)
-//                .projectBook(company_id = bean.company_id!!)
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribeOn(Schedulers.io())
-//                .subscribe({ payload ->
-//                    if (payload.isOk) {
-//                        adapter1.dataList.clear()
-//                        adapter2.dataList.clear()
-//                        adapter3.dataList.clear()
-//                        payload.payload?.apply {
-//                            if (null != list1)
-//                                for (i in 0..2) {
-//                                    if (list1!!.size > i) {
-//                                        adapter1.dataList.add(list1!!.get(i))
-//                                    }
-//                                }
-//
-//                            if (null != list2)
-//                                for (i in 0..2) {
-//                                    if (list2!!.size > i) {
-//                                        adapter2.dataList.add(list2!!.get(i))
-//                                    }
-//                                }
-//                            if (null != list3)
-//                                for (i in 0..2) {
-//                                    if (list3!!.size > i) {
-//                                        adapter3.dataList.add(list3!!.get(i))
-//                                    }
-//                                }
-//                        }
-//                        adapter1.notifyDataSetChanged()
-//                        adapter2.notifyDataSetChanged()
-//                        adapter3.notifyDataSetChanged()
-//                    } else
-//                        showToast(payload.message)
-//                }, { e ->
-//                    Trace.e(e)
-//                }, {
-//                    if (adapter1.dataList.size < 3)
-//                        tv_more1.visibility = View.GONE
-//                    else
-//                        tv_more1.visibility = View.VISIBLE
-//
-//                    if (adapter2.dataList.size < 3)
-//                        tv_more2.visibility = View.GONE
-//                    else
-//                        tv_more2.visibility = View.VISIBLE
-//
-//                    if (adapter3.dataList.size < 3)
-//                        tv_more3.visibility = View.GONE
-//                    else
-//                        tv_more3.visibility = View.VISIBLE
-//                })
-//        SoguApi.getService(application)
-//                .projectFilter()
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribeOn(Schedulers.io())
-//                .subscribe({ payload ->
-//                    if (payload.isOk && payload.payload != null) {
-//                        filterList.clear()
-//                        filterList.putAll(payload.payload!!)
-//                        setTags(filterList)
-//
-//                    } else
-//                        showToast(payload.message)
-//                }, { e ->
-//                    Trace.e(e)
-//                })
+        bean.id = 328
+        SoguApi.getService(application)
+                .projectBook(type = 2, company_id = bean.id!!)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        adapter1.dataList.clear()
+                        adapter2.dataList.clear()
+                        adapter3.dataList.clear()
+                        payload.payload?.apply {
+                            if (null != list1)
+                                for (i in 0..2) {
+                                    if (list1!!.size > i) {
+                                        adapter1.dataList.add(list1!!.get(i))
+                                    }
+                                }
+
+                            if (null != list2)
+                                for (i in 0..2) {
+                                    if (list2!!.size > i) {
+                                        adapter2.dataList.add(list2!!.get(i))
+                                    }
+                                }
+                            if (null != list3)
+                                for (i in 0..2) {
+                                    if (list3!!.size > i) {
+                                        adapter3.dataList.add(list3!!.get(i))
+                                    }
+                                }
+                        }
+                        adapter1.notifyDataSetChanged()
+                        adapter2.notifyDataSetChanged()
+                        adapter3.notifyDataSetChanged()
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                }, {
+                    if (adapter1.dataList.size < 3)
+                        tv_more1.visibility = View.GONE
+                    else
+                        tv_more1.visibility = View.VISIBLE
+
+                    if (adapter2.dataList.size < 3)
+                        tv_more2.visibility = View.GONE
+                    else
+                        tv_more2.visibility = View.VISIBLE
+
+                    if (adapter3.dataList.size < 3)
+                        tv_more3.visibility = View.GONE
+                    else
+                        tv_more3.visibility = View.VISIBLE
+                })
+        SoguApi.getService(application)
+                .projectFilter()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk && payload.payload != null) {
+                        filterList.clear()
+                        filterList.putAll(payload.payload!!)
+                        setTags(filterList)
+
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                })
     }
 
     val checkedFilter = ArrayList<String>()

@@ -533,14 +533,10 @@ interface SoguService {
     @POST("/api/news/changeStatus")
     fun changeStatus(@Field("company_id") company_id: Int, @Field("status") status: Int): Observable<Payload<Object>>
 
+    //非空（当type=1时1=>项目投资档案清单，2=>投资后项目跟踪管理清单，3=>项目推出档案清单    当type=2时,1=>储备期档案,2=>  存续期档案,3=> 退出期档案)
     @FormUrlEncoded
     @POST("/api/Listinformation/projectBook")
-    fun projectBook(@Field("company_id") company_id: Int
-                    , @Field("page") page: Int = 1
-                    , @Field("pageSize") pageSize: Int = 20
-                    , @Field("fileClass") fileClass: Int? = null
-                    , @Field("fuzzQuery") fuzzQuery: String? = null
-    ): Observable<Payload<ProjectBookRSBean>>
+    fun projectBook(@Field("type") type: Int, @Field("company_id") company_id: Int): Observable<Payload<ProjectBookRSBean>>
 
     @POST("/api/Listinformation/projectFilter")
     fun projectFilter(): Observable<Payload<Map<Int, String>>>
@@ -551,12 +547,14 @@ interface SoguService {
     @POST("/api/Approve/uploadApprove")
     fun uploadApprove(@Body body: RequestBody): Observable<Payload<CustomSealBean.ValueBean>>
 
+    //type	number	1	文件类型	非空（1=>项目文书，2=>基金类型）
     @FormUrlEncoded
     @POST("/api/Listinformation/projectSelect")
     fun projectBookSearch(
             @Field("company_id") company_id: Int
             , @Field("page") page: Int = 1
             , @Field("pageSize") pageSize: Int = 20
+            , @Field("type") type: Int
             , @Field("fileClass") fileClass: String? = null
             , @Field("fuzzyQuery") fuzzyQuery: String? = null
             , @Field("status") status: Int? = null): Observable<Payload<List<ProjectBookBean>>>

@@ -1,4 +1,4 @@
-package com.sogukj.pe.ui.htdata
+package com.sogukj.pe.ui.fund
 
 import android.app.Activity
 import android.content.Intent
@@ -17,7 +17,7 @@ import com.lcodecore.tkrefreshlayout.footer.BallPulseView
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
-import com.sogukj.pe.bean.ProjectBean
+import com.sogukj.pe.bean.FundSmallBean
 import com.sogukj.pe.bean.ProjectBookBean
 import com.sogukj.pe.ui.SupportEmptyView
 import com.sogukj.pe.util.Trace
@@ -29,21 +29,19 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_list_common.*
 import java.text.SimpleDateFormat
 
-/**
- * Created by qinfei on 17/8/11.
- */
-class ProjectBookMoreActivity : ToolbarActivity() {
+class FundBookMoreActivity : ToolbarActivity() {
+
 
     lateinit var adapter: RecyclerAdapter<ProjectBookBean>
-    lateinit var project: ProjectBean
+    lateinit var project: FundSmallBean
     var type = 1
     val df = SimpleDateFormat("yyyy-MM-dd")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         type = intent.getIntExtra(Extras.TYPE, 1)
-        project = intent.getSerializableExtra(Extras.DATA) as ProjectBean
+        project = intent.getSerializableExtra(Extras.DATA) as FundSmallBean
         setContentView(R.layout.activity_list_common)
-        title = "项目文书"
+        title = "基金文书"
         setBack(true)
         adapter = RecyclerAdapter<ProjectBookBean>(this, { _adapter, parent, type ->
             val convertView = _adapter.getView(R.layout.item_project_book, parent) as View
@@ -112,7 +110,7 @@ class ProjectBookMoreActivity : ToolbarActivity() {
     var page = 1
     fun doRequest() {
         SoguApi.getService(application)
-                .projectBookSearch(project.company_id!!, page = page, type = 1, status = type)
+                .projectBookSearch(project.id!!, page = page, type = 2, status = type)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -139,9 +137,9 @@ class ProjectBookMoreActivity : ToolbarActivity() {
     }
 
     companion object {
-        fun start(ctx: Activity?, project: ProjectBean, type: Int) {
-            val intent = Intent(ctx, ProjectBookMoreActivity::class.java)
-            intent.putExtra(Extras.DATA, project)
+        fun start(ctx: Activity?, bean: FundSmallBean, type: Int) {
+            val intent = Intent(ctx, FundBookMoreActivity::class.java)
+            intent.putExtra(Extras.DATA, bean)
             intent.putExtra(Extras.TYPE, type)
             ctx?.startActivity(intent)
         }

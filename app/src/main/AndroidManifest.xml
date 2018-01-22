@@ -535,7 +535,8 @@
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity android:name=".ui.score.PointProgressActivity" />
         <activity android:name=".ui.fund.FundBookActivity" />
-        <activity android:name=".ui.fund.FundUploadActivity"></activity>
+        <activity android:name=".ui.fund.FundUploadActivity" />
+        <activity android:name=".ui.fund.FundBookMoreActivity"></activity>
     </application>
 
 </manifest>

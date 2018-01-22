@@ -32,6 +32,7 @@ import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_list_project_book.*
+import kotlinx.android.synthetic.main.item_comment_list.*
 import kotlinx.android.synthetic.main.search_view.*
 import java.text.SimpleDateFormat
 
@@ -162,7 +163,7 @@ class ProjectBookActivity : ToolbarActivity(), SupportEmptyView {
             ProjectBookMoreActivity.start(this, project, 2)
         }
         tv_more3.setOnClickListener {
-            ProjectBookMoreActivity.start(this, project, 2)
+            ProjectBookMoreActivity.start(this, project, 3)
         }
         list1.setOnItemClickListener { parent, view, position, id ->
             val data = adapter1.dataList[position]
@@ -257,7 +258,8 @@ class ProjectBookActivity : ToolbarActivity(), SupportEmptyView {
         //TODO
         SoguApi.getService(application)
                 .projectBookSearch(company_id = project.company_id!!,
-                        fuzzyQuery = text
+                        fuzzyQuery = text,
+                        type = 1
                         , fileClass = filter, page = page)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -286,7 +288,7 @@ class ProjectBookActivity : ToolbarActivity(), SupportEmptyView {
     fun doRequest() {
 //        project.company_id = 325
         SoguApi.getService(application)
-                .projectBook(company_id = project.company_id!!)
+                .projectBook(type = 1, company_id = project.company_id!!)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
