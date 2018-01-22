@@ -3,8 +3,12 @@ package com.sogukj.pe.ui.user
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.DividerItemDecoration
+import android.support.v7.widget.LinearLayoutManager
+import android.text.Html
 import android.text.Spannable
 import android.text.Spanned
 import android.text.TextUtils
@@ -18,15 +22,15 @@ import com.sogukj.pe.R
 import com.sogukj.pe.bean.DepartmentBean
 import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.util.Trace
-import com.sogukj.pe.view.CircleImageView
-import com.sogukj.pe.view.LinkSpan
-import com.sogukj.pe.view.MyListView
+import com.sogukj.pe.view.*
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_organization.*
+import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.find
+import org.jetbrains.anko.textColor
 
 
 class OrganizationActivity : ToolbarActivity() {
@@ -59,6 +63,28 @@ class OrganizationActivity : ToolbarActivity() {
     }
 
     var flag: String? = ""
+    lateinit var orgAdapter: RecyclerAdapter<String>
+
+    private fun initHistoryAdapter() {
+        orgAdapter = RecyclerAdapter(this, { _adapter, parent, _ ->
+            val convertView = _adapter.getView(R.layout.item_main_project_search, parent)
+            object : RecyclerHolder<String>(convertView) {
+                val tv1 = convertView.findViewById(R.id.tv1) as TextView
+                override fun setData(view: View, data: String, position: Int) {
+                    tv1.text = data
+                }
+            }
+        })
+        recycler_result.layoutManager = LinearLayoutManager(this)
+        recycler_result.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+        recycler_result.adapter = orgAdapter
+        orgAdapter.onItemClick = { _, p ->
+            //点击历史记录直接进行查询
+//            searchStr = historyAdapter.dataList[p]
+//            search_view.search = searchStr
+//            doSearch(searchStr)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,6 +95,37 @@ class OrganizationActivity : ToolbarActivity() {
             menu.visibility = View.VISIBLE
             menu.setImageResource(R.drawable.org_sz)
         }
+        search.root.backgroundColor = Color.WHITE
+        (search.tv_cancel as TextView).textColor = Color.parseColor("#a0a4aa")
+        search.et_search.hint = "搜索"
+        search.onTextChange = { text ->
+            if (text.isEmpty()) {
+                ll_result.visibility = View.VISIBLE
+                tv_result_title.text = Html.fromHtml(getString(R.string.tv_title_result_news, 0))
+            } else {
+                var searchStr = search.search
+                ll_result.visibility = View.VISIBLE
+
+                var tmp = ArrayList<String>()
+                for (list in departList) {
+                    for (item in list.data!!) {
+                        if (item.name.contains(searchStr)) {
+                            tmp.add(item.name)
+                        }
+                    }
+                }
+                orgAdapter.dataList.clear()
+                orgAdapter.dataList.addAll(tmp)
+                orgAdapter.notifyDataSetChanged()
+                tv_result_title.text = Html.fromHtml(getString(R.string.tv_title_result_news, tmp.size))
+            }
+        }
+        search.tv_cancel.setOnClickListener {
+            search.et_search.setText("")
+            ll_result.visibility = View.GONE
+        }
+
+        initHistoryAdapter()
 
         flag = intent.getStringExtra(Extras.FLAG)
         if (flag == "USER") {

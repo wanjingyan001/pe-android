@@ -20,6 +20,7 @@ class SearchView : LinearLayout {
     //    internal lateinit var tv_search: View
     lateinit var tv_cancel: View
     lateinit var iv_back: View
+    lateinit var root: LinearLayout
     //    internal lateinit var iv_back: View
     var onSearch: ((String) -> Unit)? = null
     var onTextChange: ((String) -> Unit)? = null
@@ -56,6 +57,7 @@ class SearchView : LinearLayout {
         val layoutInflater = LayoutInflater.from(context)
         val view = layoutInflater.inflate(R.layout.search_view, null)
 
+        root = view.findViewById(R.id.root) as LinearLayout
         iv_back = view.findViewById(R.id.iv_back)
 //        tv_search = view.findViewById(R.id.tv_search)
         tv_cancel = view.findViewById(R.id.tv_cancel)
