@@ -110,6 +110,14 @@ class ProjectTCActivity : ToolbarActivity() {
             showToast("分红不能为空")
             return
         }
+        if (et_tcsr.text.toString().isNullOrEmpty()) {
+            showToast("退出收益不能为空")
+            return
+        }
+        if (et_tzsyl.text.toString().isNullOrEmpty()) {
+            showToast("投资收益率不能为空")
+            return
+        }
 
         if (mType == 1) {
             content.put("company_id", project.company_id!!)
@@ -117,6 +125,8 @@ class ProjectTCActivity : ToolbarActivity() {
             content.put("cost", et_cb.text.toString())
             content.put("income", et_tcsr.text.toString())
             content.put("profit", et_fh.text.toString())
+            content.put("outIncome", et_tcsr.text.toString())
+            content.put("investRate", et_tzsyl.text.toString())
         } else if (mType == 2) {
             if (et_tzzt.text.toString().isNullOrEmpty()) {
                 showToast("投资主体不能为空")
@@ -129,6 +139,8 @@ class ProjectTCActivity : ToolbarActivity() {
             content.put("income", et_tcsr.text.toString())
             content.put("compensation", et_bck.text.toString())
             content.put("profit", et_fh.text.toString())
+            content.put("outIncome", et_tcsr.text.toString())
+            content.put("investRate", et_tzsyl.text.toString())
         }
 
         map.put("ae", content)
@@ -140,9 +152,9 @@ class ProjectTCActivity : ToolbarActivity() {
         //income	string		退出收入	非空
         //compensation	string		补偿款	type=2时可空，type=1时隐藏此字段
         //profit	string		分红	非空
-
         //outIncome	string		退出收益	非空
         //investRate	string		投资收益率	非空
+
         //investTime	string		投资时间	非空(格式如2018-01-16)
         //outTime	string		退出时间	非空(格式如2018-01-16)
         //days	number		投资天数	非空
