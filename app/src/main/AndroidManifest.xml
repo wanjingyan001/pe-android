@@ -537,7 +537,8 @@
         <activity android:name=".ui.fund.FundBookActivity" />
         <activity android:name=".ui.fund.FundUploadActivity" />
         <activity android:name=".ui.fund.FundBookMoreActivity" />
-        <activity android:name=".ui.project.ProjectTCActivity"></activity>
+        <activity android:name=".ui.project.ProjectTCActivity" />
+        <activity android:name=".ui.project.ProjectTcHistoryActivity"></activity>
     </application>
 
 </manifest>

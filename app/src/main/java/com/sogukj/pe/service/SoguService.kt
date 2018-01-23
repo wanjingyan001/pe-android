@@ -1089,4 +1089,9 @@ interface SoguService {
     // 项目退出输入
     @POST("/api/News/addQuit")
     fun addQuit(@Body map: HashMap<String, Any>): Observable<Payload<Any>>
+
+    //历史退出记录
+    @FormUrlEncoded
+    @POST("/api/News/quitHistory")
+    fun quitHistory(@Field("company_id") company_id: Int): Observable<Payload<ArrayList<QuitBean>>>
 }

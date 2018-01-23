@@ -124,6 +124,9 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
                 ProjectAddActivity.startEdit(context, project)
             }
         }
+        history.setOnClickListener {
+            ProjectTcHistoryActivity.start(context, project.company_id!!)
+        }
 
 //        if (project.type == 6) {
 //            divide1.visibility = View.VISIBLE
