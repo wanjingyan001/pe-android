@@ -56,9 +56,9 @@ class ProjectTCActivity : ToolbarActivity() {
             total_quit.textColor = Color.parseColor("#282828")
 
             part_blue.visibility = View.INVISIBLE
-            tr_wtccb.visibility = View.GONE
+            tr_wtccb.visibility = View.VISIBLE
             tr_bc.visibility = View.GONE
-            tr_tzzt.visibility = View.VISIBLE
+            tr_tzzt.visibility = View.GONE
             tr_bck.visibility = View.VISIBLE
             mType = 1
 
