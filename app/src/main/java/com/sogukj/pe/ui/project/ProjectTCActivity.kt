@@ -98,23 +98,42 @@ class ProjectTCActivity : ToolbarActivity() {
         var map = HashMap<String, Any>()
         var content = HashMap<String, Any>()
 
+        if (et_cb.text.toString().isNullOrEmpty()) {
+            showToast("成本不能为空")
+            return
+        }
+        if (et_tcsr.text.toString().isNullOrEmpty()) {
+            showToast("退出收入不能为空")
+            return
+        }
+
         if (mType == 1) {
             content.put("company_id", project.company_id!!)
             content.put("type", mType)
+            content.put("cost", et_cb.text.toString())
+            content.put("income", et_tcsr.text.toString())
         } else if (mType == 2) {
+            if (et_tzzt.text.toString().isNullOrEmpty()) {
+                showToast("投资主体不能为空")
+                return
+            }
             content.put("company_id", project.company_id!!)
             content.put("type", mType)
+            content.put("invest", et_tzzt.text.toString())
+            content.put("cost", et_cb.text.toString())
+            content.put("income", et_tcsr.text.toString())
+            content.put("compensation", et_bck.text.toString())
         }
 
         map.put("ae", content)
 
         //company_id	number		公司ID	非空
         //type	number		类型	非空（1=>部分退出，2=>全部退出）
-
         //invest	string		投资主体	type=2时非空，type=1时隐藏此字段
         //cost	string		成本	非空
         //income	string		退出收入	非空
         //compensation	string		补偿款	type=2时可空，type=1时隐藏此字段
+
         //profit	string		分红	非空
         //outIncome	string		退出收益	非空
         //investRate	string		投资收益率	非空

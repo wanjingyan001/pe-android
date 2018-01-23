@@ -189,7 +189,7 @@
                         android:text="退出收入" />
 
                     <EditText
-                        android:id="@+id/et_tczt"
+                        android:id="@+id/et_tcsr"
                         style="@style/ItemTextValue"
                         android:gravity="right" />
                 </TableRow>
