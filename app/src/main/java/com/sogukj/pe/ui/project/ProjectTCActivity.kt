@@ -18,6 +18,8 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_project_tc.*
 import org.jetbrains.anko.backgroundResource
 import org.jetbrains.anko.textColor
+import java.util.*
+
 
 class ProjectTCActivity : ToolbarActivity() {
 
@@ -95,6 +97,24 @@ class ProjectTCActivity : ToolbarActivity() {
             et_tzsj.setOnClickListener {
                 val timePicker = TimePickerView.Builder(this, { date, view ->
                     et_tzsj.text = Utils.getYMD(date)
+                    startDate = date
+                    checkDays()
+                })
+                        //年月日时分秒 的显示与否，不设置则默认全部显示
+                        .setType(booleanArrayOf(true, true, true, false, false, false))
+                        .setDividerColor(Color.DKGRAY)
+                        .setContentSize(21)
+                        //.setDate(selectedDate)
+                        .setCancelColor(resources.getColor(R.color.shareholder_text_gray))
+                        .build()
+                timePicker.show()
+            }
+
+            et_tcsj.setOnClickListener {
+                val timePicker = TimePickerView.Builder(this, { date, view ->
+                    et_tcsj.text = Utils.getYMD(date)
+                    endDate = date
+                    checkDays()
                 })
                         //年月日时分秒 的显示与否，不设置则默认全部显示
                         .setType(booleanArrayOf(true, true, true, false, false, false))
@@ -108,7 +128,20 @@ class ProjectTCActivity : ToolbarActivity() {
         }
     }
 
+    fun checkDays() {
+        val between = (endDate.getTime() - startDate.getTime()) / 1000//除以1000是为了转换成秒
+        val day1 = between / (24 * 3600) + 1
+        //println("" + day1 + "天" + hour1 + "小时" + minute1 + "分" + second1 + "秒")
+        //不满一天算一天
+        et_tzts.text = "${day1}"
+
+        val hour1 = between % (24 * 3600) / 3600 + 1
+        et_tzsc.text = "${hour1}"
+    }
+
     var mType = 1
+    lateinit var startDate: Date
+    lateinit var endDate: Date
 
     fun upload() {
         var map = HashMap<String, Any>()
@@ -134,6 +167,22 @@ class ProjectTCActivity : ToolbarActivity() {
             showToast("投资收益率不能为空")
             return
         }
+        if (et_tzsj.text.toString().isNullOrEmpty()) {
+            showToast("投资时间不能为空")
+            return
+        }
+        if (et_tcsj.text.toString().isNullOrEmpty()) {
+            showToast("退出时间不能为空")
+            return
+        }
+        if (et_tzts.text.toString().isNullOrEmpty()) {
+            showToast("投资天数不能为空")
+            return
+        }
+        if (et_nhsyl.text.toString().isNullOrEmpty()) {
+            showToast("年化收益率不能为空")
+            return
+        }
 
         if (mType == 1) {
             content.put("company_id", project.company_id!!)
@@ -143,6 +192,10 @@ class ProjectTCActivity : ToolbarActivity() {
             content.put("profit", et_fh.text.toString())
             content.put("outIncome", et_tcsr.text.toString())
             content.put("investRate", et_tzsyl.text.toString())
+            content.put("investTime", et_tzsj.text.toString())
+            content.put("outTime", et_tcsj.text.toString())
+            content.put("days", et_tzts.text.toString())
+            content.put("annualRate", et_nhsyl.text.toString())
         } else if (mType == 2) {
             if (et_tzzt.text.toString().isNullOrEmpty()) {
                 showToast("投资主体不能为空")
@@ -157,8 +210,12 @@ class ProjectTCActivity : ToolbarActivity() {
             content.put("profit", et_fh.text.toString())
             content.put("outIncome", et_tcsr.text.toString())
             content.put("investRate", et_tzsyl.text.toString())
+            content.put("investTime", et_tzsj.text.toString())
+            content.put("outTime", et_tcsj.text.toString())
+            content.put("days", et_tzts.text.toString())
+            content.put("annualRate", et_nhsyl.text.toString())
         }
-
+        //百分号
         map.put("ae", content)
 
         //company_id	number		公司ID	非空
@@ -170,11 +227,11 @@ class ProjectTCActivity : ToolbarActivity() {
         //profit	string		分红	非空
         //outIncome	string		退出收益	非空
         //investRate	string		投资收益率	非空
-
         //investTime	string		投资时间	非空(格式如2018-01-16)
         //outTime	string		退出时间	非空(格式如2018-01-16)
         //days	number		投资天数	非空
         //annualRate	string		年化收益率	非空
+
         //investHour	string		投资时长	非空
         //IRR	string		IRR	非空
         //supply	string		补充	type=1时可空，type=2隐藏此字段

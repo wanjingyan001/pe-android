@@ -279,7 +279,7 @@
                         style="@style/ItemTextLabel"
                         android:text="退出时间" />
 
-                    <EditText
+                    <TextView
                         android:id="@+id/et_tcsj"
                         style="@style/ItemTextValue"
                         android:gravity="right" />
@@ -294,7 +294,7 @@
                         style="@style/ItemTextLabel"
                         android:text="投资天数" />
 
-                    <EditText
+                    <TextView
                         android:id="@+id/et_tzts"
                         style="@style/ItemTextValue"
                         android:gravity="right" />
@@ -324,7 +324,7 @@
                         style="@style/ItemTextLabel"
                         android:text="投资时长" />
 
-                    <EditText
+                    <TextView
                         android:id="@+id/et_tzsc"
                         style="@style/ItemTextValue"
                         android:gravity="right" />
