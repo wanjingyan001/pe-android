@@ -183,8 +183,20 @@ class ProjectTCActivity : ToolbarActivity() {
             showToast("年化收益率不能为空")
             return
         }
+        if (et_tzsc.text.toString().isNullOrEmpty()) {
+            showToast("投资时长不能为空")
+            return
+        }
+        if (et_IRR.text.toString().isNullOrEmpty()) {
+            showToast("IRR不能为空")
+            return
+        }
 
         if (mType == 1) {
+            if (et_wtccb.text.toString().isNullOrEmpty()) {
+                showToast("未退出成本不能为空")
+                return
+            }
             content.put("company_id", project.company_id!!)
             content.put("type", mType)
             content.put("cost", et_cb.text.toString())
@@ -196,6 +208,11 @@ class ProjectTCActivity : ToolbarActivity() {
             content.put("outTime", et_tcsj.text.toString())
             content.put("days", et_tzts.text.toString())
             content.put("annualRate", et_nhsyl.text.toString())
+            content.put("investHour", et_tzsc.text.toString())
+            content.put("IRR", et_IRR.text.toString())
+            content.put("supply", et_bc.text.toString())
+            content.put("surplus", et_wtccb.text.toString())
+            content.put("summary", et_tczj.text.toString())
         } else if (mType == 2) {
             if (et_tzzt.text.toString().isNullOrEmpty()) {
                 showToast("投资主体不能为空")
@@ -214,6 +231,9 @@ class ProjectTCActivity : ToolbarActivity() {
             content.put("outTime", et_tcsj.text.toString())
             content.put("days", et_tzts.text.toString())
             content.put("annualRate", et_nhsyl.text.toString())
+            content.put("investHour", et_tzsc.text.toString())
+            content.put("IRR", et_IRR.text.toString())
+            content.put("summary", et_tczj.text.toString())
         }
         //百分号
         map.put("ae", content)
@@ -231,7 +251,6 @@ class ProjectTCActivity : ToolbarActivity() {
         //outTime	string		退出时间	非空(格式如2018-01-16)
         //days	number		投资天数	非空
         //annualRate	string		年化收益率	非空
-
         //investHour	string		投资时长	非空
         //IRR	string		IRR	非空
         //supply	string		补充	type=1时可空，type=2隐藏此字段
