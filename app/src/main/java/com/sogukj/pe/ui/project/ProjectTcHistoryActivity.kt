@@ -11,6 +11,7 @@ import com.framework.base.ToolbarActivity
 import com.google.gson.JsonSyntaxException
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.bean.QuitBean
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
@@ -60,7 +61,9 @@ class ProjectTcHistoryActivity : ToolbarActivity() {
         })
         adapter.onItemClick = { v, p ->
             var item = adapter.dataList.get(p)
-            //RecordDetailActivity.startView(this@RecordTraceActivity, project, item)
+            var bean = ProjectBean()
+            bean.company_id = item.id
+            ProjectTCActivity.start(context, true, bean)
         }
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = LinearLayoutManager.VERTICAL

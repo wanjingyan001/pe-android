@@ -40,7 +40,11 @@ class ProjectTCActivity : ToolbarActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_project_tc)
         setBack(true)
-        title = "退出"
+        if (type) {
+            title = "退出记录"
+        } else {
+            title = "退出"
+        }
 
         type = intent.getBooleanExtra(Extras.TYPE, false)
         project = intent.getSerializableExtra(Extras.DATA) as ProjectBean
