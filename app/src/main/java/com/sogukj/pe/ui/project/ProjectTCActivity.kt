@@ -5,11 +5,13 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import com.bigkoo.pickerview.TimePickerView
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.util.Trace
+import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -88,6 +90,20 @@ class ProjectTCActivity : ToolbarActivity() {
 
             btn_commit.setOnClickListener {
                 upload()
+            }
+
+            et_tzsj.setOnClickListener {
+                val timePicker = TimePickerView.Builder(this, { date, view ->
+                    et_tzsj.text = Utils.getYMD(date)
+                })
+                        //年月日时分秒 的显示与否，不设置则默认全部显示
+                        .setType(booleanArrayOf(true, true, true, false, false, false))
+                        .setDividerColor(Color.DKGRAY)
+                        .setContentSize(21)
+                        //.setDate(selectedDate)
+                        .setCancelColor(resources.getColor(R.color.shareholder_text_gray))
+                        .build()
+                timePicker.show()
             }
         }
     }

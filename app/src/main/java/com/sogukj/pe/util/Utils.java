@@ -202,6 +202,12 @@ public class Utils {
     }
 
     @SuppressLint("SimpleDateFormat")
+    public static String getYMD(Date date) {//可根据需要自行截取数据显示
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        return format.format(date);
+    }
+
+    @SuppressLint("SimpleDateFormat")
     public static String getTime(long time) {//可根据需要自行截取数据显示
         SimpleDateFormat format = new SimpleDateFormat("HH:mm");
         return format.format(new Date(time));
