@@ -536,7 +536,8 @@
         <activity android:name=".ui.score.PointProgressActivity" />
         <activity android:name=".ui.fund.FundBookActivity" />
         <activity android:name=".ui.fund.FundUploadActivity" />
-        <activity android:name=".ui.fund.FundBookMoreActivity"></activity>
+        <activity android:name=".ui.fund.FundBookMoreActivity" />
+        <activity android:name=".ui.project.ProjectTCActivity"></activity>
     </application>
 
 </manifest>

@@ -30,4 +30,5 @@ class ProjectBean : Serializable {
     var logo: String? = null
     var chairman: String? = null
     var track_time: String? = null//	track_time	string	跟踪时间
+    var number:String? = null
 }

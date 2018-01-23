@@ -102,6 +102,7 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
                 //退出项目已经不需要退出了
             } else if (type == ProjectListFragment.TYPE_YT) {
                 //进入新增的退出模块
+                ProjectTCActivity.start(context, false, project)
             } else {
                 doAdd()
             }
