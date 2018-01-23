@@ -56,6 +56,7 @@ class ProjectTCActivity : ToolbarActivity() {
             tr_bc.visibility = View.GONE
             tr_tzzt.visibility = View.VISIBLE
             tr_bck.visibility = View.VISIBLE
+            mType = 1
 
             part_quit.setOnClickListener {
                 part_quit.backgroundResource = R.drawable.tc_true
@@ -67,6 +68,8 @@ class ProjectTCActivity : ToolbarActivity() {
                 tr_bc.visibility = View.GONE
                 tr_tzzt.visibility = View.VISIBLE
                 tr_bck.visibility = View.VISIBLE
+
+                mType = 1
             }
 
             total_quit.setOnClickListener {
@@ -79,6 +82,8 @@ class ProjectTCActivity : ToolbarActivity() {
                 tr_bc.visibility = View.VISIBLE
                 tr_tzzt.visibility = View.GONE
                 tr_bck.visibility = View.GONE
+
+                mType = 2
             }
 
             btn_commit.setOnClickListener {
@@ -87,10 +92,42 @@ class ProjectTCActivity : ToolbarActivity() {
         }
     }
 
+    var mType = 1
+
     fun upload() {
         var map = HashMap<String, Any>()
         var content = HashMap<String, Any>()
+
+        if (mType == 1) {
+            content.put("company_id", project.company_id!!)
+            content.put("type", mType)
+        } else if (mType == 2) {
+            content.put("company_id", project.company_id!!)
+            content.put("type", mType)
+        }
+
         map.put("ae", content)
+
+        //company_id	number		公司ID	非空
+        //type	number		类型	非空（1=>部分退出，2=>全部退出）
+
+        //invest	string		投资主体	type=2时非空，type=1时隐藏此字段
+        //cost	string		成本	非空
+        //income	string		退出收入	非空
+        //compensation	string		补偿款	type=2时可空，type=1时隐藏此字段
+        //profit	string		分红	非空
+        //outIncome	string		退出收益	非空
+        //investRate	string		投资收益率	非空
+        //investTime	string		投资时间	非空(格式如2018-01-16)
+        //outTime	string		退出时间	非空(格式如2018-01-16)
+        //days	number		投资天数	非空
+        //annualRate	string		年化收益率	非空
+        //investHour	string		投资时长	非空
+        //IRR	string		IRR	非空
+        //supply	string		补充	type=1时可空，type=2隐藏此字段
+        //surplus	string		未退出成本	type=1时非空，type=2隐藏此字段
+        //summary	string		退出总结	可空
+
         SoguApi.getService(application)
                 .addQuit(map)
                 .observeOn(AndroidSchedulers.mainThread())
