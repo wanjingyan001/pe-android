@@ -253,6 +253,10 @@
                         android:id="@+id/et_tzsyl"
                         style="@style/ItemTextValue"
                         android:gravity="right" />
+
+                    <TextView
+                        style="@style/ItemTextLabel"
+                        android:text="%" />
                 </TableRow>
 
                 <TableRow
@@ -313,6 +317,10 @@
                         android:id="@+id/et_nhsyl"
                         style="@style/ItemTextValue"
                         android:gravity="right" />
+
+                    <TextView
+                        style="@style/ItemTextLabel"
+                        android:text="%" />
                 </TableRow>
 
                 <TableRow
@@ -343,6 +351,10 @@
                         android:id="@+id/et_IRR"
                         style="@style/ItemTextValue"
                         android:gravity="right" />
+
+                    <TextView
+                        style="@style/ItemTextLabel"
+                        android:text="%" />
                 </TableRow>
 
                 <TableRow

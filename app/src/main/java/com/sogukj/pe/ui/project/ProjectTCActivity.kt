@@ -68,9 +68,9 @@ class ProjectTCActivity : ToolbarActivity() {
                 total_quit.backgroundResource = R.drawable.tc_false
                 total_quit.textColor = Color.parseColor("#282828")
 
-                tr_wtccb.visibility = View.GONE
+                tr_wtccb.visibility = View.VISIBLE
                 tr_bc.visibility = View.GONE
-                tr_tzzt.visibility = View.VISIBLE
+                tr_tzzt.visibility = View.GONE
                 tr_bck.visibility = View.VISIBLE
 
                 mType = 1
@@ -82,9 +82,9 @@ class ProjectTCActivity : ToolbarActivity() {
                 part_quit.backgroundResource = R.drawable.tc_false
                 part_quit.textColor = Color.parseColor("#282828")
 
-                tr_wtccb.visibility = View.VISIBLE
+                tr_wtccb.visibility = View.GONE
                 tr_bc.visibility = View.VISIBLE
-                tr_tzzt.visibility = View.GONE
+                tr_tzzt.visibility = View.VISIBLE
                 tr_bck.visibility = View.GONE
 
                 mType = 2
@@ -129,19 +129,21 @@ class ProjectTCActivity : ToolbarActivity() {
     }
 
     fun checkDays() {
-        val between = (endDate.getTime() - startDate.getTime()) / 1000//除以1000是为了转换成秒
-        val day1 = between / (24 * 3600) + 1
+        if (startDate == null || endDate == null) {
+            return
+        }
+        val between = (endDate!!.getTime() - startDate!!.getTime()) / 1000//除以1000是为了转换成秒
+        val day1 = between / (24 * 3600)
         //println("" + day1 + "天" + hour1 + "小时" + minute1 + "分" + second1 + "秒")
-        //不满一天算一天
         et_tzts.text = "${day1}"
 
-        val hour1 = between % (24 * 3600) / 3600 + 1
+        val hour1 = between / 3600
         et_tzsc.text = "${hour1}"
     }
 
     var mType = 1
-    lateinit var startDate: Date
-    lateinit var endDate: Date
+    var startDate: Date? = null
+    var endDate: Date? = null
 
     fun upload() {
         var map = HashMap<String, Any>()
@@ -188,7 +190,7 @@ class ProjectTCActivity : ToolbarActivity() {
             return
         }
         if (et_IRR.text.toString().isNullOrEmpty()) {
-            showToast("IRR不能为空")
+            showToast("IRR(内部收益率)不能为空")
             return
         }
 
@@ -203,13 +205,13 @@ class ProjectTCActivity : ToolbarActivity() {
             content.put("income", et_tcsr.text.toString())
             content.put("profit", et_fh.text.toString())
             content.put("outIncome", et_tcsr.text.toString())
-            content.put("investRate", et_tzsyl.text.toString())
+            content.put("investRate", et_tzsyl.text.toString() + "%")
             content.put("investTime", et_tzsj.text.toString())
             content.put("outTime", et_tcsj.text.toString())
             content.put("days", et_tzts.text.toString())
-            content.put("annualRate", et_nhsyl.text.toString())
+            content.put("annualRate", et_nhsyl.text.toString() + "%")
             content.put("investHour", et_tzsc.text.toString())
-            content.put("IRR", et_IRR.text.toString())
+            content.put("IRR", et_IRR.text.toString() + "%")
             content.put("supply", et_bc.text.toString())
             content.put("surplus", et_wtccb.text.toString())
             content.put("summary", et_tczj.text.toString())
@@ -226,16 +228,16 @@ class ProjectTCActivity : ToolbarActivity() {
             content.put("compensation", et_bck.text.toString())
             content.put("profit", et_fh.text.toString())
             content.put("outIncome", et_tcsr.text.toString())
-            content.put("investRate", et_tzsyl.text.toString())
+            content.put("investRate", et_tzsyl.text.toString() + "%")
             content.put("investTime", et_tzsj.text.toString())
             content.put("outTime", et_tcsj.text.toString())
             content.put("days", et_tzts.text.toString())
-            content.put("annualRate", et_nhsyl.text.toString())
+            content.put("annualRate", et_nhsyl.text.toString() + "%")
             content.put("investHour", et_tzsc.text.toString())
-            content.put("IRR", et_IRR.text.toString())
+            content.put("IRR", et_IRR.text.toString() + "%")
             content.put("summary", et_tczj.text.toString())
         }
-        //百分号
+
         map.put("ae", content)
 
         //company_id	number		公司ID	非空
