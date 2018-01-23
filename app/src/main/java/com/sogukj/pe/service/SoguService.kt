@@ -1085,4 +1085,8 @@ interface SoguService {
     //全员互评进度表
     @POST("/api/Grade/progress")
     fun GradeProgress(): Observable<Payload<ProgressBean>>
+
+    // 项目退出输入
+    @POST("/api/News/addQuit")
+    fun addQuit(@Body map: HashMap<String, Any>): Observable<Payload<Any>>
 }

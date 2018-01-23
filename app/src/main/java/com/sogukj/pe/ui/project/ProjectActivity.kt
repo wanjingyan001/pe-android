@@ -58,6 +58,13 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
         Log.e("onBackPressed", "onBackPressed")
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 0x001 && resultCode == Activity.RESULT_OK) {
+            finish()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         project = intent.getSerializableExtra(Extras.DATA) as ProjectBean

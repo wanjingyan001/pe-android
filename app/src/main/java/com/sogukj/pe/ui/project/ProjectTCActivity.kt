@@ -25,7 +25,7 @@ class ProjectTCActivity : ToolbarActivity() {
             val intent = Intent(ctx, ProjectTCActivity::class.java)
             intent.putExtra(Extras.TYPE, isView)
             intent.putExtra(Extras.DATA, bean)
-            ctx?.startActivity(intent)
+            ctx?.startActivityForResult(intent, 0x001)
         }
     }
 
@@ -41,7 +41,7 @@ class ProjectTCActivity : ToolbarActivity() {
         type = intent.getBooleanExtra(Extras.TYPE, false)
         project = intent.getSerializableExtra(Extras.DATA) as ProjectBean
         titleComp.text = project.name
-        bianhao.text = "项目编号J0001"
+        bianhao.text = "项目编号${project.number}"
 
         if (type) {
             ll_btn.visibility = View.GONE
@@ -88,17 +88,17 @@ class ProjectTCActivity : ToolbarActivity() {
     }
 
     fun upload() {
+        var map = HashMap<String, Any>()
+        var content = HashMap<String, Any>()
+        map.put("ae", content)
         SoguApi.getService(application)
-                .listNews(pageSize = 3, page = 1, type = 1, company_id = project.company_id)
+                .addQuit(map)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-//                        adapterNeg.dataList.clear()
-//                        payload.payload?.apply {
-//                            adapterNeg.dataList.addAll(this)
-//                        }
-//                        adapterNeg.notifyDataSetChanged()
+                        setResult(Activity.RESULT_OK)
+                        finish()
                     } else
                         showToast(payload.message)
                 }, { e ->
