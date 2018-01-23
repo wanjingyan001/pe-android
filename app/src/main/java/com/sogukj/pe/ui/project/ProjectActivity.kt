@@ -125,7 +125,7 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
             }
         }
         history.setOnClickListener {
-            ProjectTcHistoryActivity.start(context, project.company_id!!)
+            ProjectTcHistoryActivity.start(context, project)
         }
 
 //        if (project.type == 6) {

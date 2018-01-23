@@ -53,6 +53,7 @@ class ProjectTCActivity : ToolbarActivity() {
 
         if (type) {
             ll_btn.visibility = View.GONE
+            load()
         } else {
             part_quit.backgroundResource = R.drawable.tc_true
             part_quit.textColor = Color.parseColor("#1787fb")
@@ -209,13 +210,13 @@ class ProjectTCActivity : ToolbarActivity() {
             content.put("income", et_tcsr.text.toString())
             content.put("profit", et_fh.text.toString())
             content.put("outIncome", et_tcsr.text.toString())
-            content.put("investRate", et_tzsyl.text.toString() + "%")
+            content.put("investRate", et_tzsyl.text.toString())
             content.put("investTime", et_tzsj.text.toString())
             content.put("outTime", et_tcsj.text.toString())
             content.put("days", et_tzts.text.toString())
-            content.put("annualRate", et_nhsyl.text.toString() + "%")
+            content.put("annualRate", et_nhsyl.text.toString())
             content.put("investHour", et_tzsc.text.toString())
-            content.put("IRR", et_IRR.text.toString() + "%")
+            content.put("IRR", et_IRR.text.toString())
             content.put("supply", et_bc.text.toString())
             content.put("surplus", et_wtccb.text.toString())
             content.put("summary", et_tczj.text.toString())
@@ -232,13 +233,13 @@ class ProjectTCActivity : ToolbarActivity() {
             content.put("compensation", et_bck.text.toString())
             content.put("profit", et_fh.text.toString())
             content.put("outIncome", et_tcsr.text.toString())
-            content.put("investRate", et_tzsyl.text.toString() + "%")
+            content.put("investRate", et_tzsyl.text.toString())
             content.put("investTime", et_tzsj.text.toString())
             content.put("outTime", et_tcsj.text.toString())
             content.put("days", et_tzts.text.toString())
-            content.put("annualRate", et_nhsyl.text.toString() + "%")
+            content.put("annualRate", et_nhsyl.text.toString())
             content.put("investHour", et_tzsc.text.toString())
-            content.put("IRR", et_IRR.text.toString() + "%")
+            content.put("IRR", et_IRR.text.toString())
             content.put("summary", et_tczj.text.toString())
         }
 
@@ -271,6 +272,63 @@ class ProjectTCActivity : ToolbarActivity() {
                     if (payload.isOk) {
                         setResult(Activity.RESULT_OK)
                         finish()
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    showToast("暂无可用数据")
+                })
+    }
+
+    fun load() {
+        SoguApi.getService(application)
+                .quitInfo(project.company_id!!)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        var quitBean = payload.payload!!
+                        if (quitBean.type == 1) {
+                            tr_wtccb.visibility = View.VISIBLE
+                            tr_bc.visibility = View.GONE
+                            tr_tzzt.visibility = View.GONE
+                            tr_bck.visibility = View.VISIBLE
+
+                            et_cb.setText(quitBean.cost)
+                            et_tcsr.setText(quitBean.income)
+                            et_fh.setText(quitBean.profit)
+                            et_tcsr.setText(quitBean.outIncome)
+                            et_tzsyl.setText(quitBean.investRate)
+                            et_tzsj.setText(quitBean.investTime)
+                            et_tcsj.setText(quitBean.outTime)
+                            et_tzts.setText("${quitBean.days}")
+                            et_nhsyl.setText(quitBean.annualRate)
+                            et_tzsc.setText(quitBean.investHour)
+                            et_IRR.setText(quitBean.IRR)
+                            et_bc.setText(quitBean.supply)
+                            et_wtccb.setText(quitBean.surplus)
+                            et_tczj.setText(quitBean.summary)
+                        } else if (quitBean.type == 2) {
+                            tr_wtccb.visibility = View.GONE
+                            tr_bc.visibility = View.VISIBLE
+                            tr_tzzt.visibility = View.VISIBLE
+                            tr_bck.visibility = View.GONE
+
+                            et_tzzt.setText(quitBean.invest)
+                            et_cb.setText(quitBean.cost)
+                            et_tcsr.setText(quitBean.income)
+                            et_bck.setText(quitBean.compensation)
+                            et_fh.setText(quitBean.profit)
+                            et_tcsr.setText(quitBean.outIncome)
+                            et_tzsyl.setText(quitBean.investRate)
+                            et_tzsj.setText(quitBean.investTime)
+                            et_tcsj.setText(quitBean.outTime)
+                            et_tzts.setText("${quitBean.days}")
+                            et_nhsyl.setText(quitBean.annualRate)
+                            et_tzsc.setText(quitBean.investHour)
+                            et_IRR.setText(quitBean.IRR)
+                            et_tczj.setText(quitBean.summary)
+                        }
                     } else
                         showToast(payload.message)
                 }, { e ->

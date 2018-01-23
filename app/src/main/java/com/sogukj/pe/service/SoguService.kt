@@ -1094,4 +1094,9 @@ interface SoguService {
     @FormUrlEncoded
     @POST("/api/News/quitHistory")
     fun quitHistory(@Field("company_id") company_id: Int): Observable<Payload<ArrayList<QuitBean>>>
+
+    //退出详情
+    @FormUrlEncoded
+    @POST("/api/News/quitInfo")
+    fun quitInfo(@Field("id") id: Int): Observable<Payload<QuitInfoBean>>
 }

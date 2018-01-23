@@ -28,14 +28,14 @@ import java.net.UnknownHostException
 class ProjectTcHistoryActivity : ToolbarActivity() {
 
     companion object {
-        fun start(ctx: Activity?, id: Int) {
+        fun start(ctx: Activity?, bean: ProjectBean) {
             val intent = Intent(ctx, ProjectTcHistoryActivity::class.java)
-            intent.putExtra(Extras.ID, id)
+            intent.putExtra(Extras.DATA, bean)
             ctx?.startActivity(intent)
         }
     }
 
-    var id = 0
+    lateinit var bean: ProjectBean
     lateinit var adapter: RecyclerAdapter<QuitBean>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,7 +44,7 @@ class ProjectTcHistoryActivity : ToolbarActivity() {
         setBack(true)
         title = "历史退出记录"
 
-        id = intent.getIntExtra(Extras.ID, 0)
+        bean = intent.getSerializableExtra(Extras.DATA) as ProjectBean
 
         adapter = RecyclerAdapter<QuitBean>(this, { _adapter, parent, type ->
             val convertView = _adapter.getView(R.layout.item_quit, parent) as LinearLayout
@@ -61,9 +61,11 @@ class ProjectTcHistoryActivity : ToolbarActivity() {
         })
         adapter.onItemClick = { v, p ->
             var item = adapter.dataList.get(p)
-            var bean = ProjectBean()
-            bean.company_id = item.id
-            ProjectTCActivity.start(context, true, bean)
+            var innerbean = ProjectBean()
+            innerbean.company_id = item.id
+            innerbean.number = bean.number
+            innerbean.name = bean.name
+            ProjectTCActivity.start(context, true, innerbean)
         }
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
@@ -76,7 +78,7 @@ class ProjectTcHistoryActivity : ToolbarActivity() {
 
     fun load() {
         SoguApi.getService(application)
-                .quitHistory(id)
+                .quitHistory(bean.company_id!!)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
