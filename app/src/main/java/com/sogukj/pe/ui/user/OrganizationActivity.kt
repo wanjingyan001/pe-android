@@ -354,7 +354,7 @@ class OrganizationActivity : ToolbarActivity() {
 
             holder.title?.text = "${group[groupPosition]}（${childs[groupPosition].size}）"
             if (isExpanded) {
-                holder.direction?.setBackgroundResource(R.drawable.left)
+                holder.direction?.setBackgroundResource(R.drawable.up)
             } else {
                 holder.direction?.setBackgroundResource(R.drawable.down)
             }
