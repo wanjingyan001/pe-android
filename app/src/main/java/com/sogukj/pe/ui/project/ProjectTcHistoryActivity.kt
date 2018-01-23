@@ -13,9 +13,11 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.QuitBean
 import com.sogukj.pe.util.Trace
+import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.DotView
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
+import com.sogukj.pe.view.SpaceItemDecoration
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -44,14 +46,15 @@ class ProjectTcHistoryActivity : ToolbarActivity() {
         id = intent.getIntExtra(Extras.ID, 0)
 
         adapter = RecyclerAdapter<QuitBean>(this, { _adapter, parent, type ->
-            val convertView = _adapter.getView(R.layout.item_recordtrace, parent) as LinearLayout
+            val convertView = _adapter.getView(R.layout.item_quit, parent) as LinearLayout
             object : RecyclerHolder<QuitBean>(convertView) {
-                val dot = convertView.findViewById(R.id.dot) as DotView
-                val tvImportant = convertView.findViewById(R.id.important) as TextView
-                val tvEvent = convertView.findViewById(R.id.event) as TextView
-                val tvTime = convertView.findViewById(R.id.time) as TextView
+                val title = convertView.findViewById(R.id.title) as TextView
+                val name = convertView.findViewById(R.id.name) as TextView
+                val outTime = convertView.findViewById(R.id.outTime) as TextView
                 override fun setData(view: View, data: QuitBean, position: Int) {
-
+                    title.text = data.title
+                    name.text = data.name
+                    outTime.text = data.outTime
                 }
             }
         })
@@ -61,7 +64,7 @@ class ProjectTcHistoryActivity : ToolbarActivity() {
         }
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
-        //list.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+        list.addItemDecoration(SpaceItemDecoration(Utils.dpToPx(context, 10)))
         list.layoutManager = layoutManager
         list.adapter = adapter
 
