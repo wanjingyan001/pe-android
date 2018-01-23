@@ -9,8 +9,7 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_gravity="center|right"
-        android:layout_marginLeft="10dp"
-        android:background="@drawable/up" />
+        android:layout_marginLeft="10dp" />
 
     <TextView
         android:id="@+id/title"
