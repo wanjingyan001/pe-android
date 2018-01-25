@@ -85,7 +85,7 @@
             android:layout_marginRight="20dp"
             android:layout_marginTop="150dp"
             android:background="@drawable/msg_border"
-            android:src="@drawable/img_empty"
+            android:src="@drawable/img_empty1"
             android:visibility="gone" />
 
         <com.fashare.stack_layout.StackLayout
