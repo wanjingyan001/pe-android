@@ -14,9 +14,13 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.FundSmallBean
 import com.sogukj.pe.bean.ProjectBean
+import com.sogukj.pe.ui.fund.FundListFragment.Companion.TYPE_CB
+import com.sogukj.pe.ui.fund.FundListFragment.Companion.TYPE_CX
+import com.sogukj.pe.ui.fund.FundListFragment.Companion.TYPE_TC
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
+import com.sogukj.util.XmlDb
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_fund_upload.*
@@ -39,6 +43,18 @@ class FundUploadActivity : ToolbarActivity() {
         setContentView(R.layout.activity_fund_upload)
         setBack(true)
         title = project.fundName
+
+        var tmpInt = XmlDb.open(context).get(Extras.TYPE, "").toInt()
+        var tmpStr = ""
+        if (tmpInt == TYPE_CB) {
+            tmpStr = "储备"
+        } else if (tmpInt == TYPE_CX) {
+            tmpStr = "存续"
+        } else if (tmpInt == TYPE_TC) {
+            tmpStr = "退出"
+        }
+        tv_step.text = "阶段：${tmpStr}期档案"
+
         val user = Store.store.getUser(this)
         tv_user.text = user?.name
         Glide.with(this)

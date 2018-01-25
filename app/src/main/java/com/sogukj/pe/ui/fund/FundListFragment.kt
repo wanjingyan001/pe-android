@@ -38,6 +38,7 @@ import com.sogukj.pe.view.ProgressView
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.service.SoguApi
+import com.sogukj.util.XmlDb
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_fund_list.*
@@ -79,8 +80,12 @@ class FundListFragment : BaseFragment() {
     private var currentNameOrder = FundSmallBean.FundDesc
     private var currentTimeOrder = FundSmallBean.RegTimeAsc
 
+    var mType = 0
+
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        mType = arguments.getInt(Extras.TYPE)
 
         //列表和adapter的初始化
         adapter = RecyclerAdapter(context, { _adapter, parent, type ->
@@ -121,6 +126,7 @@ class FundListFragment : BaseFragment() {
             }
         })
         adapter.onItemClick = { _, position ->
+            XmlDb.open(context).set(Extras.TYPE, mType.toString())
             FundDetailActivity.start(activity, adapter.dataList[position])
         }
         recycler_view.layoutManager = LinearLayoutManager(context)
