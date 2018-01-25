@@ -281,7 +281,6 @@ class FundBookActivity : ToolbarActivity(), SupportEmptyView {
     }
 
     fun doRequest() {
-        bean.id = 328
         SoguApi.getService(application)
                 .projectBook(type = 2, company_id = bean.id!!)
                 .observeOn(AndroidSchedulers.mainThread())
