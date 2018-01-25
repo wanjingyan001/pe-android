@@ -30,7 +30,8 @@
                 android:gravity="center"
                 android:paddingLeft="5dp"
                 android:paddingRight="10dp"
-                android:src="@drawable/ic_project_book_filter" />
+                android:src="@drawable/ic_project_book_filter"
+                android:visibility="invisible" />
         </LinearLayout>
     </FrameLayout>
 
