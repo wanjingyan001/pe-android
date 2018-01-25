@@ -68,11 +68,6 @@ class MainHomeFragment : BaseFragment() {
         stack_layout.setOnSwipeListener(object : StackLayout.OnSwipeListener() {
             override fun onSwiped(swipedView: View, swipedItemPos: Int, isSwipeLeft: Boolean, itemLeft: Int) {
                 //Log.e("tagtagtag", (if (isSwipeLeft) "往左" else "往右") + "移除" + mData.get(swipedItemPos) + "." + "剩余" + itemLeft + "项")
-
-                // 少于5条, 加载更多
-                if (itemLeft < 5) {
-                    // TODO: loadmore
-                }
             }
         })
 
@@ -89,12 +84,18 @@ class MainHomeFragment : BaseFragment() {
         cache.close()
     }
 
+    lateinit var totalData: ArrayList<MessageBean>
+
     fun doRequest() {
+        totalData = ArrayList<MessageBean>()
         var cacheData = cache.getDiskCache("${Store.store.getUser(context)?.uid}")
         if (cacheData != null) {
             adapter.dataList.clear()
             adapter.dataList.addAll(cacheData)
             adapter.notifyDataSetChanged()
+
+            totalData.clear()
+            totalData.addAll(cacheData)
         }
         SoguApi.getService(baseActivity!!.application)
                 .msgList()
@@ -108,6 +109,8 @@ class MainHomeFragment : BaseFragment() {
                             adapter.notifyDataSetChanged()
 
                             cache.addToDiskCache("${Store.store.getUser(context)?.uid}", this)
+                            totalData.clear()
+                            totalData.addAll(this)
                         }
                     } else
                         showToast(payload.message)
