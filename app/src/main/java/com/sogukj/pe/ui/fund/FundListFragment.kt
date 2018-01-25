@@ -3,6 +3,7 @@ package com.sogukj.pe.ui.fund
 
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable
@@ -113,12 +114,28 @@ class FundListFragment : BaseFragment() {
                     var sizeSpan2 = AbsoluteSizeSpan(9, false)
                     spannableString.setSpan(sizeSpan1, 0, data.ytc.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
                     spannableString.setSpan(sizeSpan2, data.ytc.length, spannableString.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
-                    ytc.text = spannableString
-
-                    total.text = "总额：${data.total}万"
+//                    ytc.text = spannableString
+//
+//                    total.text = "总额：${data.total}万"
+//
+//                    try {
+//                        progress.setPercent(data.ytc.toInt() * 100 / data.total.toInt())
+//                    } catch (e: Exception) {
+//                        progress.setPercent(0)
+//                    }
 
                     try {
-                        progress.setPercent(data.ytc.toInt() * 100 / data.total.toInt())
+                        var fund3 = FundCountDownColor(1000, 10, ytc, data.ytc.toInt())
+                        fund3.start()
+                        var fund1 = FundCountDown(1000, 10, total, data.total.toInt())
+                        fund1.start()
+                    } catch (e: Exception) {
+                        ytc.text = ""
+                        total.text = ""
+                    }
+                    try {
+                        var fund2 = FundCountDown(1000, 10, progress, data.ytc.toInt() * 100 / data.total.toInt())
+                        fund2.start()
                     } catch (e: Exception) {
                         progress.setPercent(0)
                     }
@@ -152,6 +169,47 @@ class FundListFragment : BaseFragment() {
             }
 
         })
+    }
+
+    class FundCountDownColor(var millisInFuture: Long, var countDownInterval: Long, var view: View, var data: Int) : CountDownTimer(millisInFuture, countDownInterval) {
+        override fun onFinish() {
+            var spannableString = SpannableString("${data} 万")
+            var sizeSpan1 = AbsoluteSizeSpan(16, false)
+            var sizeSpan2 = AbsoluteSizeSpan(9, false)
+            spannableString.setSpan(sizeSpan1, 0, data.toString().length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+            spannableString.setSpan(sizeSpan2, data.toString().length, spannableString.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+            (view as TextView).text = spannableString
+        }
+
+        override fun onTick(millisUntilFinished: Long) {
+            var tmp = millisInFuture - millisUntilFinished
+            var tmpData = data * tmp.toInt() / 1000
+            var spannableString = SpannableString("${tmpData} 万")
+            var sizeSpan1 = AbsoluteSizeSpan(16, false)
+            var sizeSpan2 = AbsoluteSizeSpan(9, false)
+            spannableString.setSpan(sizeSpan1, 0, tmpData.toString().length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+            spannableString.setSpan(sizeSpan2, tmpData.toString().length, spannableString.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+            (view as TextView).text = spannableString
+        }
+    }
+
+    class FundCountDown(var millisInFuture: Long, var countDownInterval: Long, var view: View, var data: Int) : CountDownTimer(millisInFuture, countDownInterval) {
+        override fun onFinish() {
+            if (view is TextView) {
+                (view as TextView).text = "总额：${data}万"
+            } else {
+                (view as ProgressView).setPercent(data)
+            }
+        }
+
+        override fun onTick(millisUntilFinished: Long) {
+            var tmp = millisInFuture - millisUntilFinished
+            if (view is TextView) {
+                (view as TextView).text = "总额：${data * tmp.toInt() / 1000}万"
+            } else {
+                (view as ProgressView).setPercent(data * tmp.toInt() / 1000)
+            }
+        }
     }
 
     override fun onStart() {
