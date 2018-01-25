@@ -46,7 +46,7 @@ class FundUploadActivity : ToolbarActivity() {
                 .error(R.drawable.img_logo_user)
                 .into(iv_user)
         //tv_title.text = project.name
-        tv_group.setOnClickListener {
+        llgroup.setOnClickListener {
             val items = ArrayList<String?>()
             items.add("储备期档案")
             items.add("存续期档案")
