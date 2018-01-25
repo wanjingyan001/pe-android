@@ -2,6 +2,7 @@ package com.sogukj.pe.ui.fund
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
@@ -27,6 +28,8 @@ import kotlinx.android.synthetic.main.activity_fund_upload.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import org.jetbrains.anko.backgroundColor
+import org.jetbrains.anko.backgroundResource
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -141,6 +144,9 @@ class FundUploadActivity : ToolbarActivity() {
         if (!uploadBean.doCheck()) {
             return
         }
+        btn_upload.isEnabled = false
+        btn_upload.backgroundColor = Color.GRAY
+        showToast("正在上传")
         val file = File(uploadBean.file)
         //type	number	1	档案类型	非空（1=>项目文书，2=>基金档案）
         SoguApi.getService(application)
@@ -162,6 +168,8 @@ class FundUploadActivity : ToolbarActivity() {
                 }, { e ->
                     Trace.e(e)
                     showToast("上传失败")
+                    btn_upload.isEnabled = true
+                    btn_upload.backgroundResource = R.drawable.bg_btn_blue
                 })
     }
 
