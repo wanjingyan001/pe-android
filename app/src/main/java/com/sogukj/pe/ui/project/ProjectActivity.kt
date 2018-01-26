@@ -85,7 +85,7 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
         //const val TYPE_YT = 2
         //const val TYPE_GZ = 3
         //const val TYPE_DY = 6
-        //const val TYPE_TC = 5
+        //const val TYPE_TC = 7
         if (type == ProjectListFragment.TYPE_DY) {
             proj_stage.text = "储 备"
             history.visibility = View.GONE
