@@ -648,7 +648,7 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
         const val TYPE_YT = 2
         const val TYPE_GZ = 3
         const val TYPE_DY = 6
-        const val TYPE_TC = 5
+        const val TYPE_TC = 7
 
         fun newInstance(type: Int): ProjectListFragment {
             val fragment = ProjectListFragment()
