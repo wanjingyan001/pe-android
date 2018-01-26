@@ -116,22 +116,17 @@ class FundListFragment : BaseFragment() {
                     }
 
                     fundName.text = data.fundName
-                    regTime.text = data.regTime
+                    if (data.regTime.isNullOrEmpty() || data.regTime.equals("--")) {
+                        regTime.text = "- -/- -/- -"
+                    } else {
+                        regTime.text = data.regTime
+                    }
 
                     var spannableString = SpannableString("${data.ytc} 万")
                     var sizeSpan1 = AbsoluteSizeSpan(16, false)
                     var sizeSpan2 = AbsoluteSizeSpan(9, false)
                     spannableString.setSpan(sizeSpan1, 0, data.ytc.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
                     spannableString.setSpan(sizeSpan2, data.ytc.length, spannableString.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
-//                    ytc.text = spannableString
-//
-//                    total.text = "总额：${data.total}万"
-//
-//                    try {
-//                        progress.setPercent(data.ytc.toInt() * 100 / data.total.toInt())
-//                    } catch (e: Exception) {
-//                        progress.setPercent(0)
-//                    }
 
                     try {
                         var fund3 = FundCountDownColor(1000, 10, ytc, data.ytc.toInt())
@@ -139,8 +134,13 @@ class FundListFragment : BaseFragment() {
                         var fund1 = FundCountDown(1000, 10, total, data.total.toInt())
                         fund1.start()
                     } catch (e: Exception) {
-                        ytc.text = ""
-                        total.text = ""
+                        var spannable1 = SpannableString("- -  万")
+                        var sizeSpan11 = AbsoluteSizeSpan(16, false)
+                        var sizeSpan21 = AbsoluteSizeSpan(9, false)
+                        spannable1.setSpan(sizeSpan11, 0, 3, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                        spannable1.setSpan(sizeSpan21, 3, spannable1.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                        ytc.text = spannable1
+                        total.text = "总额：- - 万"
                     }
                     try {
                         var fund2 = FundCountDown(1000, 10, progress, data.ytc.toInt() * 100 / data.total.toInt())
