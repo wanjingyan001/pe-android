@@ -62,9 +62,9 @@ class ProjectTCActivity : ToolbarActivity() {
 
             part_blue.visibility = View.INVISIBLE
             tr_wtccb.visibility = View.VISIBLE
-            tr_bc.visibility = View.GONE
+            tr_bc.visibility = View.VISIBLE
             tr_tzzt.visibility = View.GONE
-            tr_bck.visibility = View.VISIBLE
+            tr_bck.visibility = View.GONE
             mType = 1
 
             part_quit.setOnClickListener {
@@ -74,9 +74,9 @@ class ProjectTCActivity : ToolbarActivity() {
                 total_quit.textColor = Color.parseColor("#282828")
 
                 tr_wtccb.visibility = View.VISIBLE
-                tr_bc.visibility = View.GONE
+                tr_bc.visibility = View.VISIBLE
                 tr_tzzt.visibility = View.GONE
-                tr_bck.visibility = View.VISIBLE
+                tr_bck.visibility = View.GONE
 
                 mType = 1
             }
@@ -88,9 +88,9 @@ class ProjectTCActivity : ToolbarActivity() {
                 part_quit.textColor = Color.parseColor("#282828")
 
                 tr_wtccb.visibility = View.GONE
-                tr_bc.visibility = View.VISIBLE
+                tr_bc.visibility = View.GONE
                 tr_tzzt.visibility = View.VISIBLE
-                tr_bck.visibility = View.GONE
+                tr_bck.visibility = View.VISIBLE
 
                 mType = 2
             }
