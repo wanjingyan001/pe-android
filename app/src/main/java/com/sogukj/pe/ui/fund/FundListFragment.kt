@@ -2,6 +2,7 @@ package com.sogukj.pe.ui.fund
 
 
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.support.v4.app.Fragment
@@ -99,13 +100,21 @@ class FundListFragment : BaseFragment() {
                 val total = convertView.find<TextView>(R.id.total)
                 val progress = convertView.find<ProgressView>(R.id.progess)
                 override fun setData(view: View, data: FundSmallBean, position: Int) {
-                    Glide.with(context).load(data.url).asBitmap().into(object : SimpleTarget<Bitmap>() {
-                        override fun onResourceReady(bitmap: Bitmap?, glideAnimation: GlideAnimation<in Bitmap>?) {
-                            var draw = RoundedBitmapDrawableFactory.create(resources, bitmap) as RoundedBitmapDrawable
-                            draw.setCornerRadius(Utils.dpToPx(context, 4).toFloat())
-                            icon.setBackgroundDrawable(draw)
-                        }
-                    })
+                    if (data.url.isNullOrEmpty()) {
+                        var bitmap = BitmapFactory.decodeResource(resources, R.drawable.default_icon)
+                        var draw = RoundedBitmapDrawableFactory.create(resources, bitmap) as RoundedBitmapDrawable
+                        draw.setCornerRadius(Utils.dpToPx(context, 4).toFloat())
+                        icon.setBackgroundDrawable(draw)
+                    } else {
+                        Glide.with(context).load(data.url).asBitmap().into(object : SimpleTarget<Bitmap>() {
+                            override fun onResourceReady(bitmap: Bitmap?, glideAnimation: GlideAnimation<in Bitmap>?) {
+                                var draw = RoundedBitmapDrawableFactory.create(resources, bitmap) as RoundedBitmapDrawable
+                                draw.setCornerRadius(Utils.dpToPx(context, 4).toFloat())
+                                icon.setBackgroundDrawable(draw)
+                            }
+                        })
+                    }
+
                     fundName.text = data.fundName
                     regTime.text = data.regTime
 

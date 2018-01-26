@@ -61,9 +61,16 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/im"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/lt" />
+
+                <ImageView
                     android:id="@+id/history"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
+                    android:layout_marginLeft="20dp"
                     android:src="@drawable/ls" />
 
                 <ImageView
@@ -98,7 +105,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
-                android:src="@color/Blue"
+                android:src="@drawable/default_icon"
                 app:civ_border_color="#4df7f7f7"
                 app:civ_border_width="3dp" />
 

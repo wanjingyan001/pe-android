@@ -3,8 +3,10 @@ package com.sogukj.pe.ui.project
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Build
@@ -698,13 +700,20 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
         }
 
         override fun setData(view: View, data: ProjectBean, position: Int) {
-            Glide.with(context).load(data.logo).asBitmap().into(object : SimpleTarget<Bitmap>() {
-                override fun onResourceReady(bitmap: Bitmap?, glideAnimation: GlideAnimation<in Bitmap>?) {
-                    var draw = RoundedBitmapDrawableFactory.create(resources, bitmap) as RoundedBitmapDrawable
-                    draw.setCornerRadius(Utils.dpToPx(context, 4).toFloat())
-                    ivIcon.setBackgroundDrawable(draw)
-                }
-            })
+            if (data.logo.isNullOrEmpty()) {
+                var bitmap = BitmapFactory.decodeResource(resources, R.drawable.default_icon)
+                var draw = RoundedBitmapDrawableFactory.create(resources, bitmap) as RoundedBitmapDrawable
+                draw.setCornerRadius(Utils.dpToPx(context, 4).toFloat())
+                ivIcon.setBackgroundDrawable(draw)
+            } else {
+                Glide.with(context).load(data.logo).asBitmap().into(object : SimpleTarget<Bitmap>() {
+                    override fun onResourceReady(bitmap: Bitmap?, glideAnimation: GlideAnimation<in Bitmap>?) {
+                        var draw = RoundedBitmapDrawableFactory.create(resources, bitmap) as RoundedBitmapDrawable
+                        draw.setCornerRadius(Utils.dpToPx(context, 4).toFloat())
+                        ivIcon.setBackgroundDrawable(draw)
+                    }
+                })
+            }
 
             if (data.is_focus == 1) {
                 Glide.with(context).load(R.drawable.sc_yes).into(ivSC)

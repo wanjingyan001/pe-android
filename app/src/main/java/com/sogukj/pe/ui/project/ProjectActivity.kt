@@ -78,7 +78,11 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
             this.setBackgroundColor(resources.getColor(R.color.transparent))
         }
         //setTitle(project.name)
-        Glide.with(context).load(project.logo).into(imgIcon)
+        if (project.logo.isNullOrEmpty()) {
+            imgIcon.setImageResource(R.drawable.default_icon)
+        } else {
+            Glide.with(context).load(project.logo).into(imgIcon)
+        }
         companyTitle.text = project.name
         //const val TYPE_CB = 4
         //const val TYPE_LX = 1
