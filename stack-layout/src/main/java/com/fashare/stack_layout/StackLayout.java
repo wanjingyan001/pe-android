@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -240,6 +241,11 @@ public class StackLayout extends FrameLayout {
                         removeView(view);
                         setCurrentItem(getCurrentItem() + 1);
                         mOnSwipeListener.onSwiped(view, ViewHolder.getPosition(view), left < 0, mAdapter.getItemCount() - getCurrentItem());
+
+                        StackLayout.this.addView(view, 0);
+                        if(getCurrentItem() == mAdapter.getItemCount()){
+                            setCurrentItem(0);
+                        }
 
                         if(mItemObserver.isDataChangedWhileScrolling)
                             mItemObserver.dataChanged(mAdapter);
