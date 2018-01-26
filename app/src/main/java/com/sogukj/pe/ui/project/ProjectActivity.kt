@@ -93,7 +93,7 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
             proj_stage.text = "立 项"
             history.visibility = View.GONE
         } else if (type == ProjectListFragment.TYPE_LX) {
-            proj_stage.text = "已 投"
+            proj_stage.text = "投 决"
             edit.visibility = View.GONE
             history.visibility = View.GONE
         } else if (type == ProjectListFragment.TYPE_YT) {
