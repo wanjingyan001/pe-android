@@ -103,6 +103,17 @@ class ProjectBookUploadActivity : ToolbarActivity() {
                     .withCloseMenu(false)
                     .start()
         }
+        ll_upload_full.setOnClickListener {
+            val list = ArrayList<String>()
+            MaterialFilePicker()
+                    .withActivity(this)
+                    .withRequestCode(REQ_SELECT_FILE)
+                    .withTitle("内部存储")
+                    .withFilterDirectories(true)
+                    .withHiddenFiles(true)
+                    .withCloseMenu(false)
+                    .start()
+        }
 
         btn_upload.setOnClickListener {
             handler.postDelayed({ doSave() }, 10)
