@@ -673,6 +673,7 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
         val tvStage: TextView
         val tvBusiness: TextView
         val tvAbility: TextView
+        val divider_t: TextView
         val tvState: TextView
 
         val bean1: ProjectBeanLayout
@@ -689,6 +690,7 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
             tvStage = convertView.findViewById(R.id.stage) as TextView
             tvBusiness = convertView.findViewById(R.id.business) as TextView
             tvAbility = convertView.findViewById(R.id.ability) as TextView
+            divider_t = convertView.findViewById(R.id.divider_t) as TextView
             tvState = convertView.findViewById(R.id.state) as TextView
             bean1 = convertView.findViewById(R.id.layout1) as ProjectBeanLayout
             bean2 = convertView.findViewById(R.id.layout2) as ProjectBeanLayout
@@ -762,10 +764,15 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
             }
 
             // 立项页面时显示（已完成或准备中）两个状态，   退出显示（部分退出或全部退出）两个状态   //1准备中  2已完成
-            if (data.status == 1) {
-                tvState.text = "准备中"
-            } else if (data.status == 2) {
-                tvState.text = "已完成"
+            if (type == TYPE_YT) {
+                if (data.out == 0) {
+                    tvState.text = "在投"
+                } else if (data.out == 1) {
+                    tvState.text = "部分退出"
+                }
+            } else {
+                divider_t.visibility = View.INVISIBLE
+                tvState.visibility = View.INVISIBLE
             }
 
             if (data.update_time.isNullOrEmpty()) {
