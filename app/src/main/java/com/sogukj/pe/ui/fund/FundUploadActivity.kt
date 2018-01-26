@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
@@ -56,7 +57,7 @@ class FundUploadActivity : ToolbarActivity() {
         } else if (tmpInt == TYPE_TC) {
             tmpStr = "退出"
         }
-        tv_step.text = "阶段：${tmpStr}期档案"
+        tv_step.text = tmpStr
 
         val user = Store.store.getUser(this)
         tv_user.text = user?.name
@@ -131,17 +132,23 @@ class FundUploadActivity : ToolbarActivity() {
         var file: String? = null
         var group: String? = null
         var type: String? = null
-        fun doCheck(): Boolean {
-            if (file.isNullOrEmpty()) return false
-            if (null == group) return false
-            //if (type == null) return false
-            return true
+    }
+
+    fun doCheck(bean: UploadBean): Boolean {
+        if (bean.file.isNullOrEmpty()) {
+            showToast("请选择文件")
+            return false
         }
+        if (null == bean.group) {
+            showToast("请选择分类")
+            return false
+        }
+        return true
     }
 
     var uploadBean = UploadBean();
     private fun doSave() {
-        if (!uploadBean.doCheck()) {
+        if (!doCheck(uploadBean)) {
             return
         }
         btn_upload.isEnabled = false

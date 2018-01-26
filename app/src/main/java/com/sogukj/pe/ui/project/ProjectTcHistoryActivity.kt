@@ -54,7 +54,7 @@ class ProjectTcHistoryActivity : ToolbarActivity() {
                 val outTime = convertView.findViewById(R.id.outTime) as TextView
                 override fun setData(view: View, data: QuitBean, position: Int) {
                     title.text = data.title
-                    name.text = data.name
+                    name.text = "操作人：${data.name}"
                     outTime.text = data.outTime
                 }
             }

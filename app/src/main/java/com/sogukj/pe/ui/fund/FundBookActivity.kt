@@ -451,6 +451,7 @@ class FundBookActivity : ToolbarActivity(), SupportEmptyView {
                 tvDate.text = strs.getOrNull(0)
                 tvTime.text = strs.getOrNull(1)
             }
+            tvType.visibility = View.INVISIBLE
             tvType.text = data?.name
         }
 

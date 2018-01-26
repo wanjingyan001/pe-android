@@ -113,17 +113,23 @@ class ProjectBookUploadActivity : ToolbarActivity() {
         var file: String? = null
         var group: String? = null
         var type: String? = null
-        fun doCheck(): Boolean {
-            if (file.isNullOrEmpty()) return false
-            if (null == group) return false
-            if (type == null) return false
-            return true
+    }
+
+    fun doCheck(bean: UploadBean): Boolean {
+        if (bean.file.isNullOrEmpty()) {
+            showToast("请选择文件")
+            return false
         }
+        if (null == bean.group) {
+            showToast("请选择分类")
+            return false
+        }
+        return true
     }
 
     var uploadBean = UploadBean();
     private fun doSave() {
-        if (!uploadBean.doCheck()) {
+        if (!doCheck(uploadBean)) {
             return
         }
         val file = File(uploadBean.file)
