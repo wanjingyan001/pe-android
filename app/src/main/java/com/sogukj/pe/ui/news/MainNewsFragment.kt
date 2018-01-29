@@ -37,7 +37,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_main_news.*
 import kotlinx.android.synthetic.main.search_view.*
-import kotlinx.android.synthetic.main.sogu_toolbar_main_news.*
 import org.jetbrains.anko.find
 import java.text.SimpleDateFormat
 import java.util.*
@@ -51,14 +50,14 @@ class MainNewsFragment : BaseFragment() {
 
     val fragments = arrayOf(
             NewsListFragment.newInstance(0),
-            NewsListFragment.newInstance(1),
-            NewsListFragment.newInstance(2)
+            NewsListFragment.newInstance(1)
+            //NewsListFragment.newInstance(2)
     )
     lateinit var adapter: RecyclerAdapter<NewsBean>
     lateinit var hisAdapter: RecyclerAdapter<String>
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbar_back.visibility = View.GONE
+        //toolbar_back.visibility = View.GONE
         adapter = RecyclerAdapter<NewsBean>(baseActivity!!, { _adapter, parent, type ->
             val convertView = _adapter.getView(R.layout.item_main_news, parent) as View
             object : RecyclerHolder<NewsBean>(convertView) {
@@ -147,22 +146,22 @@ class MainNewsFragment : BaseFragment() {
         }
         tv_result_title.text = Html.fromHtml(getString(R.string.tv_title_result_news, 0))
 
-        iv_user.setOnClickListener {
-            val activity = activity as MainActivity
-            activity.find<RadioGroup>(R.id.rg_tab_main).check(R.id.rb_my)
-//            UserFragment.start(baseActivity);
-        }
-
-        Store.store.getUser(baseActivity!!)?.apply {
-            if (null != url)
-                Glide.with(baseActivity)
-                        .load(headImage())
-                        .error(R.drawable.img_logo_user)
-                        .into(iv_user)
-        }
-        iv_add.setOnClickListener {
-            ProjectAddActivity.startAdd(baseActivity)
-        }
+//        iv_user.setOnClickListener {
+//            val activity = activity as MainActivity
+//            activity.find<RadioGroup>(R.id.rg_tab_main).check(R.id.rb_my)
+////            UserFragment.start(baseActivity);
+//        }
+//
+//        Store.store.getUser(baseActivity!!)?.apply {
+//            if (null != url)
+//                Glide.with(baseActivity)
+//                        .load(headImage())
+//                        .error(R.drawable.img_logo_user)
+//                        .into(iv_user)
+//        }
+//        iv_add.setOnClickListener {
+//            ProjectAddActivity.startAdd(baseActivity)
+//        }
         //不做实时查询,只有点击软键盘上的查询时才进行查询
 //        search_view.onTextChange = { text ->
 //            if (TextUtils.isEmpty(text)) {

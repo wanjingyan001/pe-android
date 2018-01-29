@@ -16,7 +16,53 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <include layout="@layout/sogu_toolbar_main_news" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/colorPrimary"
+                android:orientation="horizontal">
+
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/tabs"
+                    android:layout_width="100dp"
+                    android:layout_height="40dp"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="20dp"
+                    android:gravity="left"
+                    app:tabGravity="fill"
+                    app:tabIndicatorColor="@color/white"
+                    app:tabIndicatorHeight="2dp"
+                    app:tabMode="fixed"
+                    app:tabPaddingEnd="0dp"
+                    app:tabPaddingStart="0dp"
+                    app:tabTextAppearance="@style/TabLayoutTextStyle"
+                    app:tabTextColor="@color/white">
+
+                    <android.support.design.widget.TabItem
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="全部" />
+
+                    <android.support.design.widget.TabItem
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="关注" />
+                </android.support.design.widget.TabLayout>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <ImageView
+                    android:id="@+id/iv_search"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center|right"
+                    android:layout_marginRight="20dp"
+                    android:src="@drawable/ic_search" />
+            </LinearLayout>
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/view_pager"
