@@ -65,7 +65,7 @@ class MainActivity : BaseActivity() {
         var adapter = ArrayPagerAdapter(supportFragmentManager, fragments)
         viewpager.adapter = adapter
         viewpager.offscreenPageLimit = fragments.size
-        viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
+        viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
             }
 
@@ -74,6 +74,15 @@ class MainActivity : BaseActivity() {
 
             override fun onPageSelected(position: Int) {
                 viewpager.setCurrentItem(position, false)
+                var checkId = 0
+                when (position) {
+                    0 -> checkId = R.id.rb_msg
+                    1 -> checkId = R.id.rb_project
+                    2 -> checkId = R.id.rb_home
+                    3 -> checkId = R.id.rb_fund
+                    4 -> checkId = R.id.rb_my
+                }
+                rg_tab_main.check(checkId)
             }
         })
     }
