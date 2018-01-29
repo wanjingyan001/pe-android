@@ -2,6 +2,7 @@ package com.sogukj.pe.ui.news
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -41,6 +42,7 @@ import kotlinx.android.synthetic.main.layout_loading.*
 import org.jetbrains.anko.textColor
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by qinfei on 17/7/18.
@@ -76,6 +78,22 @@ class NewsListFragment : BaseFragment(), SupportEmptyView {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        for (i in 0 until grid.childCount) {
+            var child = grid.getChildAt(i) as TextView
+            child.setOnClickListener {
+                if (child.tag.equals("F")) {
+                    child.textColor = Color.parseColor("#1787fb")
+                    child.setBackgroundResource(R.drawable.tg_bg_t)
+                    child.tag = "T"
+                } else {
+                    child.textColor = Color.parseColor("#808080")
+                    child.setBackgroundResource(R.drawable.tag_bg_f)
+                    child.tag = "F"
+                }
+                filter()
+            }
+        }
 
         adapter = RecyclerAdapter<NewsBean>(baseActivity!!, { _adapter, parent, type ->
             NewsHolder(_adapter.getView(R.layout.item_main_news, parent))
@@ -132,6 +150,7 @@ class NewsListFragment : BaseFragment(), SupportEmptyView {
         doRequest()
     }
 
+    var initialData = ArrayList<NewsBean>()
 
     var page = 1
     fun doRequest() {
@@ -143,10 +162,14 @@ class NewsListFragment : BaseFragment(), SupportEmptyView {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        if (page == 1)
+                        if (page == 1) {
+                            initialData.clear()
                             adapter.dataList.clear()
+                        }
                         payload.payload?.apply {
-                            adapter.dataList.addAll(this)
+                            initialData.addAll(this)
+                            filter()
+                            //adapter.dataList.addAll(this)
                         }
                     } else
                         showToast(payload.message)
@@ -165,6 +188,35 @@ class NewsListFragment : BaseFragment(), SupportEmptyView {
                     else
                         refresh?.finishLoadmore()
                 })
+    }
+
+    private fun filter() {
+        //获取gridlayout中的tag
+        var tagList = ArrayList<String>()
+        for (i in 0 until grid.childCount) {
+            var child = grid.getChildAt(i) as TextView
+            if (child.tag.equals("T")) {
+                tagList.add(child.text.toString())
+            }
+        }
+
+        //过滤tag
+        var filterData = ArrayList<NewsBean>()
+        if (tagList.size == 0) {
+            adapter.dataList.clear()
+            adapter.dataList.addAll(initialData)
+            adapter.notifyDataSetChanged()
+        } else {
+            for (bean in initialData) {
+                var tags = bean.tag?.split("#")
+                if (tags!!.containsAll(tagList)) {
+                    filterData.add(bean)
+                }
+            }
+            adapter.dataList.clear()
+            adapter.dataList.addAll(filterData)
+            adapter.notifyDataSetChanged()
+        }
     }
 
     val fmt = SimpleDateFormat("yyyy/MM/dd HH:mm")
