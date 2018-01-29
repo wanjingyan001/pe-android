@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.framework.base.ToolbarActivity
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
@@ -63,7 +64,7 @@ class ProductInfoActivity : ToolbarActivity() {
                     tvCompany.text = Html.fromHtml(getString(R.string.tv_proj_product_company, data.companyName))
                     Glide.with(this@ProductInfoActivity)
                             .load(data.icon)
-                            .error(R.drawable.img_logo_user)
+                            .apply(RequestOptions().error(R.drawable.img_logo_user))
                             .into(ivUser)
                     tvRound.visibility = View.GONE
                     data.round?.trim()?.takeIf {

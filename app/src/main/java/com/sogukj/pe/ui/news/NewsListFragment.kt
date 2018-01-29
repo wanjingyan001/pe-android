@@ -16,8 +16,9 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.animation.GlideAnimation
+import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 import com.framework.base.BaseFragment
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
@@ -265,8 +266,8 @@ class NewsListFragment : BaseFragment(), SupportEmptyView {
                 draw.setCornerRadius(Utils.dpToPx(context, 4).toFloat())
                 iv_icon.setBackgroundDrawable(draw)
             } else {
-                Glide.with(context).load(data.url).asBitmap().into(object : SimpleTarget<Bitmap>() {
-                    override fun onResourceReady(bitmap: Bitmap?, glideAnimation: GlideAnimation<in Bitmap>?) {
+                Glide.with(context).asBitmap().load(data.url).into(object : SimpleTarget<Bitmap>() {
+                    override fun onResourceReady(bitmap: Bitmap?, glideAnimation: Transition<in Bitmap>?) {
                         var draw = RoundedBitmapDrawableFactory.create(resources, bitmap) as RoundedBitmapDrawable
                         draw.setCornerRadius(Utils.dpToPx(context, 4).toFloat())
                         iv_icon.setBackgroundDrawable(draw)

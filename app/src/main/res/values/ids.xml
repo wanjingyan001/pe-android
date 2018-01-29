@@ -6,5 +6,6 @@
     <item name="reason" type="id"/>
     <item name="notAttend" type="id"/>
     <item name="canAttend" type="id"/>
-
+    <item name="organizationList" type="id"/>
+    <item name="contactLayout" type="id"/>
 </resources>

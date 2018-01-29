@@ -30,8 +30,8 @@ import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.animation.GlideAnimation
 import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 import com.framework.base.BaseFragment
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
@@ -706,8 +706,8 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                 draw.setCornerRadius(Utils.dpToPx(context, 4).toFloat())
                 ivIcon.setBackgroundDrawable(draw)
             } else {
-                Glide.with(context).load(data.logo).asBitmap().into(object : SimpleTarget<Bitmap>() {
-                    override fun onResourceReady(bitmap: Bitmap?, glideAnimation: GlideAnimation<in Bitmap>?) {
+                Glide.with(context).asBitmap().load(data.logo).into(object : SimpleTarget<Bitmap>() {
+                    override fun onResourceReady(bitmap: Bitmap?, glideAnimation: Transition<in Bitmap>?) {
                         var draw = RoundedBitmapDrawableFactory.create(resources, bitmap) as RoundedBitmapDrawable
                         draw.setCornerRadius(Utils.dpToPx(context, 4).toFloat())
                         ivIcon.setBackgroundDrawable(draw)

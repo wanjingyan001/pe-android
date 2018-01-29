@@ -19,6 +19,7 @@ import cn.finalteam.rxgalleryfinal.rxbus.event.ImageRadioResultEvent
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.framework.base.ToolbarActivity
 import com.google.gson.JsonSyntaxException
 import com.sogukj.pe.Extras
@@ -425,7 +426,7 @@ class UserEditActivity : ToolbarActivity() {
         user.url = url
         Glide.with(this@UserEditActivity)
                 .load(url)
-                .error(R.drawable.img_logo_user)
+                .apply(RequestOptions().error(R.drawable.img_logo_user) )
                 .into(iv_user)
         val imgPath = compressImage(url, 160, 160, 1024 * 1024)
         val file = File(imgPath)

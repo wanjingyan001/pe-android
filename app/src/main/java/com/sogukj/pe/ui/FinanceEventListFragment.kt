@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.framework.base.BaseFragment
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
@@ -61,7 +62,7 @@ class FinanceEventListFragment : BaseFragment(),SupportEmptyView {
                     tvCompany.text = Html.fromHtml(getString(R.string.tv_proj_product_company, data.organization_name))
                     Glide.with(baseActivity!!)
                             .load(data.iconOssPath)
-                            .error(R.drawable.img_logo_user)
+                            .apply(RequestOptions().error(R.drawable.img_logo_user))
                             .into(ivUser)
                 }
 

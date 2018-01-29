@@ -12,6 +12,7 @@ import com.framework.base.ToolbarFragment
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.DepartmentBean
 import com.sogukj.pe.bean.UserBean
+import com.sogukj.pe.ui.IM.TeamSelectActivity
 import com.sogukj.pe.ui.project.ProjectFocusActivity
 import com.sogukj.pe.ui.project.ProjectListFragment
 import com.sogukj.pe.util.Trace
@@ -58,7 +59,8 @@ class UserFragment : ToolbarFragment(), View.OnClickListener {
             UserEditActivity.start(activity, departList)
         }
         structure.setOnClickListener {
-            OrganizationActivity.start(activity, departList)
+//            OrganizationActivity.start(activity, departList)
+            TeamSelectActivity.startForResult(activity)
         }
         setting.setOnClickListener {
             SettingActivity.start(context)

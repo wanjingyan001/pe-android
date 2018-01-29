@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.framework.base.ToolbarActivity
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
@@ -57,7 +58,7 @@ class CoreTeamActivity : ToolbarActivity() ,SupportEmptyView{
                     tvDesc.text = data.desc
                     Glide.with(this@CoreTeamActivity)
                             .load(data.icon)
-                            .error(R.drawable.img_logo_user)
+                            .apply(RequestOptions().error(R.drawable.img_logo_user))
                             .into(ivUser)
 
                 }
