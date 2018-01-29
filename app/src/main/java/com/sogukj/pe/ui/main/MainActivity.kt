@@ -22,7 +22,9 @@ import com.sogukj.util.Store
 import kotlinx.android.synthetic.main.activity_main.*
 import android.support.v4.view.ViewCompat.getMinimumHeight
 import android.support.v4.view.ViewCompat.getMinimumWidth
+import android.support.v4.view.ViewPager
 import com.sogukj.pe.util.Utils
+import com.sogukj.pe.view.ArrayPagerAdapter
 
 
 /**
@@ -52,6 +54,28 @@ class MainActivity : BaseActivity() {
         val w = dm.widthPixels
         val h = dm.heightPixels
 
+        //
+        val fragments = arrayOf(
+                fgMsg,
+                fgProj,
+                fgHome,
+                fgFund,
+                fgMine
+        )
+        var adapter = ArrayPagerAdapter(supportFragmentManager, fragments)
+        viewpager.adapter = adapter
+        viewpager.offscreenPageLimit = fragments.size
+        viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
+            override fun onPageScrollStateChanged(state: Int) {
+            }
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+            }
+
+            override fun onPageSelected(position: Int) {
+                viewpager.setCurrentItem(position, false)
+            }
+        })
     }
 
     val PERMISSIONS_STORAGE = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -75,16 +99,25 @@ class MainActivity : BaseActivity() {
     fun doCheck(checkedId: Int) {
         this.checkId = checkedId
 //        rg_tab_main.check(checkId)
-        val fragment = when (checkId) {
-            R.id.rb_msg -> fgMsg
-            R.id.rb_project -> fgProj
-            R.id.rb_fund -> fgFund
-            R.id.rb_my -> fgMine
-            else -> fgHome
+//        val fragment = when (checkId) {
+//            R.id.rb_msg -> fgMsg
+//            R.id.rb_project -> fgProj
+//            R.id.rb_fund -> fgFund
+//            R.id.rb_my -> fgMine
+//            else -> fgHome
+//        }
+//        supportFragmentManager.beginTransaction()
+//                .replace(R.id.container, fragment)
+//                .commit()
+        var currentId = 2
+        when (checkId) {
+            R.id.rb_msg -> currentId = 0
+            R.id.rb_project -> currentId = 1
+            R.id.rb_home -> currentId = 2
+            R.id.rb_fund -> currentId = 3
+            R.id.rb_my -> currentId = 4
         }
-        supportFragmentManager.beginTransaction()
-                .replace(R.id.container, fragment)
-                .commit()
+        viewpager.setCurrentItem(currentId, false)
     }
 
     override fun onStart() {
