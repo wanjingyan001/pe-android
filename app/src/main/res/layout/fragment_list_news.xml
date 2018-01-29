@@ -1,24 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
-<com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/refresh"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/recycler_view"
+    <android.support.v7.widget.GridLayout
+        android:id="@+id/grid"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="#fff3f5f7"
-        app:layoutManager="LinearLayoutManager"
-        tools:listitem="@layout/item_main_news" />
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="#ffffff"
+        app:columnCount="4"
+        app:orientation="horizontal"
+        app:rowCount="2"
+        app:useDefaultMargins="true">
 
-    <include layout="@layout/layout_empty" />
+        <TextView
+            android:background="@drawable/tag_bg_f"
+            android:gravity="center"
+            android:letterSpacing="0.04"
+            android:lineSpacingExtra="0sp"
+            android:padding="10dp"
+            android:text="负面"
+            android:textColor="#808080"
+            android:textSize="12sp"
+            app:layout_column="0"
+            app:layout_columnWeight="1"
+            app:layout_row="0"
+            app:layout_rowWeight="1" />
 
-    <include layout="@layout/layout_loading" />
-</com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
+        <TextView
+            android:background="@drawable/tag_bg_f"
+            android:gravity="center"
+            android:letterSpacing="0.04"
+            android:lineSpacingExtra="0sp"
+            android:padding="10dp"
+            android:text="社会评价"
+            android:textColor="#808080"
+            android:textSize="12sp"
+            app:layout_column="1"
+            app:layout_columnWeight="1"
+            app:layout_row="0"
+            app:layout_rowWeight="1" />
+
+        <TextView
+            android:background="@drawable/tag_bg_f"
+            android:gravity="center"
+            android:letterSpacing="0.04"
+            android:lineSpacingExtra="0sp"
+            android:padding="10dp"
+            android:text="企业风险"
+            android:textColor="#808080"
+            android:textSize="12sp"
+            app:layout_column="2"
+            app:layout_columnWeight="1"
+            app:layout_row="0"
+            app:layout_rowWeight="1" />
+
+        <TextView
+            android:background="@drawable/tag_bg_f"
+            android:gravity="center"
+            android:letterSpacing="0.04"
+            android:lineSpacingExtra="0sp"
+            android:padding="10dp"
+            android:text="法律纠纷"
+            android:textColor="#808080"
+            android:textSize="12sp"
+            app:layout_column="3"
+            app:layout_columnWeight="1"
+            app:layout_row="0"
+            app:layout_rowWeight="1" />
+
+        <TextView
+            android:background="@drawable/tag_bg_f"
+            android:gravity="center"
+            android:letterSpacing="0.04"
+            android:lineSpacingExtra="0sp"
+            android:padding="10dp"
+            android:text="人事变动"
+            android:textColor="#808080"
+            android:textSize="12sp"
+            app:layout_column="0"
+            app:layout_columnWeight="1"
+            app:layout_row="1"
+            app:layout_rowWeight="1" />
+
+        <TextView
+            android:background="@drawable/tag_bg_f"
+            android:gravity="center"
+            android:letterSpacing="0.04"
+            android:lineSpacingExtra="0sp"
+            android:padding="10dp"
+            android:text="战略转型"
+            android:textColor="#808080"
+            android:textSize="12sp"
+            app:layout_column="1"
+            app:layout_columnWeight="1"
+            app:layout_row="1"
+            app:layout_rowWeight="1" />
+
+        <TextView
+            android:background="@drawable/tag_bg_f"
+            android:gravity="center"
+            android:letterSpacing="0.04"
+            android:lineSpacingExtra="0sp"
+            android:padding="10dp"
+            android:text="民众态度"
+            android:textColor="#808080"
+            android:textSize="12sp"
+            app:layout_column="2"
+            app:layout_columnWeight="1"
+            app:layout_row="1"
+            app:layout_rowWeight="1" />
+
+        <TextView
+            android:background="@drawable/tag_bg_f"
+            android:gravity="center"
+            android:letterSpacing="0.04"
+            android:lineSpacingExtra="0sp"
+            android:padding="10dp"
+            android:text="股权"
+            android:textColor="#808080"
+            android:textSize="12sp"
+            app:layout_column="3"
+            app:layout_columnWeight="1"
+            app:layout_row="1"
+            app:layout_rowWeight="1" />
+
+    </android.support.v7.widget.GridLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="#f3f5f7" />
+
+    <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
+        android:id="@+id/refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#fff3f5f7"
+            android:orientation="vertical"
+            app:layoutManager="LinearLayoutManager"
+            tools:listitem="@layout/item_main_news" />
+
+        <include layout="@layout/layout_empty" />
+
+        <include layout="@layout/layout_loading" />
+    </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
+
+</LinearLayout>
