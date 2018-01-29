@@ -339,7 +339,7 @@ class MainProjectFragment : BaseFragment() {
     }
 
     private fun changeView() {
-        if (MyNestedScrollParent2.scrollY < toolbarLayout.height) {
+        if (toolbarLayout.height == 0) {//toolbarLayout.height=0  fragment来回切换导致toolbarLayout还没有宽高就要
             tabs.setBackgroundResource(R.drawable.tab_bg_1)
             tabs.setTabTextColors(Color.parseColor("#a0a4aa"), Color.parseColor("#282828"))
             for (i in 0 until tabs.getTabCount()) {
@@ -349,34 +349,26 @@ class MainProjectFragment : BaseFragment() {
                     setDrawable(i, "1", false)
                 }
             }
-        } else if (MyNestedScrollParent2.scrollY > toolbarLayout.height) {
-            tabs.setBackgroundResource(R.drawable.tab_bg_2)
-            tabs.setTabTextColors(Color.parseColor("#ff7bb4fc"), Color.parseColor("#ffffff"))
-            for (i in 0 until tabs.getTabCount()) {
-                if (i == tabs.getSelectedTabPosition()) {
-                    setDrawable(i, "2", true)
-                } else {
-                    setDrawable(i, "2", false)
+        } else {
+            if (MyNestedScrollParent2.scrollY < toolbarLayout.height) {
+                tabs.setBackgroundResource(R.drawable.tab_bg_1)
+                tabs.setTabTextColors(Color.parseColor("#a0a4aa"), Color.parseColor("#282828"))
+                for (i in 0 until tabs.getTabCount()) {
+                    if (i == tabs.getSelectedTabPosition()) {
+                        setDrawable(i, "1", true)
+                    } else {
+                        setDrawable(i, "1", false)
+                    }
                 }
-            }
-        } else if (MyNestedScrollParent2.scrollY == 0) {//toolbarLayout.height=0  fragment来回切换导致toolbarLayout还没有宽高就要
-            tabs.setBackgroundResource(R.drawable.tab_bg_1)
-            tabs.setTabTextColors(Color.parseColor("#a0a4aa"), Color.parseColor("#282828"))
-            for (i in 0 until tabs.getTabCount()) {
-                if (i == tabs.getSelectedTabPosition()) {
-                    setDrawable(i, "1", true)
-                } else {
-                    setDrawable(i, "1", false)
-                }
-            }
-        } else if (MyNestedScrollParent2.scrollY == toolbarLayout.height) {//toolbarLayout在顶部时互相切换
-            tabs.setBackgroundResource(R.drawable.tab_bg_2)
-            tabs.setTabTextColors(Color.parseColor("#ff7bb4fc"), Color.parseColor("#ffffff"))
-            for (i in 0 until tabs.getTabCount()) {
-                if (i == tabs.getSelectedTabPosition()) {
-                    setDrawable(i, "2", true)
-                } else {
-                    setDrawable(i, "2", false)
+            } else if (MyNestedScrollParent2.scrollY >= toolbarLayout.height) {
+                tabs.setBackgroundResource(R.drawable.tab_bg_2)
+                tabs.setTabTextColors(Color.parseColor("#ff7bb4fc"), Color.parseColor("#ffffff"))
+                for (i in 0 until tabs.getTabCount()) {
+                    if (i == tabs.getSelectedTabPosition()) {
+                        setDrawable(i, "2", true)
+                    } else {
+                        setDrawable(i, "2", false)
+                    }
                 }
             }
         }
