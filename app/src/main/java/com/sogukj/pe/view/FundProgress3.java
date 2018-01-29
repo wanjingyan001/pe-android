@@ -47,7 +47,7 @@ public class FundProgress3 extends View {
     }
 
     private void init() {
-        property = Utils.getAndroiodScreenProperty(context);
+        property = Utils.getAndroidScreenProperty(context);
         width = Utils.dpToPx(context, (property[0] - 2 * 20));
 
         quitSectionPaint = new Paint();

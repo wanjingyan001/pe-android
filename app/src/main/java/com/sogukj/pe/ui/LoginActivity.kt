@@ -5,14 +5,20 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.text.TextUtils
+import android.util.Log
 import com.framework.base.ActivityHelper
 import com.framework.base.BaseActivity
+import com.netease.nim.uikit.api.NimUIKit
+import com.netease.nimlib.sdk.RequestCallback
+import com.netease.nimlib.sdk.auth.LoginInfo
+import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.util.LoginTimer
 import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
+import com.sogukj.util.XmlDb
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_login.*
@@ -90,6 +96,10 @@ class LoginActivity : BaseActivity() {
                         showToast("登录成功")
                         payload?.payload?.apply {
                             Store.store.setUser(this@LoginActivity, this)
+                            Log.d("WJY","$accid==>$token")
+                            ifNotNull(accid, token, { accid, token ->
+                                IMLogin(accid, token)
+                            })
                         }
                         finish()
                     } else
@@ -97,6 +107,39 @@ class LoginActivity : BaseActivity() {
                 }, { e ->
                     showToast("登录失败")
                 })
+    }
+
+    /**
+     * 网易云信IM登录
+     */
+    private fun IMLogin(account: String, token: String) {
+        val loginInfo = LoginInfo(account, token)
+        NimUIKit.login(loginInfo,object : RequestCallback<LoginInfo> {
+            override fun onSuccess(p0: LoginInfo?) {
+                Log.d("WJY", "登录成功:${p0?.account}===>${p0?.token}")
+                val xmlDb = XmlDb.open(this@LoginActivity)
+                xmlDb.set(Extras.NIMACCOUNT, account)
+                xmlDb.set(Extras.NIMTOKEN, token)
+            }
+
+            override fun onFailed(p0: Int) {
+                if (p0 == 302 || p0 == 404) {
+                    showToast("帐号或密码错误")
+                } else {
+                    showToast("登录失败")
+                }
+            }
+
+            override fun onException(p0: Throwable?) {
+                showToast("无效输入")
+            }
+        })
+    }
+
+    private fun <T1, T2> ifNotNull(value1: T1?, value2: T2?, bothNotNull: (T1, T2) -> (Unit)) {
+        if (value1 != null && value2 != null) {
+            bothNotNull(value1, value2)
+        }
     }
 
     override fun onBackPressed() {

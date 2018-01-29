@@ -18,6 +18,8 @@ open class UserBean() : Serializable {
     var is_admin: Int = 0
     var user_id: Int? = null
     var full: String? = null
+    var token: String? = null
+    var accid: String? = null
 
 
     fun headImage(): String? {

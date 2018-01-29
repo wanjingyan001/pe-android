@@ -6,11 +6,15 @@ import android.os.Bundle
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.framework.base.BaseActivity
+import com.netease.nimlib.sdk.NIMClient
+import com.netease.nimlib.sdk.auth.AuthService
 import com.sogukj.pe.App
+import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.ui.LoginActivity
 import com.sogukj.pe.util.Utils
 import com.sogukj.util.Store
+import com.sogukj.util.XmlDb
 import kotlinx.android.synthetic.main.activity_setting.*
 
 class SettingActivity : BaseActivity() {
@@ -40,6 +44,7 @@ class SettingActivity : BaseActivity() {
                     .content("确定要退出此帐号?")
                     .onPositive { materialDialog, dialogAction ->
                         App.INSTANCE.resetPush(false)
+                        IMLogout()
                         Store.store.clearUser(this)
                         LoginActivity.start(this)
                         finish()
@@ -49,5 +54,15 @@ class SettingActivity : BaseActivity() {
                     .show()
         }
 
+    }
+
+    /**
+     * 网易云信IM注销
+     */
+    private fun IMLogout(){
+        val xmlDb = XmlDb.open(this)
+        xmlDb.set(Extras.NIMACCOUNT,"")
+        xmlDb.set(Extras.NIMTOKEN,"")
+        NIMClient.getService(AuthService::class.java).logout()
     }
 }

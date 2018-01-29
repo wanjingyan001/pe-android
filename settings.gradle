@@ -1,3 +1,3 @@
-include ':app', ':calendar', ':stack-layout'
+include ':app', ':calendar', ':stack-layout',':uikit'
 include ':PushSDK'
 include ':shareSDK'

@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "/Users/admin/dev/proj/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-anydpi-v21/design_ic_visibility.xml",
+        "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/design-25.3.1.aar/a15125c2d75e205fbf7314e438b4dbdd/res/drawable-anydpi-v21/design_ic_visibility.xml"
+    },
+    {
+        "merged": "/Users/admin/dev/proj/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-anydpi-v21/design_ic_visibility_off.xml",
+        "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/design-25.3.1.aar/a15125c2d75e205fbf7314e438b4dbdd/res/drawable-anydpi-v21/design_ic_visibility_off.xml"
+    },
+    {
+        "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-anydpi-v21/design_ic_visibility.xml",
+        "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/design-25.3.1.aar/a15125c2d75e205fbf7314e438b4dbdd/res/drawable-anydpi-v21/design_ic_visibility.xml"
+    },
+    {
+        "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-anydpi-v21/design_ic_visibility_off.xml",
+        "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/design-25.3.1.aar/a15125c2d75e205fbf7314e438b4dbdd/res/drawable-anydpi-v21/design_ic_visibility_off.xml"
+    }
+]

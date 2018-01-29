@@ -40,7 +40,7 @@ class CompanySelectActivity : ToolbarActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_company_select)
-        title = "选择公司"
+        title = "选择项目"
         setBack(true)
 
         adapter = RecyclerAdapter(this, { _adapter, parent, type ->

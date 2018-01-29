@@ -6,6 +6,7 @@ import com.sogukj.pe.Consts
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.util.Store
+import okhttp3.CacheControl
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -31,8 +32,10 @@ class SoguApi {
                     }
                     builder.addHeader("appkey", "d5f17cafef0829b5")
                     builder.addHeader("version", Utils.getVersionName(context))
+                    builder.cacheControl(CacheControl.FORCE_NETWORK)
                     val request = builder.build()
                     val response = chain.proceed(request)
+                    response.newBuilder().header("Cache-Control","no-cache").removeHeader("Pragma").build()
                     Trace.i("http", "RequestBody:${Gson().toJson(response.request().body())}")
                     Trace.i("http", "${request.url()} => ${response.code()}:${response.message()}")
                     response

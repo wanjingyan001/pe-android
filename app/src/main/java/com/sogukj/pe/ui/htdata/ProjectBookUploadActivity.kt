@@ -7,6 +7,7 @@ import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.framework.base.ToolbarActivity
 import com.nbsp.materialfilepicker.MaterialFilePicker
 import com.nbsp.materialfilepicker.ui.FilePickerActivity
@@ -45,7 +46,7 @@ class ProjectBookUploadActivity : ToolbarActivity() {
         tv_user.text = user?.name
         Glide.with(this)
                 .load(user?.headImage())
-                .error(R.drawable.img_logo_user)
+                .apply(RequestOptions().error(R.drawable.img_logo_user) )
                 .into(iv_user)
         tv_title.text = project.name
         tv_group.setOnClickListener {

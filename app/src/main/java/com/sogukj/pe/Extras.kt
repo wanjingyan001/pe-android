@@ -49,4 +49,8 @@ object Extras {
 
     val TYPE_TIAOZHENG = 500
     val TYPE_JIXIAO = 501
+    val NIMACCOUNT = "nim.account"//用于存储网易IM自动登录账户
+    val NIMTOKEN = "nim.token"//用于存储网易IM自动登录token
+    val CREATE_TEAM = "nim.create_team"
+    val SELECT_USER = "ext.selectUser"
 }

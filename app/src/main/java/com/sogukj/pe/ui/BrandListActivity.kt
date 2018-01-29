@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.framework.base.ToolbarActivity
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
@@ -62,7 +63,7 @@ class BrandListActivity : ToolbarActivity(),SupportEmptyView {
                     tvIntCls.text = "类别:${data.intCls}"
                     Glide.with(this@BrandListActivity)
                             .load(data.tmPic)
-                            .error(R.drawable.img_logo_user)
+                            .apply(RequestOptions().error(R.drawable.img_logo_user))
                             .into(ivLogo)
                 }
 

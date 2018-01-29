@@ -7,13 +7,20 @@ import android.util.Log
 import com.framework.base.ActivityHelper
 import com.google.gson.Gson
 import com.mob.MobSDK
+import com.netease.nim.uikit.api.NimUIKit
+import com.netease.nimlib.sdk.NIMClient
+import com.netease.nimlib.sdk.auth.LoginInfo
+import com.netease.nimlib.sdk.util.NIMUtil
 import com.sogukj.pe.bean.NewsBean
+import com.sogukj.pe.ui.IM.SessionHelper
 import com.sogukj.pe.ui.calendar.ModifyTaskActivity
 import com.sogukj.pe.ui.calendar.TaskDetailActivity
 import com.sogukj.pe.ui.news.NewsDetailActivity
+import com.sogukj.pe.util.NimSDKOptionConfig
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
+import com.sogukj.util.XmlDb
 import com.umeng.message.IUmengRegisterCallback
 import com.umeng.message.PushAgent
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -67,6 +74,7 @@ class App : MultiDexApplication() {
                 Trace.e(e)
             }
         })
+        initNIM()
     }
 
     val GSON = Gson();
@@ -108,6 +116,50 @@ class App : MultiDexApplication() {
                     }, { e -> Trace.e(e) })
         }
     }
+
+    /**
+     *网易云信IM初始化
+     */
+    private fun initNIM() {
+        // 在初始化SDK的时候，传入 loginInfo()， 其中包含用户信息，用以自动登录
+        NIMClient.init(this, getIMLoginInfo(), NimSDKOptionConfig.getSDKOptions(this))
+        // 以下逻辑只在主进程初始化时执行
+        if (NIMUtil.isMainProcess(this)) {
+            SessionHelper.init()
+            NIMClient.toggleNotification(true)
+            NimUIKit.init(this)
+        }
+//        NIMClient.getService(AuthServiceObserver::class.java).observeOnlineStatus({ statusCode ->
+//            when (statusCode) {
+//                StatusCode.UNLOGIN -> Log.d("WJY", "未登录/登录失败")
+//                StatusCode.NET_BROKEN -> Log.d("WJY", "网络连接已断开")
+//                StatusCode.CONNECTING -> Log.d("WJY", "正在连接服务器")
+//                StatusCode.LOGINING -> Log.d("WJY", "正在登录中")
+//                StatusCode.SYNCING -> Log.d("WJY", "正在同步数据")
+//                StatusCode.LOGINED -> Log.d("WJY", "已成功登录")
+//                StatusCode.KICKOUT -> Log.d("WJY", "被其他端的登录踢掉")
+//                StatusCode.KICK_BY_OTHER_CLIENT -> Log.d("WJY", "被同时在线的其他端主动踢掉")
+//                StatusCode.FORBIDDEN -> Log.d("WJY", "被服务器禁止登录")
+//                StatusCode.VER_ERROR -> Log.d("WJY", "客户端版本错误")
+//                StatusCode.PWD_ERROR -> Log.d("WJY", "用户名或密码错误")
+//                else -> Log.d("WJY", "未知错误")
+//            }
+//        }, true)
+    }
+
+    private fun getIMLoginInfo(): LoginInfo? {
+        val xmlDb = XmlDb.open(applicationContext)
+        val account = xmlDb.get(Extras.NIMACCOUNT, "")
+        val token = xmlDb.get(Extras.NIMTOKEN, "")
+        Log.d("WJY", "account:$account===>token:$token")
+        return if (account.isNotEmpty() && token.isNotEmpty()) {
+            NimUIKit.setAccount(account)//必须做这一步
+            LoginInfo(account, token)
+        } else {
+            null
+        }
+    }
+
 
     companion object {
         lateinit var INSTANCE: App

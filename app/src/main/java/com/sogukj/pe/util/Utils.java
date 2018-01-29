@@ -14,6 +14,8 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.telephony.TelephonyManager;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
@@ -22,6 +24,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -117,7 +120,7 @@ public class Utils {
         return m.matches();
     }
 
-    public static int[] getAndroiodScreenProperty(Context context) {
+    public static int[] getAndroidScreenProperty(Context context) {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics dm = new DisplayMetrics();
         wm.getDefaultDisplay().getMetrics(dm);
@@ -327,5 +330,24 @@ public class Utils {
         }
         return false;
 
+    }
+
+    public static InputFilter[] getFilter(final Context context){
+        InputFilter filter = new InputFilter() {
+            Pattern pattern = Pattern.compile("[^a-zA-Z0-9\\u4E00-\\u9FA5_]");
+
+            @Override
+            public CharSequence filter(CharSequence charSequence, int i, int i1, Spanned spanned, int i2, int i3) {
+                Matcher matcher = pattern.matcher(charSequence);
+                if (!matcher.find()) {
+                    return null;
+                } else {
+                    Toast.makeText(context, "只能输入汉字,英文，数字", Toast.LENGTH_SHORT).show();
+                    return "";
+                }
+
+            }
+        };
+        return  new InputFilter[]{filter};
     }
 }
