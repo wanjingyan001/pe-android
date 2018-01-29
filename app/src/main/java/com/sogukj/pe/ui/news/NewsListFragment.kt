@@ -1,15 +1,22 @@
 package com.sogukj.pe.ui.news
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Html
 import android.text.TextUtils
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.animation.GlideAnimation
+import com.bumptech.glide.request.target.SimpleTarget
 import com.framework.base.BaseFragment
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
@@ -20,9 +27,11 @@ import com.sogukj.pe.R
 import com.sogukj.pe.bean.NewsBean
 import com.sogukj.pe.ui.SupportEmptyView
 import com.sogukj.pe.util.Trace
+import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.FlowLayout
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
+import com.sogukj.pe.view.SpaceItemDecoration
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -78,7 +87,8 @@ class NewsListFragment : BaseFragment(), SupportEmptyView {
         }
         val layoutManager = LinearLayoutManager(baseActivity)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
-        recycler_view.addItemDecoration(DividerItemDecoration(baseActivity, DividerItemDecoration.VERTICAL))
+        //recycler_view.addItemDecoration(DividerItemDecoration(baseActivity, DividerItemDecoration.VERTICAL))
+        recycler_view.addItemDecoration(SpaceItemDecoration(Utils.dpToPx(context, 10)))
         recycler_view.layoutManager = layoutManager
         recycler_view.adapter = adapter
 
@@ -167,6 +177,7 @@ class NewsListFragment : BaseFragment(), SupportEmptyView {
         val tv_from = convertView.findViewById(R.id.tv_from) as TextView
         val tags = convertView.findViewById(R.id.tags) as FlowLayout
         val tv_date = convertView.findViewById(R.id.tv_date) as TextView
+        val iv_icon = convertView.findViewById(R.id.imageIcon) as ImageView
 
 
         override fun setData(view: View, data: NewsBean, position: Int) {
@@ -179,9 +190,9 @@ class NewsListFragment : BaseFragment(), SupportEmptyView {
             tv_time.visibility = View.GONE
             if (!TextUtils.isEmpty(strTime)) {
                 val strs = strTime!!.trim().split(" ")
-                if (!TextUtils.isEmpty(strs.getOrNull(1))) {
-                    tv_time.visibility = View.VISIBLE
-                }
+//                if (!TextUtils.isEmpty(strs.getOrNull(1))) {
+//                    tv_time.visibility = View.VISIBLE
+//                }
                 tv_date.text = strs
                         .getOrNull(0)
                 tv_time.text = strs
@@ -194,6 +205,21 @@ class NewsListFragment : BaseFragment(), SupportEmptyView {
                 tv_summary.textColor = resources.getColor(R.color.text_2)
             } else {
                 tv_summary.textColor = resources.getColor(R.color.text_1)
+            }
+
+            if (data.url.isNullOrEmpty()) {
+                var bitmap = BitmapFactory.decodeResource(resources, R.drawable.default_icon)
+                var draw = RoundedBitmapDrawableFactory.create(resources, bitmap) as RoundedBitmapDrawable
+                draw.setCornerRadius(Utils.dpToPx(context, 4).toFloat())
+                iv_icon.setBackgroundDrawable(draw)
+            } else {
+                Glide.with(context).load(data.url).asBitmap().into(object : SimpleTarget<Bitmap>() {
+                    override fun onResourceReady(bitmap: Bitmap?, glideAnimation: GlideAnimation<in Bitmap>?) {
+                        var draw = RoundedBitmapDrawableFactory.create(resources, bitmap) as RoundedBitmapDrawable
+                        draw.setCornerRadius(Utils.dpToPx(context, 4).toFloat())
+                        iv_icon.setBackgroundDrawable(draw)
+                    }
+                })
             }
 
         }
