@@ -186,6 +186,9 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
         end.text = ""
 
         start.setOnClickListener {
+            if (spinner_data.size == 0) {
+                return@setOnClickListener
+            }
             if (start.text != "") {
                 calendar.time = format.parse(start.text.toString())
             } else {
@@ -221,6 +224,9 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
         }
 
         end.setOnClickListener {
+            if (spinner_data.size == 0) {
+                return@setOnClickListener
+            }
             if (end.text != "") {
                 calendar.time = format.parse(end.text.toString())
             } else {
