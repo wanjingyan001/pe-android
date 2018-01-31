@@ -44,6 +44,7 @@ import com.sogukj.util.XmlDb
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_fund_list.*
+import kotlinx.android.synthetic.main.layout_loading.*
 import org.jetbrains.anko.find
 
 
@@ -254,9 +255,12 @@ class FundListFragment : BaseFragment() {
                         }
                     } else
                         showToast(payload.message)
+                    iv_loading?.visibility = View.GONE
                 }, { e ->
                     Trace.e(e)
-                    showToast("暂无可用数据")
+                    //showToast("暂无可用数据")
+                    iv_loading?.visibility = View.GONE
+                    SupportEmptyView.checkEmpty(this, adapter)
                 }, {
                     SupportEmptyView.checkEmpty(this, adapter)
                     refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)

@@ -13,4 +13,6 @@
         app:layoutManager="LinearLayoutManager" />
 
     <include layout="@layout/layout_empty" />
+
+    <include layout="@layout/layout_loading" />
 </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
