@@ -100,14 +100,14 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
             proj_stage.text = "投 决"
             edit.visibility = View.GONE
             history.visibility = View.GONE
-            if (project.out == 1) {
-                history.visibility = View.VISIBLE
-            }
         } else if (type == ProjectListFragment.TYPE_YT) {
             proj_stage.text = "退 出"
             edit.visibility = View.GONE
             history.visibility = View.GONE
             delete.visibility = View.GONE
+            if (project.out == 1) {
+                history.visibility = View.VISIBLE
+            }
         } else if (type == ProjectListFragment.TYPE_TC) {
             proj_stage.visibility = View.GONE
             edit.visibility = View.GONE

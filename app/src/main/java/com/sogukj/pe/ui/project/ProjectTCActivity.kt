@@ -40,16 +40,22 @@ class ProjectTCActivity : ToolbarActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_project_tc)
         setBack(true)
-        if (type) {
-            title = "退出记录"
-        } else {
-            title = "退出"
-        }
+//        if (type) {
+//            title = "退出记录"
+//        } else {
+//            title = "退出"
+//        }
 
         type = intent.getBooleanExtra(Extras.TYPE, false)
         project = intent.getSerializableExtra(Extras.DATA) as ProjectBean
         titleComp.text = project.name
         bianhao.text = "项目编号${project.number}"
+
+        if (type) {
+            title = "退出记录"
+        } else {
+            title = "退出"
+        }
 
         if (type) {
             ll_btn.visibility = View.GONE
@@ -289,6 +295,13 @@ class ProjectTCActivity : ToolbarActivity() {
                     if (payload.isOk) {
                         var quitBean = payload.payload!!
                         if (quitBean.type == 1) {
+                            part_blue.visibility = View.VISIBLE
+
+                            part_quit.backgroundResource = R.drawable.tc_true
+                            part_quit.textColor = Color.parseColor("#1787fb")
+                            total_quit.backgroundResource = R.drawable.tc_false
+                            total_quit.textColor = Color.parseColor("#282828")
+
                             tr_wtccb.visibility = View.VISIBLE
                             tr_bc.visibility = View.GONE
                             tr_tzzt.visibility = View.GONE
@@ -308,7 +321,29 @@ class ProjectTCActivity : ToolbarActivity() {
                             et_bc.setText(quitBean.supply)
                             et_wtccb.setText(quitBean.surplus)
                             et_tczj.setText(quitBean.summary)
+
+                            et_cb.isFocusable = false
+                            et_tcsr.isFocusable = false
+                            et_fh.isFocusable = false
+                            et_tcsr.isFocusable = false
+                            et_tzsyl.isFocusable = false
+                            et_tzsj.isFocusable = false
+                            et_tcsj.isFocusable = false
+                            et_tzts.isFocusable = false
+                            et_nhsyl.isFocusable = false
+                            et_tzsc.isFocusable = false
+                            et_IRR.isFocusable = false
+                            et_bc.isFocusable = false
+                            et_wtccb.isFocusable = false
+                            et_tczj.isFocusable = false
                         } else if (quitBean.type == 2) {
+                            part_blue.visibility = View.INVISIBLE
+
+                            total_quit.backgroundResource = R.drawable.tc_true
+                            total_quit.textColor = Color.parseColor("#1787fb")
+                            part_quit.backgroundResource = R.drawable.tc_false
+                            part_quit.textColor = Color.parseColor("#282828")
+
                             tr_wtccb.visibility = View.GONE
                             tr_bc.visibility = View.VISIBLE
                             tr_tzzt.visibility = View.VISIBLE
@@ -328,6 +363,21 @@ class ProjectTCActivity : ToolbarActivity() {
                             et_tzsc.setText(quitBean.investHour)
                             et_IRR.setText(quitBean.IRR)
                             et_tczj.setText(quitBean.summary)
+
+                            et_tzzt.isFocusable = false
+                            et_cb.isFocusable = false
+                            et_tcsr.isFocusable = false
+                            et_bck.isFocusable = false
+                            et_fh.isFocusable = false
+                            et_tcsr.isFocusable = false
+                            et_tzsyl.isFocusable = false
+                            et_tzsj.isFocusable = false
+                            et_tcsj.isFocusable = false
+                            et_tzts.isFocusable = false
+                            et_nhsyl.isFocusable = false
+                            et_tzsc.isFocusable = false
+                            et_IRR.isFocusable = false
+                            et_tczj.isFocusable = false
                         }
                     } else
                         showToast(payload.message)
