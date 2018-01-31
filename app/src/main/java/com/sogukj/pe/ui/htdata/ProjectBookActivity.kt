@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Html
@@ -22,6 +23,8 @@ import com.sogukj.pe.R
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.bean.ProjectBookBean
 import com.sogukj.pe.ui.SupportEmptyView
+import com.sogukj.pe.util.DownloadUtil
+import com.sogukj.pe.util.OpenFileUtil
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.ListAdapter
 import com.sogukj.pe.view.ListHolder
@@ -167,14 +170,32 @@ class ProjectBookActivity : ToolbarActivity(), SupportEmptyView {
         }
         list1.setOnItemClickListener { parent, view, position, id ->
             val data = adapter1.dataList[position]
+            //download(data.url!!)
+            if (!TextUtils.isEmpty(data.url)) {
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = Uri.parse(data.url)
+                startActivity(intent)
+            }
 //            NewsDetailActivity.start(this, data)
         }
         list2.setOnItemClickListener { parent, view, position, id ->
             val data = adapter2.dataList[position]
+            //download(data.url!!)
+            if (!TextUtils.isEmpty(data.url)) {
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = Uri.parse(data.url)
+                startActivity(intent)
+            }
 //            NewsDetailActivity.start(this, data)
         }
         list3.setOnItemClickListener { parent, view, position, id ->
             val data = adapter3.dataList[position]
+            //download(data.url!!)
+            if (!TextUtils.isEmpty(data.url)) {
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = Uri.parse(data.url)
+                startActivity(intent)
+            }
 //            NewsDetailActivity.start(this, data)
         }
 
@@ -201,6 +222,26 @@ class ProjectBookActivity : ToolbarActivity(), SupportEmptyView {
         handler.postDelayed({
             doRequest()
         }, 100)
+    }
+
+    fun download(url: String) {
+        DownloadUtil.getInstance().download(url, Environment.getExternalStorageDirectory().toString(), object : DownloadUtil.OnDownloadListener {
+            override fun onDownloadSuccess(path: String?) {
+                var intent = OpenFileUtil.openFile(path)
+                if (intent == null) {
+                    showToast("文件类型不合格")
+                } else {
+                    startActivity(intent)
+                }
+            }
+
+            override fun onDownloading(progress: Int) {
+            }
+
+            override fun onDownloadFailed() {
+                showToast("下载失败")
+            }
+        })
     }
 
     fun stateDefault() {
