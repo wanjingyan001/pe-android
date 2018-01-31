@@ -116,7 +116,7 @@ abstract class BaseActivity : AppCompatActivity() {
     fun ToastError(e:Throwable){
         when (e) {
             is JsonSyntaxException -> showToast("后台数据出错")
-            is UnknownHostException -> showToast("网络出错")
+            is UnknownHostException -> showToast("网络连接出错，请联网")
             is SocketTimeoutException -> showToast("连接超时")
             else -> showToast("未知错误")
         }
