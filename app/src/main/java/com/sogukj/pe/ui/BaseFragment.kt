@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.google.gson.JsonSyntaxException
+import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
 /**
@@ -54,6 +55,7 @@ abstract class BaseFragment : android.support.v4.app.Fragment() {
         when (e) {
             is JsonSyntaxException -> showToast("后台数据出错")
             is UnknownHostException -> showToast("网络出错")
+            is SocketTimeoutException -> showToast("连接超时")
             else -> showToast("未知错误")
         }
     }

@@ -8,6 +8,7 @@ import android.widget.Toast
 import com.google.gson.JsonSyntaxException
 import com.sogukj.pe.util.Trace
 import com.umeng.message.PushAgent
+import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
 /**
@@ -116,6 +117,7 @@ abstract class BaseActivity : AppCompatActivity() {
         when (e) {
             is JsonSyntaxException -> showToast("后台数据出错")
             is UnknownHostException -> showToast("网络出错")
+            is SocketTimeoutException -> showToast("连接超时")
             else -> showToast("未知错误")
         }
     }

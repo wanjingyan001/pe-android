@@ -117,7 +117,8 @@ class MainHomeFragment : BaseFragment() {
                     pb.visibility = View.GONE
                 }, { e ->
                     Trace.e(e)
-                    showToast("暂无新数据")
+                    //showToast("暂无新数据")
+                    ToastError(e)
                     pb.visibility = View.GONE
                 }, {
                     pb.visibility = View.GONE
