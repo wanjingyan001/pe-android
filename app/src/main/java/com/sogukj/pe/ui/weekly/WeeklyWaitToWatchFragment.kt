@@ -49,7 +49,7 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
     var currentClick = 0
 
     var loadedData = ArrayList<WeeklyWatchBean>()
-    lateinit var spinner_data: ArrayList<ReceiveSpinnerBean>
+    var spinner_data = ArrayList<ReceiveSpinnerBean>()
     var selected_depart_id: Long = 0
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -99,7 +99,7 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
                                 intent.putExtra(Extras.DATA, grid.adapter.getItem(position) as WeeklyWatchBean.BeanObj)
                                 intent.putExtra(Extras.TIME1, data.start_time)
                                 intent.putExtra(Extras.TIME2, data.end_time)
-                                intent.putExtra(Extras.NAME,"Other")
+                                intent.putExtra(Extras.NAME, "Other")
                                 startActivityForResult(intent, 0x011)
                             }
                         })
@@ -120,6 +120,9 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
         unread.setClick(false)
         readed.setClick(false)
         total.setOnClickListener {
+            if (spinner_data.size == 0) {
+                return@setOnClickListener
+            }
             if (currentClick == 0) {
                 return@setOnClickListener
             }
@@ -136,6 +139,9 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
             doRequest()
         }
         unread.setOnClickListener {
+            if (spinner_data.size == 0) {
+                return@setOnClickListener
+            }
             if (currentClick == 1) {
                 return@setOnClickListener
             }
@@ -152,6 +158,9 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
             doRequest()
         }
         readed.setOnClickListener {
+            if (spinner_data.size == 0) {
+                return@setOnClickListener
+            }
             if (currentClick == 2) {
                 return@setOnClickListener
             }
@@ -256,6 +265,7 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         payload.payload?.apply {
+                            spinner_data.clear()
                             spinner_data = this
                             var total = ReceiveSpinnerBean()
                             total.id = null
