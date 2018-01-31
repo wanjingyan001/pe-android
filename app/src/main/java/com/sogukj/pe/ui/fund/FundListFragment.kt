@@ -13,11 +13,9 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.SpannableString
 import android.text.Spanned
-import android.text.style.AbsoluteSizeSpan
+import android.text.style.RelativeSizeSpan
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
@@ -124,8 +122,8 @@ class FundListFragment : BaseFragment() {
                     }
 
                     var spannableString = SpannableString("${data.ytc} 万")
-                    var sizeSpan1 = AbsoluteSizeSpan(16, false)
-                    var sizeSpan2 = AbsoluteSizeSpan(9, false)
+                    var sizeSpan1 = RelativeSizeSpan(1f)
+                    var sizeSpan2 = RelativeSizeSpan(0.5f)
                     spannableString.setSpan(sizeSpan1, 0, data.ytc.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
                     spannableString.setSpan(sizeSpan2, data.ytc.length, spannableString.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
 
@@ -136,8 +134,8 @@ class FundListFragment : BaseFragment() {
                         fund1.start()
                     } catch (e: Exception) {
                         var spannable1 = SpannableString("- -  万")
-                        var sizeSpan11 = AbsoluteSizeSpan(16, false)
-                        var sizeSpan21 = AbsoluteSizeSpan(9, false)
+                        var sizeSpan11 = RelativeSizeSpan(1f)
+                        var sizeSpan21 = RelativeSizeSpan(0.5f)
                         spannable1.setSpan(sizeSpan11, 0, 3, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
                         spannable1.setSpan(sizeSpan21, 3, spannable1.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
                         ytc.text = spannable1
@@ -184,8 +182,8 @@ class FundListFragment : BaseFragment() {
     class FundCountDownColor(var millisInFuture: Long, var countDownInterval: Long, var view: View, var data: Int) : CountDownTimer(millisInFuture, countDownInterval) {
         override fun onFinish() {
             var spannableString = SpannableString("${data} 万")
-            var sizeSpan1 = AbsoluteSizeSpan(16, false)
-            var sizeSpan2 = AbsoluteSizeSpan(9, false)
+            var sizeSpan1 = RelativeSizeSpan(1f)
+            var sizeSpan2 = RelativeSizeSpan(0.5f)
             spannableString.setSpan(sizeSpan1, 0, data.toString().length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
             spannableString.setSpan(sizeSpan2, data.toString().length, spannableString.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
             (view as TextView).text = spannableString
@@ -195,8 +193,8 @@ class FundListFragment : BaseFragment() {
             var tmp = millisInFuture - millisUntilFinished
             var tmpData = data * tmp.toInt() / 1000
             var spannableString = SpannableString("${tmpData} 万")
-            var sizeSpan1 = AbsoluteSizeSpan(16, false)
-            var sizeSpan2 = AbsoluteSizeSpan(9, false)
+            var sizeSpan1 = RelativeSizeSpan(1f)
+            var sizeSpan2 = RelativeSizeSpan(0.5f)
             spannableString.setSpan(sizeSpan1, 0, tmpData.toString().length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
             spannableString.setSpan(sizeSpan2, tmpData.toString().length, spannableString.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
             (view as TextView).text = spannableString
