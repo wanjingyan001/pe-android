@@ -1,12 +1,15 @@
 package com.sogukj.pe.ui.user
 
 import android.app.Activity
+import android.content.ContentResolver
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.media.ExifInterface
+import android.net.Uri
 import android.os.*
+import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
 import android.view.MenuItem
@@ -91,27 +94,28 @@ class UserEditActivity : ToolbarActivity() {
                     .show()
         }
         tr_icon.setOnClickListener {
-            //            //            val intent = Intent()
+            //            var intent = Intent()
 //            intent.type = "image/*"
 //            intent.action = Intent.ACTION_GET_CONTENT
-//            startActivityForResult(intent, REQ_PHOTO)
-            RxGalleryFinal
-                    .with(this@UserEditActivity)
-                    .image()
-                    .radio()
-//                    .cropMaxBitmapSize(1024 * 1024)
-////                    .cropAspectRatioOptions(0, AspectRatio("1:1", 120f, 120f))
-//                    .cropMaxResultSize(120, 120)
-//                    .crop()
-                    .imageLoader(ImageLoaderType.GLIDE)
-                    .subscribe(object : RxBusResultDisposable<ImageRadioResultEvent>() {
-                        override fun onEvent(event: ImageRadioResultEvent?) {
-                            val path = event?.result?.originalPath
-                            if (!TextUtils.isEmpty(path))
-                                doUpload(path!!)
-                        }
-                    })
-                    .openGallery()
+            var intent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            startActivityForResult(intent, 0x001)
+//            RxGalleryFinal
+//                    .with(this@UserEditActivity)
+//                    .image()
+//                    .radio()
+////                    .cropMaxBitmapSize(1024 * 1024)
+//////                    .cropAspectRatioOptions(0, AspectRatio("1:1", 120f, 120f))
+////                    .cropMaxResultSize(120, 120)
+////                    .crop()
+//                    .imageLoader(ImageLoaderType.GLIDE)
+//                    .subscribe(object : RxBusResultDisposable<ImageRadioResultEvent>() {
+//                        override fun onEvent(event: ImageRadioResultEvent?) {
+//                            val path = event?.result?.originalPath
+//                            if (!TextUtils.isEmpty(path))
+//                                doUpload(path!!)
+//                        }
+//                    })
+//                    .openGallery()
         }
 
         //-1=>隐藏入口 0=>未开启  1=>进入评分中心，2=>进入填写页面
@@ -122,6 +126,20 @@ class UserEditActivity : ToolbarActivity() {
                 TemplateActivity.start(context)
             }
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK && requestCode == 0x001) {
+            var uri = data?.getData()
+            var cursor = getContentResolver().query(uri, null, null, null, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                var path = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA))
+                Log.e("path", path)
+                doUpload(path)
+            }
+        }
+
     }
 
     private val mHandler = object : Handler() {
@@ -171,7 +189,7 @@ class UserEditActivity : ToolbarActivity() {
     }
 
 
-    fun setUserInfo(){
+    fun setUserInfo() {
         Store.store.getUser(this)?.apply {
             user = this
             if (!TextUtils.isEmpty(name)) {
@@ -426,7 +444,7 @@ class UserEditActivity : ToolbarActivity() {
         user.url = url
         Glide.with(this@UserEditActivity)
                 .load(url)
-                .apply(RequestOptions().error(R.drawable.img_logo_user) )
+                .apply(RequestOptions().error(R.drawable.img_logo_user))
                 .into(iv_user)
         val imgPath = compressImage(url, 160, 160, 1024 * 1024)
         val file = File(imgPath)
