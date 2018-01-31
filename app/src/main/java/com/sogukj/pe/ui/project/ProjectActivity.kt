@@ -105,7 +105,7 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
             edit.visibility = View.GONE
             history.visibility = View.GONE
             delete.visibility = View.GONE
-            if (project.out == 1) {
+            if (project.quit == 1) {
                 history.visibility = View.VISIBLE
             }
         } else if (type == ProjectListFragment.TYPE_TC) {

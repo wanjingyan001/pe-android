@@ -773,9 +773,9 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
 
             // 立项页面时显示（已完成或准备中）两个状态，   退出显示（部分退出或全部退出）两个状态   //1准备中  2已完成
             if (type == TYPE_YT) {
-                if (data.out == 0) {
+                if (data.quit == 0) {
                     tvState.text = "在投"
-                } else if (data.out == 1) {
+                } else if (data.quit == 1) {
                     tvState.text = "部分退出"
                 }
             } else {

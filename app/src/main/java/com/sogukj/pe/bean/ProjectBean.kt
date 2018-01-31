@@ -31,5 +31,5 @@ class ProjectBean : Serializable {
     var chairman: String? = null
     var track_time: String? = null//	track_time	string	跟踪时间
     var number:String? = null
-    var out: Int = 1 //0---在投，1---部分退出
+    var quit: Int = 1 //0---在投，1---部分退出
 }
