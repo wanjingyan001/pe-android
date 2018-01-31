@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.google.gson.JsonSyntaxException
+import java.net.UnknownHostException
 
 /**
  * Created by qinfei on 17/7/18.
@@ -46,5 +48,13 @@ abstract class BaseFragment : android.support.v4.app.Fragment() {
             toast!!.setText(text)
         }
         toast!!.show()
+    }
+
+    fun ToastError(e:Throwable){
+        when (e) {
+            is JsonSyntaxException -> showToast("后台数据出错")
+            is UnknownHostException -> showToast("网络出错")
+            else -> showToast("未知错误")
+        }
     }
 }

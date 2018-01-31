@@ -5,8 +5,10 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
+import com.google.gson.JsonSyntaxException
 import com.sogukj.pe.util.Trace
 import com.umeng.message.PushAgent
+import java.net.UnknownHostException
 
 /**
  * Created by qinfei on 17/7/17.
@@ -108,6 +110,14 @@ abstract class BaseActivity : AppCompatActivity() {
             toast!!.setText(text)
         }
         toast!!.show()
+    }
+
+    fun ToastError(e:Throwable){
+        when (e) {
+            is JsonSyntaxException -> showToast("后台数据出错")
+            is UnknownHostException -> showToast("网络出错")
+            else -> showToast("未知错误")
+        }
     }
 
     companion object {

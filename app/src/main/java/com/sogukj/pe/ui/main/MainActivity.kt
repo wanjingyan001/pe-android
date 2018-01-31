@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.graphics.Rect
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
+import android.support.v4.app.FragmentManager
 import android.widget.RadioButton
 import com.framework.base.BaseActivity
 import com.sogukj.pe.App
@@ -32,12 +33,21 @@ import com.sogukj.pe.view.ArrayPagerAdapter
  */
 class MainActivity : BaseActivity() {
 
-    val fgProj = MainProjectFragment.newInstance()
+//    val fgProj = MainProjectFragment.newInstance()
+//    //    val fgMsg = MainMsgFragment.newInstance()
+//    val fgMsg = MainNewsFragment.newInstance()
+//    val fgHome = MainHomeFragment.newInstance()
+//    val fgFund = FundMainFragment.newInstance()
+//    val fgMine = UserFragment.newInstance()
+
+    val fragments = arrayOf(
+            MainNewsFragment.newInstance(),
     //    val fgMsg = MainMsgFragment.newInstance()
-    val fgMsg = MainNewsFragment.newInstance()
-    val fgHome = MainHomeFragment.newInstance()
-    val fgFund = FundMainFragment.newInstance()
-    val fgMine = UserFragment.newInstance()
+            MainProjectFragment.newInstance(),
+            MainHomeFragment.newInstance(),
+            FundMainFragment.newInstance(),
+            UserFragment.newInstance()
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,36 +65,50 @@ class MainActivity : BaseActivity() {
         val h = dm.heightPixels
 
         //
-        val fragments = arrayOf(
-                fgMsg,
-                fgProj,
-                fgHome,
-                fgFund,
-                fgMine
-        )
-        var adapter = ArrayPagerAdapter(supportFragmentManager, fragments)
-        viewpager.adapter = adapter
-        viewpager.offscreenPageLimit = fragments.size
-        viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrollStateChanged(state: Int) {
-            }
+//        val fragments = arrayOf(
+//                fgMsg,
+//                fgProj,
+//                fgHome,
+//                fgFund,
+//                fgMine
+//        )
+//        var adapter = ArrayPagerAdapter(supportFragmentManager, fragments)
+//        viewpager.adapter = adapter
+//        viewpager.offscreenPageLimit = fragments.size
+//        viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+//            override fun onPageScrollStateChanged(state: Int) {
+//            }
+//
+//            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+//            }
+//
+//            override fun onPageSelected(position: Int) {
+//                viewpager.setCurrentItem(position, false)
+//                var checkId = 0
+//                when (position) {
+//                    0 -> checkId = R.id.rb_msg
+//                    1 -> checkId = R.id.rb_project
+//                    2 -> checkId = R.id.rb_home
+//                    3 -> checkId = R.id.rb_fund
+//                    4 -> checkId = R.id.rb_my
+//                }
+//                rg_tab_main.check(checkId)
+//            }
+//        })
 
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-            }
+        manager = supportFragmentManager
+        manager.beginTransaction().add(R.id.container, fragments[2]).commit()
+    }
 
-            override fun onPageSelected(position: Int) {
-                viewpager.setCurrentItem(position, false)
-                var checkId = 0
-                when (position) {
-                    0 -> checkId = R.id.rb_msg
-                    1 -> checkId = R.id.rb_project
-                    2 -> checkId = R.id.rb_home
-                    3 -> checkId = R.id.rb_fund
-                    4 -> checkId = R.id.rb_my
-                }
-                rg_tab_main.check(checkId)
-            }
-        })
+    lateinit var manager: FragmentManager
+
+    fun switchContent(from: Int, to: Int) {
+        if (!fragments[to].isAdded) { // 先判断是否被add过
+            manager.beginTransaction().hide(fragments[from])
+                    .add(R.id.container, fragments[to]).commit() // 隐藏当前的fragment，add下一个到Activity中
+        } else {
+            manager.beginTransaction().hide(fragments[from]).show(fragments[to]).commit() // 隐藏当前的fragment，显示下一个
+        }
     }
 
     val PERMISSIONS_STORAGE = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -104,6 +128,7 @@ class MainActivity : BaseActivity() {
     }
 
     var checkId = R.id.rb_home
+    var current = 2
 
     fun doCheck(checkedId: Int) {
         this.checkId = checkedId
@@ -126,7 +151,12 @@ class MainActivity : BaseActivity() {
             R.id.rb_fund -> currentId = 3
             R.id.rb_my -> currentId = 4
         }
-        viewpager.setCurrentItem(currentId, false)
+        //viewpager.setCurrentItem(currentId, false)
+        if (currentId == current) {
+            return
+        }
+        switchContent(current, currentId)
+        current = currentId
     }
 
     override fun onStart() {

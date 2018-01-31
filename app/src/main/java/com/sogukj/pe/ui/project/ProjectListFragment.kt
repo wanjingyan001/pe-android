@@ -271,7 +271,6 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                     iv_loading?.visibility = View.GONE
                 }, { e ->
                     Trace.e(e)
-                    showToast("暂无可用数据")
                     iv_loading?.visibility = View.GONE
                     SupportEmptyView.checkEmpty(this, adapter)
                 }, {
