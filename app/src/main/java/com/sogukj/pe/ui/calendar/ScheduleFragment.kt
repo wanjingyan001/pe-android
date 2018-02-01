@@ -160,6 +160,7 @@ class ScheduleFragment : BaseFragment() {
                     }
                 }, { e ->
                     Trace.e(e)
+                    ToastError(e)
                 }, {
                     adapter.notifyDataSetChanged()
                     isLoading = false
@@ -187,6 +188,7 @@ class ScheduleFragment : BaseFragment() {
                     }
                 }, { e ->
                     Trace.e(e)
+                    ToastError(e)
                 })
     }
 
@@ -210,6 +212,7 @@ class ScheduleFragment : BaseFragment() {
                     }
                 }, { e ->
                     Trace.e(e)
+                    ToastError(e)
                 })
     }
 
@@ -315,6 +318,7 @@ class ScheduleFragment : BaseFragment() {
                     }
                 }, { e ->
                     Trace.e(e)
+                    ToastError(e)
                 })
     }
 
