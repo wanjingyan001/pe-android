@@ -36,7 +36,6 @@ import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_fund_main.*
-import kotlinx.android.synthetic.main.fund_mian_toolbar.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.imageResource
 
