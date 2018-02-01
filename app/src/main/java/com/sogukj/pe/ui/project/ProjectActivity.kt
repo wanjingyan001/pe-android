@@ -3,9 +3,13 @@ package com.sogukj.pe.ui.project
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
 import android.support.v7.widget.Toolbar
 import android.text.Html
 import android.text.TextUtils
@@ -14,8 +18,11 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 import com.framework.base.ToolbarActivity
 import com.google.gson.JsonSyntaxException
 import com.sogukj.pe.Extras
@@ -27,6 +34,7 @@ import com.sogukj.pe.ui.htdata.ProjectBookActivity
 import com.sogukj.pe.ui.news.NegativeNewsActivity
 import com.sogukj.pe.ui.news.NewsDetailActivity
 import com.sogukj.pe.util.Trace
+import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.FlowLayout
 import com.sogukj.pe.view.ListAdapter
 import com.sogukj.pe.view.ListHolder
@@ -581,6 +589,7 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
         lateinit var tv_from: TextView
         lateinit var tags: FlowLayout
         lateinit var tv_date: TextView
+        lateinit var icon: ImageView
         override fun createView(inflater: LayoutInflater): View {
             val convertView = inflater.inflate(R.layout.item_main_news, null)
             tv_summary = convertView.find(R.id.tv_summary)
@@ -588,6 +597,7 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
             tv_from = convertView.find(R.id.tv_from)
             tags = convertView.find(R.id.tags)
             tv_date = convertView.findViewById(R.id.tv_date) as TextView
+            icon = convertView.find(R.id.imageIcon)
             return convertView
         }
 
@@ -619,6 +629,21 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
                             data.setTags(this@ProjectActivity, tags)
                         }
                     }
+
+            if (data?.url.isNullOrEmpty()) {
+                var bitmap = BitmapFactory.decodeResource(resources, R.drawable.default_icon)
+                var draw = RoundedBitmapDrawableFactory.create(resources, bitmap) as RoundedBitmapDrawable
+                draw.setCornerRadius(Utils.dpToPx(context, 4).toFloat())
+                icon.setBackgroundDrawable(draw)
+            } else {
+                Glide.with(context).asBitmap().load(data?.url).into(object : SimpleTarget<Bitmap>() {
+                    override fun onResourceReady(bitmap: Bitmap?, glideAnimation: Transition<in Bitmap>?) {
+                        var draw = RoundedBitmapDrawableFactory.create(resources, bitmap) as RoundedBitmapDrawable
+                        draw.setCornerRadius(Utils.dpToPx(context, 4).toFloat())
+                        icon.setBackgroundDrawable(draw)
+                    }
+                })
+            }
         }
 
     }

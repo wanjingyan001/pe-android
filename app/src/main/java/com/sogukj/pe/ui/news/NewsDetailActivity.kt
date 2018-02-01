@@ -242,6 +242,7 @@ class NewsDetailActivity : ToolbarActivity(), PlatformActionListener {
         webSettings.builtInZoomControls = false;
         webSettings.setSupportZoom(false);
         webSettings.domStorageEnabled = true;
+        webSettings.textZoom = 75
 
         val appCacheDir = this.getApplicationContext().getDir("cache", Context.MODE_PRIVATE).getPath();
         webSettings.setAppCachePath(appCacheDir);

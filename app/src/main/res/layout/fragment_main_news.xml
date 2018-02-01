@@ -37,7 +37,8 @@
                     app:tabPaddingEnd="0dp"
                     app:tabPaddingStart="0dp"
                     app:tabTextAppearance="@style/TabLayoutTextStyle"
-                    app:tabTextColor="@color/white">
+                    app:tabTextColor="#afd3ff"
+                    app:tabSelectedTextColor="@color/white">
 
                     <android.support.design.widget.TabItem
                         android:layout_width="match_parent"

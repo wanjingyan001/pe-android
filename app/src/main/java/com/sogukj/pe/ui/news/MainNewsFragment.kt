@@ -59,6 +59,7 @@ class MainNewsFragment : BaseFragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //toolbar_back.visibility = View.GONE
+        Utils.setUpIndicatorWidth(tabs, 8, 8, context)
         adapter = RecyclerAdapter<NewsBean>(baseActivity!!, { _adapter, parent, type ->
             val convertView = _adapter.getView(R.layout.item_main_news, parent) as View
             object : RecyclerHolder<NewsBean>(convertView) {
