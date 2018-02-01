@@ -36,22 +36,22 @@ class UserFragment : ToolbarFragment(), View.OnClickListener {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         toolbar_title.text = "个人中心"
-//        SoguApi.getService(activity.application)
-//                .userDepart()
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribeOn(Schedulers.io())
-//                .subscribe({ payload ->
-//                    if (payload.isOk) {
-//                        departList.clear()
-//                        payload.payload?.forEach {
-//                            departList.add(it)
-//                        }
-//                    } else
-//                        showToast(payload.message)
-//                }, { e ->
-//                    Trace.e(e)
-//                    showToast("数据获取失败")
-//                })
+        SoguApi.getService(activity.application)
+                .userDepart()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        departList.clear()
+                        payload.payload?.forEach {
+                            departList.add(it)
+                        }
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    ToastError(e)
+                })
 
 
 
@@ -127,6 +127,9 @@ class UserFragment : ToolbarFragment(), View.OnClickListener {
                     } else {
                         showToast(payload.message)
                     }
+                }, { e ->
+                    Trace.e(e)
+                    ToastError(e)
                 })
     }
 
@@ -153,32 +156,13 @@ class UserFragment : ToolbarFragment(), View.OnClickListener {
                             val user = payload.payload
                             user?.apply { Store.store.setUser(context, this) }
                             updateUser(user)
-
-                            SoguApi.getService(activity.application)
-                                    .userDepart()
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribeOn(Schedulers.io())
-                                    .subscribe({ payload ->
-                                        if (payload.isOk) {
-                                            departList.clear()
-                                            payload.payload?.forEach {
-                                                departList.add(it)
-                                            }
-
-                                            user?.uid?.let { getBelongBean(it) }
-                                        } else
-                                            showToast(payload.message)
-                                    }, { e ->
-                                        Trace.e(e)
-                                        ToastError(e)
-                                    })
                         } else showToast(payload.message)
                     }, { e ->
                         Trace.e(e)
                         ToastError(e)
                     })
         }
-//        user?.uid?.let { getBelongBean(it) }
+        user?.uid?.let { getBelongBean(it) }
     }
 
     private fun updateUser(user: UserBean?) {
