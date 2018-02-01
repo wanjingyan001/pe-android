@@ -15,9 +15,12 @@ import com.nbsp.materialfilepicker.ui.FilePickerActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.ProjectBean
+import com.sogukj.pe.ui.fund.FundListFragment
+import com.sogukj.pe.ui.project.ProjectListFragment
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
+import com.sogukj.util.XmlDb
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_project_book_upload.*
@@ -47,6 +50,22 @@ class ProjectBookUploadActivity : ToolbarActivity() {
         title = "项目文书上传"
         val user = Store.store.getUser(this)
         tv_user.text = user?.name
+
+        var tmpInt = XmlDb.open(context).get(Extras.TYPE, "").toInt()
+        var tmpStr = ""
+        if (tmpInt == ProjectListFragment.TYPE_CB) {
+            tmpStr = "储备"
+        } else if (tmpInt == ProjectListFragment.TYPE_LX) {
+            tmpStr = "立项"
+        } else if (tmpInt == ProjectListFragment.TYPE_YT) {
+            tmpStr = "已投"
+        } else if (tmpInt == ProjectListFragment.TYPE_DY) {
+            tmpStr = "调研"
+        }else if (tmpInt == ProjectListFragment.TYPE_TC) {
+            tmpStr = "退出"
+        }
+        tv_step.text = "${tmpStr}阶段"
+
         Glide.with(this)
                 .load(user?.headImage())
                 .apply(RequestOptions().error(R.drawable.img_logo_user) )

@@ -46,6 +46,7 @@ import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.*
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
+import com.sogukj.util.XmlDb
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_list_project.*
@@ -106,6 +107,8 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
             intent.putExtra(Extras.TYPE, type)
             intent.putExtra(Extras.CODE, p)
             startActivityForResult(intent, 0x001)
+
+            XmlDb.open(context).set(Extras.TYPE, type.toString())
         }
 
         val user = Store.store.getUser(baseActivity!!)
