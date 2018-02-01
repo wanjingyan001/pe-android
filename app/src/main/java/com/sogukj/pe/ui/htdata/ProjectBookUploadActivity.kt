@@ -71,7 +71,7 @@ class ProjectBookUploadActivity : ToolbarActivity() {
                 .apply(RequestOptions().error(R.drawable.img_logo_user) )
                 .into(iv_user)
         tv_title.text = project.name
-        tv_group.setOnClickListener {
+        ll_group.setOnClickListener {
             val items = ArrayList<String?>()
             items.add("项目投资档案")
             items.add("投资后项目跟踪管理")
@@ -95,7 +95,7 @@ class ProjectBookUploadActivity : ToolbarActivity() {
         }
         val rMap = HashMap<String, String>()
         map.entries.forEach { e -> rMap.put(e.value, "${e.key}") }
-        tv_class.setOnClickListener {
+        ll_class.setOnClickListener {
             val items = ArrayList<String?>()
             items.addAll(map.values)
             MaterialDialog.Builder(this@ProjectBookUploadActivity)
