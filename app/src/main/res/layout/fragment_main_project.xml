@@ -68,14 +68,14 @@
                         android:id="@+id/fb_add"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:background="@drawable/tj_main" />
+                        android:background="@drawable/selector1" />
 
                     <ImageButton
                         android:id="@+id/fb_search"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_marginLeft="10dp"
-                        android:background="@drawable/search_main" />
+                        android:background="@drawable/selector2" />
                 </LinearLayout>
             </android.support.v7.widget.Toolbar>
 
