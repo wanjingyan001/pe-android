@@ -477,12 +477,14 @@ class ProjectBookActivity : ToolbarActivity(), SupportEmptyView {
         lateinit var tvDate: TextView
         lateinit var tvTime: TextView
         lateinit var tvType: TextView
+        lateinit var tvName: TextView
         override fun createView(inflater: LayoutInflater): View {
             val convertView = inflater.inflate(R.layout.item_project_book, null)
             tvSummary = convertView.findViewById(R.id.tv_summary) as TextView
             tvDate = convertView.findViewById(R.id.tv_date) as TextView
             tvTime = convertView.findViewById(R.id.tv_time) as TextView
             tvType = convertView.findViewById(R.id.tv_type) as TextView
+            tvName = convertView.findViewById(R.id.tv_name) as TextView
             return convertView
         }
 
@@ -499,6 +501,7 @@ class ProjectBookActivity : ToolbarActivity(), SupportEmptyView {
                 tvTime.text = strs.getOrNull(1)
             }
             tvType.text = data?.name
+            tvName.text = data?.submitter
         }
 
     }

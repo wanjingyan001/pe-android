@@ -30,9 +30,7 @@
             android:id="@+id/tv_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:drawableLeft="@drawable/icon_date"
-            android:drawablePadding="4dp"
+            android:layout_marginRight="30dp"
             android:textColor="@color/text_3"
             android:textSize="12sp"
             tools:text="2017/07/07" />
@@ -41,21 +39,30 @@
             android:id="@+id/tv_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/icon_time"
-            android:drawablePadding="4dp"
+            android:layout_marginRight="30dp"
             android:textColor="@color/text_3"
             android:textSize="12sp"
             tools:text="12:00" />
 
-        <View
+        <TextView
+            android:id="@+id/tv_name"
             android:layout_width="wrap_content"
-            android:layout_height="1dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="30dp"
+            android:textColor="@color/text_3"
+            android:textSize="12sp"
+            tools:text="姓名" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1" />
 
         <TextView
             android:id="@+id/tv_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="right"
             android:drawableLeft="@drawable/ic_tag_project_book"
             android:drawablePadding="3dp"
             android:gravity="center"
