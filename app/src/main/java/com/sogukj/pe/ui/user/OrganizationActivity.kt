@@ -497,6 +497,8 @@ class OrganizationActivity : ToolbarActivity() {
                     } else {
                         showToast(payload.message)
                     }
+                }, { e ->
+                    Trace.e(e)
                 })
     }
 }

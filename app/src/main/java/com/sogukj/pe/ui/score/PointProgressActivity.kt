@@ -195,11 +195,7 @@ class PointProgressActivity : ToolbarActivity() {
                         showToast(payload.message)
                 }, { e ->
                     Trace.e(e)
-                    when (e) {
-                        is JsonSyntaxException -> showToast("后台数据出错")
-                        is UnknownHostException -> showToast("网络出错")
-                        else -> showToast("未知错误")
-                    }
+                    ToastError(e)
                 })
     }
 }

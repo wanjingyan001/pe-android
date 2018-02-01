@@ -238,6 +238,8 @@ class TaskDetailActivity : ToolbarActivity(), CommentListener, View.OnClickListe
                     } else {
                         showToast(payload.message)
                     }
+                }, { e ->
+                    Trace.e(e)
                 })
     }
 
@@ -262,6 +264,8 @@ class TaskDetailActivity : ToolbarActivity(), CommentListener, View.OnClickListe
                                         } else {
                                             showToast(payload.message)
                                         }
+                                    }, { e ->
+                                        Trace.e(e)
                                     })
                         }
                         .show()

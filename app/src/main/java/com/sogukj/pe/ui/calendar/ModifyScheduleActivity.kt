@@ -106,6 +106,8 @@ class ModifyScheduleActivity : ToolbarActivity(), AddPersonListener, View.OnClic
                     } else {
                         showToast(payload.message)
                     }
+                }, { e ->
+                    Trace.e(e)
                 })
     }
 

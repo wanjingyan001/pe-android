@@ -290,7 +290,9 @@ class NewsDetailActivity : ToolbarActivity(), PlatformActionListener {
                         }
                     } else
                         showToast(payload.message)
-                }, {})
+                }, { e ->
+                    Trace.e(e)
+                })
     }
 
     fun setSubview(data: NewsBean) {

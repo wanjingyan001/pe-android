@@ -181,6 +181,8 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                         } else {
                             showToast(payload.message)
                         }
+                    }, { e ->
+                        Trace.e(e)
                     })
         }
     }

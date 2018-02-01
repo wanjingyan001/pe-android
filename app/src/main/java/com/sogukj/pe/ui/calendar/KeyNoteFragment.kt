@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.TextView
 import com.framework.base.BaseFragment
 import com.sogukj.pe.R
+import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
@@ -79,6 +80,8 @@ class KeyNoteFragment : BaseFragment() {
                     } else {
                         showToast(payload.message)
                     }
+                }, { e ->
+                    Trace.e(e)
                 })
     }
 

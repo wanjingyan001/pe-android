@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.framework.base.BaseActivity
 import com.sogukj.pe.R
+import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -56,6 +57,8 @@ class FeedBackActivity : BaseActivity() {
                     } else {
                         showToast(payload.message)
                     }
+                }, { e ->
+                    Trace.e(e)
                 })
     }
 }

@@ -13,6 +13,7 @@ import com.framework.base.ToolbarActivity
 import com.google.gson.Gson
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.FundSmallBean
+import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -115,6 +116,8 @@ class FundAccountActivity : ToolbarActivity() {
                     } else {
                         showToast(payload.message)
                     }
+                }, { e ->
+                    Trace.e(e)
                 })
     }
 }
