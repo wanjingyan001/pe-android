@@ -185,6 +185,8 @@ class ScheduleFragment : BaseFragment() {
                     } else {
                         showToast(payload.message)
                     }
+                }, { e ->
+                    Trace.e(e)
                 })
     }
 
