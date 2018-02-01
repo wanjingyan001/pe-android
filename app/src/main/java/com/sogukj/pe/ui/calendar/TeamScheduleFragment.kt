@@ -159,7 +159,6 @@ class TeamScheduleFragment : BaseFragment(), ScheduleItemClickListener {
                     }
                 }, { e ->
                     Trace.e(e)
-                    ToastError(e)
                 }, {
                     isLoading = false
                     isRefreshing = false
@@ -189,7 +188,6 @@ class TeamScheduleFragment : BaseFragment(), ScheduleItemClickListener {
                     }
                 }, { e ->
                     Trace.e(e)
-                    ToastError(e)
                 })
     }
 
@@ -304,7 +302,6 @@ class TeamScheduleFragment : BaseFragment(), ScheduleItemClickListener {
                     }
                 }, { e ->
                     Trace.e(e)
-                    ToastError(e)
                 })
     }
 
