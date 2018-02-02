@@ -3,7 +3,9 @@ package com.sogukj.pe.ui.approve
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
@@ -489,6 +491,8 @@ class BuildSignActivity : ToolbarActivity() {
                             }
                         })
                         .openGallery()
+//                var intent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+//                startActivityForResult(intent, 0x101)
             }
         }
     }
@@ -580,6 +584,15 @@ class BuildSignActivity : ToolbarActivity() {
             val bean = data?.getSerializableExtra(Extras.DATA) as CustomSealBean
             val data = data?.getSerializableExtra(Extras.DATA2) as CustomSealBean.ValueBean
             refreshListSelector(bean, data)
+        } else if (resultCode == RESULT_OK && requestCode == 0x101) {//带测试，用来选择图片的
+            var uri = data?.getData()
+            var cursor = getContentResolver().query(uri, null, null, null, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                var path = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA))
+                Log.e("path", path)
+                var imagesView = (ll_seal.parent as LinearLayout).findViewWithTag("UNIQUE") as FlowLayout
+                //uploadImage(path!!, bean!!, imagesView!!)
+            }
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
