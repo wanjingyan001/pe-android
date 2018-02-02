@@ -111,12 +111,6 @@
                     android:textColorHint="#a0a4aa"
                     android:textSize="14sp" />
 
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_gravity="center_vertical"
-                    android:scaleType="center"
-                    android:src="@drawable/nim_arrow_right" />
 
             </LinearLayout>
 
@@ -192,6 +186,8 @@
                     android:gravity="right"
                     android:text="请选择"
                     android:textColor="#a0a4aa" />
+
+
 
             </LinearLayout>
 

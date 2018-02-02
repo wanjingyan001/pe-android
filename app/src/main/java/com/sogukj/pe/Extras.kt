@@ -55,4 +55,5 @@ object Extras {
     val NIMTOKEN = "nim.token"//用于存储网易IM自动登录token
     val CREATE_TEAM = "nim.create_team"
     val SELECT_USER = "ext.selectUser"
+    val USER_REMARKS = "ext.Remarks"
 }

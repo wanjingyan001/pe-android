@@ -199,7 +199,7 @@ public class TeamSearchActivity extends AppCompatActivity implements View.OnClic
         @Override
         public void onBindViewHolder(SearchHolder holder, int position) {
             final MsgIndexRecord record = msgIndexRecords.get(position);
-            IMMessage message = record.getMessage();
+            final IMMessage message = record.getMessage();
             UserInfo userInfo = NimUIKit.getUserInfoProvider().getUserInfo(message.getFromAccount());
             holder.resultName.setText(message.getFromNick());
             String text = record.getText();
@@ -220,7 +220,7 @@ public class TeamSearchActivity extends AppCompatActivity implements View.OnClic
                 @Override
                 public void onClick(View v) {
                     //需要跳转到一个新页面,TeamMessageActivity会默认移动到最下面
-                    NimUIKit.startTeamSession(TeamSearchActivity.this,record.getSessionId(),record.getMessage());
+                    DisplayMessageActivity.Companion.start(TeamSearchActivity.this,message);
                 }
             });
         }

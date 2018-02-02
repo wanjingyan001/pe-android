@@ -23,6 +23,7 @@ import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.RequestCallback
 import com.netease.nimlib.sdk.friend.FriendService
 import com.netease.nimlib.sdk.team.TeamService
+import com.netease.nimlib.sdk.team.constant.TeamMessageNotifyTypeEnum
 import com.netease.nimlib.sdk.team.model.Team
 import com.netease.nimlib.sdk.team.model.TeamMember
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo
@@ -44,6 +45,7 @@ class TeamInfoActivity : AppCompatActivity(), View.OnClickListener, SwitchButton
     lateinit var profileToggle: SwitchButton
     var teamMembers = ArrayList<UserBean>()
     var adapter: MemberAdapter? = null
+    lateinit var team: Team
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,6 +86,8 @@ class TeamInfoActivity : AppCompatActivity(), View.OnClickListener, SwitchButton
             override fun onSuccess(p0: Team?) {
                 Log.d("WJY", "${Gson().toJson(p0)}")
                 p0?.let {
+                    team = it
+                    profileToggle.check = it.messageNotifyType == TeamMessageNotifyTypeEnum.Mute
                     Glide.with(this@TeamInfoActivity)
                             .load(it.icon)
                             .apply(RequestOptions().error(R.drawable.invalid_name2))
@@ -191,28 +195,31 @@ class TeamInfoActivity : AppCompatActivity(), View.OnClickListener, SwitchButton
     }
 
     override fun OnChanged(v: View?, checkState: Boolean) {
-        NIMClient.getService(FriendService::class.java).setMessageNotify(sessionId, checkState).setCallback(object : RequestCallback<Void> {
-            override fun onException(exception: Throwable?) {
+        var typeEnum = if (checkState) TeamMessageNotifyTypeEnum.Mute else TeamMessageNotifyTypeEnum.All
+        NIMClient.getService(TeamService::class.java).muteTeam(sessionId, typeEnum).setCallback(
+                object : RequestCallback<Void> {
+                    override fun onFailed(code: Int) {
+                        if (code == 408) {
+                            toast(R.string.network_is_not_available)
+                        } else {
+                            toast("未知错误")
+                        }
+                        profileToggle.check = !checkState
+                    }
 
-            }
+                    override fun onSuccess(param: Void?) {
+                        if (!checkState) {
+                            toast("开启消息提醒成功")
+                        } else {
+                            toast("关闭消息提醒成功")
+                        }
+                    }
 
-            override fun onFailed(code: Int) {
-                if (code == 408) {
-                    toast(R.string.network_is_not_available)
-                }else{
-                    toast("未知错误")
+                    override fun onException(exception: Throwable?) {
+                    }
+
                 }
-                profileToggle.check = !checkState
-            }
-
-            override fun onSuccess(param: Void?) {
-                if (checkState) {
-                    toast("开启消息提醒成功")
-                } else {
-                    toast("关闭消息提醒成功")
-                }
-            }
-        })
+        )
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
