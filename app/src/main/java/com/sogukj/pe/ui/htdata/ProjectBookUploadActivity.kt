@@ -64,7 +64,7 @@ class ProjectBookUploadActivity : ToolbarActivity() {
         }else if (tmpInt == ProjectListFragment.TYPE_TC) {
             tmpStr = "退出"
         }
-        tv_step.text = "${tmpStr}阶段"
+        tv_step.text = tmpStr
 
         Glide.with(this)
                 .load(user?.headImage())
