@@ -91,7 +91,7 @@ public class MyNestedScrollParentFund extends LinearLayout implements NestedScro
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         TwinklingRefreshLayout layout = (TwinklingRefreshLayout) viewPager.getChildAt(0);//fragment_fund_list
-        currentContentView =  (ViewGroup) layout.getChildAt(0);
+        currentContentView = (ViewGroup) layout.getChildAt(0);
     }
 
     @Override
@@ -196,7 +196,7 @@ public class MyNestedScrollParentFund extends LinearLayout implements NestedScro
     }
 
     private void changeView() {
-        if (getScrollY() < mToolBarHeight) {//如果parent外框，还可以往下滑动
+        if (mToolBarHeight == 0) {
             mTabs.setBackgroundResource(R.drawable.tab_bg_1);
             mTabs.setTabTextColors(Color.parseColor("#a0a4aa"), Color.parseColor("#282828"));
             for (int i = 0; i < mTabs.getTabCount(); i++) {
@@ -206,14 +206,26 @@ public class MyNestedScrollParentFund extends LinearLayout implements NestedScro
                     setDrawable(i, "1", false);
                 }
             }
-        } else if (getScrollY() >= mToolBarHeight) {
-            mTabs.setBackgroundResource(R.drawable.tab_bg_2);
-            mTabs.setTabTextColors(Color.parseColor("#ff7bb4fc"), Color.parseColor("#ffffff"));
-            for (int i = 0; i < mTabs.getTabCount(); i++) {
-                if (i == mTabs.getSelectedTabPosition()) {
-                    setDrawable(i, "2", true);
-                } else {
-                    setDrawable(i, "2", false);
+        } else {
+            if (getScrollY() < mToolBarHeight) {//如果parent外框，还可以往下滑动
+                mTabs.setBackgroundResource(R.drawable.tab_bg_1);
+                mTabs.setTabTextColors(Color.parseColor("#a0a4aa"), Color.parseColor("#282828"));
+                for (int i = 0; i < mTabs.getTabCount(); i++) {
+                    if (i == mTabs.getSelectedTabPosition()) {
+                        setDrawable(i, "1", true);
+                    } else {
+                        setDrawable(i, "1", false);
+                    }
+                }
+            } else if (getScrollY() >= mToolBarHeight) {
+                mTabs.setBackgroundResource(R.drawable.tab_bg_2);
+                mTabs.setTabTextColors(Color.parseColor("#ff7bb4fc"), Color.parseColor("#ffffff"));
+                for (int i = 0; i < mTabs.getTabCount(); i++) {
+                    if (i == mTabs.getSelectedTabPosition()) {
+                        setDrawable(i, "2", true);
+                    } else {
+                        setDrawable(i, "2", false);
+                    }
                 }
             }
         }
