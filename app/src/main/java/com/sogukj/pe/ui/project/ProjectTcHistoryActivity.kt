@@ -23,6 +23,7 @@ import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_project_tc_history.*
+import kotlinx.android.synthetic.main.layout_empty.*
 import java.net.UnknownHostException
 
 class ProjectTcHistoryActivity : ToolbarActivity() {
@@ -94,6 +95,10 @@ class ProjectTcHistoryActivity : ToolbarActivity() {
                 }, { e ->
                     Trace.e(e)
                     ToastError(e)
+                }, {
+                    if (adapter.dataList.size == 0) {
+                        iv_empty.visibility = View.VISIBLE
+                    }
                 })
     }
 }
