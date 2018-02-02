@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import android.widget.LinearLayout
 import com.bigkoo.pickerview.TimePickerView
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
@@ -59,6 +60,10 @@ class ProjectTCActivity : ToolbarActivity() {
 
         if (type) {
             ll_btn.visibility = View.GONE
+            var parent = quit_layout.parent as LinearLayout
+            parent.layoutParams.height = Utils.dpToPx(context, 130)
+            parent.requestLayout()
+            quit_layout.visibility = View.GONE
             load()
         } else {
             part_quit.backgroundResource = R.drawable.tc_true
