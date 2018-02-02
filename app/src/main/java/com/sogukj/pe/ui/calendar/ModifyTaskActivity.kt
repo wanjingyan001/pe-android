@@ -17,6 +17,7 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.CustomSealBean
 import com.sogukj.pe.bean.UserBean
+import com.sogukj.pe.ui.IM.TeamSelectActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
@@ -154,7 +155,7 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                     .subscribe({ payload ->
                         if (payload.isOk) {
                             payload.payload?.let {
-                                Log.d("WJY",Gson().toJson(it))
+                                Log.d("WJY", Gson().toJson(it))
                                 companyId = it.company_id
                                 relatedProject.text = it.cName
                                 missionDetails.setText(it.info)
@@ -356,13 +357,13 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                         selectedDate.get(Calendar.MINUTE)
                 )
                 val endDate = Calendar.getInstance()
-                if (selectT == 0 ){
+                if (selectT == 0) {
                     endDate.set(Utils.getTime(start, "yyyy").toInt(),
                             Utils.getTime(start, "MM").toInt() - 1,
                             Utils.getTime(start, "dd").toInt(),
                             Utils.getTime(start, "HH").toInt(),
                             Utils.getTime(start, "mm").toInt())
-                }else{
+                } else {
                     endDate.set(Utils.getTime(endTime, "yyyy").toInt(),
                             Utils.getTime(endTime, "MM").toInt() - 1,
                             Utils.getTime(endTime, "dd").toInt(),
@@ -370,7 +371,7 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                             Utils.getTime(endTime, "mm").toInt())
                 }
                 val timePicker = TimePickerView.Builder(this, { date, view ->
-                    if(selectT == 0){
+                    if (selectT == 0) {
                         time = start!!.time - date.time
                         time?.let {
                             if (it < 0) {
@@ -379,7 +380,7 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                                 remind.text = "开始前${it / 1000 / 60}分钟"
                             }
                         }
-                    }else{
+                    } else {
                         time = endTime!!.time - date.time
                         time?.let {
                             if (it < 0) {
@@ -404,29 +405,27 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
     }
 
     var companyBean: CustomSealBean.ValueBean? = null
-    var selectUser: Users? = null
-    var selectUser2: Users? = null
+    var selectUser: Users = Users()
+    var selectUser2: Users = Users()
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == Extras.REQUESTCODE && data != null) {
-            when (resultCode) {
-                Extras.RESULTCODE -> {
-                    selectUser = data.getSerializableExtra(Extras.DATA) as Users
-                    selectUser?.selectUsers.let {
-                        adapter.addAllData(it)
+        if (data != null) {
+            if (resultCode == Extras.RESULTCODE) {
+                when (requestCode) {
+                    1005 -> {
+                        selectUser.selectUsers = data.getSerializableExtra(Extras.DATA) as ArrayList<UserBean>
+                        adapter.addAllData(selectUser.selectUsers)
+                    }
+                    1006 -> {
+                        selectUser2.selectUsers = data.getSerializableExtra(Extras.DATA) as ArrayList<UserBean>
+                        exAdapter.addAllData(selectUser2.selectUsers)
                     }
                 }
-                Extras.RESULTCODE2 -> {
-                    selectUser2 = data.getSerializableExtra(Extras.DATA) as Users
-                    selectUser2?.selectUsers.let {
-                        exAdapter.addAllData(it)
-                    }
-                }
-                Activity.RESULT_OK -> {
-                    companyBean = data.getSerializableExtra(Extras.DATA) as CustomSealBean.ValueBean
-                    companyBean?.let {
-                        relatedProject.text = it.name
-                    }
+
+            } else if (resultCode == Activity.RESULT_OK) {
+                companyBean = data.getSerializableExtra(Extras.DATA) as CustomSealBean.ValueBean
+                companyBean?.let {
+                    relatedProject.text = it.name
                 }
             }
         }
@@ -444,8 +443,25 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
 
     override fun addPerson(tag: String) {
         when (tag) {
-            "CcPersonAdapter" -> SelectUserActivity.startForResult(this, tag, selectUser)
-            "ExecutiveAdapter" -> SelectUserActivity.startForResult(this, tag, selectUser2)
+//            "CcPersonAdapter" -> SelectUserActivity.startForResult(this, tag, selectUser)
+//            "ExecutiveAdapter" -> SelectUserActivity.startForResult(this, tag, selectUser2)
+            "CcPersonAdapter" -> {
+                TeamSelectActivity.startForResult(this, true, selectUser.selectUsers, false, false, 1005)
+            }
+            "ExecutiveAdapter" -> {
+                TeamSelectActivity.startForResult(this, true, selectUser2.selectUsers, false, false, 1006)
+            }
+        }
+    }
+
+    override fun remove(tag: String, user: UserBean) {
+        when (tag) {
+            "CcPersonAdapter" -> {
+                selectUser.selectUsers.remove(user)
+            }
+            "ExecutiveAdapter" -> {
+                selectUser2.selectUsers.remove(user)
+            }
         }
     }
 }

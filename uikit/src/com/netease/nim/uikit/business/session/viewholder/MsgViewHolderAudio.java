@@ -7,6 +7,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.netease.nim.uikit.R;
@@ -27,6 +28,7 @@ import com.netease.nimlib.sdk.msg.model.IMMessage;
  */
 public class MsgViewHolderAudio extends MsgViewHolderBase {
 
+
     public MsgViewHolderAudio(BaseMultiItemFetchLoadAdapter adapter) {
         super(adapter);
     }
@@ -34,6 +36,7 @@ public class MsgViewHolderAudio extends MsgViewHolderBase {
     public static final int CLICK_TO_PLAY_AUDIO_DELAY = 500;
 
     private TextView durationLabel;
+    private TextView durationLabel1;
     private View containerView;
     private View unreadIndicator;
     private ImageView animationView;
@@ -48,6 +51,7 @@ public class MsgViewHolderAudio extends MsgViewHolderBase {
     @Override
     protected void inflateContentView() {
         durationLabel = findViewById(R.id.message_item_audio_duration);
+        durationLabel1 = findViewById(R.id.message_item_audio_duration1);
         containerView = findViewById(R.id.message_item_audio_container);
         unreadIndicator = findViewById(R.id.message_item_audio_unread_indicator);
         animationView = findViewById(R.id.message_item_audio_playing_animation);
@@ -87,22 +91,22 @@ public class MsgViewHolderAudio extends MsgViewHolderBase {
     private void layoutByDirection() {
         if (isReceivedMessage()) {
             setGravity(animationView, Gravity.LEFT | Gravity.CENTER_VERTICAL);
-            setGravity(durationLabel, Gravity.RIGHT | Gravity.CENTER_VERTICAL);
-
             containerView.setBackgroundResource(NimUIKitImpl.getOptions().messageLeftBackground);
             containerView.setPadding(ScreenUtil.dip2px(15), ScreenUtil.dip2px(8), ScreenUtil.dip2px(10), ScreenUtil.dip2px(8));
             animationView.setBackgroundResource(R.drawable.nim_audio_animation_list_left);
-            durationLabel.setTextColor(Color.BLACK);
+            durationLabel.setVisibility(View.GONE);
+            durationLabel1.setVisibility(View.VISIBLE);
+            durationLabel.setTextColor(Color.parseColor("#282828"));
 
         } else {
             setGravity(animationView, Gravity.RIGHT | Gravity.CENTER_VERTICAL);
-            setGravity(durationLabel, Gravity.LEFT | Gravity.CENTER_VERTICAL);
             unreadIndicator.setVisibility(View.GONE);
-
             containerView.setBackgroundResource(NimUIKitImpl.getOptions().messageRightBackground);
             containerView.setPadding(ScreenUtil.dip2px(10), ScreenUtil.dip2px(8), ScreenUtil.dip2px(15), ScreenUtil.dip2px(8));
             animationView.setBackgroundResource(R.drawable.nim_audio_animation_list_right);
-            durationLabel.setTextColor(Color.WHITE);
+            durationLabel1.setVisibility(View.GONE);
+            durationLabel.setVisibility(View.VISIBLE);
+            durationLabel1.setTextColor(Color.parseColor("#282828"));
         }
     }
 
@@ -144,6 +148,7 @@ public class MsgViewHolderAudio extends MsgViewHolderBase {
         setAudioBubbleWidth(duration);
 
         durationLabel.setTag(message.getUuid());
+        durationLabel1.setTag(message.getUuid());
 
         if (!isMessagePlaying(audioControl, message)) {
             if (audioControl.getAudioControlListener() != null &&
@@ -204,8 +209,10 @@ public class MsgViewHolderAudio extends MsgViewHolderBase {
 
         if (seconds >= 0) {
             durationLabel.setText(seconds + "\"");
+            durationLabel1.setText(seconds + "\"");
         } else {
             durationLabel.setText("");
+            durationLabel1.setText("");
         }
     }
 

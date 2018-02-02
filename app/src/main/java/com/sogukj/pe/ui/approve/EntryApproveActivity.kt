@@ -19,11 +19,18 @@ import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_approve.*
+import kotlinx.android.synthetic.main.layout_network_error.*
 import java.text.SimpleDateFormat
+
 /**
  * Created by qinfei on 17/10/18.
  */
-class EntryApproveActivity : ToolbarActivity() {
+class EntryApproveActivity : ToolbarActivity(), View.OnClickListener {
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            R.id.resetRefresh -> doRequest()
+        }
+    }
 
     val fmt = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
     val gson = Gson()
@@ -33,27 +40,36 @@ class EntryApproveActivity : ToolbarActivity() {
         setBack(true)
         title = "审批"
         ll_custom.removeAllViews()
-        SoguApi.getService(application)
-                .mainApprove(3)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ payload ->
-                    if (payload.isOk) {
-                        initView(payload.payload)
-                    } else
-                        showToast(payload.message)
-                }, { e ->
-                    Trace.e(e)
-                    //showToast("暂无可用数据")
-                    ToastError(e)
-                })
-
+        doRequest()
         item_dwsp.setOnClickListener {
             ApproveListActivity.start(this, 1)
         }
         item_wfqd.setOnClickListener {
             ApproveListActivity.start(this, 3)
         }
+    }
+
+    private fun doRequest() {
+        SoguApi.getService(application)
+                .mainApprove(3)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        approveLayout.visibility = View.VISIBLE
+                        initView(payload.payload)
+                        hideEmptyView()
+                    } else {
+                        showToast(payload.message)
+                    }
+                }, { e ->
+                    Trace.e(e)
+                    //showToast("暂无可用数据")
+                    ToastError(e)
+                    approveLayout.visibility = View.GONE
+                    showEmptyView()
+                    resetRefresh.setOnClickListener(this)
+                })
     }
 
     fun initView(payload: List<SpGroupBean>?) {

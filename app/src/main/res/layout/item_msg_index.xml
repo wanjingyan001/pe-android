@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="68dp"
     android:background="@drawable/bg_item_list"
     android:orientation="horizontal"
-    android:padding="10dp">
+    android:paddingLeft="5dp"
+    android:paddingRight="15dp">
 
-    <ImageView
+    <com.netease.nim.uikit.common.ui.imageview.CircleImageView
         android:id="@+id/msg_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -17,9 +18,12 @@
         android:src="@drawable/ic_msg_alert" />
 
     <LinearLayout
+        android:id="@+id/content_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:layout_gravity="center"
+        android:layout_toRightOf="@+id/msg_icon"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -59,7 +63,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:ellipsize="end"
                 android:gravity="left"
+                android:maxLength="15"
                 android:singleLine="true"
                 android:text="暂无数据"
                 android:textColor="@color/text_3"
@@ -80,4 +86,11 @@
                 tools:text="9+" />
         </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_alignLeft="@+id/content_layout"
+        android:layout_alignParentBottom="true"
+        android:background="@color/divider2" />
+</RelativeLayout>

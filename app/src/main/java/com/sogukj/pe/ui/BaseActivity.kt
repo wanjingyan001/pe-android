@@ -3,13 +3,18 @@ package com.framework.base
 import android.app.ProgressDialog
 import android.os.Bundle
 import android.os.Handler
+import android.support.constraint.ConstraintLayout
 import android.support.v7.app.AppCompatActivity
+import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import com.google.gson.JsonSyntaxException
 import com.sogukj.pe.util.Trace
 import com.umeng.message.PushAgent
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
+import com.sogukj.pe.R
+import org.jetbrains.anko.find
 
 /**
  * Created by qinfei on 17/7/17.
@@ -26,6 +31,7 @@ abstract class BaseActivity : AppCompatActivity() {
 //        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         //        initStatusBar(getStatusBarTintRes());
         PushAgent.getInstance(this).onAppStart();
+        initEmptyView()
     }
 
     override fun onStart() {
@@ -80,6 +86,30 @@ abstract class BaseActivity : AppCompatActivity() {
     fun hideProgress() {
         if (progressDialog != null) {
             progressDialog?.dismiss()
+        }
+    }
+
+    var layout: ConstraintLayout? = null
+    private fun initEmptyView() {
+        layout = findViewById(R.id.networkErrorLayout) as ConstraintLayout?
+        if (layout == null) {
+            return
+        } else {
+            layout?.let {
+                it.visibility = View.GONE
+            }
+        }
+    }
+
+    protected fun showEmptyView(){
+        layout?.let {
+            it.visibility = View.VISIBLE
+        }
+    }
+
+    protected fun hideEmptyView(){
+        layout?.let {
+            it.visibility = View.GONE
         }
     }
 

@@ -54,7 +54,7 @@ class MainHomeFragment : BaseFragment() {
 //        disable(tv_rl)
         //disable(tv_lxr)
         tv_msg.setOnClickListener {
-            //NewsListActivity.start(baseActivity)
+            NewsListActivity.start(baseActivity)
         }
 
 

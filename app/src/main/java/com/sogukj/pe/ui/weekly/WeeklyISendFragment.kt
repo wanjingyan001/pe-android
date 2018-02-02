@@ -32,6 +32,7 @@ import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_weekly_isend.*
+import kotlinx.android.synthetic.main.layout_network_error.*
 import java.net.UnknownHostException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -51,7 +52,7 @@ class WeeklyISendFragment : BaseFragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = RecyclerAdapter<WeeklySendBean>(context, { _adapter, parent, type ->
+        adapter = RecyclerAdapter(context, { _adapter, parent, type ->
             val convertView = _adapter.getView(R.layout.item_week_send, parent) as LinearLayout
             object : RecyclerHolder<WeeklySendBean>(convertView) {
                 val tv_title = convertView.findViewById(R.id.title_date) as TextView
@@ -65,10 +66,10 @@ class WeeklyISendFragment : BaseFragment() {
                         grid.setOnItemClickListener { parent, view, position, id ->
                             val sendBeanObj = it[position]
                             val intent = Intent(context, PersonalWeeklyActivity::class.java)
-                            intent.putExtra(Extras.ID,sendBeanObj.week_id)
-                            intent.putExtra(Extras.NAME,"My")
-                            intent.putExtra(Extras.TIME1,sendBeanObj.start_time)
-                            intent.putExtra(Extras.TIME2,sendBeanObj.end_time)
+                            intent.putExtra(Extras.ID, sendBeanObj.week_id)
+                            intent.putExtra(Extras.NAME, "My")
+                            intent.putExtra(Extras.TIME1, sendBeanObj.start_time)
+                            intent.putExtra(Extras.TIME2, sendBeanObj.end_time)
                             activity.startActivity(intent)
                         }
                     }
@@ -191,7 +192,9 @@ class WeeklyISendFragment : BaseFragment() {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        if (page == 1){
+                        jsSendLayout.visibility = View.VISIBLE
+                        networkErrorLayout.visibility = View.GONE
+                        if (page == 1) {
                             adapter.dataList.clear()
                         }
                         payload.payload?.apply {
@@ -203,6 +206,18 @@ class WeeklyISendFragment : BaseFragment() {
                 }, { e ->
                     Trace.e(e)
                     ToastError(e)
+                    when (e) {
+                        is JsonSyntaxException -> showToast("后台数据出错")
+                        is UnknownHostException -> {
+                            showToast("网络出错")
+                            jsSendLayout.visibility = View.GONE
+                            networkErrorLayout.visibility = View.VISIBLE
+                            resetRefresh.setOnClickListener{
+                                doRequest()
+                            }
+                        }
+                        else -> showToast("未知错误")
+                    }
                 }, {
                     refresh.setEnableLoadmore(adapter.dataList.size % pageSize == 0)
                     adapter.notifyDataSetChanged()

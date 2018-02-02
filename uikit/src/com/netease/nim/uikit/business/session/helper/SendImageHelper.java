@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.netease.nim.uikit.R;
@@ -32,6 +33,7 @@ public class SendImageHelper {
         final ArrayList<String> origSelectedImageFileList = data.getStringArrayListExtra(Extras.EXTRA_ORIG_IMAGE_LIST);
 
         boolean isOrig = data.getBooleanExtra(Extras.EXTRA_IS_ORIGINAL, false);
+        Log.d("WJY","拍照是否发送原图"+isOrig);
         for (int i = 0; i < selectedImageFileList.size(); i++) {
             String imageFilepath = selectedImageFileList.get(i);
             File imageFile = new File(imageFilepath);
@@ -116,6 +118,7 @@ public class SendImageHelper {
             // gif 强制设置成原图
             boolean gif = ImageUtil.isGif(extension);
             isOrig |= gif;
+            Log.d("WJY","相册是否发送原图"+isOrig);
             if (isOrig) {
                 // 把原图按md5存放
                 String origMD5 = MD5.getStreamMD5(photoPath);

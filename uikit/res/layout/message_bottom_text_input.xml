@@ -3,10 +3,10 @@
     android:id="@+id/textMessageLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/nim_message_view_bottom"
+    android:background="@color/white"
     android:paddingBottom="@dimen/bottom_component_margin_vertical"
     android:paddingTop="@dimen/bottom_component_margin_vertical">
-
+    <!--android:background="@drawable/nim_message_view_bottom"-->
 
     <EditText
         android:id="@+id/editTextMessage"

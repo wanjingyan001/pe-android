@@ -56,6 +56,9 @@ public class CcPersonAdapter extends RecyclerView.Adapter<CcPersonAdapter.CCHold
             holder.view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (listener != null) {
+                        listener.remove(CcPersonAdapter.class.getSimpleName(),userBean);
+                    }
                     ccPersons.remove(userBean);
                     notifyDataSetChanged();
                 }

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +33,7 @@ import com.netease.nimlib.sdk.ResponseCode;
 import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
+import com.netease.nimlib.sdk.msg.attachment.FileAttachment;
 import com.netease.nimlib.sdk.msg.constant.MsgStatusEnum;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
@@ -42,6 +44,7 @@ import com.netease.nimlib.sdk.msg.model.MessageReceipt;
 import com.netease.nimlib.sdk.robot.model.NimRobotInfo;
 import com.netease.nimlib.sdk.robot.model.RobotAttachment;
 import com.netease.nimlib.sdk.robot.model.RobotMsgType;
+import com.netease.nimlib.sdk.team.TeamService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -139,7 +142,7 @@ public class MessageFragment extends TFragment implements ModuleProxy {
         Container container = new Container(getActivity(), sessionId, sessionType, this);
 
         if (messageListPanel == null) {
-            messageListPanel = new MessageListPanelEx(container, rootView, anchor, false, false);
+            messageListPanel = new MessageListPanelEx(container, rootView, anchor, false, true);
         } else {
             messageListPanel.reload(container, anchor);
         }
@@ -152,25 +155,12 @@ public class MessageFragment extends TFragment implements ModuleProxy {
         }
 
         initAitManager();
-
-//        inputPanel.switchRobotMode(NimUIKitImpl.getRobotInfoProvider().getRobotByAccount(sessionId) != null);
-
         registerObservers(true);
 
         if (customization != null) {
             messageListPanel.setChattingBackground(customization.backgroundUri, customization.backgroundColor);
         }
-//        NimUIKit.setSessionListener(new SessionEventListener() {
-//            @Override
-//            public void onAvatarClicked(Context context, IMMessage message) {
-//                startActivity(new Intent(getActivity(), PersonalInfoActivity.class));
-//            }
-//
-//            @Override
-//            public void onAvatarLongClicked(Context context, IMMessage message) {
-//
-//            }
-//        });
+
     }
 
     private void initAitManager() {
@@ -240,10 +230,14 @@ public class MessageFragment extends TFragment implements ModuleProxy {
         final IMMessage msg = message;
         appendPushConfig(message);
         // send message to server and save to db
+        final IMMessage finalMessage = message;
         NIMClient.getService(MsgService.class).sendMessage(message, false).setCallback(new RequestCallback<Void>() {
             @Override
             public void onSuccess(Void param) {
-
+                if (finalMessage.getAttachment() instanceof FileAttachment){
+                    String pathForSave = ((FileAttachment) finalMessage.getAttachment()).getPathForSave();
+                    Log.d("WJY",">>>>>>>"+pathForSave);
+                }
             }
 
             @Override
@@ -253,7 +247,6 @@ public class MessageFragment extends TFragment implements ModuleProxy {
 
             @Override
             public void onException(Throwable exception) {
-
             }
         });
 
@@ -335,7 +328,7 @@ public class MessageFragment extends TFragment implements ModuleProxy {
         if (customConfig != null) {
             String content = customConfig.getPushContent(message);
             Map<String, Object> payload = customConfig.getPushPayload(message);
-            if(!TextUtils.isEmpty(content)){
+            if (!TextUtils.isEmpty(content)) {
                 message.setPushContent(content);
             }
             if (payload != null) {
@@ -381,8 +374,8 @@ public class MessageFragment extends TFragment implements ModuleProxy {
         messageListPanel.onActivityResult(requestCode, resultCode, data);
     }
 
-    public void onKeyDown(int keyCode, KeyEvent event){
-        inputPanel.onKeyDown(keyCode, event);
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        return inputPanel.onKeyDown(keyCode, event);
     }
 
 

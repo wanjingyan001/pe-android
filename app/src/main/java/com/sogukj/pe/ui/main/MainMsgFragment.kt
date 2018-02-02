@@ -16,12 +16,17 @@ import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import com.lcodecore.tkrefreshlayout.footer.BallPulseView
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.netease.nim.uikit.api.NimUIKit
+import com.netease.nim.uikit.business.recent.TeamMemberAitHelper
 import com.netease.nim.uikit.business.uinfo.UserInfoHelper
+import com.netease.nim.uikit.common.ui.drop.DropManager
 import com.netease.nim.uikit.common.ui.imageview.CircleImageView
 import com.netease.nimlib.sdk.NIMClient
+import com.netease.nimlib.sdk.Observer
 import com.netease.nimlib.sdk.RequestCallback
 import com.netease.nimlib.sdk.msg.MsgService
+import com.netease.nimlib.sdk.msg.MsgServiceObserve
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
+import com.netease.nimlib.sdk.msg.model.IMMessage
 import com.netease.nimlib.sdk.msg.model.RecentContact
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.MessageIndexBean
@@ -38,15 +43,19 @@ import kotlinx.android.synthetic.main.fragment_msg_center.*
 import kotlinx.android.synthetic.main.toolbar.*
 import org.jetbrains.anko.imageResource
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by qinfei on 17/10/11.
  */
 class MainMsgFragment : ToolbarFragment() {
+    lateinit var recentList: ArrayList<RecentContact>
     override val containerViewId: Int
         get() = R.layout.fragment_msg_center
 
     lateinit var adapter: RecyclerAdapter<Any>
+
+
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setTitle("消息首页")
@@ -84,16 +93,18 @@ class MainMsgFragment : ToolbarFragment() {
                                 else -> tvTitleMsg.text = data.content
                             }
                             val userInfo = NimUIKit.getUserInfoProvider().getUserInfo(data.fromAccount)
-                            Glide.with(this@MainMsgFragment)
-                                    .load(userInfo.avatar)
-                                    .apply(RequestOptions().error(R.drawable.im_team_default))
-                                    .into(msgIcon)
+                            userInfo?.let {
+                                Glide.with(this@MainMsgFragment)
+                                        .load(it.avatar)
+                                        .apply(RequestOptions().error(R.drawable.im_team_default))
+                                        .into(msgIcon)
+                            }
                         } else if (data.sessionType == SessionTypeEnum.Team) {
                             val value = data.msgStatus.value
                             when (value) {
                                 3 -> tvTitleMsg.text = Html.fromHtml("<font color='#a0a4aa'>[已读]</font>${data.fromNick}:${data.content}")
                                 4 -> tvTitleMsg.text = Html.fromHtml("<font color='#1787fb'>[未读]</font>${data.fromNick}:${data.content}")
-                                else -> tvTitleMsg.text = data.content
+                                else -> tvTitleMsg.text = "${data.fromNick}:${data.content}"
                             }
                             msgIcon.imageResource = R.drawable.im_team_default
                         }
@@ -152,6 +163,7 @@ class MainMsgFragment : ToolbarFragment() {
         refresh.setAutoLoadMore(true)
         doRequest()
         toolbar_back.setOnClickListener { activity.onBackPressed() }
+        registerObservers(true)
     }
 
     var page = 1
@@ -162,8 +174,8 @@ class MainMsgFragment : ToolbarFragment() {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        if (page == 1)
-                            adapter.dataList.clear()
+//                        if (page == 1)
+                        adapter.dataList.clear()
                         payload.payload?.apply {
                             adapter.dataList.add(this)
                         }
@@ -178,7 +190,7 @@ class MainMsgFragment : ToolbarFragment() {
     }
 
     private fun getIMRecentContact() {
-        val recentList = ArrayList<RecentContact>()
+        recentList = ArrayList()
         NIMClient.getService(MsgService::class.java).queryRecentContacts().setCallback(object : RequestCallback<MutableList<RecentContact>> {
             override fun onSuccess(p0: MutableList<RecentContact>?) {
                 p0?.forEach { recentContact ->
@@ -216,6 +228,54 @@ class MainMsgFragment : ToolbarFragment() {
 
         })
     }
+
+    private fun registerObservers(register: Boolean) {
+        val service = NIMClient.getService(MsgServiceObserve::class.java)
+        service.observeRecentContact(messageObserver, register)
+    }
+
+
+    var messageObserver: Observer<List<RecentContact>> = Observer { recentContacts ->
+        onRecentContactChanged(recentContacts)
+    }
+    // 暂存消息，当RecentContact 监听回来时使用，结束后清掉
+    private val cacheMessages = HashMap<String, Set<IMMessage>>()
+
+    private fun onRecentContactChanged(recentContacts: List<RecentContact>) {
+        var index: Int
+        for (r in recentContacts) {
+            index = -1
+            for (i in recentList.indices) {
+                if (r.contactId == recentList.get(i).getContactId() && r.sessionType == recentList.get(i).getSessionType()) {
+                    index = i
+                    break
+                }
+            }
+            if (index >= 0) {
+                recentList.removeAt(index)
+            }
+            recentList.add(r)
+            if (r.sessionType == SessionTypeEnum.Team && cacheMessages[r.contactId] != null) {
+                TeamMemberAitHelper.setRecentContactAited(r, cacheMessages[r.contactId])
+            }
+        }
+        val iterator = adapter.dataList.iterator()
+        while (iterator.hasNext()) {
+            val next = iterator.next()
+            if (next is RecentContact) {
+                iterator.remove()
+            }
+        }
+        adapter.dataList.addAll(recentList)
+        adapter.notifyDataSetChanged()
+
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        registerObservers(false)
+    }
+
 
     companion object {
         val TAG = MainMsgFragment::class.java.simpleName

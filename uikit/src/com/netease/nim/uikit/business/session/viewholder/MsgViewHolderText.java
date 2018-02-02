@@ -51,11 +51,11 @@ public class MsgViewHolderText extends MsgViewHolderBase {
     private void layoutDirection() {
         if (isReceivedMessage()) {
             bodyTextView.setBackgroundResource(NimUIKitImpl.getOptions().messageLeftBackground);
-            bodyTextView.setTextColor(Color.BLACK);
+            bodyTextView.setTextColor(Color.parseColor("#282828"));
             bodyTextView.setPadding(ScreenUtil.dip2px(15), ScreenUtil.dip2px(8), ScreenUtil.dip2px(10), ScreenUtil.dip2px(8));
         } else {
             bodyTextView.setBackgroundResource(NimUIKitImpl.getOptions().messageRightBackground);
-            bodyTextView.setTextColor(Color.WHITE);
+            bodyTextView.setTextColor(Color.parseColor("#282828"));
             bodyTextView.setPadding(ScreenUtil.dip2px(10), ScreenUtil.dip2px(8), ScreenUtil.dip2px(15), ScreenUtil.dip2px(8));
         }
     }

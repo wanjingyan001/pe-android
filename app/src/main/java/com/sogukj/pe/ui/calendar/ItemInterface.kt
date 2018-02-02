@@ -2,6 +2,7 @@ package com.sogukj.pe.ui.calendar
 
 import android.view.View
 import com.ldf.calendar.model.CalendarDate
+import com.sogukj.pe.bean.UserBean
 
 /**
  * Created by admin on 2017/12/9.
@@ -12,13 +13,14 @@ interface MonthSelectListener {
 
 interface ScheduleItemClickListener {
     fun onItemClick(view: View, position: Int)
-    fun finishCheck( isChecked: Boolean, position: Int)
+    fun finishCheck(isChecked: Boolean, position: Int)
 }
 
 interface CommentListener {
     fun confirmListener(comment: String)
 }
 
- interface AddPersonListener {
-    fun addPerson(tag:String)
+interface AddPersonListener {
+    fun addPerson(tag: String)
+    fun remove(tag: String, user: UserBean)
 }

@@ -76,7 +76,7 @@ class PersonalInfoActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun queryUserInfo(uid: Int) {
         SoguApi.getService(application)
-                .userInfo(uid)
+                .userInfo(1)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->

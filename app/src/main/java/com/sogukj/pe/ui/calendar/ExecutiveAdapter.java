@@ -61,6 +61,9 @@ public class ExecutiveAdapter extends RecyclerView.Adapter<ExecutiveAdapter.Exec
             holder.view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (listener != null) {
+                        listener.remove(ExecutiveAdapter.class.getSimpleName(),userBean);
+                    }
                     exPersons.remove(userBean);
                     notifyDataSetChanged();
                 }

@@ -163,7 +163,6 @@ public abstract class BaseMessageActivity extends UI {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        messageFragment.onKeyDown(keyCode,event);
-        return super.onKeyDown(keyCode, event);
+        return !messageFragment.onKeyDown(keyCode, event) && super.onKeyDown(keyCode, event);
     }
 }

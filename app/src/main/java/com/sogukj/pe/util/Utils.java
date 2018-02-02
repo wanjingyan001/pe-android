@@ -9,6 +9,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -332,7 +334,7 @@ public class Utils {
 
     }
 
-    public static InputFilter[] getFilter(final Context context){
+    public static InputFilter[] getFilter(final Context context) {
         InputFilter filter = new InputFilter() {
             Pattern pattern = Pattern.compile("[^a-zA-Z0-9\\u4E00-\\u9FA5_]");
 
@@ -348,6 +350,18 @@ public class Utils {
 
             }
         };
-        return  new InputFilter[]{filter};
+        return new InputFilter[]{filter};
+    }
+
+    /**
+     * 检测网络连接状态
+     * @param context
+     * @return
+     */
+    public static boolean isNetworkError(Context context) {
+        ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        assert manager != null;
+        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isAvailable();
     }
 }

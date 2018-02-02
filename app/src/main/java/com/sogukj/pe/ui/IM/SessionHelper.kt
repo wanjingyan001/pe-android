@@ -18,6 +18,7 @@ import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum
 import com.netease.nimlib.sdk.msg.model.IMMessage
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo
 import com.sogukj.pe.R
+import com.sogukj.util.Store
 
 /**
  * Created by admin on 2018/1/25.
@@ -80,7 +81,7 @@ object SessionHelper {
             val buttons = ArrayList<SessionCustomization.OptionsButton>()
             val infoBtn = object : SessionCustomization.OptionsButton() {
                 override fun onClick(context: Context?, view: View?, sessionId: String?) {
-                    Log.d("WJY", "sessionId:$sessionId")
+                    Log.d("WJY", "sessionId:$sessionId,mine:${Store.store.getUser(context!!)!!.accid}")
                     NimUIKit.getUserInfoProvider().getUserInfoAsync(sessionId) { success, result, code ->
                         val info = result as NimUserInfo
                         val uid = info.extensionMap["uid"] as Int
@@ -122,14 +123,15 @@ object SessionHelper {
         return teamCustomization
     }
 
-    private fun registerMsgForwardFilter(){
-        NimUIKit.setMsgForwardFilter{ return@setMsgForwardFilter false}
+    private fun registerMsgForwardFilter() {
+        NimUIKit.setMsgForwardFilter { return@setMsgForwardFilter false }
     }
 
     private fun registerMsgRevokeFilter() {
         NimUIKit.setMsgRevokeFilter { return@setMsgRevokeFilter false }
     }
-    private fun registerMsgRevokeObserver(){
+
+    private fun registerMsgRevokeObserver() {
         NIMClient.getService(MsgServiceObserve::class.java).observeRevokeMessage(NimMessageRevokeObserver(), true)
     }
 }
