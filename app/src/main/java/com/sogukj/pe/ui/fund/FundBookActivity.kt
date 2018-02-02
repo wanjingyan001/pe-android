@@ -371,17 +371,17 @@ class FundBookActivity : ToolbarActivity(), SupportEmptyView {
                 }, { e ->
                     Trace.e(e)
                 }, {
-                    if (adapter1.dataList.size < 3)
+                    if (adapter1.dataList.size <= 3)
                         tv_more1.visibility = View.GONE
                     else
                         tv_more1.visibility = View.VISIBLE
 
-                    if (adapter2.dataList.size < 3)
+                    if (adapter2.dataList.size <= 3)
                         tv_more2.visibility = View.GONE
                     else
                         tv_more2.visibility = View.VISIBLE
 
-                    if (adapter3.dataList.size < 3)
+                    if (adapter3.dataList.size <= 3)
                         tv_more3.visibility = View.GONE
                     else
                         tv_more3.visibility = View.VISIBLE
