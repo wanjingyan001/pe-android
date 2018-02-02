@@ -367,17 +367,17 @@ class BuildSealActivity : ToolbarActivity() {
         tvLabel.text = bean.name
         paramMap.put(bean.fields, bean.value_map?.is_select)
         if (bean.value_map?.is_select == 1) {
-            rbYes.isChecked = true
-            rbNo.isChecked = false
-        } else {
-            rbYes.isChecked = false
             rbNo.isChecked = true
+            rbYes.isChecked = false
+        } else {
+            rbNo.isChecked = false
+            rbYes.isChecked = true
         }
         bean?.value_map?.hide?.split(",")?.forEach { field ->
             if (bean.value_map?.is_select == 1)
                 hideFields.add(field)
         }
-        rbYes.setOnClickListener {
+        rbNo.setOnClickListener {
             paramMap.put(bean.fields, 1)
             bean?.value_map?.hide?.split(",")?.forEach { field ->
                 if (!TextUtils.isEmpty(field)) {
@@ -387,7 +387,7 @@ class BuildSealActivity : ToolbarActivity() {
             }
         }
 
-        rbNo.setOnClickListener {
+        rbYes.setOnClickListener {
             paramMap.put(bean.fields, 0)
             bean?.value_map?.hide?.split(",")?.forEach { field ->
                 if (!TextUtils.isEmpty(field)) {
