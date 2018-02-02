@@ -302,7 +302,6 @@ class MainProjectFragment : BaseFragment() {
             override fun onPageSelected(position: Int) {
                 //Log.e("onPageSelected", "onPageSelected")
                 tabs?.getTabAt(position)?.select()
-                changeView()
                 fb_add.visibility = if (position == 0 || position == 1) View.VISIBLE else View.GONE
 //                iv_search?.visibility = if (position == 2) View.VISIBLE else View.GONE
 //                iv_add?.visibility = if (position == 1 && user?.is_admin == 1) View.VISIBLE else View.GONE
@@ -336,66 +335,6 @@ class MainProjectFragment : BaseFragment() {
         })
         refresh.setAutoLoadMore(true)
 
-    }
-
-    private fun changeView() {
-        if (toolbarLayout.height == 0) {//toolbarLayout.height=0  fragment来回切换导致toolbarLayout还没有宽高就要
-            tabs.setBackgroundResource(R.drawable.tab_bg_1)
-            tabs.setTabTextColors(Color.parseColor("#a0a4aa"), Color.parseColor("#282828"))
-            for (i in 0 until tabs.getTabCount()) {
-                if (i == tabs.getSelectedTabPosition()) {
-                    setDrawable(i, "1", true)
-                } else {
-                    setDrawable(i, "1", false)
-                }
-            }
-        } else {
-            if (MyNestedScrollParent2.scrollY < toolbarLayout.height) {
-                tabs.setBackgroundResource(R.drawable.tab_bg_1)
-                tabs.setTabTextColors(Color.parseColor("#a0a4aa"), Color.parseColor("#282828"))
-                for (i in 0 until tabs.getTabCount()) {
-                    if (i == tabs.getSelectedTabPosition()) {
-                        setDrawable(i, "1", true)
-                    } else {
-                        setDrawable(i, "1", false)
-                    }
-                }
-            } else if (MyNestedScrollParent2.scrollY >= toolbarLayout.height) {
-                tabs.setBackgroundResource(R.drawable.tab_bg_2)
-                tabs.setTabTextColors(Color.parseColor("#ff7bb4fc"), Color.parseColor("#ffffff"))
-                for (i in 0 until tabs.getTabCount()) {
-                    if (i == tabs.getSelectedTabPosition()) {
-                        setDrawable(i, "2", true)
-                    } else {
-                        setDrawable(i, "2", false)
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * @param index--------(tabs对应的index，分别对应dy,cb等)
-     * @param state---------（1，2）
-     * @param isSelect--------是否选中
-     */
-    private fun setDrawable(index: Int, state: String, isSelect: Boolean) {
-        var name = ""
-        when (index) {
-            0 -> name += "dy_"
-            1 -> name += "cb_"
-            2 -> name += "lx_"
-            3 -> name += "yt_"
-            4 -> name += "tc_"
-        }
-        name += state
-        if (isSelect) {
-            name += "_select"
-        } else {
-            name += "_unselect"
-        }
-        val id = resources.getIdentifier(name, "drawable", context.packageName)
-        tabs.getTabAt(index)!!.setIcon(id)
     }
 
     /**
