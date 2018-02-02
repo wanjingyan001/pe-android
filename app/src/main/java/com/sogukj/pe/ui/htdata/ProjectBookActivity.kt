@@ -170,32 +170,32 @@ class ProjectBookActivity : ToolbarActivity(), SupportEmptyView {
         }
         list1.setOnItemClickListener { parent, view, position, id ->
             val data = adapter1.dataList[position]
-            //download(data.url!!)
-            if (!TextUtils.isEmpty(data.url)) {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = Uri.parse(data.url)
-                startActivity(intent)
-            }
+            download(data.url!!, data.doc_title!!)
+//            if (!TextUtils.isEmpty(data.url)) {
+//                val intent = Intent(Intent.ACTION_VIEW)
+//                intent.data = Uri.parse(data.url)
+//                startActivity(intent)
+//            }
 //            NewsDetailActivity.start(this, data)
         }
         list2.setOnItemClickListener { parent, view, position, id ->
             val data = adapter2.dataList[position]
-            //download(data.url!!)
-            if (!TextUtils.isEmpty(data.url)) {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = Uri.parse(data.url)
-                startActivity(intent)
-            }
+            download(data.url!!, data.doc_title!!)
+//            if (!TextUtils.isEmpty(data.url)) {
+//                val intent = Intent(Intent.ACTION_VIEW)
+//                intent.data = Uri.parse(data.url)
+//                startActivity(intent)
+//            }
 //            NewsDetailActivity.start(this, data)
         }
         list3.setOnItemClickListener { parent, view, position, id ->
             val data = adapter3.dataList[position]
-            //download(data.url!!)
-            if (!TextUtils.isEmpty(data.url)) {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = Uri.parse(data.url)
-                startActivity(intent)
-            }
+            download(data.url!!, data.doc_title!!)
+//            if (!TextUtils.isEmpty(data.url)) {
+//                val intent = Intent(Intent.ACTION_VIEW)
+//                intent.data = Uri.parse(data.url)
+//                startActivity(intent)
+//            }
 //            NewsDetailActivity.start(this, data)
         }
 
@@ -224,8 +224,9 @@ class ProjectBookActivity : ToolbarActivity(), SupportEmptyView {
         }, 100)
     }
 
-    fun download(url: String) {
-        DownloadUtil.getInstance().download(url, Environment.getExternalStorageDirectory().toString(), object : DownloadUtil.OnDownloadListener {
+    fun download(url: String, fileName: String) {
+        showToast("开始下载")
+        DownloadUtil.getInstance().download(url, externalCacheDir.toString(), fileName, object : DownloadUtil.OnDownloadListener {
             override fun onDownloadSuccess(path: String?) {
                 var intent = OpenFileUtil.openFile(path)
                 if (intent == null) {

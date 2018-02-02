@@ -20,6 +20,8 @@ import com.sogukj.pe.R
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.bean.ProjectBookBean
 import com.sogukj.pe.ui.SupportEmptyView
+import com.sogukj.pe.util.DownloadUtil
+import com.sogukj.pe.util.OpenFileUtil
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
@@ -71,11 +73,12 @@ class ProjectBookMoreActivity : ToolbarActivity() {
         })
         adapter.onItemClick = { v, p ->
             val data = adapter.getItem(p);
-            if (!TextUtils.isEmpty(data.url)) {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = Uri.parse(data.url)
-                startActivity(intent)
-            }
+            download(data.url!!, data.doc_title!!)
+//            if (!TextUtils.isEmpty(data.url)) {
+//                val intent = Intent(Intent.ACTION_VIEW)
+//                intent.data = Uri.parse(data.url)
+//                startActivity(intent)
+//            }
         }
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
@@ -107,6 +110,27 @@ class ProjectBookMoreActivity : ToolbarActivity() {
         handler.postDelayed({
             doRequest()
         }, 100)
+    }
+
+    fun download(url: String, fileName: String) {
+        showToast("开始下载")
+        DownloadUtil.getInstance().download(url, externalCacheDir.toString(), fileName, object : DownloadUtil.OnDownloadListener {
+            override fun onDownloadSuccess(path: String?) {
+                var intent = OpenFileUtil.openFile(path)
+                if (intent == null) {
+                    showToast("文件类型不合格")
+                } else {
+                    startActivity(intent)
+                }
+            }
+
+            override fun onDownloading(progress: Int) {
+            }
+
+            override fun onDownloadFailed() {
+                showToast("下载失败")
+            }
+        })
     }
 
     var page = 1
