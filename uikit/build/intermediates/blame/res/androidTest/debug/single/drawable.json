@@ -212,6 +212,10 @@
         "source": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/bundles/debug/res/drawable/nim_team_create_btn_selector.xml"
     },
     {
+        "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable/im_audio_gif.gif",
+        "source": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/bundles/debug/res/drawable/im_audio_gif.gif"
+    },
+    {
         "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable/abc_ratingbar_indicator_material.xml",
         "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/55db4895ed8ab9b31de9f046b5690c60/res/drawable/abc_ratingbar_indicator_material.xml"
     },

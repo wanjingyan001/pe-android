@@ -97,25 +97,25 @@ class UserEditActivity : ToolbarActivity() {
             //            var intent = Intent()
 //            intent.type = "image/*"
 //            intent.action = Intent.ACTION_GET_CONTENT
-            var intent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            startActivityForResult(intent, 0x001)
-//            RxGalleryFinal
-//                    .with(this@UserEditActivity)
-//                    .image()
-//                    .radio()
-////                    .cropMaxBitmapSize(1024 * 1024)
-//////                    .cropAspectRatioOptions(0, AspectRatio("1:1", 120f, 120f))
-////                    .cropMaxResultSize(120, 120)
-////                    .crop()
-//                    .imageLoader(ImageLoaderType.GLIDE)
-//                    .subscribe(object : RxBusResultDisposable<ImageRadioResultEvent>() {
-//                        override fun onEvent(event: ImageRadioResultEvent?) {
-//                            val path = event?.result?.originalPath
-//                            if (!TextUtils.isEmpty(path))
-//                                doUpload(path!!)
-//                        }
-//                    })
-//                    .openGallery()
+//            var intent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+//            startActivityForResult(intent, 0x001)
+            RxGalleryFinal
+                    .with(this@UserEditActivity)
+                    .image()
+                    .radio()
+//                    .cropMaxBitmapSize(1024 * 1024)
+////                    .cropAspectRatioOptions(0, AspectRatio("1:1", 120f, 120f))
+//                    .cropMaxResultSize(120, 120)
+//                    .crop()
+                    .imageLoader(ImageLoaderType.GLIDE)
+                    .subscribe(object : RxBusResultDisposable<ImageRadioResultEvent>() {
+                        override fun onEvent(event: ImageRadioResultEvent?) {
+                            val path = event?.result?.originalPath
+                            if (!TextUtils.isEmpty(path))
+                                doUpload(path!!)
+                        }
+                    })
+                    .openGallery()
         }
 
         //-1=>隐藏入口 0=>未开启  1=>进入评分中心，2=>进入填写页面
@@ -128,19 +128,19 @@ class UserEditActivity : ToolbarActivity() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == RESULT_OK && requestCode == 0x001) {
-            var uri = data?.getData()
-            var cursor = getContentResolver().query(uri, null, null, null, null);
-            if (cursor != null && cursor.moveToFirst()) {
-                var path = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA))
-                Log.e("path", path)
-                doUpload(path)
-            }
-        }
-
-    }
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        if (resultCode == RESULT_OK && requestCode == 0x001) {
+//            var uri = data?.getData()
+//            var cursor = getContentResolver().query(uri, null, null, null, null);
+//            if (cursor != null && cursor.moveToFirst()) {
+//                var path = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA))
+//                Log.e("path", path)
+//                doUpload(path)
+//            }
+//        }
+//
+//    }
 
     private val mHandler = object : Handler() {
 
