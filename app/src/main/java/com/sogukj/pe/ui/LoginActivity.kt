@@ -8,6 +8,7 @@ import android.text.TextUtils
 import android.util.Log
 import com.framework.base.ActivityHelper
 import com.framework.base.BaseActivity
+import com.jakewharton.rxbinding2.widget.RxTextView
 import com.netease.nim.uikit.api.NimUIKit
 import com.netease.nimlib.sdk.RequestCallback
 import com.netease.nimlib.sdk.auth.LoginInfo
@@ -19,9 +20,13 @@ import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
 import com.sogukj.util.XmlDb
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.functions.Consumer
+import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_login.*
+import org.jetbrains.anko.backgroundResource
 import java.util.*
 
 /**
@@ -36,9 +41,32 @@ class LoginActivity : BaseActivity() {
         tv_code.setOnClickListener {
             doSendCode();
         }
-        btn_login.setOnClickListener {
-            doLogin();
-        }
+//        btn_login.setOnClickListener {
+//            doLogin();
+//        }
+        btn_login.isEnabled = false
+        btn_login.backgroundResource = R.drawable.bg_btn_login_1
+        var observable_List = ArrayList<Observable<CharSequence>>()
+        observable_List.add(RxTextView.textChanges(et_name))
+        observable_List.add(RxTextView.textChanges(et_pwd))
+        Observable.combineLatest(observable_List, object : Function<Array<Any>, Boolean> {
+            override fun apply(str: Array<Any>): Boolean {
+                return (str[0] as CharSequence).isNullOrEmpty() || (str[1] as CharSequence).isNullOrEmpty()//只要有一个是null或空就反悔true
+            }
+        }).subscribe(object : Consumer<Boolean> {
+            override fun accept(t: Boolean) {
+                if (!t) {
+                    btn_login.isEnabled = true
+                    btn_login.backgroundResource = R.drawable.bg_btn_login
+                    btn_login.setOnClickListener {
+                        doLogin();
+                    }
+                } else {
+                    btn_login.isEnabled = false
+                    btn_login.backgroundResource = R.drawable.bg_btn_login_1
+                }
+            }
+        })
     }
 
     private fun doSendCode() {
@@ -59,8 +87,7 @@ class LoginActivity : BaseActivity() {
                         showToast("验证码已经发送，请查收")
                     else
                         showToast(payload.message)
-                }, {
-                    e ->
+                }, { e ->
                     showToast("验证码发送失败")
                 })
 
@@ -70,7 +97,7 @@ class LoginActivity : BaseActivity() {
     private fun doLogin() {
         val user = UserBean()
         et_name?.text?.toString()?.apply {
-            user.phone =this
+            user.phone = this
         }
 
         if (TextUtils.isEmpty(et_name.text) || !Utils.isMobile(et_name.text.trim())) {
@@ -96,7 +123,7 @@ class LoginActivity : BaseActivity() {
                         showToast("登录成功")
                         payload?.payload?.apply {
                             Store.store.setUser(this@LoginActivity, this)
-                            Log.d("WJY","$accid==>$token")
+                            Log.d("WJY", "$accid==>$token")
                             ifNotNull(accid, token, { accid, token ->
                                 IMLogin(accid, token)
                             })
@@ -114,7 +141,7 @@ class LoginActivity : BaseActivity() {
      */
     private fun IMLogin(account: String, token: String) {
         val loginInfo = LoginInfo(account, token)
-        NimUIKit.login(loginInfo,object : RequestCallback<LoginInfo> {
+        NimUIKit.login(loginInfo, object : RequestCallback<LoginInfo> {
             override fun onSuccess(p0: LoginInfo?) {
                 Log.d("WJY", "登录成功:${p0?.account}===>${p0?.token}")
                 val xmlDb = XmlDb.open(this@LoginActivity)
