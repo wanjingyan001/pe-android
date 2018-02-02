@@ -15,13 +15,13 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:background="@color/white"
-        android:visibility="gone">
+        android:visibility="gone" >
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:layout_alignParentTop="true"
-            android:background="@color/color_grey_999999" />
+            android:background="#f7f9fc" />
 
         <ImageView
             android:id="@+id/record_gif1"
@@ -40,6 +40,15 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="10dp"
             android:text="按住说话" />
+
+        <ImageView
+            android:id="@+id/record_gif2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/record_tv"
+            android:layout_alignTop="@+id/record_tv"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/record_tv" />
 
         <ImageView
             android:id="@+id/record_btn"

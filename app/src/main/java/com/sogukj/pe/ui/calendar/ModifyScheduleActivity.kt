@@ -14,7 +14,6 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.CustomSealBean
 import com.sogukj.pe.bean.UserBean
-import com.sogukj.pe.ui.user.OrganizationActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
@@ -27,6 +26,8 @@ import java.util.*
 import kotlin.properties.Delegates
 
 class ModifyScheduleActivity : ToolbarActivity(), AddPersonListener, View.OnClickListener {
+
+
     var type: Long by Delegates.notNull()
     var data_id = 0
     var companyId: Int? = null
@@ -291,6 +292,8 @@ class ModifyScheduleActivity : ToolbarActivity(), AddPersonListener, View.OnClic
     }
 
     override fun addPerson(tag: String) {
-        OrganizationActivity.startForResult(this, tag)
+    }
+    override fun remove(tag: String, user: UserBean) {
+
     }
 }

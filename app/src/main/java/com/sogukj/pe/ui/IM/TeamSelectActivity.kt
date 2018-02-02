@@ -18,6 +18,7 @@ import android.widget.BaseExpandableListAdapter
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import anet.channel.util.Utils.context
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.netease.nim.uikit.business.team.activity.CustomExpandableListView
@@ -26,7 +27,6 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.DepartmentBean
 import com.sogukj.pe.bean.UserBean
-import com.sogukj.pe.ui.user.OrganizationActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
@@ -47,6 +47,7 @@ class TeamSelectActivity : AppCompatActivity() {
     val mine = Store.store.getUser(this)//自己
     var isSelectUser: Boolean = false//是否是选择用户
     var isCreateTeam: Boolean = true
+    var fromTeam: Boolean = true
     var flag: String? = ""
     lateinit var searchKey: String
     private lateinit var orgAdapter: OrganizationAdapter
@@ -59,10 +60,10 @@ class TeamSelectActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_team_select)
         Utils.setWindowStatusBarColor(this, R.color.color_blue_0888ff)
-        team_toolbar.setNavigationIcon(R.drawable.sogu_ic_back)
-        team_toolbar.setNavigationOnClickListener { finish() }
         team_toolbar.title = ""
         setSupportActionBar(team_toolbar)
+        team_toolbar.setNavigationIcon(R.drawable.sogu_ic_back)
+        team_toolbar.setNavigationOnClickListener { finish() }
         getDataFromIntent()
         initSearchView()
         initResultList()
@@ -118,6 +119,7 @@ class TeamSelectActivity : AppCompatActivity() {
         isSelectUser = intent.getBooleanExtra(Extras.SELECT_USER, false)
         val data = intent.getSerializableExtra(Extras.DATA)
         isCreateTeam = intent.getBooleanExtra(Extras.CREATE_TEAM, true)
+        fromTeam = intent.getBooleanExtra(Extras.FLAG, true)
         if (data != null) {
             alreadyList = data as ArrayList<UserBean>
             selectNumber.text = "已选择:${alreadyList.size}人"
@@ -215,7 +217,7 @@ class TeamSelectActivity : AppCompatActivity() {
                             departList.add(it)
                             it.data?.forEach {
                                 it.user_id?.let {
-                                    if (it == mine?.uid) {
+                                    if (it == mine?.uid && fromTeam) {
                                         selectMap.put(it, true)
                                     } else {
                                         selectMap.put(it, false)
@@ -257,7 +259,9 @@ class TeamSelectActivity : AppCompatActivity() {
 
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_create_imteam, menu)
+        if (fromTeam) {
+            menuInflater.inflate(R.menu.menu_create_imteam, menu)
+        }
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -344,7 +348,7 @@ class TeamSelectActivity : AppCompatActivity() {
             convertView!!.tag = holder
             parents[groupPosition].data?.let {
                 val userBean = it[childPosition]
-                if (userBean.user_id == mine!!.uid) {
+                if (userBean.user_id == mine!!.uid && fromTeam) {
                     holder.selectIcon.imageResource = R.drawable.cannot_select
                 }
                 val options = RequestOptions()
@@ -371,7 +375,7 @@ class TeamSelectActivity : AppCompatActivity() {
                 holder.itemView.setOnClickListener {
                     if (isSelectUser) {
                         //选人
-                        if (userBean.user_id != mine.uid) {
+                        if (userBean.user_id != mine.uid || !fromTeam) {
                             holder.selectIcon.isSelected = !holder.selectIcon.isSelected
                             userBean.user_id?.let {
                                 selectMap.put(it, holder.selectIcon.isSelected)
@@ -489,43 +493,36 @@ class TeamSelectActivity : AppCompatActivity() {
 
     companion object {
 
-        fun start(ctx: Activity?, departList: ArrayList<DepartmentBean>) {
-            val intent = Intent(ctx, OrganizationActivity::class.java)
-            intent.putExtra(Extras.DATA, departList)
-            intent.putExtra(Extras.FLAG, "USER")
-            ctx?.startActivity(intent)
-        }
-
-        fun startForResult(ctx: Activity?, tag: String) {
-            val intent = Intent(ctx, OrganizationActivity::class.java)
-            intent.putExtra(Extras.FLAG, "SelectUser")
-            intent.putExtra(Extras.NAME, tag)
-            ctx?.startActivityForResult(intent, Extras.REQUESTCODE)
-        }
-
-        fun startForResult(ctx: Fragment?) {
-            val intent = Intent(ctx?.context, OrganizationActivity::class.java)
-            intent.putExtra(Extras.FLAG, "SelectUser")
-            ctx?.startActivityForResult(intent, Extras.REQUESTCODE)
-        }
-
-
-        fun start(context: Context) {
-            val intent = Intent()
-            intent.setClass(context, TeamSelectActivity::class.java)
-            context.startActivity(intent)
-        }
-
-        fun startForResult(context: Context, isSelectUser: Boolean? = null, alreadySelect: ArrayList<UserBean>? = null, isCreateTeam: Boolean? = null) {
+        fun startForResult(context: Context, isSelectUser: Boolean? = null,
+                           alreadySelect: ArrayList<UserBean>? = null,
+                           isCreateTeam: Boolean? = null,
+                           fromTeam: Boolean? = null,
+                           requestCode: Int? = null) {
             val intent = Intent(context, TeamSelectActivity::class.java)
             intent.putExtra(Extras.SELECT_USER, isSelectUser)
             intent.putExtra(Extras.DATA, alreadySelect)
             intent.putExtra(Extras.CREATE_TEAM, isCreateTeam)
+            intent.putExtra(Extras.FLAG, fromTeam)
+            val code = requestCode ?: Extras.REQUESTCODE
             if (context is Fragment) {
-                context.startActivityForResult(intent, Extras.REQUESTCODE)
+                context.startActivityForResult(intent, code)
             } else if (context is Activity) {
-                context.startActivityForResult(intent, Extras.REQUESTCODE)
+                context.startActivityForResult(intent, code)
             }
+        }
+
+        fun startForResult(fragment: Fragment, isSelectUser: Boolean? = null,
+                           alreadySelect: ArrayList<UserBean>? = null,
+                           isCreateTeam: Boolean? = null,
+                           fromTeam: Boolean? = null,
+                           requestCode: Int? = null) {
+            val intent = Intent(fragment.context, TeamSelectActivity::class.java)
+            intent.putExtra(Extras.SELECT_USER, isSelectUser)
+            intent.putExtra(Extras.DATA, alreadySelect)
+            intent.putExtra(Extras.CREATE_TEAM, isCreateTeam)
+            intent.putExtra(Extras.FLAG, fromTeam)
+            val code = requestCode ?: Extras.REQUESTCODE
+            fragment.startActivityForResult(intent, code)
         }
     }
 }

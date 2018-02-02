@@ -7,17 +7,21 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.View
 import android.widget.RelativeLayout
 import android.widget.TextView
+import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.gson.Gson
 import com.netease.nim.uikit.api.NimUIKit
 import com.netease.nim.uikit.business.team.helper.TeamHelper
+import com.netease.nim.uikit.common.ui.widget.SwitchButton
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.RequestCallback
+import com.netease.nimlib.sdk.friend.FriendService
 import com.netease.nimlib.sdk.team.TeamService
 import com.netease.nimlib.sdk.team.model.Team
 import com.netease.nimlib.sdk.team.model.TeamMember
@@ -30,11 +34,14 @@ import kotlinx.android.synthetic.main.activity_team_info.*
 import org.jetbrains.anko.toast
 
 
-class TeamInfoActivity : AppCompatActivity(), View.OnClickListener {
+class TeamInfoActivity : AppCompatActivity(), View.OnClickListener, SwitchButton.OnChangedListener {
+
+
     lateinit var sessionId: String
     lateinit var toolbar: Toolbar
     lateinit var teamMember: RecyclerView
     lateinit var teamLayout: RelativeLayout
+    lateinit var profileToggle: SwitchButton
     var teamMembers = ArrayList<UserBean>()
     var adapter: MemberAdapter? = null
 
@@ -49,6 +56,7 @@ class TeamInfoActivity : AppCompatActivity(), View.OnClickListener {
         toolbar.setNavigationOnClickListener { finish() }
         teamMember = findViewById(R.id.team_member) as RecyclerView
         teamLayout = findViewById(R.id.team_layout) as RelativeLayout
+        profileToggle = findViewById(R.id.user_profile_toggle) as SwitchButton
         val manager = LinearLayoutManager(this)
         manager.orientation = LinearLayoutManager.HORIZONTAL
         teamMember.layoutManager = manager
@@ -66,6 +74,7 @@ class TeamInfoActivity : AppCompatActivity(), View.OnClickListener {
         teamSearch.setOnClickListener(this)
         teamLayout.setOnClickListener(this)
         exit_team.setOnClickListener(this)
+        profileToggle.setOnChangedListener(this)
         doRequest()
     }
 
@@ -73,6 +82,7 @@ class TeamInfoActivity : AppCompatActivity(), View.OnClickListener {
     fun doRequest() {
         NIMClient.getService(TeamService::class.java).queryTeam(sessionId).setCallback(object : RequestCallback<Team> {
             override fun onSuccess(p0: Team?) {
+                Log.d("WJY", "${Gson().toJson(p0)}")
                 p0?.let {
                     Glide.with(this@TeamInfoActivity)
                             .load(it.icon)
@@ -178,6 +188,31 @@ class TeamInfoActivity : AppCompatActivity(), View.OnClickListener {
                         .show()
             }
         }
+    }
+
+    override fun OnChanged(v: View?, checkState: Boolean) {
+        NIMClient.getService(FriendService::class.java).setMessageNotify(sessionId, checkState).setCallback(object : RequestCallback<Void> {
+            override fun onException(exception: Throwable?) {
+
+            }
+
+            override fun onFailed(code: Int) {
+                if (code == 408) {
+                    toast(R.string.network_is_not_available)
+                }else{
+                    toast("未知错误")
+                }
+                profileToggle.check = !checkState
+            }
+
+            override fun onSuccess(param: Void?) {
+                if (checkState) {
+                    toast("开启消息提醒成功")
+                } else {
+                    toast("关闭消息提醒成功")
+                }
+            }
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

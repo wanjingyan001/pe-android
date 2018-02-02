@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.netease.nim.uikit.common.ui.dialog.CustomAlertDialog;
 import com.sogukj.pe.R;
 import com.sogukj.pe.util.Utils;
 
@@ -32,14 +31,14 @@ public class TeamHistoryFileActivity extends AppCompatActivity {
         Utils.setWindowStatusBarColor(this, R.color.color_blue_0888ff);
         toolbar = (Toolbar) findViewById(R.id.team_toolbar);
         toolbar.setTitle("");
-        toolbar.setNavigationIcon(R.drawable.nim_actionbar_white_back_icon);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.sogu_ic_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-        setSupportActionBar(toolbar);
         window = new TeamMenuWindow(this);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -49,7 +48,7 @@ public class TeamHistoryFileActivity extends AppCompatActivity {
             }
         });
 
-        ArrayList<String> list = new ArrayList<>();
+        final ArrayList<String> list = new ArrayList<>();
         for (int i = 0; i < 30; i++) {
             list.add("");
         }
@@ -59,23 +58,12 @@ public class TeamHistoryFileActivity extends AppCompatActivity {
         adapter.setListener(new onItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                CustomAlertDialog dialog = new CustomAlertDialog(TeamHistoryFileActivity.this);
+                IMDialog dialog = new IMDialog(TeamHistoryFileActivity.this);
                 dialog.setTitle("海通创新.apk");
-                dialog.addItem("发送给联系人", new CustomAlertDialog.onSeparateItemClickListener() {
-                    @Override
-                    public void onClick() {
+                dialog.setOnItemClickListener(new IMDialog.IMItemClickListener(){
 
-                    }
-                });
-                dialog.addItem("分享链接", new CustomAlertDialog.onSeparateItemClickListener() {
                     @Override
-                    public void onClick() {
-
-                    }
-                });
-                dialog.addItem("取消", new CustomAlertDialog.onSeparateItemClickListener() {
-                    @Override
-                    public void onClick() {
+                    public void itemClick(int position) {
 
                     }
                 });

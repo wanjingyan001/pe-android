@@ -1,47 +1,57 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/rootScroll"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:focusableInTouchMode="true"
-    android:overScrollMode="never"
-    android:scrollbars="none"
-    tools:context="com.sogukj.pe.ui.weekly.WeeklyThisFragment">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/root"
+    <ScrollView
+        android:id="@+id/rootScroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:focusable="true"
         android:focusableInTouchMode="true"
-        android:orientation="vertical">
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        tools:context="com.sogukj.pe.ui.weekly.WeeklyThisFragment">
 
-        <Spinner
-            android:id="@+id/spinner_this"
-            android:layout_width="wrap_content"
-            android:layout_height="20dp"
-            android:layout_gravity="right"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="20dp" />
-
-        <TextView
-            android:id="@+id/buchong_hint"
-            style="@style/SoguTextMedium"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/root"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="30dp"
-            android:text="补充记录"
-            android:textColor="@color/text_1"
-            android:textSize="24sp" />
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="vertical">
 
-        <include layout="@layout/buchong_empty" />
+            <Spinner
+                android:id="@+id/spinner_this"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_gravity="right"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="20dp" />
 
-        <include layout="@layout/buchong_full" />
+            <TextView
+                android:id="@+id/buchong_hint"
+                style="@style/SoguTextMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="30dp"
+                android:text="补充记录"
+                android:textColor="@color/text_1"
+                android:textSize="24sp" />
 
-        <include layout="@layout/send" />
+            <include layout="@layout/buchong_empty" />
 
-    </LinearLayout>
+            <include layout="@layout/buchong_full" />
 
-</ScrollView>
+            <include layout="@layout/send" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <include layout="@layout/layout_network_error" />
+</LinearLayout>
+
+

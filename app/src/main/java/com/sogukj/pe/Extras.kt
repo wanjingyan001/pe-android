@@ -18,6 +18,8 @@ object Extras {
     val LIST = "ext.list"
     val LIST2 = "ext.list2"
     val MAP = "ext.map"
+    val SEND_USERS ="ext.sendUsers"
+    val COPY_FOR_USERS = "ext.copyForUsers"
     val REQUESTCODE = 1001
     val RESULTCODE = 1002
     val RESULTCODE2 = 1003

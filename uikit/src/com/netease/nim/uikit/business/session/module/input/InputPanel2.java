@@ -21,6 +21,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSONObject;
+import com.bumptech.glide.Glide;
 import com.nbsp.materialfilepicker.MaterialFilePicker;
 import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 import com.netease.nim.uikit.R;
@@ -45,14 +47,22 @@ import com.netease.nim.uikit.common.util.storage.StorageType;
 import com.netease.nim.uikit.common.util.storage.StorageUtil;
 import com.netease.nim.uikit.common.util.string.StringUtil;
 import com.netease.nim.uikit.impl.NimUIKitImpl;
+import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.media.record.AudioRecorder;
 import com.netease.nimlib.sdk.media.record.IAudioRecordCallback;
 import com.netease.nimlib.sdk.media.record.RecordType;
 import com.netease.nimlib.sdk.msg.MessageBuilder;
+import com.netease.nimlib.sdk.msg.MsgService;
+import com.netease.nimlib.sdk.msg.attachment.FileAttachment;
+import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
+import com.netease.nimlib.sdk.msg.model.CustomNotification;
+import com.netease.nimlib.sdk.msg.model.CustomNotificationConfig;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 
 import java.io.File;
 import java.util.List;
+
+import jp.wasabeef.glide.transformations.internal.Utils;
 
 /**
  * Created by admin on 2018/1/15.
@@ -77,7 +87,8 @@ public class InputPanel2 implements IAudioRecordCallback, AitTextChangeListener,
     private boolean cancelled = false;
     private boolean touched = false; // 是否按着
 
-
+    // data
+    private long typingTime = 0;
     private Runnable showTextRunnable = new Runnable() {
         @Override
         public void run() {
@@ -89,6 +100,8 @@ public class InputPanel2 implements IAudioRecordCallback, AitTextChangeListener,
     private TextView recordTv;
     private ImageView recordBtn;
     private ImageView deleteRecord;
+    private ImageView record_gif1;
+    private ImageView record_gif2;
 
     public InputPanel2(Container container, View view, List<BaseAction> actions) {
         this.container = container;
@@ -146,6 +159,8 @@ public class InputPanel2 implements IAudioRecordCallback, AitTextChangeListener,
         camera = (ImageView) view.findViewById(R.id.camera);
         file = (ImageView) view.findViewById(R.id.file);
         recordLayout = (RelativeLayout) view.findViewById(R.id.record_layout);
+        record_gif1 = ((ImageView) view.findViewById(R.id.record_gif1));
+        record_gif2 = ((ImageView) view.findViewById(R.id.record_gif2));
         recordTv = (TextView) view.findViewById(R.id.record_tv);
         recordBtn = (ImageView) view.findViewById(R.id.record_btn);
         deleteRecord = (ImageView) view.findViewById(R.id.record_delete);
@@ -182,6 +197,15 @@ public class InputPanel2 implements IAudioRecordCallback, AitTextChangeListener,
 
     private void initTextEdit() {
         editTextMessage.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        editTextMessage.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus && recordLayout.getVisibility() == View.VISIBLE) {
+                    recordLayout.setVisibility(View.GONE);
+                    audio.setSelected(false);
+                }
+            }
+        });
         editTextMessage.addTextChangedListener(new TextWatcher() {
             private int start;
             private int count;
@@ -218,8 +242,39 @@ public class InputPanel2 implements IAudioRecordCallback, AitTextChangeListener,
                 if (aitTextWatcher != null) {
                     aitTextWatcher.afterTextChanged(s);
                 }
+                sendTypingCommand();
             }
         });
+    }
+
+    /**
+     * 发送“正在输入”通知
+     */
+    private void sendTypingCommand() {
+        if (container.account.equals(NimUIKit.getAccount())) {
+            return;
+        }
+
+        if (container.sessionType == SessionTypeEnum.Team || container.sessionType == SessionTypeEnum.ChatRoom) {
+            return;
+        }
+
+        if (System.currentTimeMillis() - typingTime > 5000L) {
+            typingTime = System.currentTimeMillis();
+            CustomNotification command = new CustomNotification();
+            command.setSessionId(container.account);
+            command.setSessionType(container.sessionType);
+            CustomNotificationConfig config = new CustomNotificationConfig();
+            config.enablePush = false;
+            config.enableUnreadCount = false;
+            command.setConfig(config);
+
+            JSONObject json = new JSONObject();
+            json.put("id", "1");
+            command.setContent(json.toString());
+
+            NIMClient.getService(MsgService.class).sendCustomNotification(command);
+        }
     }
 
 
@@ -288,6 +343,7 @@ public class InputPanel2 implements IAudioRecordCallback, AitTextChangeListener,
     public boolean isRecording() {
         return audioMessageHelper != null && audioMessageHelper.isRecording();
     }
+
     private static final String TAG = "MsgSendLayout";
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -321,11 +377,13 @@ public class InputPanel2 implements IAudioRecordCallback, AitTextChangeListener,
         }
     }
 
-    public void onKeyDown(int keyCode, KeyEvent event){
-        Log.d("WJY","===>"+keyCode+"===="+event.getKeyCode()+"===");
-        if (keyCode == KeyEvent.KEYCODE_BACK){
-
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && recordLayout.getVisibility() == View.VISIBLE) {
+            audio.setSelected(false);
+            recordLayout.setVisibility(View.GONE);
+            return true;
         }
+        return false;
     }
 
     /**
@@ -426,8 +484,7 @@ public class InputPanel2 implements IAudioRecordCallback, AitTextChangeListener,
     }
 
     private void onPicked(File file) {
-        String account = NimUIKit.getAccount();
-        IMMessage message = MessageBuilder.createImageMessage(account,container.sessionType,file,file.getName());
+        IMMessage message = MessageBuilder.createImageMessage(container.account, container.sessionType, file, file.getName());
         container.proxy.sendMessage(message);
     }
 
@@ -452,7 +509,7 @@ public class InputPanel2 implements IAudioRecordCallback, AitTextChangeListener,
 
     @Override
     public void onRecordReady() {
-        Log.d("WJY","AudioRecorder:onRecordReady");
+        Log.d("WJY", "AudioRecorder:onRecordReady");
     }
 
     int second;
@@ -461,40 +518,56 @@ public class InputPanel2 implements IAudioRecordCallback, AitTextChangeListener,
         @Override
         public void run() {
             second++;
-            Log.d("WJY", "====>" + timeParse(second * 1000));
             recordTv.setText(timeParse(second * 1000));
             handler.postDelayed(this, 1000);
         }
     };
+
     @Override
     public void onRecordStart(File file, RecordType recordType) {
-        Log.d("WJY","AudioRecorder:onRecordStart");
+        Log.d("WJY", "AudioRecorder:onRecordStart");
         started = true;
         if (!touched) {
             return;
         }
         second = 0;
         handler.post(runnable);
+        record_gif1.setVisibility(View.VISIBLE);
+        record_gif2.setVisibility(View.VISIBLE);
+        Glide.with(container.activity)
+                .asGif()
+                .load(R.drawable.im_audio_gif)
+                .into(record_gif1);
+        Glide.with(container.activity)
+                .asGif()
+                .load(R.drawable.im_audio_gif)
+                .into(record_gif2);
     }
 
     @Override
     public void onRecordSuccess(File file, long l, RecordType recordType) {
-        Log.d("WJY","AudioRecorder:onRecordSuccess");
+        Log.d("WJY", "AudioRecorder:onRecordSuccess");
         IMMessage audioMessage = MessageBuilder.createAudioMessage(container.account, container.sessionType, file, l);
         container.proxy.sendMessage(audioMessage);
+        record_gif1.setVisibility(View.GONE);
+        record_gif2.setVisibility(View.GONE);
     }
 
     @Override
     public void onRecordFail() {
-        Log.d("WJY","AudioRecorder:onRecordFail");
+        Log.d("WJY", "AudioRecorder:onRecordFail");
         if (started) {
+            record_gif1.setVisibility(View.GONE);
+            record_gif2.setVisibility(View.GONE);
             Toast.makeText(container.activity, R.string.recording_error, Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     public void onRecordCancel() {
-        Log.d("WJY","AudioRecorder:onRecordCancel");
+        Log.d("WJY", "AudioRecorder:onRecordCancel");
+        record_gif1.setVisibility(View.GONE);
+        record_gif2.setVisibility(View.GONE);
     }
 
     @Override
@@ -502,10 +575,14 @@ public class InputPanel2 implements IAudioRecordCallback, AitTextChangeListener,
         EasyAlertDialogHelper.createOkCancelDiolag(container.activity, "", container.activity.getString(R.string.recording_max_time), false, new EasyAlertDialogHelper.OnDialogActionListener() {
             @Override
             public void doCancelAction() {
+                record_gif1.setVisibility(View.GONE);
+                record_gif2.setVisibility(View.GONE);
             }
 
             @Override
             public void doOkAction() {
+                record_gif1.setVisibility(View.GONE);
+                record_gif2.setVisibility(View.GONE);
                 audioMessageHelper.handleEndRecord(true, i);
             }
         }).show();
@@ -536,40 +613,32 @@ public class InputPanel2 implements IAudioRecordCallback, AitTextChangeListener,
         if (i == R.id.buttonSendMessage) {
             onTextMessageSendButtonPressed();
         } else if (i == R.id.audio) {
-            StringUtil.closeInput(container.activity,editTextMessage);
+            StringUtil.closeInput(container.activity, editTextMessage);
+            editTextMessage.clearFocus();
             audio.setSelected(true);
-//            pic.setSelected(false);
-//            camera.setSelected(false);
-//            file.setSelected(false);
             recordLayout.setVisibility(View.VISIBLE);
         } else if (i == R.id.pic) {
-            StringUtil.closeInput(container.activity,editTextMessage);
+            StringUtil.closeInput(container.activity, editTextMessage);
+            editTextMessage.clearFocus();
             audio.setSelected(false);
-//            pic.setSelected(true);
-//            camera.setSelected(false);
-//            file.setSelected(false);
             recordLayout.setVisibility(View.GONE);
             PickImageHelper.PickImageOption option = getPickImageOption();
             PickImageActivity.start(container.activity, RequestCode.PICK_IMAGE, PickImageActivity.FROM_LOCAL,
                     option.outputPath, option.multiSelect,
                     option.multiSelectMaxCount, true, false, 0, 0);
         } else if (i == R.id.camera) {
-            StringUtil.closeInput(container.activity,editTextMessage);
+            StringUtil.closeInput(container.activity, editTextMessage);
+            editTextMessage.clearFocus();
             audio.setSelected(false);
-//            pic.setSelected(false);
-//            camera.setSelected(true);
-//            file.setSelected(false);
             recordLayout.setVisibility(View.GONE);
             PickImageHelper.PickImageOption option = getPickImageOption();
             PickImageActivity.start(container.activity, RequestCode.PICK_IMAGE, PickImageActivity.FROM_CAMERA,
                     option.outputPath, option.multiSelect, 1,
                     true, false, 0, 0);
         } else if (i == R.id.file) {
-            StringUtil.closeInput(container.activity,editTextMessage);
+            StringUtil.closeInput(container.activity, editTextMessage);
+            editTextMessage.clearFocus();
             audio.setSelected(false);
-//            pic.setSelected(false);
-//            camera.setSelected(false);
-//            file.setSelected(true);
             recordLayout.setVisibility(View.GONE);
             MaterialFilePicker picker = new MaterialFilePicker();
             picker.withActivity(container.activity)

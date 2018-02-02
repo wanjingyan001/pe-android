@@ -28,7 +28,7 @@
             app:bg="@drawable/ic_sp"
             app:icon_main="@drawable/ic_main_sp"
             app:layout_columnWeight="1"
-            app:layout_rowWeight="1"
+
             app:sub_title="用印、签字、请假等"
             app:tag_text="1"
             app:title="审批" />
@@ -40,7 +40,7 @@
             app:bg="@drawable/ic_rl"
             app:icon_main="@drawable/ic_main_rl"
             app:layout_columnWeight="1"
-            app:layout_rowWeight="1"
+
             app:sub_title="任务、日程、会议等"
             app:tag_text="2"
             app:title="日历" />
@@ -52,7 +52,7 @@
             app:bg="@drawable/ic_lxr"
             app:icon_main="@drawable/ic_main_msg1"
             app:layout_columnWeight="1"
-            app:layout_rowWeight="1"
+
             app:sub_title="IM、云秘、审批等"
             app:tag_text="3"
             app:title="消息" />
@@ -64,7 +64,7 @@
             app:bg="@drawable/ic_lxr"
             app:icon_main="@drawable/ic_main_weekly"
             app:layout_columnWeight="1"
-            app:layout_rowWeight="1"
+
             app:sub_title="周报、月报等"
             app:tag_text="4"
             app:title="周报" />

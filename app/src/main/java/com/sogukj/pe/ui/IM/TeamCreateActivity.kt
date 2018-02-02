@@ -107,6 +107,7 @@ class TeamCreateActivity : AppCompatActivity() {
                                 toast("创建成功")
                             }
                             NimUIKit.startTeamSession(this@TeamCreateActivity, it.team.id)
+                            finish()
                         }
 
                     }

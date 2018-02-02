@@ -29,6 +29,7 @@ import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_weekly_wait_to_watch.*
+import kotlinx.android.synthetic.main.layout_network_error.*
 import org.jetbrains.anko.textColor
 import java.net.UnknownHostException
 import java.text.SimpleDateFormat
@@ -38,14 +39,19 @@ import kotlin.collections.ArrayList
 /**
  * A simple [Fragment] subclass.
  */
-class WeeklyWaitToWatchFragment : BaseFragment() {
+class WeeklyWaitToWatchFragment : BaseFragment(), View.OnClickListener {
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            R.id.resetRefresh -> getDepartmentData()
+        }
+    }
 
     override val containerViewId: Int
         get() = R.layout.fragment_weekly_wait_to_watch
 
     lateinit var adapter: RecyclerAdapter<WeeklyWatchBean>
     var format = SimpleDateFormat("yyyy-MM-dd")
-
+    lateinit var arr_adapter: ArrayAdapter<String>
     var currentClick = 0
 
     var loadedData = ArrayList<WeeklyWatchBean>()
@@ -55,11 +61,11 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val arr_adapter = ArrayAdapter<String>(context, R.layout.spinner_item)
+        arr_adapter = ArrayAdapter(context, R.layout.spinner_item)
         arr_adapter.setDropDownViewResource(R.layout.spinner_dropdown)
         spinner.adapter = arr_adapter
         spinner.setSelection(0, true)
-        spinner.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View,
                                         pos: Int, id: Long) {
                 selected_depart_id = parent.selectedItemId
@@ -75,7 +81,7 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
 
             override fun onNothingSelected(parent: AdapterView<*>) {
             }
-        })
+        }
 
         adapter = RecyclerAdapter<WeeklyWatchBean>(context, { _adapter, parent, type ->
             val convertView = _adapter.getView(R.layout.item_wait_watch, parent) as LinearLayout
@@ -89,24 +95,22 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
                         adapter.sort()
                         grid.adapter = adapter
 
-                        grid.setOnItemClickListener(object : AdapterView.OnItemClickListener {
-                            override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                        grid.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+                            (grid.adapter.getItem(position) as WeeklyWatchBean.BeanObj).is_read = 2
+                            grid.tag = "CLICK"
 
-                                (grid.adapter.getItem(position) as WeeklyWatchBean.BeanObj).is_read = 2
-                                grid.setTag("CLICK")
-
-                                val intent = Intent(context, PersonalWeeklyActivity::class.java)
-                                intent.putExtra(Extras.DATA, grid.adapter.getItem(position) as WeeklyWatchBean.BeanObj)
-                                intent.putExtra(Extras.TIME1, data.start_time)
-                                intent.putExtra(Extras.TIME2, data.end_time)
-                                intent.putExtra(Extras.NAME, "Other")
-                                startActivityForResult(intent, 0x011)
-                            }
-                        })
+                            val intent = Intent(context, PersonalWeeklyActivity::class.java)
+                            intent.putExtra(Extras.DATA, grid.adapter.getItem(position) as WeeklyWatchBean.BeanObj)
+                            intent.putExtra(Extras.TIME1, data.start_time)
+                            intent.putExtra(Extras.TIME2, data.end_time)
+                            intent.putExtra(Extras.NAME, "Other")
+                            startActivityForResult(intent, 0x011)
+                        }
                     }
                 }
             }
-        })
+        }
+        )
         adapter.onItemClick = { v, p ->
         }
         val layoutManager = LinearLayoutManager(context)
@@ -264,31 +268,7 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
         currentClick = 0
         selected_depart_id = 0
 
-        SoguApi.getService(baseActivity!!.application)
-                .getDepartment()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ payload ->
-                    if (payload.isOk) {
-                        payload.payload?.apply {
-                            spinner_data.clear()
-                            spinner_data = this
-                            var total = ReceiveSpinnerBean()
-                            total.id = null
-                            total.name = "全部"
-                            spinner_data.add(0, total)
-
-                            for (item in spinner_data) {
-                                arr_adapter.add(item.name)
-                            }
-                            arr_adapter.notifyDataSetChanged()
-                        }
-                    } else
-                        showToast(payload.message)
-                }, { e ->
-                    Trace.e(e)
-                    ToastError(e)
-                })
+        getDepartmentData()
 
         val header = ProgressLayout(baseActivity)
         header.setColorSchemeColors(ContextCompat.getColor(baseActivity, R.color.color_main))
@@ -310,6 +290,46 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
 
         })
         refresh.setAutoLoadMore(true)
+    }
+
+    private fun getDepartmentData() {
+        SoguApi.getService(baseActivity!!.application)
+                .getDepartment()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        root.visibility = View.VISIBLE
+                        networkErrorLayout.visibility = View.GONE
+                        payload.payload?.apply {
+                            spinner_data.clear()
+                            spinner_data = this
+                            var total = ReceiveSpinnerBean()
+                            total.id = null
+                            total.name = "全部"
+                            spinner_data.add(0, total)
+
+                            for (item in spinner_data) {
+                                arr_adapter.add(item.name)
+                            }
+                            arr_adapter.notifyDataSetChanged()
+                        }
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    ToastError(e)
+                    when (e) {
+                        is JsonSyntaxException -> showToast("后台数据出错")
+                        is UnknownHostException -> {
+                            showToast("网络出错")
+                            root.visibility = View.GONE
+                            networkErrorLayout.visibility = View.VISIBLE
+                            resetRefresh.setOnClickListener(this)
+                        }
+                        else -> showToast("未知错误")
+                    }
+                })
     }
 
     var page = 1
@@ -394,7 +414,7 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
             var grid = root.findViewWithTag("CLICK") as GridView
             (grid.adapter as MyAdapter).sort()
             (grid.adapter as MyAdapter).notifyDataSetChanged()
-            grid.setTag("")
+            grid.tag = ""
         }
     }
 
@@ -427,7 +447,7 @@ class WeeklyWaitToWatchFragment : BaseFragment() {
                 viewHolder.name = conView.findViewById(R.id.name) as TextView
                 conView.setTag(viewHolder)
             } else {
-                viewHolder = conView.getTag() as ViewHolder
+                viewHolder = conView.tag as ViewHolder
             }
             viewHolder.icon?.setChar(list.get(position).name?.first())
             viewHolder.name?.text = list.get(position).name

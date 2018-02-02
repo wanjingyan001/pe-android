@@ -12,23 +12,25 @@ import android.widget.*
 import com.framework.base.BaseFragment
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
+import com.google.gson.reflect.TypeToken
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.bean.WeeklyThisBean
+import com.sogukj.pe.ui.IM.TeamSelectActivity
 import com.sogukj.pe.ui.approve.SealApproveActivity
 import com.sogukj.pe.ui.approve.SignApproveActivity
 import com.sogukj.pe.ui.calendar.ModifyTaskActivity
 import com.sogukj.pe.ui.calendar.TaskDetailActivity
 import com.sogukj.pe.ui.project.ProjectActivity
 import com.sogukj.pe.ui.project.RecordTraceActivity
-import com.sogukj.pe.ui.user.OrganizationActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.CircleImageView
 import com.sogukj.pe.view.MyListView
 import com.sogukj.pe.view.WeeklyDotView
 import com.sogukj.service.SoguApi
+import com.sogukj.util.XmlDb
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.buchong_empty.*
@@ -37,9 +39,17 @@ import kotlinx.android.synthetic.main.fragment_weekly_this.*
 import kotlinx.android.synthetic.main.send.*
 import java.net.UnknownHostException
 import java.text.SimpleDateFormat
-import java.util.*
+import kotlin.collections.ArrayList
+import com.google.gson.JsonObject
+import kotlinx.android.synthetic.main.layout_network_error.*
 
-class WeeklyThisFragment : BaseFragment() {
+
+class WeeklyThisFragment : BaseFragment(), View.OnClickListener {
+    override fun onClick(v: View?) {
+        when(v?.id){
+            R.id.resetRefresh->doRequest()
+        }
+    }
 
     override val containerViewId: Int
         get() = R.layout.fragment_weekly_this
@@ -49,33 +59,32 @@ class WeeklyThisFragment : BaseFragment() {
     var week_id: Int? = null//可空（如果为空，显示自己的周报）
     var issue: Int? = null//可空（1=>个人事务,2=>项目事务）
     var TYPE: String = ""
+    lateinit var db: XmlDb
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         inflate = LayoutInflater.from(context)
-
+        db = XmlDb.open(context)
         var mItems = resources.getStringArray(R.array.spinner_this)
         val arr_adapter = ArrayAdapter<String>(context, R.layout.spinner_item, mItems)
         arr_adapter.setDropDownViewResource(R.layout.spinner_dropdown)
         spinner_this.adapter = arr_adapter
 //        spinner_this.setSelection(0, true) 会重复请求导致列表数据重复
-        spinner_this.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+        spinner_this.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View,
                                         pos: Int, id: Long) {
                 clearView()
-                if (pos == 0) {
-                    issue = null
-                } else if (pos == 1) {
-                    issue = 2
-                } else if (pos == 2) {
-                    issue = 1
+                when (pos) {
+                    0 -> issue = null
+                    1 -> issue = 2
+                    2 -> issue = 1
                 }
                 doRequest()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
             }
-        })
+        }
 
         buchong_hint.visibility = View.GONE
         bu_chong_empty.visibility = View.GONE
@@ -130,7 +139,8 @@ class WeeklyThisFragment : BaseFragment() {
                     .subscribe({ payload ->
                         if (payload.isOk) {
                             payload.payload?.apply {
-                                Log.d("WJY", "本周周报:"+Gson().toJson(this))
+                                rootScroll.visibility = View.VISIBLE
+                                networkErrorLayout.visibility = View.GONE
                                 initView(this)
                             }
                         } else
@@ -138,6 +148,16 @@ class WeeklyThisFragment : BaseFragment() {
                     }, { e ->
                         Trace.e(e)
                         ToastError(e)
+                        when (e) {
+                            is JsonSyntaxException -> showToast("后台数据出错")
+                            is UnknownHostException -> {
+                                showToast("网络出错")
+                                rootScroll.visibility = View.GONE
+                                networkErrorLayout.visibility = View.VISIBLE
+                                resetRefresh.setOnClickListener(this)
+                            }
+                            else -> showToast("未知错误")
+                        }
                     })
         }
     }
@@ -254,53 +274,40 @@ class WeeklyThisFragment : BaseFragment() {
             }
         }
 
-        var beanObj = UserBean()
-        beanObj.name = "添加"
+
         var list = ArrayList<UserBean>()
-        list.add(beanObj)
+        val send = db.get(Extras.SEND_USERS, "")
+        if (send.isNotEmpty()) {
+            list = Gson().fromJson(send, object : TypeToken<List<UserBean>>() {}.type)
+        }
         send_adapter = MyAdapter(context, list)
         grid_send_to.adapter = send_adapter
 
         var list1 = ArrayList<UserBean>()
-        var beanObj1 = UserBean()
-        beanObj1.name = "添加"
-        list1.add(beanObj1)
+        val copy = db.get(Extras.COPY_FOR_USERS, "")
+        if (copy.isNotEmpty()) {
+            list1 = Gson().fromJson(copy, object : TypeToken<List<UserBean>>() {}.type)
+        }
         chaosong_adapter = MyAdapter(context, list1)
         grid_chaosong_to.adapter = chaosong_adapter
 
         grid_send_to.setOnItemClickListener { parent, view, position, id ->
-            var already = ArrayList<UserBean>()
-            var list = ArrayList<UserBean>(send_adapter.list)
-            list.removeAt(list.size - 1)
-            already.addAll(list)
-            list = ArrayList<UserBean>(chaosong_adapter.list)
-            list.removeAt(list.size - 1)
-            already.addAll(list)
-
-            var obj = parent.getItemAtPosition(position) as UserBean
-            if (obj.name == "添加") {
-                val intent = Intent(context, OrganizationActivity::class.java)
-                intent.putExtra(Extras.FLAG, "WEEKLY")
-                intent.putExtra(Extras.DATA, already)
-                startActivityForResult(intent, SEND)
+            if (position == list.size) {
+                TeamSelectActivity.startForResult(this, true, send_adapter.getData(), false, false, SEND)
+            } else {
+                list.removeAt(position)
+                send_adapter.notifyDataSetChanged()
+                db.set(Extras.SEND_USERS, Gson().toJson(list))
             }
         }
 
         grid_chaosong_to.setOnItemClickListener { parent, view, position, id ->
-            var already = ArrayList<UserBean>()
-            var list = ArrayList<UserBean>(send_adapter.list)
-            list.removeAt(list.size - 1)
-            already.addAll(list)
-            list = ArrayList<UserBean>(chaosong_adapter.list)
-            list.removeAt(list.size - 1)
-            already.addAll(list)
-
-            var obj = parent.getItemAtPosition(position) as UserBean
-            if (obj.name == "添加") {
-                val intent = Intent(context, OrganizationActivity::class.java)
-                intent.putExtra(Extras.FLAG, "WEEKLY")
-                intent.putExtra(Extras.DATA, already)
-                startActivityForResult(intent, CHAO_SONG)
+            if (position == list1.size) {
+                TeamSelectActivity.startForResult(this, true, chaosong_adapter.getData(), false, false, CHAO_SONG)
+            } else {
+                list1.removeAt(position)
+                chaosong_adapter.notifyDataSetChanged()
+                db.set(Extras.COPY_FOR_USERS, Gson().toJson(list1))
             }
         }
 
@@ -467,14 +474,15 @@ class WeeklyThisFragment : BaseFragment() {
                 viewHolder.name = conView.findViewById(R.id.name) as TextView
                 conView.setTag(viewHolder)
             } else {
-                viewHolder = conView.getTag() as ViewHolder
+                viewHolder = conView.tag as ViewHolder
             }
-            if (list.get(position).name == "添加") {
+            if (position == list.size) {
                 viewHolder.icon?.setImageResource(R.drawable.send_add)
+                viewHolder.name?.text = "添加"
             } else {
-                viewHolder.icon?.setChar(list.get(position).name?.first())
+                viewHolder.icon?.setChar(list[position].name.first())
+                viewHolder.name?.text = list[position].name
             }
-            viewHolder.name?.text = list.get(position).name
             return conView
         }
 
@@ -487,8 +495,10 @@ class WeeklyThisFragment : BaseFragment() {
         }
 
         override fun getCount(): Int {
-            return list.size
+            return list.size + 1
         }
+
+        fun getData(): ArrayList<UserBean> = list
 
         class ViewHolder {
             var icon: CircleImageView? = null
@@ -520,16 +530,20 @@ class WeeklyThisFragment : BaseFragment() {
             week = data?.getSerializableExtra(Extras.DATA) as WeeklyThisBean.Week
             var info = buchong_full.findViewById(R.id.info) as TextView
             info.text = week.info
-        } else if (requestCode == SEND && resultCode == Activity.RESULT_OK) {//SEND
+        } else if (requestCode == SEND && resultCode == Extras.RESULTCODE) {//SEND
             var adapter = grid_send_to.adapter as MyAdapter
-            var beanObj = data?.getSerializableExtra(Extras.DATA) as UserBean
-            adapter.list.add(adapter.list.size - 1, beanObj)
+            var beanObj = data?.getSerializableExtra(Extras.DATA) as ArrayList<UserBean>
+            adapter.list.clear()
+            adapter.list.addAll(beanObj)
             adapter.notifyDataSetChanged()
-        } else if (requestCode == CHAO_SONG && resultCode == Activity.RESULT_OK) {//CHAO_SONG
+            db.set(Extras.SEND_USERS, Gson().toJson(beanObj))
+        } else if (requestCode == CHAO_SONG && resultCode == Extras.RESULTCODE) {//CHAO_SONG
             var adapter = grid_chaosong_to.adapter as MyAdapter
-            var beanObj = data?.getSerializableExtra(Extras.DATA) as UserBean
-            adapter.list.add(adapter.list.size - 1, beanObj)
+            var beanObj = data?.getSerializableExtra(Extras.DATA) as ArrayList<UserBean>
+            adapter.list.clear()
+            adapter.list.addAll(beanObj)
             adapter.notifyDataSetChanged()
+            db.set(Extras.COPY_FOR_USERS, Gson().toJson(beanObj))
         }
     }
 
@@ -543,7 +557,7 @@ class WeeklyThisFragment : BaseFragment() {
             args.putString(Extras.TIME1, s_time)
             args.putString(Extras.TIME2, e_time)
             args.putInt(Extras.CODE, week_id)
-            fragment.setArguments(args)
+            fragment.arguments = args
             return fragment
         }
     }
