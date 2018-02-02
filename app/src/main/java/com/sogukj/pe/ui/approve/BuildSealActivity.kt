@@ -76,7 +76,7 @@ class BuildSealActivity : ToolbarActivity() {
         title = paramTitle
         ll_seal.removeAllViews()
         ll_approver.removeAllViews()
-        val inflater = LayoutInflater.from(this)
+        inflater = LayoutInflater.from(this)
 
         SoguApi.getService(application)
                 .approveInfo(template_id = if (flagEdit) null else paramId!!,
@@ -666,7 +666,50 @@ class BuildSealActivity : ToolbarActivity() {
             val bean = data?.getSerializableExtra(Extras.DATA) as CustomSealBean
             val data = data?.getSerializableExtra(Extras.DATA2) as CustomSealBean.ValueBean
             paramMap.put(bean?.fields!!, data.id)
-            refreshListSelector(bean, data)
+            //refreshListSelector(bean, data)
+
+            paramId = data.id
+            ll_seal.removeAllViews()
+            ll_approver.removeAllViews()
+            SoguApi.getService(application)
+                    .approveInfo(template_id = if (flagEdit) null else paramId!!,
+                            sid = if (!flagEdit) null else paramId!!)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (!payload.isOk) {
+                            showToast(payload.message)
+                            return@subscribe
+                        }
+                        payload.payload?.forEach { bean ->
+                            addRow(bean, inflater)
+                        }
+                        hideFields.forEach { field ->
+                            val view = fieldMap.get(field)
+                            view?.visibility = View.GONE
+                        }
+                    }, { e ->
+                        Trace.e(e)
+                        showToast("暂无可用数据")
+                    })
+
+            SoguApi.getService(application)
+                    .approver(template_id = if (flagEdit) null else paramId!!,
+                            sid = if (!flagEdit) null else paramId!!)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (!payload.isOk) {
+                            showToast(payload.message)
+                            return@subscribe
+                        }
+                        payload.payload?.forEach { bean ->
+                            addApprover(bean, inflater)
+                        }
+                    }, { e ->
+                        Trace.e(e)
+                        showToast("暂无可用数据")
+                    })
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
