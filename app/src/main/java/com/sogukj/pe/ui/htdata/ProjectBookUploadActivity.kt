@@ -74,7 +74,7 @@ class ProjectBookUploadActivity : ToolbarActivity() {
         ll_group.setOnClickListener {
             val items = ArrayList<String?>()
             items.add("项目投资档案")
-            items.add("投资后项目跟踪管理")
+            items.add("投资后项目跟踪管理档案")
             items.add("项目退出档案")
             MaterialDialog.Builder(this@ProjectBookUploadActivity)
                     .theme(Theme.LIGHT)
