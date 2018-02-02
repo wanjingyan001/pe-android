@@ -85,6 +85,8 @@ class ProjectTCActivity : ToolbarActivity() {
                 tr_bck.visibility = View.GONE
 
                 mType = 1
+
+                part_blue.visibility = View.INVISIBLE
             }
 
             total_quit.setOnClickListener {
@@ -99,6 +101,12 @@ class ProjectTCActivity : ToolbarActivity() {
                 tr_bck.visibility = View.VISIBLE
 
                 mType = 2
+
+                if (project.quit == 1) {
+                    part_blue.visibility = View.VISIBLE
+                } else {
+                    part_blue.visibility = View.INVISIBLE
+                }
             }
 
             btn_commit.setOnClickListener {
