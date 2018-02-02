@@ -1,5 +1,6 @@
 package com.sogukj.pe.ui.main
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
@@ -15,11 +16,15 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.fashare.stack_layout.StackLayout
+import com.sogukj.pe.Extras
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import com.sogukj.pe.bean.MessageBean
+import com.sogukj.pe.ui.approve.SealApproveActivity
+import com.sogukj.pe.ui.approve.SignApproveActivity
+import com.sogukj.pe.ui.msg.MessageListActivity
 import com.sogukj.pe.ui.news.NewsListActivity
 import com.sogukj.pe.util.CacheUtils
 import com.sogukj.pe.util.ColorUtil
@@ -172,6 +177,27 @@ class MainHomeFragment : BaseFragment() {
                 holder.tvUrgent?.visibility = View.VISIBLE
             else
                 holder.tvUrgent?.visibility = View.GONE
+
+            holder.tvMore?.setOnClickListener {
+                val intent = Intent(context, MessageListActivity::class.java)
+                startActivity(intent)
+            }
+            holder.ll_content?.setOnClickListener {
+                val is_mine = if (data.status == -1 || data.status == 4) 1 else 2
+                if (data.type == 2) {
+                    //SealApproveActivity.start(context, data, is_mine)
+                    val intent = Intent(context, SealApproveActivity::class.java)
+                    intent.putExtra("is_mine", is_mine)
+                    intent.putExtra(Extras.DATA, data)
+                    startActivity(intent)
+                } else if (data.type == 3) {
+                    //SignApproveActivity.start(context, data, is_mine)
+                    val intent = Intent(context, SignApproveActivity::class.java)
+                    intent.putExtra(Extras.DATA, data)
+                    intent.putExtra("is_mine", is_mine)
+                    startActivity(intent)
+                }
+            }
         }
 
         override fun getItemCount(): Int {
@@ -189,6 +215,7 @@ class MainHomeFragment : BaseFragment() {
             var tvMsg: TextView? = null
             var tvUrgent: TextView? = null
             var ll_content: LinearLayout? = null
+            var tvMore: TextView? = null
 
             init {
                 tvTitle = view.findViewById(R.id.tv_title) as TextView
@@ -200,6 +227,7 @@ class MainHomeFragment : BaseFragment() {
                 tvMsg = view.findViewById(R.id.tv_msg) as TextView
                 tvUrgent = view.findViewById(R.id.tv_urgent) as TextView
                 ll_content = view.findViewById(R.id.ll_content) as LinearLayout
+                tvMore = view.findViewById(R.id.more) as TextView
             }
         }
     }
