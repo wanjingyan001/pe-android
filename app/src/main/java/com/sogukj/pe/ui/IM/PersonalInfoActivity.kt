@@ -9,23 +9,29 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import com.google.gson.Gson
 import com.netease.nim.uikit.api.NimUIKit
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.bean.DepartmentBean
 import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
+import com.sogukj.util.XmlDb
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_personal_info.*
 import org.jetbrains.anko.toast
 
-class PersonalInfoActivity : AppCompatActivity(), View.OnClickListener {
+class PersonalInfoActivity : AppCompatActivity(), View.OnClickListener, TextWatcher {
+
+    lateinit var db: XmlDb
     var user: UserBean? = null
     val CALL_PHONE_PERMISSION = arrayOf(Manifest.permission.CALL_PHONE)
 
@@ -49,7 +55,9 @@ class PersonalInfoActivity : AppCompatActivity(), View.OnClickListener {
         Utils.setWindowStatusBarColor(this, R.color.color_blue_0888ff)
         team_toolbar.setNavigationIcon(R.drawable.sogu_ic_back)
         team_toolbar.setNavigationOnClickListener { finish() }
+        db = XmlDb.open(this)
         user = intent.getSerializableExtra(Extras.DATA) as UserBean?
+        Log.d("WJY", Gson().toJson(user))
         val bean = Store.store.getUser(this)
         if (user != null) {
             user?.let {
@@ -59,48 +67,65 @@ class PersonalInfoActivity : AppCompatActivity(), View.OnClickListener {
                 name.text = it.name
                 position.text = it.position
                 company.text = ""
-                remarks_tv.text = ""
                 name_tv.text = it.name
                 phone_tv.text = it.phone
                 email_tv.text = it.email
                 department_tv.text = it.depart_name
                 position_tv.text = it.position
+                it.accid?.let { accid->
+                    val remark = db.get(accid, "")
+                    if (remark.isNotEmpty()) {
+                        remarks_tv.setText(remark)
+                    }
+                }
             }
         } else {
             val uid = intent.getIntExtra(Extras.ID, -1)
             queryUserInfo(uid)
         }
+
         sendMsg.setOnClickListener(this)
         call_phone.setOnClickListener(this)
+        remarks_tv.addTextChangedListener(this)
     }
 
     private fun queryUserInfo(uid: Int) {
         SoguApi.getService(application)
-                .userInfo(1)
+                .userDepart()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe({ payload ->
+                .subscribe({ payload->
                     if (payload.isOk) {
-                        val user = payload.payload
-                        Log.d("WJY", Gson().toJson(user))
-                        val bean = Store.store.getUser(this)
-                        user?.let {
-                            if (it.accid == bean!!.accid) {
-                                communicationLayout.visibility = View.INVISIBLE
+                        payload.payload?.let { departmentBean->
+                            departmentBean.forEach { item->
+                               item.data?.forEach {
+                                   if (it.user_id == uid){
+                                       user = it
+                                       val bean = Store.store.getUser(this)
+                                       user?.let {
+                                           if (it.accid == bean!!.accid) {
+                                               communicationLayout.visibility = View.INVISIBLE
+                                           }
+                                           name.text = it.name
+                                           position.text = it.position
+                                           name_tv.text = it.name
+                                           phone_tv.text = it.phone
+                                           company.text = ""
+                                           email_tv.text = it.email
+                                           department_tv.text = it.depart_name
+                                           position_tv.text = it.position
+                                           it.accid?.let { accid->
+                                               val remark = db.get(accid, "")
+                                               if (remark.isNotEmpty()) {
+                                                   remarks_tv.setText(remark)
+                                               }
+                                           }
+                                       }
+                                   }
+                               }
                             }
-                            name.text = it.name
-                            position.text = it.position
-                            name_tv.text = it.name
-                            phone_tv.text = it.phone
-                            company.text = ""
-                            remarks_tv.text = ""
-                            email_tv.text = it.email
-                            department_tv.text = it.depart_name
-                            position_tv.text = it.position
                         }
-                    } else toast(payload.message!!)
-                }, { e ->
-                    Trace.e(e)
+                    }
                 })
     }
 
@@ -121,6 +146,20 @@ class PersonalInfoActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
         }
+    }
+
+    override fun afterTextChanged(s: Editable?) {
+        s?.let {
+            if (it.toString().trim().isNotEmpty()) {
+                db.set(user?.accid!!, it.toString())
+            }
+        }
+    }
+
+    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+    }
+
+    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
     }
 
     @SuppressLint("MissingPermission")

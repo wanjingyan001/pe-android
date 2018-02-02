@@ -40,6 +40,7 @@ public class MsgViewHolderFile extends MsgViewHolderBase implements View.OnClick
     private ProgressDialog dialog;
     private AbortableFuture<Void> future;
     private ConstraintLayout fileLayout;
+    private View line;
 
     public MsgViewHolderFile(BaseMultiItemFetchLoadAdapter adapter) {
         super(adapter);
@@ -57,6 +58,7 @@ public class MsgViewHolderFile extends MsgViewHolderBase implements View.OnClick
         fileNameLabel = (TextView) view.findViewById(R.id.message_item_file_name_label);
         fileSize = (TextView) view.findViewById(R.id.message_item_file_size);
         download = (TextView) view.findViewById(R.id.download_file);
+        line = view.findViewById(R.id.line);
         download.setOnClickListener(this);
         registerObservers(true);
     }

@@ -629,13 +629,14 @@
         <activity android:name=".ui.IM.TeamPictureActivity" />
         <activity android:name=".ui.IM.TeamSelectActivity" />
         <activity android:name=".ui.IM.PersonalInfoActivity" />
-        <activity android:name=".ui.IM.TeamCreateActivity"></activity>
-	        <activity android:name=".ui.score.PointProgressActivity" />
+        <activity android:name=".ui.IM.TeamCreateActivity" />
+        <activity android:name=".ui.score.PointProgressActivity" />
         <activity android:name=".ui.fund.FundBookActivity" />
         <activity android:name=".ui.fund.FundUploadActivity" />
         <activity android:name=".ui.fund.FundBookMoreActivity" />
         <activity android:name=".ui.project.ProjectTCActivity" />
-        <activity android:name=".ui.project.ProjectTcHistoryActivity"></activity>
+        <activity android:name=".ui.project.ProjectTcHistoryActivity" />
+        <activity android:name=".ui.IM.DisplayMessageActivity"></activity>
     </application>
 
 </manifest>

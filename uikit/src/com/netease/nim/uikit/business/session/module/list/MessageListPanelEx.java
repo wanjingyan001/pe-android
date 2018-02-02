@@ -9,11 +9,13 @@ import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.netease.nim.uikit.R;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.api.model.user.UserInfoObserver;
@@ -551,6 +553,9 @@ public class MessageListPanelEx {
 
                 if (messages != null) {
                     onMessageLoaded(messages);
+                    for (IMMessage message : messages) {
+                        Log.d("WJY","消息:"+ JSON.toJSONString(message));
+                    }
                 }
             }
         };

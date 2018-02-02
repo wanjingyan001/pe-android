@@ -6,11 +6,13 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Html
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.framework.base.ToolbarFragment
+import com.google.gson.Gson
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import com.lcodecore.tkrefreshlayout.footer.BallPulseView
@@ -28,6 +30,7 @@ import com.netease.nimlib.sdk.msg.MsgServiceObserve
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
 import com.netease.nimlib.sdk.msg.model.IMMessage
 import com.netease.nimlib.sdk.msg.model.RecentContact
+import com.netease.nimlib.sdk.team.constant.TeamMessageNotifyTypeEnum
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.MessageIndexBean
 import com.sogukj.pe.ui.SupportEmptyView
@@ -41,9 +44,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_msg_center.*
 import kotlinx.android.synthetic.main.toolbar.*
+import org.jetbrains.anko.backgroundResource
 import org.jetbrains.anko.imageResource
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 /**
  * Created by qinfei on 17/10/11.
@@ -54,6 +59,7 @@ class MainMsgFragment : ToolbarFragment() {
         get() = R.layout.fragment_msg_center
 
     lateinit var adapter: RecyclerAdapter<Any>
+    val extMap = HashMap<String, Any>()
 
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -79,12 +85,13 @@ class MainMsgFragment : ToolbarFragment() {
                         if (data.count > 0) {
                             tvNum.visibility = View.VISIBLE
                         } else {
-                            tvNum.visibility = View.GONE
+                            tvNum.visibility = View.INVISIBLE
                         }
                         msgIcon.imageResource = R.drawable.ic_msg_alert
                     } else if (data is RecentContact) {
                         val titleName = UserInfoHelper.getUserTitleName(data.contactId, data.sessionType)
                         tvTitle.text = titleName
+                        Log.d("WJY","data:${Gson().toJson(data)}")
                         if (data.sessionType == SessionTypeEnum.P2P) {
                             val value = data.msgStatus.value
                             when (value) {
@@ -108,13 +115,20 @@ class MainMsgFragment : ToolbarFragment() {
                             }
                             msgIcon.imageResource = R.drawable.im_team_default
                         }
-
                         tvDate.text = Utils.getTime(data.time, "MM月dd日")
-                        if (data.unreadCount > 0) {
+                        val mutableMap = data.extension
+                        if (mutableMap != null && mutableMap.isNotEmpty() &&  mutableMap[data.contactId] == "Mute") {
                             tvNum.visibility = View.VISIBLE
-                            tvNum.text = data.unreadCount.toString()
+                            tvNum.text = ""
+                            tvNum.backgroundResource = R.drawable.im_team_shield
                         } else {
-                            tvNum.visibility = View.GONE
+                            tvNum.backgroundResource = R.drawable.bg_tag_num
+                            if (data.unreadCount > 0) {
+                                tvNum.visibility = View.VISIBLE
+                                tvNum.text = data.unreadCount.toString()
+                            } else {
+                                tvNum.visibility = View.INVISIBLE
+                            }
                         }
                     }
                 }
@@ -194,11 +208,15 @@ class MainMsgFragment : ToolbarFragment() {
         NIMClient.getService(MsgService::class.java).queryRecentContacts().setCallback(object : RequestCallback<MutableList<RecentContact>> {
             override fun onSuccess(p0: MutableList<RecentContact>?) {
                 p0?.forEach { recentContact ->
+                    Log.d("WJY","recentContact:${Gson().toJson(recentContact)}")
                     if (recentContact.sessionType == SessionTypeEnum.Team) {
+                        extMap.clear()
                         val titleName = UserInfoHelper.getUserTitleName(recentContact.contactId, recentContact.sessionType)
                         if (titleName.isNotEmpty()) {
                             val team = NimUIKit.getTeamProvider().getTeamById(recentContact.contactId)
                             if (team.isMyTeam) {
+                                extMap.put(recentContact.contactId, team.messageNotifyType)
+                                recentContact.extension = extMap
                                 recentList.add(recentContact)
                             }
                         }

@@ -74,7 +74,7 @@ class TeamSelectActivity : AppCompatActivity() {
         params.bottomMargin = Utils.dpToPx(this, 10)
         layout.orientation = LinearLayout.VERTICAL
         if (isSelectUser) {
-            team_toolbar_title.text = "选择联系人"
+            team_toolbar_title.text = "最近联系人"
             confirmSelectLayout.visibility = View.VISIBLE
 //            layout.addView(contactList, params)
             layout.addView(organizationList, params)
@@ -122,7 +122,7 @@ class TeamSelectActivity : AppCompatActivity() {
         fromTeam = intent.getBooleanExtra(Extras.FLAG, true)
         if (data != null) {
             alreadyList = data as ArrayList<UserBean>
-            selectNumber.text = "已选择:${alreadyList.size}人"
+            selectNumber.text = "已选择: ${alreadyList.size - 1}人"
         } else {
             alreadyList = ArrayList()
         }
@@ -137,6 +137,7 @@ class TeamSelectActivity : AppCompatActivity() {
             } else {
                 search_hint.visibility = View.VISIBLE
                 search_icon.visibility = View.GONE
+                search_edt.clearFocus()
             }
         }
         search_edt.setOnEditorActionListener { v, actionId, event ->
@@ -183,7 +184,7 @@ class TeamSelectActivity : AppCompatActivity() {
         layout.backgroundColor = Color.WHITE
         val title = TextView(this)
         title.setTextColor(Color.BLACK)
-        title.text = "常用联系人"
+        title.text = "最近联系人"
         val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         layoutParams.leftMargin = Utils.dpToPx(this, 10)
         layoutParams.topMargin = Utils.dpToPx(this, 20)
@@ -244,7 +245,7 @@ class TeamSelectActivity : AppCompatActivity() {
         departList.forEach {
             it.data?.let {
                 it.forEach {
-                    if (it.name.contains(searchKey)) {
+                    if (it.name.contains(searchKey) && it.user_id != mine?.uid) {
                         result.add(it)
                     }
                 }
@@ -268,6 +269,7 @@ class TeamSelectActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         item?.let {
             if (it.itemId == R.id.create_imteam) {
+                search_edt.clearFocus()
                 isSelectUser = !isSelectUser
                 orgAdapter.notifyDataSetChanged()
                 val orgList = initOrganizationList()
@@ -279,7 +281,7 @@ class TeamSelectActivity : AppCompatActivity() {
                 layout.orientation = LinearLayout.VERTICAL
                 layout.removeAllViews()
                 if (isSelectUser) {
-                    team_toolbar_title.text = "选择联系人"
+                    team_toolbar_title.text = "最近联系人"
                     confirmSelectLayout.visibility = View.VISIBLE
 //                    layout.addView(conLayout, params)
                     layout.addView(orgList, params)
@@ -335,7 +337,7 @@ class TeamSelectActivity : AppCompatActivity() {
                 holder = convertView.tag as ParentHolder
             }
             val departmentBean = parents[groupPosition]
-            holder.departmentName.text = departmentBean.de_name
+            holder.departmentName.text = "${departmentBean.de_name} (${parents[groupPosition].data?.size})"
             holder.indicator.isSelected = isExpanded
             return convertView
         }
@@ -373,6 +375,7 @@ class TeamSelectActivity : AppCompatActivity() {
                 }
 
                 holder.itemView.setOnClickListener {
+                    search_edt.clearFocus()
                     if (isSelectUser) {
                         //选人
                         if (userBean.user_id != mine.uid || !fromTeam) {
@@ -380,7 +383,7 @@ class TeamSelectActivity : AppCompatActivity() {
                             userBean.user_id?.let {
                                 selectMap.put(it, holder.selectIcon.isSelected)
                                 val map = selectMap.filterValues { it }
-                                selectNumber.text = "已选择:${map.size}人"
+                                selectNumber.text = "已选择: ${map.size - 1}人"
                             }
                         }
                     } else {
@@ -456,6 +459,7 @@ class TeamSelectActivity : AppCompatActivity() {
             }
 
             holder.itemView.setOnClickListener {
+                search_edt.clearFocus()
                 if (isSelectUser) {
                     //选人
                     if (userBean.user_id != mine!!.uid) {
@@ -463,7 +467,7 @@ class TeamSelectActivity : AppCompatActivity() {
                         userBean.user_id?.let {
                             selectMap.put(it, holder.selectIcon.isSelected)
                             val map = selectMap.filterValues { it }
-                            selectNumber.text = "已选择:${map.size}人"
+                            selectNumber.text = "已选择: ${map.size - 1}人"
                         }
                     }
                 } else {
