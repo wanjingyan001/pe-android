@@ -20,11 +20,14 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import com.framework.base.ToolbarActivity
 import com.google.gson.JsonSyntaxException
+import com.netease.nim.uikit.api.NimUIKit
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.NewsBean
@@ -349,60 +352,93 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
 
             manager_assess()
         }
+        im.setOnClickListener(this)
     }
 
     fun doDel() {
-        SoguApi.getService(application)
-                .delProject(project.company_id!!)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ payload ->
-                    if (payload.isOk) {
-                        showToast("删除成功")
-                        setResult(Activity.RESULT_OK)
-                        finish()
-                    } else
-                        showToast(payload.message)
-                }, { e ->
-                    Trace.e(e)
-                    showToast("删除失败")
-                })
+        MaterialDialog.Builder(this)
+                .theme(Theme.LIGHT)
+                .title("是否删除该项目")
+                .onPositive { dialog, which ->
+                    SoguApi.getService(application)
+                            .delProject(project.company_id!!)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(Schedulers.io())
+                            .subscribe({ payload ->
+                                if (payload.isOk) {
+                                    showToast("删除成功")
+                                    setResult(Activity.RESULT_OK)
+                                    finish()
+                                } else
+                                    showToast(payload.message)
+                            }, { e ->
+                                Trace.e(e)
+                                showToast("删除失败")
+                            })
+                }
+                .show()
     }
 
     fun doAdd() {
-        var status = if (type == ProjectListFragment.TYPE_DY) 1 else if (type == ProjectListFragment.TYPE_CB) 2 else if (type == ProjectListFragment.TYPE_LX) 3 else return
+        MaterialDialog.Builder(this)
+                .theme(Theme.LIGHT)
+                .title("是否添加项目")
+                .onPositive { dialog, which ->
+                    val status = if (type == ProjectListFragment.TYPE_DY) 1 else if (type == ProjectListFragment.TYPE_CB) 2
+                    else if (type == ProjectListFragment.TYPE_LX) 3 else return@onPositive
+                    SoguApi.getService(application)
+                            //.editProject(project.company_id!!)
+                            .changeStatus(project.company_id!!, status)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(Schedulers.io())
+                            .subscribe({ payload ->
+                                if (payload.isOk) {
+                                    if (type == ProjectListFragment.TYPE_DY) {
+                                        showToast("成功添加到储备")
+                                    } else if (type == ProjectListFragment.TYPE_CB) {
+                                        showToast("成功添加到立项")
+                                    } else if (type == ProjectListFragment.TYPE_LX) {
+                                        showToast("成功添加到已投")
+                                    } else if (type == ProjectListFragment.TYPE_YT) {
+                                        showToast("成功添加到退出")
+                                    }
+                                    setResult(Activity.RESULT_OK)
+                                    finish()
+                                } else showToast(payload.message)
+                            }, { e ->
+                                Trace.e(e)
+                                if (type == ProjectListFragment.TYPE_DY) {
+                                    showToast("添加到储备失败")
+                                } else if (type == ProjectListFragment.TYPE_CB) {
+                                    showToast("添加到立项失败")
+                                } else if (type == ProjectListFragment.TYPE_LX) {
+                                    showToast("添加到已投失败")
+                                } else if (type == ProjectListFragment.TYPE_YT) {
+                                    showToast("添加到退出失败")
+                                }
+                            })
+                }
+                .show()
+    }
+
+    private fun createOrJoin() {
+        val user = Store.store.getUser(this)
+        val accid = user?.accid ?: ""
         SoguApi.getService(application)
-                //.editProject(project.company_id!!)
-                .changeStatus(project.company_id!!, status)
+                .createJoinGroup(accid, project.company_id.toString())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        if (type == ProjectListFragment.TYPE_DY) {
-                            showToast("成功添加到储备")
-                        } else if (type == ProjectListFragment.TYPE_CB) {
-                            showToast("成功添加到立项")
-                        } else if (type == ProjectListFragment.TYPE_LX) {
-                            showToast("成功添加到已投")
-                        } else if (type == ProjectListFragment.TYPE_YT) {
-                            showToast("成功添加到退出")
+                        payload.payload?.let {
+                            NimUIKit.startTeamSession(this, it.toString())
                         }
-                        setResult(Activity.RESULT_OK)
-                        finish()
-                    } else showToast(payload.message)
+                    } else {
+                        showToast(payload.message)
+                    }
                 }, { e ->
                     Trace.e(e)
-                    if (type == ProjectListFragment.TYPE_DY) {
-                        showToast("添加到储备失败")
-                    } else if (type == ProjectListFragment.TYPE_CB) {
-                        showToast("添加到立项失败")
-                    } else if (type == ProjectListFragment.TYPE_LX) {
-                        showToast("添加到已投失败")
-                    } else if (type == ProjectListFragment.TYPE_YT) {
-                        showToast("添加到退出失败")
-                    }
                 })
-
     }
 
     var is_business: Int? = null//非空(1=>有价值 ,2=>无价值)
@@ -537,6 +573,10 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
             R.id.tv_xmjd -> SurveyDataActivity.start(this@ProjectActivity, project)
             R.id.tv_xmtj -> InvestSuggestActivity.start(this@ProjectActivity, project)
             R.id.tv_xmthgl -> ManageDataActivity.start(this@ProjectActivity, project)
+
+            R.id.im -> {
+                createOrJoin()
+            }
         }
     }
 

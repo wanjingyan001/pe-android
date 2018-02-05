@@ -74,6 +74,10 @@ public class TeamHistoryFileActivity extends AppCompatActivity {
 
     }
 
+    private void requestChatFile(){
+
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.team_filter, menu);

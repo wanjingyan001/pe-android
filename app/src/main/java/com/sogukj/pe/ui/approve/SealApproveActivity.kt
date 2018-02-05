@@ -186,11 +186,12 @@ class SealApproveActivity : ToolbarActivity() {
                             .cancelable(true)
                             .onPositive { dialog, dialogAction ->
                                 val text = dialog.inputEditText?.text.toString()
-                                examineApprove(1, text)
+                                showConfirmDialog(1, text)
+
                             }
                             .onNegative { dialog, which ->
                                 val text = dialog.inputEditText?.text.toString()
-                                examineApprove(-1, text)
+                                showConfirmDialog(-1, text)
                             }
                             .positiveText("确认")
                             .negativeText("否决")
@@ -225,6 +226,20 @@ class SealApproveActivity : ToolbarActivity() {
 
             }
         }
+    }
+
+    private fun showConfirmDialog(type: Int, text: String = "") {
+        val title = if (type == 1) "是否确认通过审批" else "是否确认否决审批"
+        MaterialDialog.Builder(this)
+                .theme(Theme.LIGHT)
+                .title(title)
+                .canceledOnTouchOutside(false)
+                .positiveText("确定")
+                .negativeText("取消")
+                .onPositive { dialog, which ->
+                    examineApprove(type, text)
+                }
+                .show()
     }
 
     fun examineApprove(type: Int, text: String = "") {

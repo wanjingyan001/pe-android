@@ -44,6 +44,7 @@ class SettingActivity : BaseActivity() {
                     .content("确定要退出此帐号?")
                     .onPositive { materialDialog, dialogAction ->
                         App.INSTANCE.resetPush(false)
+                        Store.store.setUToken(this@SettingActivity, "")
                         IMLogout()
                         Store.store.clearUser(this)
                         LoginActivity.start(this)

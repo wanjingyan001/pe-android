@@ -2,6 +2,7 @@ package com.sogukj.service
 
 import com.sogukj.pe.bean.*
 import com.sogukj.pe.service.Payload
+import com.sogukj.pe.ui.IM.ChatFileBean
 import com.sogukj.pe.ui.calendar.*
 import io.reactivex.Observable
 import okhttp3.RequestBody
@@ -1099,4 +1100,12 @@ interface SoguService {
     @FormUrlEncoded
     @POST("/api/News/quitInfo")
     fun quitInfo(@Field("id") id: Int): Observable<Payload<QuitInfoBean>>
+
+    //加入项目群组,第一次调用是创建群组
+    @FormUrlEncoded
+    @POST("/api/News/createJoinGroup")
+    fun createJoinGroup(@Field("accid")accid:String,@Field("company_id")company_id:String):Observable<Payload<Int>>
+
+
+    fun chatFile(@Field("type")type:Int):Observable<Payload<List<ChatFileBean>>>
 }

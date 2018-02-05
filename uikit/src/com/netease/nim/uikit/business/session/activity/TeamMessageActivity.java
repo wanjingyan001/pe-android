@@ -144,10 +144,11 @@ public class TeamMessageActivity extends BaseMessageActivity {
         fragment.setTeam(team);
         setTitle("");
         bigTitle.setText(team.getName());
-        if (team.getExtension() != null) {
+        if (team.getExtension() == null || team.getExtension().isEmpty()) {
             smallTitle.setVisibility(View.GONE);
         } else {
             try {
+                smallTitle.setVisibility(View.VISIBLE);
                 JSONObject object = new JSONObject(team.getExtension());
                 smallTitle.setText(object.getString("project_name"));
             } catch (JSONException e) {

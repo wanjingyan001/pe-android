@@ -7,13 +7,20 @@ import java.io.Serializable
  */
 class CustomSealBean : Serializable {
     var name: String? = null
+        get() {
+            return if (field == "项目名称") {
+                field + "(选填)"
+            } else {
+                field
+            }
+        }
     var fields: String = ""
     var control: Int? = null
     var floor: Int? = null
     var value: String? = null
     var value_list: ArrayList<ValueBean>? = null
     var value_map: ValueBean? = null
-    var is_must: Int = 0
+    var is_must: Int = 0 //1必填
 
 
     class ValueBean : Serializable {

@@ -284,6 +284,10 @@ class MainMsgFragment : ToolbarFragment() {
                 iterator.remove()
             }
         }
+        Collections.sort(recentList) { o1, o2 ->
+            val time = o1.time - o2.time
+            return@sort if (time == 0L) 0 else if (time > 0) -1 else 1
+        }
         adapter.dataList.addAll(recentList)
         adapter.notifyDataSetChanged()
 
