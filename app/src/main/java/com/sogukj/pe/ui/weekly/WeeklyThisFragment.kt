@@ -86,7 +86,7 @@ class WeeklyThisFragment : BaseFragment(), View.OnClickListener {
             }
         }
 
-        buchong_hint.visibility = View.GONE
+        //buchong_hint.visibility = View.GONE
         bu_chong_empty.visibility = View.GONE
         buchong_full.visibility = View.GONE
         send_layout.visibility = View.GONE
