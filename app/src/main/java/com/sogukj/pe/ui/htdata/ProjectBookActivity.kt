@@ -73,6 +73,7 @@ class ProjectBookActivity : ToolbarActivity(), SupportEmptyView {
                 val tvDate = convertView.findViewById(R.id.tv_date) as TextView
                 val tvTime = convertView.findViewById(R.id.tv_time) as TextView
                 val tvType = convertView.findViewById(R.id.tv_type) as TextView
+                val tvName = convertView.findViewById(R.id.tv_name) as TextView
                 override fun setData(view: View, data: ProjectBookBean, position: Int) {
                     tvSummary.text = data?.doc_title
                     val strTime = data?.add_time
@@ -86,6 +87,7 @@ class ProjectBookActivity : ToolbarActivity(), SupportEmptyView {
                         tvTime.text = strs.getOrNull(1)
                     }
                     tvType.text = data?.name
+                    tvName.text = data.submitter
                 }
 
             }
@@ -317,7 +319,7 @@ class ProjectBookActivity : ToolbarActivity(), SupportEmptyView {
                 }, { e ->
                     Trace.e(e)
                 }, {
-                    tv_result_title.text = Html.fromHtml(getString(R.string.tv_title_result_search, adapter.dataList.size))
+                    tv_result_title.text = Html.fromHtml(getString(R.string.tv_title_result_search1, adapter.dataList.size))
                     adapter.notifyDataSetChanged()
                     if (page == 1)
                         refresh?.finishRefreshing()
