@@ -53,9 +53,16 @@ class FundDetailActivity : ToolbarActivity() {
                     val commissionName = convertView.find<TextView>(R.id.commissionName)
                     override fun setData(view: View, data: FundDetail.NameList, position: Int) {
                         commissionName.text = data.name
-                        data.url.apply {
+//                        data.url.apply {
+//                            Glide.with(this@FundDetailActivity)
+//                                    .load(this)
+//                                    .into(headImg)
+//                        }
+                        if(data.url.isNullOrEmpty()){
+                            headImg.setImageResource(R.drawable.default_head)
+                        } else {
                             Glide.with(this@FundDetailActivity)
-                                    .load(this)
+                                    .load(data.url)
                                     .into(headImg)
                         }
                     }
