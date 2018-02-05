@@ -103,7 +103,7 @@ class MainHomeFragment : BaseFragment() {
             totalData.addAll(cacheData)
         }
         SoguApi.getService(baseActivity!!.application)
-                .msgList()
+                .msgList(status = 1)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->

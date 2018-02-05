@@ -650,8 +650,10 @@ interface SoguService {
     @POST("/api/Message/getMessageIndex")
     fun msgIndex(): Observable<Payload<MessageIndexBean>>
 
+    //可空（1=>待审批，2=>已审批）
+    @FormUrlEncoded
     @POST("/api/Message/getMessageList")
-    fun msgList(): Observable<Payload<ArrayList<MessageBean>>>
+    fun msgList(@Field("status") status: Int? = null): Observable<Payload<ArrayList<MessageBean>>>
 
     //    @FormUrlEncoded
 //    @POST("/api/Approve/applyUrgent")
@@ -1108,4 +1110,9 @@ interface SoguService {
 
 
     fun chatFile(@Field("type")type:Int):Observable<Payload<List<ChatFileBean>>>
+
+    //首页小红点
+    @FormUrlEncoded
+    @POST("/api/Index/getNumber")
+    fun getNumber(@Field("uid") uid: Int): Observable<Payload<NumberBean>>
 }
