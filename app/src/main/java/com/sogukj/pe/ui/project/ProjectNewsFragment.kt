@@ -1,13 +1,21 @@
 package com.sogukj.pe.ui.project
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Html
 import android.text.TextUtils
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 import com.framework.base.BaseFragment
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
@@ -21,6 +29,7 @@ import com.sogukj.pe.ui.SupportEmptyView
 import com.sogukj.pe.ui.news.NewsDetailActivity
 import com.sogukj.pe.ui.news.NewsListFragment
 import com.sogukj.pe.util.Trace
+import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.FlowLayout
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
@@ -130,7 +139,7 @@ class ProjectNewsFragment : BaseFragment(), SupportEmptyView {
         val tv_from = convertView.findViewById(R.id.tv_from) as TextView
         val tags = convertView.findViewById(R.id.tags) as FlowLayout
         val tv_date = convertView.findViewById(R.id.tv_date) as TextView
-
+        val iv_icon = convertView.findViewById(R.id.imageIcon) as ImageView
 
         override fun setData(view: View, data: NewsBean, position: Int) {
             var label = data.title
@@ -152,6 +161,21 @@ class ProjectNewsFragment : BaseFragment(), SupportEmptyView {
             }
             tv_from.text = data.source
             data.setTags(baseActivity!!, tags)
+
+            if (data.url.isNullOrEmpty()) {
+                var bitmap = BitmapFactory.decodeResource(resources, R.drawable.default_icon)
+                var draw = RoundedBitmapDrawableFactory.create(resources, bitmap) as RoundedBitmapDrawable
+                draw.setCornerRadius(Utils.dpToPx(context, 4).toFloat())
+                iv_icon.setBackgroundDrawable(draw)
+            } else {
+                Glide.with(context).asBitmap().load(data.url).into(object : SimpleTarget<Bitmap>() {
+                    override fun onResourceReady(bitmap: Bitmap?, glideAnimation: Transition<in Bitmap>?) {
+                        var draw = RoundedBitmapDrawableFactory.create(resources, bitmap) as RoundedBitmapDrawable
+                        draw.setCornerRadius(Utils.dpToPx(context, 4).toFloat())
+                        iv_icon.setBackgroundDrawable(draw)
+                    }
+                })
+            }
         }
 
     }

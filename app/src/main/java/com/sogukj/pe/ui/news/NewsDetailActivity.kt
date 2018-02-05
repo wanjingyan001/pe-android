@@ -6,11 +6,15 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
 import android.os.Message
 import android.support.v4.app.ActivityCompat
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
 import android.text.Html
 import android.text.TextUtils
 import android.view.Gravity
@@ -32,6 +36,9 @@ import cn.sharesdk.tencent.qzone.QZone
 import cn.sharesdk.wechat.friends.Wechat
 import cn.sharesdk.wechat.moments.WechatMoments
 import cn.sharesdk.wechat.utils.WechatClientNotExistException
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
@@ -322,6 +329,21 @@ class NewsDetailActivity : ToolbarActivity(), PlatformActionListener {
                         data.setTags(this, tags)
                     }
                 }
+
+        if (data.url.isNullOrEmpty()) {
+            var bitmap = BitmapFactory.decodeResource(resources, R.drawable.default_icon)
+            var draw = RoundedBitmapDrawableFactory.create(resources, bitmap) as RoundedBitmapDrawable
+            draw.setCornerRadius(Utils.dpToPx(context, 4).toFloat())
+            imageIcon.setBackgroundDrawable(draw)
+        } else {
+            Glide.with(context).asBitmap().load(data.url).into(object : SimpleTarget<Bitmap>() {
+                override fun onResourceReady(bitmap: Bitmap?, glideAnimation: Transition<in Bitmap>?) {
+                    var draw = RoundedBitmapDrawableFactory.create(resources, bitmap) as RoundedBitmapDrawable
+                    draw.setCornerRadius(Utils.dpToPx(context, 4).toFloat())
+                    imageIcon.setBackgroundDrawable(draw)
+                }
+            })
+        }
     }
 
 
