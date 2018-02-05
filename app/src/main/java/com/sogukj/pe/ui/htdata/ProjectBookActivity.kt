@@ -358,29 +358,36 @@ class ProjectBookActivity : ToolbarActivity(), SupportEmptyView {
                                         adapter3.dataList.add(list3!!.get(i))
                                     }
                                 }
+
+                            if (list1!!.size <= 3)
+                                tv_more1.visibility = View.GONE
+                            else
+                                tv_more1.visibility = View.VISIBLE
+
+                            if (list2!!.size <= 3)
+                                tv_more2.visibility = View.GONE
+                            else
+                                tv_more2.visibility = View.VISIBLE
+
+                            if (list3!!.size <= 3)
+                                tv_more3.visibility = View.GONE
+                            else
+                                tv_more3.visibility = View.VISIBLE
                         }
                         adapter1.notifyDataSetChanged()
                         adapter2.notifyDataSetChanged()
                         adapter3.notifyDataSetChanged()
-                    } else
+                    } else {
                         showToast(payload.message)
+                        tv_more1.visibility = View.GONE
+                        tv_more2.visibility = View.GONE
+                        tv_more3.visibility = View.GONE
+                    }
                 }, { e ->
                     Trace.e(e)
-                }, {
-                    if (adapter1.dataList.size <= 3)
-                        tv_more1.visibility = View.GONE
-                    else
-                        tv_more1.visibility = View.VISIBLE
-
-                    if (adapter2.dataList.size <= 3)
-                        tv_more2.visibility = View.GONE
-                    else
-                        tv_more2.visibility = View.VISIBLE
-
-                    if (adapter3.dataList.size <= 3)
-                        tv_more3.visibility = View.GONE
-                    else
-                        tv_more3.visibility = View.VISIBLE
+                    tv_more1.visibility = View.GONE
+                    tv_more2.visibility = View.GONE
+                    tv_more3.visibility = View.GONE
                 })
         SoguApi.getService(application)
                 .projectFilter()
