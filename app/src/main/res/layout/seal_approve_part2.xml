@@ -36,8 +36,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <include layout="@layout/item_approve_seal_approver" />
+        <!--<include layout="@layout/item_approve_seal_approver" />-->
 
-        <include layout="@layout/item_approve_seal_approver" />
+        <!--<include layout="@layout/item_approve_seal_approver" />-->
     </LinearLayout>
 </LinearLayout>
