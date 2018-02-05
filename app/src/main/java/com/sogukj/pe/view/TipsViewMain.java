@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,7 +20,7 @@ import com.sogukj.pe.R;
 
 public class TipsViewMain extends LinearLayout {
 
-    private ImageView icon;
+    private ImageView icon, red;
     private TextView mTitle, mSubTitle;
     private LinearLayout root;
 
@@ -45,6 +46,8 @@ public class TipsViewMain extends LinearLayout {
         icon = (ImageView) findViewById(R.id.icon);
         mTitle = (TextView) findViewById(R.id.title);
         mSubTitle = (TextView) findViewById(R.id.subtitle);
+        red = (ImageView) findViewById(R.id.point);
+        red.setVisibility(View.GONE);
 
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.title_main);
         int bg_id = ta.getResourceId(R.styleable.title_main_bg, 0);
@@ -70,6 +73,14 @@ public class TipsViewMain extends LinearLayout {
         } else if (tag_id == 4) {//周报
             mTitle.setTextColor(Color.parseColor("#FF0A0E1F"));
             mSubTitle.setTextColor(Color.parseColor("#FFA0A4AA"));
+        }
+    }
+
+    public void isRedEnable(boolean isEnable) {
+        if (isEnable) {
+            red.setVisibility(View.VISIBLE);
+        } else {
+            red.setVisibility(View.GONE);
         }
     }
 }

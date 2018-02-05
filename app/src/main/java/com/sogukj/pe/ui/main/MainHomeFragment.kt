@@ -89,7 +89,21 @@ class MainHomeFragment : BaseFragment() {
         cache.close()
     }
 
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (hidden) {   // 不在最前端显示 相当于调用了onPause();
+
+        } else {  // 在最前端显示 相当于调用了onResume();
+            onResume()
+        }
+    }
+
     lateinit var totalData: ArrayList<MessageBean>
+
+    override fun onResume() {
+        super.onResume()
+        doRequest()
+    }
 
     fun doRequest() {
         totalData = ArrayList<MessageBean>()
@@ -131,6 +145,37 @@ class MainHomeFragment : BaseFragment() {
                         iv_empty.visibility = View.VISIBLE
                         stack_layout.visibility = View.GONE
                     }
+                })
+
+        SoguApi.getService(baseActivity!!.application)
+                .getNumber()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        payload.payload?.apply {
+                            if (sp == null || sp == 0) {
+                                tv_sp.isRedEnable(false)
+                            } else {
+                                tv_sp.isRedEnable(true)
+                            }
+                            if (rl == null || rl == 0) {
+                                tv_rl.isRedEnable(false)
+                            } else {
+                                tv_rl.isRedEnable(true)
+                            }
+                            if (zb == null || zb == 0) {
+                                tv_weekly.isRedEnable(false)
+                            } else {
+                                tv_weekly.isRedEnable(true)
+                            }
+                        }
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    //showToast("暂无新数据")
+                    ToastError(e)
                 })
     }
 

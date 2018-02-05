@@ -1112,7 +1112,6 @@ interface SoguService {
     fun chatFile(@Field("type")type:Int):Observable<Payload<List<ChatFileBean>>>
 
     //首页小红点
-    @FormUrlEncoded
     @POST("/api/Index/getNumber")
-    fun getNumber(@Field("uid") uid: Int): Observable<Payload<NumberBean>>
+    fun getNumber(): Observable<Payload<NumberBean>>
 }
