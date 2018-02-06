@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.fragment_home.*
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import com.bumptech.glide.Glide
 import com.fashare.stack_layout.StackLayout
 import com.sogukj.pe.Extras
 import com.sogukj.pe.util.Trace
@@ -77,6 +78,7 @@ class MainHomeFragment : BaseFragment() {
         })
 
         cache = CacheUtils(context)
+        Glide.with(context).asGif().load(R.drawable.loading).into(pb)
         pb.visibility = View.VISIBLE
         doRequest()
     }
@@ -133,14 +135,14 @@ class MainHomeFragment : BaseFragment() {
                         }
                     } else
                         showToast(payload.message)
-                    pb.visibility = View.GONE
+                    //pb.visibility = View.GONE
                 }, { e ->
                     Trace.e(e)
                     //showToast("暂无新数据")
                     ToastError(e)
-                    pb.visibility = View.GONE
+                    //pb.visibility = View.GONE
                 }, {
-                    pb.visibility = View.GONE
+                    //pb.visibility = View.GONE
                     if (adapter.dataList.size == 0) {
                         iv_empty.visibility = View.VISIBLE
                         stack_layout.visibility = View.GONE

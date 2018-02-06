@@ -97,10 +97,19 @@
             android:layout_marginTop="150dp" />
     </LinearLayout>
 
-    <ProgressBar
+    <!--<ProgressBar-->
+        <!--android:id="@+id/pb"-->
+        <!--android:layout_width="50dp"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:layout_gravity="center" />-->
+
+    <ImageView
         android:id="@+id/pb"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_gravity="center" />
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="190dp"
+        android:src="@drawable/loading"
+        android:background="@color/transparent"/>
 
 </FrameLayout>
