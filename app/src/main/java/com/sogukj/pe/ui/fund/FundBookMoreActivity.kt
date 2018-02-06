@@ -52,6 +52,7 @@ class FundBookMoreActivity : ToolbarActivity() {
                 val tvDate = convertView.findViewById(R.id.tv_date) as TextView
                 val tvTime = convertView.findViewById(R.id.tv_time) as TextView
                 val tvType = convertView.findViewById(R.id.tv_type) as TextView
+                val tvName = convertView.findViewById(R.id.tv_name) as TextView
                 override fun setData(view: View, data: ProjectBookBean, position: Int) {
                     tvSummary.text = data?.doc_title
                     val strTime = data?.add_time
@@ -64,8 +65,12 @@ class FundBookMoreActivity : ToolbarActivity() {
                         tvDate.text = strs.getOrNull(0)
                         tvTime.text = strs.getOrNull(1)
                     }
-                    tvType.visibility = View.INVISIBLE
+                    //tvType.visibility = View.INVISIBLE
                     tvType.text = data?.name
+                    if (data?.name.isNullOrEmpty()) {
+                        tvType.visibility = View.INVISIBLE
+                    }
+                    tvName.text = data?.submitter
                 }
 
             }
