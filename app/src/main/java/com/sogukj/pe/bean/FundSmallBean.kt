@@ -15,9 +15,10 @@ class FundSmallBean : Serializable {
     }
     var id: Int = 0 //基金公司id
     var fundName: String = ""//基金公司名
+    var simpleName: String = ""//基金公司名
     var regTime: String = "--/--/--"//成立时间
 
-    var url:String = ""
-    var ytc:String = ""//7000
+    var logo:String = ""
+    var invest:String = ""//7000
     var total:String = ""//80000
 }

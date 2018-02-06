@@ -99,13 +99,13 @@ class FundListFragment : BaseFragment() {
                 val total = convertView.find<TextView>(R.id.total)
                 val progress = convertView.find<ProgressView>(R.id.progess)
                 override fun setData(view: View, data: FundSmallBean, position: Int) {
-                    if (data.url.isNullOrEmpty()) {
+                    if (data.logo.isNullOrEmpty()) {
                         var bitmap = BitmapFactory.decodeResource(resources, R.drawable.default_icon)
                         var draw = RoundedBitmapDrawableFactory.create(resources, bitmap) as RoundedBitmapDrawable
                         draw.setCornerRadius(Utils.dpToPx(context, 4).toFloat())
                         icon.setBackgroundDrawable(draw)
                     } else {
-                        Glide.with(context).asBitmap().load(data.url).into(object : SimpleTarget<Bitmap>() {
+                        Glide.with(context).asBitmap().load(data.logo).into(object : SimpleTarget<Bitmap>() {
                             override fun onResourceReady(bitmap: Bitmap?, glideAnimation: Transition<in Bitmap>?) {
                                 var draw = RoundedBitmapDrawableFactory.create(resources, bitmap) as RoundedBitmapDrawable
                                 draw.setCornerRadius(Utils.dpToPx(context, 4).toFloat())
@@ -121,14 +121,14 @@ class FundListFragment : BaseFragment() {
                         regTime.text = data.regTime
                     }
 
-                    var spannableString = SpannableString("${data.ytc} 万")
-                    var sizeSpan1 = RelativeSizeSpan(1f)
-                    var sizeSpan2 = RelativeSizeSpan(0.5f)
-                    spannableString.setSpan(sizeSpan1, 0, data.ytc.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
-                    spannableString.setSpan(sizeSpan2, data.ytc.length, spannableString.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+//                    var spannableString = SpannableString("${data.invest} 万")
+//                    var sizeSpan1 = RelativeSizeSpan(1f)
+//                    var sizeSpan2 = RelativeSizeSpan(0.5f)
+//                    spannableString.setSpan(sizeSpan1, 0, data.invest.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+//                    spannableString.setSpan(sizeSpan2, data.invest.length, spannableString.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
 
                     try {
-                        var fund3 = FundCountDownColor(1000, 10, ytc, data.ytc.toInt())
+                        var fund3 = FundCountDownColor(1000, 10, ytc, data.invest.toInt())
                         fund3.start()
                         var fund1 = FundCountDown(1000, 10, total, data.total.toInt())
                         fund1.start()
@@ -142,7 +142,7 @@ class FundListFragment : BaseFragment() {
                         total.text = "总额：- - 万"
                     }
                     try {
-                        var fund2 = FundCountDown(1000, 10, progress, data.ytc.toInt() * 100 / data.total.toInt())
+                        var fund2 = FundCountDown(1000, 10, progress, data.invest.toInt() * 100 / data.total.toInt())
                         fund2.start()
                     } catch (e: Exception) {
                         progress.setPercent(0)
