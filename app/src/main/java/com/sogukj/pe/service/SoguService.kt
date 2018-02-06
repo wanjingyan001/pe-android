@@ -1114,4 +1114,8 @@ interface SoguService {
     //首页小红点
     @POST("/api/Index/getNumber")
     fun getNumber(): Observable<Payload<NumberBean>>
+
+    //版本更新
+    @POST("/api/Index/version")
+    fun getVersion(): Observable<Payload<VersionBean>>
 }
