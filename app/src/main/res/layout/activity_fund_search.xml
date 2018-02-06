@@ -25,7 +25,8 @@
             android:layout_height="wrap_content"
             android:background="@color/color_gray_light"
             android:orientation="horizontal"
-            android:padding="8dp">
+            android:padding="8dp"
+            android:visibility="gone">
 
             <LinearLayout
                 android:id="@+id/ll_order_name_1"
@@ -79,10 +80,10 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:padding="10dp"
-            android:visibility="gone"
             android:text="@string/tv_title_result_news"
             android:textColor="@color/text_2"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:visibility="gone" />
 
 
         <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout

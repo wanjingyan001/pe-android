@@ -117,7 +117,7 @@ class FundSearchActivity : ToolbarActivity(), View.OnClickListener {
             FundDetailActivity.start(this@FundSearchActivity, adapter.dataList[position])
         }
         recycler_result.layoutManager = LinearLayoutManager(this)
-        recycler_result.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+        //recycler_result.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         recycler_result.adapter = adapter
         val header = ProgressLayout(this)
         header.setColorSchemeColors(ContextCompat.getColor(this, R.color.color_main))
@@ -174,7 +174,8 @@ class FundSearchActivity : ToolbarActivity(), View.OnClickListener {
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         payload.apply {
-                            tv_result_title.text = Html.fromHtml(getString(R.string.tv_title_result_news, (total as Double).toInt()))
+                            //tv_result_title.text = Html.fromHtml(getString(R.string.tv_title_result_news, (total as Double).toInt()))
+                            tv_result_title.text = Html.fromHtml(getString(R.string.tv_title_result_news, payload.payload?.size))
                         }
                         if (page == 0) {
                             adapter.dataList.clear()
