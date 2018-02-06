@@ -1,6 +1,7 @@
 package com.sogukj.pe.ui.project
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.TabLayout
@@ -24,6 +25,7 @@ import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import com.lcodecore.tkrefreshlayout.footer.BallPulseView
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
+import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.util.Trace
@@ -160,7 +162,23 @@ class MainProjectFragment : BaseFragment() {
 
             adapter.onItemClick = { v, p ->
                 val project = adapter.getItem(p);
-                ProjectActivity.start(baseActivity, project)
+//                ProjectActivity.start(baseActivity, project)
+                val intent = Intent(context, ProjectActivity::class.java)
+                intent.putExtra(Extras.DATA, project)
+                var type = view_pager.currentItem
+                if (type == 0) {
+                    type = ProjectListFragment.TYPE_DY
+                } else if (type == 1) {
+                    type = ProjectListFragment.TYPE_CB
+                } else if (type == 2) {
+                    type = ProjectListFragment.TYPE_LX
+                } else if (type == 3) {
+                    type = ProjectListFragment.TYPE_YT
+                } else if (type == 4) {
+                    type = ProjectListFragment.TYPE_TC
+                }
+                intent.putExtra(Extras.TYPE, type)
+                startActivity(intent)
             }
         }
         tv_result_title.text = Html.fromHtml(getString(R.string.tv_title_result_project, 0))
