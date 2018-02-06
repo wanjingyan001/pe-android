@@ -104,7 +104,11 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
             //ProjectActivity.start(baseActivity, project)
             val intent = Intent(context, ProjectActivity::class.java)
             intent.putExtra(Extras.DATA, project)
-            intent.putExtra(Extras.TYPE, type)
+            if (type == ProjectListFragment.TYPE_GZ) {
+                intent.putExtra(Extras.TYPE, project.type)
+            } else {
+                intent.putExtra(Extras.TYPE, type)
+            }
             intent.putExtra(Extras.CODE, p)
             startActivityForResult(intent, 0x001)
 
