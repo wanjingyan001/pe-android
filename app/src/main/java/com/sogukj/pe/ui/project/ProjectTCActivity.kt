@@ -315,15 +315,20 @@ class ProjectTCActivity : ToolbarActivity() {
                             total_quit.backgroundResource = R.drawable.tc_false
                             total_quit.textColor = Color.parseColor("#282828")
 
+//                            tr_wtccb.visibility = View.VISIBLE
+//                            tr_bc.visibility = View.GONE
+//                            tr_tzzt.visibility = View.GONE
+//                            tr_bck.visibility = View.VISIBLE
                             tr_wtccb.visibility = View.VISIBLE
-                            tr_bc.visibility = View.GONE
+                            tr_bc.visibility = View.VISIBLE
                             tr_tzzt.visibility = View.GONE
-                            tr_bck.visibility = View.VISIBLE
+                            tr_bck.visibility = View.GONE
 
                             et_cb.setText(quitBean.cost)
                             et_tcsr.setText(quitBean.income)
                             et_fh.setText(quitBean.profit)
-                            et_tcsr.setText(quitBean.outIncome)
+                            //et_tcsr.setText(quitBean.outIncome)
+                            et_tcsy.setText(quitBean.outIncome)
                             et_tzsyl.setText(quitBean.investRate)
                             et_tzsj.setText(quitBean.investTime)
                             et_tcsj.setText(quitBean.outTime)
@@ -338,7 +343,8 @@ class ProjectTCActivity : ToolbarActivity() {
                             et_cb.isFocusable = false
                             et_tcsr.isFocusable = false
                             et_fh.isFocusable = false
-                            et_tcsr.isFocusable = false
+                            //et_tcsr.isFocusable = false
+                            et_tcsy.isFocusable = false
                             et_tzsyl.isFocusable = false
                             et_tzsj.isFocusable = false
                             et_tcsj.isFocusable = false
@@ -357,17 +363,22 @@ class ProjectTCActivity : ToolbarActivity() {
                             part_quit.backgroundResource = R.drawable.tc_false
                             part_quit.textColor = Color.parseColor("#282828")
 
+//                            tr_wtccb.visibility = View.GONE
+//                            tr_bc.visibility = View.VISIBLE
+//                            tr_tzzt.visibility = View.VISIBLE
+//                            tr_bck.visibility = View.GONE
                             tr_wtccb.visibility = View.GONE
-                            tr_bc.visibility = View.VISIBLE
+                            tr_bc.visibility = View.GONE
                             tr_tzzt.visibility = View.VISIBLE
-                            tr_bck.visibility = View.GONE
+                            tr_bck.visibility = View.VISIBLE
 
                             et_tzzt.setText(quitBean.invest)
                             et_cb.setText(quitBean.cost)
                             et_tcsr.setText(quitBean.income)
                             et_bck.setText(quitBean.compensation)
                             et_fh.setText(quitBean.profit)
-                            et_tcsr.setText(quitBean.outIncome)
+                            //et_tcsr.setText(quitBean.outIncome)
+                            et_tcsy.setText(quitBean.outIncome)
                             et_tzsyl.setText(quitBean.investRate)
                             et_tzsj.setText(quitBean.investTime)
                             et_tcsj.setText(quitBean.outTime)
@@ -382,7 +393,8 @@ class ProjectTCActivity : ToolbarActivity() {
                             et_tcsr.isFocusable = false
                             et_bck.isFocusable = false
                             et_fh.isFocusable = false
-                            et_tcsr.isFocusable = false
+                            //et_tcsr.isFocusable = false
+                            et_tcsy.isFocusable = false
                             et_tzsyl.isFocusable = false
                             et_tzsj.isFocusable = false
                             et_tcsj.isFocusable = false
