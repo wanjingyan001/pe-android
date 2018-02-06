@@ -78,6 +78,7 @@ class FundBookActivity : ToolbarActivity(), SupportEmptyView {
                 val tvSummary = convertView.findViewById(R.id.tv_summary) as TextView
                 val tvDate = convertView.findViewById(R.id.tv_date) as TextView
                 val tvTime = convertView.findViewById(R.id.tv_time) as TextView
+                val tvName = convertView.findViewById(R.id.tv_name) as TextView
                 val tvType = convertView.findViewById(R.id.tv_type) as TextView
                 override fun setData(view: View, data: ProjectBookBean, position: Int) {
                     tvSummary.text = data?.doc_title
@@ -92,6 +93,10 @@ class FundBookActivity : ToolbarActivity(), SupportEmptyView {
                         tvTime.text = strs.getOrNull(1)
                     }
                     tvType.text = data?.name
+                    if (data?.name.isNullOrEmpty()) {
+                        tvType.visibility = View.INVISIBLE
+                    }
+                    tvName.text = data?.submitter
                 }
 
             }
@@ -115,7 +120,7 @@ class FundBookActivity : ToolbarActivity(), SupportEmptyView {
             }
 
 
-            tv_result_title.text = Html.fromHtml(getString(R.string.tv_title_result_search, 0))
+            tv_result_title.text = Html.fromHtml(getString(R.string.tv_title_result_search1, 0))
             search_view.iv_back.visibility = View.VISIBLE
             search_view.iv_back.setOnClickListener {
                 onBackPressed()
@@ -322,7 +327,7 @@ class FundBookActivity : ToolbarActivity(), SupportEmptyView {
                 }, { e ->
                     Trace.e(e)
                 }, {
-                    tv_result_title.text = Html.fromHtml(getString(R.string.tv_title_result_search, adapter.dataList.size))
+                    tv_result_title.text = Html.fromHtml(getString(R.string.tv_title_result_search1, adapter.dataList.size))
                     adapter.notifyDataSetChanged()
                     if (page == 1)
                         refresh?.finishRefreshing()

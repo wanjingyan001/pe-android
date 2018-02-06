@@ -87,6 +87,9 @@ class ProjectBookActivity : ToolbarActivity(), SupportEmptyView {
                         tvTime.text = strs.getOrNull(1)
                     }
                     tvType.text = data?.name
+                    if (data?.name.isNullOrEmpty()) {
+                        tvType.visibility = View.INVISIBLE
+                    }
                     tvName.text = data.submitter
                 }
 
@@ -111,7 +114,7 @@ class ProjectBookActivity : ToolbarActivity(), SupportEmptyView {
             }
 
 
-            tv_result_title.text = Html.fromHtml(getString(R.string.tv_title_result_search, 0))
+            tv_result_title.text = Html.fromHtml(getString(R.string.tv_title_result_search1, 0))
             search_view.iv_back.visibility = View.VISIBLE
             search_view.iv_back.setOnClickListener {
                 onBackPressed()

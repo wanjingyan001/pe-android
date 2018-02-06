@@ -31,7 +31,7 @@ public class OpenFileUtil {
             return getPptFileIntent(filePath);
         } else if (end.equals("xls")) {
             return getExcelFileIntent(filePath);
-        } else if (end.equals("doc")) {
+        } else if (end.equals("doc") || end.equals("docx")) {
             return getWordFileIntent(filePath);
         } else if (end.equals("pdf")) {
             return getPdfFileIntent(filePath);
