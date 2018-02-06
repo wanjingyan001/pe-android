@@ -148,6 +148,7 @@
                 android:textSize="10sp" />
 
             <TextView
+                android:id="@+id/divider_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
@@ -168,6 +169,7 @@
                 android:textSize="10sp" />
 
             <TextView
+                android:id="@+id/divider_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"

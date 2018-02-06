@@ -684,6 +684,9 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
         val bean2: ProjectBeanLayout
         //val point: TextView
 
+        val divider_1: TextView
+        val divider_2: TextView
+
         init {
             ivIcon = convertView.findViewById(R.id.company_icon) as ImageView
             ivSC = convertView.findViewById(R.id.shoucang) as ImageView
@@ -699,6 +702,8 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
             bean1 = convertView.findViewById(R.id.layout1) as ProjectBeanLayout
             bean2 = convertView.findViewById(R.id.layout2) as ProjectBeanLayout
             //point = convertView.findViewById(R.id.point) as TextView
+            divider_1 = convertView.findViewById(R.id.divider_1) as TextView
+            divider_2 = convertView.findViewById(R.id.divider_2) as TextView
         }
 
         override fun setData(view: View, data: ProjectBean, position: Int) {
@@ -766,12 +771,18 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                 tvBusiness.text = "有商业价值"
             } else if (data.is_business == 2) {
                 tvBusiness.text = "无商业价值"
+            } else if (data.is_business == null) {
+                tvBusiness.visibility = View.GONE
+                divider_1.visibility = View.GONE
             }
 
             if (data.is_ability == 1) {
                 tvAbility.text = "创始人靠谱"
             } else if (data.is_ability == 2) {
                 tvAbility.text = "创始人不靠谱"
+            } else if (data.is_ability == null) {
+                tvAbility.visibility = View.GONE
+                divider_2.visibility = View.GONE
             }
 
             // 立项页面时显示（已完成或准备中）两个状态，   退出显示（部分退出或全部退出）两个状态   //1准备中  2已完成
