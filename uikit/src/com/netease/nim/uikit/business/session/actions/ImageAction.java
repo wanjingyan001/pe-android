@@ -14,7 +14,7 @@ import java.io.File;
 public class ImageAction extends PickImageAction {
 
     public ImageAction() {
-        super(R.drawable.nim_message_plus_photo_selector, R.string.input_panel_photo, true);
+        super(R.drawable.im_folder, R.string.picker_image_folder, true);
     }
 
     @Override

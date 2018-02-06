@@ -13,6 +13,8 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.gson.Gson
 import com.netease.nim.uikit.api.NimUIKit
 import com.sogukj.pe.Extras
@@ -72,6 +74,10 @@ class PersonalInfoActivity : AppCompatActivity(), View.OnClickListener, TextWatc
                 email_tv.text = it.email
                 department_tv.text = it.depart_name
                 position_tv.text = it.position
+                Glide.with(this)
+                        .load(it.headImage())
+                        .apply(RequestOptions().error(R.drawable.ewm))
+                        .into(avatar)
                 it.accid?.let { accid->
                     val remark = db.get(accid, "")
                     if (remark.isNotEmpty()) {
@@ -99,6 +105,7 @@ class PersonalInfoActivity : AppCompatActivity(), View.OnClickListener, TextWatc
                         payload.payload?.let { departmentBean->
                             departmentBean.forEach { item->
                                item.data?.forEach {
+                                   it.depart_name = item.de_name
                                    if (it.user_id == uid){
                                        user = it
                                        val bean = Store.store.getUser(this)
@@ -114,6 +121,10 @@ class PersonalInfoActivity : AppCompatActivity(), View.OnClickListener, TextWatc
                                            email_tv.text = it.email
                                            department_tv.text = it.depart_name
                                            position_tv.text = it.position
+                                           Glide.with(this)
+                                                   .load(it.headImage())
+                                                   .apply(RequestOptions().error(R.drawable.ewm))
+                                                   .into(avatar)
                                            it.accid?.let { accid->
                                                val remark = db.get(accid, "")
                                                if (remark.isNotEmpty()) {

@@ -351,7 +351,7 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                 val startDate = Calendar.getInstance()
                 startDate.set(
                         selectedDate.get(Calendar.YEAR),
-                        selectedDate.get(Calendar.MONTH) - 1,
+                        selectedDate.get(Calendar.MONTH),
                         selectedDate.get(Calendar.DAY_OF_MONTH),
                         selectedDate.get(Calendar.HOUR_OF_DAY),
                         selectedDate.get(Calendar.MINUTE)

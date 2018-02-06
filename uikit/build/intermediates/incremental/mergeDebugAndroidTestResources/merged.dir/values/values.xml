@@ -777,7 +777,7 @@
     <dimen name="mask_sticker_bubble_width">120dip</dimen>
     <dimen name="max_bubble_width">240dip</dimen>
     <dimen name="max_text_bubble_width">222dip</dimen>
-    <dimen name="message_bottom_function_viewpager_height">220dp</dimen>
+    <dimen name="message_bottom_function_viewpager_height">120dp</dimen>
     <dimen name="message_bubble_basic_margin">5dip</dimen>
     <dimen name="message_list_panel_jump_offset_y">30dip</dimen>
     <dimen name="message_music_size">60dip</dimen>
@@ -1043,6 +1043,7 @@
     <string name="search">搜索</string>
     <string name="search_join_team">搜索加入群组</string>
     <string name="search_menu_title">Search</string>
+    <string name="select_file">文件传输</string>
     <string name="send">发送</string>
     <string name="set_head_image">设置头像</string>
     <string name="set_team_admin">设为管理员</string>

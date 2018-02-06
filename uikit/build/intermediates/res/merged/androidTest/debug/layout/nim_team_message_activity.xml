@@ -30,7 +30,6 @@
                     android:textStyle="bold"
                     android:layout_marginTop="2dp"
                     android:singleLine="true"
-                    android:text="项目工作组"
                     android:layout_centerHorizontal="true"
                     android:layout_alignParentTop="true"
                     android:textColor="@color/white"
@@ -46,7 +45,6 @@
                     android:layout_marginBottom="8dp"
                     android:layout_centerHorizontal="true"
                     android:layout_below="@+id/bigTitle"
-                    android:text="周黑鸭食品股份有限公司"
                     android:textColor="#cedcff"/>
 
             </RelativeLayout>

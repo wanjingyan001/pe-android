@@ -94,7 +94,9 @@ public abstract class BaseMessageActivity extends UI {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.CAMERA,
             Manifest.permission.READ_PHONE_STATE,
-            Manifest.permission.RECORD_AUDIO
+            Manifest.permission.RECORD_AUDIO,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION
     };
 
     protected void requestBasicPermission() {
@@ -161,8 +163,8 @@ public abstract class BaseMessageActivity extends UI {
         toolbar.addView(view, new Toolbar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.RIGHT | Gravity.CENTER));
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        return !messageFragment.onKeyDown(keyCode, event) && super.onKeyDown(keyCode, event);
-    }
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        return !messageFragment.onKeyDown(keyCode, event) && super.onKeyDown(keyCode, event);
+//    }
 }

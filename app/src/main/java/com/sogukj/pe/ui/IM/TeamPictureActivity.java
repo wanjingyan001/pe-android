@@ -1,28 +1,48 @@
 package com.sogukj.pe.ui.IM;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
+import com.sogukj.pe.Extras;
 import com.sogukj.pe.R;
+import com.sogukj.pe.service.Payload;
 import com.sogukj.pe.util.Utils;
+import com.sogukj.service.SoguApi;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import qdx.stickyheaderdecoration.GridDecoration;
 
 public class TeamPictureActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private RecyclerView pictureList;
-    private ArrayList<TeamPic> teamPics;
+    private ArrayList<ChatFileBean> teamPics;
+    private PictureAdapter adapter;
+    private int tid;
+
+    public static void start(Context context, int tid){
+        Intent intent = new Intent(context, TeamPictureActivity.class);
+        intent.putExtra(Extras.INSTANCE.getID(), tid);
+        context.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,29 +57,57 @@ public class TeamPictureActivity extends AppCompatActivity {
                 finish();
             }
         });
+        tid = getIntent().getIntExtra(Extras.INSTANCE.getID(), 0);
         pictureList = (RecyclerView) findViewById(R.id.pictureList);
         teamPics = new ArrayList<>();
-        int month = 1;
-        for (int i = 0; i < 50; i++) {
-            TeamPic tp = new TeamPic();
-            if (i % 5 == 0) {
-                month += 1;
-            }
-            tp.setDate("2017年" + month + "月");
-            tp.setUrl("https://www.baidu.com/img/bd_logo1.png");
-            teamPics.add(tp);
-        }
-        PictureAdapter adapter = new PictureAdapter();
+        adapter = new PictureAdapter();
         GridDecoration gridDecoration = new GridDecoration(teamPics.size(),3) {
             @Override
             public String getHeaderName(int i) {
-                return teamPics.get(i).getDate();
+                String s = teamPics.get(i).getTime().substring(0, 8);
+                s = s.replaceFirst("/", "年");
+                s = s.replace("/", "月");
+                return s;
             }
         };
         pictureList.addItemDecoration(gridDecoration);
         pictureList.setLayoutManager(new GridLayoutManager(this,3));
         pictureList.setAdapter(adapter);
+        requestChatFile();
+    }
 
+
+    private void requestChatFile() {
+        SoguApi.Companion.getService(getApplication())
+                .chatFile(1, tid)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<Payload<List<ChatFileBean>>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(Payload<List<ChatFileBean>> listPayload) {
+                        Log.d("WJY", new Gson().toJson(listPayload));
+                        if (listPayload.getPayload() != null && !listPayload.getPayload().isEmpty()) {
+                            teamPics.clear();
+                            teamPics.addAll(listPayload.getPayload());
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
 
@@ -90,28 +138,6 @@ public class TeamPictureActivity extends AppCompatActivity {
                 super(itemView);
                 picImg = (ImageView) itemView.findViewById(R.id.team_picture);
             }
-        }
-    }
-
-
-    class TeamPic {
-        private String date;
-        private String url;
-
-        public String getDate() {
-            return date;
-        }
-
-        public void setDate(String date) {
-            this.date = date;
-        }
-
-        public String getUrl() {
-            return url;
-        }
-
-        public void setUrl(String url) {
-            this.url = url;
         }
     }
 }

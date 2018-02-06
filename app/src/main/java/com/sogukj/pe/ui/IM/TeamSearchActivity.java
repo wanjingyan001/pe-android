@@ -140,9 +140,9 @@ public class TeamSearchActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.search_pic) {
-            startActivity(new Intent(this, TeamPictureActivity.class));
+            TeamPictureActivity.start(this, Integer.valueOf(sessionId));
         } else if (id == R.id.search_file) {
-            startActivity(new Intent(this, TeamHistoryFileActivity.class));
+            TeamHistoryFileActivity.start(this, Integer.valueOf(sessionId));
         } else if (id == R.id.search_link) {
 
         } else if (id == R.id.tv_cancel) {
@@ -203,7 +203,7 @@ public class TeamSearchActivity extends AppCompatActivity implements View.OnClic
             UserInfo userInfo = NimUIKit.getUserInfoProvider().getUserInfo(message.getFromAccount());
             holder.resultName.setText(message.getFromNick());
             String text = record.getText();
-            text = text.replace(searchKey,"<font color='#1787fb'>"+searchKey+"</font>");
+            text = text.replace(searchKey, "<font color='#1787fb'>" + searchKey + "</font>");
             holder.resultContent.setText(Html.fromHtml(text));
             RequestOptions options = new RequestOptions();
             options.error(R.drawable.nim_avatar_default)
@@ -220,7 +220,7 @@ public class TeamSearchActivity extends AppCompatActivity implements View.OnClic
                 @Override
                 public void onClick(View v) {
                     //需要跳转到一个新页面,TeamMessageActivity会默认移动到最下面
-                    DisplayMessageActivity.Companion.start(TeamSearchActivity.this,message);
+                    DisplayMessageActivity.Companion.start(TeamSearchActivity.this, message);
                 }
             });
         }

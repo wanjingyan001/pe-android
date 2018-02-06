@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class ActionsPagerAdapter extends PagerAdapter {
 
-    private final int ITEM_COUNT_PER_GRID_VIEW = 8;
+    private final int ITEM_COUNT_PER_GRID_VIEW = 4;
 
     private final Context context;
 
@@ -64,7 +64,7 @@ public class ActionsPagerAdapter extends PagerAdapter {
                 public void run() {
                     ViewGroup.LayoutParams layoutParams = viewPager.getLayoutParams();
                     layoutParams.height = context.getResources().getDimensionPixelOffset(
-                            R.dimen.message_bottom_function_viewpager_height) / 2;
+                            R.dimen.message_bottom_function_viewpager_height) ;
                     viewPager.setLayoutParams(layoutParams);
                 }
             });

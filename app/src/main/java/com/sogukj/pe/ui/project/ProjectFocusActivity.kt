@@ -31,7 +31,7 @@ class ProjectFocusActivity : ToolbarActivity() {
     }
 
     companion object {
-        fun start(ctx: Activity?, @IntRange(from = 1, to = 6) type: Int) {
+        fun start(ctx: Activity?, @IntRange(from = 1, to = 7) type: Int) {
             val intent = Intent(ctx, ProjectFocusActivity::class.java)
             intent.putExtra(Extras.TYPE, type)
             ctx?.startActivity(intent)

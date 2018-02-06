@@ -60,7 +60,7 @@ class UserFragment : ToolbarFragment(), View.OnClickListener {
             UserEditActivity.start(activity, departList)
         }
         structure.setOnClickListener {
-//            OrganizationActivity.start(activity, departList)
+            //            OrganizationActivity.start(activity, departList)
             TeamSelectActivity.startForResult(activity)
         }
         setting.setOnClickListener {
@@ -101,27 +101,27 @@ class UserFragment : ToolbarFragment(), View.OnClickListener {
                         payload.payload?.let {
                             it.dy?.let {
                                 tv_1.text = it.count.toString()
-                                point1.visibility = if (it.red == 0) View.GONE else View.VISIBLE
+                                point1.visibility = if (it.red == null || it.red == 0) View.GONE else View.VISIBLE
                             }
                             it.cb?.let {
                                 tv_2.text = it.count.toString()
-                                point2.visibility = if (it.red == 0) View.GONE else View.VISIBLE
+                                point2.visibility = if (it.red == null || it.red == 0) View.GONE else View.VISIBLE
                             }
                             it.lx?.let {
                                 tv_3.text = it.count.toString()
-                                point3.visibility = if (it.red == 0) View.GONE else View.VISIBLE
+                                point3.visibility = if (it.red == null || it.red == 0) View.GONE else View.VISIBLE
                             }
                             it.yt?.let {
                                 tv_4.text = it.count.toString()
-                                point4.visibility = if (it.red == 0) View.GONE else View.VISIBLE
+                                point4.visibility = if (it.red == null || it.red == 0) View.GONE else View.VISIBLE
                             }
                             it.tc?.let {
                                 tv_5.text = it.count.toString()
-                                point5.visibility = if (it.red == 0) View.GONE else View.VISIBLE
+                                point5.visibility = if (it.red == null || it.red == 0) View.GONE else View.VISIBLE
                             }
                             it.gz?.let {
                                 tv_6.text = it.count.toString()
-                                point.visibility = if (it.red == 0) View.GONE else View.VISIBLE
+                                point.visibility = if (it.red == null || it.red == 0) View.GONE else View.VISIBLE
                             }
                         }
                     } else {

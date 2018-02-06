@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import com.framework.base.BaseFragment
@@ -16,6 +17,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.fashare.stack_layout.StackLayout
+import com.google.gson.Gson
 import com.sogukj.pe.Extras
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
@@ -139,6 +141,10 @@ class MainHomeFragment : BaseFragment() {
                     //showToast("暂无新数据")
                     ToastError(e)
                     pb.visibility = View.GONE
+                    if (adapter.dataList.size == 0) {
+                        iv_empty.visibility = View.VISIBLE
+                        stack_layout.visibility = View.GONE
+                    }
                 }, {
                     pb.visibility = View.GONE
                     if (adapter.dataList.size == 0) {
@@ -146,7 +152,6 @@ class MainHomeFragment : BaseFragment() {
                         stack_layout.visibility = View.GONE
                     }
                 })
-
         SoguApi.getService(baseActivity!!.application)
                 .getNumber()
                 .observeOn(AndroidSchedulers.mainThread())

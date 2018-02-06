@@ -26,9 +26,10 @@ import java.util.List;
 public class TeamMenuWindow extends PopupWindow {
     private RecyclerView conditionsList;
     private List<String> titles = new ArrayList<>();
-    private int[] icons = {R.drawable.wd, R.drawable.ysb, R.drawable.sp, R.drawable.yy, R.drawable.pic2, R.drawable.qt};
+    private int[] icons = {R.drawable.wd, R.drawable.ysb, R.drawable.xls, R.drawable.txt, R.drawable.pdf, R.drawable.qt};
     private Context context;
     private View inflate;
+    private onItemClickListener listener;
 
     public TeamMenuWindow(Context context) {
         super(context);
@@ -42,16 +43,20 @@ public class TeamMenuWindow extends PopupWindow {
         setPopWindow();
     }
 
+    public void setListener(onItemClickListener listener) {
+        this.listener = listener;
+    }
+
     private void init(Context context) {
         this.context = context;
         inflate = LayoutInflater.from(context).inflate(R.layout.layout_team_menu_winodow, null);
         conditionsList = (RecyclerView) inflate.findViewById(R.id.filter_conditions);
         conditionsList.setLayoutManager(new GridLayoutManager(context, 3));
-        titles.add("文档");
+        titles.add("DOC");
         titles.add("压缩包");
-        titles.add("视频");
-        titles.add("应用");
-        titles.add("图片");
+        titles.add("XLS");
+        titles.add("TXT");
+        titles.add("PDF");
         titles.add("其他");
         FilterAdapter adapter = new FilterAdapter(titles);
         conditionsList.setAdapter(adapter);
@@ -104,9 +109,17 @@ public class TeamMenuWindow extends PopupWindow {
         }
 
         @Override
-        public void onBindViewHolder(FilterHolder holder, int position) {
+        public void onBindViewHolder(FilterHolder holder, final int position) {
             holder.filterTv.setText(titles.get(position));
             holder.filterIcon.setImageResource(icons[position]);
+            holder.view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        listener.onItemClick(position);
+                    }
+                }
+            });
         }
 
         @Override
@@ -117,13 +130,19 @@ public class TeamMenuWindow extends PopupWindow {
         class FilterHolder extends RecyclerView.ViewHolder {
             private ImageView filterIcon;
             private TextView filterTv;
+            private View view;
 
             public FilterHolder(View itemView) {
                 super(itemView);
+                view = itemView;
                 filterTv = (TextView) itemView.findViewById(R.id.filter_text);
                 filterIcon = (ImageView) itemView.findViewById(R.id.filter_icon);
             }
         }
+    }
+
+    interface onItemClickListener{
+        void onItemClick(int position);
     }
 
 }

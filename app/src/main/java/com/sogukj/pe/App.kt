@@ -1,9 +1,12 @@
 package com.sogukj.pe
 
+import android.app.Notification
 import android.content.Context
 import android.content.Intent
 import android.support.multidex.MultiDexApplication
 import android.util.Log
+import android.widget.RemoteViews
+import anet.channel.util.Utils.context
 import com.framework.base.ActivityHelper
 import com.google.gson.Gson
 import com.mob.MobSDK
@@ -13,6 +16,7 @@ import com.netease.nimlib.sdk.auth.LoginInfo
 import com.netease.nimlib.sdk.util.NIMUtil
 import com.sogukj.pe.bean.NewsBean
 import com.sogukj.pe.ui.IM.SessionHelper
+import com.sogukj.pe.ui.IM.location.NimDemoLocationProvider
 import com.sogukj.pe.ui.calendar.ModifyTaskActivity
 import com.sogukj.pe.ui.calendar.TaskDetailActivity
 import com.sogukj.pe.ui.news.NewsDetailActivity
@@ -23,8 +27,11 @@ import com.sogukj.util.Store
 import com.sogukj.util.XmlDb
 import com.umeng.message.IUmengRegisterCallback
 import com.umeng.message.PushAgent
+import com.umeng.message.UmengMessageHandler
+import com.umeng.message.entity.UMessage
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import me.leolin.shortcutbadger.ShortcutBadger
 import org.json.JSONObject
 
 
@@ -44,7 +51,7 @@ class App : MultiDexApplication() {
 
             override fun onSuccess(deviceToken: String) {
                 //注册成功会返回device token
-                println("IUmengRegisterCallback:$deviceToken")
+                Log.d("WJY", "IUmengRegisterCallback:$deviceToken")
                 Store.store.setUToken(this@App, deviceToken)
             }
 
@@ -52,6 +59,23 @@ class App : MultiDexApplication() {
                 println("IUmengRegisterCallback:$s=>$s1")
             }
         })
+        PushAgent.getInstance(this).messageHandler = object : UmengMessageHandler() {
+            override fun getNotification(p0: Context?, p1: UMessage?): Notification {
+                Log.d("WJY","推送==>"+Gson().toJson(p1))
+//                ShortcutBadger.applyCount(this@App,)
+                val builder = Notification.Builder(this@App)
+                val myNotificationView = RemoteViews(this@App.packageName, R.layout.upush_notification)
+                myNotificationView.setTextViewText(R.id.notification_title, p1?.title)
+                myNotificationView.setTextViewText(R.id.notification_text, p1?.text)
+                myNotificationView.setImageViewBitmap(R.id.notification_large_icon1,getLargeIcon(this@App,p1))
+                myNotificationView.setImageViewResource(R.id.notification_large_icon1,getSmallIconId(this@App,p1))
+                builder.setContent(myNotificationView)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setTicker(p1?.ticker)
+                        .setAutoCancel(true)
+               return builder.notification
+            }
+        }
         PushAgent.getInstance(this).setNotificationClickHandler({ context, uMessage ->
             try {
                 Log.d("WJY", "推送==>${Gson().toJson(uMessage)}")
@@ -77,7 +101,7 @@ class App : MultiDexApplication() {
         initNIM()
     }
 
-    val GSON = Gson();
+    val GSON = Gson()
     fun handle(context: Context, json: JSONObject) {
         try {
             val dataJson = json.getJSONObject("data")
@@ -123,6 +147,8 @@ class App : MultiDexApplication() {
     private fun initNIM() {
         // 在初始化SDK的时候，传入 loginInfo()， 其中包含用户信息，用以自动登录
         NIMClient.init(this, getIMLoginInfo(), NimSDKOptionConfig.getSDKOptions(this))
+        // 设置地理位置提供者。如果需要发送地理位置消息，该参数必须提供。如果不需要，可以忽略。
+        NimUIKit.setLocationProvider(NimDemoLocationProvider())
         // 以下逻辑只在主进程初始化时执行
         if (NIMUtil.isMainProcess(this)) {
             SessionHelper.init()
