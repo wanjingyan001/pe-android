@@ -682,7 +682,7 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
 
         val bean1: ProjectBeanLayout
         val bean2: ProjectBeanLayout
-        //val point: TextView
+        val point: ImageView
 
         val divider_1: TextView
         val divider_2: TextView
@@ -701,7 +701,7 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
             tvState = convertView.findViewById(R.id.state) as TextView
             bean1 = convertView.findViewById(R.id.layout1) as ProjectBeanLayout
             bean2 = convertView.findViewById(R.id.layout2) as ProjectBeanLayout
-            //point = convertView.findViewById(R.id.point) as TextView
+            point = convertView.findViewById(R.id.point) as ImageView
             divider_1 = convertView.findViewById(R.id.divider_1) as TextView
             divider_2 = convertView.findViewById(R.id.divider_2) as TextView
         }
@@ -808,12 +808,11 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                 bean2.setData(true, 2, data.track_time)
             }
 
-//            if (data.red != null && data.red != 0) {
-//                point.visibility = View.VISIBLE
-//                point.text = data.red.toString()
-//            } else {
-//                point.visibility = View.GONE
-//            }
+            if (data.red != null && data.red != 0) {
+                point.visibility = View.VISIBLE
+            } else {
+                point.visibility = View.INVISIBLE
+            }
         }
 
     }
