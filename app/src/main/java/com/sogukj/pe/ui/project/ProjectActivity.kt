@@ -359,6 +359,8 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
         MaterialDialog.Builder(this)
                 .theme(Theme.LIGHT)
                 .title("是否删除该项目")
+                .positiveText("确定")
+                .negativeText("取消")
                 .onPositive { dialog, which ->
                     SoguApi.getService(application)
                             .delProject(project.company_id!!)
@@ -380,9 +382,21 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
     }
 
     fun doAdd() {
+        var title = ""
+        if (type == ProjectListFragment.TYPE_DY) {
+            title = "是否添加到储备"
+        } else if (type == ProjectListFragment.TYPE_CB) {
+            title = "是否添加到立项"
+        } else if (type == ProjectListFragment.TYPE_LX) {
+            title = "是否添加到已投"
+        } else if (type == ProjectListFragment.TYPE_YT) {
+            title = "是否添加到退出"
+        }
         MaterialDialog.Builder(this)
                 .theme(Theme.LIGHT)
-                .title("是否添加项目")
+                .title(title)
+                .positiveText("确定")
+                .negativeText("取消")
                 .onPositive { dialog, which ->
                     val status = if (type == ProjectListFragment.TYPE_DY) 1 else if (type == ProjectListFragment.TYPE_CB) 2
                     else if (type == ProjectListFragment.TYPE_LX) 3 else return@onPositive
