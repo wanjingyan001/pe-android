@@ -16,12 +16,15 @@ import com.netease.nim.uikit.api.model.main.CustomPushContentProvider;
 import com.netease.nim.uikit.api.model.session.SessionCustomization;
 import com.netease.nim.uikit.business.ait.AitManager;
 import com.netease.nim.uikit.business.session.actions.BaseAction;
+import com.netease.nim.uikit.business.session.actions.FileAction;
 import com.netease.nim.uikit.business.session.actions.ImageAction;
 import com.netease.nim.uikit.business.session.actions.LocationAction;
+import com.netease.nim.uikit.business.session.actions.ShootAction;
 import com.netease.nim.uikit.business.session.actions.VideoAction;
 import com.netease.nim.uikit.business.session.constant.Extras;
 import com.netease.nim.uikit.business.session.module.Container;
 import com.netease.nim.uikit.business.session.module.ModuleProxy;
+import com.netease.nim.uikit.business.session.module.input.InputPanel;
 import com.netease.nim.uikit.business.session.module.input.InputPanel2;
 import com.netease.nim.uikit.business.session.module.list.MessageListPanelEx;
 import com.netease.nim.uikit.common.fragment.TFragment;
@@ -69,7 +72,7 @@ public class MessageFragment extends TFragment implements ModuleProxy {
     protected SessionTypeEnum sessionType;
 
     // modules
-    protected InputPanel2 inputPanel;
+    protected InputPanel inputPanel;
     protected MessageListPanelEx messageListPanel;
 
     protected AitManager aitManager;
@@ -148,7 +151,7 @@ public class MessageFragment extends TFragment implements ModuleProxy {
         }
 
         if (inputPanel == null) {
-            inputPanel = new InputPanel2(container, rootView, getActionList());
+            inputPanel = new InputPanel(container, rootView, getActionList());
             inputPanel.setCustomization(customization);
         } else {
             inputPanel.reload(container, customization);
@@ -374,17 +377,16 @@ public class MessageFragment extends TFragment implements ModuleProxy {
         messageListPanel.onActivityResult(requestCode, resultCode, data);
     }
 
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        return inputPanel.onKeyDown(keyCode, event);
-    }
+
 
 
     // 操作面板集合
     protected List<BaseAction> getActionList() {
         List<BaseAction> actions = new ArrayList<>();
         actions.add(new ImageAction());
-        actions.add(new VideoAction());
+        actions.add(new ShootAction(R.drawable.im_shoot,R.string.input_panel_take));
         actions.add(new LocationAction());
+        actions.add(new FileAction(R.drawable.im_file,R.string.select_file));
 
         if (customization != null && customization.actions != null) {
             actions.addAll(customization.actions);

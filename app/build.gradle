@@ -41,6 +41,7 @@ android {
 //            shrinkResources true  // 移除无用资源
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
+            manifestPlaceholders = [AMAP_KEY: "ee20324fba1c7f4ad7a4a207e7f08e8d"]
         }
         debug {
             minifyEnabled false
@@ -48,7 +49,7 @@ android {
             debuggable true
             jniDebuggable true
             signingConfig signingConfigs.release
-
+            manifestPlaceholders = [AMAP_KEY: "09fd4efd3e28e9bf1f449ecec7d34bfe"]
         }
     }
     lintOptions {
@@ -82,6 +83,7 @@ repositories {
     maven {
         url "http://dl.bintray.com/lukaville/maven"
     }
+    mavenCentral()
 }
 
 dependencies {
@@ -128,6 +130,7 @@ dependencies {
     compile 'com.afollestad.material-dialogs:commons:0.9.4.5'
     compile 'com.contrarywind:Android-PickerView:3.2.7'
     compile 'com.github.mcxtzhang:SwipeDelMenuLayout:V1.3.0'
+    compile "me.leolin:ShortcutBadger:1.1.21@aar"
     testCompile 'junit:junit:4.12'
     compile project(':PushSDK')
     compile project(':shareSDK')

@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -109,6 +110,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
     private boolean isRobotSession;
 
     private TextWatcher aitTextWatcher;
+    private ImageView cancel;
 
     public InputPanel(Container container, View view, List<BaseAction> actions, boolean isTextAudioSwitchShow) {
         this.container = container;
@@ -190,6 +192,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
         audioRecordBtn = (Button) view.findViewById(R.id.audioRecord);
         audioAnimLayout = view.findViewById(R.id.layoutPlayAudio);
         time = (Chronometer) view.findViewById(R.id.timer);
+        cancel = ((ImageView) view.findViewById(R.id.cancel));
         timerTip = (TextView) view.findViewById(R.id.timer_tip);
         timerTipContainer = (LinearLayout) view.findViewById(R.id.timer_tip_container);
 
@@ -713,10 +716,17 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
     private void updateTimerTip(boolean cancel) {
         if (cancel) {
             timerTip.setText(R.string.recording_cancel_tip);
-            timerTipContainer.setBackgroundResource(R.drawable.nim_cancel_record_red_bg);
+            audioAnimLayout.setBackgroundResource(R.drawable.rectangle_19);
+            time.setVisibility(View.GONE);
+            this.cancel.setVisibility(View.VISIBLE);
+//            timerTipContainer.setBackgroundResource(R.drawable.nim_cancel_record_red_bg);
         } else {
             timerTip.setText(R.string.recording_cancel);
-            timerTipContainer.setBackgroundResource(0);
+            audioAnimLayout.setBackgroundResource(R.drawable.rectangle_192);
+            time.setVisibility(View.VISIBLE);
+            this.cancel.setVisibility(View.GONE);
+//            timerTipContainer.setBackgroundResource(0);
+
         }
     }
 

@@ -36,10 +36,10 @@
 
         <FrameLayout
             android:id="@+id/layoutPlayAudio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="130dp"
+            android:layout_height="110dp"
             android:layout_gravity="center"
-            android:background="@drawable/nim_dialog_toast_bg"
+            android:background="@drawable/rectangle_192"
             android:visibility="gone">
 
             <Chronometer
@@ -50,6 +50,12 @@
                 android:text="@string/timer_default"
                 android:textColor="@color/white"
                 android:textSize="45sp"/>
+
+            <ImageView
+                android:id="@+id/cancel"
+                android:src="@drawable/audio_cancel"
+                android:layout_width="50dp"
+                android:layout_height="60dp" />
 
             <LinearLayout
                 android:id="@+id/timer_tip_container"

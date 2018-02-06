@@ -74,7 +74,7 @@ class TeamSelectActivity : AppCompatActivity() {
         params.bottomMargin = Utils.dpToPx(this, 10)
         layout.orientation = LinearLayout.VERTICAL
         if (isSelectUser) {
-            team_toolbar_title.text = "最近联系人"
+            team_toolbar_title.text = "选择联系人"
             confirmSelectLayout.visibility = View.VISIBLE
 //            layout.addView(contactList, params)
             layout.addView(organizationList, params)
@@ -122,7 +122,8 @@ class TeamSelectActivity : AppCompatActivity() {
         fromTeam = intent.getBooleanExtra(Extras.FLAG, true)
         if (data != null) {
             alreadyList = data as ArrayList<UserBean>
-            selectNumber.text = "已选择: ${alreadyList.size - 1}人"
+            val i = if (alreadyList.size - 1 < 0) 0 else alreadyList.size - 1
+            selectNumber.text = "已选择: $i 人"
         } else {
             alreadyList = ArrayList()
         }
@@ -214,9 +215,10 @@ class TeamSelectActivity : AppCompatActivity() {
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         departList.clear()
-                        payload.payload?.forEach {
-                            departList.add(it)
-                            it.data?.forEach {
+                        payload.payload?.forEach { depart ->
+                            departList.add(depart)
+                            depart.data?.forEach {
+                                it.depart_name = depart.de_name
                                 it.user_id?.let {
                                     if (it == mine?.uid && fromTeam) {
                                         selectMap.put(it, true)
@@ -281,7 +283,7 @@ class TeamSelectActivity : AppCompatActivity() {
                 layout.orientation = LinearLayout.VERTICAL
                 layout.removeAllViews()
                 if (isSelectUser) {
-                    team_toolbar_title.text = "最近联系人"
+                    team_toolbar_title.text = "选择联系人"
                     confirmSelectLayout.visibility = View.VISIBLE
 //                    layout.addView(conLayout, params)
                     layout.addView(orgList, params)
@@ -383,7 +385,7 @@ class TeamSelectActivity : AppCompatActivity() {
                             userBean.user_id?.let {
                                 selectMap.put(it, holder.selectIcon.isSelected)
                                 val map = selectMap.filterValues { it }
-                                selectNumber.text = "已选择: ${map.size - 1}人"
+                                selectNumber.text = "已选择: ${map.size}人"
                             }
                         }
                     } else {
@@ -467,7 +469,7 @@ class TeamSelectActivity : AppCompatActivity() {
                         userBean.user_id?.let {
                             selectMap.put(it, holder.selectIcon.isSelected)
                             val map = selectMap.filterValues { it }
-                            selectNumber.text = "已选择: ${map.size - 1}人"
+                            selectNumber.text = "已选择: ${map.size}人"
                         }
                     }
                 } else {

@@ -13,7 +13,7 @@ public class LocationAction extends BaseAction {
     private final static String TAG = "LocationAction";
 
     public LocationAction() {
-        super(R.drawable.nim_message_plus_location_selector, R.string.input_panel_location);
+        super(R.drawable.im_loaction, R.string.input_panel_location);
     }
 
     @Override

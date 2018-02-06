@@ -24,6 +24,7 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.*
 import com.sogukj.pe.util.Trace
+import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.FlowLayout
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -38,6 +39,7 @@ import java.util.HashMap
 import kotlin.collections.ArrayList
 import kotlin.collections.component1
 import kotlin.collections.component2
+
 /**
  * Created by qinfei on 17/10/18.
  */
@@ -94,10 +96,7 @@ class BuildSignActivity : ToolbarActivity() {
                     Trace.e(e)
                     showToast("暂无可用数据")
                 })
-
-        val convertView = inflater.inflate(R.layout.cs_row_approver, null) as LinearLayout
-        ll_approver.addView(convertView)
-        requestApprove(convertView)
+        requestApprove()
         btn_confirm.setOnClickListener {
             var flag = true
             for (chk in checkList) {
@@ -112,10 +111,10 @@ class BuildSignActivity : ToolbarActivity() {
         }
     }
 
-    private fun requestApprove(convertView: LinearLayout) {
+    private fun requestApprove(fund_id: Int? = null) {
         SoguApi.getService(application)
                 .approver(template_id = paramId!!
-                        , type = paramType)
+                        , type = paramType, fund_id = fund_id)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -124,7 +123,7 @@ class BuildSignActivity : ToolbarActivity() {
                         return@subscribe
                     }
                     payload.payload?.forEach { bean ->
-                        addApprover(bean, convertView)
+                        addApprover(bean)
                     }
                 }, { e ->
                     Trace.e(e)
@@ -157,7 +156,9 @@ class BuildSignActivity : ToolbarActivity() {
                 })
     }
 
-    private fun addApprover(bean: ApproverBean, convertView: LinearLayout) {
+    private fun addApprover(bean: ApproverBean) {
+        val convertView = inflater.inflate(R.layout.cs_row_approver, null) as LinearLayout
+        ll_approver.addView(convertView)
         val tvLabel = convertView.findViewById(R.id.tv_label) as TextView
         val etValue = convertView.findViewById(R.id.et_value) as TextView
         tvLabel.text = bean.position
@@ -274,8 +275,9 @@ class BuildSignActivity : ToolbarActivity() {
         ll_seal.addView(convertView)
 
         val tvLabel = convertView.findViewById(R.id.tv_label) as TextView
-        val etValue = convertView.findViewById(R.id.et_value) as TextView
+        val etValue = convertView.findViewById(R.id.et_value) as EditText
         tvLabel.text = if (bean.is_must == 1) bean.name + "(必填)" else bean.name
+        etValue.filters = Utils.getFilter(this)
 
         val iv_alert = convertView.findViewById(R.id.iv_alert)
         iv_alert.visibility = View.GONE
@@ -298,8 +300,9 @@ class BuildSignActivity : ToolbarActivity() {
         ll_seal.addView(convertView)
 
         val tvLabel = convertView.findViewById(R.id.tv_label) as TextView
-        val etValue = convertView.findViewById(R.id.et_value) as TextView
+        val etValue = convertView.findViewById(R.id.et_value) as EditText
         tvLabel.text = if (bean.is_must == 1) bean.name + "(必填)" else bean.name
+        etValue.filters = Utils.getFilter(this)
 
         val iv_alert = convertView.findViewById(R.id.iv_alert)
         iv_alert.visibility = View.GONE
@@ -364,6 +367,7 @@ class BuildSignActivity : ToolbarActivity() {
                         v.is_select = 0
                         v.count = 0
                     }
+                    etNum.text = v.count.toString()
                     paramMap.put(bean.fields, bean.value_list)
                 }
 
@@ -422,7 +426,7 @@ class BuildSignActivity : ToolbarActivity() {
         val convertView = inflater.inflate(R.layout.cs_row_images, null);
         ll_seal.addView(convertView)
         val tvLabel = convertView.findViewById(R.id.tv_label) as TextView
-        tvLabel.text =if (bean.is_must == 1) bean.name + "(必填)" else bean.name
+        tvLabel.text = if (bean.is_must == 1) bean.name + "(必填)" else bean.name
 
         val ll_images = convertView.findViewById(R.id.ll_images) as FlowLayout
         ll_images.removeAllViews()
@@ -590,8 +594,10 @@ class BuildSignActivity : ToolbarActivity() {
         } else if (requestCode == ListSelectorActivity.REQ_LIST_SELECTOR && resultCode === Activity.RESULT_OK) {
             val bean = data?.getSerializableExtra(Extras.DATA) as CustomSealBean
             val data = data?.getSerializableExtra(Extras.DATA2) as CustomSealBean.ValueBean
-            val convertView = inflater.inflate(R.layout.cs_row_approver, null) as LinearLayout
-            requestApprove(convertView)
+            if (paramTitle == "基金用印") {
+                ll_approver.removeAllViews()
+                requestApprove(data.id)
+            }
             refreshListSelector(bean, data)
         } else if (resultCode == RESULT_OK && requestCode == 0x101) {//带测试，用来选择图片的
             var uri = data?.getData()

@@ -27,7 +27,6 @@
                 android:textStyle="bold"
                 android:layout_marginTop="2dp"
                 android:singleLine="true"
-                android:text="项目工作组"
                 android:layout_gravity="center"
                 android:layout_centerHorizontal="true"
                 android:layout_alignParentTop="true"

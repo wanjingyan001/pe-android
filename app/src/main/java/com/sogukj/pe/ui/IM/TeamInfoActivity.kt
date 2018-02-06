@@ -13,6 +13,7 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.gson.Gson
@@ -151,8 +152,8 @@ class TeamInfoActivity : AppCompatActivity(), View.OnClickListener, SwitchButton
     override fun onClick(v: View) {
         val i = v.id
         when (i) {
-            R.id.team_pic -> startActivity(Intent(this, TeamPictureActivity::class.java))
-            R.id.team_file -> startActivity(Intent(this, TeamHistoryFileActivity::class.java))
+            R.id.team_pic -> TeamPictureActivity.start(this, sessionId.toInt())
+            R.id.team_file -> TeamHistoryFileActivity.start(this, sessionId.toInt())
             R.id.team_link -> {
 
             }
@@ -166,6 +167,7 @@ class TeamInfoActivity : AppCompatActivity(), View.OnClickListener, SwitchButton
             }
             R.id.exit_team -> {
                 MaterialDialog.Builder(this)
+                        .theme(Theme.LIGHT)
                         .title("确定退出?")
                         .content("是否退出${team_title.text}")
                         .positiveText("确认")

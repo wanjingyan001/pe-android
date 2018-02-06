@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.View
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.framework.base.ToolbarFragment
 import com.google.gson.Gson
@@ -103,7 +104,7 @@ class MainMsgFragment : ToolbarFragment() {
                             userInfo?.let {
                                 Glide.with(this@MainMsgFragment)
                                         .load(it.avatar)
-                                        .apply(RequestOptions().error(R.drawable.im_team_default))
+                                        .apply(RequestOptions().error(R.drawable.im_team_default).diskCacheStrategy(DiskCacheStrategy.NONE))
                                         .into(msgIcon)
                             }
                         } else if (data.sessionType == SessionTypeEnum.Team) {

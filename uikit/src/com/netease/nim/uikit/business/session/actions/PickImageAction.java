@@ -63,8 +63,9 @@ public abstract class PickImageAction extends BaseAction {
         option.cropOutputImageWidth = PORTRAIT_IMAGE_WIDTH;
         option.cropOutputImageHeight = PORTRAIT_IMAGE_WIDTH;
         option.outputPath = outPath;
-
-        PickImageHelper.pickImage(getActivity(), requestCode, option);
+        PickImageActivity.start(getActivity(), requestCode, PickImageActivity.FROM_LOCAL,
+                option.outputPath, option.multiSelect,
+                option.multiSelectMaxCount, true, false, 0, 0);
     }
 
     @Override

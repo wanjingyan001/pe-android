@@ -8,7 +8,8 @@ import java.io.Serializable
 class ChatFileBean : Serializable {
     var size: String? = null//文件大小
     var url: String? = null//文件路径
-    var name: String? = null//名字
-    var user: String? = null//文件上传者
+    var file_name: String? = null//名字
+    var user_name: String? = null//文件上传者
     var time: String? = null//文件上传时间
+    var type: Int = 2
 }

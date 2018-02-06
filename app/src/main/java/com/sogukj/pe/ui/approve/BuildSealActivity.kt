@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
@@ -22,6 +23,7 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.*
 import com.sogukj.pe.util.Trace
+import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.FlowLayout
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -97,9 +99,8 @@ class BuildSealActivity : ToolbarActivity() {
                     Trace.e(e)
                     showToast("暂无可用数据")
                 })
-        val convertView = inflater.inflate(R.layout.cs_row_approver, null) as LinearLayout
-        ll_approver.addView(convertView)
-        requestApprove(convertView)
+
+        requestApprove()
         btn_confirm.setOnClickListener {
             var flag = true
             for (chk in checkList) {
@@ -114,10 +115,10 @@ class BuildSealActivity : ToolbarActivity() {
         }
     }
 
-    private fun requestApprove(convertView: LinearLayout) {
+    private fun requestApprove(fund_id: Int? = null) {
         SoguApi.getService(application)
                 .approver(template_id = if (flagEdit) null else paramId!!,
-                        sid = if (!flagEdit) null else paramId!!)
+                        sid = if (!flagEdit) null else paramId!!, fund_id = fund_id)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -126,7 +127,7 @@ class BuildSealActivity : ToolbarActivity() {
                         return@subscribe
                     }
                     payload.payload?.forEach { bean ->
-                        addApprover(bean, convertView)
+                        addApprover(bean)
                     }
                 }, { e ->
                     Trace.e(e)
@@ -187,7 +188,9 @@ class BuildSealActivity : ToolbarActivity() {
         }
     }
 
-    fun addApprover(bean: ApproverBean, convertView: LinearLayout) {
+    fun addApprover(bean: ApproverBean) {
+        val convertView = inflater.inflate(R.layout.cs_row_approver, null) as LinearLayout
+        ll_approver.addView(convertView)
         val tvLabel = convertView.findViewById(R.id.tv_label) as TextView
         val etValue = convertView.findViewById(R.id.et_value) as TextView
         tvLabel.text = bean.position
@@ -308,9 +311,10 @@ class BuildSealActivity : ToolbarActivity() {
         fieldMap.put(bean.fields, convertView)
 
         val tvLabel = convertView.findViewById(R.id.tv_label) as TextView
-        val etValue = convertView.findViewById(R.id.et_value) as TextView
+        val etValue = convertView.findViewById(R.id.et_value) as EditText
         tvLabel.text = if (bean.is_must == 1) bean.name + "(必填)" else bean.name
-        etValue.text = bean.value
+        etValue.setText(bean.value)
+        etValue.filters = Utils.getFilter(this)
 
         val iv_alert = convertView.findViewById(R.id.iv_alert)
         iv_alert.visibility = View.GONE
@@ -334,10 +338,10 @@ class BuildSealActivity : ToolbarActivity() {
         fieldMap.put(bean.fields, convertView)
 
         val tvLabel = convertView.findViewById(R.id.tv_label) as TextView
-        val etValue = convertView.findViewById(R.id.et_value) as TextView
+        val etValue = convertView.findViewById(R.id.et_value) as EditText
         tvLabel.text = if (bean.is_must == 1) bean.name + "(必填)" else bean.name
-        etValue.text = bean.value
-
+        etValue.setText(bean.value)
+        etValue.filters = Utils.getFilter(this)
         val iv_alert = convertView.findViewById(R.id.iv_alert)
         iv_alert.visibility = View.GONE
         checkList.add {
@@ -390,7 +394,7 @@ class BuildSealActivity : ToolbarActivity() {
 
         rbYes.setOnClickListener {
             paramMap.put(bean.fields, 0)
-            bean.value_map?.hide?.split(",")?.forEach { field ->
+            bean?.value_map?.hide?.split(",")?.forEach { field ->
                 if (!TextUtils.isEmpty(field)) {
                     val view = fieldMap[field]
                     view?.visibility = View.VISIBLE
@@ -429,6 +433,7 @@ class BuildSealActivity : ToolbarActivity() {
                         v.is_select = 0
                         v.count = 0
                     }
+                    etNum.text = v.count.toString()
                     paramMap.put(bean.fields, bean.value_list)
                 }
                 etNum.setOnFocusChangeListener { view, hasFocus ->
@@ -440,7 +445,6 @@ class BuildSealActivity : ToolbarActivity() {
                         }
                         etNum.text = "${num}"
                         v.count = num
-                        cbCheck.isChecked = hasFocus || num != 0
                         paramMap.put(bean.fields, bean.value_list)
                     } catch (e: Exception) {
 
@@ -672,8 +676,10 @@ class BuildSealActivity : ToolbarActivity() {
             val bean = data?.getSerializableExtra(Extras.DATA) as CustomSealBean
             val valueBean = data.getSerializableExtra(Extras.DATA2) as CustomSealBean.ValueBean
             paramMap.put(bean.fields, valueBean.id)
-            val convertView = inflater.inflate(R.layout.cs_row_approver, null) as LinearLayout
-            requestApprove(convertView)
+            if (paramTitle == "基金用印") {
+                ll_approver.removeAllViews()
+                requestApprove(valueBean.id)
+            }
             refreshListSelector(bean, valueBean)
         }
         super.onActivityResult(requestCode, resultCode, data)

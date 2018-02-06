@@ -61,6 +61,9 @@ class EntryApproveActivity : ToolbarActivity(), View.OnClickListener {
                         hideEmptyView()
                     } else {
                         showToast(payload.message)
+                        approveLayout.visibility = View.GONE
+                        showEmptyView()
+                        resetRefresh.setOnClickListener(this)
                     }
                 }, { e ->
                     Trace.e(e)

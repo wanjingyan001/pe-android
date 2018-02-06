@@ -18,7 +18,7 @@ import com.afollestad.materialdialogs.Theme
 import com.sogukj.pe.util.DownloadUtil
 import com.sogukj.pe.util.OpenFileUtil
 import java.util.*
-
+import me.leolin.shortcutbadger.ShortcutBadger
 
 /**
  * Created by qinfei on 17/8/11.
@@ -28,6 +28,7 @@ class SplashActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
+        ShortcutBadger.removeCount(this)
     }
 
     override fun onResume() {

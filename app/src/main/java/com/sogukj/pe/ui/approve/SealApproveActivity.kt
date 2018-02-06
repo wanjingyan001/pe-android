@@ -18,6 +18,7 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.*
 import com.sogukj.pe.util.Trace
+import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.CircleImageView
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -181,7 +182,7 @@ class SealApproveActivity : ToolbarActivity() {
                             .theme(Theme.LIGHT)
                             .title("审批意见")
                             .input("输入意见...", "", true) { dialog, text ->
-
+                                dialog.inputEditText?.filters = Utils.getFilter(this)
                             }
                             .cancelable(true)
                             .onPositive { dialog, dialogAction ->
@@ -371,7 +372,7 @@ class SealApproveActivity : ToolbarActivity() {
                 .theme(Theme.LIGHT)
                 .title("评论")
                 .input("输入评论文字...", "", true) { dialog, text ->
-
+                    dialog.inputEditText?.filters = Utils.getFilter(this)
                 }
                 .cancelable(true)
                 .onPositive { dialog, dialogAction ->

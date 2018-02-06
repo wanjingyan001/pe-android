@@ -573,7 +573,8 @@ interface SoguService {
     @POST("/api/Approve/approveInfo")
     fun approver(@Field("template_id") template_id: Int? = null
                  , @Field("sid") sid: Int? = null
-                 , @Field("type") type: Int? = null): Observable<Payload<List<ApproverBean>>>
+                 , @Field("type") type: Int? = null
+                 , @Field("fund_id") fund_id: Int? = null): Observable<Payload<List<ApproverBean>>>
 
     @FormUrlEncoded
     @POST("/api/Approve/getFundOrProject")
@@ -1106,10 +1107,12 @@ interface SoguService {
     //加入项目群组,第一次调用是创建群组
     @FormUrlEncoded
     @POST("/api/News/createJoinGroup")
-    fun createJoinGroup(@Field("accid")accid:String,@Field("company_id")company_id:String):Observable<Payload<Int>>
+    fun createJoinGroup(@Field("accid") accid: String, @Field("company_id") company_id: String): Observable<Payload<Int>>
 
-
-    fun chatFile(@Field("type")type:Int):Observable<Payload<List<ChatFileBean>>>
+    //查询群组文件
+    @FormUrlEncoded
+    @POST("/api/Message/chatFile")
+    fun chatFile(@Field("type") type: Int, @Field("tid") tid: Int? = null): Observable<Payload<List<ChatFileBean>>>
 
     //首页小红点
     @POST("/api/Index/getNumber")
