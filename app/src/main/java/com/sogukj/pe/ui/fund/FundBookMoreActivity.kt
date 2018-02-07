@@ -77,12 +77,12 @@ class FundBookMoreActivity : ToolbarActivity() {
         })
         adapter.onItemClick = { v, p ->
             val data = adapter.getItem(p);
-            download(data.url!!, data.doc_title!!)
-//            if (!TextUtils.isEmpty(data.url)) {
-//                val intent = Intent(Intent.ACTION_VIEW)
-//                intent.data = Uri.parse(data.url)
-//                startActivity(intent)
-//            }
+            //download(data.url!!, data.doc_title!!)
+            if (!TextUtils.isEmpty(data.url)) {
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = Uri.parse(data.url)
+                startActivity(intent)
+            }
         }
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
@@ -120,7 +120,7 @@ class FundBookMoreActivity : ToolbarActivity() {
         showToast("开始下载")
         DownloadUtil.getInstance().download(url, externalCacheDir.toString(), fileName, object : DownloadUtil.OnDownloadListener {
             override fun onDownloadSuccess(path: String?) {
-                var intent = OpenFileUtil.openFile(path)
+                var intent = OpenFileUtil.openFile(context, path)
                 if (intent == null) {
                     showToast("文件类型不合格")
                 } else {

@@ -72,7 +72,7 @@ class SplashActivity : BaseActivity() {
                     }
                 }, { e ->
                     Trace.e(e)
-                    showToast("更新失败，进入首页")
+                    //showToast("更新失败，进入首页")
                     enterNext()
                 })
 //        handler.postDelayed({
@@ -89,7 +89,7 @@ class SplashActivity : BaseActivity() {
         val fileName = url.substring(url.lastIndexOf("/") + 1)
         DownloadUtil.getInstance().download(url, externalCacheDir.toString(), fileName, object : DownloadUtil.OnDownloadListener {
             override fun onDownloadSuccess(path: String?) {
-                var intent = OpenFileUtil.openFile(path)
+                var intent = OpenFileUtil.openFile(context, path)
                 if (intent == null) {
                     showToast("apk出错")
                 } else {

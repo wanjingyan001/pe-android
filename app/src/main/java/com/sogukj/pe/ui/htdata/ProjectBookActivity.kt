@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Html
@@ -35,7 +34,6 @@ import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_list_project_book.*
-import kotlinx.android.synthetic.main.item_comment_list.*
 import kotlinx.android.synthetic.main.search_view.*
 import java.text.SimpleDateFormat
 
@@ -175,32 +173,33 @@ class ProjectBookActivity : ToolbarActivity(), SupportEmptyView {
         }
         list1.setOnItemClickListener { parent, view, position, id ->
             val data = adapter1.dataList[position]
-            download(data.url!!, data.doc_title!!)
-//            if (!TextUtils.isEmpty(data.url)) {
-//                val intent = Intent(Intent.ACTION_VIEW)
-//                intent.data = Uri.parse(data.url)
-//                startActivity(intent)
-//            }
+            //download(data.url!!, data.doc_title!!)
+            if (!TextUtils.isEmpty(data.url)) {
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = Uri.parse(data.url)
+                startActivity(intent)
+            }
+            //ViewActivity.start(context, data.url!!)
 //            NewsDetailActivity.start(this, data)
         }
         list2.setOnItemClickListener { parent, view, position, id ->
             val data = adapter2.dataList[position]
-            download(data.url!!, data.doc_title!!)
-//            if (!TextUtils.isEmpty(data.url)) {
-//                val intent = Intent(Intent.ACTION_VIEW)
-//                intent.data = Uri.parse(data.url)
-//                startActivity(intent)
-//            }
+            //download(data.url!!, data.doc_title!!)
+            if (!TextUtils.isEmpty(data.url)) {
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = Uri.parse(data.url)
+                startActivity(intent)
+            }
 //            NewsDetailActivity.start(this, data)
         }
         list3.setOnItemClickListener { parent, view, position, id ->
             val data = adapter3.dataList[position]
-            download(data.url!!, data.doc_title!!)
-//            if (!TextUtils.isEmpty(data.url)) {
-//                val intent = Intent(Intent.ACTION_VIEW)
-//                intent.data = Uri.parse(data.url)
-//                startActivity(intent)
-//            }
+            //download(data.url!!, data.doc_title!!)
+            if (!TextUtils.isEmpty(data.url)) {
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = Uri.parse(data.url)
+                startActivity(intent)
+            }
 //            NewsDetailActivity.start(this, data)
         }
 
@@ -233,7 +232,7 @@ class ProjectBookActivity : ToolbarActivity(), SupportEmptyView {
         showToast("开始下载")
         DownloadUtil.getInstance().download(url, externalCacheDir.toString(), fileName, object : DownloadUtil.OnDownloadListener {
             override fun onDownloadSuccess(path: String?) {
-                var intent = OpenFileUtil.openFile(path)
+                var intent = OpenFileUtil.openFile(context, path)
                 if (intent == null) {
                     showToast("文件类型不合格")
                 } else {
