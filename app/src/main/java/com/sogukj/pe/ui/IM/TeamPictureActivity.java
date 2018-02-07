@@ -36,6 +36,7 @@ public class TeamPictureActivity extends AppCompatActivity {
     private RecyclerView pictureList;
     private ArrayList<ChatFileBean> teamPics;
     private PictureAdapter adapter;
+    private ImageView iv_empty;
     private int tid;
 
     public static void start(Context context, int tid){
@@ -59,6 +60,7 @@ public class TeamPictureActivity extends AppCompatActivity {
         });
         tid = getIntent().getIntExtra(Extras.INSTANCE.getID(), 0);
         pictureList = (RecyclerView) findViewById(R.id.pictureList);
+        iv_empty = ((ImageView) findViewById(R.id.iv_empty));
         teamPics = new ArrayList<>();
         adapter = new PictureAdapter();
         GridDecoration gridDecoration = new GridDecoration(teamPics.size(),3) {
@@ -105,7 +107,11 @@ public class TeamPictureActivity extends AppCompatActivity {
 
                     @Override
                     public void onComplete() {
-
+                        if (adapter.getItemCount() == 0) {
+                            iv_empty.setVisibility(View.VISIBLE);
+                        }else {
+                            iv_empty.setVisibility(View.GONE);
+                        }
                     }
                 });
     }

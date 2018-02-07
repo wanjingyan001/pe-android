@@ -67,6 +67,10 @@ class LoginActivity : BaseActivity() {
                 }
             }
         })
+        val extra = intent.getBooleanExtra(Extras.FLAG, false)
+        if (extra) {
+            showToast("被其他端的登录踢掉,请重新登录")
+        }
     }
 
     private fun doSendCode() {

@@ -53,7 +53,7 @@ class TeamSelectActivity : AppCompatActivity() {
     private lateinit var orgAdapter: OrganizationAdapter
     private lateinit var contactAdapter: ContactAdapter
     private lateinit var resultAdapter: ContactAdapter
-    private val selectMap = HashMap<Int, Boolean>()
+    private val selectMap = HashMap<String, Boolean>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -95,7 +95,7 @@ class TeamSelectActivity : AppCompatActivity() {
                         val id = it
                         departList.forEach {
                             it.data?.forEach {
-                                if (id == it.user_id) {
+                                if (id == it.accid) {
                                     alreadyList.add(it)
                                 }
                             }
@@ -225,8 +225,8 @@ class TeamSelectActivity : AppCompatActivity() {
                             departList.add(depart)
                             depart.data?.forEach {
                                 it.depart_name = depart.de_name
-                                it.user_id?.let {
-                                    if (it == mine?.uid && fromTeam) {
+                                it.accid?.let {
+                                    if (it == mine?.accid && fromTeam) {
                                         selectMap.put(it, true)
                                     } else {
                                         selectMap.put(it, false)
@@ -234,7 +234,7 @@ class TeamSelectActivity : AppCompatActivity() {
                                 }
                             }
                             alreadyList.forEach {
-                                it.user_id?.let {
+                                it.accid?.let {
                                     selectMap.put(it, true)
                                 }
                             }
@@ -373,8 +373,8 @@ class TeamSelectActivity : AppCompatActivity() {
 
                 if (isSelectUser) {
                     holder.selectIcon.visibility = View.VISIBLE
-                    userBean.user_id?.let {
-                        if (it != mine.uid) {
+                    userBean.accid?.let {
+                        if (it != mine.accid) {
                             holder.selectIcon.isSelected = selectMap[it]!!
                         }
                     }
@@ -386,9 +386,9 @@ class TeamSelectActivity : AppCompatActivity() {
                     search_edt.clearFocus()
                     if (isSelectUser) {
                         //选人
-                        if (userBean.user_id != mine.uid || !fromTeam) {
+                        if (userBean.accid != mine.accid || !fromTeam) {
                             holder.selectIcon.isSelected = !holder.selectIcon.isSelected
-                            userBean.user_id?.let {
+                            userBean.accid?.let {
                                 selectMap.put(it, holder.selectIcon.isSelected)
                                 val map = selectMap.filterValues { it }
                                 selectNumber.text = "已选择: ${map.size}人"
@@ -455,8 +455,8 @@ class TeamSelectActivity : AppCompatActivity() {
 
             if (isSelectUser) {
                 holder.selectIcon.visibility = View.VISIBLE
-                userBean.user_id?.let {
-                    if (it != mine!!.uid) {
+                userBean.accid?.let {
+                    if (it != mine!!.accid) {
                         holder.selectIcon.isSelected = selectMap[it]!!
                     } else {
                         holder.selectIcon.imageResource = R.drawable.cannot_select
@@ -470,9 +470,9 @@ class TeamSelectActivity : AppCompatActivity() {
                 search_edt.clearFocus()
                 if (isSelectUser) {
                     //选人
-                    if (userBean.user_id != mine!!.uid) {
+                    if (userBean.accid != mine!!.accid) {
                         holder.selectIcon.isSelected = !holder.selectIcon.isSelected
-                        userBean.user_id?.let {
+                        userBean.accid?.let {
                             selectMap.put(it, holder.selectIcon.isSelected)
                             val map = selectMap.filterValues { it }
                             selectNumber.text = "已选择: ${map.size}人"

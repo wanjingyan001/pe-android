@@ -1,5 +1,6 @@
 package com.netease.nim.uikit.business.session.viewholder;
 
+import android.view.Gravity;
 import android.widget.TextView;
 
 import com.netease.nim.uikit.R;
@@ -47,6 +48,13 @@ public class MsgViewHolderLocation extends MsgViewHolderBase {
         setLayoutParams(width, (int) (0.38 * height), addressText);
 
         mapView.loadAsResource(R.drawable.nim_location_bk, R.drawable.nim_message_item_round_bg);
+        if (isReceivedMessage()) {
+            setGravity(mapView, Gravity.LEFT);
+            contentContainer.setBackground(null);
+        } else {
+            setGravity(mapView, Gravity.RIGHT);
+            contentContainer.setBackground(null);
+        }
     }
 
     @Override
