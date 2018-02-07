@@ -122,8 +122,14 @@ class TeamSelectActivity : AppCompatActivity() {
         fromTeam = intent.getBooleanExtra(Extras.FLAG, true)
         if (data != null) {
             alreadyList = data as ArrayList<UserBean>
-            val i = if (alreadyList.size - 1 < 0) 0 else alreadyList.size - 1
-            selectNumber.text = "已选择: $i 人"
+            selectNumber.text = "已选择: ${alreadyList.size} 人"
+//            val find = alreadyList.find { it.accid == mine?.accid }
+//            if (find!=null){
+//                val i = if (alreadyList.size - 1 < 0) 0 else alreadyList.size - 1
+//                selectNumber.text = "已选择: $i 人"
+//            }else{
+//
+//            }
         } else {
             alreadyList = ArrayList()
         }

@@ -214,15 +214,16 @@
                     android:text="群名称"
                     android:textColor="@color/black" />
 
-                <TextView
+                <EditText
                     android:id="@+id/team_name"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:drawablePadding="10dp"
-                    android:drawableRight="@drawable/nim_arrow_right"
+                    android:background="@null"
                     android:gravity="right"
                     android:text="项目工作组"
+                    android:textSize="14sp"
                     android:textColor="#a0a4aa" />
 
             </LinearLayout>

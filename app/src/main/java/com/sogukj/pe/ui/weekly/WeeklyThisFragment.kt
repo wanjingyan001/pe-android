@@ -192,7 +192,7 @@ class WeeklyThisFragment : BaseFragment(), View.OnClickListener {
                     when (weeklyData?.type) {
                         0 -> {
                             //日程
-                            TaskDetailActivity.start(activity, weeklyData.data_id!!, weeklyData.title!!, ModifyTaskActivity.Task)
+                            TaskDetailActivity.start(activity, weeklyData.data_id!!, weeklyData.title!!, ModifyTaskActivity.Schedule)
                         }
                         1 -> {
                             //任务

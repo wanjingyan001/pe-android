@@ -17,9 +17,13 @@ import com.netease.nimlib.sdk.util.NIMUtil
 import com.sogukj.pe.bean.NewsBean
 import com.sogukj.pe.ui.IM.SessionHelper
 import com.sogukj.pe.ui.IM.location.NimDemoLocationProvider
+import com.sogukj.pe.ui.approve.SealApproveActivity
+import com.sogukj.pe.ui.approve.SignApproveActivity
 import com.sogukj.pe.ui.calendar.ModifyTaskActivity
 import com.sogukj.pe.ui.calendar.TaskDetailActivity
 import com.sogukj.pe.ui.news.NewsDetailActivity
+import com.sogukj.pe.ui.project.ProjectActivity
+import com.sogukj.pe.ui.project.RecordTraceActivity
 import com.sogukj.pe.util.NimSDKOptionConfig
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
@@ -32,6 +36,7 @@ import com.umeng.message.entity.UMessage
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import me.leolin.shortcutbadger.ShortcutBadger
+import org.jetbrains.anko.toast
 import org.json.JSONObject
 
 
@@ -61,19 +66,21 @@ class App : MultiDexApplication() {
         })
         PushAgent.getInstance(this).messageHandler = object : UmengMessageHandler() {
             override fun getNotification(p0: Context?, p1: UMessage?): Notification {
-                Log.d("WJY","推送==>"+Gson().toJson(p1))
-//                ShortcutBadger.applyCount(this@App,)
+                Log.d("WJY", "推送==>" + Gson().toJson(p1))
+                p1?.let {
+                    ShortcutBadger.applyCount(this@App, it.extra["badge"]!!.toInt())
+                }
                 val builder = Notification.Builder(this@App)
                 val myNotificationView = RemoteViews(this@App.packageName, R.layout.upush_notification)
                 myNotificationView.setTextViewText(R.id.notification_title, p1?.title)
                 myNotificationView.setTextViewText(R.id.notification_text, p1?.text)
-                myNotificationView.setImageViewBitmap(R.id.notification_large_icon1,getLargeIcon(this@App,p1))
-                myNotificationView.setImageViewResource(R.id.notification_large_icon1,getSmallIconId(this@App,p1))
+                myNotificationView.setImageViewBitmap(R.id.notification_large_icon1, getLargeIcon(this@App, p1))
+                myNotificationView.setImageViewResource(R.id.notification_large_icon1, getSmallIconId(this@App, p1))
                 builder.setContent(myNotificationView)
                         .setSmallIcon(R.mipmap.ic_launcher)
                         .setTicker(p1?.ticker)
                         .setAutoCancel(true)
-               return builder.notification
+                return builder.notification
             }
         }
         PushAgent.getInstance(this).setNotificationClickHandler({ context, uMessage ->
@@ -84,12 +91,27 @@ class App : MultiDexApplication() {
                     com.sogukj.pe.util.Trace.i("uPush", this)
                     val json = JSONObject(this)
                     val type = json.getInt("type")
-                    val data_id = json.getInt("data_id")
-                    //1.负面信息  2.任务  3.日程
+                    val data = json.getJSONObject("data")
+                    //1.负面信息  2.任务  3.日程 4签字,用印
                     when (type) {
                         1 -> handle(context, json)
-                        2 -> TaskDetailActivity.start(context, data_id, uMessage.title, ModifyTaskActivity.Task)
-                        3 -> TaskDetailActivity.start(context, data_id, uMessage.title, ModifyTaskActivity.Schedule)
+                        2 -> {
+                            val data_id = data.getInt("data_id")
+                            TaskDetailActivity.start(context, data_id, uMessage.title, ModifyTaskActivity.Task)
+                        }
+                        3 -> {
+                            val data_id = data.getInt("data_id")
+                            TaskDetailActivity.start(context, data_id, uMessage.title, ModifyTaskActivity.Schedule)
+                        }
+                        4 -> {
+                            val approval_id = data.getInt("approval_id")
+                            val is_mine = data.getInt("is_mine")
+                            if (data.has("qs")) {
+                                SignApproveActivity.start(context, approval_id, is_mine,"签字审批")
+                            }else{
+                                SealApproveActivity.start(context, approval_id, is_mine,"用印审批")
+                            }
+                        }
                         else -> {
                         }
                     }
@@ -100,6 +122,7 @@ class App : MultiDexApplication() {
         })
         initNIM()
     }
+
 
     val GSON = Gson()
     fun handle(context: Context, json: JSONObject) {

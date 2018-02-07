@@ -51,6 +51,13 @@ public class TeamHistoryFileActivity extends AppCompatActivity implements TeamMe
         context.startActivity(intent);
     }
 
+    public static void start(Context context, int tid, int type) {
+        Intent intent = new Intent(context, TeamHistoryFileActivity.class);
+        intent.putExtra(Extras.INSTANCE.getID(), tid);
+        intent.putExtra(Extras.INSTANCE.getTYPE(), type);
+        context.startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +66,7 @@ public class TeamHistoryFileActivity extends AppCompatActivity implements TeamMe
         toolbar = (Toolbar) findViewById(R.id.team_toolbar);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
+        TextView title = (TextView) findViewById(R.id.team_tool);
         toolbar.setNavigationIcon(R.drawable.sogu_ic_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,8 +83,11 @@ public class TeamHistoryFileActivity extends AppCompatActivity implements TeamMe
                 return true;
             }
         });
-        tid = getIntent().getIntExtra(Extras.INSTANCE.getID(), 8);
-        type = 8;
+        tid = getIntent().getIntExtra(Extras.INSTANCE.getID(), 0);
+        type = getIntent().getIntExtra(Extras.INSTANCE.getTYPE(), 8);
+        if (type == 2){
+            title.setText("视频");
+        }
         historyList = (RecyclerView) findViewById(R.id.history_file_list);
         historyList.setLayoutManager(new LinearLayoutManager(this));
         adapter = new HistoryFileAdapter(files);
@@ -90,33 +101,34 @@ public class TeamHistoryFileActivity extends AppCompatActivity implements TeamMe
             }
         };
         historyList.addItemDecoration(decoration);
-        adapter.setListener(new onItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                IMDialog dialog = new IMDialog(TeamHistoryFileActivity.this);
-                dialog.setTitle(files.get(position).getFile_name());
-                dialog.setOnItemClickListener(new IMDialog.IMItemClickListener() {
-
-                    @Override
-                    public void itemClick(int position) {
-                        switch (position) {
-                            case 1:
-                                TeamSelectActivity.Companion.startForResult(TeamHistoryFileActivity.this,
-                                        true,null,null,false,null);
-                                break;
-                            case 2:
-
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                });
-                dialog.show();
-            }
-        });
         historyList.setAdapter(adapter);
         requestChatFile();
+//        adapter.setListener(new onItemClickListener() {
+//            @Override
+//            public void onItemClick(View view, int position) {
+//                IMDialog dialog = new IMDialog(TeamHistoryFileActivity.this);
+//                dialog.setTitle(files.get(position).getFile_name());
+//                dialog.setOnItemClickListener(new IMDialog.IMItemClickListener() {
+//
+//                    @Override
+//                    public void itemClick(int position) {
+//                        switch (position) {
+//                            case 1:
+//                                TeamSelectActivity.Companion.startForResult(TeamHistoryFileActivity.this,
+//                                        true, null, null, false, null);
+//                                break;
+//                            case 2:
+//
+//                                break;
+//                            default:
+//                                break;
+//                        }
+//                    }
+//                });
+//                dialog.show();
+//            }
+//        });
+
     }
 
     private void requestChatFile() {
@@ -154,7 +166,9 @@ public class TeamHistoryFileActivity extends AppCompatActivity implements TeamMe
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.team_filter, menu);
+        if (type != 5) {
+            getMenuInflater().inflate(R.menu.team_filter, menu);
+        }
         return true;
     }
 
@@ -218,6 +232,23 @@ public class TeamHistoryFileActivity extends AppCompatActivity implements TeamMe
                 }
                 ((FileHolder) holder).fileName.setText(fileBean.getFile_name());
                 ((FileHolder) holder).fileInfo.setText(fileBean.getSize() + "   " + fileBean.getUser_name() + "   " + fileBean.getTime());
+//                (1=>图片，2=>视频，3=>压缩包，4=>Excel档，5=>TXT，6=>PDF，7=>DOC，8=>全部，9=>其他)
+//                switch (fileBean.getType()) {
+//                    case 3:
+//                        break;
+//                    case 4:
+//                        break;
+//                    case 5:
+//                        break;
+//                    case 6:
+//                        break;
+//                    case 7:
+//                        break;
+//                    case 9:
+//                        break;
+//                    default:
+//                        break;
+//                }
             }
         }
 

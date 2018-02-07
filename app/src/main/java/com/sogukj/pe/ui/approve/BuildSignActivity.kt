@@ -4,7 +4,9 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.Editable
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -357,8 +359,12 @@ class BuildSignActivity : ToolbarActivity() {
                 val etNum = convertView.findViewById(R.id.et_num) as TextView
                 val tvPlus = convertView.findViewById(R.id.tv_plus) as TextView
                 cbCheck.text = v.name
-                cbCheck.isChecked = v.is_select == 1
+                cbCheck.isChecked = v.is_select == 1|| v.count > 0
                 etNum.text = "${v.count}"
+                if (cbCheck.isChecked){
+                    v.is_select = 1
+                    paramMap.put(bean.fields, bean.value_list)
+                }
                 cbCheck.setOnCheckedChangeListener { buttonView, isChecked ->
                     if (isChecked) {
                         v.is_select = 1
@@ -370,7 +376,6 @@ class BuildSignActivity : ToolbarActivity() {
                     etNum.text = v.count.toString()
                     paramMap.put(bean.fields, bean.value_list)
                 }
-
                 tvMinus.setOnClickListener {
                     var num = 0
                     etNum.text.toString().toIntOrNull()?.apply {

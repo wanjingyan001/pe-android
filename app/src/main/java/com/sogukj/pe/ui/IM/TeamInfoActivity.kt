@@ -99,7 +99,7 @@ class TeamInfoActivity : AppCompatActivity(), View.OnClickListener, SwitchButton
                         team_project.text = bean.project_name
                     }
                     team_number.text = "${it.memberCount}人"
-                    team_name.text = it.name
+                    team_name.setText(it.name)
                     NIMClient.getService(TeamService::class.java).queryMemberList(it.id).setCallback(object : RequestCallback<List<TeamMember>> {
                         override fun onSuccess(p0: List<TeamMember>?) {
                             val accounts = ArrayList<String>()
@@ -155,7 +155,7 @@ class TeamInfoActivity : AppCompatActivity(), View.OnClickListener, SwitchButton
             R.id.team_pic -> TeamPictureActivity.start(this, sessionId.toInt())
             R.id.team_file -> TeamHistoryFileActivity.start(this, sessionId.toInt())
             R.id.team_link -> {
-
+                TeamHistoryFileActivity.start(this, sessionId.toInt(), 2)
             }
             R.id.team_search -> {
                 val intent = Intent(this, TeamSearchActivity::class.java)
@@ -222,6 +222,15 @@ class TeamInfoActivity : AppCompatActivity(), View.OnClickListener, SwitchButton
 
                 }
         )
+    }
+
+    override fun onPause() {
+        super.onPause()
+        //未修改成功
+        val name = team_name.text.trim().toString()
+        if (name.isNotEmpty()) {
+            NIMClient.getService(TeamService::class.java).updateName(sessionId,name)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

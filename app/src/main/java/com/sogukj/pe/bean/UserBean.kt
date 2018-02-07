@@ -14,6 +14,7 @@ open class UserBean() : Serializable {
     var memo: String = ""
     var url: String? = null
     var depart_id: Int? = null
+    var campany:String?=null
     var numberOfShares: Int = 0
     var is_admin: Int = 0
     var user_id: Int? = null

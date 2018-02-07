@@ -11,5 +11,4 @@ class ChatFileBean : Serializable {
     var file_name: String? = null//名字
     var user_name: String? = null//文件上传者
     var time: String? = null//文件上传时间
-    var type: Int = 2
 }

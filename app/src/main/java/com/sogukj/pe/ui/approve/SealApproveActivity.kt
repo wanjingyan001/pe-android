@@ -1,6 +1,7 @@
 package com.sogukj.pe.ui.approve
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -48,6 +49,7 @@ class SealApproveActivity : ToolbarActivity() {
         if (paramObj == null) {
             paramId = intent.getIntExtra(Extras.ID, -1)
             paramTitle = intent.getStringExtra(Extras.TITLE)
+            paramType = intent.getIntExtra(Extras.TYPE,2)
         } else {
             if (paramObj is ApprovalBean) {
                 paramTitle = paramObj.kind!!
@@ -507,6 +509,16 @@ class SealApproveActivity : ToolbarActivity() {
             intent.putExtra(Extras.ID, data_id)
             intent.putExtra(Extras.TITLE, title)
             ctx?.startActivity(intent)
+        }
+
+        fun start(ctx: Context, approval_id: Int, is_mine: Int, title: String, type: Int? = 2) {
+            val intent = Intent(ctx, SealApproveActivity::class.java)
+            intent.putExtra(Extras.ID, approval_id)
+            intent.putExtra("is_mine", is_mine)
+            intent.putExtra(Extras.TITLE, title)
+            intent.putExtra(Extras.TYPE, type)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            ctx.startActivity(intent)
         }
     }
 }

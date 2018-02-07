@@ -5,17 +5,21 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.view.View
+import com.google.gson.Gson
 import com.netease.nim.uikit.api.NimUIKit
 import com.netease.nim.uikit.api.model.session.SessionCustomization
 import com.netease.nim.uikit.api.model.session.SessionEventListener
 import com.netease.nim.uikit.api.wrapper.NimMessageRevokeObserver
 import com.netease.nim.uikit.business.session.viewholder.MsgViewHolderTip
 import com.netease.nimlib.sdk.NIMClient
+import com.netease.nimlib.sdk.RequestCallback
+import com.netease.nimlib.sdk.RequestCallbackWrapper
 import com.netease.nimlib.sdk.msg.MsgServiceObserve
 import com.netease.nimlib.sdk.msg.attachment.MsgAttachment
 import com.netease.nimlib.sdk.msg.constant.MsgDirectionEnum
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum
 import com.netease.nimlib.sdk.msg.model.IMMessage
+import com.netease.nimlib.sdk.uinfo.UserService
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo
 import com.sogukj.pe.R
 import com.sogukj.util.Store
@@ -49,12 +53,26 @@ object SessionHelper {
                         return
                     }
                     context?.let {
-                        Log.d("WJY", "sessionId:${message.fromAccount}")
-                        NimUIKit.getUserInfoProvider().getUserInfoAsync(message.fromAccount) { success, result, code ->
-                            val info = result as NimUserInfo
-                            val uid = info.extensionMap["uid"] as Int
-                            PersonalInfoActivity.start(context, uid)
-                        }
+                        Log.d("WJY", "sessionId:${message.fromAccount}," +
+                                "mine:${Store.store.getUser(context)!!.accid};")
+                        val accounts = java.util.ArrayList<String>(1)
+                        accounts.add(message.fromAccount)
+                        NIMClient.getService(UserService::class.java).fetchUserInfo(accounts)
+                                .setCallback(object : RequestCallbackWrapper<List<NimUserInfo>>() {
+                                    override fun onResult(code: Int, result: List<NimUserInfo>?, exception: Throwable?) {
+                                        if (code == 200) {
+                                            val nimUserInfo = result?.get(0)
+                                            Log.d("WJY", Gson().toJson(nimUserInfo))
+                                        }
+                                    }
+                                })
+
+//                        NimUIKit.getUserInfoProvider().getUserInfoAsync(message.fromAccount) { success, result, code ->
+//                            val info = result as NimUserInfo
+//                            val uid = info.extensionMap["uid"] as Int
+//                            Log.d("WJY", Gson().toJson(info))
+//                            PersonalInfoActivity.start(context, uid)
+//                        }
                     }
                 }
             }
@@ -85,6 +103,7 @@ object SessionHelper {
                     NimUIKit.getUserInfoProvider().getUserInfoAsync(sessionId) { success, result, code ->
                         val info = result as NimUserInfo
                         val uid = info.extensionMap["uid"] as Int
+                        Log.d("WJY", Gson().toJson(info))
                         PersonalInfoActivity.start(context, uid)
                     }
                 }

@@ -68,10 +68,10 @@ class EntryApproveActivity : ToolbarActivity(), View.OnClickListener {
                 }, { e ->
                     Trace.e(e)
                     //showToast("暂无可用数据")
-                    ToastError(e)
                     approveLayout.visibility = View.GONE
                     showEmptyView()
                     resetRefresh.setOnClickListener(this)
+                    ToastError(e)
                 })
     }
 
