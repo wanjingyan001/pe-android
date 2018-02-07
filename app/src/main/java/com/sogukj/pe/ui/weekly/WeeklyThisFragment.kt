@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.bumptech.glide.Glide
 import com.framework.base.BaseFragment
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
@@ -41,7 +42,7 @@ import java.net.UnknownHostException
 import java.text.SimpleDateFormat
 import kotlin.collections.ArrayList
 import com.google.gson.JsonObject
-import kotlinx.android.synthetic.main.layout_network_error.*
+//import kotlinx.android.synthetic.main.layout_network_error.*
 
 
 class WeeklyThisFragment : BaseFragment(), View.OnClickListener {
@@ -133,6 +134,13 @@ class WeeklyThisFragment : BaseFragment(), View.OnClickListener {
             e_time = arguments.getString(Extras.TIME2)
             week_id = arguments.getInt(Extras.CODE)
         }
+        Glide.with(context).asGif().load(R.drawable.loading).into(iv_loading)
+        iv_loading.visibility = View.VISIBLE
+        if (TYPE == "MAIN") {
+            buchong_hint.visibility = View.GONE
+        } else if (TYPE == "PERSONAL") {
+            spinner_this.visibility = View.GONE
+        }
         baseActivity?.let {
             SoguApi.getService(it.application)
                     .getWeekly(user_id, issue, s_time, e_time, week_id)
@@ -142,7 +150,7 @@ class WeeklyThisFragment : BaseFragment(), View.OnClickListener {
                         if (payload.isOk) {
                             payload.payload?.apply {
                                 rootScroll.visibility = View.VISIBLE
-                                networkErrorLayout.visibility = View.GONE
+//                                networkErrorLayout.visibility = View.GONE
                                 initView(this)
                             }
                         } else
@@ -150,16 +158,23 @@ class WeeklyThisFragment : BaseFragment(), View.OnClickListener {
                     }, { e ->
                         Trace.e(e)
                         ToastError(e)
-                        when (e) {
-                            is JsonSyntaxException -> showToast("后台数据出错")
-                            is UnknownHostException -> {
-                                showToast("网络出错")
-                                rootScroll.visibility = View.GONE
-                                networkErrorLayout.visibility = View.VISIBLE
-                                resetRefresh.setOnClickListener(this)
-                            }
-                            else -> showToast("未知错误")
+//                        when (e) {
+//                            is JsonSyntaxException -> showToast("后台数据出错")
+//                            is UnknownHostException -> {
+//                                showToast("网络出错")
+//                                rootScroll.visibility = View.GONE
+//                                networkErrorLayout.visibility = View.VISIBLE
+//                                resetRefresh.setOnClickListener(this)
+//                            }
+//                            else -> showToast("未知错误")
+//                        }
+                    }, {
+                        if (TYPE == "MAIN") {
+                            buchong_hint.visibility = View.VISIBLE
+                        } else if (TYPE == "PERSONAL") {
+                            spinner_this.visibility = View.VISIBLE
                         }
+                        iv_loading.visibility = View.GONE
                     })
         }
     }
