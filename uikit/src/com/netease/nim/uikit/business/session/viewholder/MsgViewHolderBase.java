@@ -381,8 +381,17 @@ public abstract class MsgViewHolderBase extends RecyclerViewHolder<BaseMultiItem
     }
 
     private void setReadReceipt() {
-        if (shouldDisplayReceipt() && !TextUtils.isEmpty(getMsgAdapter().getUuid()) && message.getUuid().equals(getMsgAdapter().getUuid())) {
+        if (!isReceivedMessage() && shouldDisplayReceipt() && message.getSessionType() == SessionTypeEnum.P2P) {
             readReceiptTextView.setVisibility(View.VISIBLE);
+//            if (shouldDisplayReceipt() && !TextUtils.isEmpty(getMsgAdapter().getUuid())
+//                    && message.getUuid().equals(getMsgAdapter().getUuid()) ) {
+//                readReceiptTextView.setText("已读");
+//            }
+            if (message.isRemoteRead()) {
+                readReceiptTextView.setText("已读");
+            } else {
+                readReceiptTextView.setText("未读");
+            }
         } else {
             readReceiptTextView.setVisibility(View.GONE);
         }

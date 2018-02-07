@@ -55,6 +55,7 @@ class TaskDetailActivity : ToolbarActivity(), CommentListener, View.OnClickListe
             intent.putExtra(Extras.ID, data_id)
             intent.putExtra(Extras.NAME, name)
             intent.putExtra(Extras.TITLE, title)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             ctx?.startActivity(intent)
         }
 

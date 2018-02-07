@@ -3,7 +3,9 @@ package com.sogukj.pe.ui.approve
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -51,7 +53,7 @@ class BuildSealActivity : ToolbarActivity() {
         super.onCreate(savedInstanceState)
         inflater = LayoutInflater.from(this)
         flagEdit = intent.getBooleanExtra(Extras.FLAG, false)
-        val paramObj = intent.getSerializableExtra(Extras.DATA) as Serializable?
+        val paramObj = intent.getSerializableExtra(Extras.DATA)
         if (paramObj is ApprovalBean) {
             paramTitle = paramObj.kind!!
             paramId = paramObj.approval_id!!
@@ -214,7 +216,7 @@ class BuildSealActivity : ToolbarActivity() {
     val checkList = ArrayList<() -> Boolean>()
 
     private fun add1(bean: CustomSealBean, inflater: LayoutInflater) {
-        val convertView = inflater.inflate(R.layout.cs_row_pop_list, null);
+        val convertView = inflater.inflate(R.layout.cs_row_pop_list, null)
         ll_seal.addView(convertView)
         fieldMap.put(bean.fields, convertView)
 
@@ -257,7 +259,7 @@ class BuildSealActivity : ToolbarActivity() {
                                 etValue.text = name
                                 etValue.tag = "${valBean?.id}"
                                 dialog?.dismiss()
-                                paramMap.put(bean.fields!!, valBean?.id)
+                                paramMap.put(bean.fields, valBean?.id)
                                 return true
                             }
 
@@ -271,14 +273,14 @@ class BuildSealActivity : ToolbarActivity() {
     fun refreshListSelector(bean: CustomSealBean, data: CustomSealBean.ValueBean) {
         val view = viewMap[bean.fields]
         if (null != view) {
-            view?.text = data.name
+            view.text = data.name
         }
     }
 
     val viewMap = HashMap<String, TextView>()
     val fieldMap = HashMap<String, View?>()
     fun add2(bean: CustomSealBean, inflater: LayoutInflater) {
-        val convertView = inflater.inflate(R.layout.cs_row_pop_list, null);
+        val convertView = inflater.inflate(R.layout.cs_row_pop_list, null)
         ll_seal.addView(convertView)
         fieldMap.put(bean.fields, convertView)
         val tvLabel = convertView.findViewById(R.id.tv_label) as TextView
@@ -291,7 +293,7 @@ class BuildSealActivity : ToolbarActivity() {
         checkList.add {
             val str = etValue.text?.toString()
             if (flagEdit)
-                paramMap.put(bean.fields!!, bean.value_map?.id)
+                paramMap.put(bean.fields, bean.value_map?.id)
             if (bean.is_must == 1 && str.isNullOrEmpty()) {
                 iv_alert.visibility = View.VISIBLE
                 false
@@ -306,7 +308,7 @@ class BuildSealActivity : ToolbarActivity() {
     }
 
     private fun add3(bean: CustomSealBean, inflater: LayoutInflater) {
-        val convertView = inflater.inflate(R.layout.cs_row_edit_text, null);
+        val convertView = inflater.inflate(R.layout.cs_row_edit_text, null)
         ll_seal.addView(convertView)
         fieldMap.put(bean.fields, convertView)
 
@@ -333,7 +335,7 @@ class BuildSealActivity : ToolbarActivity() {
     }
 
     private fun add4(bean: CustomSealBean, inflater: LayoutInflater) {
-        val convertView = inflater.inflate(R.layout.cs_row_edit_box, null);
+        val convertView = inflater.inflate(R.layout.cs_row_edit_box, null)
         ll_seal.addView(convertView)
         fieldMap.put(bean.fields, convertView)
 
@@ -359,7 +361,7 @@ class BuildSealActivity : ToolbarActivity() {
 
     val hideFields = ArrayList<String>()
     fun add5(bean: CustomSealBean, inflater: LayoutInflater) {
-        val convertView = inflater.inflate(R.layout.cs_row_radio, null);
+        val convertView = inflater.inflate(R.layout.cs_row_radio, null)
         ll_seal.addView(convertView)
         fieldMap.put(bean.fields, convertView)
 
@@ -394,7 +396,7 @@ class BuildSealActivity : ToolbarActivity() {
 
         rbYes.setOnClickListener {
             paramMap.put(bean.fields, 0)
-            bean?.value_map?.hide?.split(",")?.forEach { field ->
+            bean.value_map?.hide?.split(",")?.forEach { field ->
                 if (!TextUtils.isEmpty(field)) {
                     val view = fieldMap[field]
                     view?.visibility = View.VISIBLE
@@ -405,7 +407,7 @@ class BuildSealActivity : ToolbarActivity() {
 
     private fun add6(bean: CustomSealBean, inflater: LayoutInflater) {
 
-        val convertView = inflater.inflate(R.layout.cs_row_check_box, null);
+        val convertView = inflater.inflate(R.layout.cs_row_check_box, null)
         ll_seal.addView(convertView)
         fieldMap.put(bean.fields, convertView)
 
@@ -423,8 +425,12 @@ class BuildSealActivity : ToolbarActivity() {
                 val etNum = convertView.findViewById(R.id.et_num) as TextView
                 val tvPlus = convertView.findViewById(R.id.tv_plus) as TextView
                 cbCheck.text = v.name
-                cbCheck.isChecked = v.is_select == 1
+                cbCheck.isChecked = v.is_select == 1 || v.count > 0
                 etNum.text = "${v.count}"
+                if (cbCheck.isChecked){
+                    v.is_select = 1
+                    paramMap.put(bean.fields, bean.value_list)
+                }
                 cbCheck.setOnCheckedChangeListener { buttonView, isChecked ->
                     if (isChecked) {
                         v.is_select = 1
@@ -503,7 +509,7 @@ class BuildSealActivity : ToolbarActivity() {
     }
 
     fun add8(bean: CustomSealBean, inflater: LayoutInflater) {
-        val convertView = inflater.inflate(R.layout.cs_row_images, null);
+        val convertView = inflater.inflate(R.layout.cs_row_images, null)
         ll_seal.addView(convertView)
         val tvLabel = convertView.findViewById(R.id.tv_label) as TextView
         tvLabel.text = if (bean.is_must == 1) bean.name + "(必填)" else bean.name
@@ -511,16 +517,16 @@ class BuildSealActivity : ToolbarActivity() {
 
         val ll_images = convertView.findViewById(R.id.ll_images) as FlowLayout
         ll_images.removeAllViews()
-        refreshImages(bean!!, ll_images!!)
+        refreshImages(bean, ll_images)
 
     }
 
     fun uploadImage(filePath: String?, imagesBean: CustomSealBean, imagesView: FlowLayout) {
         if (null != imagesBean && null != imagesView && null != filePath) {
-            val file = File(filePath!!)
+            val file = File(filePath)
             SoguApi.getService(application)
                     .uploadApprove(MultipartBody.Builder().setType(MultipartBody.FORM)
-                            .addFormDataPart("file", file.getName(), RequestBody.create(MediaType.parse("*/*"), file))
+                            .addFormDataPart("file", file.name, RequestBody.create(MediaType.parse("*/*"), file))
                             .addFormDataPart("control", 8.toString())
                             .addFormDataPart("template_id", "${paramId}")
                             .build())
@@ -529,8 +535,8 @@ class BuildSealActivity : ToolbarActivity() {
                     .subscribe({ payload ->
                         if (payload.isOk && payload.payload != null) {
                             showToast("上传成功")
-                            imagesBean?.value_list?.add(payload.payload!!)
-                            refreshImages(imagesBean!!, imagesView!!)
+                            imagesBean.value_list?.add(payload.payload!!)
+                            refreshImages(imagesBean, imagesView)
                         } else
                             showToast(payload.message)
                     }, { e ->
@@ -580,7 +586,7 @@ class BuildSealActivity : ToolbarActivity() {
                             override fun onEvent(event: ImageRadioResultEvent?) {
                                 val path = event?.result?.originalPath
                                 if (!TextUtils.isEmpty(path))
-                                    uploadImage(path!!, bean!!, imagesView!!)
+                                    uploadImage(path!!, bean, imagesView)
                             }
                         })
                         .openGallery()
@@ -591,7 +597,7 @@ class BuildSealActivity : ToolbarActivity() {
     var filesBean: CustomSealBean? = null
     var filesView: LinearLayout? = null
     private fun add9(bean: CustomSealBean, inflater: LayoutInflater) {
-        val convertView = inflater.inflate(R.layout.cs_row_files, null);
+        val convertView = inflater.inflate(R.layout.cs_row_files, null)
         ll_seal.addView(convertView)
         fieldMap.put(bean.fields, convertView)
         val tvLabel = convertView.findViewById(R.id.tv_label) as TextView
@@ -600,7 +606,7 @@ class BuildSealActivity : ToolbarActivity() {
 
         val ll_files = convertView.findViewById(R.id.ll_files) as LinearLayout
         ll_files.removeAllViews()
-        filesBean = bean;
+        filesBean = bean
         filesView = ll_files
         refreshFiles(filesBean!!, filesView!!)
 
@@ -619,10 +625,10 @@ class BuildSealActivity : ToolbarActivity() {
 
     fun uploadFile(filePath: String?) {
         if (null != filesBean && null != filesView && null != filePath) {
-            val file = File(filePath!!)
+            val file = File(filePath)
             SoguApi.getService(application)
                     .uploadApprove(MultipartBody.Builder().setType(MultipartBody.FORM)
-                            .addFormDataPart("file", file.getName(), RequestBody.create(MediaType.parse("*/*"), file))
+                            .addFormDataPart("file", file.name, RequestBody.create(MediaType.parse("*/*"), file))
                             .addFormDataPart("control", 9.toString())
                             .addFormDataPart("template_id", "${paramId}")
                             .build())
@@ -667,7 +673,7 @@ class BuildSealActivity : ToolbarActivity() {
         }
     }
 
-    val REQ_SELECT_FILE = 0xf0;
+    val REQ_SELECT_FILE = 0xf0
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQ_SELECT_FILE && resultCode === Activity.RESULT_OK) {
             val filePath = data?.getStringExtra(FilePickerActivity.RESULT_FILE_PATH)
@@ -704,7 +710,7 @@ class BuildSealActivity : ToolbarActivity() {
             ctx?.startActivity(intent)
         }
 
-        val REQ_EDIT = 0xe0;
+        val REQ_EDIT = 0xe0
 
         fun start(ctx: Activity?, id: Int, paramType: Int?, paramTitle: String, edit: Boolean = false) {
             val intent = Intent(ctx, BuildSealActivity::class.java)

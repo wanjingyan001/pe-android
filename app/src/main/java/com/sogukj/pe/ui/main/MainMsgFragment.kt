@@ -81,8 +81,11 @@ class MainMsgFragment : ToolbarFragment() {
                     if (data is MessageIndexBean) {
                         if (!TextUtils.isEmpty(data.title))
                             tvTitleMsg.text = data.title
+                        else
+                            tvTitleMsg.text = "暂无数据"
                         tvDate.text = data.time
                         tvNum.text = "${data.count}"
+                        tvTitle.text = "系统消息助手"
                         if (data.count > 0) {
                             tvNum.visibility = View.VISIBLE
                         } else {
@@ -92,7 +95,6 @@ class MainMsgFragment : ToolbarFragment() {
                     } else if (data is RecentContact) {
                         val titleName = UserInfoHelper.getUserTitleName(data.contactId, data.sessionType)
                         tvTitle.text = titleName
-                        Log.d("WJY","data:${Gson().toJson(data)}")
                         if (data.sessionType == SessionTypeEnum.P2P) {
                             val value = data.msgStatus.value
                             when (value) {
@@ -100,11 +102,11 @@ class MainMsgFragment : ToolbarFragment() {
                                 4 -> tvTitleMsg.text = Html.fromHtml("<font color='#1787fb'>[未读]</font>${data.content}")
                                 else -> tvTitleMsg.text = data.content
                             }
-                            val userInfo = NimUIKit.getUserInfoProvider().getUserInfo(data.fromAccount)
+                            val userInfo = NimUIKit.getUserInfoProvider().getUserInfo(data.contactId)
                             userInfo?.let {
                                 Glide.with(this@MainMsgFragment)
                                         .load(it.avatar)
-                                        .apply(RequestOptions().error(R.drawable.im_team_default).diskCacheStrategy(DiskCacheStrategy.NONE))
+                                        .apply(RequestOptions().error(R.drawable.ewm).diskCacheStrategy(DiskCacheStrategy.NONE))
                                         .into(msgIcon)
                             }
                         } else if (data.sessionType == SessionTypeEnum.Team) {
@@ -176,12 +178,16 @@ class MainMsgFragment : ToolbarFragment() {
 
         })
         refresh.setAutoLoadMore(true)
-        doRequest()
+
         toolbar_back.setOnClickListener { activity.onBackPressed() }
         registerObservers(true)
     }
 
     var page = 1
+    override fun onResume() {
+        super.onResume()
+        doRequest()
+    }
     fun doRequest() {
         SoguApi.getService(baseActivity!!.application)
                 .msgIndex()
@@ -209,7 +215,6 @@ class MainMsgFragment : ToolbarFragment() {
         NIMClient.getService(MsgService::class.java).queryRecentContacts().setCallback(object : RequestCallback<MutableList<RecentContact>> {
             override fun onSuccess(p0: MutableList<RecentContact>?) {
                 p0?.forEach { recentContact ->
-                    Log.d("WJY","recentContact:${Gson().toJson(recentContact)}")
                     if (recentContact.sessionType == SessionTypeEnum.Team) {
                         extMap.clear()
                         val titleName = UserInfoHelper.getUserTitleName(recentContact.contactId, recentContact.sessionType)

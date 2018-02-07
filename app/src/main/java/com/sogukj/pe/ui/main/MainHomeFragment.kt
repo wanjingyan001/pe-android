@@ -33,6 +33,8 @@ import com.sogukj.pe.util.CacheUtils
 import com.sogukj.pe.util.ColorUtil
 import com.sogukj.pe.view.MyStackPageTransformer
 import com.sogukj.util.Store
+import com.netease.nimlib.sdk.msg.MsgService
+import com.netease.nimlib.sdk.NIMClient
 
 
 /**
@@ -184,6 +186,13 @@ class MainHomeFragment : BaseFragment() {
                     //showToast("暂无新数据")
                     ToastError(e)
                 })
+        val msgUnreadCount = NIMClient.getService(MsgService::class.java).totalUnreadCount
+        if (msgUnreadCount > 0) {
+            tv_msg.isRedEnable(true)
+        } else {
+            tv_msg.isRedEnable(false)
+        }
+
     }
 
     inner class HomeAdapter : StackLayout.Adapter<HomeAdapter.MyViewHolder>() {

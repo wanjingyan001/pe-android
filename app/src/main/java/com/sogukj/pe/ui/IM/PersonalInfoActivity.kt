@@ -19,9 +19,7 @@ import com.google.gson.Gson
 import com.netease.nim.uikit.api.NimUIKit
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
-import com.sogukj.pe.bean.DepartmentBean
 import com.sogukj.pe.bean.UserBean
-import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
@@ -68,7 +66,7 @@ class PersonalInfoActivity : AppCompatActivity(), View.OnClickListener, TextWatc
                 }
                 name.text = it.name
                 position.text = it.position
-                company.text = ""
+                company.text =  it.campany
                 name_tv.text = it.name
                 phone_tv.text = it.phone
                 email_tv.text = it.email
@@ -78,12 +76,6 @@ class PersonalInfoActivity : AppCompatActivity(), View.OnClickListener, TextWatc
                         .load(it.headImage())
                         .apply(RequestOptions().error(R.drawable.ewm))
                         .into(avatar)
-                it.accid?.let { accid->
-                    val remark = db.get(accid, "")
-                    if (remark.isNotEmpty()) {
-                        remarks_tv.setText(remark)
-                    }
-                }
             }
         } else {
             val uid = intent.getIntExtra(Extras.ID, -1)
@@ -92,7 +84,6 @@ class PersonalInfoActivity : AppCompatActivity(), View.OnClickListener, TextWatc
 
         sendMsg.setOnClickListener(this)
         call_phone.setOnClickListener(this)
-        remarks_tv.addTextChangedListener(this)
     }
 
     private fun queryUserInfo(uid: Int) {
@@ -105,6 +96,7 @@ class PersonalInfoActivity : AppCompatActivity(), View.OnClickListener, TextWatc
                         payload.payload?.let { departmentBean->
                             departmentBean.forEach { item->
                                item.data?.forEach {
+                                   Log.d("WJY","${it.user_id}==>${it.uid}==>$uid")
                                    it.depart_name = item.de_name
                                    if (it.user_id == uid){
                                        user = it
@@ -117,7 +109,7 @@ class PersonalInfoActivity : AppCompatActivity(), View.OnClickListener, TextWatc
                                            position.text = it.position
                                            name_tv.text = it.name
                                            phone_tv.text = it.phone
-                                           company.text = ""
+                                           company.text = it.campany
                                            email_tv.text = it.email
                                            department_tv.text = it.depart_name
                                            position_tv.text = it.position
@@ -125,12 +117,6 @@ class PersonalInfoActivity : AppCompatActivity(), View.OnClickListener, TextWatc
                                                    .load(it.headImage())
                                                    .apply(RequestOptions().error(R.drawable.ewm))
                                                    .into(avatar)
-                                           it.accid?.let { accid->
-                                               val remark = db.get(accid, "")
-                                               if (remark.isNotEmpty()) {
-                                                   remarks_tv.setText(remark)
-                                               }
-                                           }
                                        }
                                    }
                                }
@@ -143,8 +129,10 @@ class PersonalInfoActivity : AppCompatActivity(), View.OnClickListener, TextWatc
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.sendMsg -> {
-                if (NimUIKit.getAccount().isNotEmpty()) {
+                if (NimUIKit.getAccount().isNotEmpty() &&  user?.accid!=null) {
                     NimUIKit.startP2PSession(this, user?.accid)
+                }else{
+                    toast("信息有误")
                 }
             }
             R.id.call_phone -> {

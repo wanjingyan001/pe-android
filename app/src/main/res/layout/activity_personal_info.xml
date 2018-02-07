@@ -129,34 +129,34 @@
                     android:layout_marginRight="20dp"
                     android:background="#f1f1f1" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="20dp">
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:orientation="horizontal"-->
+                    <!--android:padding="20dp">-->
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="备注"
-                        android:textColor="#808080"
-                        android:textSize="14sp" />
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="备注"-->
+                        <!--android:textColor="#808080"-->
+                        <!--android:textSize="14sp" />-->
 
-                    <EditText
-                        android:id="@+id/remarks_tv"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:layout_weight="1"
-                        android:background="@null"
-                        android:drawablePadding="10dp"
-                        android:drawableRight="@drawable/nim_arrow_right"
-                        android:gravity="right"
-                        android:hint="填写备注"
-                        android:textColor="@color/black"
-                        android:textSize="14sp" />
+                    <!--<EditText-->
+                        <!--android:id="@+id/remarks_tv"-->
+                        <!--android:layout_width="0dp"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_marginLeft="20dp"-->
+                        <!--android:layout_weight="1"-->
+                        <!--android:background="@null"-->
+                        <!--android:drawablePadding="10dp"-->
+                        <!--android:drawableRight="@drawable/nim_arrow_right"-->
+                        <!--android:gravity="right"-->
+                        <!--android:hint="填写备注"-->
+                        <!--android:textColor="@color/black"-->
+                        <!--android:textSize="14sp" />-->
 
-                </LinearLayout>
+                <!--</LinearLayout>-->
 
                 <View
                     android:layout_width="match_parent"

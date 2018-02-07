@@ -1,6 +1,7 @@
 package com.sogukj.pe.ui.approve
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
@@ -53,7 +54,8 @@ class SignApproveActivity : ToolbarActivity() {
         val paramObj = intent.getSerializableExtra(Extras.DATA)
         is_mine = intent.getIntExtra("is_mine", 2)
         if (paramObj == null){
-
+            paramId = intent.getIntExtra(Extras.ID, -1)
+            paramTitle = intent.getStringExtra(Extras.TITLE)
         }else{
             if (paramObj is ApprovalBean) {
                 paramTitle = paramObj.kind!!
@@ -380,6 +382,14 @@ class SignApproveActivity : ToolbarActivity() {
             intent.putExtra(Extras.ID, data_id)
             intent.putExtra(Extras.TITLE, title)
             ctx?.startActivity(intent)
+        }
+        fun start(ctx: Context, approval_id:Int, is_mine: Int, title: String){
+            val intent = Intent(ctx, SignApproveActivity::class.java)
+            intent.putExtra(Extras.ID, approval_id)
+            intent.putExtra("is_mine", is_mine)
+            intent.putExtra(Extras.TITLE, title)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            ctx.startActivity(intent)
         }
     }
 }

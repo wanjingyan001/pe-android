@@ -527,6 +527,7 @@ public class MessageListPanelEx {
         public MessageLoader(IMMessage anchor, boolean remote) {
             this.anchor = anchor;
             this.remote = remote;
+            Log.d("WJY", "anchor:" + (anchor == null) + "==>remote:" + remote);
             if (remote) {
                 loadFromRemote();
             } else {
@@ -554,7 +555,7 @@ public class MessageListPanelEx {
                 if (messages != null) {
                     onMessageLoaded(messages);
                     for (IMMessage message : messages) {
-                        Log.d("WJY","消息:"+ JSON.toJSONString(message));
+                        Log.d("WJY", "消息:" + JSON.toJSONString(message));
                     }
                 }
             }
@@ -590,7 +591,8 @@ public class MessageListPanelEx {
 
         private IMMessage anchor() {
             if (items.size() == 0) {
-                return anchor == null ? MessageBuilder.createEmptyMessage(container.account, container.sessionType, 0) : anchor;
+                return anchor == null ? MessageBuilder.createEmptyMessage(container.account,
+                        container.sessionType, 0) : anchor;
             } else {
                 int index = (direction == QueryDirectionEnum.QUERY_NEW ? items.size() - 1 : 0);
                 return items.get(index);
