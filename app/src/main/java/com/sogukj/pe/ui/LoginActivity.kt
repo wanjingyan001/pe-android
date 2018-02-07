@@ -15,6 +15,7 @@ import com.netease.nimlib.sdk.auth.LoginInfo
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.UserBean
+import com.sogukj.pe.ui.main.MainActivity
 import com.sogukj.pe.util.LoginTimer
 import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
@@ -132,6 +133,7 @@ class LoginActivity : BaseActivity() {
                                 IMLogin(accid, token)
                             })
                         }
+                        startActivity(Intent(context, MainActivity::class.java))
                         finish()
                     } else
                         showToast(payload.message)

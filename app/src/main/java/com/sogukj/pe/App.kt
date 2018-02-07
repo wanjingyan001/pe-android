@@ -3,6 +3,7 @@ package com.sogukj.pe
 import android.app.Notification
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.support.multidex.MultiDexApplication
 import android.util.Log
 import android.widget.RemoteViews
@@ -191,12 +192,14 @@ class App : MultiDexApplication() {
                     StatusCode.LOGINED -> Log.d("WJY", "已成功登录")
                     StatusCode.KICKOUT, StatusCode.KICK_BY_OTHER_CLIENT -> {
                         Log.d("WJY", "被其他端的登录踢掉")
-                        ActivityHelper.remove(ActivityHelper.rootActivity)
+                        //ActivityHelper.remove(ActivityHelper.rootActivity)
+                        ActivityHelper.exit()
                         resetPush(false)
                         IMLogout()
                         Store.store.clearUser(this)
                         val intent = Intent(this, LoginActivity::class.java)
                         intent.putExtra(Extras.FLAG,true)
+                        intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
                         startActivity(intent)
                     }
                     StatusCode.FORBIDDEN -> Log.d("WJY", "被服务器禁止登录")

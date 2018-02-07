@@ -110,6 +110,7 @@ class SplashActivity : BaseActivity() {
         handler.postDelayed({
             if (!Store.store.checkLogin(this)) {
                 LoginActivity.start(this)
+                finish()
             } else {
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()

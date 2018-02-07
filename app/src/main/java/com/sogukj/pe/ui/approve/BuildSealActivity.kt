@@ -385,7 +385,7 @@ class BuildSealActivity : ToolbarActivity() {
                 hideFields.add(field)
         }
         rbNo.setOnClickListener {
-            paramMap.put(bean.fields, 1)
+            paramMap.put(bean.fields, 0)
             bean.value_map?.hide?.split(",")?.forEach { field ->
                 if (!TextUtils.isEmpty(field)) {
                     val view = fieldMap[field]
@@ -395,7 +395,7 @@ class BuildSealActivity : ToolbarActivity() {
         }
 
         rbYes.setOnClickListener {
-            paramMap.put(bean.fields, 0)
+            paramMap.put(bean.fields, 1)
             bean.value_map?.hide?.split(",")?.forEach { field ->
                 if (!TextUtils.isEmpty(field)) {
                     val view = fieldMap[field]
