@@ -1,6 +1,7 @@
 package com.netease.nim.uikit.business.session.viewholder;
 
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
@@ -57,7 +58,13 @@ public abstract class MsgViewHolderThumbBase extends MsgViewHolderBase {
                 downloadAttachment();
             }
         }
-
+        if (isReceivedMessage()) {
+            setGravity(thumbnail, Gravity.LEFT);
+            contentContainer.setBackground(null);
+        } else {
+            setGravity(thumbnail, Gravity.RIGHT);
+            contentContainer.setBackground(null);
+        }
         refreshStatus();
     }
 
@@ -128,4 +135,6 @@ public abstract class MsgViewHolderThumbBase extends MsgViewHolderBase {
     }
 
     protected abstract String thumbFromSourceFile(String path);
+
+
 }

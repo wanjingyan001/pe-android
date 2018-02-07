@@ -171,8 +171,6 @@ public abstract class MsgViewHolderBase extends RecyclerViewHolder<BaseMultiItem
         view = holder.getConvertView();
         context = holder.getContext();
         message = data;
-        Log.d("WJY", JSON.toJSONString(data));
-
         inflate();
         refresh();
         bindHolder(holder);

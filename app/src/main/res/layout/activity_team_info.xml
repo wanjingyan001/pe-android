@@ -222,7 +222,6 @@
                     android:drawablePadding="10dp"
                     android:background="@null"
                     android:gravity="right"
-                    android:text="项目工作组"
                     android:textSize="14sp"
                     android:textColor="#a0a4aa" />
 

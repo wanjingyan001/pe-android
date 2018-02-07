@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.support.constraint.ConstraintLayout;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -91,6 +92,13 @@ public class MsgViewHolderFile extends MsgViewHolderBase implements View.OnClick
                 default:
                     break;
             }
+        }
+        if (isReceivedMessage()) {
+            setGravity(fileLayout, Gravity.LEFT);
+            contentContainer.setBackgroundResource(leftBackground());
+        } else {
+            setGravity(fileLayout, Gravity.RIGHT);
+            contentContainer.setBackgroundResource(R.drawable.nim_message_right_white_bg2);
         }
     }
 

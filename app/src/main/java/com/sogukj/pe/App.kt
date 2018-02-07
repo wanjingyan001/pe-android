@@ -12,11 +12,15 @@ import com.google.gson.Gson
 import com.mob.MobSDK
 import com.netease.nim.uikit.api.NimUIKit
 import com.netease.nimlib.sdk.NIMClient
+import com.netease.nimlib.sdk.StatusCode
+import com.netease.nimlib.sdk.auth.AuthService
+import com.netease.nimlib.sdk.auth.AuthServiceObserver
 import com.netease.nimlib.sdk.auth.LoginInfo
 import com.netease.nimlib.sdk.util.NIMUtil
 import com.sogukj.pe.bean.NewsBean
 import com.sogukj.pe.ui.IM.SessionHelper
 import com.sogukj.pe.ui.IM.location.NimDemoLocationProvider
+import com.sogukj.pe.ui.LoginActivity
 import com.sogukj.pe.ui.approve.SealApproveActivity
 import com.sogukj.pe.ui.approve.SignApproveActivity
 import com.sogukj.pe.ui.calendar.ModifyTaskActivity
@@ -107,9 +111,9 @@ class App : MultiDexApplication() {
                             val approval_id = data.getInt("approval_id")
                             val is_mine = data.getInt("is_mine")
                             if (data.has("qs")) {
-                                SignApproveActivity.start(context, approval_id, is_mine,"签字审批")
-                            }else{
-                                SealApproveActivity.start(context, approval_id, is_mine,"用印审批")
+                                SignApproveActivity.start(context, approval_id, is_mine, "签字审批")
+                            } else {
+                                SealApproveActivity.start(context, approval_id, is_mine, "用印审批")
                             }
                         }
                         else -> {
@@ -177,23 +181,32 @@ class App : MultiDexApplication() {
             SessionHelper.init()
             NIMClient.toggleNotification(true)
             NimUIKit.init(this)
+            NIMClient.getService(AuthServiceObserver::class.java).observeOnlineStatus({ statusCode ->
+                when (statusCode) {
+                    StatusCode.UNLOGIN -> Log.d("WJY", "未登录/登录失败")
+                    StatusCode.NET_BROKEN -> Log.d("WJY", "网络连接已断开")
+                    StatusCode.CONNECTING -> Log.d("WJY", "正在连接服务器")
+                    StatusCode.LOGINING -> Log.d("WJY", "正在登录中")
+                    StatusCode.SYNCING -> Log.d("WJY", "正在同步数据")
+                    StatusCode.LOGINED -> Log.d("WJY", "已成功登录")
+                    StatusCode.KICKOUT, StatusCode.KICK_BY_OTHER_CLIENT -> {
+                        Log.d("WJY", "被其他端的登录踢掉")
+                        ActivityHelper.remove(ActivityHelper.rootActivity)
+                        resetPush(false)
+                        IMLogout()
+                        Store.store.clearUser(this)
+                        val intent = Intent(this, LoginActivity::class.java)
+                        intent.putExtra(Extras.FLAG,true)
+                        startActivity(intent)
+                    }
+                    StatusCode.FORBIDDEN -> Log.d("WJY", "被服务器禁止登录")
+                    StatusCode.VER_ERROR -> Log.d("WJY", "客户端版本错误")
+                    StatusCode.PWD_ERROR -> Log.d("WJY", "用户名或密码错误")
+                    else -> Log.d("WJY", "未知错误")
+                }
+            }, true)
         }
-//        NIMClient.getService(AuthServiceObserver::class.java).observeOnlineStatus({ statusCode ->
-//            when (statusCode) {
-//                StatusCode.UNLOGIN -> Log.d("WJY", "未登录/登录失败")
-//                StatusCode.NET_BROKEN -> Log.d("WJY", "网络连接已断开")
-//                StatusCode.CONNECTING -> Log.d("WJY", "正在连接服务器")
-//                StatusCode.LOGINING -> Log.d("WJY", "正在登录中")
-//                StatusCode.SYNCING -> Log.d("WJY", "正在同步数据")
-//                StatusCode.LOGINED -> Log.d("WJY", "已成功登录")
-//                StatusCode.KICKOUT -> Log.d("WJY", "被其他端的登录踢掉")
-//                StatusCode.KICK_BY_OTHER_CLIENT -> Log.d("WJY", "被同时在线的其他端主动踢掉")
-//                StatusCode.FORBIDDEN -> Log.d("WJY", "被服务器禁止登录")
-//                StatusCode.VER_ERROR -> Log.d("WJY", "客户端版本错误")
-//                StatusCode.PWD_ERROR -> Log.d("WJY", "用户名或密码错误")
-//                else -> Log.d("WJY", "未知错误")
-//            }
-//        }, true)
+
     }
 
     private fun getIMLoginInfo(): LoginInfo? {
@@ -207,6 +220,15 @@ class App : MultiDexApplication() {
         } else {
             null
         }
+    }
+    /**
+     * 网易云信IM注销
+     */
+    private fun IMLogout(){
+        val xmlDb = XmlDb.open(this)
+        xmlDb.set(Extras.NIMACCOUNT,"")
+        xmlDb.set(Extras.NIMTOKEN,"")
+        NIMClient.getService(AuthService::class.java).logout()
     }
 
 

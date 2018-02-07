@@ -106,7 +106,7 @@ class MainMsgFragment : ToolbarFragment() {
                             userInfo?.let {
                                 Glide.with(this@MainMsgFragment)
                                         .load(it.avatar)
-                                        .apply(RequestOptions().error(R.drawable.ewm).diskCacheStrategy(DiskCacheStrategy.NONE))
+                                        .apply(RequestOptions().error(R.drawable.ewm))
                                         .into(msgIcon)
                             }
                         } else if (data.sessionType == SessionTypeEnum.Team) {

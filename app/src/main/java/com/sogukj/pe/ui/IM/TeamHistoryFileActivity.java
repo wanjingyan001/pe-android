@@ -44,6 +44,7 @@ public class TeamHistoryFileActivity extends AppCompatActivity implements TeamMe
     private int tid;
     private HistoryFileAdapter adapter;
     private List<ChatFileBean> files = new ArrayList<>();
+    private ImageView iv_empty;
 
     public static void start(Context context, int tid) {
         Intent intent = new Intent(context, TeamHistoryFileActivity.class);
@@ -89,6 +90,7 @@ public class TeamHistoryFileActivity extends AppCompatActivity implements TeamMe
             title.setText("视频");
         }
         historyList = (RecyclerView) findViewById(R.id.history_file_list);
+        iv_empty = ((ImageView) findViewById(R.id.iv_empty));
         historyList.setLayoutManager(new LinearLayoutManager(this));
         adapter = new HistoryFileAdapter(files);
         NormalDecoration decoration = new NormalDecoration() {
@@ -103,6 +105,7 @@ public class TeamHistoryFileActivity extends AppCompatActivity implements TeamMe
         historyList.addItemDecoration(decoration);
         historyList.setAdapter(adapter);
         requestChatFile();
+        //暂时去掉,以后还要加回来
 //        adapter.setListener(new onItemClickListener() {
 //            @Override
 //            public void onItemClick(View view, int position) {
@@ -159,7 +162,11 @@ public class TeamHistoryFileActivity extends AppCompatActivity implements TeamMe
 
                     @Override
                     public void onComplete() {
-
+                        if (adapter.getItemCount() == 0) {
+                            iv_empty.setVisibility(View.VISIBLE);
+                        }else {
+                            iv_empty.setVisibility(View.GONE);
+                        }
                     }
                 });
     }

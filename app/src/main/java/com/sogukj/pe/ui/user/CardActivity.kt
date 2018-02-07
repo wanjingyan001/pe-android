@@ -61,7 +61,7 @@ class CardActivity : Activity() {
         }
         cardName.text = bean.name
         cardPosition.text = bean.position
-        cardCompanyName.text = bean.campany
+        cardCompanyName.text = bean.company
         cardPhone.text = bean.phone
         cardEmail.text = bean.email
         cardAddress.text = bean.memo

@@ -22,6 +22,7 @@ import com.netease.nim.uikit.business.team.helper.TeamHelper
 import com.netease.nim.uikit.common.ui.widget.SwitchButton
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.RequestCallback
+import com.netease.nimlib.sdk.RequestCallbackWrapper
 import com.netease.nimlib.sdk.friend.FriendService
 import com.netease.nimlib.sdk.team.TeamService
 import com.netease.nimlib.sdk.team.constant.TeamMessageNotifyTypeEnum
@@ -32,6 +33,7 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.util.Utils
+import com.sogukj.util.Store
 import kotlinx.android.synthetic.main.activity_team_info.*
 import org.jetbrains.anko.toast
 
@@ -47,6 +49,7 @@ class TeamInfoActivity : AppCompatActivity(), View.OnClickListener, SwitchButton
     var teamMembers = ArrayList<UserBean>()
     var adapter: MemberAdapter? = null
     lateinit var team: Team
+    lateinit var creatorAccount: String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,6 +91,15 @@ class TeamInfoActivity : AppCompatActivity(), View.OnClickListener, SwitchButton
                 Log.d("WJY", "${Gson().toJson(p0)}")
                 p0?.let {
                     team = it
+                    creatorAccount = it.creator
+                    val accid = Store.store.getUser(this@TeamInfoActivity)?.accid
+                    val b = creatorAccount == accid
+                    team_name.isFocusable = b
+                    team_name.setOnClickListener {
+                        if (!b){
+                            toast("只有群创建者可以修改")
+                        }
+                    }
                     profileToggle.check = it.messageNotifyType == TeamMessageNotifyTypeEnum.Mute
                     Glide.with(this@TeamInfoActivity)
                             .load(it.icon)
@@ -229,7 +241,11 @@ class TeamInfoActivity : AppCompatActivity(), View.OnClickListener, SwitchButton
         //未修改成功
         val name = team_name.text.trim().toString()
         if (name.isNotEmpty()) {
-            NIMClient.getService(TeamService::class.java).updateName(sessionId,name)
+            NIMClient.getService(TeamService::class.java).updateName(sessionId, name).setCallback(object : RequestCallbackWrapper<Void>() {
+                override fun onResult(code: Int, result: Void?, exception: Throwable?) {
+                    Log.d("WJY", "$code+${result.toString()}")
+                }
+            })
         }
     }
 

@@ -1121,4 +1121,9 @@ interface SoguService {
     //版本更新
     @POST("/api/Index/version")
     fun getVersion(): Observable<Payload<VersionBean>>
+
+    //获取IM用户对应信息
+    @FormUrlEncoded
+    @POST("/api/userFont/showInfo")
+    fun showIMUserInfo(@Field("user_id")user_id:Int):Observable<Payload<UserBean>>
 }

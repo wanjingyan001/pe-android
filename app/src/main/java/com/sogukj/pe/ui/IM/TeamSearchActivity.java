@@ -144,9 +144,13 @@ public class TeamSearchActivity extends AppCompatActivity implements View.OnClic
         } else if (id == R.id.search_file) {
             TeamHistoryFileActivity.start(this, Integer.valueOf(sessionId));
         } else if (id == R.id.search_link) {
-
+            TeamHistoryFileActivity.start(this, Integer.valueOf(sessionId), 2);
         } else if (id == R.id.tv_cancel) {
-            searchEdt.setText("");
+            if (!searchEdt.getText().toString().isEmpty()){
+                searchEdt.setText("");
+            }else {
+                finish();
+            }
         }
     }
 

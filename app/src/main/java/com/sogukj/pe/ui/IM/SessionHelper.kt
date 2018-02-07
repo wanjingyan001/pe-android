@@ -57,22 +57,12 @@ object SessionHelper {
                                 "mine:${Store.store.getUser(context)!!.accid};")
                         val accounts = java.util.ArrayList<String>(1)
                         accounts.add(message.fromAccount)
-                        NIMClient.getService(UserService::class.java).fetchUserInfo(accounts)
-                                .setCallback(object : RequestCallbackWrapper<List<NimUserInfo>>() {
-                                    override fun onResult(code: Int, result: List<NimUserInfo>?, exception: Throwable?) {
-                                        if (code == 200) {
-                                            val nimUserInfo = result?.get(0)
-                                            Log.d("WJY", Gson().toJson(nimUserInfo))
-                                        }
-                                    }
-                                })
-
-//                        NimUIKit.getUserInfoProvider().getUserInfoAsync(message.fromAccount) { success, result, code ->
-//                            val info = result as NimUserInfo
-//                            val uid = info.extensionMap["uid"] as Int
-//                            Log.d("WJY", Gson().toJson(info))
-//                            PersonalInfoActivity.start(context, uid)
-//                        }
+                        NimUIKit.getUserInfoProvider().getUserInfoAsync(message.fromAccount) { success, result, code ->
+                            val info = result as NimUserInfo
+                            val uid = info.extensionMap["uid"] as Int
+                            Log.d("WJY", Gson().toJson(info))
+                            PersonalInfoActivity.start(context, uid)
+                        }
                     }
                 }
             }

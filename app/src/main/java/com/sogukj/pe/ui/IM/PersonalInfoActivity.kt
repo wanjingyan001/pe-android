@@ -66,7 +66,7 @@ class PersonalInfoActivity : AppCompatActivity(), View.OnClickListener, TextWatc
                 }
                 name.text = it.name
                 position.text = it.position
-                company.text =  it.campany
+                company.text = it.company
                 name_tv.text = it.name
                 phone_tv.text = it.phone
                 email_tv.text = it.email
@@ -81,46 +81,36 @@ class PersonalInfoActivity : AppCompatActivity(), View.OnClickListener, TextWatc
             val uid = intent.getIntExtra(Extras.ID, -1)
             queryUserInfo(uid)
         }
-
         sendMsg.setOnClickListener(this)
         call_phone.setOnClickListener(this)
     }
 
     private fun queryUserInfo(uid: Int) {
         SoguApi.getService(application)
-                .userDepart()
+                .showIMUserInfo(uid)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe({ payload->
+                .subscribe({ payload ->
                     if (payload.isOk) {
-                        payload.payload?.let { departmentBean->
-                            departmentBean.forEach { item->
-                               item.data?.forEach {
-                                   Log.d("WJY","${it.user_id}==>${it.uid}==>$uid")
-                                   it.depart_name = item.de_name
-                                   if (it.user_id == uid){
-                                       user = it
-                                       val bean = Store.store.getUser(this)
-                                       user?.let {
-                                           if (it.accid == bean!!.accid) {
-                                               communicationLayout.visibility = View.INVISIBLE
-                                           }
-                                           name.text = it.name
-                                           position.text = it.position
-                                           name_tv.text = it.name
-                                           phone_tv.text = it.phone
-                                           company.text = it.campany
-                                           email_tv.text = it.email
-                                           department_tv.text = it.depart_name
-                                           position_tv.text = it.position
-                                           Glide.with(this)
-                                                   .load(it.headImage())
-                                                   .apply(RequestOptions().error(R.drawable.ewm))
-                                                   .into(avatar)
-                                       }
-                                   }
-                               }
+                        payload.payload?.let {
+                            user = it
+                            val bean = Store.store.getUser(this)
+                            if (it.accid == bean!!.accid) {
+                                communicationLayout.visibility = View.INVISIBLE
                             }
+                            name.text = it.name
+                            position.text = it.position
+                            name_tv.text = it.name
+                            phone_tv.text = it.phone
+                            company.text = it.company
+                            email_tv.text = it.email
+                            department_tv.text = it.depart_name
+                            position_tv.text = it.position
+                            Glide.with(this)
+                                    .load(it.headImage())
+                                    .apply(RequestOptions().error(R.drawable.ewm))
+                                    .into(avatar)
+
                         }
                     }
                 })
@@ -129,9 +119,9 @@ class PersonalInfoActivity : AppCompatActivity(), View.OnClickListener, TextWatc
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.sendMsg -> {
-                if (NimUIKit.getAccount().isNotEmpty() &&  user?.accid!=null) {
+                if (NimUIKit.getAccount().isNotEmpty() && user?.accid != null) {
                     NimUIKit.startP2PSession(this, user?.accid)
-                }else{
+                } else {
                     toast("信息有误")
                 }
             }
