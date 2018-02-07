@@ -32,6 +32,10 @@
         "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/55db4895ed8ab9b31de9f046b5690c60/res/drawable-xhdpi-v4/abc_ic_menu_share_mtrl_alpha.png"
     },
     {
+        "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/im_folder.png",
+        "source": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/im_folder.png"
+    },
+    {
         "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/abc_list_focused_holo.9.png",
         "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/55db4895ed8ab9b31de9f046b5690c60/res/drawable-xhdpi-v4/abc_list_focused_holo.9.png"
     },
@@ -252,6 +256,10 @@
         "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/55db4895ed8ab9b31de9f046b5690c60/res/drawable-xhdpi-v4/abc_ab_share_pack_mtrl_alpha.9.png"
     },
     {
+        "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/audio_cancel.png",
+        "source": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/audio_cancel.png"
+    },
+    {
         "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/nim_actionbar_dark_back_icon.png",
         "source": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/nim_actionbar_dark_back_icon.png"
     },
@@ -336,6 +344,10 @@
         "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/library-1.8.aar/d3eee9d5aca290eecb1184bceedece98/res/drawable-xhdpi-v4/ic_document_box.png"
     },
     {
+        "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/im_shoot.png",
+        "source": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/im_shoot.png"
+    },
+    {
         "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/nim_message_input_plus.png",
         "source": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/nim_message_input_plus.png"
     },
@@ -386,6 +398,10 @@
     {
         "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/nim_audio_animation_list_left_1.png",
         "source": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/nim_audio_animation_list_left_1.png"
+    },
+    {
+        "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/im_loaction.png",
+        "source": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/im_loaction.png"
     },
     {
         "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/nim_message_input_voice_normal.png",
@@ -466,6 +482,14 @@
     {
         "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/nim_main_tab_new_message_notify.png",
         "source": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/nim_main_tab_new_message_notify.png"
+    },
+    {
+        "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/im_file.png",
+        "source": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/im_file.png"
+    },
+    {
+        "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/rectangle_192.png",
+        "source": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/rectangle_192.png"
     },
     {
         "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/nim_picker_orignal_normal.png",
@@ -560,6 +584,10 @@
         "source": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/sx.png"
     },
     {
+        "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/rectangle_19.png",
+        "source": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/rectangle_19.png"
+    },
+    {
         "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/nim_message_input_emotion_pressed.png",
         "source": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/nim_message_input_emotion_pressed.png"
     },
@@ -586,10 +614,6 @@
     {
         "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/file.png",
         "source": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/file.png"
-    },
-    {
-        "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/wd.png",
-        "source": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/wd.png"
     },
     {
         "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/abc_tab_indicator_mtrl_alpha.9.png",
