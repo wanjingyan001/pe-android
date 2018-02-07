@@ -98,6 +98,7 @@ class SplashActivity : BaseActivity() {
     }
 
     fun update(url: String) {
+        pb_progress.visibility = View.VISIBLE
         tv_progress.text = "开始下载"
         val fileName = url.substring(url.lastIndexOf("/") + 1)
         DownloadUtil.getInstance().download(url, externalCacheDir.toString(), fileName, object : DownloadUtil.OnDownloadListener {
