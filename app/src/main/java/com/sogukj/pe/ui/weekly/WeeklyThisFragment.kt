@@ -313,14 +313,18 @@ class WeeklyThisFragment : BaseFragment(), View.OnClickListener {
 
         btn_commit.setOnClickListener {
 
-            if (send_adapter.list.size == 1) {
+            if (send_adapter.list.size == 0) {
                 showToast("发送人不可为空")
                 return@setOnClickListener
             }
 
             var weekly_id: Int? = null
-            if (week != null) {
-                weekly_id = week.week_id
+            try {
+                if (week != null) {
+                    weekly_id = week.week_id
+                }
+            } catch (e: Exception) {
+                //week未初始化
             }
             var accept_uid: String = ""
             for (item in send_adapter.list) {
