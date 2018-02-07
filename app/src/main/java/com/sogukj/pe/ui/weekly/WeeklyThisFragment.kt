@@ -325,6 +325,8 @@ class WeeklyThisFragment : BaseFragment(), View.OnClickListener {
                 }
             } catch (e: Exception) {
                 //week未初始化
+                showToast("补充记录不能为空")
+                return@setOnClickListener
             }
             var accept_uid: String = ""
             for (item in send_adapter.list) {
