@@ -12,13 +12,16 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager.NameNotFoundException
+import android.net.Uri
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.sogukj.pe.util.DownloadUtil
 import com.sogukj.pe.util.OpenFileUtil
+import kotlinx.android.synthetic.main.activity_splash.*
 import java.util.*
 import me.leolin.shortcutbadger.ShortcutBadger
+import java.io.File
 
 /**
  * Created by qinfei on 17/8/11.
@@ -42,13 +45,12 @@ class SplashActivity : BaseActivity() {
                         var newVersion = payload.payload?.version
                         var info = payload.payload?.info
                         var url = payload.payload?.app_url
-                        var force = payload.payload?.force//1=>是，0=>否
+                        var force = payload.payload?.force//1=>更新，0=>不更新，2---强制更新
 
                         if (!url.isNullOrEmpty()) {
-                            //要更新
-                            if (force == 1) {
-                                update(url!!)
-                            } else {
+                            if (force == 0) {
+                                enterNext()
+                            } else if (force == 1) {
                                 MaterialDialog.Builder(context)
                                         .theme(Theme.LIGHT)
                                         .title("发现新的版本，是否需要更新")
@@ -60,6 +62,16 @@ class SplashActivity : BaseActivity() {
                                         }
                                         .onNegative { dialog, which ->
                                             enterNext()
+                                        }
+                                        .show()
+                            } else if (force == 2) {
+                                MaterialDialog.Builder(context)
+                                        .theme(Theme.LIGHT)
+                                        .title("发现新的版本，是否需要更新")
+                                        .content(info.toString())
+                                        .positiveText("确认")
+                                        .onPositive { dialog, which ->
+                                            update(url!!)
                                         }
                                         .show()
                             }
@@ -86,22 +98,27 @@ class SplashActivity : BaseActivity() {
     }
 
     fun update(url: String) {
+        tv_progress.text = "开始下载"
         val fileName = url.substring(url.lastIndexOf("/") + 1)
         DownloadUtil.getInstance().download(url, externalCacheDir.toString(), fileName, object : DownloadUtil.OnDownloadListener {
             override fun onDownloadSuccess(path: String?) {
-                var intent = OpenFileUtil.openFile(context, path)
-                if (intent == null) {
-                    showToast("apk出错")
-                } else {
-                    startActivity(intent)
-                }
+                tv_progress.text = "下载完成"
+                var intent = Intent()
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                intent.action = Intent.ACTION_VIEW
+                val uri = Uri.fromFile(File(path))
+                intent.setDataAndType(uri, "application/vnd.android.package-archive")
+                startActivity(intent)
             }
 
             override fun onDownloading(progress: Int) {
+                tv_progress.text = "已下载" + progress + "%"
+                pb_progress.progress = progress
             }
 
             override fun onDownloadFailed() {
-                showToast("下载失败")
+                //showToast("下载失败")
+                tv_progress.text = "下载失败"
             }
         })
     }

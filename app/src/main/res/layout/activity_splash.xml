@@ -13,4 +13,26 @@
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginBottom="40dp"
         android:src="@drawable/img_logo_splash" />
+
+    <ProgressBar
+        android:id="@+id/pb_progress"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:progress="0"
+        android:progressDrawable="@drawable/custom_progress"
+        android:max="100" />
+
+    <TextView
+        android:id="@+id/tv_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:text="111111"
+        android:textSize="20sp" />
 </FrameLayout>

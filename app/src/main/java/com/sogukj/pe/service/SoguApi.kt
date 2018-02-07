@@ -33,6 +33,7 @@ class SoguApi {
                     }
                     builder.addHeader("appkey", "d5f17cafef0829b5")
                     builder.addHeader("version", Utils.getVersionName(context))
+                    builder.addHeader("client", "android")
                     val request = builder.build()
                     val response = chain.proceed(request)
                     Trace.i("http", "RequestBody:${Gson().toJson(response.request().body())}")
