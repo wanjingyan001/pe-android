@@ -94,11 +94,13 @@ class WeeklyThisFragment : BaseFragment(), View.OnClickListener {
         TYPE = arguments.getString(Extras.FLAG)
         if (TYPE == "MAIN") {
             spinner_this.visibility = View.GONE
+            buchong_hint.visibility = View.VISIBLE
             user_id = null
             issue = null
             week_id = null
             doRequest()
         } else if (TYPE == "PERSONAL") {
+            buchong_hint.visibility = View.GONE
             spinner_this.visibility = View.VISIBLE
             var obj = arguments.getSerializable(Extras.DATA) as WeeklyThisBean
             initView(obj)
