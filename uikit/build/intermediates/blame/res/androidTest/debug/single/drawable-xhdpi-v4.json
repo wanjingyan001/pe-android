@@ -420,6 +420,10 @@
         "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/55db4895ed8ab9b31de9f046b5690c60/res/drawable-xhdpi-v4/abc_scrubber_track_mtrl_alpha.9.png"
     },
     {
+        "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/nim_message_right_white_bg2.9.png",
+        "source": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/nim_message_right_white_bg2.9.png"
+    },
+    {
         "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/ic_powerpoint_box.png",
         "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/library-1.8.aar/d3eee9d5aca290eecb1184bceedece98/res/drawable-xhdpi-v4/ic_powerpoint_box.png"
     },
