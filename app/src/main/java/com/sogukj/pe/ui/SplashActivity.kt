@@ -13,6 +13,8 @@ import io.reactivex.schedulers.Schedulers
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager.NameNotFoundException
 import android.net.Uri
+import android.os.Build
+import android.support.v4.content.FileProvider
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
@@ -107,7 +109,8 @@ class SplashActivity : BaseActivity() {
                 var intent = Intent()
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 intent.action = Intent.ACTION_VIEW
-                val uri = Uri.fromFile(File(path))
+                //val uri = Uri.fromFile(File(path))
+                val uri = transform(path!!, intent)
                 intent.setDataAndType(uri, "application/vnd.android.package-archive")
                 startActivity(intent)
             }
@@ -122,6 +125,19 @@ class SplashActivity : BaseActivity() {
                 tv_progress.text = "下载失败"
             }
         })
+    }
+
+    private fun transform(param: String, intent: Intent): Uri {
+        val uri: Uri
+        // 判断版本大于等于7.0
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            uri = FileProvider.getUriForFile(context, "com.sogukj.pe.fileProvider", File(param))
+            //uri = MyFileProvider.getUriForFile(new File(param));
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+        } else {
+            uri = Uri.fromFile(File(param))
+        }
+        return uri
     }
 
     fun enterNext() {
