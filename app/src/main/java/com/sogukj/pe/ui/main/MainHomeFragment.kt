@@ -55,7 +55,7 @@ class MainHomeFragment : BaseFragment() {
 //            UserFragment.start(baseActivity)
 //        }
         tv_sp.setOnClickListener {
-            EntryApproveActivity.start(baseActivity)
+            EntryApproveActivity.start(baseActivity, local_sp)
         }
         tv_weekly.setOnClickListener { WeeklyActivity.start(baseActivity) }
 //        tv_jj.setOnClickListener { FundMainFragment.start(baseActivity) }
@@ -163,6 +163,7 @@ class MainHomeFragment : BaseFragment() {
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         payload.payload?.apply {
+                            local_sp = sp
                             if (sp == null || sp == 0) {
                                 tv_sp.isRedEnable(false)
                             } else {
@@ -194,6 +195,8 @@ class MainHomeFragment : BaseFragment() {
         }
 
     }
+
+    var local_sp: Int? = null
 
     inner class HomeAdapter : StackLayout.Adapter<HomeAdapter.MyViewHolder>() {
 

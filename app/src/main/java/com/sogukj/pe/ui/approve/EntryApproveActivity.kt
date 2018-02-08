@@ -11,6 +11,7 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.framework.base.ToolbarActivity
 import com.google.gson.Gson
+import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.SpGroupBean
 import com.sogukj.pe.bean.SpGroupItemBean
@@ -46,6 +47,13 @@ class EntryApproveActivity : ToolbarActivity(), View.OnClickListener {
         }
         item_wfqd.setOnClickListener {
             ApproveListActivity.start(this, 3)
+        }
+
+        var sp = intent.getIntExtra(Extras.DATA, 0)
+        if (sp == null || sp == 0) {
+            point.visibility = View.INVISIBLE
+        } else {
+            point.visibility = View.VISIBLE
         }
     }
 
@@ -134,8 +142,8 @@ class EntryApproveActivity : ToolbarActivity(), View.OnClickListener {
     }
 
     companion object {
-        fun start(ctx: Activity?) {
-            val intent = Intent(ctx, EntryApproveActivity::class.java)
+        fun start(ctx: Activity?, sp: Int?) {
+            val intent = Intent(ctx, EntryApproveActivity::class.java).putExtra(Extras.DATA, sp)
             ctx?.startActivity(intent)
         }
     }
