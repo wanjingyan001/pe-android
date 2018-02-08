@@ -12,6 +12,7 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Html
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -208,6 +209,7 @@ class NewsListFragment : BaseFragment(), SupportEmptyView {
             adapter.dataList.clear()
             adapter.dataList.addAll(initialData)
             adapter.notifyDataSetChanged()
+            iv_empty.visibility = View.GONE
         } else {
             for (bean in initialData) {
                 var tags = bean.tag?.split("#")
@@ -218,11 +220,11 @@ class NewsListFragment : BaseFragment(), SupportEmptyView {
             adapter.dataList.clear()
             adapter.dataList.addAll(filterData)
             adapter.notifyDataSetChanged()
-        }
-        if (filterData.size == 0) {
-            iv_empty.visibility = View.VISIBLE
-        } else {
-            iv_empty.visibility = View.GONE
+            if (filterData.size == 0) {
+                iv_empty.visibility = View.VISIBLE
+            } else {
+                iv_empty.visibility = View.GONE
+            }
         }
     }
 
