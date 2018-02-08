@@ -265,7 +265,7 @@ class LeaderActivity : ToolbarActivity() {
                     timeTick.text = "距离结束还有${formatSec(leftSec)}"
                     leftSec--
                     if (leftSec == -1) {
-                        timeTick.text = "超时"
+                        timeTick.text = "考核结束"
                     } else {
                         sendMessageDelayed(obtainMessage(0x001, leftSec), 1000)
                     }

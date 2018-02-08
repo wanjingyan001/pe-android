@@ -151,7 +151,7 @@ class UserEditActivity : ToolbarActivity() {
                     tv_rate.text = "距离结束还有${formatSec(leftSec)}"
                     leftSec--
                     if (leftSec == -1) {
-                        tv_rate.text = "超时"
+                        tv_rate.text = "考核结束"
                     } else {
                         sendMessageDelayed(obtainMessage(0x001, leftSec), 1000)
                     }
