@@ -39,6 +39,7 @@ import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_list_news.*
+import kotlinx.android.synthetic.main.layout_empty.*
 import kotlinx.android.synthetic.main.layout_loading.*
 import org.jetbrains.anko.textColor
 import java.text.SimpleDateFormat
@@ -217,6 +218,11 @@ class NewsListFragment : BaseFragment(), SupportEmptyView {
             adapter.dataList.clear()
             adapter.dataList.addAll(filterData)
             adapter.notifyDataSetChanged()
+        }
+        if (filterData.size == 0) {
+            iv_empty.visibility = View.VISIBLE
+        } else {
+            iv_empty.visibility = View.GONE
         }
     }
 
