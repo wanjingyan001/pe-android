@@ -47,6 +47,7 @@ class TeamSelectActivity : AppCompatActivity() {
     val mine = Store.store.getUser(this)//自己
     var isSelectUser: Boolean = false//是否是选择用户
     var isCreateTeam: Boolean = true
+    var canRemove: Boolean = true
     var fromTeam: Boolean = true
     var flag: String? = ""
     lateinit var searchKey: String
@@ -120,6 +121,7 @@ class TeamSelectActivity : AppCompatActivity() {
         val data = intent.getSerializableExtra(Extras.DATA)
         isCreateTeam = intent.getBooleanExtra(Extras.CREATE_TEAM, true)
         fromTeam = intent.getBooleanExtra(Extras.FLAG, true)
+        canRemove = intent.getBooleanExtra(Extras.CAN_REMOVE_MEMBER, true)
         if (data != null) {
             alreadyList = data as ArrayList<UserBean>
             selectNumber.text = "已选择: ${alreadyList.size} 人"
@@ -386,6 +388,10 @@ class TeamSelectActivity : AppCompatActivity() {
                     search_edt.clearFocus()
                     if (isSelectUser) {
                         //选人
+                        val find = alreadyList.find { it.accid == userBean.accid }
+                        if (find != null && !canRemove) {
+                            return@setOnClickListener
+                        }
                         if (userBean.accid != mine.accid || !fromTeam) {
                             holder.selectIcon.isSelected = !holder.selectIcon.isSelected
                             userBean.accid?.let {
@@ -461,6 +467,10 @@ class TeamSelectActivity : AppCompatActivity() {
                     } else {
                         holder.selectIcon.imageResource = R.drawable.cannot_select
                     }
+
+                    if (holder.selectIcon.isSelected && !canRemove) {
+                        holder.selectIcon.isEnabled = false
+                    }
                 }
             } else {
                 holder.selectIcon.visibility = View.GONE
@@ -470,6 +480,10 @@ class TeamSelectActivity : AppCompatActivity() {
                 search_edt.clearFocus()
                 if (isSelectUser) {
                     //选人
+                    val find = alreadyList.find { it.accid == userBean.accid }
+                    if (find != null && !canRemove) {
+                        return@setOnClickListener
+                    }
                     if (userBean.accid != mine!!.accid) {
                         holder.selectIcon.isSelected = !holder.selectIcon.isSelected
                         userBean.accid?.let {
@@ -509,12 +523,14 @@ class TeamSelectActivity : AppCompatActivity() {
                            alreadySelect: ArrayList<UserBean>? = null,
                            isCreateTeam: Boolean? = null,
                            fromTeam: Boolean? = null,
+                           canRemoveMember: Boolean? = null,
                            requestCode: Int? = null) {
             val intent = Intent(context, TeamSelectActivity::class.java)
             intent.putExtra(Extras.SELECT_USER, isSelectUser)
             intent.putExtra(Extras.DATA, alreadySelect)
             intent.putExtra(Extras.CREATE_TEAM, isCreateTeam)
             intent.putExtra(Extras.FLAG, fromTeam)
+            intent.putExtra(Extras.CAN_REMOVE_MEMBER, canRemoveMember)
             val code = requestCode ?: Extras.REQUESTCODE
             if (context is Fragment) {
                 context.startActivityForResult(intent, code)
