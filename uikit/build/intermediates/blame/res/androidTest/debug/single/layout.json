@@ -748,14 +748,34 @@
         "source": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/bundles/debug/res/layout/nim_watch_video_activity.xml"
     },
     {
+<<<<<<< HEAD
         "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/layout/nim_popup_menu_list_item.xml",
         "source": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/bundles/debug/res/layout/nim_popup_menu_list_item.xml"
+=======
+        "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/layout/nim_message_fragment.xml",
+        "source": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/bundles/debug/res/layout/nim_message_fragment.xml"
+    },
+    {
+        "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/layout/nim_contacts_abc_item.xml",
+        "source": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/bundles/debug/res/layout/nim_contacts_abc_item.xml"
+>>>>>>> a134a38c339cd5bfbf1c4c62584c2aedf265a850
     },
     {
         "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/layout/nim_action_bar_custom_view.xml",
         "source": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/bundles/debug/res/layout/nim_action_bar_custom_view.xml"
     },
     {
+<<<<<<< HEAD
+=======
+        "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/layout/design_layout_tab_icon.xml",
+        "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/design-25.3.1.aar/134c3c602da753b4853681be29adaca7/res/layout/design_layout_tab_icon.xml"
+    },
+    {
+        "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/layout/abc_alert_dialog_title_material.xml",
+        "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/55db4895ed8ab9b31de9f046b5690c60/res/layout/abc_alert_dialog_title_material.xml"
+    },
+    {
+>>>>>>> a134a38c339cd5bfbf1c4c62584c2aedf265a850
         "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/layout/nim_message_item_picture.xml",
         "source": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/bundles/debug/res/layout/nim_message_item_picture.xml"
     },

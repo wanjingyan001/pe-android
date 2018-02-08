@@ -1084,8 +1084,17 @@
         "source": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/audio_cancel.png"
     },
     {
+<<<<<<< HEAD
         "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/pic.png",
         "source": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/pic.png"
+=======
+        "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/nim_message_right_white_bg2.9.png",
+        "source": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/nim_message_right_white_bg2.9.png"
+    },
+    {
+        "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/ic_powerpoint_box.png",
+        "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/library-1.8.aar/d3eee9d5aca290eecb1184bceedece98/res/drawable-xhdpi-v4/ic_powerpoint_box.png"
+>>>>>>> a134a38c339cd5bfbf1c4c62584c2aedf265a850
     },
     {
         "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/nim_audio_animation_list_left_1.png",
