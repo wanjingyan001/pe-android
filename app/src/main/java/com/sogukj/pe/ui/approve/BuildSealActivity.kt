@@ -154,7 +154,7 @@ class BuildSealActivity : ToolbarActivity() {
                     .subscribeOn(Schedulers.io())
                     .subscribe({ payload ->
                         if (payload.isOk && payload.payload != null) {
-                            showToast("保存成功")
+                            showToast("提交成功")
                             val intent = Intent()
                             intent.putExtra(Extras.ID, payload.payload!!)
                             setResult(Activity.RESULT_OK, intent)
@@ -163,7 +163,7 @@ class BuildSealActivity : ToolbarActivity() {
                             showToast(payload.message)
                     }, { e ->
                         Trace.e(e)
-                        showToast("保存失败")
+                        showToast("提交失败")
                     })
         } else {
             builder.add("template_id", "${paramId}")

@@ -78,7 +78,11 @@
 
         <meta-data
             android:name="com.netease.nim.appKey"
-            android:value="a0af02d86ecfb1ee160dde8369a5035e" />
+            android:value="${IM_KEY}" />
+        <!--测试版-->
+        <!--a0af02d86ecfb1ee160dde8369a5035e-->
+        <!--正式版-->
+        <!--5d8ada31fe2ba9cb419b5f63a95e8756-->
         <!-- 云信后台服务，请使用独立进程。 -->
         <service
             android:name="com.netease.nimlib.service.NimService"

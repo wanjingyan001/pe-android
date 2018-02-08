@@ -7,7 +7,7 @@ import java.io.Serializable
  */
 class ScheduleDetailsBean : Serializable {
     var info: Info? = null
-    var record: String? = null
+    var record: List<Record>? = null
 
     inner class Info : Serializable {
         var number: String? = null//任务编号

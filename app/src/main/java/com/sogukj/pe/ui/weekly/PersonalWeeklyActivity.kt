@@ -29,7 +29,7 @@ class PersonalWeeklyActivity : BaseActivity() {
     var user_id: Int? = null
     var startTime: String? = null
     var endTime: String? = null
-    var week_id: Int by Delegates.notNull()
+    var week_id: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +37,7 @@ class PersonalWeeklyActivity : BaseActivity() {
         val nameStr = intent.getStringExtra(Extras.NAME)
         when (nameStr) {
             "Other" -> {
-                var bean = intent.getSerializableExtra(Extras.DATA) as WeeklyWatchBean.BeanObj
+                val bean = intent.getSerializableExtra(Extras.DATA) as WeeklyWatchBean.BeanObj
                 user_id = bean.user_id
                 startTime = intent.getStringExtra(Extras.TIME1)
                 endTime = intent.getStringExtra(Extras.TIME2)
@@ -48,12 +48,17 @@ class PersonalWeeklyActivity : BaseActivity() {
                 Glide.with(context).load(bean.url).into(icon)
             }
             "My" -> {
-                week_id = intent.getIntExtra(Extras.ID,-1)
+                week_id = intent.getIntExtra(Extras.ID, -1)
                 startTime = intent.getStringExtra(Extras.TIME1)
                 endTime = intent.getStringExtra(Extras.TIME2)
                 val user = Store.store.getUser(context)
                 name.text = user?.name
                 Glide.with(context).load(user?.headImage()).into(icon)
+            }
+            "Push" -> {
+                week_id = intent.getIntExtra(Extras.ID, -1)
+                user_id = intent.getIntExtra(Extras.TYPE1, -1)
+                name.text = intent.getStringExtra(Extras.TYPE2)
             }
         }
 

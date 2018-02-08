@@ -41,7 +41,10 @@ android {
 //            shrinkResources true  // 移除无用资源
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
-            manifestPlaceholders = [AMAP_KEY: "9204f7dcdd8c2beba10c94dbe96bd062"]
+            manifestPlaceholders = [
+                    AMAP_KEY: "9204f7dcdd8c2beba10c94dbe96bd062",
+                    IM_KEY:"5d8ada31fe2ba9cb419b5f63a95e8756"
+            ]
         }
         debug {
             minifyEnabled false
@@ -49,7 +52,10 @@ android {
             debuggable true
             jniDebuggable true
             signingConfig signingConfigs.release
-            manifestPlaceholders = [AMAP_KEY: "9204f7dcdd8c2beba10c94dbe96bd062"]
+            manifestPlaceholders = [
+                    AMAP_KEY: "9204f7dcdd8c2beba10c94dbe96bd062",
+                    IM_KEY:"a0af02d86ecfb1ee160dde8369a5035e"
+            ]
         }
     }
     lintOptions {
