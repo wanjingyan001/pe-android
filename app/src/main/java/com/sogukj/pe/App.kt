@@ -29,6 +29,7 @@ import com.sogukj.pe.ui.calendar.TaskDetailActivity
 import com.sogukj.pe.ui.news.NewsDetailActivity
 import com.sogukj.pe.ui.project.ProjectActivity
 import com.sogukj.pe.ui.project.RecordTraceActivity
+import com.sogukj.pe.ui.weekly.PersonalWeeklyActivity
 import com.sogukj.pe.util.NimSDKOptionConfig
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
@@ -97,7 +98,7 @@ class App : MultiDexApplication() {
                     val json = JSONObject(this)
                     val type = json.getInt("type")
                     val data = json.getJSONObject("data")
-                    //1.负面信息  2.任务  3.日程 4签字,用印
+                    //1.负面信息  2.任务  3.日程 4签字,用印 5.周报
                     when (type) {
                         1 -> handle(context, json)
                         2 -> {
@@ -116,6 +117,18 @@ class App : MultiDexApplication() {
                             } else {
                                 SealApproveActivity.start(context, approval_id, is_mine, "用印审批")
                             }
+                        }
+                        5 -> {
+                            val weekId = data.getInt("week_id")
+                            val userId = data.getInt("user_id")
+                            val postName = data.getString("postName")
+                            val intent = Intent(context, PersonalWeeklyActivity::class.java)
+                            intent.putExtra(Extras.ID, weekId)
+                            intent.putExtra(Extras.NAME, "Push")
+                            intent.putExtra(Extras.TYPE1, userId)
+                            intent.putExtra(Extras.TYPE2,postName)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            context.startActivity(intent)
                         }
                         else -> {
                         }
@@ -198,7 +211,7 @@ class App : MultiDexApplication() {
                         IMLogout()
                         Store.store.clearUser(this)
                         val intent = Intent(this, LoginActivity::class.java)
-                        intent.putExtra(Extras.FLAG,true)
+                        intent.putExtra(Extras.FLAG, true)
                         intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
                         startActivity(intent)
                     }
@@ -224,13 +237,14 @@ class App : MultiDexApplication() {
             null
         }
     }
+
     /**
      * 网易云信IM注销
      */
-    private fun IMLogout(){
+    private fun IMLogout() {
         val xmlDb = XmlDb.open(this)
-        xmlDb.set(Extras.NIMACCOUNT,"")
-        xmlDb.set(Extras.NIMTOKEN,"")
+        xmlDb.set(Extras.NIMACCOUNT, "")
+        xmlDb.set(Extras.NIMTOKEN, "")
         NIMClient.getService(AuthService::class.java).logout()
     }
 

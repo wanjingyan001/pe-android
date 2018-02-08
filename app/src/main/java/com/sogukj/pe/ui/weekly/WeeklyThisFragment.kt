@@ -554,11 +554,10 @@ class WeeklyThisFragment : BaseFragment(), View.OnClickListener {
             var info = buchong_full.findViewById(R.id.info) as TextView
             info.text = week.info
         } else if (requestCode == SEND && resultCode == Extras.RESULTCODE) {//SEND
-            var adapter = grid_send_to.adapter as MyAdapter
             var beanObj = data?.getSerializableExtra(Extras.DATA) as ArrayList<UserBean>
-            adapter.list.clear()
-            adapter.list.addAll(beanObj)
-            adapter.notifyDataSetChanged()
+            send_adapter.list.clear()
+            send_adapter.list.addAll(beanObj)
+            send_adapter.notifyDataSetChanged()
             db.set(Extras.SEND_USERS, Gson().toJson(beanObj))
         } else if (requestCode == CHAO_SONG && resultCode == Extras.RESULTCODE) {//CHAO_SONG
             var adapter = grid_chaosong_to.adapter as MyAdapter

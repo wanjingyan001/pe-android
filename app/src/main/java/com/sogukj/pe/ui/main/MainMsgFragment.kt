@@ -111,10 +111,11 @@ class MainMsgFragment : ToolbarFragment() {
                             }
                         } else if (data.sessionType == SessionTypeEnum.Team) {
                             val value = data.msgStatus.value
+                            val fromNick =if (data.fromNick.isEmpty()) "" else "${data.fromNick}:"
                             when (value) {
-                                3 -> tvTitleMsg.text = Html.fromHtml("<font color='#a0a4aa'>[已读]</font>${data.fromNick}:${data.content}")
-                                4 -> tvTitleMsg.text = Html.fromHtml("<font color='#1787fb'>[未读]</font>${data.fromNick}:${data.content}")
-                                else -> tvTitleMsg.text = "${data.fromNick}:${data.content}"
+                                3 -> tvTitleMsg.text = Html.fromHtml("<font color='#a0a4aa'>[已读]</font>$fromNick${data.content}")
+                                4 -> tvTitleMsg.text = Html.fromHtml("<font color='#1787fb'>[未读]</font>$fromNick${data.content}")
+                                else -> tvTitleMsg.text = "$fromNick${data.content}"
                             }
                             msgIcon.imageResource = R.drawable.im_team_default
                         }
