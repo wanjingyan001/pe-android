@@ -76,7 +76,7 @@ class FundMainFragment : BaseFragment(), View.OnClickListener {
             view_pager.adapter = adapter
             view_pager.offscreenPageLimit = fragments.size
             var transFormer = ProjectPageTransformer()
-            view_pager.setPageTransformer(true, transFormer)
+            //view_pager.setPageTransformer(true, transFormer)
 
             tabs?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabReselected(tab: TabLayout.Tab?) {

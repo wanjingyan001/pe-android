@@ -278,7 +278,7 @@ class MainProjectFragment : BaseFragment() {
         view_pager.adapter = adapter
         view_pager.offscreenPageLimit = fragments.size
         var transFormer = ProjectPageTransformer()
-        view_pager.setPageTransformer(true, transFormer)
+        //view_pager.setPageTransformer(true, transFormer)
 
         val user = Store.store.getUser(baseActivity!!)
         tabs?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
