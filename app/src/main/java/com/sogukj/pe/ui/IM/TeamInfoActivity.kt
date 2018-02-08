@@ -175,7 +175,7 @@ class TeamInfoActivity : AppCompatActivity(), View.OnClickListener, SwitchButton
                 startActivity(intent)
             }
             R.id.team_layout -> {
-                TeamSelectActivity.startForResult(this, true, teamMembers, false)
+                TeamSelectActivity.startForResult(this, true, teamMembers, false,canRemoveMember = false)
             }
             R.id.exit_team -> {
                 MaterialDialog.Builder(this)
