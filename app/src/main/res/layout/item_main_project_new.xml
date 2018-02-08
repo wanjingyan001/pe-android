@@ -148,7 +148,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/shape"
-                android:drawablePadding="4dp"
+                android:drawablePadding="10dp"
                 android:gravity="center"
                 android:letterSpacing="0.04"
                 android:lineSpacingExtra="0sp"

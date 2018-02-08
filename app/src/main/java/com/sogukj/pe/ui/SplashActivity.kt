@@ -38,6 +38,7 @@ class SplashActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
+        tv_progress.text = "正在检测更新"
         SoguApi.getService(application)
                 .getVersion()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -141,6 +142,7 @@ class SplashActivity : BaseActivity() {
     }
 
     fun enterNext() {
+        tv_progress.text = "正在进入首页"
         handler.postDelayed({
             if (!Store.store.checkLogin(this)) {
                 LoginActivity.start(this)
