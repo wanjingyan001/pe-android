@@ -157,6 +157,11 @@ class ApproveListActivity : ToolbarActivity(), TabLayout.OnTabSelectedListener {
         }
         stateDefault()
         ////
+
+    }
+
+    override fun onResume() {
+        super.onResume()
         handler.postDelayed({
             doRequest()
         }, 100)

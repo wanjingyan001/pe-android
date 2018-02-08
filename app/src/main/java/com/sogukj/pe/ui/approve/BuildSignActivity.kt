@@ -148,13 +148,13 @@ class BuildSignActivity : ToolbarActivity() {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk && payload.payload != null) {
-                        showToast("保存成功")
+                        showToast("提交成功")
                         finish()
                     } else
                         showToast(payload.message)
                 }, { e ->
                     Trace.e(e)
-                    showToast("保存失败")
+                    showToast("提交失败")
                 })
     }
 

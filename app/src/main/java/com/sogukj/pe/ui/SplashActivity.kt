@@ -38,66 +38,66 @@ class SplashActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        tv_progress.text = "正在检测更新"
-        SoguApi.getService(application)
-                .getVersion()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ payload ->
-                    if (payload.isOk) {
-                        var newVersion = payload.payload?.version
-                        var info = payload.payload?.info
-                        var url = payload.payload?.app_url
-                        var force = payload.payload?.force//1=>更新，0=>不更新，2---强制更新
-
-                        if (!url.isNullOrEmpty()) {
-                            if (force == 0) {
-                                enterNext()
-                            } else if (force == 1) {
-                                MaterialDialog.Builder(context)
-                                        .theme(Theme.LIGHT)
-                                        .title("发现新的版本，是否需要更新")
-                                        .content(info.toString())
-                                        .positiveText("确认")
-                                        .negativeText("取消")
-                                        .onPositive { dialog, which ->
-                                            update(url!!)
-                                        }
-                                        .onNegative { dialog, which ->
-                                            enterNext()
-                                        }
-                                        .show()
-                            } else if (force == 2) {
-                                MaterialDialog.Builder(context)
-                                        .theme(Theme.LIGHT)
-                                        .title("发现新的版本，是否需要更新")
-                                        .content(info.toString())
-                                        .positiveText("确认")
-                                        .onPositive { dialog, which ->
-                                            update(url!!)
-                                        }
-                                        .show()
-                            }
-                        } else {
-                            enterNext()
-                        }
-                    } else {
-                        showToast(payload.message)
-                        enterNext()
-                    }
-                }, { e ->
-                    Trace.e(e)
-                    //showToast("更新失败，进入首页")
-                    enterNext()
-                })
-//        handler.postDelayed({
-//            if (!Store.store.checkLogin(this)) {
-//                LoginActivity.start(this)
-//            } else {
-//                startActivity(Intent(this, MainActivity::class.java))
-//                finish()
-//            }
-//        }, 500)
+//        tv_progress.text = "正在检测更新"
+//        SoguApi.getService(application)
+//                .getVersion()
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribeOn(Schedulers.io())
+//                .subscribe({ payload ->
+//                    if (payload.isOk) {
+//                        var newVersion = payload.payload?.version
+//                        var info = payload.payload?.info
+//                        var url = payload.payload?.app_url
+//                        var force = payload.payload?.force//1=>更新，0=>不更新，2---强制更新
+//
+//                        if (!url.isNullOrEmpty()) {
+//                            if (force == 0) {
+//                                enterNext()
+//                            } else if (force == 1) {
+//                                MaterialDialog.Builder(context)
+//                                        .theme(Theme.LIGHT)
+//                                        .title("发现新的版本，是否需要更新")
+//                                        .content(info.toString())
+//                                        .positiveText("确认")
+//                                        .negativeText("取消")
+//                                        .onPositive { dialog, which ->
+//                                            update(url!!)
+//                                        }
+//                                        .onNegative { dialog, which ->
+//                                            enterNext()
+//                                        }
+//                                        .show()
+//                            } else if (force == 2) {
+//                                MaterialDialog.Builder(context)
+//                                        .theme(Theme.LIGHT)
+//                                        .title("发现新的版本，是否需要更新")
+//                                        .content(info.toString())
+//                                        .positiveText("确认")
+//                                        .onPositive { dialog, which ->
+//                                            update(url!!)
+//                                        }
+//                                        .show()
+//                            }
+//                        } else {
+//                            enterNext()
+//                        }
+//                    } else {
+//                        showToast(payload.message)
+//                        enterNext()
+//                    }
+//                }, { e ->
+//                    Trace.e(e)
+//                    //showToast("更新失败，进入首页")
+//                    enterNext()
+//                })
+        handler.postDelayed({
+            if (!Store.store.checkLogin(this)) {
+                LoginActivity.start(this)
+            } else {
+                startActivity(Intent(this, MainActivity::class.java))
+                finish()
+            }
+        }, 500)
     }
 
     fun update(url: String) {
