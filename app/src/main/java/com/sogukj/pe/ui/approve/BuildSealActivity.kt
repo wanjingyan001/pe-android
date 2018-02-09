@@ -97,6 +97,26 @@ class BuildSealActivity : ToolbarActivity() {
                         val view = fieldMap.get(field)
                         view?.visibility = View.GONE
                     }
+                    //律师意见默认为否，渲染的时候view未生成，所以生成不了。等生成的时候并没有隐藏
+                    payload.payload?.forEach { bean ->
+                        if (bean.control == 5) {
+                            if (bean.value_map?.is_select == 1) {
+                                bean.value_map?.hide?.split(",")?.forEach { field ->
+                                    if (!TextUtils.isEmpty(field)) {
+                                        val view = fieldMap[field]
+                                        view?.visibility = View.VISIBLE
+                                    }
+                                }
+                            } else {
+                                bean.value_map?.hide?.split(",")?.forEach { field ->
+                                    if (!TextUtils.isEmpty(field)) {
+                                        val view = fieldMap[field]
+                                        view?.visibility = View.GONE
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }, { e ->
                     Trace.e(e)
                     showToast("暂无可用数据")
@@ -427,7 +447,7 @@ class BuildSealActivity : ToolbarActivity() {
                 cbCheck.text = v.name
                 cbCheck.isChecked = v.is_select == 1 || v.count > 0
                 etNum.text = "${v.count}"
-                if (cbCheck.isChecked){
+                if (cbCheck.isChecked) {
                     v.is_select = 1
                     paramMap.put(bean.fields, bean.value_list)
                 }
