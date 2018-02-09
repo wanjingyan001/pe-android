@@ -767,6 +767,9 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                         .getOrNull(0)
                 tvTime.text = strs
                         .getOrNull(1)
+            } else {
+                tvDate.visibility = View.INVISIBLE
+                tvTime.visibility = View.INVISIBLE
             }
 
             tvStage.text = data.state
