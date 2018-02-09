@@ -70,7 +70,7 @@ class LoginActivity : BaseActivity() {
         })
         val extra = intent.getBooleanExtra(Extras.FLAG, false)
         if (extra) {
-            showToast("被其他端的登录踢掉,请重新登录")
+            showToast("您的帐号已在其他设备登陆，您已被迫下线")
         }
     }
 
