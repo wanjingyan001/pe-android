@@ -146,7 +146,8 @@
                     <EditText
                         android:id="@+id/et_wtccb"
                         style="@style/ItemTextValue"
-                        android:gravity="right" />
+                        android:gravity="right"
+                        android:inputType="number" />
                 </TableRow>
 
                 <TableRow
@@ -177,7 +178,8 @@
                     <EditText
                         android:id="@+id/et_cb"
                         style="@style/ItemTextValue"
-                        android:gravity="right" />
+                        android:gravity="right"
+                        android:inputType="number" />
                 </TableRow>
 
                 <TableRow
@@ -192,7 +194,8 @@
                     <EditText
                         android:id="@+id/et_tcsr"
                         style="@style/ItemTextValue"
-                        android:gravity="right" />
+                        android:gravity="right"
+                        android:inputType="number" />
                 </TableRow>
 
                 <TableRow
@@ -208,7 +211,8 @@
                     <EditText
                         android:id="@+id/et_bck"
                         style="@style/ItemTextValue"
-                        android:gravity="right" />
+                        android:gravity="right"
+                        android:inputType="number" />
                 </TableRow>
 
                 <TableRow
@@ -223,7 +227,8 @@
                     <EditText
                         android:id="@+id/et_fh"
                         style="@style/ItemTextValue"
-                        android:gravity="right" />
+                        android:gravity="right"
+                        android:inputType="number" />
                 </TableRow>
 
                 <TableRow
@@ -238,7 +243,8 @@
                     <EditText
                         android:id="@+id/et_tcsy"
                         style="@style/ItemTextValue"
-                        android:gravity="right" />
+                        android:gravity="right"
+                        android:inputType="number" />
                 </TableRow>
 
                 <TableRow
@@ -253,7 +259,8 @@
                     <EditText
                         android:id="@+id/et_tzsyl"
                         style="@style/ItemTextValue"
-                        android:gravity="right" />
+                        android:gravity="right"
+                        android:inputType="number" />
 
                     <TextView
                         style="@style/ItemTextLabel"
@@ -317,7 +324,8 @@
                     <EditText
                         android:id="@+id/et_nhsyl"
                         style="@style/ItemTextValue"
-                        android:gravity="right" />
+                        android:gravity="right"
+                        android:inputType="number" />
 
                     <TextView
                         style="@style/ItemTextLabel"
@@ -351,7 +359,8 @@
                     <EditText
                         android:id="@+id/et_IRR"
                         style="@style/ItemTextValue"
-                        android:gravity="right" />
+                        android:gravity="right"
+                        android:inputType="number" />
 
                     <TextView
                         style="@style/ItemTextLabel"
@@ -381,33 +390,29 @@
                 android:layout_height="8dp"
                 android:background="@color/divider2" />
 
-            <TableLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:background="@color/white"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp">
+                android:orientation="horizontal"
+                android:padding="20dp">
 
-                <TableRow
-                    android:layout_width="match_parent"
+                <TextView
+                    style="@style/ItemTextLabel"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:paddingBottom="15dp"
-                    android:paddingTop="15dp">
+                    android:text="退出总结" />
 
-                    <TextView
-                        style="@style/ItemTextLabel"
-                        android:text="退出总结" />
+                <EditText
+                    android:id="@+id/et_tczj"
+                    style="@style/ItemTextValue"
+                    android:layout_height="match_parent"
+                    android:gravity="left"
+                    android:letterSpacing="0.04"
+                    android:lineSpacingExtra="10sp"
+                    android:text="" />
 
-                    <EditText
-                        android:id="@+id/et_tczj"
-                        style="@style/ItemTextValue"
-                        android:gravity="left"
-                        android:letterSpacing="0.04"
-                        android:lineSpacingExtra="10sp"
-                        android:text="" />
-                </TableRow>
-
-            </TableLayout>
+            </LinearLayout>
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

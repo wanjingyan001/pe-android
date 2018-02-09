@@ -30,7 +30,7 @@
             android:id="@+id/tv_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="30dp"
+            android:layout_marginRight="20dp"
             android:textColor="@color/text_3"
             android:textSize="12sp"
             tools:text="2017/07/07" />
@@ -39,7 +39,7 @@
             android:id="@+id/tv_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="30dp"
+            android:layout_marginRight="20dp"
             android:textColor="@color/text_3"
             android:textSize="12sp"
             tools:text="12:00" />
@@ -48,7 +48,7 @@
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="30dp"
+            android:layout_marginRight="20dp"
             android:textColor="@color/text_3"
             android:textSize="12sp"
             tools:text="姓名" />
@@ -68,6 +68,8 @@
             android:gravity="center"
             android:textColor="#d66247"
             android:textSize="12sp"
-            tools:text="法务文件" />
+            android:maxEms="6"
+            android:maxLines="1"
+            tools:text="法务文件很好很好" />
     </LinearLayout>
 </LinearLayout>
