@@ -223,7 +223,7 @@ public class StackLayout extends FrameLayout {
 //            Log.d(TAG, "onViewReleased: " + ViewHolder.getPosition(releasedChild));
             final int totalRange = mParent.getWidth();
             final int left = releasedChild.getLeft();
-            if(Math.abs(left - 0) < totalRange/2) {
+            if(Math.abs(left - 0) < totalRange/3) {
                 getScrollManager().smoothScrollTo(releasedChild, 0, 0, new ScrollManager.Callback() {
                     @Override
                     public void onComplete(View view) {

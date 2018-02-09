@@ -377,8 +377,8 @@ class BuildSealActivity : ToolbarActivity() {
             rbNo.isChecked = false
             rbYes.isChecked = true
         } else {
-            rbNo.isChecked = false
-            rbYes.isChecked = true
+            rbNo.isChecked = true
+            rbYes.isChecked = false
         }
         bean.value_map?.hide?.split(",")?.forEach { field ->
             if (bean.value_map?.is_select == 1)
