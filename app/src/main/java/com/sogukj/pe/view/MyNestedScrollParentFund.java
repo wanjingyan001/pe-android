@@ -284,6 +284,8 @@ public class MyNestedScrollParentFund extends LinearLayout implements NestedScro
         return super.onTouchEvent(event);
     }
 
+    private int mLastTouchX;
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         Log.i("aaa", "getY():getRawY:" + event.getRawY());
@@ -297,8 +299,19 @@ public class MyNestedScrollParentFund extends LinearLayout implements NestedScro
                 int y = (int) (event.getRawY() + 0.5f);
                 int dy = mLastTouchY - y;
                 mLastTouchY = y;
-                if (showImg(dy) || hideImg(dy)) {//如果父亲自己要滑动
-                    scrollBy(0, dy);
+//                if (showImg(dy) || hideImg(dy)) {//如果父亲自己要滑动
+//                    scrollBy(0, dy);
+//                }
+                int x = (int) (event.getRawX() + 0.5f);
+                int dx = mLastTouchX - x;
+                mLastTouchX = x;
+
+                if (Math.abs(dx) > Math.abs(dy)) {
+
+                } else {
+                    if (showImg(dy) || hideImg(dy)) {//如果父亲自己要滑动
+                        scrollBy(0, dy);
+                    }
                 }
                 break;
             case MotionEvent.ACTION_UP:
@@ -345,39 +358,77 @@ public class MyNestedScrollParentFund extends LinearLayout implements NestedScro
         if (mScroller.computeScrollOffset()) {
             postInvalidate();
             int dy = mScroller.getFinalY() - mScroller.getCurrY();
-            if (yVelocity > 0) {//下拉
-                Log.e("getScrollY", "" + getScrollY());
-                Log.e("isChildScrollToTop", "" + isChildScrollToTop());
-                //172 false 滑动内部
-                //172 true 滑动父亲
-                //0 true 不变
-                if (getScrollY() >= mToolBarHeight) {//此时top完全隐藏
+            int dx = mScroller.getFinalX() - mScroller.getCurrX();
+            if (Math.abs(dx) < Math.abs(dy)) {
 
-                    if (isChildScrollToTop()) {//如果子view已经滑动到顶部，这个时候父亲自己滑动
+            } else {
+                if (yVelocity > 0) {//下拉
+                    Log.e("getScrollY", "" + getScrollY());
+                    Log.e("isChildScrollToTop", "" + isChildScrollToTop());
+                    //172 false 滑动内部
+                    //172 true 滑动父亲
+                    //0 true 不变
+                    if (getScrollY() >= mToolBarHeight) {//此时top完全隐藏
+
+                        if (isChildScrollToTop()) {//如果子view已经滑动到顶部，这个时候父亲自己滑动
+                            scrollBy(0, dy);
+                        } else {
+                            scrollContentView(dy);
+                        }
+
+                    } else if (getScrollY() == 0) {//parent自己完全显示，交给子view滑动
+                        if (!isChildScrollToTop()) {
+                            scrollContentView(dy);
+                        } else {
+                            changeView();
+                        }
+                    } else {//此时top没有完全显示，让parent自己滑动
                         scrollBy(0, dy);
-                    } else {
-                        scrollContentView(dy);
                     }
-
-                } else if (getScrollY() == 0) {//parent自己完全显示，交给子view滑动
-                    if (!isChildScrollToTop()) {
+                } else if (yVelocity < 0) {//上拉
+                    changeView();
+                    if (getScrollY() >= mToolBarHeight) {//此时top完全隐藏
                         scrollContentView(dy);
                     } else {
-                        changeView();
+
+                        scrollBy(0, dy);
                     }
-                } else {//此时top没有完全显示，让parent自己滑动
-                    scrollBy(0, dy);
-                }
-            } else if (yVelocity < 0) {//上拉
-                changeView();
-                if (getScrollY() >= mToolBarHeight) {//此时top完全隐藏
-                    scrollContentView(dy);
-                } else {
 
-                    scrollBy(0, dy);
                 }
-
             }
+//            if (yVelocity > 0) {//下拉
+//                Log.e("getScrollY", "" + getScrollY());
+//                Log.e("isChildScrollToTop", "" + isChildScrollToTop());
+//                //172 false 滑动内部
+//                //172 true 滑动父亲
+//                //0 true 不变
+//                if (getScrollY() >= mToolBarHeight) {//此时top完全隐藏
+//
+//                    if (isChildScrollToTop()) {//如果子view已经滑动到顶部，这个时候父亲自己滑动
+//                        scrollBy(0, dy);
+//                    } else {
+//                        scrollContentView(dy);
+//                    }
+//
+//                } else if (getScrollY() == 0) {//parent自己完全显示，交给子view滑动
+//                    if (!isChildScrollToTop()) {
+//                        scrollContentView(dy);
+//                    } else {
+//                        changeView();
+//                    }
+//                } else {//此时top没有完全显示，让parent自己滑动
+//                    scrollBy(0, dy);
+//                }
+//            } else if (yVelocity < 0) {//上拉
+//                changeView();
+//                if (getScrollY() >= mToolBarHeight) {//此时top完全隐藏
+//                    scrollContentView(dy);
+//                } else {
+//
+//                    scrollBy(0, dy);
+//                }
+//
+//            }
 
         }
     }
