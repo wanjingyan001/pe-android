@@ -1,27 +1,19 @@
 [
     {
-        "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-night-xxhdpi-v8/ic_music_box.png",
-        "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/library-1.8.aar/d3eee9d5aca290eecb1184bceedece98/res/drawable-night-xxhdpi-v8/ic_music_box.png"
-    },
-    {
-        "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-night-xxhdpi-v8/ic_powerpoint_box.png",
-        "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/library-1.8.aar/d3eee9d5aca290eecb1184bceedece98/res/drawable-night-xxhdpi-v8/ic_powerpoint_box.png"
-    },
-    {
-        "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-night-xxhdpi-v8/ic_folder_48dp.png",
-        "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/library-1.8.aar/d3eee9d5aca290eecb1184bceedece98/res/drawable-night-xxhdpi-v8/ic_folder_48dp.png"
+        "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-night-xxhdpi-v8/ic_zip_box.png",
+        "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/library-1.8.aar/b5a4c2ef89f892b32f9b1a913a6f7354/res/drawable-night-xxhdpi-v8/ic_zip_box.png"
     },
     {
         "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-night-xxhdpi-v8/ic_apk_box.png",
         "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/library-1.8.aar/b5a4c2ef89f892b32f9b1a913a6f7354/res/drawable-night-xxhdpi-v8/ic_apk_box.png"
     },
     {
-        "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-night-xxhdpi-v8/ic_pdf_box.png",
-        "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/library-1.8.aar/d3eee9d5aca290eecb1184bceedece98/res/drawable-night-xxhdpi-v8/ic_pdf_box.png"
-    },
-    {
         "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-night-xxhdpi-v8/ic_folder_48dp.png",
         "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/library-1.8.aar/b5a4c2ef89f892b32f9b1a913a6f7354/res/drawable-night-xxhdpi-v8/ic_folder_48dp.png"
+    },
+    {
+        "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-night-xxhdpi-v8/ic_powerpoint_box.png",
+        "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/library-1.8.aar/b5a4c2ef89f892b32f9b1a913a6f7354/res/drawable-night-xxhdpi-v8/ic_powerpoint_box.png"
     },
     {
         "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-night-xxhdpi-v8/ic_excel_box.png",
@@ -36,8 +28,12 @@
         "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/library-1.8.aar/b5a4c2ef89f892b32f9b1a913a6f7354/res/drawable-night-xxhdpi-v8/ic_pdf_box.png"
     },
     {
-        "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-night-xxhdpi-v8/ic_excel_box.png",
-        "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/library-1.8.aar/d3eee9d5aca290eecb1184bceedece98/res/drawable-night-xxhdpi-v8/ic_excel_box.png"
+        "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-night-xxhdpi-v8/ic_word_box.png",
+        "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/library-1.8.aar/b5a4c2ef89f892b32f9b1a913a6f7354/res/drawable-night-xxhdpi-v8/ic_word_box.png"
+    },
+    {
+        "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-night-xxhdpi-v8/ic_certificate_box.png",
+        "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/library-1.8.aar/b5a4c2ef89f892b32f9b1a913a6f7354/res/drawable-night-xxhdpi-v8/ic_certificate_box.png"
     },
     {
         "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-night-xxhdpi-v8/ic_drawing_box.png",
@@ -54,53 +50,5 @@
     {
         "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-night-xxhdpi-v8/ic_image_box.png",
         "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/library-1.8.aar/b5a4c2ef89f892b32f9b1a913a6f7354/res/drawable-night-xxhdpi-v8/ic_image_box.png"
-    },
-    {
-        "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-night-xxhdpi-v8/ic_apk_box.png",
-        "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/library-1.8.aar/d3eee9d5aca290eecb1184bceedece98/res/drawable-night-xxhdpi-v8/ic_apk_box.png"
-    },
-    {
-        "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-night-xxhdpi-v8/ic_drawing_box.png",
-        "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/library-1.8.aar/d3eee9d5aca290eecb1184bceedece98/res/drawable-night-xxhdpi-v8/ic_drawing_box.png"
-    },
-    {
-        "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-night-xxhdpi-v8/ic_zip_box.png",
-        "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/library-1.8.aar/b5a4c2ef89f892b32f9b1a913a6f7354/res/drawable-night-xxhdpi-v8/ic_zip_box.png"
-    },
-    {
-        "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-night-xxhdpi-v8/ic_powerpoint_box.png",
-        "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/library-1.8.aar/b5a4c2ef89f892b32f9b1a913a6f7354/res/drawable-night-xxhdpi-v8/ic_powerpoint_box.png"
-    },
-    {
-        "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-night-xxhdpi-v8/ic_word_box.png",
-        "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/library-1.8.aar/b5a4c2ef89f892b32f9b1a913a6f7354/res/drawable-night-xxhdpi-v8/ic_word_box.png"
-    },
-    {
-        "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-night-xxhdpi-v8/ic_certificate_box.png",
-        "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/library-1.8.aar/b5a4c2ef89f892b32f9b1a913a6f7354/res/drawable-night-xxhdpi-v8/ic_certificate_box.png"
-    },
-    {
-        "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-night-xxhdpi-v8/ic_certificate_box.png",
-        "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/library-1.8.aar/d3eee9d5aca290eecb1184bceedece98/res/drawable-night-xxhdpi-v8/ic_certificate_box.png"
-    },
-    {
-        "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-night-xxhdpi-v8/ic_image_box.png",
-        "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/library-1.8.aar/d3eee9d5aca290eecb1184bceedece98/res/drawable-night-xxhdpi-v8/ic_image_box.png"
-    },
-    {
-        "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-night-xxhdpi-v8/ic_zip_box.png",
-        "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/library-1.8.aar/d3eee9d5aca290eecb1184bceedece98/res/drawable-night-xxhdpi-v8/ic_zip_box.png"
-    },
-    {
-        "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-night-xxhdpi-v8/ic_video_box.png",
-        "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/library-1.8.aar/d3eee9d5aca290eecb1184bceedece98/res/drawable-night-xxhdpi-v8/ic_video_box.png"
-    },
-    {
-        "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-night-xxhdpi-v8/ic_word_box.png",
-        "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/library-1.8.aar/d3eee9d5aca290eecb1184bceedece98/res/drawable-night-xxhdpi-v8/ic_word_box.png"
-    },
-    {
-        "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-night-xxhdpi-v8/ic_document_box.png",
-        "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/library-1.8.aar/d3eee9d5aca290eecb1184bceedece98/res/drawable-night-xxhdpi-v8/ic_document_box.png"
     }
 ]

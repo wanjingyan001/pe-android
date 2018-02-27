@@ -35,6 +35,7 @@ import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
 import com.sogukj.util.XmlDb
+import com.tencent.bugly.crashreport.CrashReport
 import com.umeng.message.IUmengRegisterCallback
 import com.umeng.message.PushAgent
 import com.umeng.message.UmengMessageHandler
@@ -54,6 +55,7 @@ class App : MultiDexApplication() {
         super.onCreate()
         INSTANCE = this
 //        MobSDK.init(this, "137b5c5ce8f55", "b28db523803b31a66b590150cb96c4fd")
+//        CrashReport.initCrashReport(this,"id49fb9e37b7",true)
         MobSDK.init(this, "214eaf8217e6c", "c1ddfcaa333020a5a06812bc745d508c")
         val mPushAgent = PushAgent.getInstance(this)
         mPushAgent.setDebugMode(false)

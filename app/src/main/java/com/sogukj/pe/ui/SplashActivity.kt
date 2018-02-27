@@ -12,10 +12,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager.NameNotFoundException
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.support.v4.content.FileProvider
 import android.view.View
+import android.widget.*
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.sogukj.pe.util.DownloadUtil
@@ -23,6 +26,8 @@ import com.sogukj.pe.util.OpenFileUtil
 import kotlinx.android.synthetic.main.activity_splash.*
 import java.util.*
 import me.leolin.shortcutbadger.ShortcutBadger
+import org.jetbrains.anko.find
+import org.jetbrains.anko.imageResource
 import java.io.File
 
 /**
@@ -34,6 +39,30 @@ class SplashActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
         ShortcutBadger.removeCount(this)
+//        val dialog = MaterialDialog.Builder(this)
+//                .customView(R.layout.dialog_updated, false)
+//                .theme(Theme.LIGHT)
+//                .cancelable(false)
+//                .build()
+//        dialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//        val icon = dialog.find<ImageView>(R.id.updated_icon)
+//        val bar = dialog.find<ProgressBar>(R.id.update_progress)
+//        val title = dialog.find<TextView>(R.id.update_title)
+//        val info = dialog.find<TextView>(R.id.update_info)
+//        val scrollView = dialog.find<ScrollView>(R.id.update_message_layout)
+//        val message = dialog.find<TextView>(R.id.update_message)
+//        val update = dialog.find<Button>(R.id.update)
+//        val prompt = dialog.find<TextView>(R.id.update_prompt)
+//        update.setOnClickListener {
+//            icon.imageResource = R.drawable.update_icon1
+//            bar.visibility = View.VISIBLE
+//            title.text = "新功能介绍"
+//            info.visibility = View.GONE
+//            scrollView.visibility = View.VISIBLE
+//            update.visibility = View.GONE
+//            prompt.visibility = View.GONE
+//        }
+//        dialog.show()
     }
 
     override fun onResume() {

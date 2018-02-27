@@ -99,7 +99,8 @@ class CircleImageView : android.support.v7.widget.AppCompatImageView {
             val str = mChar.toString()
             var color = COLORS[0]
             if (!TextUtils.isEmpty(str)) {
-                color = COLORS[(Math.random() * (COLORS.size - 1)).toInt()]
+//                color = COLORS[(Math.random() * (COLORS.size - 1)).toInt()]
+                color = Color.parseColor("#1787FB")
             }
             textPaint.color = color
             val fontSize = Math.min(width, height) / 2
@@ -109,7 +110,6 @@ class CircleImageView : android.support.v7.widget.AppCompatImageView {
             canvas.drawText(mChar.toString(), (width / 2).toFloat(), height / 2 - (textPaint.descent() + textPaint.ascent()) / 2, textPaint)
             return
         }
-
         if (mFillColor != Color.TRANSPARENT) {
             canvas.drawCircle(width / 2.0f, height / 2.0f, mDrawableRadius, mFillPaint)
         }

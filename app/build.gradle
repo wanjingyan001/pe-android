@@ -10,9 +10,13 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.appTargetSdkVersion
         multiDexEnabled true
-        versionCode 23
-        versionName "3.0"
+        versionCode 24
+        versionName "3.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        ndk {
+            // 设置支持的SO库架构
+            abiFilters 'armeabi' //, 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
+        }
     }
     signingConfigs {
         release {
@@ -43,7 +47,9 @@ android {
             signingConfig signingConfigs.release
             manifestPlaceholders = [
                     AMAP_KEY: "9204f7dcdd8c2beba10c94dbe96bd062",
-                    IM_KEY:"5d8ada31fe2ba9cb419b5f63a95e8756"
+                    IM_KEY:"5d8ada31fe2ba9cb419b5f63a95e8756",
+                    Umeng_KEY:"59ddf11e8f4a9d7c4b000116",
+                    Umeng_MESSAGE_SECRET:"8a3cd80e07007a0463e9b12f758b727b"
             ]
         }
         debug {
@@ -54,7 +60,9 @@ android {
             signingConfig signingConfigs.release
             manifestPlaceholders = [
                     AMAP_KEY: "9204f7dcdd8c2beba10c94dbe96bd062",
-                    IM_KEY:"a0af02d86ecfb1ee160dde8369a5035e"
+                    IM_KEY:"a0af02d86ecfb1ee160dde8369a5035e",
+                    Umeng_KEY:"59b781c607fe652e44000165",
+                    Umeng_MESSAGE_SECRET:"a4bb361310d9aee916f2cc43c5dbda5c"
             ]
         }
     }
@@ -147,4 +155,5 @@ dependencies {
     compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
     compile project(':stack-layout')
     implementation project(':library')
+    compile 'com.tencent.bugly:crashreport:latest.release' //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.2.0
 }

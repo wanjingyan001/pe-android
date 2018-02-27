@@ -54,6 +54,7 @@ class CardActivity : Activity() {
 
 
     fun setData(bean: UserBean) {
+        headerImage.setChar(bean.name.first())
         if (!TextUtils.isEmpty(bean.url)) {
             Glide.with(this)
                     .load(bean.headImage())

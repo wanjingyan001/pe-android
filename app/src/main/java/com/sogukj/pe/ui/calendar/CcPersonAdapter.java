@@ -8,9 +8,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.netease.nim.uikit.common.ui.imageview.CircleImageView;
 import com.sogukj.pe.R;
 import com.sogukj.pe.bean.UserBean;
-import com.sogukj.pe.view.CircleImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +53,7 @@ public class CcPersonAdapter extends RecyclerView.Adapter<CcPersonAdapter.CCHold
             holder.userName.setText(userBean.getName());
             Glide.with(context)
                     .load(userBean.getUrl())
+                    .apply(new RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
                     .into(holder.userHeader);
             holder.view.setOnClickListener(new View.OnClickListener() {
                 @Override

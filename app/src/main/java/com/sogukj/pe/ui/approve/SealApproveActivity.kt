@@ -3,12 +3,16 @@ package com.sogukj.pe.ui.approve
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.text.Html
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
@@ -29,6 +33,8 @@ import kotlinx.android.synthetic.main.seal_approve_part1.*
 import kotlinx.android.synthetic.main.seal_approve_part2.*
 import kotlinx.android.synthetic.main.seal_approve_part3.*
 import org.jetbrains.anko.collections.forEachWithIndex
+import org.jetbrains.anko.find
+import org.jetbrains.anko.sdk25.coroutines.onClick
 import java.text.SimpleDateFormat
 
 /**
@@ -49,7 +55,7 @@ class SealApproveActivity : ToolbarActivity() {
         if (paramObj == null) {
             paramId = intent.getIntExtra(Extras.ID, -1)
             paramTitle = intent.getStringExtra(Extras.TITLE)
-            paramType = intent.getIntExtra(Extras.TYPE,2)
+            paramType = intent.getIntExtra(Extras.TYPE, 2)
         } else {
             if (paramObj is ApprovalBean) {
                 paramTitle = paramObj.kind!!
@@ -180,25 +186,29 @@ class SealApproveActivity : ToolbarActivity() {
                 btn_single.visibility = View.VISIBLE
                 btn_single.text = "审批"
                 btn_single.setOnClickListener {
-                    MaterialDialog.Builder(this)
-                            .theme(Theme.LIGHT)
-                            .title("审批意见")
-                            .input("输入意见...", "", true) { dialog, text ->
-                                dialog.inputEditText?.filters = Utils.getFilter(this)
-                            }
+                    val inflate = LayoutInflater.from(this).inflate(R.layout.layout_input_dialog, null)
+                    val dialog = MaterialDialog.Builder(this)
+                            .customView(inflate, false)
                             .cancelable(true)
-                            .onPositive { dialog, dialogAction ->
-                                val text = dialog.inputEditText?.text.toString()
-                                showConfirmDialog(1, text)
-
-                            }
-                            .onNegative { dialog, which ->
-                                val text = dialog.inputEditText?.text.toString()
-                                showConfirmDialog(-1, text)
-                            }
-                            .positiveText("确认")
-                            .negativeText("否决")
-                            .show()
+                            .build()
+                    dialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                    val commentInput = inflate.find<EditText>(R.id.approval_comments_input)
+                    val veto = inflate.find<TextView>(R.id.veto_comment)
+                    val confirm = inflate.find<TextView>(R.id.confirm_comment)
+                    commentInput.filters = Utils.getFilter(this)
+                    veto.setOnClickListener {
+                        if (dialog.isShowing) {
+                            dialog.dismiss()
+                        }
+                        showConfirmDialog(-1, commentInput.text.toString())
+                    }
+                    confirm.setOnClickListener {
+                        if (dialog.isShowing) {
+                            dialog.dismiss()
+                        }
+                        showConfirmDialog(1, commentInput.text.toString())
+                    }
+                    dialog.show()
                 }
             }
             6 -> {
@@ -233,16 +243,28 @@ class SealApproveActivity : ToolbarActivity() {
 
     private fun showConfirmDialog(type: Int, text: String = "") {
         val title = if (type == 1) "是否确认通过审批" else "是否确认否决审批"
-        MaterialDialog.Builder(this)
+        val build = MaterialDialog.Builder(this)
                 .theme(Theme.LIGHT)
-                .title(title)
+                .customView(R.layout.layout_confirm_approve, false)
                 .canceledOnTouchOutside(false)
-                .positiveText("确定")
-                .negativeText("取消")
-                .onPositive { dialog, which ->
-                    examineApprove(type, text)
-                }
-                .show()
+                .build()
+        build.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val titleTv = build.find<TextView>(R.id.confirm_title)
+        val cancel = build.find<TextView>(R.id.cancel_comment)
+        val confirm = build.find<TextView>(R.id.confirm_comment)
+        titleTv.text = title
+        cancel.setOnClickListener {
+            if (build.isShowing) {
+                build.dismiss()
+            }
+        }
+        confirm.setOnClickListener {
+            if (build.isShowing) {
+                build.dismiss()
+            }
+            examineApprove(type, text)
+        }
+        build.show()
     }
 
     fun examineApprove(type: Int, text: String = "") {
@@ -370,34 +392,51 @@ class SealApproveActivity : ToolbarActivity() {
     }
 
     fun doComment(llComments: LinearLayout, hid: Int, commentId: Int = 0) {
-        MaterialDialog.Builder(this)
+        val inflate = LayoutInflater.from(this).inflate(R.layout.layout_input_dialog, null)
+        val dialog = MaterialDialog.Builder(this)
                 .theme(Theme.LIGHT)
-                .title("评论")
-                .input("输入评论文字...", "", true) { dialog, text ->
-                    dialog.inputEditText?.filters = Utils.getFilter(this)
-                }
+                .customView(inflate, false)
                 .cancelable(true)
-                .onPositive { dialog, dialogAction ->
-                    val text = dialog.inputEditText?.text.toString()
-                    if (!TextUtils.isEmpty(text))
-                        SoguApi.getService(application)
-                                .submitComment(hid, comment_id = commentId, content = text)
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribeOn(Schedulers.io())
-                                .subscribe({ payload ->
-                                    if (payload.isOk) {
-                                        showToast("提交成功")
-                                        refresh()
-                                    } else
-                                        showToast(payload.message)
-                                }, { e ->
-                                    Trace.e(e)
-                                    showToast("提交失败")
-                                })
-                }
-                .positiveText("确认")
-                .negativeText("取消")
-                .show()
+                .build()
+        dialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val title = inflate.find<TextView>(R.id.approval_comments_title)
+        val commentInput = inflate.find<EditText>(R.id.approval_comments_input)
+        val veto = inflate.find<TextView>(R.id.veto_comment)
+        val confirm = inflate.find<TextView>(R.id.confirm_comment)
+        title.text = "评论"
+        commentInput.filters = Utils.getFilter(this)
+        commentInput.hint = "请输入评论文字..."
+        veto.text = resources.getString(R.string.cancel)
+        confirm.text = resources.getString(R.string.confirm)
+        veto.setOnClickListener {
+            Utils.closeInput(this,commentInput)
+            if (dialog.isShowing) {
+                dialog.dismiss()
+            }
+        }
+        confirm.setOnClickListener {
+            Utils.closeInput(this,commentInput)
+            if (dialog.isShowing) {
+                dialog.dismiss()
+            }
+            val text = commentInput.text.toString()
+            if (!TextUtils.isEmpty(text))
+                SoguApi.getService(application)
+                        .submitComment(hid, comment_id = commentId, content = text)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({ payload ->
+                            if (payload.isOk) {
+                                showToast("提交成功")
+                                refresh()
+                            } else
+                                showToast(payload.message)
+                        }, { e ->
+                            Trace.e(e)
+                            showToast("提交失败")
+                        })
+        }
+        dialog.show()
     }
 
     val fmt_time = SimpleDateFormat("")

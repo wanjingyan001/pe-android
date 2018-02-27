@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.framework.base.BaseFragment
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
@@ -27,7 +28,6 @@ import com.sogukj.pe.ui.project.ProjectActivity
 import com.sogukj.pe.ui.project.RecordTraceActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
-import com.sogukj.pe.view.CircleImageView
 import com.sogukj.pe.view.MyListView
 import com.sogukj.pe.view.WeeklyDotView
 import com.sogukj.service.SoguApi
@@ -42,6 +42,8 @@ import java.net.UnknownHostException
 import java.text.SimpleDateFormat
 import kotlin.collections.ArrayList
 import com.google.gson.JsonObject
+import com.netease.nim.uikit.common.ui.imageview.CircleImageView
+
 //import kotlinx.android.synthetic.main.layout_network_error.*
 
 
@@ -503,7 +505,11 @@ class WeeklyThisFragment : BaseFragment(), View.OnClickListener {
                 viewHolder.icon?.setImageResource(R.drawable.send_add)
                 viewHolder.name?.text = "添加"
             } else {
-                viewHolder.icon?.setChar(list[position].name.first())
+//                viewHolder.icon?.setChar(list[position].name.first())
+                Glide.with(context)
+                        .load(list[position].headImage())
+                        .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
+                        .into(viewHolder.icon)
                 viewHolder.name?.text = list[position].name
             }
             return conView

@@ -3,11 +3,12 @@ package com.sogukj.pe.ui.main
 import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.graphics.Rect
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.FragmentManager
-import android.widget.RadioButton
 import com.framework.base.BaseActivity
 import com.sogukj.pe.App
 import com.sogukj.pe.Extras
@@ -24,8 +25,14 @@ import kotlinx.android.synthetic.main.activity_main.*
 import android.support.v4.view.ViewCompat.getMinimumHeight
 import android.support.v4.view.ViewCompat.getMinimumWidth
 import android.support.v4.view.ViewPager
+import android.view.View
+import android.widget.*
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.Theme
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.ArrayPagerAdapter
+import org.jetbrains.anko.find
+import org.jetbrains.anko.imageResource
 
 
 /**
@@ -42,7 +49,7 @@ class MainActivity : BaseActivity() {
 
     val fragments = arrayOf(
             MainNewsFragment.newInstance(),
-    //    val fgMsg = MainMsgFragment.newInstance()
+            //    val fgMsg = MainMsgFragment.newInstance()
             MainProjectFragment.newInstance(),
             MainHomeFragment.newInstance(),
             FundMainFragment.newInstance(),

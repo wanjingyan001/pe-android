@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:padding="8dp">
 
-    <com.sogukj.pe.view.CircleImageView
+    <com.netease.nim.uikit.common.ui.imageview.CircleImageView
         android:id="@+id/commissionHeadImg"
         android:layout_width="40dp"
         android:layout_height="40dp" />
