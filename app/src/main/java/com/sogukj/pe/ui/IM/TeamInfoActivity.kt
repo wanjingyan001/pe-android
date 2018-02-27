@@ -15,16 +15,19 @@ import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
+import com.bumptech.glide.manager.Lifecycle
 import com.bumptech.glide.request.RequestOptions
 import com.google.gson.Gson
 import com.netease.nim.uikit.api.NimUIKit
 import com.netease.nim.uikit.business.team.helper.TeamHelper
 import com.netease.nim.uikit.common.ui.widget.SwitchButton
 import com.netease.nimlib.sdk.NIMClient
+import com.netease.nimlib.sdk.Observer
 import com.netease.nimlib.sdk.RequestCallback
 import com.netease.nimlib.sdk.RequestCallbackWrapper
 import com.netease.nimlib.sdk.friend.FriendService
 import com.netease.nimlib.sdk.team.TeamService
+import com.netease.nimlib.sdk.team.TeamServiceObserver
 import com.netease.nimlib.sdk.team.constant.TeamMessageNotifyTypeEnum
 import com.netease.nimlib.sdk.team.model.Team
 import com.netease.nimlib.sdk.team.model.TeamMember
@@ -90,50 +93,54 @@ class TeamInfoActivity : AppCompatActivity(), View.OnClickListener, SwitchButton
             override fun onSuccess(p0: Team?) {
                 Log.d("WJY", "${Gson().toJson(p0)}")
                 p0?.let {
-                    team = it
-                    creatorAccount = it.creator
-                    val accid = Store.store.getUser(this@TeamInfoActivity)?.accid
-                    val b = creatorAccount == accid
-                    team_name.isFocusable = b
-                    team_name.setOnClickListener {
-                        if (!b){
-                            toast("只有群创建者可以修改")
-                        }
-                    }
-                    profileToggle.check = it.messageNotifyType == TeamMessageNotifyTypeEnum.Mute
-                    Glide.with(this@TeamInfoActivity)
-                            .load(it.icon)
-                            .apply(RequestOptions().error(R.drawable.invalid_name2))
-                            .into(team_logo)
-                    team_title.text = it.name
-                    val bean = Gson().fromJson(it.extension, TeamBean::class.java)
-                    if (bean != null) {
-                        team_project.text = bean.project_name
-                    }
-                    team_number.text = "${it.memberCount}人"
-                    team_name.setText(it.name)
-                    NIMClient.getService(TeamService::class.java).queryMemberList(it.id).setCallback(object : RequestCallback<List<TeamMember>> {
-                        override fun onSuccess(p0: List<TeamMember>?) {
-                            val accounts = ArrayList<String>()
-                            p0?.let {
-                                it.forEach {
-                                    accounts.add(it.account)
-                                }
-                            }
-                            getUsersInfoAsync(accounts)
-                        }
-
-                        override fun onFailed(p0: Int) {
-
-                        }
-
-                        override fun onException(p0: Throwable?) {
-                        }
-                    })
+                    refreshTeamView(it)
                 }
             }
 
             override fun onFailed(p0: Int) {
+            }
+
+            override fun onException(p0: Throwable?) {
+            }
+        })
+    }
+
+    private fun refreshTeamView(it: Team) {
+        team = it
+        creatorAccount = it.creator
+        val accid = Store.store.getUser(this@TeamInfoActivity)?.accid
+        val b = creatorAccount == accid
+        team_name.isFocusable = b
+        team_name.setOnClickListener {
+            if (!b) {
+                toast("只有群创建者可以修改")
+            }
+        }
+        profileToggle.check = it.messageNotifyType == TeamMessageNotifyTypeEnum.Mute
+        Glide.with(this@TeamInfoActivity)
+                .load(it.icon)
+                .apply(RequestOptions().error(R.drawable.invalid_name2))
+                .into(team_logo)
+        team_title.text = it.name
+        val bean = Gson().fromJson(it.extension, TeamBean::class.java)
+        if (bean != null) {
+            team_project.text = bean.project_name
+        }
+        team_number.text = "${it.memberCount}人"
+        team_name.setText(it.name)
+        NIMClient.getService(TeamService::class.java).queryMemberList(it.id).setCallback(object : RequestCallback<List<TeamMember>> {
+            override fun onSuccess(p0: List<TeamMember>?) {
+                val accounts = ArrayList<String>()
+                p0?.let {
+                    it.forEach {
+                        accounts.add(it.account)
+                    }
+                }
+                getUsersInfoAsync(accounts)
+            }
+
+            override fun onFailed(p0: Int) {
+
             }
 
             override fun onException(p0: Throwable?) {
@@ -236,9 +243,14 @@ class TeamInfoActivity : AppCompatActivity(), View.OnClickListener, SwitchButton
         )
     }
 
+    override fun onResume() {
+        super.onResume()
+        NIMClient.getService(TeamServiceObserver::class.java).observeTeamUpdate(teamUpdateObserver,true)
+    }
+
     override fun onPause() {
         super.onPause()
-        //未修改成功
+        NIMClient.getService(TeamServiceObserver::class.java).observeTeamUpdate(teamUpdateObserver,false)
         val name = team_name.text.trim().toString()
         if (name.isNotEmpty()) {
             NIMClient.getService(TeamService::class.java).updateName(sessionId, name).setCallback(object : RequestCallbackWrapper<Void>() {
@@ -298,6 +310,12 @@ class TeamInfoActivity : AppCompatActivity(), View.OnClickListener, SwitchButton
         }
     }
 
+    /**
+     * 群组资料变动监听
+     */
+    private val teamUpdateObserver = Observer<List<Team>> {
+        refreshTeamView(it[0])
+    }
 
     companion object {
 

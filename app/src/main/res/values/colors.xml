@@ -110,4 +110,7 @@
     <color name="weekly_label">#4b5266</color>
     <color name="bg_record">#f7f9fc</color>
     <color name="business_card_bg">#66000000</color>
+
+    <color name="approve_blue">#479eff</color>
+    <color name="approve_blue1">#1787fb</color>
 </resources>

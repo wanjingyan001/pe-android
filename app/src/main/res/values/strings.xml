@@ -93,4 +93,13 @@
     <string name="location_address_fail">获取位置信息失败</string>
     <string name="tools_selected">选择工具</string>
     <string name="friends_map_navigation_web">在网页中打开</string>
+
+    <string name="approval_comments">审批意见</string>
+    <string name="approval_input_hint">请输入审批意见（选填）</string>
+    <string name="vote">否 决</string>
+    <string name="confirm">确 认</string>
+    <string name="cancel">取 消</string>
+    <string name="update_title">当前版本过低</string>
+    <string name="update_info">请立即升级到最新版</string>
+    <string name="update_now">立刻升级</string>
 </resources>

@@ -145,7 +145,7 @@ class UserFragment : ToolbarFragment(), View.OnClickListener {
     override fun onResume() {
         super.onResume()
         val user = Store.store.getUser(context)
-        updateUser(user)
+//        updateUser(user)
         if (null != user?.uid) {
             SoguApi.getService(activity.application)
                     .userInfo(user.uid!!)

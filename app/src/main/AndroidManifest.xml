@@ -21,6 +21,7 @@
     <uses-permission android:name="com.huawei.android.launcher2.permission.WRITE_SETTINGS" />
     <uses-permission android:name="com.huawei.android.launcher3.permission.READ_SETTINGS" />
     <uses-permission android:name="com.huawei.android.launcher3.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
     <!-- 网易云信IM权限 -->
     <!-- 权限声明 -->
     <!-- 访问网络状态 -->

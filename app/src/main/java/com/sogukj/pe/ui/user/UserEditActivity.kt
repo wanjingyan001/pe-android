@@ -206,6 +206,7 @@ class UserEditActivity : ToolbarActivity() {
                 tv_depart?.text = depart_name
             if (!TextUtils.isEmpty(memo))
                 tv_note?.setText(memo)
+            iv_user.setChar(user.name.first())
             if (!TextUtils.isEmpty(url))
                 Glide.with(this@UserEditActivity)
                         .load(headImage())
