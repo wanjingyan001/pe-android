@@ -56,7 +56,7 @@
         android:id="@+id/update_message_layout"
         android:layout_width="wrap_content"
         android:layout_height="100dp"
-        android:visibility="gone"
+        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/update_info">
@@ -73,21 +73,44 @@
 
     </ScrollView>
 
-    <Button
-        android:id="@+id/update"
+    <LinearLayout
+        android:id="@+id/ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/bg_update"
-        android:elevation="5dp"
-        android:paddingBottom="1dp"
-        android:paddingTop="1dp"
-        android:text="@string/update_now"
-        android:textColor="@color/white"
-        android:textSize="16sp"
+        android:orientation="horizontal"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        app:layout_constraintTop_toBottomOf="@+id/update_message_layout" />
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/update_message_layout">
+
+        <Button
+            android:id="@+id/update"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_update"
+            android:elevation="5dp"
+            android:paddingBottom="1dp"
+            android:paddingTop="1dp"
+            android:text="@string/update_now"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/cancel"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_update"
+            android:elevation="5dp"
+            android:layout_marginLeft="20dp"
+            android:paddingBottom="1dp"
+            android:paddingTop="1dp"
+            android:text="取消"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/update_prompt"
@@ -99,7 +122,7 @@
         android:textSize="10sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/update" />
+        app:layout_constraintTop_toBottomOf="@+id/ll" />
 
 
 </android.support.constraint.ConstraintLayout>
