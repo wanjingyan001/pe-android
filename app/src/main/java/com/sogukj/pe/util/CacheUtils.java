@@ -69,7 +69,7 @@ public class CacheUtils {
     }
 
     private DiskLruCache mDiskLruCache;
-    private static final long DISK_CACHE_SIZE = 1024 * 1024 * 50;// 50M
+    private static final long DISK_CACHE_SIZE = 1024 * 1024 * 10;// 10M
     private Gson gson = new Gson();
 
     public ArrayList<MessageBean> getDiskCache(String key) {
