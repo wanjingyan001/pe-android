@@ -576,6 +576,11 @@ interface SoguService {
                  , @Field("type") type: Int? = null
                  , @Field("fund_id") fund_id: Int? = null): Observable<Payload<List<ApproverBean>>>
 
+    //获取用户上次审批单id
+    @FormUrlEncoded
+    @POST("/api/Approve/getLastApprove")
+    fun getLastApprove(@Field("template_id") template_id: Int): Observable<Payload<Int>>
+
     @FormUrlEncoded
     @POST("/api/Approve/getFundOrProject")
     fun listSelector(

@@ -8,6 +8,8 @@ import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import cn.finalteam.rxgalleryfinal.RxGalleryFinal
@@ -78,6 +80,67 @@ class BuildSealActivity : ToolbarActivity() {
         setContentView(R.layout.activity_build_seal)
         setBack(true)
         title = paramTitle
+//        ll_seal.removeAllViews()
+//        ll_approver.removeAllViews()
+//        SoguApi.getService(application)
+//                .approveInfo(template_id = if (flagEdit) null else paramId!!,
+//                        sid = if (!flagEdit) null else paramId!!)
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribeOn(Schedulers.io())
+//                .subscribe({ payload ->
+//                    if (!payload.isOk) {
+//                        showToast(payload.message)
+//                        return@subscribe
+//                    }
+//                    payload.payload?.forEach { bean ->
+//                        addRow(bean, inflater)
+//                    }
+//                    hideFields.forEach { field ->
+//                        val view = fieldMap.get(field)
+//                        view?.visibility = View.GONE
+//                    }
+//                    //律师意见默认为否，渲染的时候view未生成，所以生成不了。等生成的时候并没有隐藏
+//                    payload.payload?.forEach { bean ->
+//                        if (bean.control == 5) {
+//                            if (bean.value_map?.is_select == 1) {
+//                                bean.value_map?.hide?.split(",")?.forEach { field ->
+//                                    if (!TextUtils.isEmpty(field)) {
+//                                        val view = fieldMap[field]
+//                                        view?.visibility = View.VISIBLE
+//                                    }
+//                                }
+//                            } else {
+//                                bean.value_map?.hide?.split(",")?.forEach { field ->
+//                                    if (!TextUtils.isEmpty(field)) {
+//                                        val view = fieldMap[field]
+//                                        view?.visibility = View.GONE
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                }, { e ->
+//                    Trace.e(e)
+//                    showToast("暂无可用数据")
+//                })
+//
+//        requestApprove()
+        load()
+        btn_confirm.setOnClickListener {
+            var flag = true
+            for (chk in checkList) {
+                flag = flag.and(chk())
+                if (!flag) break
+            }
+            if (flag) {
+                doConfirm()
+            } else {
+                showToast("请填写完整后再提交")
+            }
+        }
+    }
+
+    private fun load() {
         ll_seal.removeAllViews()
         ll_approver.removeAllViews()
         SoguApi.getService(application)
@@ -123,18 +186,49 @@ class BuildSealActivity : ToolbarActivity() {
                 })
 
         requestApprove()
-        btn_confirm.setOnClickListener {
-            var flag = true
-            for (chk in checkList) {
-                flag = flag.and(chk())
-                if (!flag) break
-            }
-            if (flag) {
-                doConfirm()
-            } else {
-                showToast("请填写完整后再提交")
+    }
+
+    override val menuId: Int
+        get() = R.menu.menu_mark
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val flag = super.onCreateOptionsMenu(menu)
+        val menuMark = menu.findItem(R.id.action_mark) as MenuItem
+        menuMark?.title = "复制"
+        return flag
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.action_mark -> {
+                MaterialDialog.Builder(this@BuildSealActivity)
+                        .theme(Theme.LIGHT)
+                        .canceledOnTouchOutside(true)
+                        .title("111111")
+                        .content("222222")
+                        .positiveText("333333")
+                        .onPositive { dialog, which ->
+                            SoguApi.getService(application)
+                                    .getLastApprove(paramId!!)
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribeOn(Schedulers.io())
+                                    .subscribe({ payload ->
+                                        if (payload.isOk) {
+                                            if(payload.payload != null){
+                                                paramId = payload.payload
+                                                flagEdit = true
+                                                load()
+                                            }
+                                        }
+                                    }, { e ->
+                                        Trace.e(e)
+                                        showToast("暂无可用数据")
+                                    })
+                        }
+                        .show()
             }
         }
+        return false
     }
 
     private fun requestApprove(fund_id: Int? = null) {
