@@ -42,6 +42,7 @@ import com.sogukj.pe.util.DownloadUtil
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.ArrayPagerAdapter
+import com.sogukj.pe.view.MyProgressBar
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -215,7 +216,7 @@ class MainActivity : BaseActivity() {
                 .build()
         mDialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         val icon = mDialog.find<ImageView>(R.id.updated_icon)
-        val bar = mDialog.find<ProgressBar>(R.id.update_progress)
+        val bar = mDialog.find<MyProgressBar>(R.id.update_progress)
         val title = mDialog.find<TextView>(R.id.update_title)
         val update_info = mDialog.find<TextView>(R.id.update_info)
         val scrollView = mDialog.find<ScrollView>(R.id.update_message_layout)
@@ -309,7 +310,7 @@ class MainActivity : BaseActivity() {
         App.INSTANCE.resetPush(true)
     }
 
-    fun update(url: String, bar: ProgressBar, update: Button, dialog: MaterialDialog, prompt: TextView, force: Int) {
+    fun update(url: String, bar: MyProgressBar, update: Button, dialog: MaterialDialog, prompt: TextView, force: Int) {
         bar.visibility = View.VISIBLE
         //title.text = "开始下载"
         val fileName = url.substring(url.lastIndexOf("/") + 1)
@@ -345,7 +346,8 @@ class MainActivity : BaseActivity() {
 
             override fun onDownloading(progress: Int) {
                 //title.text = "已下载" + progress + "%"
-                bar.progress = progress
+                //bar.progress = progress
+                bar.setProgress(progress)
                 dialog.setCanceledOnTouchOutside(false)
                 dialog.setCancelable(false)
             }

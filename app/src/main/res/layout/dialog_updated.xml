@@ -15,11 +15,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ProgressBar
+    <!--<ProgressBar-->
+        <!--android:id="@+id/update_progress"-->
+        <!--style="?android:attr/progressBarStyleHorizontal"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="10dp"-->
+        <!--android:layout_marginTop="20dp"-->
+        <!--android:visibility="gone"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/updated_icon" />-->
+
+    <com.sogukj.pe.view.MyProgressBar
         android:id="@+id/update_progress"
-        style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
-        android:layout_height="10dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
