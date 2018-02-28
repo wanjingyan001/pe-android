@@ -8,19 +8,31 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <FrameLayout
+    <!--<FrameLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="56dp"-->
+        <!--android:layout_gravity="center">-->
+
+        <!--<include layout="@layout/toolbar_search" />-->
+
+        <!--<com.sogukj.pe.view.SearchBar-->
+            <!--android:id="@+id/search_bar"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:visibility="gone" />-->
+    <!--</FrameLayout>-->
+
+    <include layout="@layout/toolbar_search" />
+
+    <com.sogukj.pe.view.SearchBar
+        android:id="@+id/search_bar"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_gravity="center">
+        android:layout_height="wrap_content" />
 
-        <include layout="@layout/toolbar_search" />
-
-        <com.sogukj.pe.view.SearchBar
-            android:id="@+id/search_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-    </FrameLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#dbdbdb"/>
 
     <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"

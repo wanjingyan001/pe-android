@@ -579,7 +579,7 @@ interface SoguService {
     //获取用户上次审批单id
     @FormUrlEncoded
     @POST("/api/Approve/getLastApprove")
-    fun getLastApprove(@Field("template_id") template_id: Int): Observable<Payload<Int>>
+    fun getLastApprove(@Field("template_id") template_id: Int): Observable<Payload<LastApproveBean>>
 
     @FormUrlEncoded
     @POST("/api/Approve/getFundOrProject")

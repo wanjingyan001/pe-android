@@ -2,10 +2,10 @@ package com.sogukj.pe.ui.approve
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextUtils
-import android.text.TextWatcher
+import android.text.*
+import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
@@ -30,13 +30,16 @@ import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.FlowLayout
 import com.sogukj.service.SoguApi
+import com.sogukj.util.XmlDb
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_build_seal.*
+import kotlinx.android.synthetic.main.toolbar.*
 import okhttp3.FormBody
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import org.jetbrains.anko.find
 import java.io.File
 import java.io.Serializable
 
@@ -138,6 +141,50 @@ class BuildSealActivity : ToolbarActivity() {
                 showToast("请填写完整后再提交")
             }
         }
+        toolbar_menu.setImageResource(R.drawable.copy)
+        toolbar_menu.visibility = View.VISIBLE
+        XmlDb.open(context).set(Extras.ID, "${paramId}")
+        var tmpId = XmlDb.open(context).get(Extras.ID, "")
+        SoguApi.getService(application)
+                .getLastApprove(tmpId.toInt())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        //toolbar_menu 可能要隐藏，比如重新发起审批就不需要这个
+                        toolbar_menu.setOnClickListener {
+
+                            paramId = payload.payload?.sid
+                            flagEdit = true
+                            var name = payload.payload?.name
+
+                            var mDialog = MaterialDialog.Builder(this@BuildSealActivity)
+                                    .theme(Theme.LIGHT)
+                                    .canceledOnTouchOutside(true)
+                                    .customView(R.layout.dialog_yongyin, false).build()
+                            mDialog.show()
+                            val content = mDialog.find<TextView>(R.id.content)
+                            val cancel = mDialog.find<Button>(R.id.cancel)
+                            val yes = mDialog.find<Button>(R.id.yes)
+
+                            name = "上海马力画材销售有限公司用印审批用印审批"
+                            val spannable1 = SpannableString("是否将上次“${name}”填写内容一键复制填写")
+                            spannable1.setSpan(ForegroundColorSpan(Color.parseColor("#808080")), 5, 5 + name.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                            content.text = spannable1
+
+                            cancel.setOnClickListener {
+                                mDialog.dismiss()
+                            }
+                            yes.setOnClickListener {
+                                load()
+                                mDialog.dismiss()
+                            }
+                        }
+                    }
+                }, { e ->
+                    Trace.e(e)
+                    //showToast("暂无可用数据")
+                })
     }
 
     private fun load() {
@@ -186,49 +233,6 @@ class BuildSealActivity : ToolbarActivity() {
                 })
 
         requestApprove()
-    }
-
-    override val menuId: Int
-        get() = R.menu.menu_mark
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val flag = super.onCreateOptionsMenu(menu)
-        val menuMark = menu.findItem(R.id.action_mark) as MenuItem
-        menuMark?.title = "复制"
-        return flag
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
-            R.id.action_mark -> {
-                MaterialDialog.Builder(this@BuildSealActivity)
-                        .theme(Theme.LIGHT)
-                        .canceledOnTouchOutside(true)
-                        .title("111111")
-                        .content("222222")
-                        .positiveText("333333")
-                        .onPositive { dialog, which ->
-                            SoguApi.getService(application)
-                                    .getLastApprove(paramId!!)
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribeOn(Schedulers.io())
-                                    .subscribe({ payload ->
-                                        if (payload.isOk) {
-                                            if(payload.payload != null){
-                                                paramId = payload.payload
-                                                flagEdit = true
-                                                load()
-                                            }
-                                        }
-                                    }, { e ->
-                                        Trace.e(e)
-                                        showToast("暂无可用数据")
-                                    })
-                        }
-                        .show()
-            }
-        }
-        return false
     }
 
     private fun requestApprove(fund_id: Int? = null) {

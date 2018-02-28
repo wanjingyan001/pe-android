@@ -2,11 +2,13 @@ package com.sogukj.pe.ui.approve
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.framework.base.ToolbarActivity
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
@@ -19,6 +21,7 @@ import com.sogukj.pe.bean.CustomSealBean
 import com.sogukj.pe.ui.SupportEmptyView
 import com.sogukj.pe.ui.htdata.ProjectBookActivity
 import com.sogukj.pe.util.Trace
+import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.service.SoguApi
@@ -26,6 +29,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_list_search.*
 import kotlinx.android.synthetic.main.toolbar.*
+import org.jetbrains.anko.backgroundColor
 
 /**
  * Created by qinfei on 17/10/18.
@@ -39,6 +43,9 @@ class ListSelectorActivity : ToolbarActivity() {
         bean = intent.getSerializableExtra(Extras.DATA) as CustomSealBean
         title = bean.name
         setBack(true)
+        toolbar_menu.visibility = View.INVISIBLE
+        search_bar.setCancel(false, {})
+        (search_bar.tv_cancel.parent as LinearLayout).backgroundColor = Color.parseColor("#ffffff")
         adapter = RecyclerAdapter<CustomSealBean.ValueBean>(this, { _adapter, parent, type ->
             val convertView = _adapter.getView(R.layout.item_main_project_search, parent) as View
             object : RecyclerHolder<CustomSealBean.ValueBean>(convertView) {
@@ -47,7 +54,7 @@ class ListSelectorActivity : ToolbarActivity() {
                 val tv3 = convertView.findViewById(R.id.tv3) as TextView
 
                 override fun setData(view: View, data: CustomSealBean.ValueBean, position: Int) {
-                    tv1.text = data.name
+                    tv1.text = "${position + 1}." + data.name
                 }
             }
         })
@@ -90,12 +97,12 @@ class ListSelectorActivity : ToolbarActivity() {
             search_bar.visibility = View.VISIBLE
         }
 
-        search_bar.setCancel(true, {
-            page = 1
-            search_bar.visibility = View.GONE
-            search_bar.search = ""
-            doRequest()
-        })
+//        search_bar.setCancel(true, {
+//            page = 1
+//            search_bar.visibility = View.GONE
+//            search_bar.search = ""
+//            doRequest()
+//        })
         search_bar.onTextChange = { text ->
             page = 1
             handler.removeCallbacks(searchTask)
