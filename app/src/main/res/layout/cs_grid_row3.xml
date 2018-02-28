@@ -16,4 +16,8 @@
         layout="@layout/cs_grid_item"
         android:visibility="invisible" />
 
+    <include
+        layout="@layout/cs_grid_item"
+        android:visibility="invisible" />
+
 </LinearLayout>

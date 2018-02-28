@@ -73,7 +73,9 @@ class ApproveListActivity : ToolbarActivity(), TabLayout.OnTabSelectedListener {
         } else {
             tab_title.visibility = View.VISIBLE
             tab_title.addOnTabSelectedListener(this)
+            stateDefault()
         }
+        tab_title.visibility = View.GONE
         adapter = RecyclerAdapter<ApprovalBean>(this, { _adapter, parent, type ->
             val convertView = _adapter.getView(R.layout.item_approval, parent) as View
 
@@ -380,7 +382,8 @@ class ApproveListActivity : ToolbarActivity(), TabLayout.OnTabSelectedListener {
         fun start(ctx: Activity?, type: Int) {
             val intent = Intent(ctx, ApproveListActivity::class.java)
             val title = when (type) {
-                1, 2 -> "待我审批"
+                1 -> "待我审批"
+                2 -> "我已审批"
                 3 -> "我发起的"
                 else -> ""
             }

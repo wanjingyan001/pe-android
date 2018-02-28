@@ -45,6 +45,9 @@ class EntryApproveActivity : ToolbarActivity(), View.OnClickListener {
         item_dwsp.setOnClickListener {
             ApproveListActivity.start(this, 1)
         }
+        item_wysp.setOnClickListener {
+            ApproveListActivity.start(this, 2)
+        }
         item_wfqd.setOnClickListener {
             ApproveListActivity.start(this, 3)
         }
@@ -102,18 +105,20 @@ class EntryApproveActivity : ToolbarActivity(), View.OnClickListener {
                 val gridRow = inflater.inflate(R.layout.cs_grid_row3, null, false) as LinearLayout
                 groupView.addView(gridRow)
 
+                setGridItem(items!!.getOrNull(3), gridRow.getChildAt(3)!!, spGroupBean)
                 setGridItem(items!!.getOrNull(2), gridRow.getChildAt(2)!!, spGroupBean)
                 setGridItem(items!!.getOrNull(1), gridRow.getChildAt(1)!!, spGroupBean)
                 setGridItem(items!!.getOrNull(0), gridRow.getChildAt(0)!!, spGroupBean)
 
             }
-            if (null != items && items.size > 3) {
+            if (null != items && items.size > 4) {
                 val gridRow = inflater.inflate(R.layout.cs_grid_row3, null, false) as LinearLayout
                 groupView.addView(gridRow)
 
-                setGridItem(items!!.getOrNull(5), gridRow.getChildAt(2)!!, spGroupBean)
-                setGridItem(items!!.getOrNull(4), gridRow.getChildAt(1)!!, spGroupBean)
-                setGridItem(items!!.getOrNull(3), gridRow.getChildAt(0)!!, spGroupBean)
+                setGridItem(items!!.getOrNull(7), gridRow.getChildAt(3)!!, spGroupBean)
+                setGridItem(items!!.getOrNull(6), gridRow.getChildAt(2)!!, spGroupBean)
+                setGridItem(items!!.getOrNull(5), gridRow.getChildAt(1)!!, spGroupBean)
+                setGridItem(items!!.getOrNull(4), gridRow.getChildAt(0)!!, spGroupBean)
             }
         }
     }

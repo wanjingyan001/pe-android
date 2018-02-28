@@ -64,6 +64,29 @@
                 </LinearLayout>
 
                 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/item_wysp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_margin="5dp"
+                        android:src="@drawable/ic_approve_wysp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="我已审批"
+                        android:textColor="@color/text_1"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:id="@+id/item_wfqd"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -82,6 +105,29 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="我发起的"
+                        android:textColor="@color/text_1"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/item_cswd"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_margin="5dp"
+                        android:src="@drawable/ic_approve_cswd" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="抄送我的"
                         android:textColor="@color/text_1"
                         android:textSize="14sp" />
                 </LinearLayout>
