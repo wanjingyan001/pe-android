@@ -167,8 +167,8 @@ class BuildSealActivity : ToolbarActivity() {
                             val cancel = mDialog.find<Button>(R.id.cancel)
                             val yes = mDialog.find<Button>(R.id.yes)
 
-                            name = "上海马力画材销售有限公司用印审批用印审批"
-                            val spannable1 = SpannableString("是否将上次“${name}”填写内容一键复制填写")
+                            name = "“${name}”"
+                            val spannable1 = SpannableString("是否将上次${name}填写内容一键复制填写")
                             spannable1.setSpan(ForegroundColorSpan(Color.parseColor("#808080")), 5, 5 + name.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
                             content.text = spannable1
 
