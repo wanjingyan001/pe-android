@@ -211,7 +211,7 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 0x001 && resultCode == Activity.RESULT_OK) {
+        if (requestCode == 0x001) {
 //            data?.let {
 //                Log.e("onActivityResult", "${type}")
 //                var project = it.getSerializableExtra(Extras.DATA) as ProjectBean
@@ -775,8 +775,12 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
             tvStage.text = data.state
 
             if (data.is_business == 1) {
+                tvBusiness.visibility = View.VISIBLE
+                divider_1.visibility = View.VISIBLE
                 tvBusiness.text = "有商业价值"
             } else if (data.is_business == 2) {
+                tvBusiness.visibility = View.VISIBLE
+                divider_1.visibility = View.VISIBLE
                 tvBusiness.text = "无商业价值"
             } else if (data.is_business == null) {
                 tvBusiness.visibility = View.GONE
@@ -784,8 +788,12 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
             }
 
             if (data.is_ability == 1) {
+                tvAbility.visibility = View.VISIBLE
+                divider_2.visibility = View.VISIBLE
                 tvAbility.text = "创始人靠谱"
             } else if (data.is_ability == 2) {
+                tvAbility.visibility = View.VISIBLE
+                divider_2.visibility = View.VISIBLE
                 tvAbility.text = "创始人不靠谱"
             } else if (data.is_ability == null) {
                 tvAbility.visibility = View.GONE
