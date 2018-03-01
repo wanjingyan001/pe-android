@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="20dp"
+    android:paddingLeft="30dp"
+    android:paddingRight="30dp"
     android:background="@drawable/approve_bg">
 
     <ImageView
@@ -45,6 +46,8 @@
         android:textColor="@color/text_1"
         android:textSize="18sp"
         android:textStyle="bold"
+        android:letterSpacing="0.13"
+        android:lineSpacingExtra="0sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/update_progress" />
@@ -58,13 +61,15 @@
         android:text="@string/update_info"
         android:textColor="@color/text_3"
         android:textSize="14sp"
+        android:letterSpacing="0.11"
+        android:lineSpacingExtra="0sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/update_title" />
 
     <ScrollView
         android:id="@+id/update_message_layout"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -73,11 +78,14 @@
 
         <TextView
             android:id="@+id/update_message"
-            android:layout_width="245dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="1、这里显现更新内容，可以逐条显示，那种打字机效果当然最好，然后上方进度条根据跟新进度显示进度条及数字～～
             1、这里是更新的内容，不够显示就换行。
             2、侧边这个灰色方块是侧面滑块，色值#EFEFEF，r=6，w=5"
+            android:letterSpacing="0.03"
+            android:lineSpacingExtra="6sp"
+            android:layout_margin="10dp"
             android:textColor="@color/text_3"
             android:textSize="14sp" />
 
@@ -86,14 +94,10 @@
     <Button
         android:id="@+id/update"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
+        android:layout_height="40dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/bg_update"
         android:elevation="5dp"
-        android:paddingBottom="1dp"
-        android:paddingTop="1dp"
         android:text="@string/update_now"
         android:textColor="@color/white"
         android:textSize="16sp"

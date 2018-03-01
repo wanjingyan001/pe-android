@@ -242,7 +242,7 @@ class SealApproveActivity : ToolbarActivity() {
     }
 
     private fun showConfirmDialog(type: Int, text: String = "") {
-        val title = if (type == 1) "是否确认通过审批" else "是否确认否决审批"
+        val title = if (type == 1) "是否确认通过审批？" else "是否确认否决审批？"
         val build = MaterialDialog.Builder(this)
                 .theme(Theme.LIGHT)
                 .customView(R.layout.layout_confirm_approve, false)

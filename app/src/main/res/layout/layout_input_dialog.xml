@@ -41,13 +41,11 @@
         <TextView
             android:id="@+id/veto_comment"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
             android:layout_marginRight="15dp"
             android:layout_weight="1"
             android:background="@drawable/bg_border_blue1"
             android:gravity="center"
-            android:paddingBottom="14dp"
-            android:paddingTop="14dp"
             android:text="@string/vote"
             android:textColor="@color/approve_blue1"
             android:textSize="18sp" />
@@ -55,13 +53,11 @@
         <TextView
             android:id="@+id/confirm_comment"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
             android:layout_weight="1"
             android:background="@drawable/bg_btn_blue1"
             android:gravity="center"
-            android:paddingBottom="14dp"
-            android:paddingTop="14dp"
-            android:text="@string/confirm"
+            android:text="同 意"
             android:textColor="@color/white"
             android:textSize="18sp" />
 
