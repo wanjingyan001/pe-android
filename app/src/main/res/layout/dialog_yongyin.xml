@@ -29,7 +29,8 @@
 
         <Button
             android:id="@+id/cancel"
-            android:layout_width="145dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="45dp"
             android:background="@drawable/yongyin_f"
             android:letterSpacing="0.04"
@@ -40,7 +41,8 @@
 
         <Button
             android:id="@+id/yes"
-            android:layout_width="145dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="45dp"
             android:layout_marginLeft="15dp"
             android:background="@drawable/yongyin_t"

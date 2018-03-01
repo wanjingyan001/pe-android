@@ -28,8 +28,8 @@ object ColorUtil {
     fun setColorStatus(view: TextView, bean: ApprovalBean) {
         view.text = bean.status_str
         view.textColor = when (bean.status_str) {
-            "完成用印" -> Color.parseColor("#fa34ca")
-            "签发完成" -> Color.parseColor("#fa34ca")
+            "完成用印" -> Color.parseColor("#A0A4AA")
+            "签发完成" -> Color.parseColor("#A0A4AA")
             "签发中" -> Color.parseColor("#806af2")
             "待用印" -> Color.parseColor("#806af2")
             "审批完成" -> Color.parseColor("#50d59d")
