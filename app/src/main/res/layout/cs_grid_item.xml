@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/iv_icon"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_gravity="center"
         android:layout_margin="5dp"
         android:src="@drawable/ic_approve_qj" />
@@ -22,5 +22,5 @@
         android:gravity="center"
         android:text="出差"
         android:textColor="@color/text_1"
-        android:textSize="14sp" />
+        android:textSize="12sp" />
 </LinearLayout>
