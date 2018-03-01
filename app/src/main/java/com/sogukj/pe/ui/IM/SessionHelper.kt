@@ -10,6 +10,7 @@ import com.netease.nim.uikit.api.NimUIKit
 import com.netease.nim.uikit.api.model.session.SessionCustomization
 import com.netease.nim.uikit.api.model.session.SessionEventListener
 import com.netease.nim.uikit.api.wrapper.NimMessageRevokeObserver
+import com.netease.nim.uikit.business.session.actions.BaseAction
 import com.netease.nim.uikit.business.session.viewholder.MsgViewHolderTip
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.RequestCallback
@@ -85,6 +86,9 @@ object SessionHelper {
                     return super.createStickerAttachment(category, item)
                 }
             }
+            val actions = ArrayList<BaseAction>()
+            actions.add(FileAction(com.netease.nim.uikit.R.drawable.im_file,R.string.select_file))
+            p2pCustomization?.actions = actions
             p2pCustomization?.withSticker = true
             val buttons = ArrayList<SessionCustomization.OptionsButton>()
             val infoBtn = object : SessionCustomization.OptionsButton() {
@@ -117,6 +121,10 @@ object SessionHelper {
                     return super.createStickerAttachment(category, item)
                 }
             }
+            val actions = ArrayList<BaseAction>()
+            actions.add(FileAction(com.netease.nim.uikit.R.drawable.im_file,R.string.select_file))
+            teamCustomization?.actions = actions
+            teamCustomization?.withSticker = true
             val buttons = ArrayList<SessionCustomization.OptionsButton>()
             val infoBtn = object : SessionCustomization.OptionsButton() {
                 override fun onClick(context: Context?, view: View?, sessionId: String?) {

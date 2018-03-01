@@ -46,10 +46,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
             manifestPlaceholders = [
-                    AMAP_KEY: "9204f7dcdd8c2beba10c94dbe96bd062",
-                    IM_KEY:"5d8ada31fe2ba9cb419b5f63a95e8756",
-                    Umeng_KEY:"59ddf11e8f4a9d7c4b000116",
-                    Umeng_MESSAGE_SECRET:"8a3cd80e07007a0463e9b12f758b727b"
+                    AMAP_KEY            : "9204f7dcdd8c2beba10c94dbe96bd062",
+                    IM_KEY              : "5d8ada31fe2ba9cb419b5f63a95e8756",
+                    Umeng_KEY           : "59ddf11e8f4a9d7c4b000116",
+                    Umeng_MESSAGE_SECRET: "8a3cd80e07007a0463e9b12f758b727b"
             ]
         }
         debug {
@@ -59,10 +59,10 @@ android {
             jniDebuggable true
             signingConfig signingConfigs.release
             manifestPlaceholders = [
-                    AMAP_KEY: "9204f7dcdd8c2beba10c94dbe96bd062",
-                    IM_KEY:"a0af02d86ecfb1ee160dde8369a5035e",
-                    Umeng_KEY:"59b781c607fe652e44000165",
-                    Umeng_MESSAGE_SECRET:"a4bb361310d9aee916f2cc43c5dbda5c"
+                    AMAP_KEY            : "9204f7dcdd8c2beba10c94dbe96bd062",
+                    IM_KEY              : "a0af02d86ecfb1ee160dde8369a5035e",
+                    Umeng_KEY           : "59b781c607fe652e44000165",
+                    Umeng_MESSAGE_SECRET: "a4bb361310d9aee916f2cc43c5dbda5c"
             ]
         }
     }
@@ -101,6 +101,7 @@ repositories {
 }
 
 dependencies {
+    implementation 'com.android.support:support-v4:25.4.0'
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -155,5 +156,6 @@ dependencies {
     compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
     compile project(':stack-layout')
     implementation project(':library')
-    compile 'com.tencent.bugly:crashreport:latest.release' //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.2.0
+    compile 'com.tencent.bugly:crashreport:latest.release'
+    //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.2.0
 }

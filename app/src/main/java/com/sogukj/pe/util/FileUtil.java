@@ -2,11 +2,17 @@ package com.sogukj.pe.util;
 
 import android.content.Context;
 
+import com.nbsp.materialfilepicker.utils.FileComparator;
+import com.netease.nim.uikit.api.NimUIKit;
+import com.netease.nim.uikit.business.session.viewholder.MsgViewHolderFile;
+import com.sogukj.pe.R;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -16,8 +22,14 @@ import java.io.InputStream;
 import java.io.LineNumberReader;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Vector;
 
 public class FileUtil {
     private static final String TAG = FileUtil.class.getSimpleName();
@@ -556,4 +568,177 @@ public class FileUtil {
         return string.toString();
     }
 
+
+    /**
+     * 获取图片类型
+     *
+     * @param filePath
+     * @return
+     */
+    public static String getFileType(String filePath) {
+        HashMap<String, String> mFileTypes = new HashMap<>();
+        mFileTypes.put("FFD8FF", "jpg");
+        mFileTypes.put("89504E47", "png");
+        mFileTypes.put("47494638", "gif");
+        mFileTypes.put("49492A00", "tif");
+        mFileTypes.put("424D", "bmp");
+        return mFileTypes.get(getFileHeader(filePath));
+    }
+
+    /**
+     * 获取文件头信息
+     *
+     * @param filePath
+     * @return
+     */
+    public static String getFileHeader(String filePath) {
+        FileInputStream is = null;
+        String value = null;
+        try {
+            is = new FileInputStream(filePath);
+            byte[] b = new byte[3];
+            is.read(b, 0, b.length);
+            value = bytesToHexString(b);
+        } catch (Exception e) {
+        } finally {
+            if (null != is) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                }
+            }
+        }
+        return value;
+    }
+
+    /**
+     * 将byte字节转换为十六进制字符串
+     *
+     * @param src
+     * @return
+     */
+    private static String bytesToHexString(byte[] src) {
+        StringBuilder builder = new StringBuilder();
+        if (src == null || src.length <= 0) {
+            return null;
+        }
+        String hv;
+        for (int i = 0; i < src.length; i++) {
+            hv = Integer.toHexString(src[i] & 0xFF).toUpperCase();
+            if (hv.length() < 2) {
+                builder.append(0);
+            }
+            builder.append(hv);
+        }
+        return builder.toString();
+    }
+
+    /**
+     * 获取文件大小
+     * @param size
+     * @param unit
+     * @return
+     */
+    public static String formatFileSize(long size, SizeUnit unit) {
+        if (size < 0) {
+            return NimUIKit.getContext().getString(R.string.unknow_size);
+        }
+
+        final double KB = 1024;
+        final double MB = KB * 1024;
+        final double GB = MB * 1024;
+        final double TB = GB * 1024;
+        if (unit == SizeUnit.Auto) {
+            if (size < KB) {
+                unit = SizeUnit.Byte;
+            } else if (size < MB) {
+                unit = SizeUnit.KB;
+            } else if (size < GB) {
+                unit = SizeUnit.MB;
+            } else if (size < TB) {
+                unit = SizeUnit.GB;
+            } else {
+                unit = SizeUnit.TB;
+            }
+        }
+
+        switch (unit) {
+            case Byte:
+                return size + "B";
+            case KB:
+                return String.format(Locale.US, "%.2fKB", size / KB);
+            case MB:
+                return String.format(Locale.US, "%.2fMB", size / MB);
+            case GB:
+                return String.format(Locale.US, "%.2fGB", size / GB);
+            case TB:
+                return String.format(Locale.US, "%.2fPB", size / TB);
+            default:
+                return size + "B";
+        }
+    }
+
+    public enum SizeUnit {
+        Byte,
+        KB,
+        MB,
+        GB,
+        TB,
+        Auto,
+    }
+
+    /**
+     * 获取指定目录下的文件列表
+     * @param fileAbsolutePath
+     * @return
+     */
+    public static List<File> getFiles(String fileAbsolutePath) {
+        List<File> vecFile = new ArrayList<>();
+        File file = new File(fileAbsolutePath);
+        if (file.exists()){
+            File[] subFile = file.listFiles();
+            if (subFile.length>0){
+                for (File aSubFile : subFile) {
+                    // 判断是否为文件夹
+                    if (!aSubFile.isDirectory()) {
+                        vecFile.add(aSubFile);
+                    }
+                }
+            }
+        }
+        return vecFile;
+    }
+    public static List<File> getFileListByDirPath(String path, FileFilter filter) {
+        File directory = new File(path);
+        File[] files = directory.listFiles(filter);
+
+        if (files == null) {
+            return new ArrayList<>();
+        }
+
+        List<File> result = Arrays.asList(files);
+        Collections.sort(result, new FileComparator());
+        return result;
+    }
+
+    public static String cutLastSegmentOfPath(String path) {
+        if (path.length() - path.replace("/", "").length() <= 1) {
+            return "/";
+        }
+        String newPath = path.substring(0, path.lastIndexOf("/"));
+        // We don't need to list the content of /storage/emulated
+        if (newPath.equals("/storage/emulated")) {
+            newPath = "/storage";
+        }
+        return newPath;
+    }
+
+    public static String getReadableFileSize(long size) {
+        if (size <= 0) {
+            return "0";
+        }
+        final String[] units = new String[]{"B", "KB", "MB", "GB", "TB"};
+        int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
+        return new DecimalFormat("#").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
+    }
 }

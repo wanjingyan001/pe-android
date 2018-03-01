@@ -65,6 +65,11 @@
         <item>个人事务</item>
     </string-array>
 
+    <string-array name="spinner_select_file">
+        <item>常用应用</item>
+        <item>内部存储</item>
+    </string-array>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hint_add_minus">如无,请填写\"无\"</string>
