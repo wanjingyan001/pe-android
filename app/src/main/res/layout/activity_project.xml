@@ -516,6 +516,14 @@
                     android:tag="tv_xmzw"
                     android:text="投后管理数据"
                     app:layout_columnWeight="1" />
+
+                <com.sogukj.pe.view.TipsView
+                    android:id="@+id/tv_spls"
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_spls"
+                    android:tag="tv_xmzw"
+                    android:text="审批历史"
+                    app:layout_columnWeight="1" />
             </android.support.v7.widget.GridLayout>
 
             <LinearLayout
