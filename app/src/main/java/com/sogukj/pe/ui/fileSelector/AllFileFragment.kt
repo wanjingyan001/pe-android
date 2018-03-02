@@ -40,10 +40,10 @@ class AllFileFragment : Fragment(), StorageFileFragment.FileClickListener {
             if (fileActivity.selectedFile.contains(clickedFile)) {
                 fileActivity.selectedFile.remove(clickedFile)
             } else {
-                if (fileActivity.selectedFile.size < 9) {
+                if (fileActivity.selectedFile.size < fileActivity.maxSize) {
                     fileActivity.selectedFile.add(clickedFile)
                 } else {
-                    toast("最多只能选择9个")
+                    toast("最多只能选择${fileActivity.maxSize}个")
                 }
             }
             fileActivity.showSelectedInfo()

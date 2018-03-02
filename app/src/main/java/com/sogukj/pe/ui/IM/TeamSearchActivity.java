@@ -78,7 +78,7 @@ public class TeamSearchActivity extends AppCompatActivity implements View.OnClic
         searchResultList = (RecyclerView) findViewById(R.id.search_result_list);
         sessionId = getIntent().getStringExtra("sessionId");
 
-
+        searchEdt.setFilters(Utils.getFilter(this));
         searchEdt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {

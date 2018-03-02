@@ -220,6 +220,7 @@ class FengKongActivity : ToolbarActivity() {
         override fun setData(view: View, data: GradeCheckBean.FengKongItem.FengKongInnerItem, position: Int) {
             Log.e("TouHouHolder", "TouHouHolder")
             title.text = data.zhibiao
+            content.filters = Utils.getFilter(context)
             var item = TouHouManageItem()
             item.performance_id = data.performance_id
             item.info = ""
@@ -277,6 +278,8 @@ class FengKongActivity : ToolbarActivity() {
 
         override fun setData(view: View, data: GradeCheckBean.FengKongItem.FengKongInnerItem, position: Int) {
             Log.e("JinDiaoHolder", "JinDiaoHolder")
+            zhibiao.filters = Utils.getFilter(context)
+            condition.filters = Utils.getFilter(context)
             var item = JinDiaoItem()
             item.info = ""
             item.title = ""

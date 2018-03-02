@@ -41,7 +41,7 @@ public class FileAction extends BaseAction {
 //                .withCloseMenu(false)
 //                .withRequestCode( makeRequestCode(RequestCode.GET_LOCAL_FILE))
 //                .start();
-        getActivity().startActivityForResult(new Intent(getActivity(), FileMainActivity.class), makeRequestCode(RequestCode.GET_LOCAL_FILE));
+        FileMainActivity.Companion.start(getActivity(),9,false,makeRequestCode(RequestCode.GET_LOCAL_FILE));
     }
 
     @Override

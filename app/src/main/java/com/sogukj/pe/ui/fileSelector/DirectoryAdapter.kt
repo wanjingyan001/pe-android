@@ -9,9 +9,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.nbsp.materialfilepicker.utils.FileTypeUtils
 import com.sogukj.pe.R
 import com.sogukj.pe.R.id.view
+import com.sogukj.pe.util.FileTypeUtils
 import com.sogukj.pe.util.FileUtil
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.RecyclerHolder
@@ -84,7 +84,7 @@ class DirectoryAdapter(val context: Context, val files: List<File>,val activity:
             if (FileUtil.getFileType(data.absolutePath) != null) {
                 Glide.with(context)
                         .load(data.absoluteFile)
-                        .apply(RequestOptions().error(R.drawable.file_default))
+                        .apply(RequestOptions().error(R.drawable.icon_pic))
                         .into(icon)
             } else {
                 icon.imageResource = FileTypeUtils.getFileType(data).icon
@@ -99,7 +99,7 @@ class DirectoryAdapter(val context: Context, val files: List<File>,val activity:
                 if (activity.selectedFile.contains(data)) {
                     slector.isSelected = false
                 } else {
-                    if (activity.selectedFile.size < 9) {
+                    if (activity.selectedFile.size < activity.maxSize) {
                         slector.isSelected = true
                     }
                 }

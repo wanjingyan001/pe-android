@@ -1,6 +1,7 @@
 package com.sogukj.pe.ui.fileSelector
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -18,18 +19,23 @@ import com.sogukj.pe.R
 import com.sogukj.pe.util.FileUtil
 import kotlinx.android.synthetic.main.activity_file_main.*
 import java.io.File
+import kotlin.properties.Delegates
 
 class FileMainActivity : AppCompatActivity() {
     val selectedFile = ArrayList<File>()
+    var maxSize: Int by Delegates.notNull()
+    var isReplace: Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_file_main)
+        maxSize = intent.getIntExtra(Extras.DATA, 9)
+        isReplace = intent.getBooleanExtra(Extras.FLAG, false)
         back.setOnClickListener {
             finish()
         }
-        directory_type.adapter = SpinnerAdapter(this,resources.getStringArray(R.array.spinner_select_file))
+        directory_type.adapter = SpinnerAdapter(this, resources.getStringArray(R.array.spinner_select_file))
         directory_type.dropDownVerticalOffset = 20
-        directory_type.onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
+        directory_type.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
 
             }
@@ -47,8 +53,8 @@ class FileMainActivity : AppCompatActivity() {
             selectedFile.forEach {
                 paths.add(it.path)
             }
-            intent.putExtra(Extras.LIST,paths)
-            setResult(Activity.RESULT_OK,intent)
+            intent.putExtra(Extras.LIST, paths)
+            setResult(Activity.RESULT_OK, intent)
             finish()
         }
     }
@@ -59,14 +65,14 @@ class FileMainActivity : AppCompatActivity() {
             size += it.length()
         }
         selected_files_size.text = "已选择 : ${FileUtil.formatFileSize(size, FileUtil.SizeUnit.Auto)}"
-        send_selected_files.isEnabled = selectedFile.size>0
-        send_selected_files.text = "选择(${selectedFile.size}/9)"
+        send_selected_files.isEnabled = selectedFile.size > 0
+        send_selected_files.text = "选择(${selectedFile.size}/$maxSize)"
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         supportFragmentManager.fragments.forEach {
             if (it is AllFileFragment) {
-                return it.onKeyDown(keyCode,event)
+                return it.onKeyDown(keyCode, event)
             }
         }
         return super.onKeyDown(keyCode, event)
@@ -78,5 +84,14 @@ class FileMainActivity : AppCompatActivity() {
 
         override fun getCount(): Int = fragments.size
 
+    }
+
+    companion object {
+        fun start(context: Activity, maxSize: Int? = 9, isReplace: Boolean? = false, requestCode: Int) {
+            val intent = Intent(context, FileMainActivity::class.java)
+            intent.putExtra(Extras.DATA, maxSize)
+            intent.putExtra(Extras.FLAG, isReplace)
+            context.startActivityForResult(intent, requestCode)
+        }
     }
 }

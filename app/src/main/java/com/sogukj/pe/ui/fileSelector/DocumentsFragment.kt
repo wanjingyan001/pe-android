@@ -14,9 +14,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.nbsp.materialfilepicker.utils.FileTypeUtils
 
 import com.sogukj.pe.R
+import com.sogukj.pe.util.FileTypeUtils
 import com.sogukj.pe.util.FileUtil
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.RecyclerAdapter
@@ -128,7 +128,7 @@ class DocumentsFragment : Fragment() {
             if (FileUtil.getFileType(data.absolutePath) != null) {
                 Glide.with(context)
                         .load(data.absoluteFile)
-                        .apply(RequestOptions().error(R.drawable.file_default))
+                        .apply(RequestOptions().error(R.drawable.icon_pic))
                         .into(icon)
             } else {
                 icon.imageResource = FileTypeUtils.getFileType(data).icon
@@ -141,7 +141,7 @@ class DocumentsFragment : Fragment() {
                 builder.append("微信  ")
             }
             val time = Utils.getTime(data.lastModified(), "yyyy/MM/dd HH:mm")
-            builder.append(time.substring(2,time.length) + "  ")
+            builder.append(time.substring(2, time.length) + "  ")
             builder.append(FileUtil.formatFileSize(data.length(), FileUtil.SizeUnit.Auto))
             info.text = builder.toString()
 
@@ -150,11 +150,11 @@ class DocumentsFragment : Fragment() {
                     fileActivity.selectedFile.remove(data)
                     slector.isSelected = false
                 } else {
-                    if (fileActivity.selectedFile.size < 9) {
+                    if (fileActivity.selectedFile.size < fileActivity.maxSize) {
                         slector.isSelected = true
                         fileActivity.selectedFile.add(data)
                     } else {
-                        context.toast("最多只能选择9个")
+                        context.toast("最多只能选择${fileActivity.maxSize}个")
                     }
                 }
                 fileActivity.showSelectedInfo()

@@ -17,6 +17,7 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.FundSmallBean
 import com.sogukj.pe.bean.ProjectBean
+import com.sogukj.pe.ui.fileSelector.FileMainActivity
 import com.sogukj.pe.ui.fund.FundListFragment.Companion.TYPE_CB
 import com.sogukj.pe.ui.fund.FundListFragment.Companion.TYPE_CX
 import com.sogukj.pe.ui.fund.FundListFragment.Companion.TYPE_TC
@@ -113,6 +114,7 @@ class FundUploadActivity : ToolbarActivity() {
                     .show()
         }
         ll_upload_empty.setOnClickListener {
+//            FileMainActivity.start(this, requestCode = REQ_SELECT_FILE)
             val list = ArrayList<String>()
             MaterialFilePicker()
                     .withActivity(this)
@@ -124,6 +126,7 @@ class FundUploadActivity : ToolbarActivity() {
                     .start()
         }
         ll_upload_full.setOnClickListener {
+//            FileMainActivity.start(this, requestCode = REQ_SELECT_FILE)
             val list = ArrayList<String>()
             MaterialFilePicker()
                     .withActivity(this)

@@ -185,7 +185,7 @@ class InvestManageActivity : ToolbarActivity() {
 
         override fun setData(view: View, data: TouZiItem.TouZiInnerItem, position: Int) {
             zhibiao.text = data.zhibiao
-
+            standard.filters = Utils.getFilter(context)
             var upload = TouZiUpload()
             upload.performance_id = data.performance_id
             upload.standard = ""

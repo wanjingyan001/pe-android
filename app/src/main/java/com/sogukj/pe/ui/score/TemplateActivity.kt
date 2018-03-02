@@ -21,6 +21,7 @@ import com.sogukj.pe.R
 import com.sogukj.pe.bean.TemplateBean
 import com.sogukj.pe.bean.TouZiUpload
 import com.sogukj.pe.util.Trace
+import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.service.SoguApi
@@ -143,7 +144,7 @@ class TemplateActivity : ToolbarActivity() {
         override fun setData(view: View, data: TemplateBean.InnerItem, position: Int) {
             head_title.text = data.name
             zhibiao.text = data.info
-
+            condi.filters = Utils.getFilter(context)
             var upload = TouZiUpload()
             upload.performance_id = data.performance_id
             upload.actual = ""
@@ -166,7 +167,7 @@ class TemplateActivity : ToolbarActivity() {
 
         override fun setData(view: View, data: TemplateBean.InnerItem, position: Int) {
             title.text = data.name
-
+            content.filters = Utils.getFilter(context)
             var upload = TouZiUpload()
             upload.performance_id = data.performance_id
             upload.actual = ""

@@ -188,7 +188,8 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
         override fun setData(view: View, data: CreditInfo.Item, position: Int) {
             phoneNumberEdt.visibility = View.GONE
             IDCardEdt.visibility = View.GONE
-
+            phoneNumberEdt.filters = Utils.getFilter(context)
+            IDCardEdt.filters = Utils.getFilter(context)
             directorName.text = data.name
             if (data.position.isEmpty()) {
                 directorPosition.text = "股东"
@@ -270,6 +271,7 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
                 phoneEdt.setPadding(i, 0, 0, i)
                 phoneEdt.textColor = Color.parseColor("#282828")
                 phoneEdt.setSelection(phoneNumberTv.text.length)
+                phoneEdt.filters = Utils.getFilter(context)
                 MaterialDialog.Builder(this@ShareholderCreditActivity)
                         .title("修改手机号")
                         .theme(Theme.LIGHT)
@@ -306,6 +308,7 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
                 idEdt.setPadding(i, 0, 0, i)
                 idEdt.textColor = Color.parseColor("#282828")
                 idEdt.setSelection(IDCardTv.text.length)
+                idEdt.filters = Utils.getFilter(context)
                 MaterialDialog.Builder(this@ShareholderCreditActivity)
                         .title("修改身份证号")
                         .theme(Theme.LIGHT)

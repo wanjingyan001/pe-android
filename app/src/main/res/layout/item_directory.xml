@@ -8,8 +8,10 @@
         android:id="@+id/item_file_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
-        android:src="@drawable/ic_folder_48dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/icon_folder"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

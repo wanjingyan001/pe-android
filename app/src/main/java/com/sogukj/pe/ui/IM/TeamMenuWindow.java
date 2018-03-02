@@ -26,7 +26,7 @@ import java.util.List;
 public class TeamMenuWindow extends PopupWindow {
     private RecyclerView conditionsList;
     private List<String> titles = new ArrayList<>();
-    private int[] icons = {R.drawable.wd, R.drawable.ysb, R.drawable.xls, R.drawable.txt, R.drawable.pdf, R.drawable.qt};
+    private int[] icons = {R.drawable.wd, R.drawable.ysb, R.drawable.xls, R.drawable.txt, R.drawable.icon_pdf, R.drawable.qt};
     private Context context;
     private View inflate;
     private onItemClickListener listener;

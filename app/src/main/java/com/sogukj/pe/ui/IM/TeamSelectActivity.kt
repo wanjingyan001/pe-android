@@ -139,6 +139,7 @@ class TeamSelectActivity : AppCompatActivity() {
 
 
     private fun initSearchView() {
+        search_edt.filters = Utils.getFilter(this)
         search_edt.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
                 search_hint.visibility = View.GONE

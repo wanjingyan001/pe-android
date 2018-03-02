@@ -530,7 +530,7 @@ class BuildSignActivity : ToolbarActivity() {
         refreshFiles(filesBean!!, filesView!!)
 
         tvFile.setOnClickListener {
-            startActivityForResult(Intent(this,FileMainActivity::class.java),REQ_SELECT_FILE)
+            FileMainActivity.start(this, requestCode = REQ_SELECT_FILE)
 //            MaterialFilePicker()
 //                    .withActivity(this)
 //                    .withRequestCode(REQ_SELECT_FILE)
