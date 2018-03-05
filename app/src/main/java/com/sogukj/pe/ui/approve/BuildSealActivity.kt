@@ -205,7 +205,7 @@ class BuildSealActivity : ToolbarActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         if ((paramMap.get("seal") == null || judgeSealEmpty(paramMap.get("seal") as ArrayList<CustomSealBean.ValueBean>)) &&
-                (paramMap.get("fund_id") == null || (paramMap.get("fund_id") as String).isEmpty()) &&
+                (paramMap.get("fund_id") == null) &&
                 (paramMap.get("lawyerFile") == null || (paramMap.get("lawyerFile") as ArrayList<CustomSealBean.ValueBean>).size == 0) &&
                 (paramMap.get("is_lawyer") == null || (paramMap.get("is_lawyer") as Int) == 0) &&
                 (paramMap.get("sealFile") == null || (paramMap.get("sealFile") as ArrayList<CustomSealBean.ValueBean>).size == 0) &&
@@ -213,22 +213,15 @@ class BuildSealActivity : ToolbarActivity() {
             return
         }
 
-        val builder = FormBody.Builder()
+        val builder = HashMap<String, Any>()
         if (flagEdit) {
-            builder.add("approval_id", "${paramId}")
+            builder.put("approval_id", paramId!!)
         } else {
-            builder.add("template_id", "${paramId}")
+            builder.put("template_id", paramId!!)
         }
-        val tmpMap = HashMap<String, String>()
-        for ((k, v) in paramMap) {
-            if (v is String) {
-                tmpMap.put(k, v)
-            } else
-                tmpMap.put(k, gson.toJson(v))
-        }
-        builder.add("data", gson.toJson(tmpMap))
+        builder.put("data", paramMap)
         SoguApi.getService(application)
-                .saveDraft(builder.build())
+                .saveDraft(builder)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->

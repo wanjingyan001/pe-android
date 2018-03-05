@@ -596,7 +596,7 @@ interface SoguService {
     fun updateApprove(@Body body: RequestBody): Observable<Payload<Int>>
 
     @POST("/api/Approve/saveDraft")
-    fun saveDraft(@Body body: RequestBody): Observable<Payload<Object>>
+    fun saveDraft(@Body map: HashMap<String, Any>): Observable<Payload<Object>>
 
     @FormUrlEncoded
     @POST("/api/Approve/waitingMeApproval")
