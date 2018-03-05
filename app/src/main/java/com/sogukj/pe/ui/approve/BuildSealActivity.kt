@@ -187,6 +187,62 @@ class BuildSealActivity : ToolbarActivity() {
                 })
     }
 
+    private fun judgeSealEmpty(list: ArrayList<CustomSealBean.ValueBean>): Boolean {
+        if (list.size == 0) {
+            return true
+        } else {
+            var flag = true
+            for (item in list) {
+                if (item.count > 0) {
+                    flag = false
+                    break
+                }
+            }
+            return flag
+        }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        if ((paramMap.get("seal") == null || judgeSealEmpty(paramMap.get("seal") as ArrayList<CustomSealBean.ValueBean>)) &&
+                (paramMap.get("fund_id") == null || (paramMap.get("fund_id") as String).isEmpty()) &&
+                (paramMap.get("lawyerFile") == null || (paramMap.get("lawyerFile") as ArrayList<CustomSealBean.ValueBean>).size == 0) &&
+                (paramMap.get("is_lawyer") == null || (paramMap.get("is_lawyer") as Int) == 0) &&
+                (paramMap.get("sealFile") == null || (paramMap.get("sealFile") as ArrayList<CustomSealBean.ValueBean>).size == 0) &&
+                (paramMap.get("project_name") == null)) {//project_name选填
+            return
+        }
+
+        val builder = FormBody.Builder()
+        if (flagEdit) {
+            builder.add("approval_id", "${paramId}")
+        } else {
+            builder.add("template_id", "${paramId}")
+        }
+        val tmpMap = HashMap<String, String>()
+        for ((k, v) in paramMap) {
+            if (v is String) {
+                tmpMap.put(k, v)
+            } else
+                tmpMap.put(k, gson.toJson(v))
+        }
+        builder.add("data", gson.toJson(tmpMap))
+        SoguApi.getService(application)
+                .saveDraft(builder.build())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        showToast("草稿保存成功")
+                        finish()
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    showToast("草稿保存失败")
+                })
+    }
+
     private fun load() {
         ll_seal.removeAllViews()
         ll_approver.removeAllViews()

@@ -106,7 +106,7 @@ class WeeklyThisFragment : BaseFragment(), View.OnClickListener {
             buchong_hint.visibility = View.GONE
             spinner_this.visibility = View.VISIBLE
             var obj = arguments.getSerializable(Extras.DATA) as WeeklyThisBean
-            initView(obj)
+            //initView(obj)
         }
     }
 
@@ -187,7 +187,13 @@ class WeeklyThisFragment : BaseFragment(), View.OnClickListener {
     lateinit var chaosong_adapter: MyAdapter
 
     fun initView(loaded: WeeklyThisBean) {
-        if (spinner_this.visibility == View.VISIBLE) {
+//        if (spinner_this.visibility == View.VISIBLE) {
+//            childs = 1
+//        }
+        if (TYPE == "MAIN") {
+            buchong_hint.visibility = View.VISIBLE
+        } else if (TYPE == "PERSONAL") {
+            spinner_this.visibility = View.VISIBLE
             childs = 1
         }
 

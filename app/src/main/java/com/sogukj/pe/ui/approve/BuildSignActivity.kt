@@ -80,6 +80,77 @@ class BuildSignActivity : ToolbarActivity() {
         setContentView(R.layout.activity_build_sign)
         setBack(true)
         title = paramTitle
+//        ll_seal.removeAllViews()
+//        ll_approver.removeAllViews()
+//        SoguApi.getService(application)
+//                .approveInfo(template_id = paramId!!)
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribeOn(Schedulers.io())
+//                .subscribe({ payload ->
+//                    if (!payload.isOk) {
+//                        showToast(payload.message)
+//                        return@subscribe
+//                    }
+//                    payload.payload?.forEach { bean ->
+//                        addRow(bean, inflater)
+//                    }
+//                }, { e ->
+//                    Trace.e(e)
+//                    showToast("暂无可用数据")
+//                })
+//        requestApprove()
+        load()
+        btn_confirm.setOnClickListener {
+            var flag = true
+            for (chk in checkList) {
+                flag = flag.and(chk())
+                if (!flag) break
+            }
+            if (flag) {
+                doConfirm()
+            } else {
+                showToast("请填写完整后再提交")
+            }
+        }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        if ((paramMap.get("fund_id") == null || (paramMap.get("fund_id") as String).isEmpty()) &&
+                (paramMap.get("lawyerFile") == null || (paramMap.get("lawyerFile") as ArrayList<CustomSealBean.ValueBean>).size == 0) &&
+                (paramMap.get("is_lawyer") == null || (paramMap.get("is_lawyer") as Int) == 0) &&
+                (paramMap.get("sealFile") == null || (paramMap.get("sealFile") as ArrayList<CustomSealBean.ValueBean>).size == 0) &&
+                (paramMap.get("project_id") == null)) {//project_id 选填
+            return
+        }
+
+        val builder = FormBody.Builder()
+        builder.add("template_id", "${paramId}")
+        val tmpMap = HashMap<String, String>()
+        for ((k, v) in paramMap) {
+            if (v is String) {
+                tmpMap.put(k, v)
+            } else
+                tmpMap.put(k, gson.toJson(v))
+        }
+        builder.add("data", gson.toJson(tmpMap))
+        SoguApi.getService(application)
+                .saveDraft(builder.build())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        showToast("草稿保存成功")
+                        finish()
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    showToast("草稿保存失败")
+                })
+    }
+
+    private fun load() {
         ll_seal.removeAllViews()
         ll_approver.removeAllViews()
         SoguApi.getService(application)
@@ -99,18 +170,6 @@ class BuildSignActivity : ToolbarActivity() {
                     showToast("暂无可用数据")
                 })
         requestApprove()
-        btn_confirm.setOnClickListener {
-            var flag = true
-            for (chk in checkList) {
-                flag = flag.and(chk())
-                if (!flag) break
-            }
-            if (flag) {
-                doConfirm()
-            } else {
-                showToast("请填写完整后再提交")
-            }
-        }
     }
 
     private fun requestApprove(fund_id: Int? = null) {
@@ -359,9 +418,9 @@ class BuildSignActivity : ToolbarActivity() {
                 val etNum = convertView.findViewById(R.id.et_num) as TextView
                 val tvPlus = convertView.findViewById(R.id.tv_plus) as TextView
                 cbCheck.text = v.name
-                cbCheck.isChecked = v.is_select == 1|| v.count > 0
+                cbCheck.isChecked = v.is_select == 1 || v.count > 0
                 etNum.text = "${v.count}"
-                if (cbCheck.isChecked){
+                if (cbCheck.isChecked) {
                     v.is_select = 1
                     paramMap.put(bean.fields, bean.value_list)
                 }
