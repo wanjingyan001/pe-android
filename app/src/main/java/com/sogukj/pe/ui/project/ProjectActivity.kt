@@ -33,6 +33,7 @@ import com.sogukj.pe.R
 import com.sogukj.pe.bean.NewsBean
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.ui.*
+import com.sogukj.pe.ui.approve.ApproveListActivity
 import com.sogukj.pe.ui.htdata.ProjectBookActivity
 import com.sogukj.pe.ui.news.NegativeNewsActivity
 import com.sogukj.pe.ui.news.NewsDetailActivity
@@ -587,6 +588,8 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
             R.id.tv_xmjd -> SurveyDataActivity.start(this@ProjectActivity, project)
             R.id.tv_xmtj -> InvestSuggestActivity.start(this@ProjectActivity, project)
             R.id.tv_xmthgl -> ManageDataActivity.start(this@ProjectActivity, project)
+
+            R.id.tv_spls -> ApproveListActivity.start(this@ProjectActivity, 4, project.company_id)
 
             R.id.im -> {
                 createOrJoin()

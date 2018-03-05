@@ -610,6 +610,13 @@ interface SoguService {
             , @Field("filter") filter: String? = null
             , @Field("sort") sort: Int? = null): Observable<Payload<List<ApprovalBean>>>
 
+    @FormUrlEncoded
+    @POST("/api/Approve/projectApprovalHistory")
+    fun projectApprovalHistory(
+            @Field("page") page: Int = 1
+            , @Field("pageSize") pageSize: Int = 20
+            , @Field("project_id") project_id: Int): Observable<Payload<List<ApprovalBean>>>
+
 
     @POST("/api/Approve/approveFilter")
     fun approveFilter(): Observable<Payload<ApproveFilterBean>>

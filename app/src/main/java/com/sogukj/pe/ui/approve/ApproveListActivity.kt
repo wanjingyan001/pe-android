@@ -334,33 +334,89 @@ class ApproveListActivity : ToolbarActivity(), TabLayout.OnTabSelectedListener {
         val templates = if (paramTemplates.isEmpty()) null else paramTemplates.joinToString(",")
         val status = if (paramStates.isEmpty()) null else paramStates.joinToString(",")
 
-        SoguApi.getService(application)
-                .listApproval(status = mType, page = page,
-                        fuzzyQuery = null,
-                        type = filterType, template_id = templates, filter = status)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ payload ->
-                    if (payload.isOk) {
+        if (mType == 4) {//审批历史
+            SoguApi.getService(application)
+                    .projectApprovalHistory(page = page, pageSize = 20, project_id = intent.getIntExtra(Extras.ID, 1))
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (payload.isOk) {
+                            if (page == 1)
+                                adapter.dataList.clear()
+                            payload.payload?.apply {
+                                adapter.dataList.addAll(this)
+                            }
+                        } else
+                            showToast(payload.message)
+                    }, { e ->
+                        Trace.e(e)
+                        showToast("暂无可用数据")
+                    }, {
+                        SupportEmptyView.checkEmpty(this, adapter)
+                        refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
+                        adapter.notifyDataSetChanged()
                         if (page == 1)
-                            adapter.dataList.clear()
-                        payload.payload?.apply {
-                            adapter.dataList.addAll(this)
-                        }
-                    } else
-                        showToast(payload.message)
-                }, { e ->
-                    Trace.e(e)
-                    showToast("暂无可用数据")
-                }, {
-                    SupportEmptyView.checkEmpty(this, adapter)
-                    refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
-                    adapter.notifyDataSetChanged()
-                    if (page == 1)
-                        refresh?.finishRefreshing()
-                    else
-                        refresh?.finishLoadmore()
-                })
+                            refresh?.finishRefreshing()
+                        else
+                            refresh?.finishLoadmore()
+                    })
+        } else {
+            SoguApi.getService(application)
+                    .listApproval(status = mType, page = page,
+                            fuzzyQuery = null,
+                            type = filterType, template_id = templates, filter = status)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (payload.isOk) {
+                            if (page == 1)
+                                adapter.dataList.clear()
+                            payload.payload?.apply {
+                                adapter.dataList.addAll(this)
+                            }
+                        } else
+                            showToast(payload.message)
+                    }, { e ->
+                        Trace.e(e)
+                        showToast("暂无可用数据")
+                    }, {
+                        SupportEmptyView.checkEmpty(this, adapter)
+                        refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
+                        adapter.notifyDataSetChanged()
+                        if (page == 1)
+                            refresh?.finishRefreshing()
+                        else
+                            refresh?.finishLoadmore()
+                    })
+        }
+
+//        SoguApi.getService(application)
+//                .listApproval(status = mType, page = page,
+//                        fuzzyQuery = null,
+//                        type = filterType, template_id = templates, filter = status)
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribeOn(Schedulers.io())
+//                .subscribe({ payload ->
+//                    if (payload.isOk) {
+//                        if (page == 1)
+//                            adapter.dataList.clear()
+//                        payload.payload?.apply {
+//                            adapter.dataList.addAll(this)
+//                        }
+//                    } else
+//                        showToast(payload.message)
+//                }, { e ->
+//                    Trace.e(e)
+//                    showToast("暂无可用数据")
+//                }, {
+//                    SupportEmptyView.checkEmpty(this, adapter)
+//                    refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
+//                    adapter.notifyDataSetChanged()
+//                    if (page == 1)
+//                        refresh?.finishRefreshing()
+//                    else
+//                        refresh?.finishLoadmore()
+//                })
 
 
         SoguApi.getService(application)
@@ -379,16 +435,18 @@ class ApproveListActivity : ToolbarActivity(), TabLayout.OnTabSelectedListener {
 
 
     companion object {
-        fun start(ctx: Activity?, type: Int) {
+        fun start(ctx: Activity?, type: Int, id: Int? = null) {
             val intent = Intent(ctx, ApproveListActivity::class.java)
             val title = when (type) {
                 1 -> "待我审批"
                 2 -> "我已审批"
                 3 -> "我发起的"
+                4 -> "审批历史"
                 else -> ""
             }
             intent.putExtra(Extras.TYPE, type)
             intent.putExtra(Extras.TITLE, title)
+            intent.putExtra(Extras.ID, id)
             ctx?.startActivity(intent)
         }
     }
