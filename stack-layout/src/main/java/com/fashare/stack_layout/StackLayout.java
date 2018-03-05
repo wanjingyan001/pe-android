@@ -242,15 +242,15 @@ public class StackLayout extends FrameLayout {
                         setCurrentItem(getCurrentItem() + 1);
                         mOnSwipeListener.onSwiped(view, ViewHolder.getPosition(view), left < 0, mAdapter.getItemCount() - getCurrentItem());
 
-                        if(getCurrentItem() == mAdapter.getItemCount()){
-                            setCurrentItem(0);
-                            StackLayout.this.removeAllViews();
-                            for(int i=0; i<mAdapter.getItemCount(); i ++) {
-                                ViewHolder viewHolder = mAdapter.getViewHolder(StackLayout.this, i);
-                                StackLayout.this.addView(viewHolder.itemView, 0);
-                            }
-                            transformPage(0, true);
-                        }
+//                        if(getCurrentItem() == mAdapter.getItemCount()){
+//                            setCurrentItem(0);
+//                            StackLayout.this.removeAllViews();
+//                            for(int i=0; i<mAdapter.getItemCount(); i ++) {
+//                                ViewHolder viewHolder = mAdapter.getViewHolder(StackLayout.this, i);
+//                                StackLayout.this.addView(viewHolder.itemView, 0);
+//                            }
+//                            transformPage(0, true);
+//                        }
 
                         if(mItemObserver.isDataChangedWhileScrolling)
                             mItemObserver.dataChanged(mAdapter);
