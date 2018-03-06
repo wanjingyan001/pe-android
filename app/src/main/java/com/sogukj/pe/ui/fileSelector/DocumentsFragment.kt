@@ -2,6 +2,7 @@ package com.sogukj.pe.ui.fileSelector
 
 
 import android.content.Context
+import android.content.pm.PackageManager
 import android.media.Image
 import android.os.Bundle
 import android.os.Environment
@@ -34,7 +35,6 @@ import java.io.File
  * create an instance of this fragment.
  */
 class DocumentsFragment : Fragment() {
-
     private var type: Int? = null
     private var mParam2: String? = null
 
@@ -74,18 +74,22 @@ class DocumentsFragment : Fragment() {
         super.onResume()
         adapter.dataList.clear()
         when (type) {
-            1 -> {
+            PE_LOACL -> {
+                files = FileUtil.getFiles(FileUtil.getExternalFilesDir(fileActivity.applicationContext))
+            }
+            ALL_DOC -> {
                 val list = FileUtil.getFiles(WX_DOC_PATH1)
                 val list1 = FileUtil.getFiles(WX_DOC_PATH2)
                 val list2 = FileUtil.getFiles(QQ_DOC_PATH)
-                files = list.plus(list1).plus(list2)
+                val list3 = FileUtil.getFiles(FileUtil.getExternalFilesDir(fileActivity.applicationContext))
+                files = list.plus(list1).plus(list2).plus(list3)
             }
-            2 -> {
+            WX_DOC -> {
                 val list = FileUtil.getFiles(WX_DOC_PATH1)
                 val list1 = FileUtil.getFiles(WX_DOC_PATH2)
                 files = list.plus(list1)
             }
-            3 -> {
+            QQ_DOC -> {
                 files = FileUtil.getFiles(QQ_DOC_PATH)
             }
         }
@@ -102,6 +106,7 @@ class DocumentsFragment : Fragment() {
         val QQ_DOC_PATH = Environment.getExternalStorageDirectory().path + "/tencent/QQfile_recv/"
         val WX_DOC_PATH1 = Environment.getExternalStorageDirectory().path + "/tencent/MicroMsg/WeiXin/"
         val WX_DOC_PATH2 = Environment.getExternalStorageDirectory().path + "/tencent/MicroMsg/Download/"
+        val PE_LOACL = 0
         val ALL_DOC = 1
         val WX_DOC = 2
         val QQ_DOC = 3
@@ -135,10 +140,10 @@ class DocumentsFragment : Fragment() {
             }
             name.text = data.name
             val builder = StringBuilder()
-            if (data.absolutePath.contains("QQ")) {
-                builder.append("QQ  ")
-            } else {
-                builder.append("微信  ")
+            when {
+                data.absolutePath.contains("QQ") -> builder.append("QQ  ")
+                data.absolutePath.contains(context.packageName) -> builder.append("本应用  ")
+                else -> builder.append("微信  ")
             }
             val time = Utils.getTime(data.lastModified(), "yyyy/MM/dd HH:mm")
             builder.append(time.substring(2, time.length) + "  ")
@@ -146,18 +151,22 @@ class DocumentsFragment : Fragment() {
             info.text = builder.toString()
 
             view.setOnClickListener {
-                if (fileActivity.selectedFile.contains(data)) {
-                    fileActivity.selectedFile.remove(data)
-                    slector.isSelected = false
-                } else {
-                    if (fileActivity.selectedFile.size < fileActivity.maxSize) {
-                        slector.isSelected = true
-                        fileActivity.selectedFile.add(data)
+                if (!fileActivity.isReplace) {
+                    if (fileActivity.selectedFile.contains(data)) {
+                        fileActivity.selectedFile.remove(data)
+                        slector.isSelected = false
                     } else {
-                        context.toast("最多只能选择${fileActivity.maxSize}个")
+                        if (fileActivity.selectedFile.size < fileActivity.maxSize) {
+                            slector.isSelected = true
+                            fileActivity.selectedFile.add(data)
+                        } else {
+                            context.toast("最多只能选择${fileActivity.maxSize}个")
+                        }
                     }
+                    fileActivity.showSelectedInfo()
+                } else {
+                    fileActivity.sendChangeFile(data)
                 }
-                fileActivity.showSelectedInfo()
             }
         }
     }

@@ -36,17 +36,21 @@ class AllFileFragment : Fragment(), StorageFileFragment.FileClickListener {
                     .addToBackStack(null)
                     .commit()
         } else {
-            //添加文件
-            if (fileActivity.selectedFile.contains(clickedFile)) {
-                fileActivity.selectedFile.remove(clickedFile)
-            } else {
-                if (fileActivity.selectedFile.size < fileActivity.maxSize) {
-                    fileActivity.selectedFile.add(clickedFile)
+            if (!fileActivity.isReplace){
+                //添加文件
+                if (fileActivity.selectedFile.contains(clickedFile)) {
+                    fileActivity.selectedFile.remove(clickedFile)
                 } else {
-                    toast("最多只能选择${fileActivity.maxSize}个")
+                    if (fileActivity.selectedFile.size < fileActivity.maxSize) {
+                        fileActivity.selectedFile.add(clickedFile)
+                    } else {
+                        toast("最多只能选择${fileActivity.maxSize}个")
+                    }
                 }
+                fileActivity.showSelectedInfo()
+            }else{
+                fileActivity.sendChangeFile(clickedFile)
             }
-            fileActivity.showSelectedInfo()
         }
     }
 

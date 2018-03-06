@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.BaseAdapter
 import android.widget.TextView
+import com.sogukj.pe.R
 import org.jetbrains.anko.textColor
 
 /**
@@ -19,11 +20,11 @@ class SpinnerAdapter(val content: Context, val dirs: Array<String>) : BaseAdapte
     @SuppressLint("ViewHolder")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         var view: View? = convertView
-        view = LayoutInflater.from(content).inflate(android.R.layout.simple_spinner_dropdown_item, parent, false)
+//        view = LayoutInflater.from(content).inflate(android.R.layout.simple_spinner_dropdown_item, parent, false)
+        view = LayoutInflater.from(content).inflate(R.layout.file_spinner_dropdown_item, parent, false)
         if (view != null) {
-            val textView = view.findViewById(android.R.id.text1) as TextView
+            val textView = view.findViewById(R.id.text1) as TextView
             textView.text = dirs[position]
-            textView.textColor = Color.parseColor("#282828")
         }
         return view!!
     }

@@ -21,6 +21,7 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.*
 import com.sogukj.pe.util.FileUtil
+import com.sogukj.pe.util.PdfUtil
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.CircleImageView
 import com.sogukj.service.SoguApi
@@ -219,12 +220,12 @@ class SignApproveActivity : ToolbarActivity() {
                             .subscribe({ payload ->
                                 if (payload.isOk) {
                                     val url = payload.payload
-                                    if (!TextUtils.isEmpty(url)) {
-                                        val intent = Intent(Intent.ACTION_VIEW)
-                                        intent.data = Uri.parse(url)
-                                        startActivity(intent)
-                                    }
-//                                        PdfUtil.loadPdf(this, url!!)
+//                                    if (!TextUtils.isEmpty(url)) {
+//                                        val intent = Intent(Intent.ACTION_VIEW)
+//                                        intent.data = Uri.parse(url)
+//                                        startActivity(intent)
+//                                    }
+                                        PdfUtil.loadPdf(this, url!!)
                                 } else
                                     showToast(payload.message)
                             }, { e ->

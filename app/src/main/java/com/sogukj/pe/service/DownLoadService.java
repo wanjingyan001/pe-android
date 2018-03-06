@@ -1,5 +1,7 @@
 package com.sogukj.pe.service;
 
+import android.util.Log;
+
 import com.sogukj.pe.util.Trace;
 
 import java.io.IOException;
@@ -13,6 +15,7 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Url;
 
 public class DownLoadService {
 
@@ -21,25 +24,23 @@ public class DownLoadService {
     ApiService apiService;
 
     public interface ApiService {
-        @GET("{path}")
-        Call<ResponseBody> getFile(@Path("path") String path);
+        @GET()
+        Call<ResponseBody> getFile(@Url String path);
     }
 
     private class LoggingInterceptor implements Interceptor {
         @Override
         public Response intercept(Chain chain) throws IOException {
             Request newRequest = chain.request();
-            newRequest = chain.request().newBuilder().url(newRequest.url().toString().replaceAll("%2F", "/")).build();
-//            Trace.e(TAG, "url = " + newRequest.url().toString());
-            Response response = chain.proceed(newRequest);
-//            if (response != null)
-//                Trace.e(TAG, "code = " + response.code());
-            return response;
+//            Log.d(TAG, "url = " + newRequest.url().toString());
+            //            if (response != null)
+//                Log.d(TAG, "code = " + response.code());
+            return chain.proceed(newRequest);
         }
     }
 
     public DownLoadService(String host) {
-//        Trace.e(TAG, "host = " + host);
+//        Log.d(TAG, "host = " + host);
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(new LoggingInterceptor())
                 .build();
@@ -53,7 +54,7 @@ public class DownLoadService {
     }
 
     public Call<ResponseBody> getFile(String path) {
-        Trace.INSTANCE.e(TAG, "path = " + path.substring(1));
+//        Trace.INSTANCE.e(TAG, "path = " + path.substring(1));
         return apiService.getFile(path.substring(1));
     }
 }

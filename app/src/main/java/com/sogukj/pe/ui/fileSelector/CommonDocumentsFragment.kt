@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.fragment_common_documents.*
 class CommonDocumentsFragment : Fragment() {
     private var mParam1: String? = null
     private var mParam2: String? = null
-    val titles = listOf("全部", "微信", "QQ")
+    val titles = listOf("本应用", "微信", "QQ", "全部")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,9 +31,11 @@ class CommonDocumentsFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val fragments = listOf<Fragment>(DocumentsFragment.newInstance(DocumentsFragment.ALL_DOC),
+        val fragments = listOf<Fragment>(
+                DocumentsFragment.newInstance(DocumentsFragment.PE_LOACL),
                 DocumentsFragment.newInstance(DocumentsFragment.WX_DOC),
-                DocumentsFragment.newInstance(DocumentsFragment.QQ_DOC))
+                DocumentsFragment.newInstance(DocumentsFragment.QQ_DOC),
+                DocumentsFragment.newInstance(DocumentsFragment.ALL_DOC))
         documentList.adapter = DocPageAdapter(childFragmentManager, fragments)
         tab.setupWithViewPager(documentList)
     }
@@ -42,7 +44,7 @@ class CommonDocumentsFragment : Fragment() {
         private val ARG_PARAM1 = "param1"
         private val ARG_PARAM2 = "param2"
 
-        fun newInstance(param1: String?=null, param2: String?=null): CommonDocumentsFragment {
+        fun newInstance(param1: String? = null, param2: String? = null): CommonDocumentsFragment {
             val fragment = CommonDocumentsFragment()
             val args = Bundle()
             args.putString(ARG_PARAM1, param1)

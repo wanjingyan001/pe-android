@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.content.FileProvider;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.sogukj.pe.BuildConfig;
@@ -15,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -61,12 +63,12 @@ public class PdfUtil {
         }
 
         final String filePath = FileUtil.getExternalFilesDir(context) + url.getPath().hashCode() + ".pdf";
-
         if (FileUtil.isFileExist(filePath)) {
             opendPdf(context, new File(filePath));
         } else {
             Toast.makeText(context, "正在下载文件...", Toast.LENGTH_SHORT).show();
-            new DownLoadService("http://" + url.getHost()).getFile(url.getPath()).enqueue(new Callback<ResponseBody>() {
+            String host = "http://" + url.getHost();
+            new DownLoadService(host).getFile(urls.replace(host,"")).enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     try {
