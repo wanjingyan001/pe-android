@@ -2,11 +2,11 @@ package com.sogukj.pe.ui.approve
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.provider.MediaStore
-import android.text.Editable
-import android.text.TextUtils
-import android.text.TextWatcher
+import android.text.*
+import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -30,13 +30,16 @@ import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.FlowLayout
 import com.sogukj.service.SoguApi
+import com.sogukj.util.XmlDb
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_build_sign.*
+import kotlinx.android.synthetic.main.toolbar.*
 import okhttp3.FormBody
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import org.jetbrains.anko.find
 import java.io.File
 import java.util.HashMap
 import kotlin.collections.ArrayList
@@ -113,6 +116,52 @@ class BuildSignActivity : ToolbarActivity() {
                 showToast("请填写完整后再提交")
             }
         }
+        toolbar_menu.setImageResource(R.drawable.copy)
+        toolbar_menu.visibility = View.VISIBLE
+        XmlDb.open(context).set(Extras.ID, "${paramId}")
+        var tmpId = XmlDb.open(context).get(Extras.ID, "")
+        SoguApi.getService(application)
+                .getLastApprove(tmpId.toInt())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        if (payload.payload?.sid == null) {
+                            toolbar_menu.visibility = View.INVISIBLE
+                        }
+                        //toolbar_menu 可能要隐藏，比如重新发起审批就不需要这个
+                        toolbar_menu.setOnClickListener {
+
+                            paramId = payload.payload?.sid
+                            var name = payload.payload?.name
+
+                            var mDialog = MaterialDialog.Builder(this@BuildSignActivity)
+                                    .theme(Theme.LIGHT)
+                                    .canceledOnTouchOutside(true)
+                                    .customView(R.layout.dialog_yongyin, false).build()
+                            mDialog.show()
+                            val content = mDialog.find<TextView>(R.id.content)
+                            val cancel = mDialog.find<Button>(R.id.cancel)
+                            val yes = mDialog.find<Button>(R.id.yes)
+
+                            name = "“${name}”"
+                            val spannable1 = SpannableString("是否将上次${name}填写内容一键复制填写")
+                            spannable1.setSpan(ForegroundColorSpan(Color.parseColor("#808080")), 5, 5 + name.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                            content.text = spannable1
+
+                            cancel.setOnClickListener {
+                                mDialog.dismiss()
+                            }
+                            yes.setOnClickListener {
+                                load()
+                                mDialog.dismiss()
+                            }
+                        }
+                    }
+                }, { e ->
+                    Trace.e(e)
+                    //showToast("暂无可用数据")
+                })
     }
 
     override fun onBackPressed() {
@@ -122,20 +171,21 @@ class BuildSignActivity : ToolbarActivity() {
         //sealFile              签字文件                9
         //info                  备注说明                4
         //sms              是否发短信提醒审批人      5
+        if ((paramMap.get("reasons") == null || (paramMap.get("reasons") as String?).isNullOrEmpty()) &&
+                (paramMap.get("sealFile") == null || (paramMap.get("sealFile") as ArrayList<CustomSealBean.ValueBean>).size == 0) &&
+                (paramMap.get("info") == null || (paramMap.get("info") as String?).isNullOrEmpty()) &&
+                (paramMap.get("sms") == null || (paramMap.get("sms") as Int) == 0) &&
+                (paramMap.get("project_id") == null)) {//project_id 选填
+            super.onBackPressed()
+            return
+        }
+
         MaterialDialog.Builder(this@BuildSignActivity)
                 .theme(Theme.LIGHT)
                 .content("是否需要保存草稿")
                 .canceledOnTouchOutside(true)
                 .positiveText("是")
                 .onPositive { dialog, which ->
-                    if ((paramMap.get("reasons") == null || (paramMap.get("reasons") as String?).isNullOrEmpty()) &&
-                            (paramMap.get("sealFile") == null || (paramMap.get("sealFile") as ArrayList<CustomSealBean.ValueBean>).size == 0) &&
-                            (paramMap.get("info") == null || (paramMap.get("info") as String?).isNullOrEmpty()) &&
-                            (paramMap.get("sms") == null || (paramMap.get("sms") as Int) == 0) &&
-                            (paramMap.get("project_id") == null)) {//project_id 选填
-                        return@onPositive
-                    }
-
                     val builder = HashMap<String, Any>()
                     builder.put("template_id", paramId!!)
                     builder.put("data", paramMap)

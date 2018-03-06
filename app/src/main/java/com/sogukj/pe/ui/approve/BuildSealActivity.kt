@@ -221,26 +221,26 @@ class BuildSealActivity : ToolbarActivity() {
         //foreign_id            外资名称                2
 
         //fund_id               基金名称                2
+        if ((paramMap.get("seal") == null || judgeSealEmpty(paramMap.get("seal") as ArrayList<CustomSealBean.ValueBean>)) &&
+                (paramMap.get("fund_id") == null) &&
+                (paramMap.get("reasons") == null || (paramMap.get("reasons") as String?).isNullOrEmpty()) &&
+                (paramMap.get("info") == null || (paramMap.get("info") as String?).isNullOrEmpty()) &&
+                (paramMap.get("manager_opinion") == null || (paramMap.get("manager_opinion") as String?).isNullOrEmpty()) &&
+                (paramMap.get("lawyerFile") == null || (paramMap.get("lawyerFile") as ArrayList<CustomSealBean.ValueBean>).size == 0) &&
+                (paramMap.get("is_lawyer") == null || (paramMap.get("is_lawyer") as Int) == 0) &&
+                (paramMap.get("send_sms") == null || (paramMap.get("send_sms") as Int) == 0) &&
+                (paramMap.get("sealFile") == null || (paramMap.get("sealFile") as ArrayList<CustomSealBean.ValueBean>).size == 0) &&
+                (paramMap.get("project_name") == null) &&
+                (paramMap.get("foreign_id") == null)) {
+            super.onBackPressed()
+            return
+        }
         MaterialDialog.Builder(this@BuildSealActivity)
                 .theme(Theme.LIGHT)
                 .content("是否需要保存草稿")
                 .canceledOnTouchOutside(true)
                 .positiveText("是")
                 .onPositive { dialog, which ->
-                    if ((paramMap.get("seal") == null || judgeSealEmpty(paramMap.get("seal") as ArrayList<CustomSealBean.ValueBean>)) &&
-                            (paramMap.get("fund_id") == null) &&
-                            (paramMap.get("reasons") == null || (paramMap.get("reasons") as String?).isNullOrEmpty()) &&
-                            (paramMap.get("info") == null || (paramMap.get("info") as String?).isNullOrEmpty()) &&
-                            (paramMap.get("manager_opinion") == null || (paramMap.get("manager_opinion") as String?).isNullOrEmpty()) &&
-                            (paramMap.get("lawyerFile") == null || (paramMap.get("lawyerFile") as ArrayList<CustomSealBean.ValueBean>).size == 0) &&
-                            (paramMap.get("is_lawyer") == null || (paramMap.get("is_lawyer") as Int) == 0) &&
-                            (paramMap.get("send_sms") == null || (paramMap.get("send_sms") as Int) == 0) &&
-                            (paramMap.get("sealFile") == null || (paramMap.get("sealFile") as ArrayList<CustomSealBean.ValueBean>).size == 0) &&
-                            (paramMap.get("project_name") == null) &&
-                            (paramMap.get("foreign_id") == null)) {
-                        return@onPositive
-                    }
-
                     val builder = HashMap<String, Any>()
                     if (flagEdit) {
                         builder.put("approval_id", paramId!!)
