@@ -603,12 +603,13 @@ interface SoguService {
     fun listApproval(
             @Field("page") page: Int = 1
             , @Field("pageSize") pageSize: Int = 20
-            , @Field("status") status: Int
+            , @Field("status") status: Int? = null
             , @Field("fuzzyQuery") fuzzyQuery: String? = null
             , @Field("type") type: Int? = null
             , @Field("template_id") template_id: String? = null
             , @Field("filter") filter: String? = null
-            , @Field("sort") sort: Int? = null): Observable<Payload<List<ApprovalBean>>>
+            , @Field("sort") sort: Int? = null
+            , @Field("project_id") project_id: Int? = null): Observable<Payload<List<ApprovalBean>>>
 
     @FormUrlEncoded
     @POST("/api/Approve/projectApprovalHistory")

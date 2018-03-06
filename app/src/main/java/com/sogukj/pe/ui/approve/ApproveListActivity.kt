@@ -155,7 +155,18 @@ class ApproveListActivity : ToolbarActivity(), TabLayout.OnTabSelectedListener {
                     stateFilter()
                 }
             }
-            search_box.setOnClickListener { ApproveSearchActivity.start(this, mType) }
+            search_box.setOnClickListener {
+                var pro_id: Int? = null
+                var status_tyoe: Int? = null
+                if (intent.getStringExtra(Extras.TITLE).equals("审批历史")) {
+                    pro_id = intent.getIntExtra(Extras.ID, 1)
+                    status_tyoe = null
+                } else {
+                    pro_id = null
+                    status_tyoe = mType
+                }
+                ApproveSearchActivity.start(this, status_tyoe, pro_id)
+            }
         }
         stateDefault()
         ////
@@ -334,89 +345,42 @@ class ApproveListActivity : ToolbarActivity(), TabLayout.OnTabSelectedListener {
         val templates = if (paramTemplates.isEmpty()) null else paramTemplates.joinToString(",")
         val status = if (paramStates.isEmpty()) null else paramStates.joinToString(",")
 
-        if (mType == 4) {//审批历史
-            SoguApi.getService(application)
-                    .projectApprovalHistory(page = page, pageSize = 20, project_id = intent.getIntExtra(Extras.ID, 1))
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe({ payload ->
-                        if (payload.isOk) {
-                            if (page == 1)
-                                adapter.dataList.clear()
-                            payload.payload?.apply {
-                                adapter.dataList.addAll(this)
-                            }
-                        } else
-                            showToast(payload.message)
-                    }, { e ->
-                        Trace.e(e)
-                        showToast("暂无可用数据")
-                    }, {
-                        SupportEmptyView.checkEmpty(this, adapter)
-                        refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
-                        adapter.notifyDataSetChanged()
-                        if (page == 1)
-                            refresh?.finishRefreshing()
-                        else
-                            refresh?.finishLoadmore()
-                    })
+        var pro_id: Int? = null
+        var status_tyoe: Int? = null
+        if (intent.getStringExtra(Extras.TITLE).equals("审批历史")) {
+            pro_id = intent.getIntExtra(Extras.ID, 1)
+            status_tyoe = null
         } else {
-            SoguApi.getService(application)
-                    .listApproval(status = mType, page = page,
-                            fuzzyQuery = null,
-                            type = filterType, template_id = templates, filter = status)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe({ payload ->
-                        if (payload.isOk) {
-                            if (page == 1)
-                                adapter.dataList.clear()
-                            payload.payload?.apply {
-                                adapter.dataList.addAll(this)
-                            }
-                        } else
-                            showToast(payload.message)
-                    }, { e ->
-                        Trace.e(e)
-                        showToast("暂无可用数据")
-                    }, {
-                        SupportEmptyView.checkEmpty(this, adapter)
-                        refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
-                        adapter.notifyDataSetChanged()
-                        if (page == 1)
-                            refresh?.finishRefreshing()
-                        else
-                            refresh?.finishLoadmore()
-                    })
+            pro_id = null
+            status_tyoe = mType
         }
-
-//        SoguApi.getService(application)
-//                .listApproval(status = mType, page = page,
-//                        fuzzyQuery = null,
-//                        type = filterType, template_id = templates, filter = status)
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribeOn(Schedulers.io())
-//                .subscribe({ payload ->
-//                    if (payload.isOk) {
-//                        if (page == 1)
-//                            adapter.dataList.clear()
-//                        payload.payload?.apply {
-//                            adapter.dataList.addAll(this)
-//                        }
-//                    } else
-//                        showToast(payload.message)
-//                }, { e ->
-//                    Trace.e(e)
-//                    showToast("暂无可用数据")
-//                }, {
-//                    SupportEmptyView.checkEmpty(this, adapter)
-//                    refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
-//                    adapter.notifyDataSetChanged()
-//                    if (page == 1)
-//                        refresh?.finishRefreshing()
-//                    else
-//                        refresh?.finishLoadmore()
-//                })
+        SoguApi.getService(application)
+                .listApproval(status = status_tyoe, page = page,
+                        fuzzyQuery = null,
+                        type = filterType, template_id = templates, filter = status, project_id = pro_id)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        if (page == 1)
+                            adapter.dataList.clear()
+                        payload.payload?.apply {
+                            adapter.dataList.addAll(this)
+                        }
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    showToast("暂无可用数据")
+                }, {
+                    SupportEmptyView.checkEmpty(this, adapter)
+                    refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
+                    adapter.notifyDataSetChanged()
+                    if (page == 1)
+                        refresh?.finishRefreshing()
+                    else
+                        refresh?.finishLoadmore()
+                })
 
 
         SoguApi.getService(application)
@@ -435,14 +399,14 @@ class ApproveListActivity : ToolbarActivity(), TabLayout.OnTabSelectedListener {
 
 
     companion object {
-        fun start(ctx: Activity?, type: Int, id: Int? = null) {
+        fun start(ctx: Activity?, type: Int? = null, id: Int? = null) {
             val intent = Intent(ctx, ApproveListActivity::class.java)
             val title = when (type) {
                 1 -> "待我审批"
                 2 -> "我已审批"
                 3 -> "我发起的"
-                4 -> "审批历史"
-                else -> ""
+                4 -> "抄送我的"
+                else -> "审批历史"
             }
             intent.putExtra(Extras.TYPE, type)
             intent.putExtra(Extras.TITLE, title)

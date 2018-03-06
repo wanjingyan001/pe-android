@@ -129,9 +129,18 @@ class ApproveSearchActivity : ToolbarActivity() {
     var page = 1
     fun doRequest() {
         val text = search_bar.search
+        var pro_id: Int? = null
+        var status_tyoe: Int? = null
+        if (intent.getStringExtra(Extras.TITLE).equals("审批历史")) {
+            pro_id = intent.getIntExtra(Extras.ID, 1)
+            status_tyoe = null
+        } else {
+            pro_id = null
+            status_tyoe = mType
+        }
         SoguApi.getService(application)
-                .listApproval(status = mType, page = page,
-                        fuzzyQuery = text)
+                .listApproval(status = status_tyoe, page = page,
+                        fuzzyQuery = text, project_id = pro_id)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -158,15 +167,18 @@ class ApproveSearchActivity : ToolbarActivity() {
     }
 
     companion object {
-        fun start(ctx: Activity?, type: Int) {
-            val intent = Intent(ctx, ApproveSearchActivity::class.java)
+        fun start(ctx: Activity?, type: Int? = null, id: Int? = null) {
+            val intent = Intent(ctx, ApproveListActivity::class.java)
             val title = when (type) {
-                1, 2 -> "待我审批"
+                1 -> "待我审批"
+                2 -> "我已审批"
                 3 -> "我发起的"
-                else -> ""
+                4 -> "抄送我的"
+                else -> "审批历史"
             }
             intent.putExtra(Extras.TYPE, type)
             intent.putExtra(Extras.TITLE, title)
+            intent.putExtra(Extras.ID, id)
             ctx?.startActivity(intent)
         }
     }

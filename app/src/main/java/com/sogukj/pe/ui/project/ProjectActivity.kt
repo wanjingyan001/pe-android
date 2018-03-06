@@ -589,7 +589,7 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
             R.id.tv_xmtj -> InvestSuggestActivity.start(this@ProjectActivity, project)
             R.id.tv_xmthgl -> ManageDataActivity.start(this@ProjectActivity, project)
 
-            R.id.tv_spls -> ApproveListActivity.start(this@ProjectActivity, 4, project.company_id)
+            R.id.tv_spls -> ApproveListActivity.start(this@ProjectActivity, null, project.company_id)
 
             R.id.im -> {
                 createOrJoin()

@@ -51,6 +51,9 @@ class EntryApproveActivity : ToolbarActivity(), View.OnClickListener {
         item_wfqd.setOnClickListener {
             ApproveListActivity.start(this, 3)
         }
+        item_cswd.setOnClickListener {
+            ApproveListActivity.start(this, 4)
+        }
 
         var sp = intent.getIntExtra(Extras.DATA, 0)
         if (sp == null || sp == 0) {
