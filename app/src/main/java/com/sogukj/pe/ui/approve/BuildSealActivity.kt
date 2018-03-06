@@ -345,7 +345,9 @@ class BuildSealActivity : ToolbarActivity() {
 
             builder.add("approval_id", "${paramId}")
             for ((k, v) in paramMap) {
-                if (v is String) {
+                if (v == null) {
+
+                } else if (v is String) {
                     builder.add(k, v)
                 } else
                     builder.add(k, gson.toJson(v))
@@ -370,7 +372,9 @@ class BuildSealActivity : ToolbarActivity() {
         } else {
             builder.add("template_id", "${paramId}")
             for ((k, v) in paramMap) {
-                if (v is String) {
+                if (v == null) {
+
+                } else if (v is String) {
                     builder.add(k, v)
                 } else
                     builder.add(k, gson.toJson(v))

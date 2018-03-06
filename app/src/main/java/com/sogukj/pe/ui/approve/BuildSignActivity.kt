@@ -258,7 +258,9 @@ class BuildSignActivity : ToolbarActivity() {
         val builder = FormBody.Builder()
         builder.add("template_id", "${paramId}")
         for ((k, v) in paramMap) {
-            if (v is String) {
+            if (v == null) {
+
+            } else if (v is String) {
                 builder.add(k, v)
             } else
                 builder.add(k, gson.toJson(v))
