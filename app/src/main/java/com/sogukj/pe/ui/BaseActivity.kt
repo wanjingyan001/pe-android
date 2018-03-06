@@ -69,18 +69,18 @@ abstract class BaseActivity : AppCompatActivity() {
     fun showProgress(msg: String) {
         if (progressDialog == null) {
             progressDialog = ProgressDialog(this)
-            progressDialog?.setMessage(msg)
-            progressDialog?.show()
         }
+        progressDialog?.setMessage(msg)
+        progressDialog?.show()
     }
 
     fun showProgress(msg: String, theme: Int) {
         if (progressDialog == null) {
             progressDialog = ProgressDialog(this)
-            progressDialog?.setMessage(msg)
-            progressDialog?.setProgressStyle(theme)
-            progressDialog?.show()
         }
+        progressDialog?.setMessage(msg)
+        progressDialog?.setProgressStyle(theme)
+        progressDialog?.show()
     }
 
     fun hideProgress() {

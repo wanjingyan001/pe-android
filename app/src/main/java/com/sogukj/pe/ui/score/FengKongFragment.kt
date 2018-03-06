@@ -267,6 +267,9 @@ class FengKongFragment : BaseFragment() {
             } else {
                 holder = view.tag as Holder
             }
+            holder?.content?.filters = Utils.getFilter(context)
+            holder?.zhibiao?.filters = Utils.getFilter(context)
+            holder?.condition?.filters = Utils.getFilter(context)
             holder?.title?.text = datalist[position].target
             holder?.content?.setText(datalist[position].info)
             return view!!

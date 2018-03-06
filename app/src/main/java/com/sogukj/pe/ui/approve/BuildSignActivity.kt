@@ -25,6 +25,7 @@ import com.nbsp.materialfilepicker.ui.FilePickerActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.*
+import com.sogukj.pe.ui.fileSelector.FileMainActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.FlowLayout
@@ -581,21 +582,22 @@ class BuildSignActivity : ToolbarActivity() {
         refreshFiles(filesBean!!, filesView!!)
 
         tvFile.setOnClickListener {
-            MaterialFilePicker()
-                    .withActivity(this)
-                    .withRequestCode(REQ_SELECT_FILE)
-                    .withTitle("内部存储")
-                    .withFilterDirectories(true)
-                    .withHiddenFiles(true)
-                    .withCloseMenu(false)
-//                    .withFilter(Pattern.compile(".*\\.txt$")) // Filtering files and directories by file name using regexp
-                    .start()
+            FileMainActivity.start(this, requestCode = REQ_SELECT_FILE)
+//            MaterialFilePicker()
+//                    .withActivity(this)
+//                    .withRequestCode(REQ_SELECT_FILE)
+//                    .withTitle("内部存储")
+//                    .withFilterDirectories(true)
+//                    .withHiddenFiles(true)
+//                    .withCloseMenu(false)
+////                    .withFilter(Pattern.compile(".*\\.txt$")) // Filtering files and directories by file name using regexp
+//                    .start()
         }
     }
 
     fun uploadFile(filePath: String?) {
         if (null != filesBean && null != filesView && null != filePath) {
-            val file = File(filePath!!)
+            val file = File(filePath)
             SoguApi.getService(application)
                     .uploadApprove(MultipartBody.Builder().setType(MultipartBody.FORM)
                             .addFormDataPart("file", file.getName(), RequestBody.create(MediaType.parse("*/*"), file))
@@ -614,6 +616,10 @@ class BuildSignActivity : ToolbarActivity() {
                     }, { e ->
                         Trace.e(e)
                         showToast("上传失败")
+                    },{
+                        hideProgress()
+                    },{
+                        showProgress("正在上传")
                     })
         }
     }
@@ -646,8 +652,12 @@ class BuildSignActivity : ToolbarActivity() {
     val REQ_SELECT_FILE = 0xf0;
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQ_SELECT_FILE && resultCode === Activity.RESULT_OK) {
-            val filePath = data?.getStringExtra(FilePickerActivity.RESULT_FILE_PATH)
-            uploadFile(filePath)
+//            val filePath = data?.getStringExtra(FilePickerActivity.RESULT_FILE_PATH)
+//            uploadFile(filePath)
+            val paths = data?.getStringArrayListExtra(Extras.LIST)
+            paths?.forEach {
+                uploadFile(it)
+            }
         } else if (requestCode == ListSelectorActivity.REQ_LIST_SELECTOR && resultCode === Activity.RESULT_OK) {
             val bean = data?.getSerializableExtra(Extras.DATA) as CustomSealBean
             val data = data?.getSerializableExtra(Extras.DATA2) as CustomSealBean.ValueBean

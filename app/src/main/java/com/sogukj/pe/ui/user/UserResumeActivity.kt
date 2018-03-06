@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.text.TextUtils.substring
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import cn.finalteam.rxgalleryfinal.rxbus.RxBus
@@ -330,19 +332,27 @@ class UserResumeActivity : BaseActivity(), View.OnClickListener {
 
             }
             R.id.tv_language -> {
-                var position = -1
+                val position = arrayListOf<Int>()
                 val languageList = resources.getStringArray(R.array.Language).toList()
                 languageList.forEachIndexed { index, s ->
-                    if (tv_language.text == s) {
-                        position = index
+                    val list = tv_language.text.split(",")
+                    if (list.contains(s)) {
+                        position.add(index)
                     }
                 }
                 MaterialDialog.Builder(this)
                         .title("选择语言")
                         .theme(Theme.LIGHT)
                         .items(languageList)
-                        .itemsCallbackSingleChoice(position) { dialog, itemView, which, text ->
-                            tv_language.text = text
+                        .itemsCallbackMultiChoice( position.toTypedArray()) { dialog, which, text ->
+                            val build = StringBuilder()
+                            text?.forEach {
+                                Log.d("WJY",it.toString())
+                                build.append(it)
+                                build.append(",")
+                            }
+                            val str = build.toString()
+                            tv_language.text = str.substring(0,str.length-1)
                             true
                         }
                         .positiveText("确定")

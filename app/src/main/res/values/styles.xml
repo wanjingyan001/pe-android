@@ -247,6 +247,7 @@
     <style name="TabLayoutTextStyle">
         <item name="android:textSize">16sp</item>
     </style>
+
     <style name="ios_bottom_dialog" parent="android:style/Theme.Dialog">
         <!--背景颜色及和透明程度-->
         <item name="android:windowBackground">@color/transparent</item>
@@ -265,5 +266,10 @@
         <!-- 进入时的动画 -->
         <item name="@android:windowExitAnimation">@anim/ios_dialog_exit</item>
         <!-- 退出时的动画 -->
+    </style>
+
+    <style name="spinner_anim">
+        <item name="android:windowEnterAnimation">@anim/spinner_in</item>
+        <item name="android:windowExitAnimation">@anim/spinner_out</item>
     </style>
 </resources>

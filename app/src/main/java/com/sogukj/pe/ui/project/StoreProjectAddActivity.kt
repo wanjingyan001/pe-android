@@ -15,6 +15,7 @@ import com.sogukj.pe.R
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.bean.StoreProjectBean
 import com.sogukj.pe.util.Trace
+import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -122,6 +123,7 @@ class StoreProjectAddActivity : ToolbarActivity() {
     }
 
     fun tvalue(et: EditText): String {
+        et.filters = Utils.getFilter(context)
         return et.text.trim().toString()
     }
 

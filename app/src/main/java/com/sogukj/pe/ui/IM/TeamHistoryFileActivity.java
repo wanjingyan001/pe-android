@@ -21,9 +21,11 @@ import com.google.gson.Gson;
 import com.sogukj.pe.Extras;
 import com.sogukj.pe.R;
 import com.sogukj.pe.service.Payload;
+import com.sogukj.pe.util.FileTypeUtils;
 import com.sogukj.pe.util.Utils;
 import com.sogukj.service.SoguApi;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -239,6 +241,7 @@ public class TeamHistoryFileActivity extends AppCompatActivity implements TeamMe
                 }
                 ((FileHolder) holder).fileName.setText(fileBean.getFile_name());
                 ((FileHolder) holder).fileInfo.setText(fileBean.getSize() + "   " + fileBean.getUser_name() + "   " + fileBean.getTime());
+                ((FileHolder) holder).fileIcon.setImageResource(FileTypeUtils.getFileType(new File(fileBean.getFile_name())).getIcon());
 //                (1=>图片，2=>视频，3=>压缩包，4=>Excel档，5=>TXT，6=>PDF，7=>DOC，8=>全部，9=>其他)
 //                switch (fileBean.getType()) {
 //                    case 3:
