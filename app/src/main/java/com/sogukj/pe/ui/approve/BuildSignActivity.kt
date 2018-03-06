@@ -116,32 +116,50 @@ class BuildSignActivity : ToolbarActivity() {
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
-        if ((paramMap.get("fund_id") == null) &&
-                (paramMap.get("lawyerFile") == null || (paramMap.get("lawyerFile") as ArrayList<CustomSealBean.ValueBean>).size == 0) &&
-                (paramMap.get("is_lawyer") == null || (paramMap.get("is_lawyer") as Int) == 0) &&
-                (paramMap.get("sealFile") == null || (paramMap.get("sealFile") as ArrayList<CustomSealBean.ValueBean>).size == 0) &&
-                (paramMap.get("project_id") == null)) {//project_id 选填
-            return
-        }
 
-        val builder = HashMap<String, Any>()
-        builder.put("template_id", paramId!!)
-        builder.put("data", paramMap)
-        SoguApi.getService(application)
-                .saveDraft(builder)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ payload ->
-                    if (payload.isOk) {
-                        showToast("草稿保存成功")
-                        finish()
-                    } else
-                        showToast(payload.message)
-                }, { e ->
-                    Trace.e(e)
-                    showToast("草稿保存失败")
-                })
+        //project_id          项目名称                2
+        //reasons               签字事由                4
+        //sealFile              签字文件                9
+        //info                  备注说明                4
+        //sms              是否发短信提醒审批人      5
+        MaterialDialog.Builder(this@BuildSignActivity)
+                .theme(Theme.LIGHT)
+                .content("是否需要保存草稿")
+                .canceledOnTouchOutside(true)
+                .positiveText("是")
+                .onPositive { dialog, which ->
+                    if ((paramMap.get("reasons") == null || (paramMap.get("reasons") as String?).isNullOrEmpty()) &&
+                            (paramMap.get("sealFile") == null || (paramMap.get("sealFile") as ArrayList<CustomSealBean.ValueBean>).size == 0) &&
+                            (paramMap.get("info") == null || (paramMap.get("info") as String?).isNullOrEmpty()) &&
+                            (paramMap.get("sms") == null || (paramMap.get("sms") as Int) == 0) &&
+                            (paramMap.get("project_id") == null)) {//project_id 选填
+                        return@onPositive
+                    }
+
+                    val builder = HashMap<String, Any>()
+                    builder.put("template_id", paramId!!)
+                    builder.put("data", paramMap)
+                    SoguApi.getService(application)
+                            .saveDraft(builder)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(Schedulers.io())
+                            .subscribe({ payload ->
+                                if (payload.isOk) {
+                                    showToast("草稿保存成功")
+                                    super.onBackPressed()
+                                } else
+                                    showToast(payload.message)
+                            }, { e ->
+                                Trace.e(e)
+                                showToast("草稿保存失败")
+                            })
+                }
+                .negativeText("否")
+                .onNegative { dialog, which ->
+                    dialog.dismiss()
+                    super.onBackPressed()
+                }
+                .show()
     }
 
     private fun load() {
@@ -310,6 +328,7 @@ class BuildSignActivity : ToolbarActivity() {
         viewMap.put(bean.fields, etValue)
         val iv_alert = convertView.findViewById(R.id.iv_alert)
         iv_alert.visibility = View.GONE
+        paramMap.put(bean.fields, bean.value_map?.id)// TODO
         checkList.add {
             val str = etValue.text?.toString()
             if (bean.is_must == 1 && str.isNullOrEmpty()) {
@@ -361,6 +380,7 @@ class BuildSignActivity : ToolbarActivity() {
 
         val iv_alert = convertView.findViewById(R.id.iv_alert)
         iv_alert.visibility = View.GONE
+        paramMap.put(bean.fields, bean.value)// TODO
         checkList.add {
             val str = etValue.text?.toString()
             paramMap.put(bean.fields, str)
@@ -616,9 +636,9 @@ class BuildSignActivity : ToolbarActivity() {
                     }, { e ->
                         Trace.e(e)
                         showToast("上传失败")
-                    },{
+                    }, {
                         hideProgress()
-                    },{
+                    }, {
                         showProgress("正在上传")
                     })
         }

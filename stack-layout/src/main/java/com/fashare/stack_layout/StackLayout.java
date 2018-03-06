@@ -160,7 +160,7 @@ public class StackLayout extends FrameLayout {
     }
 
     // ------ Current Item ------
-    private int mCurrentItem;
+    public int mCurrentItem;
 
     private void setCurrentItem(int item){
         mCurrentItem = item;

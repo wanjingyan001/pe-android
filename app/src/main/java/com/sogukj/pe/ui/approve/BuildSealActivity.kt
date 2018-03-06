@@ -152,6 +152,9 @@ class BuildSealActivity : ToolbarActivity() {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
+                        if (payload.payload?.sid == null) {
+                            toolbar_menu.visibility = View.INVISIBLE
+                        }
                         //toolbar_menu 可能要隐藏，比如重新发起审批就不需要这个
                         toolbar_menu.setOnClickListener {
 
@@ -204,37 +207,68 @@ class BuildSealActivity : ToolbarActivity() {
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
-        if ((paramMap.get("seal") == null || judgeSealEmpty(paramMap.get("seal") as ArrayList<CustomSealBean.ValueBean>)) &&
-                (paramMap.get("fund_id") == null) &&
-                (paramMap.get("lawyerFile") == null || (paramMap.get("lawyerFile") as ArrayList<CustomSealBean.ValueBean>).size == 0) &&
-                (paramMap.get("is_lawyer") == null || (paramMap.get("is_lawyer") as Int) == 0) &&
-                (paramMap.get("sealFile") == null || (paramMap.get("sealFile") as ArrayList<CustomSealBean.ValueBean>).size == 0) &&
-                (paramMap.get("project_name") == null)) {//project_name选填
-            return
-        }
+        //project_name          项目名称                2
+        //seal                  用印选择                6
+        //reasons               用印事由                4
+        //sealFile              用印文件                9
+        //info                  备注说明                4
+        //send_sms              是否发短信提醒审批人      5
+        //manager_opinion       投资经理意见              4
+        //is_lawyer             是否需要律师意见        5
+        //lawyer_opinion        律师意见                4
+        //lawyerFile            律师意见文件          8
 
-        val builder = HashMap<String, Any>()
-        if (flagEdit) {
-            builder.put("approval_id", paramId!!)
-        } else {
-            builder.put("template_id", paramId!!)
-        }
-        builder.put("data", paramMap)
-        SoguApi.getService(application)
-                .saveDraft(builder)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ payload ->
-                    if (payload.isOk) {
-                        showToast("草稿保存成功")
-                        finish()
-                    } else
-                        showToast(payload.message)
-                }, { e ->
-                    Trace.e(e)
-                    showToast("草稿保存失败")
-                })
+        //foreign_id            外资名称                2
+
+        //fund_id               基金名称                2
+        MaterialDialog.Builder(this@BuildSealActivity)
+                .theme(Theme.LIGHT)
+                .content("是否需要保存草稿")
+                .canceledOnTouchOutside(true)
+                .positiveText("是")
+                .onPositive { dialog, which ->
+                    if ((paramMap.get("seal") == null || judgeSealEmpty(paramMap.get("seal") as ArrayList<CustomSealBean.ValueBean>)) &&
+                            (paramMap.get("fund_id") == null) &&
+                            (paramMap.get("reasons") == null || (paramMap.get("reasons") as String?).isNullOrEmpty()) &&
+                            (paramMap.get("info") == null || (paramMap.get("info") as String?).isNullOrEmpty()) &&
+                            (paramMap.get("manager_opinion") == null || (paramMap.get("manager_opinion") as String?).isNullOrEmpty()) &&
+                            (paramMap.get("lawyerFile") == null || (paramMap.get("lawyerFile") as ArrayList<CustomSealBean.ValueBean>).size == 0) &&
+                            (paramMap.get("is_lawyer") == null || (paramMap.get("is_lawyer") as Int) == 0) &&
+                            (paramMap.get("send_sms") == null || (paramMap.get("send_sms") as Int) == 0) &&
+                            (paramMap.get("sealFile") == null || (paramMap.get("sealFile") as ArrayList<CustomSealBean.ValueBean>).size == 0) &&
+                            (paramMap.get("project_name") == null) &&
+                            (paramMap.get("foreign_id") == null)) {
+                        return@onPositive
+                    }
+
+                    val builder = HashMap<String, Any>()
+                    if (flagEdit) {
+                        builder.put("approval_id", paramId!!)
+                    } else {
+                        builder.put("template_id", paramId!!)
+                    }
+                    builder.put("data", paramMap)
+                    SoguApi.getService(application)
+                            .saveDraft(builder)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(Schedulers.io())
+                            .subscribe({ payload ->
+                                if (payload.isOk) {
+                                    showToast("草稿保存成功")
+                                    super.onBackPressed()
+                                } else
+                                    showToast(payload.message)
+                            }, { e ->
+                                Trace.e(e)
+                                showToast("草稿保存失败")
+                            })
+                }
+                .negativeText("否")
+                .onNegative { dialog, which ->
+                    dialog.dismiss()
+                    super.onBackPressed()
+                }
+                .show()
     }
 
     private fun load() {
@@ -458,6 +492,7 @@ class BuildSealActivity : ToolbarActivity() {
         viewMap.put(bean.fields, etValue)
         val iv_alert = convertView.findViewById(R.id.iv_alert)
         iv_alert.visibility = View.GONE
+        paramMap.put(bean.fields, bean.value_map?.id)// TODO
         checkList.add {
             val str = etValue.text?.toString()
             if (flagEdit)
@@ -514,6 +549,7 @@ class BuildSealActivity : ToolbarActivity() {
         etValue.filters = Utils.getFilter(this)
         val iv_alert = convertView.findViewById(R.id.iv_alert)
         iv_alert.visibility = View.GONE
+        paramMap.put(bean.fields, bean.value)// TODO
         checkList.add {
             val str = etValue.text?.toString()
             paramMap.put(bean.fields, str)
@@ -525,6 +561,17 @@ class BuildSealActivity : ToolbarActivity() {
                 true
             }
         }
+        etValue.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                paramMap.put(bean.fields, s.toString())
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+        })
     }
 
     val hideFields = ArrayList<String>()
@@ -554,6 +601,9 @@ class BuildSealActivity : ToolbarActivity() {
         }
         rbNo.setOnClickListener {
             paramMap.put(bean.fields, 0)
+            if (bean.fields.equals("send_sms")) {
+                return@setOnClickListener
+            }
             bean.value_map?.hide?.split(",")?.forEach { field ->
                 if (!TextUtils.isEmpty(field)) {
                     val view = fieldMap[field]
@@ -564,6 +614,9 @@ class BuildSealActivity : ToolbarActivity() {
 
         rbYes.setOnClickListener {
             paramMap.put(bean.fields, 1)
+            if (bean.fields.equals("send_sms")) {
+                return@setOnClickListener
+            }
             bean.value_map?.hide?.split(",")?.forEach { field ->
                 if (!TextUtils.isEmpty(field)) {
                     val view = fieldMap[field]

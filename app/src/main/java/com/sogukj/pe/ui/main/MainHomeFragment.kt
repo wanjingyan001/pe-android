@@ -115,6 +115,7 @@ class MainHomeFragment : BaseFragment() {
         totalData = ArrayList<MessageBean>()
         var cacheData = cache.getDiskCache("${Store.store.getUser(context)?.uid}")
         if (cacheData != null) {
+            stack_layout.mCurrentItem = 0
             adapter.dataList.clear()
             adapter.dataList.addAll(cacheData)
             adapter.notifyDataSetChanged()
@@ -129,6 +130,7 @@ class MainHomeFragment : BaseFragment() {
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         payload.payload?.apply {
+                            stack_layout.mCurrentItem = 0
                             adapter.dataList.clear()
                             adapter.dataList.addAll(this)
                             adapter.notifyDataSetChanged()
