@@ -232,7 +232,7 @@ class MainActivity : BaseActivity() {
         if (isWifi()) {
             prompt.text = "当前处于Wi-Fi网络，请放心下载"
         } else {
-            var hint = SpannableString("当前处于4G网络，下载将消耗流量")
+            var hint = SpannableString("当前处于移动网络，下载将消耗流量")
             hint.setSpan(ForegroundColorSpan(Color.parseColor("#FF6174")), 9, hint.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
             prompt.text = hint
         }
@@ -330,7 +330,7 @@ class MainActivity : BaseActivity() {
                 if (isWifi()) {
                     prompt.text = "已在Wi-Fi网络下完成下载"
                 } else {
-                    prompt.text = "已在4G网络下完成下载"
+                    prompt.text = "已在移动网络下完成下载"
                 }
                 update.setOnClickListener {
                     dialog.dismiss()
