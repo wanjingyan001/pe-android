@@ -44,6 +44,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_fund_list.*
 import kotlinx.android.synthetic.main.layout_loading.*
 import org.jetbrains.anko.find
+import java.text.DecimalFormat
 
 
 /**
@@ -181,30 +182,64 @@ class FundListFragment : BaseFragment() {
 
     class FundCountDownColor(var millisInFuture: Long, var countDownInterval: Long, var view: View, var data: Int) : CountDownTimer(millisInFuture, countDownInterval) {
         override fun onFinish() {
-            var spannableString = SpannableString("${data} 万")
+            var tmpdata = ""//data原始数据，tmpdata表示是否需要转化为"亿"来显示
+            var spannableString: SpannableString? = null
+            if (data >= 10000) {
+                val df = DecimalFormat("#.00")
+                tmpdata = df.format(data * 1.0 / 10000)
+                spannableString = SpannableString("${tmpdata} 亿")
+            } else {
+                tmpdata = "${data}"
+                spannableString = SpannableString("${tmpdata} 万")
+            }
             var sizeSpan1 = RelativeSizeSpan(1f)
             var sizeSpan2 = RelativeSizeSpan(0.5f)
-            spannableString.setSpan(sizeSpan1, 0, data.toString().length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
-            spannableString.setSpan(sizeSpan2, data.toString().length, spannableString.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+            spannableString.setSpan(sizeSpan1, 0, tmpdata.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+            spannableString.setSpan(sizeSpan2, tmpdata.length, spannableString.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
             (view as TextView).text = spannableString
+//            var spannableString = SpannableString("${data} 万")
+//            var sizeSpan1 = RelativeSizeSpan(1f)
+//            var sizeSpan2 = RelativeSizeSpan(0.5f)
+//            spannableString.setSpan(sizeSpan1, 0, data.toString().length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+//            spannableString.setSpan(sizeSpan2, data.toString().length, spannableString.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+//            (view as TextView).text = spannableString
         }
 
         override fun onTick(millisUntilFinished: Long) {
             var tmp = millisInFuture - millisUntilFinished
-            var tmpData = data * tmp.toInt() / 1000
-            var spannableString = SpannableString("${tmpData} 万")
+            var data = data * tmp.toInt() / 1000
+
+            var tmpdata = ""
+            var spannableString: SpannableString? = null
+            if (data >= 10000) {
+                val df = DecimalFormat("#.00")
+                tmpdata = df.format(data * 1.0 / 10000)
+                spannableString = SpannableString("${tmpdata} 亿")
+            } else {
+                tmpdata = "${data}"
+                spannableString = SpannableString("${tmpdata} 万")
+            }
             var sizeSpan1 = RelativeSizeSpan(1f)
             var sizeSpan2 = RelativeSizeSpan(0.5f)
-            spannableString.setSpan(sizeSpan1, 0, tmpData.toString().length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
-            spannableString.setSpan(sizeSpan2, tmpData.toString().length, spannableString.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+            spannableString.setSpan(sizeSpan1, 0, tmpdata.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+            spannableString.setSpan(sizeSpan2, tmpdata.length, spannableString.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
             (view as TextView).text = spannableString
+//            var tmp = millisInFuture - millisUntilFinished
+//            var tmpData = data * tmp.toInt() / 1000
+//            var spannableString = SpannableString("${tmpData} 万")
+//            var sizeSpan1 = RelativeSizeSpan(1f)
+//            var sizeSpan2 = RelativeSizeSpan(0.5f)
+//            spannableString.setSpan(sizeSpan1, 0, tmpData.toString().length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+//            spannableString.setSpan(sizeSpan2, tmpData.toString().length, spannableString.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+//            (view as TextView).text = spannableString
         }
     }
 
     class FundCountDown(var millisInFuture: Long, var countDownInterval: Long, var view: View, var data: Int) : CountDownTimer(millisInFuture, countDownInterval) {
         override fun onFinish() {
             if (view is TextView) {
-                (view as TextView).text = "总额：${data}万"
+                //(view as TextView).text = "总额：${data}万"
+                (view as TextView).text = transform(data)
             } else {
                 (view as ProgressView).setPercent(data)
             }
@@ -213,9 +248,19 @@ class FundListFragment : BaseFragment() {
         override fun onTick(millisUntilFinished: Long) {
             var tmp = millisInFuture - millisUntilFinished
             if (view is TextView) {
-                (view as TextView).text = "总额：${data * tmp.toInt() / 1000}万"
+                //(view as TextView).text = "总额：${data * tmp.toInt() / 1000}万"
+                (view as TextView).text = transform(data * tmp.toInt() / 1000)
             } else {
                 (view as ProgressView).setPercent(data * tmp.toInt() / 1000)
+            }
+        }
+
+        private fun transform(data: Int): String {
+            if (data >= 10000) {
+                val df = DecimalFormat("#.00")
+                return "总额：${df.format(data * 1.0 / 10000)}亿"
+            } else {
+                return "总额：${data}万"
             }
         }
     }
