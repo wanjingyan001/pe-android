@@ -1,6 +1,11 @@
 [
     {
+<<<<<<< Updated upstream
         "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/animator-v21/design_appbar_state_list_animator.xml",
         "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/design-25.3.1.aar/a15125c2d75e205fbf7314e438b4dbdd/res/animator-v21/design_appbar_state_list_animator.xml"
+=======
+        "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/animator-v21/design_appbar_state_list_animator.xml",
+        "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/design-25.3.1.aar/134c3c602da753b4853681be29adaca7/res/animator-v21/design_appbar_state_list_animator.xml"
+>>>>>>> Stashed changes
     }
 ]
