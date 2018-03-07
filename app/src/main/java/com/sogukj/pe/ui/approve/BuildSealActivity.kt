@@ -16,6 +16,7 @@ import cn.finalteam.rxgalleryfinal.RxGalleryFinal
 import cn.finalteam.rxgalleryfinal.imageloader.ImageLoaderType
 import cn.finalteam.rxgalleryfinal.rxbus.RxBusResultDisposable
 import cn.finalteam.rxgalleryfinal.rxbus.event.ImageRadioResultEvent
+import com.afollestad.materialdialogs.GravityEnum
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
@@ -237,9 +238,10 @@ class BuildSealActivity : ToolbarActivity() {
         }
         MaterialDialog.Builder(this@BuildSealActivity)
                 .theme(Theme.LIGHT)
+                .title("提示")
                 .content("是否需要保存草稿")
                 .canceledOnTouchOutside(true)
-                .positiveText("是")
+                .positiveText("确定")
                 .onPositive { dialog, which ->
                     val builder = HashMap<String, Any>()
                     if (flagEdit) {
@@ -263,7 +265,7 @@ class BuildSealActivity : ToolbarActivity() {
                                 showToast("草稿保存失败")
                             })
                 }
-                .negativeText("否")
+                .negativeText("取消")
                 .onNegative { dialog, which ->
                     dialog.dismiss()
                     super.onBackPressed()
