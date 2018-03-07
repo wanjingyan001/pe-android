@@ -43,6 +43,7 @@ import okhttp3.RequestBody
 import org.jetbrains.anko.find
 import java.io.File
 import java.util.HashMap
+import java.util.concurrent.ConcurrentHashMap
 import kotlin.collections.ArrayList
 import kotlin.collections.component1
 import kotlin.collections.component2
@@ -166,6 +167,16 @@ class BuildSignActivity : ToolbarActivity() {
     }
 
     override fun onBackPressed() {
+        var tmpMap = HashMap<String, Any?>()
+        for ((k, v) in paramMap) {
+            if (v == null) {
+
+            } else {
+                tmpMap.put(k, v)
+            }
+        }
+        paramMap.clear()
+        paramMap.putAll(tmpMap)
 
         //project_id          项目名称                2
         //reasons               签字事由                4
@@ -189,6 +200,7 @@ class BuildSignActivity : ToolbarActivity() {
                 .positiveText("确定")
                 .onPositive { dialog, which ->
                     val builder = HashMap<String, Any>()
+                    paramId = XmlDb.open(context).get(Extras.ID, "").toInt()
                     builder.put("template_id", paramId!!)
                     builder.put("data", paramMap)
                     SoguApi.getService(application)
@@ -305,7 +317,7 @@ class BuildSignActivity : ToolbarActivity() {
         }
     }
 
-    val paramMap = HashMap<String, Any?>()
+    val paramMap = ConcurrentHashMap<String, Any?>()
     val checkList = ArrayList<() -> Boolean>()
 
     private fun add1(bean: CustomSealBean, inflater: LayoutInflater) {

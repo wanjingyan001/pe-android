@@ -44,6 +44,7 @@ import okhttp3.RequestBody
 import org.jetbrains.anko.find
 import java.io.File
 import java.io.Serializable
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Created by qinfei on 17/10/18.
@@ -208,6 +209,16 @@ class BuildSealActivity : ToolbarActivity() {
     }
 
     override fun onBackPressed() {
+        var tmpMap = HashMap<String, Any?>()
+        for ((k, v) in paramMap) {
+            if (v == null) {
+
+            } else {
+                tmpMap.put(k, v)
+            }
+        }
+        paramMap.clear()
+        paramMap.putAll(tmpMap)
         //project_name          项目名称                2
         //seal                  用印选择                6
         //reasons               用印事由                4
@@ -244,11 +255,13 @@ class BuildSealActivity : ToolbarActivity() {
                 .positiveText("确定")
                 .onPositive { dialog, which ->
                     val builder = HashMap<String, Any>()
-                    if (flagEdit) {
-                        builder.put("approval_id", paramId!!)
-                    } else {
-                        builder.put("template_id", paramId!!)
-                    }
+//                    if (flagEdit) {
+//                        builder.put("approval_id", paramId!!)
+//                    } else {
+//                        builder.put("template_id", paramId!!)
+//                    }
+                    paramId = XmlDb.open(context).get(Extras.ID, "").toInt()
+                    builder.put("template_id", paramId!!)
                     builder.put("data", paramMap)
                     SoguApi.getService(application)
                             .saveDraft(builder)
