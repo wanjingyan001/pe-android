@@ -41,12 +41,18 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <include
+        <!--<include-->
+            <!--android:id="@+id/search_box"-->
+            <!--layout="@layout/search_box"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginLeft="10dp"-->
+            <!--android:layout_weight="1" />-->
+
+        <com.sogukj.pe.view.SearchView
             android:id="@+id/search_box"
-            layout="@layout/search_box"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
             android:layout_weight="1" />
 
         <ImageView

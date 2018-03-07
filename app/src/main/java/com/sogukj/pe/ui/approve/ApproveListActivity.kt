@@ -3,6 +3,7 @@ package com.sogukj.pe.ui.approve
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.content.ContextCompat
@@ -31,6 +32,9 @@ import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_approve_list.*
+import org.jetbrains.anko.backgroundColor
+import org.jetbrains.anko.backgroundResource
+import org.jetbrains.anko.textColor
 
 /**
  * Created by qinfei on 17/10/18.
@@ -155,17 +159,32 @@ class ApproveListActivity : ToolbarActivity(), TabLayout.OnTabSelectedListener {
                     stateFilter()
                 }
             }
-            search_box.setOnClickListener {
-                var pro_id: Int? = null
-                var status_tyoe: Int? = null
-                if (intent.getStringExtra(Extras.TITLE).equals("审批历史")) {
-                    pro_id = intent.getIntExtra(Extras.ID, 1)
-                    status_tyoe = null
+//            search_box.setOnClickListener {
+//                var pro_id: Int? = null
+//                var status_tyoe: Int? = null
+//                if (intent.getStringExtra(Extras.TITLE).equals("审批历史")) {
+//                    pro_id = intent.getIntExtra(Extras.ID, 1)
+//                    status_tyoe = null
+//                } else {
+//                    pro_id = null
+//                    status_tyoe = mType
+//                }
+//                ApproveSearchActivity.start(this, status_tyoe, pro_id)
+//            }
+            search_box.root.backgroundColor = Color.WHITE
+            (search_box.tv_cancel as TextView).textColor = Color.parseColor("#a0a4aa")
+            search_box.tv_cancel.visibility = View.GONE
+            search_box.et_search.hint = "搜索"
+            search_box.onTextChange = { text ->
+                if (null != text && !TextUtils.isEmpty(text)) {
+                    searchStr = text
+                    page = 1
+                    doRequest()
                 } else {
-                    pro_id = null
-                    status_tyoe = mType
+                    searchStr = null
+                    page = 1
+                    stateDefault()
                 }
-                ApproveSearchActivity.start(this, status_tyoe, pro_id)
             }
         }
         stateDefault()
@@ -340,6 +359,7 @@ class ApproveListActivity : ToolbarActivity(), TabLayout.OnTabSelectedListener {
         }
     }
 
+    var searchStr: String? = null
     var page = 1
     fun doRequest() {
         val templates = if (paramTemplates.isEmpty()) null else paramTemplates.joinToString(",")
@@ -356,7 +376,7 @@ class ApproveListActivity : ToolbarActivity(), TabLayout.OnTabSelectedListener {
         }
         SoguApi.getService(application)
                 .listApproval(status = status_tyoe, page = page,
-                        fuzzyQuery = null,
+                        fuzzyQuery = searchStr,
                         type = filterType, template_id = templates, filter = status, project_id = pro_id)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
