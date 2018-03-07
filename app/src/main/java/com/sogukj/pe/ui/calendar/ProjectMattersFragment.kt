@@ -102,7 +102,6 @@ class ProjectMattersFragment : BaseFragment(), ScheduleItemClickListener {
             this.date = Utils.getTime(calendar.time.time, "yyyy-MM-dd")
             doRequest(page, this.date, companyId)
         })
-        doRequest(page, date)
         MDTime.text = Utils.getTime(System.currentTimeMillis(), "MM月dd日")
         matters_img1.setOnClickListener {
             //跳转公司列表
@@ -112,6 +111,11 @@ class ProjectMattersFragment : BaseFragment(), ScheduleItemClickListener {
             //选择日期
             window.showAtLocation(find(R.id.project_matter_main), Gravity.BOTTOM, 0, 0)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        doRequest(page, date)
     }
 
 

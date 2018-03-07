@@ -30,7 +30,7 @@ class BizInfoActivity : ToolbarActivity() {
         setBack(true)
         setTitle("工商信息")
         SoguApi.getService(application)
-                .bizinfo(project.company_id!!)
+                .bizinfo(company_id = project.company_id!!)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->

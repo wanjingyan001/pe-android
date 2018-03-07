@@ -10,6 +10,7 @@ import android.graphics.PorterDuff
 import android.os.Bundle
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.text.Html
 import android.text.TextUtils
@@ -39,10 +40,7 @@ import com.sogukj.pe.ui.news.NegativeNewsActivity
 import com.sogukj.pe.ui.news.NewsDetailActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
-import com.sogukj.pe.view.FlowLayout
-import com.sogukj.pe.view.ListAdapter
-import com.sogukj.pe.view.ListHolder
-import com.sogukj.pe.view.TipsView
+import com.sogukj.pe.view.*
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -56,8 +54,8 @@ import java.net.UnknownHostException
  * Created by qinfei on 17/7/18.
  */
 class ProjectActivity : ToolbarActivity(), View.OnClickListener {
-    lateinit var adapterNeg: ListAdapter<NewsBean>
-    lateinit var adapterYuqin: ListAdapter<NewsBean>
+    lateinit var adapterNeg: RecyclerAdapter<NewsBean>
+    lateinit var adapterYuqin: RecyclerAdapter<NewsBean>
     lateinit var project: ProjectBean
     var position = 0
     var type = 0
@@ -161,70 +159,34 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
         divide2.visibility = View.VISIBLE
 
         ll_shangshi.visibility = if (project.is_volatility == 0) View.GONE else View.VISIBLE
-        adapterNeg = ListAdapter<NewsBean> { NewsHolder() }
-        adapterYuqin = ListAdapter<NewsBean> { NewsHolder() }
+//        adapterNeg = ListAdapter<NewsBean> { NewsHolder() }
+        adapterNeg = RecyclerAdapter(context, { adapter, parent, type ->
+            NewsHolder(adapter.getView(R.layout.item_main_news, parent))
+        })
+        adapterYuqin = RecyclerAdapter(context, { adapter, parent, type ->
+            NewsHolder(adapter.getView(R.layout.item_main_news, parent))
+        })
+        list_negative.layoutManager = LinearLayoutManager(this)
+        list_negative.isNestedScrollingEnabled = false
         list_negative.adapter = adapterNeg
+        list_yuqin.layoutManager = LinearLayoutManager(this)
         list_yuqin.adapter = adapterYuqin
+        list_yuqin.isNestedScrollingEnabled = false
+
         tv_more.setOnClickListener {
             NegativeNewsActivity.start(this, project, 1)
         }
         tv_more_yq.setOnClickListener {
             NegativeNewsActivity.start(this, project, 2)
         }
-        list_negative.setOnItemClickListener { parent, view, position, id ->
+        adapterNeg.onItemClick = { view, position ->
             val data = adapterNeg.dataList[position]
             NewsDetailActivity.start(this, data)
         }
-        list_yuqin.setOnItemClickListener { parent, view, position, id ->
+        adapterYuqin.onItemClick = { view, position ->
             val data = adapterYuqin.dataList[position]
             NewsDetailActivity.start(this, data)
         }
-        SoguApi.getService(application)
-                .listNews(pageSize = 3, page = 1, type = 1, company_id = project.company_id)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ payload ->
-                    if (payload.isOk) {
-                        adapterNeg.dataList.clear()
-                        payload.payload?.apply {
-                            adapterNeg.dataList.addAll(this)
-                        }
-                        adapterNeg.notifyDataSetChanged()
-                    } else
-                        showToast(payload.message)
-                }, { e ->
-                    Trace.e(e)
-                    tv_more.visibility = View.GONE
-                    showToast("暂无可用数据")
-                }, {
-                    if (adapterNeg.dataList.size < 3)
-                        tv_more.visibility = View.GONE
-                    else
-                        tv_more.visibility = View.VISIBLE
-                })
-        SoguApi.getService(application)
-                .listNews(pageSize = 3, page = 1, type = 2, company_id = project.company_id)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ payload ->
-                    if (payload.isOk) {
-                        adapterYuqin.dataList.clear()
-                        payload.payload?.apply {
-                            adapterYuqin.dataList.addAll(this)
-                        }
-                        adapterYuqin.notifyDataSetChanged()
-                    } else
-                        showToast(payload.message)
-                }, { e ->
-                    Trace.e(e)
-                    tv_more_yq.visibility = View.GONE
-                    showToast("暂无可用数据")
-                }, {
-                    if (adapterYuqin.dataList.size < 3)
-                        tv_more_yq.visibility = View.GONE
-                    else
-                        tv_more_yq.visibility = View.VISIBLE
-                })
         disable(tv_cwsj)
 //        disable(tv_gdzx)
         disable(tv_xmzy)
@@ -235,21 +197,43 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        payload.payload
-                                ?.counts
-                                ?.apply {
-                                    refresh(gl_shangshi, this, Color.parseColor("#5785f3"))
-                                    refresh(gl_qiyebeijin, this, Color.parseColor("#fe5f39"))
-                                    refresh(gl_qiyefazhan, this, Color.parseColor("#5785f3"))
-                                    refresh(gl_jinyinzhuankuang, this, Color.parseColor("#fe5f39"))
-                                    refresh(gl_zhishichanquan, this, Color.parseColor("#5785f3"))
-                                    refreshView()
-                                }
+                        payload.payload?.counts?.apply {
+                            refresh(gl_shangshi, this, Color.parseColor("#5785f3"))
+                            refresh(gl_qiyebeijin, this, Color.parseColor("#fe5f39"))
+                            refresh(gl_qiyefazhan, this, Color.parseColor("#5785f3"))
+                            refresh(gl_jinyinzhuankuang, this, Color.parseColor("#fe5f39"))
+                            refresh(gl_zhishichanquan, this, Color.parseColor("#5785f3"))
+                            refreshView()
+                        }
+                        payload.payload?.yuQing?.let { list ->
+                            adapterYuqin.dataList.clear()
+                            payload.payload?.let {
+                                adapterYuqin.dataList.addAll(list)
+                            }
+                            adapterYuqin.notifyDataSetChanged()
+                        }
+                        payload.payload?.fuMian?.let { list ->
+                            adapterNeg.dataList.clear()
+                            payload.payload?.let {
+                                adapterNeg.dataList.addAll(list)
+                            }
+                            adapterNeg.notifyDataSetChanged()
+                        }
                     } else
                         showToast(payload.message)
                 }, { e ->
                     Trace.e(e)
                     tv_more_yq.visibility = View.GONE
+                },{
+                    if (adapterNeg.dataList.size < 3)
+                        tv_more.visibility = View.GONE
+                    else
+                        tv_more.visibility = View.VISIBLE
+
+                    if (adapterYuqin.dataList.size < 3)
+                        tv_more_yq.visibility = View.GONE
+                    else
+                        tv_more_yq.visibility = View.VISIBLE
                 })
 
         is_business = project.is_business
@@ -640,26 +624,14 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
 //
 //    }
 
-    inner class NewsHolder
-        : ListHolder<NewsBean> {
-        lateinit var tv_summary: TextView
-        lateinit var tv_time: TextView
-        lateinit var tv_from: TextView
-        lateinit var tags: FlowLayout
-        lateinit var tv_date: TextView
-        lateinit var icon: ImageView
-        override fun createView(inflater: LayoutInflater): View {
-            val convertView = inflater.inflate(R.layout.item_main_news, null)
-            tv_summary = convertView.find(R.id.tv_summary)
-            tv_time = convertView.find(R.id.tv_time)
-            tv_from = convertView.find(R.id.tv_from)
-            tags = convertView.find(R.id.tags)
-            tv_date = convertView.findViewById(R.id.tv_date) as TextView
-            icon = convertView.find(R.id.imageIcon)
-            return convertView
-        }
-
-        override fun showData(convertView: View, position: Int, data: NewsBean?) {
+    inner class NewsHolder(convertView: View) : RecyclerHolder<NewsBean>(convertView) {
+        val tv_summary: TextView = convertView.find(R.id.tv_summary)
+        val tv_time: TextView = convertView.find(R.id.tv_time)
+        val tv_from: TextView = convertView.find(R.id.tv_from)
+        val tags: FlowLayout = convertView.find(R.id.tags)
+        val tv_date: TextView = convertView.find(R.id.tv_date)
+        val icon: ImageView = convertView.find(R.id.imageIcon)
+        override fun setData(view: View, data: NewsBean, position: Int) {
             var label = data?.title
 //                if (!TextUtils.isEmpty(label) && !TextUtils.isEmpty(key)) {
 //                    label = label!!.replaceFirst(key, "<font color='#ff3300'>${key}</font>")

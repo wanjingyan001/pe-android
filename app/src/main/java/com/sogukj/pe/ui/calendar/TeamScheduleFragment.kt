@@ -19,6 +19,8 @@ import com.ldf.calendar.view.MonthPager
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.ScheduleBean
+import com.sogukj.pe.bean.UserBean
+import com.sogukj.pe.ui.IM.TeamSelectActivity
 import com.sogukj.pe.ui.approve.SealApproveActivity
 import com.sogukj.pe.ui.approve.SignApproveActivity
 import com.sogukj.pe.ui.project.ProjectActivity
@@ -75,6 +77,11 @@ class TeamScheduleFragment : BaseFragment(), ScheduleItemClickListener {
         initList()
         selectDate = SimpleDateFormat("yyyy-MM-dd").format(Date(System.currentTimeMillis()))
         calendarAdapter.notifyDataChanged(CalendarDate())
+
+    }
+
+    override fun onResume() {
+        super.onResume()
         doRequest(page, selectDate)
     }
 
@@ -236,8 +243,8 @@ class TeamScheduleFragment : BaseFragment(), ScheduleItemClickListener {
     override fun onItemClick(view: View, position: Int) {
         when (view.id) {
             R.id.selectTv -> {
-//                OrganizationActivity.startForResult(this)
-                SelectUserActivity.start(this, selectUser)
+//                SelectUserActivity.start(this, selectUser)
+                TeamSelectActivity.startForResult(this,true, selectUser,false,false)
             }
             R.id.teamItemLayout -> {
                 val scheduleBean = data[position]
@@ -309,12 +316,12 @@ class TeamScheduleFragment : BaseFragment(), ScheduleItemClickListener {
 
     }
 
-    var selectUser: Users? = null
+    var selectUser: ArrayList<UserBean>? = null
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == Extras.REQUESTCODE && resultCode == Activity.RESULT_OK && data != null) {
-            selectUser = data.getSerializableExtra(Extras.DATA) as Users
-            selectUser?.selectUsers?.let {
+            selectUser = data.getSerializableExtra(Extras.DATA) as ArrayList<UserBean>
+            selectUser?.let {
                 it.forEachIndexed { index, userBean ->
                     filter = filter.append("${userBean.user_id},")
                 }
