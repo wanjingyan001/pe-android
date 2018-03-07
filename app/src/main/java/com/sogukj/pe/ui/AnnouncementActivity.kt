@@ -53,7 +53,7 @@ class AnnouncementActivity : ToolbarActivity(), SupportEmptyView {
         adapter.onItemClick = { v, p ->
             val bean = adapter.dataList[p]
             if (null != bean.url)
-                PdfUtil.loadPdf(this, bean.url)
+                PdfUtil.loadPdf(this, bean.url,null)
         }
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = LinearLayoutManager.VERTICAL

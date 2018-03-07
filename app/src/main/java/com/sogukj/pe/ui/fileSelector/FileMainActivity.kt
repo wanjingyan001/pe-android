@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.app.FragmentStatePagerAdapter
+import android.support.v4.view.ViewPager
 import android.view.KeyEvent
 import android.view.View
 import android.widget.AdapterView
@@ -24,7 +25,7 @@ import kotlinx.android.synthetic.main.fragment_weekly_wait_to_watch.*
 import java.io.File
 import kotlin.properties.Delegates
 
-class FileMainActivity : AppCompatActivity() {
+class FileMainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
     val selectedFile = ArrayList<File>()
     var maxSize: Int by Delegates.notNull()
     var isReplace: Boolean = false
@@ -48,20 +49,9 @@ class FileMainActivity : AppCompatActivity() {
                 spinner.dismiss()
             }
         }
-//        directory_type.adapter = SpinnerAdapter(this, resources.getStringArray(R.array.spinner_select_file))
-//        directory_type.dropDownVerticalOffset = 20
-//        directory_type.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-//            override fun onNothingSelected(parent: AdapterView<*>?) {
-//
-//            }
-//
-//            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-//                file_pager.currentItem = position
-//            }
-//
-//        }
         val fragments = listOf(CommonDocumentsFragment.newInstance(), AllFileFragment())
         file_pager.adapter = FilePageAdapter(supportFragmentManager, fragments)
+        file_pager.addOnPageChangeListener(this)
         send_selected_files.setOnClickListener {
             val intent = Intent()
             val paths = ArrayList<String>()
@@ -100,6 +90,18 @@ class FileMainActivity : AppCompatActivity() {
         return super.onKeyDown(keyCode, event)
     }
 
+    override fun onPageScrollStateChanged(state: Int) {
+    }
+
+    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+    }
+
+    override fun onPageSelected(position: Int) {
+        when (position) {
+            0 -> directory_type.text = "常用应用"
+            1 -> directory_type.text = "内部存储"
+        }
+    }
 
     inner class FilePageAdapter(fm: FragmentManager, val fragments: List<Fragment>) : FragmentPagerAdapter(fm) {
         override fun getItem(position: Int): Fragment = fragments[position]

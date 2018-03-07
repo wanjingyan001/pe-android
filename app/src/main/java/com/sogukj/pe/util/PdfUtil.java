@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.widget.Toast;
@@ -49,7 +51,7 @@ public class PdfUtil {
         }
     }
 
-    public static void loadPdf(final Context context, String urls) {
+    public static void loadPdf(final Context context, String urls, @Nullable String name) {
         URL url = null;
 
         try {
@@ -61,14 +63,18 @@ public class PdfUtil {
         if (url == null) {
             return;
         }
-
-        final String filePath = FileUtil.getExternalFilesDir(context) + url.getPath().hashCode() + ".pdf";
+        final String filePath;
+        if (name != null) {
+            filePath = FileUtil.getExternalFilesDir(context) + name;
+        } else {
+            filePath = FileUtil.getExternalFilesDir(context) + url.getPath().hashCode() + ".pdf";
+        }
         if (FileUtil.isFileExist(filePath)) {
             opendPdf(context, new File(filePath));
         } else {
             Toast.makeText(context, "正在下载文件...", Toast.LENGTH_SHORT).show();
             String host = "http://" + url.getHost();
-            new DownLoadService(host).getFile(urls.replace(host,"")).enqueue(new Callback<ResponseBody>() {
+            new DownLoadService(host).getFile(urls.replace(host, "")).enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     try {

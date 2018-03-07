@@ -662,7 +662,7 @@ interface SoguService {
 
     @FormUrlEncoded
     @POST("/api/Approve/derivePdf")
-    fun exportPdf(@Field("approval_id") approval_id: Int): Observable<Payload<String>>
+    fun exportPdf(@Field("approval_id") approval_id: Int): Observable<Payload<ApprovalForm>>
 
     @POST("/api/Message/getMessageIndex")
     fun msgIndex(): Observable<Payload<MessageIndexBean>>

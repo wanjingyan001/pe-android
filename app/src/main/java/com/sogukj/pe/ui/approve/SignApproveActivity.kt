@@ -219,13 +219,15 @@ class SignApproveActivity : ToolbarActivity() {
                             .subscribeOn(Schedulers.io())
                             .subscribe({ payload ->
                                 if (payload.isOk) {
-                                    val url = payload.payload
+                                    val bean = payload.payload
 //                                    if (!TextUtils.isEmpty(url)) {
 //                                        val intent = Intent(Intent.ACTION_VIEW)
 //                                        intent.data = Uri.parse(url)
 //                                        startActivity(intent)
 //                                    }
-                                        PdfUtil.loadPdf(this, url!!)
+                                    bean?.let {
+                                        PdfUtil.loadPdf(this, it.url,it.name)
+                                    }
                                 } else
                                     showToast(payload.message)
                             }, { e ->
