@@ -115,7 +115,9 @@ class MessageListActivity : ToolbarActivity() {
             }
 
             override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
-                refreshLayout?.finishLoadmore()
+                //refreshLayout?.finishLoadmore()
+                ++page
+                doRequest()
             }
 
         })
@@ -133,7 +135,7 @@ class MessageListActivity : ToolbarActivity() {
     var page = 1
     fun doRequest() {
         SoguApi.getService(application)
-                .msgList()
+                .msgList(page = page, pageSize = 20)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->

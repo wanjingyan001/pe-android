@@ -1,5 +1,7 @@
 package com.sogukj.pe.ui.main
 
+import android.app.Notification
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.PorterDuff
@@ -35,6 +37,11 @@ import com.sogukj.pe.view.MyStackPageTransformer
 import com.sogukj.util.Store
 import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.NIMClient
+import com.umeng.message.PushAgent
+import com.umeng.message.UmengMessageHandler
+import com.umeng.message.entity.UMessage
+import me.leolin.shortcutbadger.ShortcutBadger
+import org.json.JSONObject
 
 
 /**
@@ -78,6 +85,11 @@ class MainHomeFragment : BaseFragment() {
         stack_layout.setOnSwipeListener(object : StackLayout.OnSwipeListener() {
             override fun onSwiped(swipedView: View, swipedItemPos: Int, isSwipeLeft: Boolean, itemLeft: Int) {
                 //Log.e("tagtagtag", (if (isSwipeLeft) "往左" else "往右") + "移除" + mData.get(swipedItemPos) + "." + "剩余" + itemLeft + "项")
+                Log.e("tagtagtag", "剩余" + itemLeft + "项")
+                if (itemLeft == 0) {
+                    page++
+                    doRequest()
+                }
             }
         })
 
@@ -85,10 +97,38 @@ class MainHomeFragment : BaseFragment() {
         Glide.with(context).asGif().load(R.drawable.loading).into(pb)
         pb.visibility = View.VISIBLE
         doRequest()
+
+        PushAgent.getInstance(context).messageHandler = object : UmengMessageHandler() {
+            override fun getNotification(p0: Context?, p1: UMessage?): Notification {
+                p1?.custom.apply {
+                    val json = JSONObject(this)
+                    val type = json.getInt("type")
+                    val data = json.getJSONObject("data")
+                    //1.负面信息  2.任务  3.日程 4签字,用印 5.周报
+                    when (type) {
+                        4 -> {
+                            val approval_id = data.getInt("approval_id")
+                            val is_mine = data.getInt("is_mine")
+                            if (data.has("qs")) {
+                                //SignApproveActivity.start(context, approval_id, is_mine, "签字审批")
+                            } else {
+                                //SealApproveActivity.start(context, approval_id, is_mine, "用印审批")
+                                page = 1
+                                doRequest()
+                            }
+                        }
+                        else -> {
+                        }
+                    }
+                }
+                return super.getNotification(p0, p1)
+            }
+        }
     }
 
     lateinit var adapter: HomeAdapter
     lateinit var cache: CacheUtils
+    var page = 1
 
     override fun onDestroy() {
         super.onDestroy()
@@ -115,16 +155,18 @@ class MainHomeFragment : BaseFragment() {
         totalData = ArrayList<MessageBean>()
         var cacheData = cache.getDiskCache("${Store.store.getUser(context)?.uid}")
         if (cacheData != null) {
-            stack_layout.mCurrentItem = 0
-            adapter.dataList.clear()
-            adapter.dataList.addAll(cacheData)
-            adapter.notifyDataSetChanged()
+            if (page == 1) {
+                stack_layout.mCurrentItem = 0
+                adapter.dataList.clear()
+                adapter.dataList.addAll(cacheData)
+                adapter.notifyDataSetChanged()
 
-            totalData.clear()
-            totalData.addAll(cacheData)
+                totalData.clear()
+                totalData.addAll(cacheData)
+            }
         }
         SoguApi.getService(baseActivity!!.application)
-                .msgList(status = 1)
+                .msgList(page = page, pageSize = 20, status = 1)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -135,9 +177,11 @@ class MainHomeFragment : BaseFragment() {
                             adapter.dataList.addAll(this)
                             adapter.notifyDataSetChanged()
 
-                            cache.addToDiskCache("${Store.store.getUser(context)?.uid}", this)
-                            totalData.clear()
-                            totalData.addAll(this)
+                            if (page == 1) {
+                                cache.addToDiskCache("${Store.store.getUser(context)?.uid}", this)
+                                totalData.clear()
+                                totalData.addAll(this)
+                            }
                         }
                     } else
                         showToast(payload.message)

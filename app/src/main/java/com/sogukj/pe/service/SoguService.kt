@@ -670,7 +670,11 @@ interface SoguService {
     //可空（1=>待审批，2=>已审批）
     @FormUrlEncoded
     @POST("/api/Message/getMessageList")
-    fun msgList(@Field("status") status: Int? = null): Observable<Payload<ArrayList<MessageBean>>>
+    fun msgList(@Field("page") page: Int? = 1,
+                @Field("pageSize") pageSize: Int? = 20,
+                @Field("status") status: Int? = null,
+                @Field("type") type: Int? = null,
+                @Field("template_id") template_id: String? = null): Observable<Payload<ArrayList<MessageBean>>>
 
     //    @FormUrlEncoded
 //    @POST("/api/Approve/applyUrgent")
