@@ -223,7 +223,7 @@ class MainActivity : BaseActivity() {
         val message = mDialog.find<TextView>(R.id.update_message)
         val update = mDialog.find<Button>(R.id.update)
         val prompt = mDialog.find<TextView>(R.id.update_prompt)
-        mDialog.show()
+        //mDialog.show()
         title.text = "正在检测更新"
         update_info.visibility = View.GONE
         scrollView.visibility = View.GONE
@@ -252,9 +252,10 @@ class MainActivity : BaseActivity() {
                             if (force == 0) {
                                 title.text = "不用更新"
                                 Thread.sleep(500)
-                                mDialog.dismiss()
+                                //mDialog.dismiss()
                                 //enterNext()
                             } else {//1=>更新，2---强制更新
+                                mDialog.show()
                                 if (force == 1) {
                                     mDialog.setCanceledOnTouchOutside(true)
                                 } else {
@@ -279,13 +280,13 @@ class MainActivity : BaseActivity() {
                         } else {
                             //enterNext()
                             title.text = "更新失败"
-                            mDialog.dismiss()
+                            //mDialog.dismiss()
                         }
                     } else {
                         showToast(payload.message)
                         //enterNext()
                         title.text = "更新失败"
-                        mDialog.dismiss()
+                        //mDialog.dismiss()
                     }
                 }, { e ->
                     Trace.e(e)
