@@ -156,11 +156,12 @@ class SealApproveActivity : ToolbarActivity() {
                                 if (payload.isOk) {
                                     val bean = payload.payload
                                     bean?.let {
-                                        if (!TextUtils.isEmpty(it.url)) {
-                                            val intent = Intent(Intent.ACTION_VIEW)
-                                            intent.data = Uri.parse(it.url)
-                                            startActivity(intent)
-                                        }
+//                                        if (!TextUtils.isEmpty(it.url)) {
+//                                            val intent = Intent(Intent.ACTION_VIEW)
+//                                            intent.data = Uri.parse(it.url)
+//                                            startActivity(intent)
+//                                        }
+                                        PdfUtil.loadPdf(this, it.url,it.name)
                                     }
                                 } else
                                     showToast(payload.message)

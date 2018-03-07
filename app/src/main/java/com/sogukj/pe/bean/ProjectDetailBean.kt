@@ -6,9 +6,10 @@ import java.io.Serializable
  * Created by qinfei on 17/8/25.
  */
 class ProjectDetailBean : Serializable {
-    var yuQing: List<NewsBean>? = null
-    var fuMian: List<NewsBean>? = null
+    var yuQing: List<NewsBean>? = null//舆情新闻
+    var fuMian: List<NewsBean>? = null//负面新闻
     var counts: Map<String, Int>? = null
+    var is_focus: Int? = null//是否关注，1是关注，0未关注
 }
 
 //class ProjectCountBean : Serializable {
