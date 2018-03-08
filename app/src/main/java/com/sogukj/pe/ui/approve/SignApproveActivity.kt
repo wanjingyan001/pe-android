@@ -328,9 +328,10 @@ class SignApproveActivity : ToolbarActivity() {
             ll_files.addView(view)
             if (!TextUtils.isEmpty(v.url))
                 view.setOnClickListener {
-                    val intent = Intent(Intent.ACTION_VIEW)
-                    intent.data = Uri.parse(v.url)
-                    startActivity(intent)
+//                    val intent = Intent(Intent.ACTION_VIEW)
+//                    intent.data = Uri.parse(v.url)
+//                    startActivity(intent)
+                    PdfUtil.loadPdf(this,v.url,v.file_name)
                 }
         }
     }

@@ -175,10 +175,9 @@ class UserFragment : ToolbarFragment(), View.OnClickListener {
             tv_mail?.text = user.email
 //        if (!TextUtils.isEmpty(user.depart_name))
 //            tv_job?.text = user.position
-        if (!TextUtils.isEmpty(user.url))
-            Glide.with(this@UserFragment)
-                    .load(user.headImage())
-                    .into(iv_user)
+        Glide.with(this@UserFragment)
+                .load(user.headImage())
+                .into(iv_user)
     }
 
     override fun onClick(view: View) {
