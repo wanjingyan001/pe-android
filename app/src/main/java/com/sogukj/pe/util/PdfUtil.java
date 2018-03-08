@@ -28,25 +28,50 @@ import retrofit2.Response;
 public class PdfUtil {
 
     public static void opendPdf(Context context, File file) {
-        Uri path = Uri.fromFile(file);
         Intent intent = new Intent(Intent.ACTION_VIEW);
-//        intent.setDataAndType(path, "application/pdf");
-//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
+        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Uri uri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            Uri contentUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", file);
-            intent.setDataAndType(contentUri, "application/pdf");
+            uri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", file);
         } else {
-            intent.setDataAndType(Uri.fromFile(file), "application/pdf");
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            uri = Uri.fromFile(file);
         }
-
+        FileTypeUtils.FileType type = FileTypeUtils.getFileType(file);
+        switch (type) {
+            case PDF:
+                intent.setDataAndType(uri, "application/pdf");
+                break;
+            case WORD:
+                intent.setDataAndType(uri, "application/msword");
+                break;
+            case EXCEL:
+                intent.setDataAndType(uri, "application/vnd.ms-excel");
+                break;
+            case MUSIC:
+                intent.setDataAndType(uri, "audio/*");
+                break;
+            case VIDEO:
+                intent.setDataAndType(uri, "video/*");
+                break;
+            case IMAGE:
+                intent.setDataAndType(uri, "image/*");
+                break;
+            case DOCUMENT:
+            case CERTIFICATE:
+            case DRAWING:
+                intent.setDataAndType(uri, "text/plain");
+                break;
+            default:
+                intent.setDataAndType(uri, "text/html");
+                break;
+        }
         try {
             context.startActivity(intent);
         } catch (ActivityNotFoundException e) {
             Toast.makeText(context,
-                    "没有找到可以打开pdf类型的应用!",
+                    "没有找到可以打开该文件的应用!",
                     Toast.LENGTH_SHORT).show();
         }
     }
