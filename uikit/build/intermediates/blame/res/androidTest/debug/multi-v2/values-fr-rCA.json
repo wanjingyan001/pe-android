@@ -1,17 +1,10 @@
 {
     "logs": [
         {
-<<<<<<< Updated upstream
             "outputFile": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/incremental/mergeDebugAndroidTestResources/merged.dir/values-fr-rCA/values-fr-rCA.xml",
             "map": [
                 {
-                    "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/6fabeab51bbb988f6ebb3575ac908b3c/res/values-fr-rCA/values-fr-rCA.xml",
-=======
-            "outputFile": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/incremental/mergeDebugAndroidTestResources/merged.dir/values-fr-rCA/values-fr-rCA.xml",
-            "map": [
-                {
-                    "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/55db4895ed8ab9b31de9f046b5690c60/res/values-fr-rCA/values-fr-rCA.xml",
->>>>>>> Stashed changes
+                    "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/f6d2a503db6dbeac8bcee150d656c30d/res/values-fr-rCA/values-fr-rCA.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -23,17 +16,10 @@
             ]
         },
         {
-<<<<<<< Updated upstream
             "outputFile": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/values-fr-rCA/values-fr-rCA.xml",
             "map": [
                 {
-                    "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/6fabeab51bbb988f6ebb3575ac908b3c/res/values-fr-rCA/values-fr-rCA.xml",
-=======
-            "outputFile": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/values-fr-rCA/values-fr-rCA.xml",
-            "map": [
-                {
-                    "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/55db4895ed8ab9b31de9f046b5690c60/res/values-fr-rCA/values-fr-rCA.xml",
->>>>>>> Stashed changes
+                    "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/f6d2a503db6dbeac8bcee150d656c30d/res/values-fr-rCA/values-fr-rCA.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",

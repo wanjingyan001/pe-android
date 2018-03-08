@@ -1,17 +1,10 @@
 {
     "logs": [
         {
-<<<<<<< Updated upstream
             "outputFile": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/values-land/values-land.xml",
             "map": [
                 {
-                    "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/6fabeab51bbb988f6ebb3575ac908b3c/res/values-land/values-land.xml",
-=======
-            "outputFile": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/incremental/mergeDebugAndroidTestResources/merged.dir/values-land/values-land.xml",
-            "map": [
-                {
-                    "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/55db4895ed8ab9b31de9f046b5690c60/res/values-land/values-land.xml",
->>>>>>> Stashed changes
+                    "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/f6d2a503db6dbeac8bcee150d656c30d/res/values-land/values-land.xml",
                     "from": {
                         "startLines": "2,3,4,5",
                         "startColumns": "4,4,4,4",
@@ -21,11 +14,7 @@
                     }
                 },
                 {
-<<<<<<< Updated upstream
-                    "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/design-25.3.1.aar/a15125c2d75e205fbf7314e438b4dbdd/res/values-land/values-land.xml",
-=======
-                    "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/design-25.3.1.aar/134c3c602da753b4853681be29adaca7/res/values-land/values-land.xml",
->>>>>>> Stashed changes
+                    "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/design-25.3.1.aar/87909884eaa1c455dd83c1116c1283b8/res/values-land/values-land.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -46,17 +35,10 @@
             ]
         },
         {
-<<<<<<< Updated upstream
             "outputFile": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/incremental/mergeDebugAndroidTestResources/merged.dir/values-land/values-land.xml",
             "map": [
                 {
-                    "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/6fabeab51bbb988f6ebb3575ac908b3c/res/values-land/values-land.xml",
-=======
-            "outputFile": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/values-land/values-land.xml",
-            "map": [
-                {
-                    "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/55db4895ed8ab9b31de9f046b5690c60/res/values-land/values-land.xml",
->>>>>>> Stashed changes
+                    "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/f6d2a503db6dbeac8bcee150d656c30d/res/values-land/values-land.xml",
                     "from": {
                         "startLines": "2,3,4,5",
                         "startColumns": "4,4,4,4",
@@ -66,11 +48,7 @@
                     }
                 },
                 {
-<<<<<<< Updated upstream
-                    "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/design-25.3.1.aar/a15125c2d75e205fbf7314e438b4dbdd/res/values-land/values-land.xml",
-=======
-                    "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/design-25.3.1.aar/134c3c602da753b4853681be29adaca7/res/values-land/values-land.xml",
->>>>>>> Stashed changes
+                    "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/design-25.3.1.aar/87909884eaa1c455dd83c1116c1283b8/res/values-land/values-land.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

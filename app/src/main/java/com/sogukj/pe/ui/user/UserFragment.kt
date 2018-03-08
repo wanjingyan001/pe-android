@@ -8,7 +8,10 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
+import com.bumptech.glide.GenericTransitionOptions
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.bumptech.glide.request.RequestOptions
 import com.framework.base.ToolbarFragment
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.DepartmentBean
@@ -138,7 +141,8 @@ class UserFragment : ToolbarFragment(), View.OnClickListener {
         if (hidden) {   // 不在最前端显示 相当于调用了onPause();
 
         } else {  // 在最前端显示 相当于调用了onResume();
-            onResume()
+            val user = Store.store.getUser(context)
+            user?.uid?.let { getBelongBean(it) }
         }
     }
 
@@ -169,38 +173,37 @@ class UserFragment : ToolbarFragment(), View.OnClickListener {
         if (null == user) return
         tv_name?.text = user.name
         tv_position?.text = user.position
-        val ch = user.name.first()
-        iv_user.setChar(ch)
         if (!TextUtils.isEmpty(user.email))
             tv_mail?.text = user.email
 //        if (!TextUtils.isEmpty(user.depart_name))
 //            tv_job?.text = user.position
-        Glide.with(this@UserFragment)
-                .load(user.headImage())
-                .into(iv_user)
+        if (user.url != null && !TextUtils.isEmpty(user.url)) {
+            Glide.with(this@UserFragment)
+                    .load(user.headImage())
+                    .transition(GenericTransitionOptions())
+                    .into(iv_user)
+        } else {
+            val ch = user.name.first()
+            iv_user.setChar(ch)
+        }
     }
 
     override fun onClick(view: View) {
         when (view.id) {
             R.id.tv_1, R.id.tv_11 -> {
                 ProjectFocusActivity.start(activity, ProjectListFragment.TYPE_DY)
-//                activity.fgProj.setCurrentItem(0)
             }
             R.id.tv_2, R.id.tv_22 -> {
                 ProjectFocusActivity.start(activity, ProjectListFragment.TYPE_CB)
-//                activity.fgProj.setCurrentItem(1)
             }
             R.id.tv_3, R.id.tv_33 -> {
                 ProjectFocusActivity.start(activity, ProjectListFragment.TYPE_LX)
-//                activity.fgProj.setCurrentItem(2)
             }
             R.id.tv_4, R.id.tv_44 -> {
                 ProjectFocusActivity.start(activity, ProjectListFragment.TYPE_YT)
-//                activity.fgProj.setCurrentItem(3)
             }
             R.id.tv_5, R.id.tv_55 -> {
                 ProjectFocusActivity.start(activity, ProjectListFragment.TYPE_TC)
-//                activity.fgProj.setCurrentItem(4)
             }
         }
     }
