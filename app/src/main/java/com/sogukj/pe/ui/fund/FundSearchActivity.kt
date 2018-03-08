@@ -2,15 +2,23 @@ package com.sogukj.pe.ui.fund
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Html
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 import com.framework.base.ToolbarActivity
 import com.google.gson.Gson
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
@@ -22,6 +30,7 @@ import com.sogukj.pe.R
 import com.sogukj.pe.bean.FundSmallBean
 import com.sogukj.pe.ui.SupportEmptyView
 import com.sogukj.pe.util.Trace
+import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.service.SoguApi
@@ -103,7 +112,22 @@ class FundSearchActivity : ToolbarActivity(), View.OnClickListener {
             object : RecyclerHolder<FundSmallBean>(convertView) {
                 val fundName = convertView.find<TextView>(R.id.fundName)
                 val regTime = convertView.find<TextView>(R.id.regTime)
+                val icon = convertView.find<ImageView>(R.id.imageIcon)
                 override fun setData(view: View, data: FundSmallBean, position: Int) {
+                    if (data.logo.isNullOrEmpty()) {
+                        var bitmap = BitmapFactory.decodeResource(resources, R.drawable.default_icon)
+                        var draw = RoundedBitmapDrawableFactory.create(resources, bitmap) as RoundedBitmapDrawable
+                        draw.setCornerRadius(Utils.dpToPx(context, 4).toFloat())
+                        icon.setBackgroundDrawable(draw)
+                    } else {
+                        Glide.with(context).asBitmap().load(data.logo).into(object : SimpleTarget<Bitmap>() {
+                            override fun onResourceReady(bitmap: Bitmap?, glideAnimation: Transition<in Bitmap>?) {
+                                var draw = RoundedBitmapDrawableFactory.create(resources, bitmap) as RoundedBitmapDrawable
+                                draw.setCornerRadius(Utils.dpToPx(context, 4).toFloat())
+                                icon.setBackgroundDrawable(draw)
+                            }
+                        })
+                    }
                     var label = data.fundName
                     if (!TextUtils.isEmpty(label) && !TextUtils.isEmpty(searchStr)) {
                         label = label.replaceFirst(searchStr, "<font color='#ff3300'>$searchStr</font>")

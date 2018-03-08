@@ -177,7 +177,7 @@
                     <EditText
                         android:id="@+id/et_short_name"
                         style="@style/ItemTextValue"
-                        android:hint="请输入项目名称"/>
+                        android:hint="请输入公司简称"/>
                 </TableRow>
 
                 <TableRow

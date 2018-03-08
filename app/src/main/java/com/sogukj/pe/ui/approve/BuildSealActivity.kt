@@ -162,6 +162,7 @@ class BuildSealActivity : ToolbarActivity() {
 
                             paramId = payload.payload?.sid
                             flagEdit = true
+                            isOneKey = true
                             var name = payload.payload?.name
 
                             var mDialog = MaterialDialog.Builder(this@BuildSealActivity)
@@ -192,6 +193,8 @@ class BuildSealActivity : ToolbarActivity() {
                     //showToast("暂无可用数据")
                 })
     }
+
+    private var isOneKey = false
 
     private fun judgeSealEmpty(list: ArrayList<CustomSealBean.ValueBean>): Boolean {
         if (list.size == 0) {
@@ -224,7 +227,7 @@ class BuildSealActivity : ToolbarActivity() {
         //reasons               用印事由                4
         //sealFile              用印文件                9
         //info                  备注说明                4
-        //send_sms              是否发短信提醒审批人      5
+        //sms              是否发短信提醒审批人      5
         //manager_opinion       投资经理意见              4
         //is_lawyer             是否需要律师意见        5
         //lawyer_opinion        律师意见                4
@@ -240,7 +243,7 @@ class BuildSealActivity : ToolbarActivity() {
                 (paramMap.get("manager_opinion") == null || (paramMap.get("manager_opinion") as String?).isNullOrEmpty()) &&
                 (paramMap.get("lawyerFile") == null || (paramMap.get("lawyerFile") as ArrayList<CustomSealBean.ValueBean>).size == 0) &&
                 (paramMap.get("is_lawyer") == null || (paramMap.get("is_lawyer") as Int) == 0) &&
-                (paramMap.get("send_sms") == null || (paramMap.get("send_sms") as Int) == 0) &&
+                (paramMap.get("sms") == null || (paramMap.get("sms") as Int) == 0) &&
                 (paramMap.get("sealFile") == null || (paramMap.get("sealFile") as ArrayList<CustomSealBean.ValueBean>).size == 0) &&
                 (paramMap.get("project_name") == null) &&
                 (paramMap.get("foreign_id") == null)) {
@@ -255,11 +258,6 @@ class BuildSealActivity : ToolbarActivity() {
                 .positiveText("确定")
                 .onPositive { dialog, which ->
                     val builder = HashMap<String, Any>()
-//                    if (flagEdit) {
-//                        builder.put("approval_id", paramId!!)
-//                    } else {
-//                        builder.put("template_id", paramId!!)
-//                    }
                     paramId = XmlDb.open(context).get(Extras.ID, "").toInt()
                     builder.put("template_id", paramId!!)
                     builder.put("data", paramMap)
@@ -280,8 +278,22 @@ class BuildSealActivity : ToolbarActivity() {
                 }
                 .negativeText("取消")
                 .onNegative { dialog, which ->
-                    dialog.dismiss()
-                    super.onBackPressed()
+                    val builder = HashMap<String, Any>()
+                    paramId = XmlDb.open(context).get(Extras.ID, "").toInt()
+                    builder.put("template_id", paramId!!)
+                    builder.put("data", HashMap<String, Any?>())
+                    SoguApi.getService(application)
+                            .saveDraft(builder)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(Schedulers.io())
+                            .subscribe({ payload ->
+                                if (payload.isOk) {
+                                    super.onBackPressed()
+                                } else
+                                    showToast(payload.message)
+                            }, { e ->
+                                Trace.e(e)
+                            })
                 }
                 .show()
     }
@@ -289,6 +301,7 @@ class BuildSealActivity : ToolbarActivity() {
     private fun load() {
         ll_seal.removeAllViews()
         ll_approver.removeAllViews()
+        checkList.clear()
         SoguApi.getService(application)
                 .approveInfo(template_id = if (flagEdit) null else paramId!!,
                         sid = if (!flagEdit) null else paramId!!)
@@ -355,6 +368,10 @@ class BuildSealActivity : ToolbarActivity() {
     }
 
     fun doConfirm() {
+        if(isOneKey){
+            flagEdit = false
+            paramId = XmlDb.open(context).get(Extras.ID, "").toInt()
+        }
         val builder = FormBody.Builder()
         if (flagEdit) {
 
@@ -620,7 +637,7 @@ class BuildSealActivity : ToolbarActivity() {
         }
         rbNo.setOnClickListener {
             paramMap.put(bean.fields, 0)
-            if (bean.fields.equals("send_sms")) {
+            if (bean.fields.equals("sms")) {
                 return@setOnClickListener
             }
             bean.value_map?.hide?.split(",")?.forEach { field ->
@@ -633,7 +650,7 @@ class BuildSealActivity : ToolbarActivity() {
 
         rbYes.setOnClickListener {
             paramMap.put(bean.fields, 1)
-            if (bean.fields.equals("send_sms")) {
+            if (bean.fields.equals("sms")) {
                 return@setOnClickListener
             }
             bean.value_map?.hide?.split(",")?.forEach { field ->

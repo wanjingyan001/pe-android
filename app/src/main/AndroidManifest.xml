@@ -647,7 +647,8 @@
         <activity android:name=".ui.fund.FundBookMoreActivity" />
         <activity android:name=".ui.project.ProjectTCActivity" />
         <activity android:name=".ui.project.ProjectTcHistoryActivity" />
-        <activity android:name=".ui.fileSelector.FileMainActivity"></activity>
+        <activity android:name=".ui.fileSelector.FileMainActivity" />
+        <activity android:name=".ui.approve.LeaveBusinessActivity"></activity>
     </application>
 
 </manifest>

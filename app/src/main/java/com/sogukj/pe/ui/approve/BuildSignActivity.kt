@@ -136,6 +136,7 @@ class BuildSignActivity : ToolbarActivity() {
 
                             paramId = payload.payload?.sid
                             var name = payload.payload?.name
+                            isOneKey = true
 
                             var mDialog = MaterialDialog.Builder(this@BuildSignActivity)
                                     .theme(Theme.LIGHT)
@@ -220,13 +221,28 @@ class BuildSignActivity : ToolbarActivity() {
                 }
                 .negativeText("取消")
                 .onNegative { dialog, which ->
-                    dialog.dismiss()
-                    super.onBackPressed()
+                    val builder = HashMap<String, Any>()
+                    paramId = XmlDb.open(context).get(Extras.ID, "").toInt()
+                    builder.put("template_id", paramId!!)
+                    builder.put("data", HashMap<String, Any?>())
+                    SoguApi.getService(application)
+                            .saveDraft(builder)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(Schedulers.io())
+                            .subscribe({ payload ->
+                                if (payload.isOk) {
+                                    super.onBackPressed()
+                                } else
+                                    showToast(payload.message)
+                            }, { e ->
+                                Trace.e(e)
+                            })
                 }
                 .show()
     }
 
     private fun load() {
+        checkList.clear()
         ll_seal.removeAllViews()
         ll_approver.removeAllViews()
         SoguApi.getService(application)
@@ -268,7 +284,12 @@ class BuildSignActivity : ToolbarActivity() {
                 })
     }
 
+    private var isOneKey = false
+
     fun doConfirm() {
+        if(isOneKey){
+            paramId = XmlDb.open(context).get(Extras.ID, "").toInt()
+        }
         val builder = FormBody.Builder()
         builder.add("template_id", "${paramId}")
         for ((k, v) in paramMap) {
@@ -317,7 +338,7 @@ class BuildSignActivity : ToolbarActivity() {
         }
     }
 
-    val paramMap = ConcurrentHashMap<String, Any?>()
+    val paramMap = HashMap<String, Any?>()
     val checkList = ArrayList<() -> Boolean>()
 
     private fun add1(bean: CustomSealBean, inflater: LayoutInflater) {
@@ -442,6 +463,7 @@ class BuildSignActivity : ToolbarActivity() {
         val tvLabel = convertView.findViewById(R.id.tv_label) as TextView
         val etValue = convertView.findViewById(R.id.et_value) as EditText
         tvLabel.text = if (bean.is_must == 1) bean.name + "(必填)" else bean.name
+        etValue.setText(bean.value)
         etValue.filters = Utils.getFilter(this)
 
         val iv_alert = convertView.findViewById(R.id.iv_alert)
@@ -458,6 +480,17 @@ class BuildSignActivity : ToolbarActivity() {
                 true
             }
         }
+        etValue.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                paramMap.put(bean.fields, s.toString())
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+        })
     }
 
     private fun add5(bean: CustomSealBean, inflater: LayoutInflater) {
