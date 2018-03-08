@@ -120,10 +120,8 @@ class BuildSignActivity : ToolbarActivity() {
         }
         toolbar_menu.setImageResource(R.drawable.copy)
         toolbar_menu.visibility = View.VISIBLE
-        XmlDb.open(context).set(Extras.ID, "${paramId}")
-        var tmpId = XmlDb.open(context).get(Extras.ID, "")
         SoguApi.getService(application)
-                .getLastApprove(tmpId.toInt())
+                .getLastApprove(paramId!!)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -134,9 +132,8 @@ class BuildSignActivity : ToolbarActivity() {
                         //toolbar_menu 可能要隐藏，比如重新发起审批就不需要这个
                         toolbar_menu.setOnClickListener {
 
-                            paramId = payload.payload?.sid
+                            sid = payload.payload?.sid
                             var name = payload.payload?.name
-                            isOneKey = true
 
                             var mDialog = MaterialDialog.Builder(this@BuildSignActivity)
                                     .theme(Theme.LIGHT)
@@ -201,7 +198,6 @@ class BuildSignActivity : ToolbarActivity() {
                 .positiveText("确定")
                 .onPositive { dialog, which ->
                     val builder = HashMap<String, Any>()
-                    paramId = XmlDb.open(context).get(Extras.ID, "").toInt()
                     builder.put("template_id", paramId!!)
                     builder.put("data", paramMap)
                     SoguApi.getService(application)
@@ -222,7 +218,6 @@ class BuildSignActivity : ToolbarActivity() {
                 .negativeText("取消")
                 .onNegative { dialog, which ->
                     val builder = HashMap<String, Any>()
-                    paramId = XmlDb.open(context).get(Extras.ID, "").toInt()
                     builder.put("template_id", paramId!!)
                     builder.put("data", HashMap<String, Any?>())
                     SoguApi.getService(application)
@@ -241,12 +236,14 @@ class BuildSignActivity : ToolbarActivity() {
                 .show()
     }
 
+    private var sid:Int? = null
+
     private fun load() {
         checkList.clear()
         ll_seal.removeAllViews()
         ll_approver.removeAllViews()
         SoguApi.getService(application)
-                .approveInfo(template_id = paramId!!)
+                .approveInfo(template_id = paramId!!, sid = sid)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -284,12 +281,7 @@ class BuildSignActivity : ToolbarActivity() {
                 })
     }
 
-    private var isOneKey = false
-
     fun doConfirm() {
-        if(isOneKey){
-            paramId = XmlDb.open(context).get(Extras.ID, "").toInt()
-        }
         val builder = FormBody.Builder()
         builder.add("template_id", "${paramId}")
         for ((k, v) in paramMap) {
