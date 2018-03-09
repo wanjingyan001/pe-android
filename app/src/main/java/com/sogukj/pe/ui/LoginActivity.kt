@@ -88,9 +88,13 @@ class LoginActivity : BaseActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
-                    if (payload.isOk)
+                    if (payload.isOk) {
                         showToast("验证码已经发送，请查收")
-                    else
+                        et_pwd.setFocusable(true);//设置输入框可聚集
+                        et_pwd.setFocusableInTouchMode(true);//设置触摸聚焦
+                        et_pwd.requestFocus();//请求焦点
+                        et_pwd.findFocus();//获取焦点
+                    } else
                         showToast(payload.message)
                 }, { e ->
                     showToast("验证码发送失败")
