@@ -13,7 +13,7 @@
     <android.support.v7.widget.GridLayout
         android:id="@+id/grid"
         android:layout_width="match_parent"
-        android:layout_height="170dp"
+        android:layout_height="180dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="310dp"
@@ -89,7 +89,7 @@
         <ImageView
             android:id="@+id/iv_empty"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="170dp"
             android:layout_gravity="center"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
@@ -99,7 +99,7 @@
         <com.fashare.stack_layout.StackLayout
             android:id="@+id/stack_layout"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="170dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp" />
     </LinearLayout>
