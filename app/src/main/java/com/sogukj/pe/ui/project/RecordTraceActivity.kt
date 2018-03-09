@@ -118,11 +118,15 @@ class RecordTraceActivity : ToolbarActivity() {
                             tv_invests.text = info?.invests
 
                             if (list != null && list?.size != 0) {
+                                contentLayout.visibility = View.VISIBLE
+                                iv_empty.visibility = View.GONE
                                 adapter.dataList.clear()
                                 adapter.dataList.addAll(list)
                                 adapter.notifyDataSetChanged()
                             } else {
                                 showToast("无信息列表")
+                                contentLayout.visibility = View.GONE
+                                iv_empty.visibility = View.VISIBLE
                             }
                         }
                     } else
