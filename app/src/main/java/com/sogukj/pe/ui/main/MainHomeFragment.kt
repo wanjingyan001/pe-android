@@ -106,6 +106,7 @@ class MainHomeFragment : BaseFragment() {
         doRequest()
 
         refresh.setOnClickListener {
+            showToast("数据刷新中")
             onResume()
         }
     }
