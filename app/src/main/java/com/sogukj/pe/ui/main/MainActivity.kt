@@ -253,7 +253,7 @@ class MainActivity : BaseActivity() {
                             if (force == 0) {
                                 title.text = "不用更新"
                                 Thread.sleep(500)
-                                if (XmlDb.open(context).get("is_read").equals("no")) {
+                                if (XmlDb.open(context).get("is_read", "").equals("no")) {
                                     mDialog.show()
                                     title.text = "新版功能介绍"
                                     icon.imageResource = R.drawable.update_icon1

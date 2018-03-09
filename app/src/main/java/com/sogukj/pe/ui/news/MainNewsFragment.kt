@@ -325,18 +325,13 @@ class MainNewsFragment : BaseFragment() {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        payload?.apply {
-//                            try {
-//                                tv_result_title.text = Html.fromHtml(getString(R.string.tv_title_result_news, (total as Double).toInt()))
-//                            } catch (e: Exception) {
-//                                tv_result_title.text = Html.fromHtml(getString(R.string.tv_title_result_news, payload.payload?.size))
-//                            }
-                            tv_result_title.text = Html.fromHtml(getString(R.string.tv_title_result_news, payload.payload?.size))
-                        }
                         if (page == 1)
                             adapter.dataList.clear()
                         payload.payload?.apply {
                             adapter.dataList.addAll(this)
+                        }
+                        payload?.apply {
+                            tv_result_title.text = Html.fromHtml(getString(R.string.tv_title_result_news, adapter.dataList.size))
                         }
                     } else
                         showToast(payload.message)
