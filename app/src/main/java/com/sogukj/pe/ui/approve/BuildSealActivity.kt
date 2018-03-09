@@ -250,52 +250,55 @@ class BuildSealActivity : ToolbarActivity() {
             super.onBackPressed()
             return
         }
-        MaterialDialog.Builder(this@BuildSealActivity)
+        var mDialog = MaterialDialog.Builder(this@BuildSealActivity)
                 .theme(Theme.LIGHT)
-                .title("提示")
-                .content("是否需要保存草稿")
                 .canceledOnTouchOutside(true)
-                .positiveText("确定")
-                .onPositive { dialog, which ->
-                    val builder = HashMap<String, Any>()
-                    paramId = XmlDb.open(context).get(Extras.ID, "").toInt()
-                    builder.put("template_id", paramId!!)
-                    builder.put("data", paramMap)
-                    SoguApi.getService(application)
-                            .saveDraft(builder)
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribeOn(Schedulers.io())
-                            .subscribe({ payload ->
-                                if (payload.isOk) {
-                                    showToast("草稿保存成功")
-                                    super.onBackPressed()
-                                } else
-                                    showToast(payload.message)
-                            }, { e ->
-                                Trace.e(e)
-                                showToast("草稿保存失败")
-                            })
-                }
-                .negativeText("取消")
-                .onNegative { dialog, which ->
-                    val builder = HashMap<String, Any>()
-                    paramId = XmlDb.open(context).get(Extras.ID, "").toInt()
-                    builder.put("template_id", paramId!!)
-                    builder.put("data", HashMap<String, Any?>())
-                    SoguApi.getService(application)
-                            .saveDraft(builder)
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribeOn(Schedulers.io())
-                            .subscribe({ payload ->
-                                if (payload.isOk) {
-                                    super.onBackPressed()
-                                } else
-                                    showToast(payload.message)
-                            }, { e ->
-                                Trace.e(e)
-                            })
-                }
-                .show()
+                .customView(R.layout.dialog_yongyin, false).build()
+        mDialog.show()
+        val content = mDialog.find<TextView>(R.id.content)
+        val cancel = mDialog.find<Button>(R.id.cancel)
+        val yes = mDialog.find<Button>(R.id.yes)
+        content.text = "是否需要保存草稿"
+        cancel.text = "取消"
+        yes.text = "确定"
+        cancel.setOnClickListener {
+            val builder = HashMap<String, Any>()
+            paramId = XmlDb.open(context).get(Extras.ID, "").toInt()
+            builder.put("template_id", paramId!!)
+            builder.put("data", HashMap<String, Any?>())
+            SoguApi.getService(application)
+                    .saveDraft(builder)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (payload.isOk) {
+                            super.onBackPressed()
+                        } else
+                            showToast(payload.message)
+                    }, { e ->
+                        Trace.e(e)
+                    })
+        }
+        yes.setOnClickListener {
+            val builder = HashMap<String, Any>()
+            paramId = XmlDb.open(context).get(Extras.ID, "").toInt()
+            builder.put("template_id", paramId!!)
+            builder.put("data", paramMap)
+            SoguApi.getService(application)
+                    .saveDraft(builder)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (payload.isOk) {
+                            showToast("草稿保存成功")
+                            super.onBackPressed()
+                        } else
+                            showToast(payload.message)
+                    }, { e ->
+                        Trace.e(e)
+                        showToast("草稿保存失败")
+                    })
+        }
     }
 
     private fun load() {

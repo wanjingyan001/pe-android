@@ -1,8 +1,12 @@
 package com.sogukj.pe.ui.news
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.content.ContextCompat
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
 import android.support.v4.view.ViewPager
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -17,6 +21,8 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 import com.framework.base.BaseFragment
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
@@ -68,9 +74,23 @@ class MainNewsFragment : BaseFragment() {
                 val tv_from = convertView.findViewById(R.id.tv_from) as TextView
                 val tags = convertView.findViewById(R.id.tags) as FlowLayout
                 val tv_date = convertView.findViewById(R.id.tv_date) as TextView
-
+                val iv_icon = convertView.findViewById(R.id.imageIcon) as ImageView
 
                 override fun setData(view: View, data: NewsBean, position: Int) {
+                    if (data.url.isNullOrEmpty()) {
+                        var bitmap = BitmapFactory.decodeResource(resources, R.drawable.default_icon)
+                        var draw = RoundedBitmapDrawableFactory.create(resources, bitmap) as RoundedBitmapDrawable
+                        draw.setCornerRadius(Utils.dpToPx(context, 4).toFloat())
+                        iv_icon.setBackgroundDrawable(draw)
+                    } else {
+                        Glide.with(context).asBitmap().load(data.url).into(object : SimpleTarget<Bitmap>() {
+                            override fun onResourceReady(bitmap: Bitmap?, glideAnimation: Transition<in Bitmap>?) {
+                                var draw = RoundedBitmapDrawableFactory.create(resources, bitmap) as RoundedBitmapDrawable
+                                draw.setCornerRadius(Utils.dpToPx(context, 4).toFloat())
+                                iv_icon.setBackgroundDrawable(draw)
+                            }
+                        })
+                    }
                     var label = data.title
                     if (!TextUtils.isEmpty(label) && !TextUtils.isEmpty(key)) {
                         label = label!!.replaceFirst(key, "<font color='#ff3300'>${key}</font>")
@@ -306,11 +326,12 @@ class MainNewsFragment : BaseFragment() {
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         payload?.apply {
-                            try {
-                                tv_result_title.text = Html.fromHtml(getString(R.string.tv_title_result_news, (total as Double).toInt()))
-                            } catch (e: Exception) {
-                                tv_result_title.text = Html.fromHtml(getString(R.string.tv_title_result_news, payload.payload?.size))
-                            }
+//                            try {
+//                                tv_result_title.text = Html.fromHtml(getString(R.string.tv_title_result_news, (total as Double).toInt()))
+//                            } catch (e: Exception) {
+//                                tv_result_title.text = Html.fromHtml(getString(R.string.tv_title_result_news, payload.payload?.size))
+//                            }
+                            tv_result_title.text = Html.fromHtml(getString(R.string.tv_title_result_news, payload.payload?.size))
                         }
                         if (page == 1)
                             adapter.dataList.clear()
