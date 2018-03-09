@@ -253,9 +253,15 @@ class MainProjectFragment : BaseFragment() {
 
         fb_add.setOnClickListener {
             if (view_pager.currentItem == 0) {
-                ProjectAddActivity.startAdd(baseActivity)
+                //ProjectAddActivity.startAdd(baseActivity)
+                var intent = Intent(context, ProjectAddActivity::class.java)
+                intent.putExtra(Extras.TYPE, "ADD")
+                startActivityForResult(intent, 0x543)
             } else if (view_pager.currentItem == 1) {
-                StoreProjectAddActivity.startAdd(baseActivity)
+                //StoreProjectAddActivity.startAdd(baseActivity)
+                val intent = Intent(context, StoreProjectAddActivity::class.java)
+                intent.putExtra(Extras.TYPE, StoreProjectAddActivity.TYPE_ADD)
+                startActivityForResult(intent, 0x543)
             }
         }
         fb_search.setOnClickListener {
@@ -354,6 +360,13 @@ class MainProjectFragment : BaseFragment() {
         })
         refresh.setAutoLoadMore(true)
 
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == 0x543){
+            fragments.get(view_pager.currentItem).request()
+        }
     }
 
     private fun changeView() {

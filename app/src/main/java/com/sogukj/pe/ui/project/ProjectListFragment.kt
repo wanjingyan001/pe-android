@@ -204,6 +204,10 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
         }
     }
 
+    fun request() {
+        doRequest()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         isViewCreated = false
