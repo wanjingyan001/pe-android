@@ -44,6 +44,7 @@ import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.ArrayPagerAdapter
 import com.sogukj.pe.view.MyProgressBar
 import com.sogukj.service.SoguApi
+import com.sogukj.util.XmlDb
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.item_comment_list.*
@@ -252,6 +253,21 @@ class MainActivity : BaseActivity() {
                             if (force == 0) {
                                 title.text = "不用更新"
                                 Thread.sleep(500)
+                                if (XmlDb.open(context).get("is_read").equals("no")) {
+                                    mDialog.show()
+                                    title.text = "新版功能介绍"
+                                    icon.imageResource = R.drawable.update_icon1
+                                    message.text = info.toString()
+                                    update_info.visibility = View.GONE
+                                    scrollView.visibility = View.VISIBLE
+                                    update.visibility = View.VISIBLE
+                                    prompt.visibility = View.GONE
+                                    update.text = "我知道了"
+                                    update.setOnClickListener {
+                                        mDialog.dismiss()
+                                    }
+                                    XmlDb.open(context).set("is_read", "yes")
+                                }
                                 //mDialog.dismiss()
                                 //enterNext()
                             } else {//1=>更新，2---强制更新
@@ -268,6 +284,7 @@ class MainActivity : BaseActivity() {
                                 scrollView.visibility = View.GONE
                                 message.text = info.toString()
                                 update.setOnClickListener {
+                                    XmlDb.open(context).set("is_read", "no")
                                     icon.imageResource = R.drawable.update_icon1
                                     update.visibility = View.GONE
                                     title.text = "新版功能介绍"
