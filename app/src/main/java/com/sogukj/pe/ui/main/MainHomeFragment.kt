@@ -104,33 +104,6 @@ class MainHomeFragment : BaseFragment() {
         Glide.with(context).asGif().load(R.drawable.loading).into(pb)
         pb.visibility = View.VISIBLE
         doRequest()
-
-        PushAgent.getInstance(context).messageHandler = object : UmengMessageHandler() {
-            override fun getNotification(p0: Context?, p1: UMessage?): Notification {
-                p1?.custom.apply {
-                    val json = JSONObject(this)
-                    val type = json.getInt("type")
-                    val data = json.getJSONObject("data")
-                    //1.负面信息  2.任务  3.日程 4签字,用印 5.周报
-                    when (type) {
-                        4 -> {
-                            val approval_id = data.getInt("approval_id")
-                            val is_mine = data.getInt("is_mine")
-                            if (data.has("qs")) {
-                                //SignApproveActivity.start(context, approval_id, is_mine, "签字审批")
-                            } else {
-                                //SealApproveActivity.start(context, approval_id, is_mine, "用印审批")
-                                page = 1
-                                doRequest()
-                            }
-                        }
-                        else -> {
-                        }
-                    }
-                }
-                return super.getNotification(p0, p1)
-            }
-        }
     }
 
     lateinit var adapter: HomeAdapter
