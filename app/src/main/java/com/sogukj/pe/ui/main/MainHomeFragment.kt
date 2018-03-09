@@ -88,7 +88,7 @@ class MainHomeFragment : BaseFragment() {
                 Log.e("tagtagtag", "剩余" + itemLeft + "项")
                 if (itemLeft == 0) {
                     iv_empty.visibility = View.VISIBLE
-                    iv_empty.setImageResource(R.drawable.img_empty2)
+                    iv_empty.setBackgroundResource(R.drawable.img_empty2)
                     stack_layout.visibility = View.GONE
                     iv_empty.setOnClickListener {
                         iv_empty.visibility = View.GONE
@@ -104,6 +104,10 @@ class MainHomeFragment : BaseFragment() {
         Glide.with(context).asGif().load(R.drawable.loading).into(pb)
         pb.visibility = View.VISIBLE
         doRequest()
+
+        refresh.setOnClickListener {
+            onResume()
+        }
     }
 
     lateinit var adapter: HomeAdapter
@@ -177,10 +181,10 @@ class MainHomeFragment : BaseFragment() {
                     if (adapter.dataList.size == 0) {
                         iv_empty.visibility = View.VISIBLE
                         if (page == 1) {
-                            iv_empty.setImageResource(R.drawable.img_empty1)
+                            iv_empty.setBackgroundResource(R.drawable.img_empty1)
                         } else {
                             showToast("暂无最新数据")
-                            iv_empty.setImageResource(R.drawable.img_empty2)
+                            iv_empty.setBackgroundResource(R.drawable.img_empty2)
                         }
                         stack_layout.visibility = View.GONE
                     }
@@ -189,10 +193,10 @@ class MainHomeFragment : BaseFragment() {
                     if (adapter.dataList.size == 0) {
                         iv_empty.visibility = View.VISIBLE
                         if (page == 1) {
-                            iv_empty.setImageResource(R.drawable.img_empty1)
+                            iv_empty.setBackgroundResource(R.drawable.img_empty1)
                         } else {
                             showToast("暂无最新数据")
-                            iv_empty.setImageResource(R.drawable.img_empty2)
+                            iv_empty.setBackgroundResource(R.drawable.img_empty2)
                         }
                         stack_layout.visibility = View.GONE
                     }
