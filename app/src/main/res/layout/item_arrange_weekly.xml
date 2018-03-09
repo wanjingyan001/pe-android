@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="125dp"
+    android:layout_marginBottom="15dp"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:id="@+id/day_of_weekly_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="23dp"
+        android:background="@drawable/icon_day_for_weekly"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/weekly"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="6dp"
+            android:layout_weight="1"
+            android:text="周一"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/dayOfMonth"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:text="02-24"
+            android:textColor="@color/text_3"
+            android:textSize="10sp" />
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/arrangement_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:gravity="top|left"
+        android:lineSpacingExtra="6dp"
+        android:maxLines="2"
+        android:paddingLeft="15dp"
+        android:text="参加搜股东会参加搜股股东会参加搜股股东会参加搜股股东会参加搜e股股东......."
+        android:textColor="@color/text_1"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toRightOf="@+id/day_of_weekly_layout"
+        app:layout_constraintTop_toTopOf="@+id/day_of_weekly_layout" />
+
+    <TextView
+        android:id="@+id/attend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="5dp"
+        android:text="出席：李三四"
+        android:textColor="@color/text_3"
+        android:textSize="10sp"
+        app:layout_constraintLeft_toLeftOf="@+id/arrangement_content"
+        app:layout_constraintTop_toBottomOf="@+id/arrangement_content" />
+
+
+    <TextView
+        android:id="@+id/participate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="70dp"
+        android:gravity="left"
+        android:text="出席：李三四，刘东东…"
+        android:textColor="@color/text_3"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/attend" />
+
+
+    <ImageView
+        android:id="@+id/address_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="18dp"
+        android:src="@drawable/bg_arrange_address"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="@+id/attend" />
+
+    <TextView
+        android:id="@+id/arrange_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="上海市·静安区江场三路199号410…"
+        android:textColor="@color/approve_blue1"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/address_icon"
+        app:layout_constraintLeft_toRightOf="@+id/address_icon" />
+
+    <ImageView
+        android:id="@+id/icon_right"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="25dp"
+        android:src="@drawable/ic_right"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/empty_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        app:layout_constraintLeft_toRightOf="@+id/day_of_weekly_layout">
+
+        <ImageView
+            android:id="@+id/empty_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/icon_work_arrange_empty" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+
+</android.support.constraint.ConstraintLayout>
