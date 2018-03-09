@@ -87,8 +87,15 @@ class MainHomeFragment : BaseFragment() {
                 //Log.e("tagtagtag", (if (isSwipeLeft) "往左" else "往右") + "移除" + mData.get(swipedItemPos) + "." + "剩余" + itemLeft + "项")
                 Log.e("tagtagtag", "剩余" + itemLeft + "项")
                 if (itemLeft == 0) {
-                    page++
-                    doRequest()
+                    iv_empty.visibility = View.VISIBLE
+                    iv_empty.setImageResource(R.drawable.img_empty2)
+                    stack_layout.visibility = View.GONE
+                    iv_empty.setOnClickListener {
+                        iv_empty.visibility = View.GONE
+                        stack_layout.visibility = View.VISIBLE
+                        page++
+                        doRequest()
+                    }
                 }
             }
         })
@@ -148,10 +155,13 @@ class MainHomeFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
+        page = 1
         doRequest()
     }
 
     fun doRequest() {
+        iv_empty.visibility = View.GONE
+        stack_layout.visibility = View.VISIBLE
         totalData = ArrayList<MessageBean>()
         var cacheData = cache.getDiskCache("${Store.store.getUser(context)?.uid}")
         if (cacheData != null) {
@@ -166,7 +176,7 @@ class MainHomeFragment : BaseFragment() {
             }
         }
         SoguApi.getService(baseActivity!!.application)
-                .msgList(page = page, pageSize = 20, status = 1)
+                .msgList(page = page, pageSize = 10, status = 1)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -193,12 +203,24 @@ class MainHomeFragment : BaseFragment() {
                     pb.visibility = View.GONE
                     if (adapter.dataList.size == 0) {
                         iv_empty.visibility = View.VISIBLE
+                        if (page == 1) {
+                            iv_empty.setImageResource(R.drawable.img_empty1)
+                        } else {
+                            showToast("暂无最新数据")
+                            iv_empty.setImageResource(R.drawable.img_empty2)
+                        }
                         stack_layout.visibility = View.GONE
                     }
                 }, {
                     pb.visibility = View.GONE
                     if (adapter.dataList.size == 0) {
                         iv_empty.visibility = View.VISIBLE
+                        if (page == 1) {
+                            iv_empty.setImageResource(R.drawable.img_empty1)
+                        } else {
+                            showToast("暂无最新数据")
+                            iv_empty.setImageResource(R.drawable.img_empty2)
+                        }
                         stack_layout.visibility = View.GONE
                     }
                 })
