@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:button="@null"
+        android:background="@null"
         android:drawableLeft="@drawable/ic_cs_check"
         android:drawablePadding="5dp"
         android:text="管理公司印章"
