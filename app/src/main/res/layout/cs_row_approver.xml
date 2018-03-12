@@ -7,6 +7,12 @@
     android:gravity="center"
     android:padding="18dp">
 
+    <ImageView
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:background="@drawable/star"
+        android:visibility="gone"/>
+
     <TextView
         android:id="@+id/tv_label"
         android:layout_width="wrap_content"
@@ -21,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:background="@color/white"
-        android:gravity="center_vertical"
+        android:gravity="center|right"
         android:hint="--"
         android:lines="1" />
 </LinearLayout>

@@ -650,7 +650,9 @@
         <activity android:name=".ui.fileSelector.FileMainActivity" />
         <activity android:name=".ui.approve.LeaveBusinessActivity" />
         <activity android:name=".ui.calendar.ArrangeEditActivity" />
-        <activity android:name=".ui.calendar.ArrangePersonActivity"></activity>
+        <activity android:name=".ui.calendar.ArrangePersonActivity" />
+        <activity android:name=".ui.approve.MyHolidayActivity" />
+        <activity android:name=".ui.approve.BusinessTripDetailActivity"></activity>
     </application>
 
 </manifest>
