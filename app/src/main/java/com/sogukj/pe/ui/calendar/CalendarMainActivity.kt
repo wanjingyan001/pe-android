@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
+import android.view.MenuItem
 import android.view.View
 import com.framework.base.ToolbarActivity
 import com.ldf.calendar.model.CalendarDate
@@ -22,7 +23,10 @@ class CalendarMainActivity : ToolbarActivity(), MonthSelectListener, ViewPager.O
         }
     }
 
+//    override val menuId: Int
+//        get() = R.menu.calendar_menu
     val fragments = ArrayList<Fragment>()
+//    "周工作安排",
     val titles = arrayListOf("日历", "任务", "项目事项", "团队日程")
     private lateinit var scheduleFragment: ScheduleFragment
     private lateinit var teamScheduleFragment: TeamScheduleFragment
@@ -36,6 +40,7 @@ class CalendarMainActivity : ToolbarActivity(), MonthSelectListener, ViewPager.O
         teamScheduleFragment = TeamScheduleFragment.newInstance("", "")
         scheduleFragment.monthSelect = this
         teamScheduleFragment.monthSelect = this
+//        fragments.add(ArrangeListFragment.newInstance("", ""))
         fragments.add(scheduleFragment)
         fragments.add(TaskFragment.newInstance("", ""))
         fragments.add(ProjectMattersFragment.newInstance("", ""))
@@ -68,7 +73,17 @@ class CalendarMainActivity : ToolbarActivity(), MonthSelectListener, ViewPager.O
 
     override fun onPageSelected(position: Int) {
         when (position) {
+//            0 -> {
+//                mMenu.getItem(0).isVisible = true
+//                addSchedule.visibility = View.GONE
+//                title = scheduleFragment.date
+//                addSchedule.visibility = View.VISIBLE
+//                addSchedule.setOnClickListener {
+//                    ModifyTaskActivity.startForCreate(this, ModifyTaskActivity.Schedule)
+//                }
+//            }
             0 -> {
+//                mMenu.getItem(0).isVisible = false
                 title = scheduleFragment.date
                 addSchedule.visibility = View.VISIBLE
                 addSchedule.setOnClickListener {
@@ -76,6 +91,7 @@ class CalendarMainActivity : ToolbarActivity(), MonthSelectListener, ViewPager.O
                 }
             }
             1 -> {
+//                mMenu.getItem(0).isVisible = false
                 title = "日历"
                 addSchedule.visibility = View.VISIBLE
                 addSchedule.setOnClickListener {
@@ -83,6 +99,7 @@ class CalendarMainActivity : ToolbarActivity(), MonthSelectListener, ViewPager.O
                 }
             }
             2 -> {
+//                mMenu.getItem(0).isVisible = false
                 title = "日历"
                 addSchedule.visibility = View.GONE
                 addSchedule.setOnClickListener {
@@ -90,6 +107,7 @@ class CalendarMainActivity : ToolbarActivity(), MonthSelectListener, ViewPager.O
                 }
             }
             3 -> {
+//                mMenu.getItem(0).isVisible = false
                 title = teamScheduleFragment.date
                 addSchedule.visibility = View.GONE
                 addSchedule.setOnClickListener {
@@ -97,5 +115,14 @@ class CalendarMainActivity : ToolbarActivity(), MonthSelectListener, ViewPager.O
                 }
             }
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.calendar_menu -> {
+                ArrangeEditActivity.start(this)
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

@@ -28,7 +28,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_record_trace.*
 import org.jetbrains.anko.textColor
-import java.net.UnknownHostException
 
 class RecordTraceActivity : ToolbarActivity() {
 

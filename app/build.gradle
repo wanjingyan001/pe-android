@@ -46,10 +46,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
             manifestPlaceholders = [
+//                   目前release版本依然使用测试appkey
                     AMAP_KEY            : "9204f7dcdd8c2beba10c94dbe96bd062",
-                    IM_KEY              : "5d8ada31fe2ba9cb419b5f63a95e8756",
-                    Umeng_KEY           : "59ddf11e8f4a9d7c4b000116",
-                    Umeng_MESSAGE_SECRET: "8a3cd80e07007a0463e9b12f758b727b"
+//                    IM_KEY              : "5d8ada31fe2ba9cb419b5f63a95e8756",
+//                    Umeng_KEY           : "59ddf11e8f4a9d7c4b000116",
+//                    Umeng_MESSAGE_SECRET: "8a3cd80e07007a0463e9b12f758b727b"
+                    IM_KEY              : "a0af02d86ecfb1ee160dde8369a5035e",
+                    Umeng_KEY           : "59b781c607fe652e44000165",
+                    Umeng_MESSAGE_SECRET: "a4bb361310d9aee916f2cc43c5dbda5c"
             ]
         }
         debug {

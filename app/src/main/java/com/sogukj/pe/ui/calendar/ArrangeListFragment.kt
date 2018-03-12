@@ -3,11 +3,15 @@ package com.sogukj.pe.ui.calendar
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
 import com.sogukj.pe.R
+import com.sogukj.pe.view.RecyclerAdapter
+import com.sogukj.pe.view.RecyclerHolder
+import kotlinx.android.synthetic.main.fragment_arrange_list.*
 
 
 /**
@@ -18,6 +22,7 @@ import com.sogukj.pe.R
 class ArrangeListFragment : Fragment() {
     private var mParam1: String? = null
     private var mParam2: String? = null
+    private lateinit var arrangeAdapter: RecyclerAdapter<Any>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +39,21 @@ class ArrangeListFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        arrangeAdapter = RecyclerAdapter(context, { adapter, parent, type ->
+            val convertView = adapter.getView(R.layout.item_arrange_weekly, parent)
+            object : RecyclerHolder<Any>(convertView) {
+                override fun setData(view: View, data: Any, position: Int) {
 
+                }
+            }
+        })
+        recycler_view.layoutManager = LinearLayoutManager(context)
+        recycler_view.adapter = arrangeAdapter
+        val inflate = layoutInflater.inflate(R.layout.layout_arrange_weekly_header, recycler_view, false)
+        recycler_view.addHeaderView(inflate)
+        for (i in 0..7){
+            arrangeAdapter.dataList.add("")
+        }
     }
 
     companion object {
@@ -58,7 +77,4 @@ class ArrangeListFragment : Fragment() {
             return fragment
         }
     }
-
-
-
 }

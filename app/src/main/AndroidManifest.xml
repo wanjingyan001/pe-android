@@ -648,7 +648,9 @@
         <activity android:name=".ui.project.ProjectTCActivity" />
         <activity android:name=".ui.project.ProjectTcHistoryActivity" />
         <activity android:name=".ui.fileSelector.FileMainActivity" />
-        <activity android:name=".ui.approve.LeaveBusinessActivity"></activity>
+        <activity android:name=".ui.approve.LeaveBusinessActivity" />
+        <activity android:name=".ui.calendar.ArrangeEditActivity" />
+        <activity android:name=".ui.calendar.ArrangePersonActivity"></activity>
     </application>
 
 </manifest>
