@@ -1,2 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+<<<<<<< HEAD
 <merger version="3"><dataSet config="main"><source path="/Users/sogubaby/pe-v2/pe-android/uikit/src/main/shaders"/></dataSet><dataSet config="release"><source path="/Users/sogubaby/pe-v2/pe-android/uikit/src/release/shaders"/></dataSet></merger>
+=======
+<merger version="3"><dataSet config="main"><source path="/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/src/main/shaders"/></dataSet><dataSet config="release"><source path="/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/src/release/shaders"/></dataSet></merger>
+>>>>>>> ac73e2849a73e789e1538e474b02aa06dc4d141c

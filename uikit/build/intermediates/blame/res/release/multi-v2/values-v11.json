@@ -1,10 +1,17 @@
 {
     "logs": [
         {
+<<<<<<< HEAD
             "outputFile": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/incremental/mergeReleaseResources/merged.dir/values-v11/values-v11.xml",
             "map": [
                 {
                     "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/b9f40973249904c072c5dc9eefbb25fa/res/values-v11/values-v11.xml",
+=======
+            "outputFile": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/release/values-v11/values-v11.xml",
+            "map": [
+                {
+                    "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/f6d2a503db6dbeac8bcee150d656c30d/res/values-v11/values-v11.xml",
+>>>>>>> ac73e2849a73e789e1538e474b02aa06dc4d141c
                     "from": {
                         "startLines": "2,8,14,20,26,32,38,39,43,47,48,52,56,57,61,66,71,76,78,80,81,82,136,191",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -17,10 +24,17 @@
             ]
         },
         {
+<<<<<<< HEAD
             "outputFile": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/release/values-v11/values-v11.xml",
             "map": [
                 {
                     "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/b9f40973249904c072c5dc9eefbb25fa/res/values-v11/values-v11.xml",
+=======
+            "outputFile": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/incremental/mergeReleaseResources/merged.dir/values-v11/values-v11.xml",
+            "map": [
+                {
+                    "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/f6d2a503db6dbeac8bcee150d656c30d/res/values-v11/values-v11.xml",
+>>>>>>> ac73e2849a73e789e1538e474b02aa06dc4d141c
                     "from": {
                         "startLines": "2,8,14,20,26,32,38,39,43,47,48,52,56,57,61,66,71,76,78,80,81,82,136,191",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",

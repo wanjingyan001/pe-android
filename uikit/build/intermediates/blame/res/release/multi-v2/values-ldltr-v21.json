@@ -1,10 +1,17 @@
 {
     "logs": [
         {
+<<<<<<< HEAD
             "outputFile": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/release/values-ldltr-v21/values-ldltr-v21.xml",
             "map": [
                 {
                     "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/b9f40973249904c072c5dc9eefbb25fa/res/values-ldltr-v21/values-ldltr-v21.xml",
+=======
+            "outputFile": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/release/values-ldltr-v21/values-ldltr-v21.xml",
+            "map": [
+                {
+                    "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/f6d2a503db6dbeac8bcee150d656c30d/res/values-ldltr-v21/values-ldltr-v21.xml",
+>>>>>>> ac73e2849a73e789e1538e474b02aa06dc4d141c
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -16,10 +23,17 @@
             ]
         },
         {
+<<<<<<< HEAD
             "outputFile": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/incremental/mergeReleaseResources/merged.dir/values-ldltr-v21/values-ldltr-v21.xml",
             "map": [
                 {
                     "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/b9f40973249904c072c5dc9eefbb25fa/res/values-ldltr-v21/values-ldltr-v21.xml",
+=======
+            "outputFile": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/incremental/mergeReleaseResources/merged.dir/values-ldltr-v21/values-ldltr-v21.xml",
+            "map": [
+                {
+                    "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/f6d2a503db6dbeac8bcee150d656c30d/res/values-ldltr-v21/values-ldltr-v21.xml",
+>>>>>>> ac73e2849a73e789e1538e474b02aa06dc4d141c
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

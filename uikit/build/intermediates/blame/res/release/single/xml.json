@@ -1,6 +1,11 @@
 [
     {
+<<<<<<< HEAD
         "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/release/xml/provider_paths.xml",
         "source": "/Users/sogubaby/pe-v2/pe-android/uikit/res/xml/provider_paths.xml"
+=======
+        "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/release/xml/provider_paths.xml",
+        "source": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/res/xml/provider_paths.xml"
+>>>>>>> ac73e2849a73e789e1538e474b02aa06dc4d141c
     }
 ]

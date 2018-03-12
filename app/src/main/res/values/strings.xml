@@ -107,4 +107,9 @@
     <string name="update_title">当前版本过低</string>
     <string name="update_info">请立即升级到最新版</string>
     <string name="update_now">立刻升级</string>
+    <string name="work_edit_hint">请输入事由…</string>
+    <string name="people_attending">出席人</string>
+    <string name="people_participate">参加人</string>
+    <string name="arrange_address">地址</string>
+    <string name="address_edit_hint">请输入地址</string>
 </resources>

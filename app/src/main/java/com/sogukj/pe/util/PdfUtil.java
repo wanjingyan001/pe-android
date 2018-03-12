@@ -8,6 +8,7 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.FileProvider;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -76,7 +77,7 @@ public class PdfUtil {
         }
     }
 
-    public static void loadPdf(final Context context, String urls, @Nullable String name) {
+    public static void loadPdf(final Context context, final String urls, @Nullable String name) {
         URL url = null;
 
         try {
@@ -108,6 +109,11 @@ public class PdfUtil {
                             opendPdf(context, file);
                         } else {
                             Toast.makeText(context, "下载失败!", Toast.LENGTH_SHORT).show();
+                            if (!TextUtils.isEmpty(urls)) {
+                                Intent intent = new Intent(Intent.ACTION_VIEW);
+                                intent.setData(Uri.parse(urls));
+                                context.startActivity(intent);
+                            }
                         }
 
                     } catch (IOException e) {

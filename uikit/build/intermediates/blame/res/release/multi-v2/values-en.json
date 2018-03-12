@@ -1,10 +1,17 @@
 {
     "logs": [
         {
+<<<<<<< HEAD
             "outputFile": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/incremental/mergeReleaseResources/merged.dir/values-en/values-en.xml",
             "map": [
                 {
                     "source": "/Users/sogubaby/pe-v2/pe-android/uikit/res/values-en/strings-ptr.xml",
+=======
+            "outputFile": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/release/values-en/values-en.xml",
+            "map": [
+                {
+                    "source": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/res/values-en/strings-ptr.xml",
+>>>>>>> ac73e2849a73e789e1538e474b02aa06dc4d141c
                     "from": {
                         "startLines": "3,2,1",
                         "startColumns": "4,4,4",
@@ -23,10 +30,17 @@
             ]
         },
         {
+<<<<<<< HEAD
             "outputFile": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/release/values-en/values-en.xml",
             "map": [
                 {
                     "source": "/Users/sogubaby/pe-v2/pe-android/uikit/res/values-en/strings-ptr.xml",
+=======
+            "outputFile": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/incremental/mergeReleaseResources/merged.dir/values-en/values-en.xml",
+            "map": [
+                {
+                    "source": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/res/values-en/strings-ptr.xml",
+>>>>>>> ac73e2849a73e789e1538e474b02aa06dc4d141c
                     "from": {
                         "startLines": "3,2,1",
                         "startColumns": "4,4,4",

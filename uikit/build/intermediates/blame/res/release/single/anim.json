@@ -1,5 +1,6 @@
 [
     {
+<<<<<<< HEAD
         "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/release/anim/abc_fade_in.xml",
         "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/b9f40973249904c072c5dc9eefbb25fa/res/anim/abc_fade_in.xml"
     },
@@ -62,5 +63,69 @@
     {
         "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/release/anim/abc_popup_exit.xml",
         "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/b9f40973249904c072c5dc9eefbb25fa/res/anim/abc_popup_exit.xml"
+=======
+        "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/release/anim/design_bottom_sheet_slide_in.xml",
+        "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/design-25.3.1.aar/87909884eaa1c455dd83c1116c1283b8/res/anim/design_bottom_sheet_slide_in.xml"
+    },
+    {
+        "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/release/anim/abc_popup_exit.xml",
+        "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/f6d2a503db6dbeac8bcee150d656c30d/res/anim/abc_popup_exit.xml"
+    },
+    {
+        "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/release/anim/abc_fade_out.xml",
+        "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/f6d2a503db6dbeac8bcee150d656c30d/res/anim/abc_fade_out.xml"
+    },
+    {
+        "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/release/anim/abc_fade_in.xml",
+        "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/f6d2a503db6dbeac8bcee150d656c30d/res/anim/abc_fade_in.xml"
+    },
+    {
+        "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/release/anim/abc_slide_out_top.xml",
+        "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/f6d2a503db6dbeac8bcee150d656c30d/res/anim/abc_slide_out_top.xml"
+    },
+    {
+        "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/release/anim/abc_grow_fade_in_from_bottom.xml",
+        "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/f6d2a503db6dbeac8bcee150d656c30d/res/anim/abc_grow_fade_in_from_bottom.xml"
+    },
+    {
+        "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/release/anim/abc_slide_out_bottom.xml",
+        "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/f6d2a503db6dbeac8bcee150d656c30d/res/anim/abc_slide_out_bottom.xml"
+    },
+    {
+        "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/release/anim/abc_popup_enter.xml",
+        "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/f6d2a503db6dbeac8bcee150d656c30d/res/anim/abc_popup_enter.xml"
+    },
+    {
+        "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/release/anim/abc_shrink_fade_out_from_bottom.xml",
+        "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/f6d2a503db6dbeac8bcee150d656c30d/res/anim/abc_shrink_fade_out_from_bottom.xml"
+    },
+    {
+        "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/release/anim/design_snackbar_in.xml",
+        "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/design-25.3.1.aar/87909884eaa1c455dd83c1116c1283b8/res/anim/design_snackbar_in.xml"
+    },
+    {
+        "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/release/anim/abc_slide_in_bottom.xml",
+        "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/f6d2a503db6dbeac8bcee150d656c30d/res/anim/abc_slide_in_bottom.xml"
+    },
+    {
+        "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/release/anim/abc_slide_in_top.xml",
+        "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/f6d2a503db6dbeac8bcee150d656c30d/res/anim/abc_slide_in_top.xml"
+    },
+    {
+        "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/release/anim/design_fab_in.xml",
+        "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/design-25.3.1.aar/87909884eaa1c455dd83c1116c1283b8/res/anim/design_fab_in.xml"
+    },
+    {
+        "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/release/anim/design_bottom_sheet_slide_out.xml",
+        "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/design-25.3.1.aar/87909884eaa1c455dd83c1116c1283b8/res/anim/design_bottom_sheet_slide_out.xml"
+    },
+    {
+        "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/release/anim/design_fab_out.xml",
+        "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/design-25.3.1.aar/87909884eaa1c455dd83c1116c1283b8/res/anim/design_fab_out.xml"
+    },
+    {
+        "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/release/anim/design_snackbar_out.xml",
+        "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/design-25.3.1.aar/87909884eaa1c455dd83c1116c1283b8/res/anim/design_snackbar_out.xml"
+>>>>>>> ac73e2849a73e789e1538e474b02aa06dc4d141c
     }
 ]
