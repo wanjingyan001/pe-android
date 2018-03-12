@@ -14,15 +14,14 @@ open class UserBean() : Serializable {
     var memo: String = ""//备注
     var url: String? = null
     var depart_id: Int? = null//部门ID
-    var company:String?=null//所属公司
+    var company: String? = null//所属公司
     var numberOfShares: Int = 0
     var is_admin: Int = 0
     var user_id: Int? = null
     var full: String? = null
     var token: String? = null
     var accid: String? = null//网易云id
-    var address:String?=null//公司地址
-
+    var address: String? = null//公司地址
 
 
     fun headImage(): String? {
@@ -30,5 +29,16 @@ open class UserBean() : Serializable {
         val file = File(url)
         if (file.exists()) return url
         return "${url}"
+    }
+
+    fun imageId(): String {
+        url?.let {
+            return if (it.contains("?")) {
+                it.substring(0, it.indexOf("?"))
+            } else {
+                it
+            }
+        }
+        return ""
     }
 }

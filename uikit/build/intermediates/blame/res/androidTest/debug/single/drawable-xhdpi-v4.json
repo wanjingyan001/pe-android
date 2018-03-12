@@ -83,12 +83,12 @@
         "source": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/yuyin.png"
     },
     {
-        "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/notification_bg_normal.9.png",
-        "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/f6d2a503db6dbeac8bcee150d656c30d/res/drawable-xhdpi-v4/notification_bg_normal.9.png"
-    },
-    {
         "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/abc_ic_star_black_48dp.png",
         "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/f6d2a503db6dbeac8bcee150d656c30d/res/drawable-xhdpi-v4/abc_ic_star_black_48dp.png"
+    },
+    {
+        "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/notification_bg_normal.9.png",
+        "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/f6d2a503db6dbeac8bcee150d656c30d/res/drawable-xhdpi-v4/notification_bg_normal.9.png"
     },
     {
         "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/ic_close_white_24dp.png",

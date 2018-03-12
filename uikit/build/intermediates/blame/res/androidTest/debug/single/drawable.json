@@ -9,8 +9,13 @@
     },
     {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable/abc_ic_clear_material.xml",
         "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/f6d2a503db6dbeac8bcee150d656c30d/res/drawable/abc_ic_clear_material.xml"
+=======
+        "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable/nim_bg_edittext_rectangle_normal.xml",
+        "source": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/bundles/debug/res/drawable/nim_bg_edittext_rectangle_normal.xml"
+>>>>>>> Stashed changes
     },
     {
         "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable/nim_recent_contact_sticky_selecter.xml",
@@ -21,8 +26,13 @@
 >>>>>>> Stashed changes
     },
     {
+<<<<<<< Updated upstream
         "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable/nim_list_item_selector.xml",
         "source": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/bundles/debug/res/drawable/nim_list_item_selector.xml"
+=======
+        "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable/abc_ic_clear_material.xml",
+        "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/f6d2a503db6dbeac8bcee150d656c30d/res/drawable/abc_ic_clear_material.xml"
+>>>>>>> Stashed changes
     },
     {
 <<<<<<< Updated upstream
@@ -37,6 +47,7 @@
         "source": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/bundles/debug/res/drawable/nim_recent_contact_sticky_selecter.xml"
     },
     {
+<<<<<<< Updated upstream
         "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable/nim_message_item_left_selector.xml",
         "source": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/bundles/debug/res/drawable/nim_message_item_left_selector.xml"
     },
@@ -55,8 +66,14 @@
     },
     {
 <<<<<<< Updated upstream
+=======
+>>>>>>> Stashed changes
         "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable/abc_vector_test.xml",
         "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/f6d2a503db6dbeac8bcee150d656c30d/res/drawable/abc_vector_test.xml"
+    },
+    {
+        "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable/nim_bg_edittext_rectangle_focused.xml",
+        "source": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/bundles/debug/res/drawable/nim_bg_edittext_rectangle_focused.xml"
     },
     {
         "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable/nim_portrait_mask_round.xml",
@@ -83,12 +100,12 @@
         "source": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/bundles/debug/res/drawable/nim_team_create_btn_selector.xml"
     },
     {
-        "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable/nim_bg_edittext_rectangle.xml",
-        "source": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/bundles/debug/res/drawable/nim_bg_edittext_rectangle.xml"
-    },
-    {
         "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable/bg_search.xml",
         "source": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/bundles/debug/res/drawable/bg_search.xml"
+    },
+    {
+        "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable/nim_bg_edittext_rectangle.xml",
+        "source": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/bundles/debug/res/drawable/nim_bg_edittext_rectangle.xml"
     },
     {
         "merged": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable/message_file_selector.xml",

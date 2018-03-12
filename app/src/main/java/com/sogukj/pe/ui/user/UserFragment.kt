@@ -3,6 +3,7 @@ package com.sogukj.pe.ui.user
 import android.annotation.TargetApi
 import android.app.Activity
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
@@ -10,8 +11,13 @@ import android.util.Log
 import android.view.View
 import com.bumptech.glide.GenericTransitionOptions
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
+import com.bumptech.glide.signature.ObjectKey
 import com.framework.base.ToolbarFragment
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.DepartmentBean
@@ -19,6 +25,7 @@ import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.ui.IM.TeamSelectActivity
 import com.sogukj.pe.ui.project.ProjectFocusActivity
 import com.sogukj.pe.ui.project.ProjectListFragment
+import com.sogukj.pe.util.HeaderImgKey
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
@@ -180,7 +187,20 @@ class UserFragment : ToolbarFragment(), View.OnClickListener {
         if (user.url != null && !TextUtils.isEmpty(user.url)) {
             Glide.with(this@UserFragment)
                     .load(user.headImage())
+                    .apply(RequestOptions().signature(HeaderImgKey(user.url)))
                     .transition(GenericTransitionOptions())
+                    .listener(object : RequestListener<Drawable> {
+                        override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                            val ch = user.name.first()
+                            iv_user.setChar(ch)
+                            return false
+                        }
+
+                        override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                            return false
+                        }
+
+                    })
                     .into(iv_user)
         } else {
             val ch = user.name.first()
