@@ -33,5 +33,7 @@ class CustomSealBean : Serializable {
         var size: String? = null
         var type: Int? = null
         val hide: String = ""
+        val pla: String = ""
+        val value: String = ""
     }
 }

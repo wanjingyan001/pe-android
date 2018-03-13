@@ -140,6 +140,7 @@ class EntryApproveActivity : ToolbarActivity(), View.OnClickListener {
         itemView.setOnClickListener {
             if (itemBean.id == null) return@setOnClickListener
             when (itemBean.type) {
+                1 -> LeaveBusinessActivity.start(context, false, itemBean.id!!)
                 2 -> BuildSealActivity.start(this, itemBean!!)
                 3 -> BuildSignActivity.start(this, itemBean!!)
                 else -> {

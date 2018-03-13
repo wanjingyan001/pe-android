@@ -570,6 +570,11 @@ interface SoguService {
                     , @Field("sid") sid: Int? = null): Observable<Payload<List<CustomSealBean>>>
 
     @FormUrlEncoded
+    @POST("/api/Approve/leaveInfo")
+    fun leaveInfo(@Field("template_id") template_id: Int? = null
+                    , @Field("sid") sid: Int? = null): Observable<Payload<LeaveBean>>
+
+    @FormUrlEncoded
     @POST("/api/Approve/approveInfo")
     fun approver(@Field("template_id") template_id: Int? = null
                  , @Field("sid") sid: Int? = null
