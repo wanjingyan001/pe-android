@@ -1,6 +1,8 @@
 package com.framework.base
 
+import android.app.Activity
 import android.app.ProgressDialog
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.support.constraint.ConstraintLayout
@@ -133,6 +135,10 @@ abstract class BaseActivity : AppCompatActivity() {
     private var toast: Toast? = null
     fun showToast(text: CharSequence?) {
         Trace.d(TAG, text?.toString())
+        //文件上传未完成，界面销毁
+        if (!(context is Activity)) {
+            return
+        }
         if (toast == null) {
             toast = Toast.makeText(this,
                     text?.toString(),

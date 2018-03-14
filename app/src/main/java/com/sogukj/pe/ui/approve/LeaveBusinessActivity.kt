@@ -24,6 +24,13 @@ import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_leave_business.*
+import android.databinding.adapters.TextViewBindingAdapter.setText
+import com.bigkoo.pickerview.OptionsPickerView
+import com.google.gson.Gson
+import com.sogukj.pe.bean.UserBean
+import com.sogukj.pe.ui.IM.TeamSelectActivity
+import com.sogukj.pe.ui.main.MainActivity
+
 
 class LeaveBusinessActivity : ToolbarActivity() {
 
@@ -81,7 +88,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
                                 }
                                 payload.payload?.apply {
                                     addGrid(sp!!)
-                                    cs!!.add(ApproverBean())
+                                    cs!!.add(UserBean())
                                     addGrid(cs!!)
                                 }
                             }, { e ->
@@ -139,24 +146,31 @@ class LeaveBusinessActivity : ToolbarActivity() {
         }
         if (map.isNotEmpty())
             etValue.setOnClickListener {
-                MaterialDialog.Builder(this@LeaveBusinessActivity)
-                        .theme(Theme.LIGHT)
-                        .items(items)
-                        .canceledOnTouchOutside(true)
-                        .itemsCallbackSingleChoice(-1, object : MaterialDialog.ListCallbackSingleChoice {
-                            override fun onSelection(dialog: MaterialDialog?, v: View?, p: Int, s: CharSequence?): Boolean {
-                                if (p == -1) return false
-                                val name = items[p]
-                                val valBean = map[name]
-                                etValue.text = name
-                                etValue.tag = "${valBean?.id}"
-                                dialog?.dismiss()
-                                //paramMap.put(bean.fields, valBean?.id)
-                                return true
-                            }
-
-                        })
-                        .show()
+                //                MaterialDialog.Builder(this@LeaveBusinessActivity)
+//                        .theme(Theme.LIGHT)
+//                        .items(items)
+//                        .canceledOnTouchOutside(true)
+//                        .itemsCallbackSingleChoice(-1, object : MaterialDialog.ListCallbackSingleChoice {
+//                            override fun onSelection(dialog: MaterialDialog?, v: View?, p: Int, s: CharSequence?): Boolean {
+//                                if (p == -1) return false
+//                                val name = items[p]
+//                                val valBean = map[name]
+//                                etValue.text = name
+//                                etValue.tag = "${valBean?.id}"
+//                                dialog?.dismiss()
+//                                //paramMap.put(bean.fields, valBean?.id)
+//                                return true
+//                            }
+//
+//                        })
+//                        .show()
+                var pvOptions = OptionsPickerView.Builder(this, OptionsPickerView.OnOptionsSelectListener { options1, option2, options3, v ->
+                    //返回的分别是三个级别的选中位置
+                    val tx = items.get(options1)
+                    etValue.text = tx
+                }).build()
+                pvOptions.setPicker(items, null, null)
+                pvOptions.show()
             }
     }
 
@@ -264,7 +278,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
     }
 
     // WeeklyThisFragment
-    fun addGrid(list: ArrayList<ApproverBean>) {
+    fun addGrid(list: ArrayList<UserBean>) {
         val convertView = inflater.inflate(R.layout.cs_row_sendto, null) as LinearLayout
         ll_content.addView(convertView)
         var grid_to = convertView.findViewById(R.id.grid_chaosong_to) as GridView
@@ -273,12 +287,33 @@ class LeaveBusinessActivity : ToolbarActivity() {
 
         val tvLabel = convertView.findViewById(R.id.tv_label) as TextView
         val icon = convertView.findViewById(R.id.starIcon) as ImageView
-        if (list[list.size - 1].approver.isNullOrEmpty()) {
+        if (list[list.size - 1].name.isNullOrEmpty()) {
             icon.visibility = View.INVISIBLE
             tvLabel.text = "抄送人"
+            grid_to.setOnItemClickListener { parent, view, position, id ->
+                if (adapter.list[position].name.isNullOrEmpty()) {
+                    var list = ArrayList<UserBean>()
+                    for (index in 0 until adapter.list.size - 1) {//不包含
+                        list.add(adapter.list[index])
+                    }
+                    TeamSelectActivity.startForResult(context = this, isSelectUser = true, alreadySelect = list, requestCode = SEND)
+                } else {
+                    adapter.list.removeAt(position)
+                    adapter.notifyDataSetChanged()
+                }
+            }
         } else {
             icon.visibility = View.VISIBLE
             tvLabel.text = "审批人"
+        }
+    }
+
+    var SEND = 0x007
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == SEND && resultCode == Activity.RESULT_OK) {
+
         }
     }
 
@@ -296,7 +331,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
         }
     }
 
-    class MyAdapter(var context: Context, val list: ArrayList<ApproverBean>) : BaseAdapter() {
+    class MyAdapter(var context: Context, val list: ArrayList<UserBean>) : BaseAdapter() {
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             var viewHolder: ViewHolder
@@ -310,7 +345,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
             } else {
                 viewHolder = conView.tag as ViewHolder
             }
-            if (list[position].approver.isNullOrEmpty()) {
+            if (list[position].name.isNullOrEmpty()) {
                 viewHolder.icon?.setImageResource(R.drawable.send_add)
                 viewHolder.name?.text = "添加"
             } else {
@@ -318,7 +353,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
                         .load(list[position].url)
                         .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
                         .into(viewHolder.icon)
-                viewHolder.name?.text = list[position].approver
+                viewHolder.name?.text = list[position].name
             }
             return conView
         }

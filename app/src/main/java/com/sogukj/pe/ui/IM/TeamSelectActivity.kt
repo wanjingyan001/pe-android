@@ -125,15 +125,20 @@ class TeamSelectActivity : AppCompatActivity() {
         if (data != null) {
             alreadyList = data as ArrayList<UserBean>
             selectNumber.text = "已选择: ${alreadyList.size} 人"
-//            val find = alreadyList.find { it.accid == mine?.accid }
-//            if (find!=null){
-//                val i = if (alreadyList.size - 1 < 0) 0 else alreadyList.size - 1
-//                selectNumber.text = "已选择: $i 人"
-//            }else{
-//
-//            }
         } else {
-            alreadyList = ArrayList()
+            val accounts = intent.getSerializableExtra(Extras.DATA2) as ArrayList<String>?
+            if (accounts != null) {
+                alreadyList = ArrayList()
+                accounts.forEach {
+                    val bean = UserBean()
+                    bean.accid = it
+                    bean.uid = it.toInt()
+                    bean.user_id = it.toInt()
+                    alreadyList.add(bean)
+                }
+            } else {
+                alreadyList = ArrayList()
+            }
         }
     }
 
@@ -364,12 +369,9 @@ class TeamSelectActivity : AppCompatActivity() {
                 if (userBean.user_id == mine!!.uid && fromTeam) {
                     holder.selectIcon.imageResource = R.drawable.cannot_select
                 }
-                val options = RequestOptions()
-                options.error(R.drawable.nim_avatar_default)
-                options.fallback(R.drawable.nim_avatar_default)
                 Glide.with(this@TeamSelectActivity)
                         .load(userBean.headImage())
-                        .apply(options)
+                        .apply(RequestOptions().error(R.drawable.nim_avatar_default).placeholder(R.drawable.nim_avatar_default))
                         .into(holder.userImg)
                 holder.userName.text = userBean.name
                 holder.userPosition.text = userBean.position
@@ -446,12 +448,9 @@ class TeamSelectActivity : AppCompatActivity() {
 
         override fun onBindViewHolder(holder: ContactHolder, position: Int) {
             val userBean = datas[position]
-            val options = RequestOptions()
-            options.error(R.drawable.nim_avatar_default)
-            options.fallback(R.drawable.nim_avatar_default)
             Glide.with(this@TeamSelectActivity)
                     .load(userBean.headImage())
-                    .apply(options)
+                    .apply(RequestOptions().error(R.drawable.nim_avatar_default).placeholder(R.drawable.nim_avatar_default))
                     .into(holder.userImg)
             var name = userBean.name
             if (searchKey.isNotEmpty()) {
@@ -552,6 +551,26 @@ class TeamSelectActivity : AppCompatActivity() {
             intent.putExtra(Extras.FLAG, fromTeam)
             val code = requestCode ?: Extras.REQUESTCODE
             fragment.startActivityForResult(intent, code)
+        }
+
+        fun start(context: Context, isSelectUser: Boolean? = null,
+                  alreadySelectAccount: ArrayList<String>? = null,
+                  isCreateTeam: Boolean? = false,
+                  fromTeam: Boolean? = false,
+                  canRemoveMember: Boolean? = true,
+                  requestCode: Int? = null) {
+            val intent = Intent(context, TeamSelectActivity::class.java)
+            intent.putExtra(Extras.SELECT_USER, isSelectUser)
+            intent.putExtra(Extras.DATA2, alreadySelectAccount)
+            intent.putExtra(Extras.CREATE_TEAM, isCreateTeam)
+            intent.putExtra(Extras.FLAG, fromTeam)
+            intent.putExtra(Extras.CAN_REMOVE_MEMBER, canRemoveMember)
+            val code = requestCode ?: Extras.REQUESTCODE
+            if (context is Fragment) {
+                context.startActivityForResult(intent, code)
+            } else if (context is Activity) {
+                context.startActivityForResult(intent, code)
+            }
         }
     }
 }
