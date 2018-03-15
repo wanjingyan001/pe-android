@@ -53,7 +53,10 @@ class RecruitActivity : ToolbarActivity() {
                 override fun setData(view: View, data: RecruitBean, position: Int) {
                     tvTitle.text = data.title
                     tvOriSalary.text = data.oriSalary
-                    tvCity.text = "${data.city}   ${data.district}  ${data.experience}"
+                    var str1 = if(data.city.isNullOrEmpty()) "--" else data.city
+                    var str2 = if(data.district.isNullOrEmpty()) "--" else data.district
+                    var str3 = if(data.experience.isNullOrEmpty()) "--" else data.experience
+                    tvCity.text = "${str1}  ${str2}  ${str3}"
                     tvCreateTime.text = data.createTime
                 }
 
