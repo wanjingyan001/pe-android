@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -39,168 +40,10 @@
             android:textSize="14sp" />
     </LinearLayout>
 
-    <LinearLayout
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/divider_bottom"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="6dp"
-            android:layout_height="match_parent"
-            android:background="#a2c0e3" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="18dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="18dp"
-            android:letterSpacing="0.04"
-            android:lineSpacingExtra="0sp"
-            android:text="事假"
-            android:textColor="#282828"
-            android:textSize="14sp" />
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:layout_margin="15dp"
-            android:background="#f1f1f1" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:letterSpacing="0.04"
-            android:lineSpacingExtra="0sp"
-            android:textColor="#808080"
-            android:textSize="14sp"
-            tools:text="剩余20.5小时" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/divider_bottom"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="6dp"
-            android:layout_height="match_parent"
-            android:background="#aed4ab" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="18dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="18dp"
-            android:letterSpacing="0.04"
-            android:lineSpacingExtra="0sp"
-            android:text="病假"
-            android:textColor="#282828"
-            android:textSize="14sp" />
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:layout_margin="15dp"
-            android:background="#f1f1f1" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:letterSpacing="0.04"
-            android:lineSpacingExtra="0sp"
-            android:textColor="#808080"
-            android:textSize="14sp"
-            tools:text="剩余20.5小时" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/divider_bottom"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="6dp"
-            android:layout_height="match_parent"
-            android:background="#e4c2c2" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="18dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="18dp"
-            android:letterSpacing="0.04"
-            android:lineSpacingExtra="0sp"
-            android:text="年假"
-            android:textColor="#282828"
-            android:textSize="14sp" />
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:layout_margin="15dp"
-            android:background="#f1f1f1" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:letterSpacing="0.04"
-            android:lineSpacingExtra="0sp"
-            android:textColor="#808080"
-            android:textSize="14sp"
-            tools:text="剩余20.5小时" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/divider_bottom"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="6dp"
-            android:layout_height="match_parent"
-            android:background="#dfbfe6" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="18dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="18dp"
-            android:letterSpacing="0.04"
-            android:lineSpacingExtra="0sp"
-            android:text="婚假"
-            android:textColor="#282828"
-            android:textSize="14sp" />
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:layout_margin="15dp"
-            android:background="#f1f1f1" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:letterSpacing="0.04"
-            android:lineSpacingExtra="0sp"
-            android:textColor="#808080"
-            android:textSize="14sp"
-            tools:text="剩余20.5小时" />
-    </LinearLayout>
+        android:layout_marginTop="10dp" />
 
 </LinearLayout>

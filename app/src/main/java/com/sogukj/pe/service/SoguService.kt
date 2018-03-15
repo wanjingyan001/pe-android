@@ -1151,4 +1151,7 @@ interface SoguService {
     @FormUrlEncoded
     @POST("/api/userFont/showInfo")
     fun showIMUserInfo(@Field("user_id")user_id:Int):Observable<Payload<UserBean>>
+
+    @POST("/api/Approve/showVacation")
+    fun showVacation():Observable<Payload<ArrayList<VacationBean>>>
 }

@@ -96,7 +96,7 @@ class TeamSelectActivity : AppCompatActivity() {
                         val id = it
                         departList.forEach {
                             it.data?.forEach {
-                                if (id == it.accid) {
+                                if (id.toInt() == it.uid) {
                                     alreadyList.add(it)
                                 }
                             }
@@ -131,7 +131,7 @@ class TeamSelectActivity : AppCompatActivity() {
                 alreadyList = ArrayList()
                 accounts.forEach {
                     val bean = UserBean()
-                    bean.accid = it
+                    bean.uid = it.toInt()
                     bean.uid = it.toInt()
                     bean.user_id = it.toInt()
                     alreadyList.add(bean)
@@ -233,17 +233,17 @@ class TeamSelectActivity : AppCompatActivity() {
                             departList.add(depart)
                             depart.data?.forEach {
                                 it.depart_name = depart.de_name
-                                it.accid?.let {
-                                    if (it == mine?.accid && fromTeam) {
-                                        selectMap.put(it, true)
+                                it.uid?.let {
+                                    if (it == mine?.uid && fromTeam) {
+                                        selectMap.put(it.toString(), true)
                                     } else {
-                                        selectMap.put(it, false)
+                                        selectMap.put(it.toString(), false)
                                     }
                                 }
                             }
                             alreadyList.forEach {
-                                it.accid?.let {
-                                    selectMap.put(it, true)
+                                it.uid?.let {
+                                    selectMap.put(it.toString(), true)
                                 }
                             }
                         }
@@ -378,9 +378,9 @@ class TeamSelectActivity : AppCompatActivity() {
 
                 if (isSelectUser) {
                     holder.selectIcon.visibility = View.VISIBLE
-                    userBean.accid?.let {
-                        if (it != mine.accid) {
-                            holder.selectIcon.isSelected = selectMap[it]!!
+                    userBean.uid?.let {
+                        if (it != mine.uid) {
+                            holder.selectIcon.isSelected = selectMap[it.toString()]!!
                         }
                     }
                 } else {
@@ -391,14 +391,14 @@ class TeamSelectActivity : AppCompatActivity() {
                     search_edt.clearFocus()
                     if (isSelectUser) {
                         //选人
-                        val find = alreadyList.find { it.accid == userBean.accid }
+                        val find = alreadyList.find { it.uid == userBean.uid }
                         if (find != null && !canRemove) {
                             return@setOnClickListener
                         }
-                        if (userBean.accid != mine.accid || !fromTeam) {
+                        if (userBean.uid != mine.uid || !fromTeam) {
                             holder.selectIcon.isSelected = !holder.selectIcon.isSelected
-                            userBean.accid?.let {
-                                selectMap.put(it, holder.selectIcon.isSelected)
+                            userBean.uid?.let {
+                                selectMap.put(it.toString(), holder.selectIcon.isSelected)
                                 val map = selectMap.filterValues { it }
                                 selectNumber.text = "已选择: ${map.size}人"
                             }
@@ -461,9 +461,9 @@ class TeamSelectActivity : AppCompatActivity() {
 
             if (isSelectUser) {
                 holder.selectIcon.visibility = View.VISIBLE
-                userBean.accid?.let {
-                    if (it != mine!!.accid) {
-                        holder.selectIcon.isSelected = selectMap[it]!!
+                userBean.uid?.let {
+                    if (it != mine!!.uid) {
+                        holder.selectIcon.isSelected = selectMap[it.toString()]!!
                     } else {
                         holder.selectIcon.imageResource = R.drawable.cannot_select
                     }
@@ -480,14 +480,14 @@ class TeamSelectActivity : AppCompatActivity() {
                 search_edt.clearFocus()
                 if (isSelectUser) {
                     //选人
-                    val find = alreadyList.find { it.accid == userBean.accid }
+                    val find = alreadyList.find { it.uid == userBean.uid }
                     if (find != null && !canRemove) {
                         return@setOnClickListener
                     }
-                    if (userBean.accid != mine!!.accid) {
+                    if (userBean.uid != mine!!.uid) {
                         holder.selectIcon.isSelected = !holder.selectIcon.isSelected
-                        userBean.accid?.let {
-                            selectMap.put(it, holder.selectIcon.isSelected)
+                        userBean.uid?.let {
+                            selectMap.put(it.toString(), holder.selectIcon.isSelected)
                             val map = selectMap.filterValues { it }
                             selectNumber.text = "已选择: ${map.size}人"
                         }

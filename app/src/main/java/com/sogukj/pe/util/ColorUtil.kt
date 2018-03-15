@@ -1,9 +1,12 @@
 package com.sogukj.pe.util
 
 import android.graphics.Color
+import android.widget.ImageView
 import android.widget.TextView
 import com.sogukj.pe.bean.ApprovalBean
 import com.sogukj.pe.bean.MessageBean
+import com.sogukj.pe.bean.VacationBean
+import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.textColor
 
 /**
@@ -40,6 +43,17 @@ object ColorUtil {
             "待签字" -> Color.parseColor("#ffa715")
             "待审批" -> Color.parseColor("#ffa715")
             else -> Color.parseColor("#ffa715")
+        }
+    }
+
+    fun setColorStatus(view: ImageView, bean: VacationBean) {
+        view.backgroundColor = when (bean.id) {
+            1 -> Color.parseColor("#a2c0e3")//事假
+            2 -> Color.parseColor("#aed4ab")//病假
+            3 -> Color.parseColor("#e4c2c2")//年假
+            4 -> Color.parseColor("#dfbfe6")//婚假
+            5 -> Color.parseColor("#e8e2b7")//丧假
+            else -> Color.parseColor("#ffffff")
         }
     }
 }
