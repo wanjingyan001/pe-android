@@ -1,34 +1,10 @@
 {
     "logs": [
         {
-<<<<<<< Updated upstream
-            "outputFile": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/incremental/mergeDebugAndroidTestResources/merged.dir/values-sk/values-sk.xml",
-            "map": [
-                {
-                    "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/library-1.8.aar/8fc44c7508e7d819ec4ef8c9832adca1/res/values-sk/values-sk.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,104,171,212,260,316,369,417,465,512,559,606,656,713,758",
-                        "endColumns": "48,66,40,47,55,52,47,47,46,46,46,49,56,44,46",
-                        "endOffsets": "99,166,207,255,311,364,412,460,507,554,601,651,708,753,800"
-                    },
-                    "to": {
-                        "startLines": "21,22,25,26,27,28,29,30,31,32,33,34,35,36,37",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "2017,2066,2322,2363,2411,2467,2520,2568,2616,2663,2710,2757,2807,2864,2909",
-                        "endColumns": "48,66,40,47,55,52,47,47,46,46,46,49,56,44,46",
-                        "endOffsets": "2061,2128,2358,2406,2462,2515,2563,2611,2658,2705,2752,2802,2859,2904,2951"
-                    }
-                },
-                {
-                    "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/f6d2a503db6dbeac8bcee150d656c30d/res/values-sk/values-sk.xml",
-=======
             "outputFile": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/values-sk/values-sk.xml",
             "map": [
                 {
                     "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/b9f40973249904c072c5dc9eefbb25fa/res/values-sk/values-sk.xml",
->>>>>>> Stashed changes
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -43,18 +19,9 @@
                         "endColumns": "106,107,122,99,110,85,107,117,77,77,83,104,108,98,105,110,108,123,97,87,100",
                         "endOffsets": "157,265,388,488,599,685,793,911,989,1067,1151,1256,1365,1464,1570,1681,1790,1914,2012,2216,2317"
                     }
-                }
-            ]
-        },
-        {
-            "outputFile": "/Users/admin/dev/proj/pe2.0.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/values-sk/values-sk.xml",
-            "map": [
+                },
                 {
-<<<<<<< Updated upstream
-                    "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/library-1.8.aar/8fc44c7508e7d819ec4ef8c9832adca1/res/values-sk/values-sk.xml",
-=======
                     "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/library-1.8.aar/88af069f4ddabb461ddc19ef2881cfc9/res/values-sk/values-sk.xml",
->>>>>>> Stashed changes
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -69,11 +36,6 @@
                         "endColumns": "48,66,40,47,55,52,47,47,46,46,46,49,56,44,46",
                         "endOffsets": "2061,2128,2358,2406,2462,2515,2563,2611,2658,2705,2752,2802,2859,2904,2951"
                     }
-<<<<<<< Updated upstream
-                },
-                {
-                    "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/f6d2a503db6dbeac8bcee150d656c30d/res/values-sk/values-sk.xml",
-=======
                 }
             ]
         },
@@ -82,7 +44,6 @@
             "map": [
                 {
                     "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/b9f40973249904c072c5dc9eefbb25fa/res/values-sk/values-sk.xml",
->>>>>>> Stashed changes
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -97,8 +58,6 @@
                         "endColumns": "106,107,122,99,110,85,107,117,77,77,83,104,108,98,105,110,108,123,97,87,100",
                         "endOffsets": "157,265,388,488,599,685,793,911,989,1067,1151,1256,1365,1464,1570,1681,1790,1914,2012,2216,2317"
                     }
-<<<<<<< Updated upstream
-=======
                 },
                 {
                     "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/library-1.8.aar/88af069f4ddabb461ddc19ef2881cfc9/res/values-sk/values-sk.xml",
@@ -116,7 +75,6 @@
                         "endColumns": "48,66,40,47,55,52,47,47,46,46,46,49,56,44,46",
                         "endOffsets": "2061,2128,2358,2406,2462,2515,2563,2611,2658,2705,2752,2802,2859,2904,2951"
                     }
->>>>>>> Stashed changes
                 }
             ]
         }

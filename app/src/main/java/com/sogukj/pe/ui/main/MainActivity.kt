@@ -123,7 +123,7 @@ class MainActivity : BaseActivity() {
 
         manager = supportFragmentManager
         manager.beginTransaction().add(R.id.container, fragments[2]).commit()
-
+        Trace.e("AndroidPE",""+Utils.isApkInDebug(this))
         updateVersion()
     }
 
