@@ -62,17 +62,17 @@
 
                 <ImageButton
                     android:id="@+id/fb_add"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:background="@drawable/selector1"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/tj_main"
                     android:visibility="gone" />
 
                 <ImageButton
                     android:id="@+id/iv_search"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginLeft="10dp"
-                    android:background="@drawable/selector2" />
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/search_main" />
             </LinearLayout>
         </android.support.v7.widget.Toolbar>
 
