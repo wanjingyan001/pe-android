@@ -19,18 +19,19 @@ import com.sogukj.pe.view.SpaceItemDecoration
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_my_holiday.*
+import kotlinx.android.synthetic.main.activity_vacation_record.*
 
-class MyHolidayActivity : ToolbarActivity() {
+class VacationRecordActivity : ToolbarActivity() {
 
     lateinit var adapter: RecyclerAdapter<VacationBean>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_my_holiday)
+        setContentView(R.layout.activity_vacation_record)
+        title = "记录"
         setBack(true)
-        title = "我的假期"
 
+        //qj_record_item
         adapter = RecyclerAdapter(context, { _adapter, parent, type ->
             val convertView = _adapter.getView(R.layout.item_vacation, parent)
             object : RecyclerHolder<VacationBean>(convertView) {
@@ -65,15 +66,11 @@ class MyHolidayActivity : ToolbarActivity() {
                     Trace.e(e)
                     empty.visibility = View.VISIBLE
                 })
-
-        record_detail.setOnClickListener {
-            VacationRecordActivity.start(context)
-        }
     }
 
     companion object {
         fun start(ctx: Activity?) {
-            val intent = Intent(ctx, MyHolidayActivity::class.java)
+            val intent = Intent(ctx, VacationRecordActivity::class.java)
             ctx?.startActivity(intent)
         }
     }

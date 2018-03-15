@@ -11,6 +11,7 @@
     <include layout="@layout/toolbar" />
 
     <LinearLayout
+        android:id="@+id/record_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
@@ -45,5 +46,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp" />
+
+    <ImageView
+        android:id="@+id/empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="70dp"
+        android:src="@drawable/img_empty"
+        android:visibility="gone" />
 
 </LinearLayout>

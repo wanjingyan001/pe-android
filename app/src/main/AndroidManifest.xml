@@ -652,7 +652,8 @@
         <activity android:name=".ui.calendar.ArrangeEditActivity" />
         <activity android:name=".ui.calendar.ArrangePersonActivity" />
         <activity android:name=".ui.approve.MyHolidayActivity" />
-        <activity android:name=".ui.approve.BusinessTripDetailActivity"></activity>
+        <activity android:name=".ui.approve.BusinessTripDetailActivity" />
+        <activity android:name=".ui.approve.VacationRecordActivity"></activity>
     </application>
 
 </manifest>
