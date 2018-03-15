@@ -2,6 +2,7 @@ package com.sogukj.pe.ui.news
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.content.ContextCompat
@@ -45,8 +46,10 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_main_news.*
 import kotlinx.android.synthetic.main.search_view.*
 import org.jetbrains.anko.find
+import org.jetbrains.anko.textColor
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by qinfei on 17/7/18.
@@ -253,6 +256,7 @@ class MainNewsFragment : BaseFragment() {
 
             override fun onTabSelected(tab: TabLayout.Tab) {
                 view_pager?.currentItem = tab.position
+                resetGrid()
             }
 
         })
@@ -295,9 +299,66 @@ class MainNewsFragment : BaseFragment() {
 
         })
         refresh.setAutoLoadMore(true)
+
+        iv_filter.setOnClickListener {
+            if (fl_filter.visibility == View.GONE) {
+                view_pager.visibility = View.GONE
+                fl_filter.visibility = View.VISIBLE
+            } else {
+                view_pager.visibility = View.VISIBLE
+                fl_filter.visibility = View.GONE
+            }
+        }
+
+        btn_reset.setOnClickListener {
+            resetGrid()
+        }
+
+        btn_ok.setOnClickListener {
+            fragments[view_pager.currentItem].setTagList(getTagList())
+            view_pager.visibility = View.VISIBLE
+            fl_filter.visibility = View.GONE
+        }
+
+        for (i in 0 until grid.childCount) {
+            var child = grid.getChildAt(i) as TextView
+            child.setOnClickListener {
+                if (child.tag.equals("F")) {
+                    child.textColor = Color.parseColor("#1787fb")
+                    child.setBackgroundResource(R.drawable.tg_bg_t)
+                    child.tag = "T"
+                } else {
+                    child.textColor = Color.parseColor("#808080")
+                    child.setBackgroundResource(R.drawable.tag_bg_f)
+                    child.tag = "F"
+                }
+            }
+        }
     }
 
+    fun resetGrid() {
+        fragments[view_pager.currentItem].setTagList(ArrayList<String>())
+        view_pager.visibility = View.VISIBLE
+        fl_filter.visibility = View.GONE
+        for (i in 0 until grid.childCount) {
+            var child = grid.getChildAt(i) as TextView
+            child.textColor = Color.parseColor("#808080")
+            child.setBackgroundResource(R.drawable.tag_bg_f)
+            child.tag = "F"
+        }
+    }
 
+    fun getTagList(): ArrayList<String> {
+        //获取gridlayout中的tag
+        var tagList = ArrayList<String>()
+        for (i in 0 until grid.childCount) {
+            var child = grid.getChildAt(i) as TextView
+            if (child.tag.equals("T")) {
+                tagList.add(child.text.toString())
+            }
+        }
+        return tagList
+    }
 
     val searchTask = Runnable {
         doSearch(search_view.search)

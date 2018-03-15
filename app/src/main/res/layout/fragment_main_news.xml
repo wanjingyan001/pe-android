@@ -36,9 +36,9 @@
                     app:tabMode="fixed"
                     app:tabPaddingEnd="0dp"
                     app:tabPaddingStart="0dp"
+                    app:tabSelectedTextColor="@color/white"
                     app:tabTextAppearance="@style/TabLayoutTextStyle"
-                    app:tabTextColor="#afd3ff"
-                    app:tabSelectedTextColor="@color/white">
+                    app:tabTextColor="#afd3ff">
 
                     <android.support.design.widget.TabItem
                         android:layout_width="match_parent"
@@ -58,17 +58,209 @@
 
                 <ImageView
                     android:id="@+id/iv_search"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_gravity="center|right"
-                    android:layout_marginRight="20dp"
                     android:src="@drawable/ic_search" />
+
+                <ImageView
+                    android:id="@+id/iv_filter"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center|right"
+                    android:layout_marginLeft="18dp"
+                    android:layout_marginRight="15dp"
+                    android:src="@drawable/ic_project_book_filter" />
             </LinearLayout>
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/view_pager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
+
+            <FrameLayout
+                android:id="@+id/fl_filter"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#50000000"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:id="@+id/ll_filter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <android.support.v7.widget.GridLayout
+                        android:id="@+id/grid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:background="#ffffff"
+                        app:columnCount="4"
+                        app:orientation="horizontal"
+                        app:rowCount="2"
+                        app:useDefaultMargins="true">
+
+                        <TextView
+                            android:background="@drawable/tag_bg_f"
+                            android:gravity="center"
+                            android:letterSpacing="0.04"
+                            android:lineSpacingExtra="0sp"
+                            android:padding="10dp"
+                            android:tag="F"
+                            android:text="负面"
+                            android:textColor="#808080"
+                            android:textSize="12sp"
+                            app:layout_column="0"
+                            app:layout_columnWeight="1"
+                            app:layout_row="0"
+                            app:layout_rowWeight="1" />
+
+                        <TextView
+                            android:background="@drawable/tag_bg_f"
+                            android:gravity="center"
+                            android:letterSpacing="0.04"
+                            android:lineSpacingExtra="0sp"
+                            android:padding="10dp"
+                            android:tag="F"
+                            android:text="社会评价"
+                            android:textColor="#808080"
+                            android:textSize="12sp"
+                            app:layout_column="1"
+                            app:layout_columnWeight="1"
+                            app:layout_row="0"
+                            app:layout_rowWeight="1" />
+
+                        <TextView
+                            android:background="@drawable/tag_bg_f"
+                            android:gravity="center"
+                            android:letterSpacing="0.04"
+                            android:lineSpacingExtra="0sp"
+                            android:padding="10dp"
+                            android:tag="F"
+                            android:text="企业风险"
+                            android:textColor="#808080"
+                            android:textSize="12sp"
+                            app:layout_column="2"
+                            app:layout_columnWeight="1"
+                            app:layout_row="0"
+                            app:layout_rowWeight="1" />
+
+                        <TextView
+                            android:background="@drawable/tag_bg_f"
+                            android:gravity="center"
+                            android:letterSpacing="0.04"
+                            android:lineSpacingExtra="0sp"
+                            android:padding="10dp"
+                            android:tag="F"
+                            android:text="法律纠纷"
+                            android:textColor="#808080"
+                            android:textSize="12sp"
+                            app:layout_column="3"
+                            app:layout_columnWeight="1"
+                            app:layout_row="0"
+                            app:layout_rowWeight="1" />
+
+                        <TextView
+                            android:background="@drawable/tag_bg_f"
+                            android:gravity="center"
+                            android:letterSpacing="0.04"
+                            android:lineSpacingExtra="0sp"
+                            android:padding="10dp"
+                            android:tag="F"
+                            android:text="人事变动"
+                            android:textColor="#808080"
+                            android:textSize="12sp"
+                            app:layout_column="0"
+                            app:layout_columnWeight="1"
+                            app:layout_row="1"
+                            app:layout_rowWeight="1" />
+
+                        <TextView
+                            android:background="@drawable/tag_bg_f"
+                            android:gravity="center"
+                            android:letterSpacing="0.04"
+                            android:lineSpacingExtra="0sp"
+                            android:padding="10dp"
+                            android:tag="F"
+                            android:text="战略转型"
+                            android:textColor="#808080"
+                            android:textSize="12sp"
+                            app:layout_column="1"
+                            app:layout_columnWeight="1"
+                            app:layout_row="1"
+                            app:layout_rowWeight="1" />
+
+                        <TextView
+                            android:background="@drawable/tag_bg_f"
+                            android:gravity="center"
+                            android:letterSpacing="0.04"
+                            android:lineSpacingExtra="0sp"
+                            android:padding="10dp"
+                            android:tag="F"
+                            android:text="民众态度"
+                            android:textColor="#808080"
+                            android:textSize="12sp"
+                            app:layout_column="2"
+                            app:layout_columnWeight="1"
+                            app:layout_row="1"
+                            app:layout_rowWeight="1" />
+
+                        <TextView
+                            android:background="@drawable/tag_bg_f"
+                            android:gravity="center"
+                            android:letterSpacing="0.04"
+                            android:lineSpacingExtra="0sp"
+                            android:padding="10dp"
+                            android:tag="F"
+                            android:text="股权"
+                            android:textColor="#808080"
+                            android:textSize="12sp"
+                            app:layout_column="3"
+                            app:layout_columnWeight="1"
+                            app:layout_row="1"
+                            app:layout_rowWeight="1" />
+
+                    </android.support.v7.widget.GridLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/divider" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/btn_reset"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_btn_gray"
+                            android:text="重置"
+                            android:textColor="@color/text_1"
+                            android:textSize="16sp" />
+
+                        <Button
+                            android:id="@+id/btn_ok"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_btn_blue"
+                            android:text="确定"
+                            android:textColor="@color/white"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </FrameLayout>
         </LinearLayout>
 
         <RelativeLayout

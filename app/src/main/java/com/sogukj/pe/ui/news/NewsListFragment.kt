@@ -82,22 +82,6 @@ class NewsListFragment : BaseFragment(), SupportEmptyView {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        for (i in 0 until grid.childCount) {
-            var child = grid.getChildAt(i) as TextView
-            child.setOnClickListener {
-                if (child.tag.equals("F")) {
-                    child.textColor = Color.parseColor("#1787fb")
-                    child.setBackgroundResource(R.drawable.tg_bg_t)
-                    child.tag = "T"
-                } else {
-                    child.textColor = Color.parseColor("#808080")
-                    child.setBackgroundResource(R.drawable.tag_bg_f)
-                    child.tag = "F"
-                }
-                filter()
-            }
-        }
-
         adapter = RecyclerAdapter<NewsBean>(baseActivity!!, { _adapter, parent, type ->
             NewsHolder(_adapter.getView(R.layout.item_main_news, parent))
         })
@@ -193,16 +177,15 @@ class NewsListFragment : BaseFragment(), SupportEmptyView {
                 })
     }
 
-    private fun filter() {
-        //获取gridlayout中的tag
-        var tagList = ArrayList<String>()
-        for (i in 0 until grid.childCount) {
-            var child = grid.getChildAt(i) as TextView
-            if (child.tag.equals("T")) {
-                tagList.add(child.text.toString())
-            }
-        }
+    private var tagList = ArrayList<String>()
 
+    public fun setTagList(tags: ArrayList<String>) {
+        tagList.clear()
+        tagList.addAll(tags)
+        filter()
+    }
+
+    private fun filter() {
         //过滤tag
         var filterData = ArrayList<NewsBean>()
         if (tagList.size == 0) {
