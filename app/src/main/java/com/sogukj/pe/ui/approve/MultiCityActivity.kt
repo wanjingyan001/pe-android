@@ -23,5 +23,6 @@ class MultiCityActivity : ToolbarActivity() {
         setContentView(R.layout.activity_multi_city)
         setBack(true)
         title = "目的城市"
+
     }
 }
