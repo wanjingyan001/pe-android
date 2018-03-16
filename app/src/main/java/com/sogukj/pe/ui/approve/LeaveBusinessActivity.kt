@@ -450,7 +450,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
                 for (index in 0 until adapter.list.size - 1) {//不包含
                     list.add(adapter.list[index])
                 }
-                TeamSelectActivity.startForResult(this, true, list, false, false, false, SEND)
+                TeamSelectActivity.startForResult(this, true, list, false, false, true, SEND)
             } else {
                 adapter.list.removeAt(position)
                 adapter.notifyDataSetChanged()
@@ -466,7 +466,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
             var grid_to = ll_content.findViewWithTag("CS") as GridView
             if (grid_to != null) {
                 var adapter = grid_to.adapter as MyCSAdapter
-                adapter.list.removeAt(adapter.list.size - 1)
+                adapter.list.clear()
                 adapter.list.addAll(data!!.getSerializableExtra(Extras.DATA) as ArrayList<UserBean>)
                 adapter.list.add(UserBean())
                 adapter.notifyDataSetChanged()
