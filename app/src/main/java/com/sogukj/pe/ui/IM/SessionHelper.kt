@@ -60,7 +60,7 @@ object SessionHelper {
                         accounts.add(message.fromAccount)
                         NimUIKit.getUserInfoProvider().getUserInfoAsync(message.fromAccount) { success, result, code ->
                             val info = result as NimUserInfo
-                            val uid = info.extensionMap["uid"] as Int
+                            val uid = info.extensionMap["uid"].toString().toInt()
                             Log.d("WJY", Gson().toJson(info))
                             PersonalInfoActivity.start(context, uid)
                         }
