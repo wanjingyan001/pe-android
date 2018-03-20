@@ -127,7 +127,10 @@ class FundMainFragment : BaseFragment(), View.OnClickListener {
 
     override fun onResume() {
         super.onResume()
-        setContent()
+        try {
+            setContent()
+        } catch (e: Exception) {
+        }
     }
 
     private fun changeView() {

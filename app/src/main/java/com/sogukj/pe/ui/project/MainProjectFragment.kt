@@ -446,7 +446,10 @@ class MainProjectFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        setContent()
+        try {
+            setContent()
+        } catch (e: Exception) {
+        }
     }
 
     var judgeOncce = 0

@@ -221,7 +221,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
 //            }).build()
 //            pvOptions.setPicker(provinces_str, cities_str, null)
 //            pvOptions.show()
-            CityAreaActivity.start(context)
+            DstCityActivity.start(context)
         }
 
         SoguApi.getService(application)
@@ -298,15 +298,15 @@ class LeaveBusinessActivity : ToolbarActivity() {
                         paramMap.put(bean.fields, "${startDate!!.time}&${endDate!!.time}")
 
                         var total = ll_content.findViewWithTag("total_hours") as TextView
-//                        if (paramId == 10) {
-//                            var day = (endDate!!.getTime() - startDate!!.getTime()) / (24 * 60 * 60 * 1000) + 1
-//                            total.text = day.toString() + "天"
-//                            paramMap.put("total_hours", day)
-//                        } else if (paramId == 11) {
+                        if (paramId == 10) {
+                            var day = (endDate!!.getTime() - startDate!!.getTime()) / (24 * 60 * 60 * 1000) + 1
+                            total.text = day.toString() + "天"
+                            paramMap.put("total_hours", day)
+                        } else if (paramId == 11) {
 //                            var hour = (endDate!!.getTime() - startDate!!.getTime()) / (60 * 60 * 1000)
 //                            total.text = hour.toString()
 //                            paramMap.put("total_hours", hour)
-//                        }
+                        }
                     }
                     if (paramId == 10) {
                         etValue.text = Utils.getTime(date, "yyyy-MM-dd")
@@ -548,7 +548,12 @@ class LeaveBusinessActivity : ToolbarActivity() {
                 viewHolder = conView.tag as ViewHolder
             }
             if (position == list.size - 1) {
-                viewHolder.icon?.setImageResource(R.drawable.send_add)
+                //load("android.resource://包名/drawable/"+R.drawable.news)
+                //viewHolder.icon?.setImageResource(R.drawable.send_add)
+                Glide.with(context)
+                        .load("android.resource://" + context.packageName + "/drawable/" + R.drawable.send_add)
+                        .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
+                        .into(viewHolder.icon)
                 viewHolder.name?.text = "添加"
             } else {
                 Glide.with(context)
