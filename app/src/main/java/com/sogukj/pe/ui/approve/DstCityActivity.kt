@@ -16,10 +16,7 @@ import com.sogukj.pe.bean.CityArea
 import com.sogukj.pe.util.CharacterParser
 import com.sogukj.pe.util.PinyinComparator
 import com.sogukj.pe.util.Trace
-import com.sogukj.pe.view.CityAdapter
-import com.sogukj.pe.view.MyListView
-import com.sogukj.pe.view.ProvinceAdapter
-import com.sogukj.pe.view.SideBar
+import com.sogukj.pe.view.*
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -73,6 +70,8 @@ class DstCityActivity : ToolbarActivity() {
     private var childs = ArrayList<ArrayList<CityArea.City>>()
 
     fun doRequest() {
+        chosenAdapter = ChosenAdapter(context)
+        chosenGrid.adapter = chosenAdapter
         SoguApi.getService(application)
                 .getCityArea()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -92,11 +91,16 @@ class DstCityActivity : ToolbarActivity() {
                         for (list in groups) {
                             childs.add(list.city!!)
                         }
-                        listview_pro.setAdapter(MyExpAdapter(context, groups, childs, object : MyExpAdapter.onChildClick {
+                        addToHistory(childs.get(0))
+                        mCityAdapter = MyExpAdapter(context, groups, childs, object : MyExpAdapter.onChildClick {
                             override fun onClick(city: CityArea.City) {
+                                //第一次点击添加
+                                //第二次点击删除
+                                //添加不了，注意selected需要更新
                                 addToCurrent(city)
                             }
-                        }))
+                        })
+                        listview_pro.setAdapter(mCityAdapter)
                     } else {
                         showToast(payload.message)
                     }
@@ -105,12 +109,62 @@ class DstCityActivity : ToolbarActivity() {
                 })
     }
 
-    fun addToCurrent(city: CityArea.City) {
+    lateinit var mCityAdapter: MyExpAdapter
 
+    lateinit var chosenAdapter: ChosenAdapter
+
+    fun addToCurrent(city: CityArea.City) {
+        if (city.seclected == false) {//点两次
+            chosenAdapter.data.remove(city)
+            chosenAdapter.notifyDataSetChanged()
+            return
+        }
+        if (chosenAdapter.data.size == 6) {
+            showToast("目的城市数目不能超过6个")
+            //添加不了，注意selected需要更新
+            updateList(city)
+            return
+        }
+        chosenAdapter.data.add(city)
+        chosenAdapter.notifyDataSetChanged()
     }
 
-    fun addToHistory() {
+    //更新的时候先要看childs，然后groups
+    fun updateList(city: CityArea.City) {
+        for (groupIndex in 0 until groups.size) {
+            var group = groups[groupIndex]
+            for (childIndex in 0 until group.city!!.size) {
+                if (group.city!![childIndex].id == city.id) {
+                    childs[groupIndex][childIndex].seclected = false
 
+                    //去红点
+                    var isAllUnselect = true
+                    for (childIndex in 0 until group.city!!.size) {
+                        if (group.city!![childIndex].seclected == true) {
+                            isAllUnselect = false
+                            break
+                        }
+                    }
+                    if (isAllUnselect) {
+                        groups[groupIndex].seclected = false
+                    } else {
+                        groups[groupIndex].seclected = true
+                    }
+
+                    break
+                }
+            }
+        }
+        mCityAdapter.notifyDataSetChanged()
+    }
+
+    lateinit var historyAdapter: HistoryAdapter
+
+    fun addToHistory(citys: ArrayList<CityArea.City>) {
+        historyAdapter = HistoryAdapter(context)
+        historyAdapter.data.addAll(citys.subList(0, 5))
+        historyAdapter.notifyDataSetChanged()
+        historyGrid.adapter = historyAdapter
     }
 
     /**
@@ -164,7 +218,7 @@ class DstCityActivity : ToolbarActivity() {
                 holder = GroupHolder()
                 holder.tvLetter = view.findViewById(R.id.catalog) as TextView
                 holder.tvTitle = view.findViewById(R.id.province) as TextView
-
+                holder.mRed = view.findViewById(R.id.select) as ImageView
                 holder.mLayout = view.findViewById(R.id.display) as LinearLayout
                 holder.mIv = view.findViewById(R.id.direct) as ImageView
                 view.setTag(holder)
@@ -185,6 +239,12 @@ class DstCityActivity : ToolbarActivity() {
 
             holder.tvTitle!!.setText(province.name)
 
+            if (province.seclected) {
+                holder.mRed!!.visibility = View.VISIBLE
+            } else {
+                holder.mRed!!.visibility = View.GONE
+            }
+
             if (isExpanded) {
                 holder.mIv!!.setBackgroundResource(R.drawable.up)
             } else {
@@ -197,6 +257,7 @@ class DstCityActivity : ToolbarActivity() {
         class GroupHolder {
             var tvLetter: TextView? = null
             var tvTitle: TextView? = null
+            var mRed: ImageView? = null
             var mLayout: LinearLayout? = null
             var mIv: ImageView? = null
 
@@ -270,16 +331,38 @@ class DstCityActivity : ToolbarActivity() {
             } else {
                 holder = view.getTag() as GroupHolder
             }
-            var adapter = CityAdapter(context, childs.get(groupPosition))
+            adapter = CityAdapter(context, childs.get(groupPosition))
             holder.mCityLv?.adapter = adapter
             holder.mCityLv?.setOnItemClickListener { parent, view, position, id ->
-                var city = adapter.data[position]
+                var city = childs.get(groupPosition)[position]
                 city.seclected = !city.seclected
-                adapter.notifyDataSetChanged()
+
+                var pid = city.pid
+                for (single in group) {
+                    if (single.id == pid) {
+                        //去红点
+                        var isAllUnSelect = true
+                        for (item in single.city!!) {
+                            if (item.seclected == true) {
+                                isAllUnSelect = false
+                                break
+                            }
+                        }
+                        if (isAllUnSelect) {
+                            single.seclected = false
+                        } else {
+                            single.seclected = true
+                        }
+                    }
+                }
+
+                notifyDataSetChanged()
                 listener.onClick(city)
             }
             return view!!
         }
+
+        lateinit var adapter: CityAdapter
 
         override fun getChildId(groupPosition: Int, childPosition: Int): Long {
             return childPosition.toLong()
@@ -291,6 +374,11 @@ class DstCityActivity : ToolbarActivity() {
 
         interface onChildClick {
             fun onClick(city: CityArea.City)
+        }
+
+        override fun notifyDataSetChanged() {
+            super.notifyDataSetChanged()
+            adapter.notifyDataSetChanged()
         }
     }
 }

@@ -23,15 +23,18 @@
             android:layout_marginTop="15dp"
             android:letterSpacing="0.04"
             android:lineSpacingExtra="0sp"
+            android:text="已选"
             android:textColor="#a0a4aa"
-            android:textSize="12sp"
-            tools:text="已选" />
+            android:textSize="12sp" />
 
         <GridView
+            android:id="@+id/chosenGrid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="15dp"
             android:horizontalSpacing="12dp"
             android:numColumns="3"
             android:verticalSpacing="15dp" />
@@ -57,16 +60,18 @@
             android:layout_marginLeft="20dp"
             android:letterSpacing="0.04"
             android:lineSpacingExtra="0sp"
+            android:text="历史"
             android:textColor="#a0a4aa"
-            android:textSize="12sp"
-            tools:text="历史" />
+            android:textSize="12sp" />
 
         <GridView
             android:id="@+id/historyGrid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="15dp"
             android:horizontalSpacing="12dp"
             android:numColumns="3"
             android:verticalSpacing="15dp" />
