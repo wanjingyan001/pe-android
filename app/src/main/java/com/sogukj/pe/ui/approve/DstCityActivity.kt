@@ -34,8 +34,6 @@ class DstCityActivity : ToolbarActivity() {
         }
     }
 
-    lateinit var adapter: ProvinceAdapter
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dst_city)
@@ -47,7 +45,6 @@ class DstCityActivity : ToolbarActivity() {
 
     //实例化汉字转拼音类
     private var characterParser = CharacterParser.getInstance()
-    private var pinyinComparator = PinyinComparator()
 
     private fun initView() {
         side_bar.setTextView(dialog)
@@ -56,41 +53,54 @@ class DstCityActivity : ToolbarActivity() {
         side_bar.setOnTouchingLetterChangedListener(object : SideBar.OnTouchingLetterChangedListener {
             override fun onTouchingLetterChanged(s: String?) {
                 //该字母首次出现的位置
-                val position = adapter.getPositionForSection(s!!.get(0).toInt())
+                val position = mCityAdapter.getPositionForSection(s!!.get(0).toInt())
                 if (position != -1) {
                     listview_pro.setSelection(position)
                 }
             }
         })
 
+        chosenAdapter = ChosenAdapter(context)
+        chosenGrid.adapter = chosenAdapter
+        chosenGrid.setOnItemClickListener { parent, view, position, id ->
+            var city = chosenAdapter.data.get(position)
+            updateList(city, false)
+            chosenAdapter.data.remove(city)
+            chosenAdapter.notifyDataSetChanged()
+        }
+
+        historyAdapter = HistoryAdapter(context)
+        historyGrid.adapter = historyAdapter
+        historyGrid.setOnItemClickListener { parent, view, position, id ->
+            var city = historyAdapter.data.get(position)
+            if (chosenAdapter.data.contains(city)) {
+                //已点过
+                updateList(city, false)
+                chosenAdapter.data.remove(city)
+                chosenAdapter.notifyDataSetChanged()
+            } else {
+                //未点过
+                updateList(city, true)
+                chosenAdapter.data.add(city)
+                chosenAdapter.notifyDataSetChanged()
+            }
+        }
+
         doRequest()
     }
 
-    private var groups = ArrayList<CityArea>()
+    private var groups = ArrayList<String>()
     private var childs = ArrayList<ArrayList<CityArea.City>>()
 
     fun doRequest() {
-        chosenAdapter = ChosenAdapter(context)
-        chosenGrid.adapter = chosenAdapter
         SoguApi.getService(application)
                 .getCityArea()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        groups = filledData(payload.payload!!)
+                        filledData(payload.payload!!)
 
-                        //根据a-z进行排序源数据
-                        Collections.sort(groups, pinyinComparator)
-
-                        //初始化适配器
-                        adapter = ProvinceAdapter(context, groups)
-                        //绑定适配器
-                        //listview_pro.setAdapter(adapter)
-                        childs.clear()
-                        for (list in groups) {
-                            childs.add(list.city!!)
-                        }
                         addToHistory(childs.get(0))
                         mCityAdapter = MyExpAdapter(context, groups, childs, object : MyExpAdapter.onChildClick {
                             override fun onClick(city: CityArea.City) {
@@ -101,6 +111,14 @@ class DstCityActivity : ToolbarActivity() {
                             }
                         })
                         listview_pro.setAdapter(mCityAdapter)
+                        for (i in 0 until groups.size) {
+                            listview_pro.expandGroup(i)
+                        }
+                        listview_pro.setOnGroupClickListener(object : ExpandableListView.OnGroupClickListener {
+                            override fun onGroupClick(parent: ExpandableListView?, v: View?, groupPosition: Int, id: Long): Boolean {
+                                return true
+                            }
+                        })
                     } else {
                         showToast(payload.message)
                     }
@@ -122,35 +140,19 @@ class DstCityActivity : ToolbarActivity() {
         if (chosenAdapter.data.size == 6) {
             showToast("目的城市数目不能超过6个")
             //添加不了，注意selected需要更新
-            updateList(city)
+            updateList(city, false)
             return
         }
         chosenAdapter.data.add(city)
         chosenAdapter.notifyDataSetChanged()
     }
 
-    //更新的时候先要看childs，然后groups
-    fun updateList(city: CityArea.City) {
-        for (groupIndex in 0 until groups.size) {
-            var group = groups[groupIndex]
-            for (childIndex in 0 until group.city!!.size) {
-                if (group.city!![childIndex].id == city.id) {
-                    childs[groupIndex][childIndex].seclected = false
-
-                    //去红点
-                    var isAllUnselect = true
-                    for (childIndex in 0 until group.city!!.size) {
-                        if (group.city!![childIndex].seclected == true) {
-                            isAllUnselect = false
-                            break
-                        }
-                    }
-                    if (isAllUnselect) {
-                        groups[groupIndex].seclected = false
-                    } else {
-                        groups[groupIndex].seclected = true
-                    }
-
+    fun updateList(city: CityArea.City, newState: Boolean) {
+        for (fatherIndex in 0 until childs.size) {
+            var child = childs[fatherIndex]
+            for (childIndex in 0 until child.size) {
+                if (child[childIndex].id == city.id) {
+                    childs[fatherIndex][childIndex].seclected = newState
                     break
                 }
             }
@@ -161,40 +163,64 @@ class DstCityActivity : ToolbarActivity() {
     lateinit var historyAdapter: HistoryAdapter
 
     fun addToHistory(citys: ArrayList<CityArea.City>) {
-        historyAdapter = HistoryAdapter(context)
         historyAdapter.data.addAll(citys.subList(0, 5))
         historyAdapter.notifyDataSetChanged()
-        historyGrid.adapter = historyAdapter
     }
 
     /**
      * 为ListView填充数据
      */
-    private fun filledData(list: List<CityArea>): ArrayList<CityArea> {
-        val mSortList = ArrayList<CityArea>()
-
-        for (i in list.indices) {
-            val province = CityArea()
-            province.name = list[i].name
-            province.id = list[i].id
-            province.city = list[i].city
-            //汉字转换成拼音
-            val pinyin = characterParser.getSelling(list[i].name)
-            val sortString = pinyin.substring(0, 1).toUpperCase()//获取拼音首字母
-            // 正则表达式，判断首字母是否是英文字母
-            if (sortString.matches("[A-Z]".toRegex())) {
-                province.sortLetters = sortString.toUpperCase()
-            } else {
-                province.sortLetters = "#"
-            }
-
-            mSortList.add(province)
+    private fun filledData(list: List<CityArea>) {
+        //java 用for循环为一个字符串数组输入从a到z的值。//groups
+        var result = ""
+        var i = 0
+        var j = 'a'
+        while (i < 26) {
+            groups.add((j.toString() + "").toUpperCase())
+            result += j.toString() + " "//连起来，空格隔开
+            i++
+            j++
         }
-        return mSortList
 
+        //获取所有城市列表
+        var cities = ArrayList<CityArea.City>()
+        for (provIndex in list.indices) {
+            var province = list[provIndex]
+            for (cityIndex in province.city!!.indices) {
+                var city = province.city!![cityIndex]
+
+                //汉字转换成拼音
+                val sortString = characterParser.getAlpha(city.name).toUpperCase().substring(0, 1)
+                // 正则表达式，判断首字母是否是英文字母
+                if (sortString.matches("[A-Z]".toRegex())) {
+                    city.sortLetters = sortString.toUpperCase()
+                } else {
+                    city.sortLetters = "#"
+                }
+
+                cities.add(city)
+            }
+        }
+
+        //组装格式
+        for (index in groups.indices) {
+            var innerList = ArrayList<CityArea.City>()
+            for (cityIndex in cities.indices) {
+                if (cities[cityIndex].sortLetters.equals(groups[index])) {
+                    innerList.add(cities[cityIndex])
+                }
+            }
+            childs.add(innerList)
+        }
+        for (i in (childs.size - 1) downTo 0) {
+            if (childs[i].size == 0) {
+                childs.removeAt(i)
+                groups.removeAt(i)
+            }
+        }
     }
 
-    class MyExpAdapter(val context: Context, val group: ArrayList<CityArea>,
+    class MyExpAdapter(val context: Context, val group: ArrayList<String>,
                        val childs: ArrayList<ArrayList<CityArea.City>>, val listener: onChildClick) : BaseExpandableListAdapter() {
 
         override fun getGroup(groupPosition: Int): Any {
@@ -212,44 +238,17 @@ class DstCityActivity : ToolbarActivity() {
         override fun getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup?): View {
             var view = convertView
             var holder: GroupHolder? = null
-            val province = group.get(groupPosition)
             if (view == null) {
                 view = LayoutInflater.from(context).inflate(R.layout.item, null)
                 holder = GroupHolder()
                 holder.tvLetter = view.findViewById(R.id.catalog) as TextView
-                holder.tvTitle = view.findViewById(R.id.province) as TextView
-                holder.mRed = view.findViewById(R.id.select) as ImageView
-                holder.mLayout = view.findViewById(R.id.display) as LinearLayout
-                holder.mIv = view.findViewById(R.id.direct) as ImageView
                 view.setTag(holder)
             } else {
                 holder = view.getTag() as GroupHolder
             }
 
-            //根据position获取分类的首字母的char ascii值
-            val section = getSectionForPosition(groupPosition)
-
-            //如果当前位置等于该分类首字母的Char的位置，则认为是第一次出现
-            if (groupPosition == getPositionForSection(section)) {
-                holder.tvLetter!!.setVisibility(View.VISIBLE)
-                holder.tvLetter!!.setText(province.sortLetters)
-            } else {
-                holder.tvLetter!!.setVisibility(View.GONE)
-            }
-
-            holder.tvTitle!!.setText(province.name)
-
-            if (province.seclected) {
-                holder.mRed!!.visibility = View.VISIBLE
-            } else {
-                holder.mRed!!.visibility = View.GONE
-            }
-
-            if (isExpanded) {
-                holder.mIv!!.setBackgroundResource(R.drawable.up)
-            } else {
-                holder.mIv!!.setBackgroundResource(R.drawable.down)
-            }
+            holder.tvLetter!!.setVisibility(View.VISIBLE)
+            holder.tvLetter!!.setText(group.get(groupPosition))
 
             return view!!
         }
@@ -271,7 +270,7 @@ class DstCityActivity : ToolbarActivity() {
          * @return
          */
         fun getSectionForPosition(position: Int): Int {
-            return group.get(position).sortLetters.get(0).toInt()
+            return group.get(position).toInt()
         }
 
         /**
@@ -282,29 +281,13 @@ class DstCityActivity : ToolbarActivity() {
          */
         fun getPositionForSection(section: Int): Int {
             for (i in 0 until group.size) {
-                val sortStr = group.get(i).sortLetters
+                val sortStr = group.get(i)
                 val firstChar = sortStr.toUpperCase().get(0)
                 if (firstChar.toInt() == section) {
                     return i
                 }
             }
             return -1
-        }
-
-        /**
-         * 提取英文的首字母，非英文字母用#代替
-         *
-         * @param str
-         * @return
-         */
-        private fun getAlpha(str: String): String {
-            val sortStr = str.trim { it <= ' ' }.substring(0, 1).toUpperCase()
-            //正则表达式，判断首字母是否是英文字母
-            return if (sortStr.matches("[A-Z]".toRegex())) {
-                sortStr
-            } else {
-                "#"
-            }
         }
 
         override fun getChildrenCount(groupPosition: Int): Int {
@@ -331,38 +314,16 @@ class DstCityActivity : ToolbarActivity() {
             } else {
                 holder = view.getTag() as GroupHolder
             }
-            adapter = CityAdapter(context, childs.get(groupPosition))
+            var adapter = CityAdapter(context, childs.get(groupPosition))
             holder.mCityLv?.adapter = adapter
             holder.mCityLv?.setOnItemClickListener { parent, view, position, id ->
                 var city = childs.get(groupPosition)[position]
                 city.seclected = !city.seclected
-
-                var pid = city.pid
-                for (single in group) {
-                    if (single.id == pid) {
-                        //去红点
-                        var isAllUnSelect = true
-                        for (item in single.city!!) {
-                            if (item.seclected == true) {
-                                isAllUnSelect = false
-                                break
-                            }
-                        }
-                        if (isAllUnSelect) {
-                            single.seclected = false
-                        } else {
-                            single.seclected = true
-                        }
-                    }
-                }
-
-                notifyDataSetChanged()
                 listener.onClick(city)
+                notifyDataSetChanged()
             }
             return view!!
         }
-
-        lateinit var adapter: CityAdapter
 
         override fun getChildId(groupPosition: Int, childPosition: Int): Long {
             return childPosition.toLong()
@@ -374,11 +335,6 @@ class DstCityActivity : ToolbarActivity() {
 
         interface onChildClick {
             fun onClick(city: CityArea.City)
-        }
-
-        override fun notifyDataSetChanged() {
-            super.notifyDataSetChanged()
-            adapter.notifyDataSetChanged()
         }
     }
 }

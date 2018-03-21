@@ -1,121 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#f3f5f7"
-    android:orientation="vertical"
     tools:context="com.sogukj.pe.ui.approve.DstCityActivity">
 
     <include layout="@layout/toolbar" />
 
-    <LinearLayout
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:background="#ffffff"
+        android:layout_height="match_parent"
+        android:layout_marginTop="56dp"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="15dp"
-            android:letterSpacing="0.04"
-            android:lineSpacingExtra="0sp"
-            android:text="已选"
-            android:textColor="#a0a4aa"
-            android:textSize="12sp" />
-
-        <GridView
-            android:id="@+id/chosenGrid"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="15dp"
-            android:horizontalSpacing="12dp"
-            android:numColumns="3"
-            android:verticalSpacing="15dp" />
-    </LinearLayout>
+            android:orientation="vertical">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:background="#f1f1f1" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:background="#ffffff"
+                android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#ffffff"
-        android:orientation="vertical"
-        android:paddingTop="15dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="15dp"
+                    android:letterSpacing="0.04"
+                    android:lineSpacingExtra="0sp"
+                    android:text="已选"
+                    android:textColor="#a0a4aa"
+                    android:textSize="12sp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:letterSpacing="0.04"
-            android:lineSpacingExtra="0sp"
-            android:text="历史"
-            android:textColor="#a0a4aa"
-            android:textSize="12sp" />
+                <GridView
+                    android:id="@+id/chosenGrid"
+                    android:layout_width="match_parent"
+                    android:layout_height="85dp"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="15dp"
+                    android:horizontalSpacing="12dp"
+                    android:numColumns="3"
+                    android:verticalSpacing="15dp" />
+            </LinearLayout>
 
-        <GridView
-            android:id="@+id/historyGrid"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="15dp"
-            android:horizontalSpacing="12dp"
-            android:numColumns="3"
-            android:verticalSpacing="15dp" />
-    </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="#f1f1f1" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@drawable/divider" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ffffff"
+                android:orientation="vertical"
+                android:paddingTop="15dp">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:letterSpacing="0.04"
+                    android:lineSpacingExtra="0sp"
+                    android:text="历史"
+                    android:textColor="#a0a4aa"
+                    android:textSize="12sp" />
 
-        <!--<ListView-->
-        <!--android:id="@+id/listview_pro"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:divider="@null" />-->
+                <GridView
+                    android:id="@+id/historyGrid"
+                    android:layout_width="match_parent"
+                    android:layout_height="85dp"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="15dp"
+                    android:horizontalSpacing="12dp"
+                    android:numColumns="3"
+                    android:verticalSpacing="15dp" />
+            </LinearLayout>
 
-        <ExpandableListView
-            android:id="@+id/listview_pro"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:groupIndicator="@null" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/divider" />
 
-        <TextView
-            android:id="@+id/dialog"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_gravity="center"
-            android:background="@drawable/sidebar_background"
-            android:gravity="center"
-            android:textColor="#ffffff"
-            android:textSize="30dp"
-            android:visibility="invisible" />
+            <com.sogukj.pe.view.MyExpandableListView
+                android:id="@+id/listview_pro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:groupIndicator="@null" />
 
-        <com.sogukj.pe.view.SideBar
-            android:id="@+id/side_bar"
-            android:layout_width="30dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="right|center" />
-    </FrameLayout>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/dialog"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+        android:background="@drawable/sidebar_background"
+        android:gravity="center"
+        android:textColor="#ffffff"
+        android:textSize="30dp"
+        android:visibility="invisible" />
+
+    <com.sogukj.pe.view.SideBar
+        android:id="@+id/side_bar"
+        android:layout_width="30dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="right|center"
+        android:layout_marginTop="56dp" />
+
+</FrameLayout>

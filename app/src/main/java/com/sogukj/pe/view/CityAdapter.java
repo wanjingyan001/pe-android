@@ -54,6 +54,7 @@ public class CityAdapter extends BaseAdapter {
             holder = new ViewHolder();
             view = LayoutInflater.from(context).inflate(R.layout.city_item, null);
             holder.tvCity = (TextView) view.findViewById(R.id.city);
+            holder.mRoot = (LinearLayout) view.findViewById(R.id.root);
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
@@ -61,13 +62,16 @@ public class CityAdapter extends BaseAdapter {
         holder.tvCity.setText(city.get(position).getName());
         if (city.get(position).getSeclected() == true) {
             holder.tvCity.setTextColor(Color.parseColor("#1787fb"));
+            holder.mRoot.setBackgroundColor(Color.parseColor("#fff8f9fe"));
         } else {
             holder.tvCity.setTextColor(Color.parseColor("#282828"));
+            holder.mRoot.setBackgroundColor(Color.parseColor("#ffffffff"));
         }
         return view;
     }
 
     final static class ViewHolder {
+        LinearLayout mRoot;
         TextView tvCity;
     }
 }

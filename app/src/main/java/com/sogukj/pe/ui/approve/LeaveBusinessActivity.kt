@@ -335,7 +335,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
         val tvLabel = convertView.findViewById(R.id.tv_label) as TextView
         val etValue = convertView.findViewById(R.id.et_value) as TextView
         tvLabel.text = bean.name
-        etValue.text = bean.value_map?.value
+        //etValue.text = bean.value_map?.value
         etValue.setOnClickListener {
             if (paramId == 11) {
                 MyHolidayActivity.start(context)

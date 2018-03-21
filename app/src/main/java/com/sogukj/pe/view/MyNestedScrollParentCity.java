@@ -1,12 +1,8 @@
 package com.sogukj.pe.view;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.support.design.widget.TabLayout;
 import android.support.v4.view.NestedScrollingParent;
 import android.support.v4.view.NestedScrollingParentHelper;
-import android.support.v4.view.ViewConfigurationCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -16,30 +12,25 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.ExpandableListView;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.OverScroller;
 import android.widget.ScrollView;
-
-import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
-import com.sogukj.pe.R;
-import com.sogukj.pe.util.Utils;
 
 /**
  * Created by lmj on 2016/10/27 0027. on 下午 8:38
  * limengjie
  */
 public class MyNestedScrollParentCity extends LinearLayout implements NestedScrollingParent {
-    private String Tag = "MyNestedScrollParent";
-    private LinearLayout mToolBar;
+    private String Tag = "MyNestedScrollParentCity";
+    private LinearLayout mLayout;
     private FrameLayout mFrame;
-    private TabLayout mTabs;
     private ViewGroup currentContentView;
-    private ViewPager viewPager;
     private NestedScrollingParentHelper mParentHelper;
-    private int mToolBarHeight;
+    private int mLayoutHeight;
     private int mFrameHeight;
-    private int mTouchSlop = 0;
     private Context context;
     private int maxVelocity;
     private int minVelocity;
@@ -63,16 +54,13 @@ public class MyNestedScrollParentCity extends LinearLayout implements NestedScro
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        mToolBar = (LinearLayout) getChildAt(0);
-        mFrame = (FrameLayout) getChildAt(2);
-        mTabs = (TabLayout) mFrame.getChildAt(1);
-        viewPager = (ViewPager) getChildAt(3);
-        mToolBar.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        mLayout = (LinearLayout) getChildAt(0);//顶部layout，包括已投
+        mFrame = (FrameLayout) getChildAt(1);
+        mLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                if (mToolBarHeight <= 0) {
-                    mToolBarHeight = mToolBar.getMeasuredHeight();
-                    Log.i(Tag, "mToolBarHeight:" + mToolBarHeight + ",mFrameHeight:" + mFrameHeight);
+                if (mLayoutHeight <= 0) {
+                    mLayoutHeight = mLayout.getMeasuredHeight();
                 }
             }
         });
@@ -81,7 +69,6 @@ public class MyNestedScrollParentCity extends LinearLayout implements NestedScro
             public void onGlobalLayout() {
                 if (mFrameHeight <= 0) {
                     mFrameHeight = mFrame.getMeasuredHeight();
-                    Log.i(Tag, "mToolBarHeight:" + mToolBarHeight + ",mFrameHeight:" + mFrameHeight);
                 }
             }
         });
@@ -90,8 +77,18 @@ public class MyNestedScrollParentCity extends LinearLayout implements NestedScro
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        TwinklingRefreshLayout layout = (TwinklingRefreshLayout) viewPager.getChildAt(0);//fragment_fund_list
-        currentContentView = (ViewGroup) layout.getChildAt(0);
+        //TwinklingRefreshLayout layout = (TwinklingRefreshLayout) viewPager.getChildAt(0);//fragment_fund_list
+        currentContentView = (ViewGroup) mFrame.getChildAt(0);
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        ViewGroup.LayoutParams params1 = mFrame.getLayoutParams();
+        params1.height = getMeasuredHeight() - mLayoutHeight;
+
+        ViewGroup.LayoutParams params = mFrame.getChildAt(0).getLayoutParams();
+        params.height = getMeasuredHeight() - mLayoutHeight;
     }
 
     @Override
@@ -103,7 +100,6 @@ public class MyNestedScrollParentCity extends LinearLayout implements NestedScro
     private void init() {
         mParentHelper = new NestedScrollingParentHelper(this);
         ViewConfiguration configuration = ViewConfiguration.get(context);
-        mTouchSlop = ViewConfigurationCompat.getScaledPagingTouchSlop(configuration);
         maxVelocity = configuration.getScaledMaximumFlingVelocity();
         minVelocity = configuration.getScaledMinimumFlingVelocity();
         mScroller = new OverScroller(context);
@@ -147,9 +143,6 @@ public class MyNestedScrollParentCity extends LinearLayout implements NestedScro
     @Override
     public boolean onNestedPreFling(View target, float velocityX, float velocityY) {
         Log.i(Tag, "onNestedPreFling--target:" + target);
-//        CoordinatorLayout
-//        RecyclerView
-
         return true;
     }
 
@@ -164,8 +157,8 @@ public class MyNestedScrollParentCity extends LinearLayout implements NestedScro
         if (y < 0) {
             y = 0;
         }
-        if (y > mToolBarHeight) {
-            y = mToolBarHeight;
+        if (y > mLayoutHeight) {
+            y = mLayoutHeight;
         }
 
         super.scrollTo(x, y);
@@ -176,14 +169,10 @@ public class MyNestedScrollParentCity extends LinearLayout implements NestedScro
      */
     public boolean showImg(int dy) {
         if (dy < 0) {
-            //改变view
-            Log.e("下拉", dy + "+++" + getScrollY());//dy<0;getScrollY()>0,变小
-            changeView();
-
             if (getScrollY() > 0) {//如果parent外框，还可以往上滑动
                 if (currentContentView instanceof ScrollView && currentContentView.getScrollY() == 0) {
                     return true;
-                } else if (currentContentView instanceof RecyclerView) {
+                } else if (currentContentView instanceof ListView) {
 
                     if (!currentContentView.canScrollVertically(-1)) {
                         return true;
@@ -195,42 +184,6 @@ public class MyNestedScrollParentCity extends LinearLayout implements NestedScro
         return false;
     }
 
-    private void changeView() {
-        if (mToolBarHeight == 0) {
-            mTabs.setBackgroundResource(R.drawable.tab_bg_1);
-            mTabs.setTabTextColors(Color.parseColor("#a0a4aa"), Color.parseColor("#282828"));
-            for (int i = 0; i < mTabs.getTabCount(); i++) {
-                if (i == mTabs.getSelectedTabPosition()) {
-                    setDrawable(i, "1", true);
-                } else {
-                    setDrawable(i, "1", false);
-                }
-            }
-        } else {
-            if (getScrollY() < mToolBarHeight) {//如果parent外框，还可以往下滑动
-                mTabs.setBackgroundResource(R.drawable.tab_bg_1);
-                mTabs.setTabTextColors(Color.parseColor("#a0a4aa"), Color.parseColor("#282828"));
-                for (int i = 0; i < mTabs.getTabCount(); i++) {
-                    if (i == mTabs.getSelectedTabPosition()) {
-                        setDrawable(i, "1", true);
-                    } else {
-                        setDrawable(i, "1", false);
-                    }
-                }
-            } else if (getScrollY() >= mToolBarHeight) {
-                mTabs.setBackgroundResource(R.drawable.tab_bg_2);
-                mTabs.setTabTextColors(Color.parseColor("#ff7bb4fc"), Color.parseColor("#ffffff"));
-                for (int i = 0; i < mTabs.getTabCount(); i++) {
-                    if (i == mTabs.getSelectedTabPosition()) {
-                        setDrawable(i, "2", true);
-                    } else {
-                        setDrawable(i, "2", false);
-                    }
-                }
-            }
-        }
-    }
-
     /**
      * 上拉的时候，是否要向上滑动，隐藏图片
      *
@@ -238,53 +191,17 @@ public class MyNestedScrollParentCity extends LinearLayout implements NestedScro
      */
     public boolean hideImg(int dy) {
         if (dy > 0) {
-            Log.e("上拉", dy + "+++" + getScrollY());//dy>0;getScrollY()>0,变大
-            changeView();
-
-            if (getScrollY() < mToolBarHeight) {//如果parent外框，还可以往下滑动
+            if (getScrollY() < mLayoutHeight) {//如果parent外框，还可以往下滑动
                 return true;
             }
         }
         return false;
     }
 
-    //dy_1_unselect
-
-    /**
-     * @param index--------(tabs对应的index，分别对应dy,cb等)
-     * @param state---------（1，2）
-     * @param isSelect--------是否选中
-     */
-    private void setDrawable(int index, String state, boolean isSelect) {
-        String name = "";
-        switch (index) {
-            case 0:
-                name += "cb_";
-                break;
-            case 1:
-                name += "cx_";
-                break;
-            case 2:
-                name += "tc_";
-                break;
-        }
-        name += state;
-        if (isSelect) {
-            name += "_select";
-        } else {
-            name += "_unselect";
-        }
-        int id = getResources().getIdentifier(name, "drawable", context.getPackageName());
-        mTabs.getTabAt(index).setIcon(id);
-    }
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-
         return super.onTouchEvent(event);
     }
-
-    private int mLastTouchX;
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
@@ -299,19 +216,8 @@ public class MyNestedScrollParentCity extends LinearLayout implements NestedScro
                 int y = (int) (event.getRawY() + 0.5f);
                 int dy = mLastTouchY - y;
                 mLastTouchY = y;
-//                if (showImg(dy) || hideImg(dy)) {//如果父亲自己要滑动
-//                    scrollBy(0, dy);
-//                }
-                int x = (int) (event.getRawX() + 0.5f);
-                int dx = mLastTouchX - x;
-                mLastTouchX = x;
-
-                if (Math.abs(dx) > Math.abs(dy)) {
-
-                } else {
-                    if (showImg(dy) || hideImg(dy)) {//如果父亲自己要滑动
-                        scrollBy(0, dy);
-                    }
+                if (showImg(dy) || hideImg(dy)) {//如果父亲自己要滑动
+                    scrollBy(0, dy);
                 }
                 break;
             case MotionEvent.ACTION_UP:
@@ -319,7 +225,6 @@ public class MyNestedScrollParentCity extends LinearLayout implements NestedScro
                 yVelocity = (int) mVelocityTracker.getYVelocity();
                 Log.i(Tag, "getYVelocity:" + yVelocity + ",minVelocity:" + minVelocity);
                 if (Math.abs(yVelocity) > minVelocity) {
-//                    mScroller.fling(0,getScrollY(), 0, -yVelocity, 0, 0, 0, Math.max(0, nsc.getMeasuredHeight()+imgHeight), 0, nsc.getMeasuredHeight()/2);
                     mScroller.fling(0, getScrollY(), 0, -yVelocity, 0, 0, -50000, 5000);
                     postInvalidate();
                 }
@@ -358,97 +263,40 @@ public class MyNestedScrollParentCity extends LinearLayout implements NestedScro
         if (mScroller.computeScrollOffset()) {
             postInvalidate();
             int dy = mScroller.getFinalY() - mScroller.getCurrY();
-            int dx = mScroller.getFinalX() - mScroller.getCurrX();
-            if (Math.abs(dx) < Math.abs(dy)) {
-
-            } else {
-                if (yVelocity > 0) {//下拉
-                    Log.e("getScrollY", "" + getScrollY());
-                    Log.e("isChildScrollToTop", "" + isChildScrollToTop());
-                    //172 false 滑动内部
-                    //172 true 滑动父亲
-                    //0 true 不变
-                    if (getScrollY() >= mToolBarHeight) {//此时top完全隐藏
-
-                        if (isChildScrollToTop()) {//如果子view已经滑动到顶部，这个时候父亲自己滑动
-                            scrollBy(0, dy);
-                        } else {
-                            scrollContentView(dy);
-                        }
-
-                    } else if (getScrollY() == 0) {//parent自己完全显示，交给子view滑动
-                        if (!isChildScrollToTop()) {
-                            scrollContentView(dy);
-                        } else {
-                            changeView();
-                        }
-                    } else {//此时top没有完全显示，让parent自己滑动
+            if (yVelocity > 0) {//下拉
+                Log.e("getScrollY", "" + getScrollY());
+                Log.e("isChildScrollToTop", "" + isChildScrollToTop());
+                if (getScrollY() >= mLayoutHeight) {//此时top完全隐藏
+                    if (isChildScrollToTop()) {//如果子view已经滑动到顶部，这个时候父亲自己滑动
                         scrollBy(0, dy);
-                    }
-                } else if (yVelocity < 0) {//上拉
-                    changeView();
-                    if (getScrollY() >= mToolBarHeight) {//此时top完全隐藏
-                        scrollContentView(dy);
                     } else {
-
-                        scrollBy(0, dy);
+                        scrollContentView(dy);
                     }
-
+                } else if (getScrollY() == 0) {//parent自己完全显示，交给子view滑动
+                    if (!isChildScrollToTop()) {
+                        scrollContentView(dy);
+                    }
+                } else {//此时top没有完全显示，让parent自己滑动
+                    scrollBy(0, dy);
                 }
-            }
-//            if (yVelocity > 0) {//下拉
-//                Log.e("getScrollY", "" + getScrollY());
-//                Log.e("isChildScrollToTop", "" + isChildScrollToTop());
-//                //172 false 滑动内部
-//                //172 true 滑动父亲
-//                //0 true 不变
-//                if (getScrollY() >= mToolBarHeight) {//此时top完全隐藏
-//
-//                    if (isChildScrollToTop()) {//如果子view已经滑动到顶部，这个时候父亲自己滑动
-//                        scrollBy(0, dy);
-//                    } else {
-//                        scrollContentView(dy);
-//                    }
-//
-//                } else if (getScrollY() == 0) {//parent自己完全显示，交给子view滑动
-//                    if (!isChildScrollToTop()) {
-//                        scrollContentView(dy);
-//                    } else {
-//                        changeView();
-//                    }
-//                } else {//此时top没有完全显示，让parent自己滑动
-//                    scrollBy(0, dy);
-//                }
-//            } else if (yVelocity < 0) {//上拉
-//                changeView();
-//                if (getScrollY() >= mToolBarHeight) {//此时top完全隐藏
-//                    scrollContentView(dy);
-//                } else {
-//
-//                    scrollBy(0, dy);
-//                }
-//
-//            }
+            } else if (yVelocity < 0) {//上拉
+                if (getScrollY() >= mLayoutHeight) {//此时top完全隐藏
+                    scrollContentView(dy);
+                } else {
+                    scrollBy(0, dy);
+                }
 
+            }
         }
     }
 
     public void scrollContentView(int dy) {
         if (currentContentView instanceof ScrollView) {
-
             ((ScrollView) currentContentView).smoothScrollBy(0, dy);
-        } else if (currentContentView instanceof RecyclerView) {
-            ((RecyclerView) currentContentView).smoothScrollBy(0, dy);
+        } else if (currentContentView instanceof ListView) {
+            ((ListView) currentContentView).smoothScrollBy(0, dy);
         }
     }
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        ViewGroup.LayoutParams params = viewPager.getLayoutParams();
-        params.height = getMeasuredHeight() - mFrameHeight - Utils.dpToPx(context, 50);//50dp是底部导航栏的高度
-    }
-
 
     /**
      * 判断子view是否已经滑动到顶部
@@ -456,7 +304,7 @@ public class MyNestedScrollParentCity extends LinearLayout implements NestedScro
     public boolean isChildScrollToTop() {
         if (currentContentView instanceof ScrollView && currentContentView.getScrollY() == 0) {
             return true;
-        } else if (currentContentView instanceof RecyclerView) {
+        } else if (currentContentView instanceof ListView) {
 
             if (!currentContentView.canScrollVertically(-1)) {
                 return true;

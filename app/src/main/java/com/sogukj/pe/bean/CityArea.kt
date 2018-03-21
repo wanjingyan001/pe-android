@@ -14,6 +14,7 @@ class CityArea : Serializable {
     var city: ArrayList<City>? = null//市相关信息
 
     inner class City : Serializable  {
+        var sortLetters:String = ""//显示数据拼音的首字母
         var id: Int? = null//id
         var name: String? = null//省
         var pid: Int? = null//父id
