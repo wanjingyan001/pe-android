@@ -40,16 +40,16 @@
 
                 <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="100dp"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginTop="15dp">
 
                     <GridView
                         android:id="@+id/chosenGrid"
                         android:layout_width="match_parent"
-                        android:layout_height="85dp"
-                        android:layout_marginBottom="15dp"
+                        android:layout_height="match_parent"
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"
-                        android:layout_marginTop="15dp"
                         android:horizontalSpacing="12dp"
                         android:numColumns="3"
                         android:verticalSpacing="15dp" />
@@ -91,16 +91,16 @@
 
                 <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="100dp"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginTop="15dp">
 
                     <GridView
                         android:id="@+id/historyGrid"
                         android:layout_width="match_parent"
-                        android:layout_height="85dp"
-                        android:layout_marginBottom="15dp"
+                        android:layout_height="match_parent"
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"
-                        android:layout_marginTop="15dp"
                         android:horizontalSpacing="12dp"
                         android:numColumns="3"
                         android:verticalSpacing="15dp" />
