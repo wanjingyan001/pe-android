@@ -9,6 +9,7 @@
     <include layout="@layout/toolbar" />
 
     <android.support.v4.widget.NestedScrollView
+        android:id="@+id/mRootScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="56dp"
@@ -92,12 +93,13 @@
                 android:layout_height="1dp"
                 android:background="@drawable/divider" />
 
-            <com.sogukj.pe.view.MyExpandableListView
-                android:id="@+id/listview_pro"
+            <LinearLayout
+                android:id="@+id/cityLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:groupIndicator="@null" />
+                android:orientation="vertical">
+
+            </LinearLayout>
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
@@ -107,9 +109,8 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_gravity="center"
-        android:background="@drawable/sidebar_background"
         android:gravity="center"
-        android:textColor="#ffffff"
+        android:textColor="#1787fb"
         android:textSize="30dp"
         android:visibility="invisible" />
 
@@ -118,6 +119,7 @@
         android:layout_width="30dp"
         android:layout_height="match_parent"
         android:layout_gravity="right|center"
-        android:layout_marginTop="56dp" />
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="50dp" />
 
 </FrameLayout>

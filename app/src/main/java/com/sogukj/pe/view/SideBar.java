@@ -15,15 +15,18 @@ import android.widget.TextView;
 
 import com.sogukj.pe.R;
 
+import java.util.ArrayList;
+
 public class SideBar extends View {
 
     //触摸事件
     private OnTouchingLetterChangedListener onTouchingLetterChangedListener;
 
     //26个字母
-    public static String[] b = {"A", "B", "C", "D", "E", "F", "G", "H", "I",
-            "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V",
-            "W", "X", "Y", "Z"};
+//    public static String[] b = {"A", "B", "C", "D", "E", "F", "G", "H", "I",
+//            "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V",
+//            "W", "X", "Y", "Z"};
+    private ArrayList<String> b = new ArrayList<String>();
 
     //选中
     private int choose = -1;
@@ -53,6 +56,11 @@ public class SideBar extends View {
         super(context, attrs, defStyleAttr);
     }
 
+    public void setB(ArrayList<String> content) {
+        b = content;
+        invalidate();
+    }
+
     /**
      * 重写
      *
@@ -64,9 +72,12 @@ public class SideBar extends View {
 
         int height = getHeight();//获取对应的高度
         int width = getWidth();//获取对应的宽度
-        int singleHeight = height / b.length;//获取每一个字母的高度
+        if (b.size() == 0) {
+            return;
+        }
+        int singleHeight = height / b.size();//获取每一个字母的高度
 
-        for (int i = 0; i < b.length; i++) {
+        for (int i = 0; i < b.size(); i++) {
             paint.setColor(Color.parseColor("#1787fb"));
             paint.setTypeface(Typeface.DEFAULT_BOLD);
             paint.setAntiAlias(true);
@@ -77,9 +88,9 @@ public class SideBar extends View {
                 paint.setFakeBoldText(true);
             }
             //x坐标等于中间-字符串宽度的一办(????????)
-            float xPos = width / 2 - paint.measureText(b[i]) / 2;
+            float xPos = width / 2 - paint.measureText(b.get(i)) / 2;
             float yPos = singleHeight * i + singleHeight;
-            canvas.drawText(b[i], xPos, yPos, paint);
+            canvas.drawText(b.get(i), xPos, yPos, paint);
             paint.reset();//重置画笔
         }
     }
@@ -98,11 +109,11 @@ public class SideBar extends View {
         float y = event.getY();//点击Y坐标
         int oldChoose = choose;
         OnTouchingLetterChangedListener listener = onTouchingLetterChangedListener;
-        int c = (int) (y / getHeight() * b.length);//点击y坐标所占总高度的比例*b数组的长度就等于点击b中的个数
+        int c = (int) (y / getHeight() * b.size());//点击y坐标所占总高度的比例*b数组的长度就等于点击b中的个数
 
         switch (action) {
             case MotionEvent.ACTION_UP:
-                setBackground(new ColorDrawable(0 * 00000000));
+                //setBackground(new ColorDrawable(0 * 00000000));
                 choose = -1;//
                 invalidate();
                 if (mTextDialog != null) {
@@ -110,14 +121,14 @@ public class SideBar extends View {
                 }
                 break;
             default:
-                setBackgroundResource(R.drawable.sidebar_background);
+                //setBackgroundResource(R.drawable.sidebar_background);
                 if (oldChoose != c) {
-                    if (c >= 0 && c < b.length) {
+                    if (c >= 0 && c < b.size()) {
                         if (listener != null) {
-                            listener.onTouchingLetterChanged(b[c]);
+                            listener.onTouchingLetterChanged(b.get(c));
                         }
                         if (mTextDialog != null) {
-                            mTextDialog.setText(b[c]);
+                            mTextDialog.setText(b.get(c));
                             mTextDialog.setVisibility(View.VISIBLE);
                         }
 

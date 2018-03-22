@@ -1,30 +1,29 @@
 package com.sogukj.pe.ui.approve
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.*
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.CityArea
 import com.sogukj.pe.util.CharacterParser
-import com.sogukj.pe.util.PinyinComparator
 import com.sogukj.pe.util.Trace
+import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.*
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_dst_city.*
-import java.util.*
+import java.lang.reflect.Field
 import kotlin.collections.ArrayList
 
 class DstCityActivity : ToolbarActivity() {
+
+    lateinit var inflater: LayoutInflater
 
     companion object {
         val TAG = DstCityActivity::class.java.simpleName
@@ -40,22 +39,38 @@ class DstCityActivity : ToolbarActivity() {
         setBack(true)
         title = "目的城市"
 
+        inflater = LayoutInflater.from(context)
+
         initView()
     }
 
     //实例化汉字转拼音类
     private var characterParser = CharacterParser.getInstance()
 
+    private var loadFinish = false
+
     private fun initView() {
         side_bar.setTextView(dialog)
-
         //设置右侧触摸监听
         side_bar.setOnTouchingLetterChangedListener(object : SideBar.OnTouchingLetterChangedListener {
             override fun onTouchingLetterChanged(s: String?) {
+                if (loadFinish == false) {
+                    return
+                }
                 //该字母首次出现的位置
-                val position = mCityAdapter.getPositionForSection(s!!.get(0).toInt())
+                val position = getPositionForSection(s!!.get(0).toInt())
+                Log.e("position", "${position}")
+                Log.e("char", s.toString())
                 if (position != -1) {
-                    listview_pro.setSelection(position)
+                    var layout = mRootScrollView.findViewWithTag("group${position}") as LinearLayout
+
+                    mRootScrollView.post(Runnable {
+                        val location = IntArray(2)
+                        layout.getLocationInWindow(location)
+                        var offset = location[1] - getStatusBarHeight() + lastOffSet
+                        lastOffSet = offset
+                        mRootScrollView.smoothScrollTo(0, offset)
+                    })
                 }
             }
         })
@@ -89,10 +104,33 @@ class DstCityActivity : ToolbarActivity() {
         doRequest()
     }
 
+    private var lastOffSet = 0
+
+    //顶部状态栏（电量）+标题
+    private fun getStatusBarHeight(): Int {
+        var c: Class<*>? = null
+        var obj: Any? = null
+        var field: Field? = null
+        var x = 0
+        var sbar = 0
+        try {
+            c = Class.forName("com.android.internal.R\$dimen")
+            obj = c!!.newInstance()
+            field = c.getField("status_bar_height")
+            x = Integer.parseInt(field!!.get(obj).toString())
+            sbar = resources.getDimensionPixelSize(x)
+        } catch (e1: Exception) {
+            e1.printStackTrace()
+        }
+        return sbar + Utils.dpToPx(context, 56)
+    }
+
     private var groups = ArrayList<String>()
     private var childs = ArrayList<ArrayList<CityArea.City>>()
+    private var adapters = ArrayList<CityAdapter>()
 
     fun doRequest() {
+        showToast("获取城市列表，请等待")
         SoguApi.getService(application)
                 .getCityArea()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -101,24 +139,11 @@ class DstCityActivity : ToolbarActivity() {
                     if (payload.isOk) {
                         filledData(payload.payload!!)
 
+                        side_bar.setB(groups)
+
                         addToHistory(childs.get(0))
-                        mCityAdapter = MyExpAdapter(context, groups, childs, object : MyExpAdapter.onChildClick {
-                            override fun onClick(city: CityArea.City) {
-                                //第一次点击添加
-                                //第二次点击删除
-                                //添加不了，注意selected需要更新
-                                addToCurrent(city)
-                            }
-                        })
-                        listview_pro.setAdapter(mCityAdapter)
-                        for (i in 0 until groups.size) {
-                            listview_pro.expandGroup(i)
-                        }
-                        listview_pro.setOnGroupClickListener(object : ExpandableListView.OnGroupClickListener {
-                            override fun onGroupClick(parent: ExpandableListView?, v: View?, groupPosition: Int, id: Long): Boolean {
-                                return true
-                            }
-                        })
+
+                        initAdapter()
                     } else {
                         showToast(payload.message)
                     }
@@ -127,7 +152,31 @@ class DstCityActivity : ToolbarActivity() {
                 })
     }
 
-    lateinit var mCityAdapter: MyExpAdapter
+    fun initAdapter() {
+        loadFinish = false
+        for (groupIndex in 0 until groups.size) {
+            var Groupview = inflater.inflate(R.layout.item, null)
+            var tvLetter = Groupview.findViewById(R.id.catalog) as TextView
+            tvLetter.text = groups[groupIndex]
+            Groupview.tag = "group${groupIndex}"
+            cityLayout.addView(Groupview)
+
+            var Childview = inflater.inflate(R.layout.child_item_dstcity, null)
+            cityLayout.addView(Childview)
+            Childview.tag = "child${groupIndex}"
+            var mCityLv = Childview.findViewById(R.id.city) as MyListView
+            var adapter = CityAdapter(context, childs.get(groupIndex))
+            adapters.add(adapter)
+            mCityLv?.adapter = adapter
+            mCityLv?.setOnItemClickListener { parent, view, position, id ->
+                var city = childs.get(groupIndex)[position]
+                city.seclected = !city.seclected
+                addToCurrent(city)
+                adapter.notifyDataSetChanged()
+            }
+        }
+        loadFinish = true
+    }
 
     lateinit var chosenAdapter: ChosenAdapter
 
@@ -153,11 +202,11 @@ class DstCityActivity : ToolbarActivity() {
             for (childIndex in 0 until child.size) {
                 if (child[childIndex].id == city.id) {
                     childs[fatherIndex][childIndex].seclected = newState
+                    adapters[fatherIndex].notifyDataSetChanged()
                     break
                 }
             }
         }
-        mCityAdapter.notifyDataSetChanged()
     }
 
     lateinit var historyAdapter: HistoryAdapter
@@ -220,121 +269,30 @@ class DstCityActivity : ToolbarActivity() {
         }
     }
 
-    class MyExpAdapter(val context: Context, val group: ArrayList<String>,
-                       val childs: ArrayList<ArrayList<CityArea.City>>, val listener: onChildClick) : BaseExpandableListAdapter() {
+    /**
+     * 根据ListView的当前位置获取匪类的首字母的Char ascii值
+     *
+     * @param position
+     * @return
+     */
+    fun getSectionForPosition(position: Int): Int {
+        return groups.get(position).toInt()
+    }
 
-        override fun getGroup(groupPosition: Int): Any {
-            return group[groupPosition]
-        }
-
-        override fun isChildSelectable(groupPosition: Int, childPosition: Int): Boolean {
-            return true
-        }
-
-        override fun hasStableIds(): Boolean {
-            return true
-        }
-
-        override fun getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup?): View {
-            var view = convertView
-            var holder: GroupHolder? = null
-            if (view == null) {
-                view = LayoutInflater.from(context).inflate(R.layout.item, null)
-                holder = GroupHolder()
-                holder.tvLetter = view.findViewById(R.id.catalog) as TextView
-                view.setTag(holder)
-            } else {
-                holder = view.getTag() as GroupHolder
+    /**
+     * 根据分类的首字母的Char ascii值获取其第一次出现该首字母的位置
+     *
+     * @param section
+     * @return
+     */
+    fun getPositionForSection(section: Int): Int {
+        for (i in 0 until groups.size) {
+            val sortStr = groups.get(i)
+            val firstChar = sortStr.toUpperCase().get(0)
+            if (firstChar.toInt() == section) {
+                return i
             }
-
-            holder.tvLetter!!.setVisibility(View.VISIBLE)
-            holder.tvLetter!!.setText(group.get(groupPosition))
-
-            return view!!
         }
-
-        class GroupHolder {
-            var tvLetter: TextView? = null
-            var tvTitle: TextView? = null
-            var mRed: ImageView? = null
-            var mLayout: LinearLayout? = null
-            var mIv: ImageView? = null
-
-            var mCityLv: MyListView? = null
-        }
-
-        /**
-         * 根据ListView的当前位置获取匪类的首字母的Char ascii值
-         *
-         * @param position
-         * @return
-         */
-        fun getSectionForPosition(position: Int): Int {
-            return group.get(position).toInt()
-        }
-
-        /**
-         * 根据分类的首字母的Char ascii值获取其第一次出现该首字母的位置
-         *
-         * @param section
-         * @return
-         */
-        fun getPositionForSection(section: Int): Int {
-            for (i in 0 until group.size) {
-                val sortStr = group.get(i)
-                val firstChar = sortStr.toUpperCase().get(0)
-                if (firstChar.toInt() == section) {
-                    return i
-                }
-            }
-            return -1
-        }
-
-        override fun getChildrenCount(groupPosition: Int): Int {
-            //return childs[groupPosition].size
-            return 1
-        }
-
-        override fun getChild(groupPosition: Int, childPosition: Int): Any {
-            return childs[groupPosition][childPosition]
-        }
-
-        override fun getGroupId(groupPosition: Int): Long {
-            return groupPosition.toLong()
-        }
-
-        override fun getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean, convertView: View?, parent: ViewGroup?): View {
-            var view = convertView
-            var holder: GroupHolder? = null
-            if (view == null) {
-                view = LayoutInflater.from(context).inflate(R.layout.child_item_dstcity, null)
-                holder = GroupHolder()
-                holder.mCityLv = view.findViewById(R.id.city) as MyListView
-                view.setTag(holder)
-            } else {
-                holder = view.getTag() as GroupHolder
-            }
-            var adapter = CityAdapter(context, childs.get(groupPosition))
-            holder.mCityLv?.adapter = adapter
-            holder.mCityLv?.setOnItemClickListener { parent, view, position, id ->
-                var city = childs.get(groupPosition)[position]
-                city.seclected = !city.seclected
-                listener.onClick(city)
-                notifyDataSetChanged()
-            }
-            return view!!
-        }
-
-        override fun getChildId(groupPosition: Int, childPosition: Int): Long {
-            return childPosition.toLong()
-        }
-
-        override fun getGroupCount(): Int {
-            return group.size
-        }
-
-        interface onChildClick {
-            fun onClick(city: CityArea.City)
-        }
+        return -1
     }
 }
