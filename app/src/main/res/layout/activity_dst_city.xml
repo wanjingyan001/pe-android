@@ -38,17 +38,31 @@
                     android:textColor="#a0a4aa"
                     android:textSize="12sp" />
 
-                <GridView
-                    android:id="@+id/chosenGrid"
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="85dp"
-                    android:layout_marginBottom="15dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginTop="15dp"
-                    android:horizontalSpacing="12dp"
-                    android:numColumns="3"
-                    android:verticalSpacing="15dp" />
+                    android:layout_height="wrap_content">
+
+                    <GridView
+                        android:id="@+id/chosenGrid"
+                        android:layout_width="match_parent"
+                        android:layout_height="85dp"
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginTop="15dp"
+                        android:horizontalSpacing="12dp"
+                        android:numColumns="3"
+                        android:verticalSpacing="15dp" />
+
+                    <TextView
+                        android:id="@+id/empty_chosen"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="未选择任何城市"
+                        android:textColor="#ffd9d9d9"
+                        android:textSize="12sp" />
+                </FrameLayout>
             </LinearLayout>
 
             <View
@@ -75,17 +89,31 @@
                     android:textColor="#a0a4aa"
                     android:textSize="12sp" />
 
-                <GridView
-                    android:id="@+id/historyGrid"
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="85dp"
-                    android:layout_marginBottom="15dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginTop="15dp"
-                    android:horizontalSpacing="12dp"
-                    android:numColumns="3"
-                    android:verticalSpacing="15dp" />
+                    android:layout_height="wrap_content">
+
+                    <GridView
+                        android:id="@+id/historyGrid"
+                        android:layout_width="match_parent"
+                        android:layout_height="85dp"
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginTop="15dp"
+                        android:horizontalSpacing="12dp"
+                        android:numColumns="3"
+                        android:verticalSpacing="15dp" />
+
+                    <TextView
+                        android:id="@+id/empty_history"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="暂无历史选择"
+                        android:textColor="#ffd9d9d9"
+                        android:textSize="12sp" />
+                </FrameLayout>
             </LinearLayout>
 
             <View

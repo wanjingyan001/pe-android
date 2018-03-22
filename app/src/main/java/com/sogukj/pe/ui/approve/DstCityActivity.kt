@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.*
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
@@ -27,10 +28,26 @@ class DstCityActivity : ToolbarActivity() {
 
     companion object {
         val TAG = DstCityActivity::class.java.simpleName
-        fun start(ctx: Activity?) {
+        fun start(ctx: Activity, id: Int, list: ArrayList<CityArea.City>) {
             val intent = Intent(ctx, DstCityActivity::class.java)
+            intent.putExtra(Extras.ID, id)
+            intent.putExtra(Extras.DATA, list)
             ctx?.startActivityForResult(intent, Extras.REQUESTCODE)
         }
+    }
+
+    override fun onBackPressed() {
+        if (chosenAdapter.data.size == 0) {
+            showToast("未选择城市")
+            setResult(Extras.RESULTCODE2)
+            super.onBackPressed()
+            return
+        }
+        var list = chosenAdapter.data
+        var intent = Intent()
+        intent.putExtra(Extras.DATA, list)
+        setResult(Extras.RESULTCODE, intent)
+        super.onBackPressed()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,11 +94,22 @@ class DstCityActivity : ToolbarActivity() {
 
         chosenAdapter = ChosenAdapter(context)
         chosenGrid.adapter = chosenAdapter
+        var list = intent.getSerializableExtra(Extras.DATA) as ArrayList<CityArea.City>
+        chosenAdapter.data.addAll(list)
+        if (chosenAdapter.data.size == 0) {
+            empty_chosen.visibility = View.VISIBLE
+        } else {
+            empty_chosen.visibility = View.GONE
+        }
+        chosenAdapter.notifyDataSetChanged()
         chosenGrid.setOnItemClickListener { parent, view, position, id ->
             var city = chosenAdapter.data.get(position)
             updateList(city, false)
             chosenAdapter.data.remove(city)
             chosenAdapter.notifyDataSetChanged()
+            if (chosenAdapter.data.size == 0) {
+                empty_chosen.visibility = View.VISIBLE
+            }
         }
 
         historyAdapter = HistoryAdapter(context)
@@ -93,11 +121,17 @@ class DstCityActivity : ToolbarActivity() {
                 updateList(city, false)
                 chosenAdapter.data.remove(city)
                 chosenAdapter.notifyDataSetChanged()
+                if (chosenAdapter.data.size == 0) {
+                    empty_chosen.visibility = View.VISIBLE
+                }
             } else {
                 //未点过
                 updateList(city, true)
                 chosenAdapter.data.add(city)
                 chosenAdapter.notifyDataSetChanged()
+                if (chosenAdapter.data.size != 0) {
+                    empty_chosen.visibility = View.GONE
+                }
             }
         }
 
@@ -141,9 +175,34 @@ class DstCityActivity : ToolbarActivity() {
 
                         side_bar.setB(groups)
 
-                        addToHistory(childs.get(0))
-
                         initAdapter()
+
+                        var list = intent.getSerializableExtra(Extras.DATA) as ArrayList<CityArea.City>
+                        for (city in list) {
+                            updateList(city, true)
+                        }
+                    } else {
+                        showToast(payload.message)
+                    }
+                }, { e ->
+                    Trace.e(e)
+                })
+
+        var id = intent.getIntExtra(Extras.ID, 0)
+        SoguApi.getService(application)
+                .getHistoryCity(id)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        var list = payload.payload
+                        if (list == null || list.isEmpty()) {
+
+                        } else {
+                            empty_history.visibility = View.GONE
+                            historyAdapter.data.addAll(list)
+                            historyAdapter.notifyDataSetChanged()
+                        }
                     } else {
                         showToast(payload.message)
                     }
@@ -184,6 +243,9 @@ class DstCityActivity : ToolbarActivity() {
         if (city.seclected == false) {//点两次
             chosenAdapter.data.remove(city)
             chosenAdapter.notifyDataSetChanged()
+            if (chosenAdapter.data.size == 0) {
+                empty_chosen.visibility = View.VISIBLE
+            }
             return
         }
         if (chosenAdapter.data.size == 6) {
@@ -194,6 +256,9 @@ class DstCityActivity : ToolbarActivity() {
         }
         chosenAdapter.data.add(city)
         chosenAdapter.notifyDataSetChanged()
+        if (chosenAdapter.data.size != 0) {
+            empty_chosen.visibility = View.GONE
+        }
     }
 
     fun updateList(city: CityArea.City, newState: Boolean) {
@@ -210,11 +275,6 @@ class DstCityActivity : ToolbarActivity() {
     }
 
     lateinit var historyAdapter: HistoryAdapter
-
-    fun addToHistory(citys: ArrayList<CityArea.City>) {
-        historyAdapter.data.addAll(citys.subList(0, 5))
-        historyAdapter.notifyDataSetChanged()
-    }
 
     /**
      * 为ListView填充数据

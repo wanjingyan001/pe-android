@@ -1154,4 +1154,8 @@ interface SoguService {
 
     @POST("/api/Approve/showVacation")
     fun showVacation():Observable<Payload<ArrayList<VacationBean>>>
+
+    @FormUrlEncoded
+    @POST("/api/Approve/historyCity")
+    fun getHistoryCity(@Field("template_id") template_id: Int): Observable<Payload<ArrayList<CityArea.City>>>
 }

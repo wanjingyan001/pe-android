@@ -29,6 +29,7 @@ import com.sogukj.pe.ui.IM.TeamSelectActivity
 import com.sogukj.pe.ui.user.CityAreaActivity
 import com.sogukj.pe.util.Utils
 import java.util.*
+import kotlin.collections.ArrayList
 
 class LeaveBusinessActivity : ToolbarActivity() {
 
@@ -185,7 +186,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
     private fun add10(bean: CustomSealBean) {
         val convertView = inflater.inflate(R.layout.cs_row_10, null)
         ll_content.addView(convertView)
-        //fieldMap.put(bean.fields, convertView)
+        convertView.tag = "time"
 
         val tvLabel = convertView.findViewById(R.id.tv_label) as TextView
         val etValue = convertView.findViewById(R.id.et_value) as TextView
@@ -202,56 +203,17 @@ class LeaveBusinessActivity : ToolbarActivity() {
         if (!bean.value_map?.name.isNullOrEmpty()) {
             etValue.text = bean.value_map?.name
         }
+        var list = bean.value_map?.value
+        if (list == null || list.size == 0) {
 
-        var provinces = ArrayList<CityArea>()
-        var cities = ArrayList<ArrayList<CityArea.City>>()
-
-        var provinces_str = ArrayList<String>()
-        var cities_str = ArrayList<ArrayList<String>>()
-        //end_city
-        etValue.setOnClickListener {
-            if (provinces.size == 0) {
-                return@setOnClickListener
-            }
-//            var pvOptions = OptionsPickerView.Builder(this, OptionsPickerView.OnOptionsSelectListener { options1, option2, options3, v ->
-//                val tx = cities.get(options1).get(option2).name
-//                etValue.text = tx
-//
-//                paramMap.put(bean.fields, cities.get(options1).get(option2).id)
-//            }).build()
-//            pvOptions.setPicker(provinces_str, cities_str, null)
-//            pvOptions.show()
-            DstCityActivity.start(context)
+        } else {
+            initDstCity(list)
         }
 
-        SoguApi.getService(application)
-                .getCityArea()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ payload ->
-                    if (payload.isOk) {
-                        provinces.clear()
-                        cities.clear()
-                        payload.payload?.forEach {
-                            provinces.add(it)
-                            cities.add(it.city!!)
-                        }
-                        for (prov in provinces) {
-                            provinces_str.add(prov.name!!)
-                        }
-                        for (index in 0 until cities.size) {
-                            var str = ArrayList<String>()
-                            for (cityNum in 0 until cities[index].size) {
-                                str.add(cities[index][cityNum].name!!)
-                            }
-                            cities_str.add(str)
-                        }
-                    } else {
-                        showToast(payload.message)
-                    }
-                }, { e ->
-                    Trace.e(e)
-                })
+        //end_city
+        etValue.setOnClickListener {
+            DstCityActivity.start(context, paramId!!, dstCity)
+        }
     }
 
     var startDate: Date? = null
@@ -471,6 +433,44 @@ class LeaveBusinessActivity : ToolbarActivity() {
                 adapter.list.add(UserBean())
                 adapter.notifyDataSetChanged()
             }
+        } else if (requestCode == Extras.REQUESTCODE && resultCode == Extras.RESULTCODE) {
+            var list = data!!.getSerializableExtra(Extras.DATA) as ArrayList<CityArea.City>
+            initDstCity(list)
+        }
+    }
+
+    private var dstCity = ArrayList<CityArea.City>()
+
+    fun initDstCity(list: ArrayList<CityArea.City>) {
+        dstCity.clear()
+        dstCity.addAll(list)
+
+        var view = ll_content.findViewWithTag("time") as LinearLayout
+        var citys = view.findViewById(R.id.cities) as LinearLayout
+        citys.visibility = View.VISIBLE
+
+        var etValue = view.findViewById(R.id.et_value) as TextView
+        etValue.text = "${list.size}个"
+        etValue.requestLayout()
+
+        var cityValue1 = view.findViewById(R.id.city1) as TextView
+        var cityValue2 = view.findViewById(R.id.city2) as TextView
+        var cityValue3 = view.findViewById(R.id.city3) as TextView
+        cityValue1.visibility = View.VISIBLE
+        cityValue2.visibility = View.VISIBLE
+        cityValue3.visibility = View.VISIBLE
+        if (list.size == 1) {
+            cityValue1.visibility = View.GONE
+            cityValue2.visibility = View.GONE
+            cityValue3.text = list[0].name
+        } else if (list.size == 2) {
+            cityValue1.visibility = View.GONE
+            cityValue2.text = list[0].name
+            cityValue3.text = list[1].name
+        } else if (list.size >= 3) {
+            cityValue1.text = list[0].name
+            cityValue2.text = list[1].name
+            cityValue3.text = list[2].name
         }
     }
 

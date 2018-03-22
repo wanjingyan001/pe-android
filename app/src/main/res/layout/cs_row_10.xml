@@ -24,17 +24,69 @@
         android:textColor="@color/text_2"
         tools:text="基金名称" />
 
+    <LinearLayout
+        android:id="@+id/cities"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="right"
+        android:orientation="horizontal"
+        android:visibility="invisible">
+
+        <TextView
+            android:id="@+id/city1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/city_bg"
+            android:paddingBottom="2dp"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:paddingTop="2dp"
+            android:text="舟山"
+            android:textColor="#ff1787fb"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/city2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/city_bg"
+            android:paddingBottom="2dp"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:paddingTop="2dp"
+            android:text="舟山"
+            android:textColor="#ff1787fb"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/city3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/city_bg"
+            android:paddingBottom="2dp"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:paddingTop="2dp"
+            android:text="舟山"
+            android:textColor="#ff1787fb"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
     <TextView
         android:id="@+id/et_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="10dp"
-        android:layout_weight="1"
         android:gravity="right"
+        android:hint="请选择城市"
         android:letterSpacing="0.04"
         android:lineSpacingExtra="0sp"
         android:lines="1"
-        android:hint="请选择城市"
         android:textColor="@color/text_1"
         android:textColorHint="#a0a4aa"
         android:textSize="14sp" />
