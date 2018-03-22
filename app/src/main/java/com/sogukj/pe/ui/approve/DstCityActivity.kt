@@ -16,6 +16,7 @@ import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.*
 import com.sogukj.service.SoguApi
+import com.taobao.accs.utl.UT
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_dst_city.*
@@ -79,15 +80,16 @@ class DstCityActivity : ToolbarActivity() {
                 Log.e("position", "${position}")
                 Log.e("char", s.toString())
                 if (position != -1) {
-                    var layout = mRootScrollView.findViewWithTag("group${position}") as LinearLayout
-
-                    mRootScrollView.post(Runnable {
-                        val location = IntArray(2)
-                        layout.getLocationInWindow(location)
-                        var offset = location[1] - getStatusBarHeight() + lastOffSet
-                        lastOffSet = offset
-                        mRootScrollView.smoothScrollTo(0, offset)
-                    })
+//                    var layout = mRootScrollView.findViewWithTag("group${position}") as LinearLayout
+//
+//                    mRootScrollView.post(Runnable {
+//                        val location = IntArray(2)
+//                        layout.getLocationInWindow(location)
+//                        var offset = location[1] - getStatusBarHeight() + lastOffSet
+//                        lastOffSet = offset
+//                        mRootScrollView.smoothScrollTo(0, offset)
+//                    })
+                    mRootScrollView.smoothScrollTo(0, scrollDistance.get(position))
                 }
             }
         })
@@ -162,6 +164,7 @@ class DstCityActivity : ToolbarActivity() {
     private var groups = ArrayList<String>()
     private var childs = ArrayList<ArrayList<CityArea.City>>()
     private var adapters = ArrayList<CityAdapter>()
+    private var scrollDistance = ArrayList<Int>()
 
     fun doRequest() {
         showToast("获取城市列表，请等待")
@@ -180,6 +183,24 @@ class DstCityActivity : ToolbarActivity() {
                         var list = intent.getSerializableExtra(Extras.DATA) as ArrayList<CityArea.City>
                         for (city in list) {
                             updateList(city, true)
+                        }
+
+                        //先找到cityLayout之前的距离
+                        var childs = mRootScrollView.getChildAt(0) as LinearLayout
+                        var h0 = childs.getChildAt(0).measuredHeight
+                        var h1 = childs.getChildAt(1).measuredHeight
+                        var h2 = childs.getChildAt(2).measuredHeight
+                        var h3 = childs.getChildAt(3).measuredHeight
+
+                        cityLayout.post {
+                            var beforeDis = h0 + h1 + h2 + h3 + Utils.dpToPx(context, 15)
+                            scrollDistance.add(beforeDis)
+                            for (viewIndex in 0 until (cityLayout.childCount - 2) step 2) {
+                                var groupH = cityLayout.getChildAt(viewIndex).measuredHeight
+                                var childH = cityLayout.getChildAt(viewIndex + 1).measuredHeight
+                                var previous = scrollDistance.get(scrollDistance.lastIndex)
+                                scrollDistance.add((groupH + childH + previous))
+                            }
                         }
                     } else {
                         showToast(payload.message)
