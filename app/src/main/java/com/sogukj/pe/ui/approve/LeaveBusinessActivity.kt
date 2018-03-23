@@ -23,11 +23,12 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_leave_business.*
 import com.bigkoo.pickerview.OptionsPickerView
 import com.bigkoo.pickerview.TimePickerView
+import com.google.gson.Gson
 import com.sogukj.pe.bean.CityArea
 import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.ui.IM.TeamSelectActivity
-import com.sogukj.pe.ui.user.CityAreaActivity
 import com.sogukj.pe.util.Utils
+import okhttp3.FormBody
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -54,6 +55,47 @@ class LeaveBusinessActivity : ToolbarActivity() {
         }
 
         load()
+
+        btn_commit.setOnClickListener {
+            var flag = true
+            for (chk in checkList) {
+                flag = flag.and(chk())
+                if (!flag) break
+            }
+            if (flag) {
+                doConfirm()
+            } else {
+                showToast("请填写完整后再提交")
+            }
+        }
+    }
+
+    //出差  end_city  time_range（,）  total_hours  reasons   copy
+    fun doConfirm() {
+        val builder = FormBody.Builder()
+        builder.add("template_id", "${paramId}")
+        for ((k, v) in paramMap) {
+            if (v == null) {
+
+            } else if (v is String) {
+                builder.add(k, v)
+            } else
+                builder.add(k, Gson().toJson(v))
+        }
+        SoguApi.getService(application)
+                .submitApprove(builder.build())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        showToast("提交成功")
+                        finish()
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    showToast("提交失败")
+                })
     }
 
     private var flagEdit = false
@@ -130,7 +172,9 @@ class LeaveBusinessActivity : ToolbarActivity() {
         }
 
         tvLabel.text = bean.name
-        etValue.hint = bean.value_map?.pla
+        if (!bean.value_map?.pla.isNullOrEmpty()) {
+            etValue.hint = bean.value_map?.pla
+        }
         if (!bean.value_map?.name.isNullOrEmpty()) {
             etValue.text = bean.value_map?.name
         }
@@ -181,6 +225,15 @@ class LeaveBusinessActivity : ToolbarActivity() {
         tv_title.text = bean.name
         et_reason.setText(bean.value)
         //reasons
+        checkList.add {
+            val str = et_reason.text?.toString()?.trim()
+            paramMap.put(bean.fields, str)
+            if (bean.is_must == 1 && str.isNullOrEmpty()) {
+                false
+            } else {
+                true
+            }
+        }
     }
 
     private fun add10(bean: CustomSealBean) {
@@ -203,7 +256,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
         if (!bean.value_map?.name.isNullOrEmpty()) {
             etValue.text = bean.value_map?.name
         }
-        var list = bean.value_map?.value
+        var list = bean.value_map?.value as ArrayList<CityArea.City>
         if (list == null || list.size == 0) {
 
         } else {
@@ -214,6 +267,25 @@ class LeaveBusinessActivity : ToolbarActivity() {
         etValue.setOnClickListener {
             DstCityActivity.start(context, paramId!!, dstCity)
         }
+
+        checkList.add {
+            //end_city
+            var cities = ""
+            for (city in dstCity) {
+                cities = "${cities}${city.id},"
+            }
+            cities = cities.removeSuffix(",")
+            paramMap.put(bean.fields, cities)
+            if (bean.is_must == 1) {
+                if (dstCity.size == 0) {
+                    false
+                } else {
+                    true
+                }
+            } else {
+                true
+            }
+        }
     }
 
     var startDate: Date? = null
@@ -221,12 +293,11 @@ class LeaveBusinessActivity : ToolbarActivity() {
 
     private fun add11(bean: CustomSealBean) {
         //time_range
-        var nameList = bean.name?.split("&") as ArrayList<String>
+        var nameList = bean.name?.split(",") as ArrayList<String>
         for (index in nameList.indices) {
             var name = nameList[index]
             val convertView = inflater.inflate(R.layout.cs_row_10, null)
             ll_content.addView(convertView)
-            //fieldMap.put(bean.fields, convertView)
 
             val tvLabel = convertView.findViewById(R.id.tv_label) as TextView
             val etValue = convertView.findViewById(R.id.et_value) as TextView
@@ -252,28 +323,34 @@ class LeaveBusinessActivity : ToolbarActivity() {
                 val builder = TimePickerView.Builder(this, { date, view ->
                     if (index == 0) {
                         startDate = date
+                        if (endDate == null) {
+                            setTime(etValue, date)
+                            return@Builder
+                        }
+                        if (startDate!!.time > endDate!!.time) {
+                            return@Builder
+                        }
+                        setTime(etValue, date)
+                        calculateTime()
                     } else if (index == 1) {
                         endDate = date
                         if (startDate!!.time > endDate!!.time) {
                             return@Builder
                         }
-                        paramMap.put(bean.fields, "${startDate!!.time}&${endDate!!.time}")
-
-                        var total = ll_content.findViewWithTag("total_hours") as TextView
-                        if (paramId == 10) {
-                            var day = (endDate!!.getTime() - startDate!!.getTime()) / (24 * 60 * 60 * 1000) + 1
-                            total.text = day.toString() + "天"
-                            paramMap.put("total_hours", day)
-                        } else if (paramId == 11) {
-//                            var hour = (endDate!!.getTime() - startDate!!.getTime()) / (60 * 60 * 1000)
-//                            total.text = hour.toString()
-//                            paramMap.put("total_hours", hour)
-                        }
+                        setTime(etValue, date)
+                        calculateTime()
                     }
-                    if (paramId == 10) {
-                        etValue.text = Utils.getTime(date, "yyyy-MM-dd")
-                    } else if (paramId == 11) {
-                        etValue.text = Utils.getTime(date, "yyyy-MM-dd HH:mm")
+                    checkList.add {
+                        if (bean.is_must == 1) {
+                            if (startDate != null && endDate != null) {
+                                paramMap.put(bean.fields, "${(startDate!!.time) / 1000},${(endDate!!.time) / 1000}")
+                                true
+                            } else {
+                                false
+                            }
+                        } else {
+                            true
+                        }
                     }
                 })
                         //年月日时分秒 的显示与否，不设置则默认全部显示
@@ -290,6 +367,49 @@ class LeaveBusinessActivity : ToolbarActivity() {
         }
     }
 
+    fun setTime(etValue: TextView, date: Date) {
+        if (paramId == 10) {
+            etValue.text = Utils.getTime(date, "yyyy-MM-dd")
+        } else if (paramId == 11) {
+            etValue.text = Utils.getTime(date, "yyyy-MM-dd HH:mm")
+        }
+    }
+
+    fun calculateTime() {
+        var total = ll_content.findViewWithTag("total_hours") as TextView
+        if (paramId == 10) {
+            SoguApi.getService(application)
+                    .calcTotalTime(start_time = (startDate!!.time / 1000).toString(), end_time = (endDate!!.time / 1000).toString(), type = 1)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (payload.isOk) {
+                            total.text = payload.payload + "天"
+                            paramMap.put("total_hours", payload.payload)//total_hours
+                        } else
+                            showToast(payload.message)
+                    }, { e ->
+                        Trace.e(e)
+                        showToast("时间计算出错")
+                    })
+        } else if (paramId == 11) {
+            SoguApi.getService(application)
+                    .calcTotalTime(start_time = (startDate!!.time / 1000).toString(), end_time = (endDate!!.time / 1000).toString(), type = 2)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (payload.isOk) {
+                            total.text = payload.payload + "小时"
+                            paramMap.put("total_hours", payload.payload)//total_hours
+                        } else
+                            showToast(payload.message)
+                    }, { e ->
+                        Trace.e(e)
+                        showToast("时间计算出错")
+                    })
+        }
+    }
+
     fun add12(bean: CustomSealBean) {
         //fields为空
         val convertView = inflater.inflate(R.layout.cs_row_13, null) as LinearLayout
@@ -297,7 +417,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
         val tvLabel = convertView.findViewById(R.id.tv_label) as TextView
         val etValue = convertView.findViewById(R.id.et_value) as TextView
         tvLabel.text = bean.name
-        //etValue.text = bean.value_map?.value
+        etValue.text = bean.value_map?.value as String?
         etValue.setOnClickListener {
             if (paramId == 11) {
                 MyHolidayActivity.start(context)
@@ -327,6 +447,18 @@ class LeaveBusinessActivity : ToolbarActivity() {
             icon.visibility = View.VISIBLE
         } else {
             icon.visibility = View.GONE
+        }
+        checkList.add {
+            var txt = etValue.text.toString()
+            if (bean.is_must == 1) {
+                if (txt.isNullOrEmpty()) {
+                    false
+                } else {
+                    true
+                }
+            } else {
+                true
+            }
         }
     }
 
@@ -418,6 +550,16 @@ class LeaveBusinessActivity : ToolbarActivity() {
                 adapter.notifyDataSetChanged()
             }
         }
+        checkList.add {
+            var copyid = ""
+            var list = adapter.list
+            for (index in 0 until (list.size - 1)) {
+                copyid = "${copyid}${list[index].uid},"
+            }
+            copyid = copyid.removeSuffix(",")
+            paramMap.put("copy", copyid)
+            true
+        }
     }
 
     var SEND = 0x007
@@ -451,7 +593,6 @@ class LeaveBusinessActivity : ToolbarActivity() {
 
         var etValue = view.findViewById(R.id.et_value) as TextView
         etValue.text = "${list.size}个"
-        etValue.requestLayout()
 
         var cityValue1 = view.findViewById(R.id.city1) as TextView
         var cityValue2 = view.findViewById(R.id.city2) as TextView

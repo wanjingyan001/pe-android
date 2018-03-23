@@ -1158,4 +1158,11 @@ interface SoguService {
     @FormUrlEncoded
     @POST("/api/Approve/historyCity")
     fun getHistoryCity(@Field("template_id") template_id: Int): Observable<Payload<ArrayList<CityArea.City>>>
+
+    //计算出差天数|请假小时-----1=>出差天数，2=>请假时间
+    @FormUrlEncoded
+    @POST("/api/Approve/calcTotalTime")
+    fun calcTotalTime(@Field("start_time") start_time: String,
+                      @Field("end_time") end_time: String,
+                      @Field("type") type: Int): Observable<Payload<String>>
 }

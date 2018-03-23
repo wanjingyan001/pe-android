@@ -34,6 +34,6 @@ class CustomSealBean : Serializable {
         var type: Int? = null
         val hide: String = ""
         val pla: String = ""
-        val value: ArrayList<CityArea.City>? = null
+        val value: Any? = null
     }
 }
