@@ -83,7 +83,7 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="10dp"
         android:gravity="right"
-        android:hint="请选择城市"
+        android:hint="请选择"
         android:letterSpacing="0.04"
         android:lineSpacingExtra="0sp"
         android:lines="1"

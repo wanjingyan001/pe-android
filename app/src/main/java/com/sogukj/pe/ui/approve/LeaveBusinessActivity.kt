@@ -252,7 +252,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
         }
 
         tvLabel.text = bean.name
-        etValue.hint = bean.value_map?.pla
+        //etValue.hint = bean.value_map?.pla
         if (!bean.value_map?.name.isNullOrEmpty()) {
             etValue.text = bean.value_map?.name
         }
@@ -293,10 +293,10 @@ class LeaveBusinessActivity : ToolbarActivity() {
 
     private fun add11(bean: CustomSealBean) {
         //time_range
-        var nameList = bean.name?.split(",") as ArrayList<String>
+        var nameList = bean.name?.split("&") as ArrayList<String>
         for (index in nameList.indices) {
             var name = nameList[index]
-            val convertView = inflater.inflate(R.layout.cs_row_10, null)
+            val convertView = inflater.inflate(R.layout.cs_row_11, null)
             ll_content.addView(convertView)
 
             val tvLabel = convertView.findViewById(R.id.tv_label) as TextView

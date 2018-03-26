@@ -1165,4 +1165,10 @@ interface SoguService {
     fun calcTotalTime(@Field("start_time") start_time: String,
                       @Field("end_time") end_time: String,
                       @Field("type") type: Int): Observable<Payload<String>>
+
+    //我的请假记录
+    @FormUrlEncoded
+    @POST("/api/Approve/showLeaveRecode")
+    fun showLeaveRecode(@Field("page") page: Int? = 1,
+                        @Field("pageSize") pageSize: Int? = 20): Observable<Payload<ArrayList<LeaveRecordBean>>>
 }

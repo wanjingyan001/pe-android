@@ -3,16 +3,22 @@ package com.sogukj.pe.ui.approve
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
-import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.framework.base.ToolbarActivity
+import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
+import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
+import com.lcodecore.tkrefreshlayout.footer.BallPulseView
+import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.R
-import com.sogukj.pe.bean.VacationBean
-import com.sogukj.pe.util.ColorUtil
+import com.sogukj.pe.bean.LeaveRecordBean
+import com.sogukj.pe.ui.SupportEmptyView
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
+import com.sogukj.pe.view.CircleImageView
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.pe.view.SpaceItemDecoration
@@ -23,7 +29,7 @@ import kotlinx.android.synthetic.main.activity_vacation_record.*
 
 class VacationRecordActivity : ToolbarActivity() {
 
-    lateinit var adapter: RecyclerAdapter<VacationBean>
+    lateinit var adapter: RecyclerAdapter<LeaveRecordBean>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,17 +37,36 @@ class VacationRecordActivity : ToolbarActivity() {
         title = "记录"
         setBack(true)
 
-        //qj_record_item
         adapter = RecyclerAdapter(context, { _adapter, parent, type ->
-            val convertView = _adapter.getView(R.layout.item_vacation, parent)
-            object : RecyclerHolder<VacationBean>(convertView) {
-                val image = convertView.findViewById(R.id.color) as ImageView
-                val vac_type = convertView.findViewById(R.id.type) as TextView
-                val shengyu = convertView.findViewById(R.id.shengyu) as TextView
-                override fun setData(view: View, data: VacationBean, position: Int) {
-                    vac_type.text = data.name
-                    shengyu.text = "剩余${data.hours}小时"
-                    ColorUtil.setColorStatus(image, data)
+            val convertView = _adapter.getView(R.layout.qj_record_item, parent)
+            object : RecyclerHolder<LeaveRecordBean>(convertView) {
+
+                val icon = convertView.findViewById(R.id.icon) as CircleImageView
+                val title = convertView.findViewById(R.id.title) as TextView
+                val type1 = convertView.findViewById(R.id.type) as TextView
+                val start_time = convertView.findViewById(R.id.start_time) as TextView
+                val end_time = convertView.findViewById(R.id.end_time) as TextView
+                val time = convertView.findViewById(R.id.time) as TextView
+                val status = convertView.findViewById(R.id.status) as TextView
+
+                override fun setData(view: View, data: LeaveRecordBean, position: Int) {
+                    if (data.url.isNullOrEmpty()) {
+                        icon.setImageResource(R.drawable.default_icon)
+                    } else {
+                        Glide.with(context).load(data.url).into(icon)
+                    }
+                    title.text = data.title
+                    type1.text = "请假类型：${data.name}"
+                    start_time.text = data.start_time
+                    end_time.text = data.end_time
+                    time.text = data.add_time
+                    status.text = when (data.status) {//-1=>不通过，0=>待审批，1=>审批中，4=>审批通过
+                        -1 -> "不通过"
+                        0 -> "待审批"
+                        1 -> "审批中"
+                        4 -> "审批通过"
+                        else -> "未知状态"
+                    }
                 }
             }
         })
@@ -49,22 +74,58 @@ class VacationRecordActivity : ToolbarActivity() {
         recycler_view.addItemDecoration(SpaceItemDecoration(Utils.dpToPx(context, 10)))
         recycler_view.adapter = adapter
 
+        val header = ProgressLayout(context)
+        header.setColorSchemeColors(ContextCompat.getColor(context, R.color.color_main))
+        refresh.setHeaderView(header)
+        val footer = BallPulseView(context)
+        footer.setAnimatingColor(ContextCompat.getColor(context, R.color.color_main))
+        refresh.setBottomView(footer)
+        refresh.setOverScrollRefreshShow(false)
+        refresh.setOnRefreshListener(object : RefreshListenerAdapter() {
+            override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
+                page = 1
+                doRequest()
+            }
+
+            override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
+                ++page
+                doRequest()
+            }
+
+        })
+        refresh.setAutoLoadMore(true)
+
+        doRequest()
+    }
+
+    var page = 1
+
+    fun doRequest() {
         SoguApi.getService(application)
-                .showVacation()
+                .showLeaveRecode(page = page)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        adapter.dataList.clear()
-                        adapter.dataList.addAll(payload.payload!!)
-                        adapter.notifyDataSetChanged()
+                        if (page == 1)
+                            adapter.dataList.clear()
+                        payload.payload?.apply {
+                            adapter.dataList.addAll(this)
+                        }
                     } else {
                         showToast(payload.message)
-                        empty.visibility = View.VISIBLE
                     }
                 }, { e ->
                     Trace.e(e)
-                    empty.visibility = View.VISIBLE
+                    showToast("暂无可用数据")
+                }, {
+                    SupportEmptyView.checkEmpty(this,adapter)
+                    refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
+                    adapter.notifyDataSetChanged()
+                    if (page == 1)
+                        refresh?.finishRefreshing()
+                    else
+                        refresh?.finishLoadmore()
                 })
     }
 

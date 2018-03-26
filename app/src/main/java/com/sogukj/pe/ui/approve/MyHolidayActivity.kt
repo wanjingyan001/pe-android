@@ -39,7 +39,11 @@ class MyHolidayActivity : ToolbarActivity() {
                 val shengyu = convertView.findViewById(R.id.shengyu) as TextView
                 override fun setData(view: View, data: VacationBean, position: Int) {
                     vac_type.text = data.name
-                    shengyu.text = "剩余${data.hours}小时"
+                    if (data.status == 0) {//0=>已请了多长时间，1=>还剩多长时间
+                        shengyu.text = "已申请${data.hours}小时"
+                    } else if (data.status == 1) {
+                        shengyu.text = "剩余${data.hours}小时"
+                    }
                     ColorUtil.setColorStatus(image, data)
                 }
             }
