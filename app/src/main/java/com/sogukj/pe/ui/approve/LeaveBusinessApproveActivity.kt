@@ -145,37 +145,50 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
             }
             4 -> {
                 ll_twins.visibility = View.VISIBLE
+                if (paramTitle.equals("出差") || paramTitle.equals("请假")) {
+                    btn_left.text = "修改"
+                    btn_right.text = "撤销"
+                }
                 btn_left.setOnClickListener {
-                    SoguApi.getService(application)
-                            .exportPdf(paramId!!)
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribeOn(Schedulers.io())
-                            .subscribe({ payload ->
-                                if (payload.isOk) {
-                                    val bean = payload.payload
-                                    bean?.let {
-                                        //                                        if (!TextUtils.isEmpty(it.url)) {
-//                                            val intent = Intent(Intent.ACTION_VIEW)
-//                                            intent.data = Uri.parse(it.url)
-//                                            startActivity(intent)
-//                                        }
-                                        PdfUtil.loadPdf(this, it.url, it.name)
-                                    }
-                                } else
-                                    showToast(payload.message)
-                            }, { e ->
-                                Trace.e(e)
-                                showToast("请求失败")
-                            })
+                    //                    SoguApi.getService(application)
+//                            .exportPdf(paramId!!)
+//                            .observeOn(AndroidSchedulers.mainThread())
+//                            .subscribeOn(Schedulers.io())
+//                            .subscribe({ payload ->
+//                                if (payload.isOk) {
+//                                    val bean = payload.payload
+//                                    bean?.let {
+//                                        PdfUtil.loadPdf(this, it.url, it.name)
+//                                    }
+//                                } else
+//                                    showToast(payload.message)
+//                            }, { e ->
+//                                Trace.e(e)
+//                                showToast("请求失败")
+//                            })
                 }
                 btn_right.setOnClickListener {
+                    //                    SoguApi.getService(application)
+//                            .finishApprove(paramId!!)
+//                            .observeOn(AndroidSchedulers.mainThread())
+//                            .subscribeOn(Schedulers.io())
+//                            .subscribe({ payload ->
+//                                if (payload.isOk) {
+//                                    refresh()
+//                                } else
+//                                    showToast(payload.message)
+//                            }, { e ->
+//                                Trace.e(e)
+//                                showToast("请求失败")
+//                            })
                     SoguApi.getService(application)
-                            .finishApprove(paramId!!)
+                            .cancalLeave(paramId!!)
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribeOn(Schedulers.io())
                             .subscribe({ payload ->
                                 if (payload.isOk) {
-                                    refresh()
+                                    showToast("撤销成功")
+                                    finish()
                                 } else
                                     showToast(payload.message)
                             }, { e ->
@@ -188,48 +201,58 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
                 btn_single.visibility = View.VISIBLE
                 btn_single.text = "审批"
                 btn_single.setOnClickListener {
-                    val inflate = LayoutInflater.from(this).inflate(R.layout.layout_input_dialog, null)
-                    val dialog = MaterialDialog.Builder(this)
-                            .customView(inflate, false)
-                            .cancelable(true)
-                            .build()
-                    dialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                    val commentInput = inflate.find<EditText>(R.id.approval_comments_input)
-                    val veto = inflate.find<TextView>(R.id.veto_comment)
-                    val confirm = inflate.find<TextView>(R.id.confirm_comment)
-                    commentInput.filters = Utils.getFilter(this)
                     if (paramTitle.equals("请假") || paramTitle.equals("出差")) {
+
+                        val inflate = LayoutInflater.from(this).inflate(R.layout.layout_input_dialog1, null)
+                        val dialog = MaterialDialog.Builder(this)
+                                .customView(inflate, false)
+                                .cancelable(true)
+                                .build()
+                        dialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                        val veto = inflate.find<TextView>(R.id.veto_comment)
+                        val confirm = inflate.find<TextView>(R.id.confirm_comment)
                         val title = inflate.find<TextView>(R.id.approval_comments_title)
                         title.text = "是否同意此${paramTitle}申请？"
-                        commentInput.visibility = View.INVISIBLE
-                        commentInput.viewTreeObserver.addOnGlobalLayoutListener {
-                            var params = commentInput.layoutParams as RelativeLayout.LayoutParams
-                            params.height = 100
-                            commentInput.layoutParams = params
-                        }
                         veto.text = "不同意"
-                    }
-                    veto.setOnClickListener {
-                        if (dialog.isShowing) {
-                            dialog.dismiss()
-                        }
-                        if (paramTitle.equals("请假") || paramTitle.equals("出差")) {
+                        veto.setOnClickListener {
+                            if (dialog.isShowing) {
+                                dialog.dismiss()
+                            }
                             examineApprove(-1, "")
-                        } else {
+                        }
+                        confirm.setOnClickListener {
+                            if (dialog.isShowing) {
+                                dialog.dismiss()
+                            }
+                            examineApprove(1, "")
+                        }
+                        dialog.show()
+
+                    } else {
+                        val inflate = LayoutInflater.from(this).inflate(R.layout.layout_input_dialog, null)
+                        val dialog = MaterialDialog.Builder(this)
+                                .customView(inflate, false)
+                                .cancelable(true)
+                                .build()
+                        dialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                        val commentInput = inflate.find<EditText>(R.id.approval_comments_input)
+                        val veto = inflate.find<TextView>(R.id.veto_comment)
+                        val confirm = inflate.find<TextView>(R.id.confirm_comment)
+                        commentInput.filters = Utils.getFilter(this)
+                        veto.setOnClickListener {
+                            if (dialog.isShowing) {
+                                dialog.dismiss()
+                            }
                             showConfirmDialog(-1, commentInput.text.toString())
                         }
-                    }
-                    confirm.setOnClickListener {
-                        if (dialog.isShowing) {
-                            dialog.dismiss()
-                        }
-                        if (paramTitle.equals("请假") || paramTitle.equals("出差")) {
-                            examineApprove(1, "")
-                        } else {
+                        confirm.setOnClickListener {
+                            if (dialog.isShowing) {
+                                dialog.dismiss()
+                            }
                             showConfirmDialog(1, commentInput.text.toString())
                         }
+                        dialog.show()
                     }
-                    dialog.show()
                 }
             }
             6 -> {
