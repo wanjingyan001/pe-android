@@ -19,6 +19,7 @@ class ApproveViewBean {
         var number: String? = null//   string    编号
         var add_time: String? = null//   string    申请时间
         var sp_type: String? = null//  string    审批类型
+        var depart: String? = null//  string    部门
     }
 
     class ValueBean {

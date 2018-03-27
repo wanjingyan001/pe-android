@@ -118,7 +118,7 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
                                         inquireBtn.isEnabled = false
                                     }
                                     3 -> {
-                                        inquireBtn.text = "查询完成"
+                                        inquireBtn.text = "提交查询"
                                         inquireBtn.isEnabled = false
                                     }
                                 }

@@ -336,6 +336,15 @@ class MainNewsFragment : BaseFragment() {
         }
     }
 
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (hidden) {   // 不在最前端显示 相当于调用了onPause();
+
+        } else {  // 在最前端显示 相当于调用了onResume();
+            resetGrid()
+        }
+    }
+
     fun resetGrid() {
         fragments[view_pager.currentItem].setTagList(ArrayList<String>())
         view_pager.visibility = View.VISIBLE

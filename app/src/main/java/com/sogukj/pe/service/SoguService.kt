@@ -645,6 +645,12 @@ interface SoguService {
                        , @Field("content") content: String): Observable<Payload<Object>>
 
     @FormUrlEncoded
+    @POST("/api/Approve/leaveResult")
+    fun examineLeaveApprove(@Field("approval_id") approval_id: Int
+                       , @Field("type") type: Int? = null
+                       , @Field("content") content: String): Observable<Payload<Object>>
+
+    @FormUrlEncoded
     @POST("/api/Approve/applyUrgent")
     fun approveUrgent(@Field("approval_id") approval_id: Int): Observable<Payload<Object>>
 

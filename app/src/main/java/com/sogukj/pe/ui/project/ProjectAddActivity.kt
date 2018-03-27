@@ -96,42 +96,42 @@ class ProjectAddActivity : ToolbarActivity() {
     }
 
     private fun editSave() {
-//        var data = intent.getSerializableExtra(Extras.DATA) as ProjectBean
-//        if (et_name?.text?.trim()?.toString().isNullOrEmpty()) return
-//        data.name = et_name?.text?.trim()?.toString()
-//        data.shortName = et_short_name?.text?.trim()?.toString()
-//        data.legalPersonName = et_faren?.text?.trim()?.toString()
-//        data.regLocation = et_reg_address?.text?.trim()?.toString()
-//        data.creditCode = et_credit_code?.text?.trim()?.toString()
-//        data.info = et_other?.text?.trim()?.toString()
-//
-//        SoguApi.getService(application)
-//                .addProject(name = project.name!!
-//                        , shortName = project.shortName!!
-//                        , creditCode = project.creditCode
-//                        , legalPersonName = project.legalPersonName
-//                        , regLocation = project.regLocation
-//                        , info = project.info
-//                        , type = 6)
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribeOn(Schedulers.io())
-//                .subscribe({ payload ->
-//                    if (payload.isOk) {
-//                        showToast("保存成功")
-//                        finish()
-//                    } else {
-//                        showToast(payload.message)
-//                    }
-//
-//                }, { e ->
-//                    Trace.e(e)
-//                    hideProgress()
-//                    showToast("保存失败")
-//                }, {
-//                    hideProgress()
-//                }, {
-//                    showProgress("正在提交")
-//                })
+        var data = intent.getSerializableExtra(Extras.DATA) as ProjectBean
+        if (et_name?.text?.trim()?.toString().isNullOrEmpty()) return
+        data.name = et_name?.text?.trim()?.toString()
+        data.shortName = et_short_name?.text?.trim()?.toString()
+        data.legalPersonName = et_faren?.text?.trim()?.toString()
+        data.regLocation = et_reg_address?.text?.trim()?.toString()
+        data.creditCode = et_credit_code?.text?.trim()?.toString()
+        data.info = et_other?.text?.trim()?.toString()
+
+        SoguApi.getService(application)
+                .addProject(name = data.name!!
+                        , shortName = data.shortName!!
+                        , creditCode = data.creditCode
+                        , legalPersonName = data.legalPersonName
+                        , regLocation = data.regLocation
+                        , info = data.info
+                        , type = 6)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        showToast("保存成功")
+                        finish()
+                    } else {
+                        showToast(payload.message)
+                    }
+
+                }, { e ->
+                    Trace.e(e)
+                    hideProgress()
+                    showToast("保存失败")
+                }, {
+                    hideProgress()
+                }, {
+                    showProgress("正在提交")
+                })
     }
 
     companion object {

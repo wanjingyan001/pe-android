@@ -243,9 +243,9 @@
                             android:layout_height="40dp"
                             android:layout_margin="5dp"
                             android:layout_weight="1"
-                            android:background="@drawable/bg_btn_gray"
+                            android:background="@drawable/yongyin_f"
                             android:text="重置"
-                            android:textColor="@color/text_1"
+                            android:textColor="#1787fb"
                             android:textSize="16sp" />
 
                         <Button
@@ -254,9 +254,9 @@
                             android:layout_height="40dp"
                             android:layout_margin="5dp"
                             android:layout_weight="1"
-                            android:background="@drawable/bg_btn_blue"
+                            android:background="@drawable/yongyin_t"
                             android:text="确定"
-                            android:textColor="@color/white"
+                            android:textColor="#ffffff"
                             android:textSize="16sp" />
                     </LinearLayout>
                 </LinearLayout>

@@ -65,7 +65,7 @@
             app:icon_main="@drawable/ic_main_weekly"
             app:layout_columnWeight="1"
 
-            app:sub_title="周报、月报"
+            app:sub_title="员工周报"
             app:tag_text="4"
             app:title="周报" />
     </android.support.v7.widget.GridLayout>

@@ -18,6 +18,7 @@ import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.MessageBean
 import com.sogukj.pe.ui.SupportEmptyView
+import com.sogukj.pe.ui.approve.LeaveBusinessApproveActivity
 import com.sogukj.pe.ui.approve.SealApproveActivity
 import com.sogukj.pe.ui.approve.SignApproveActivity
 import com.sogukj.pe.util.ColorUtil
@@ -92,6 +93,8 @@ class MessageListActivity : ToolbarActivity() {
                 SealApproveActivity.start(this, data, is_mine)
             else if (data.type == 3)
                 SignApproveActivity.start(this, data, is_mine)
+            else if (data.type == 1)
+                LeaveBusinessApproveActivity.start(this, data, is_mine)//出差  SealApproveActivity
         }
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = LinearLayoutManager.VERTICAL

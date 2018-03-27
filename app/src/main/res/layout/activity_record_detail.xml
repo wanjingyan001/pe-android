@@ -116,6 +116,8 @@
 
             <EditText
                 android:id="@+id/et_des"
+                android:layout_height="100dp"
+                android:gravity="left|top"
                 style="@style/ItemTextValue" />
         </TableRow>
     </TableLayout>

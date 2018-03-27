@@ -102,7 +102,7 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
         //const val TYPE_TC = 7
         if (type == ProjectListFragment.TYPE_DY) {
             proj_stage.text = "储 备"
-            edit.visibility = View.GONE
+            //edit.visibility = View.GONE
             history.visibility = View.GONE
         } else if (type == ProjectListFragment.TYPE_CB) {
             proj_stage.text = "立 项"
@@ -225,12 +225,12 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
                     Trace.e(e)
                     tv_more_yq.visibility = View.GONE
                 },{
-                    if (adapterNeg.dataList.size < 3)
+                    if (adapterNeg.dataList.size <= 3)
                         tv_more.visibility = View.GONE
                     else
                         tv_more.visibility = View.VISIBLE
 
-                    if (adapterYuqin.dataList.size < 3)
+                    if (adapterYuqin.dataList.size <= 3)
                         tv_more_yq.visibility = View.GONE
                     else
                         tv_more_yq.visibility = View.VISIBLE

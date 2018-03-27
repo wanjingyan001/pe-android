@@ -69,7 +69,7 @@
                         style="@style/ItemTextLabel"
                         android:text="金额" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/et_amount"
                         style="@style/ItemTextValue"
                         android:hint="" />
