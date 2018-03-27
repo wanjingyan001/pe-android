@@ -60,9 +60,9 @@
                 style="@style/TableTextValue"
                 android:hint="未填写" />
 
-            <ImageView
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_arrow_r" />
+            <!--<ImageView-->
+            <!--android:layout_gravity="center_vertical"-->
+            <!--android:src="@drawable/ic_arrow_r" />-->
         </TableRow>
 
         <TableRow
@@ -78,9 +78,9 @@
                 style="@style/TableTextValue"
                 android:hint="未填写" />
 
-            <ImageView
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_arrow_r" />
+            <!--<ImageView-->
+            <!--android:layout_gravity="center_vertical"-->
+            <!--android:src="@drawable/ic_arrow_r" />-->
         </TableRow>
 
         <TableRow
@@ -96,9 +96,9 @@
                 style="@style/TableTextValue"
                 android:hint="未填写" />
 
-            <ImageView
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_arrow_r" />
+            <!--<ImageView-->
+            <!--android:layout_gravity="center_vertical"-->
+            <!--android:src="@drawable/ic_arrow_r" />-->
         </TableRow>
 
         <TableRow
@@ -114,10 +114,10 @@
                 style="@style/TableTextValue"
                 android:hint="未填写" />
 
-            <ImageView
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_arrow_r"
-                android:visibility="gone" />
+            <!--<ImageView-->
+            <!--android:layout_gravity="center_vertical"-->
+            <!--android:src="@drawable/ic_arrow_r"-->
+            <!--android:visibility="gone" />-->
         </TableRow>
 
         <TableRow
@@ -134,9 +134,9 @@
                 style="@style/TableTextValue"
                 android:hint="未填写" />
 
-            <ImageView
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_arrow_r" />
+            <!--<ImageView-->
+            <!--android:layout_gravity="center_vertical"-->
+            <!--android:src="@drawable/ic_arrow_r" />-->
         </TableRow>
 
 
@@ -153,9 +153,9 @@
                 style="@style/TableTextValue"
                 android:hint="未填写" />
 
-            <ImageView
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_arrow_r" />
+            <!--<ImageView-->
+            <!--android:layout_gravity="center_vertical"-->
+            <!--android:src="@drawable/ic_arrow_r" />-->
         </TableRow>
 
         <TableRow

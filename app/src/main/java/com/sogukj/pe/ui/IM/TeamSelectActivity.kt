@@ -96,7 +96,7 @@ class TeamSelectActivity : AppCompatActivity() {
                         val id = it
                         departList.forEach {
                             it.data?.forEach {
-                                if (id.toInt() == it.uid) {
+                                if (id == it.uid.toString()) {
                                     alreadyList.add(it)
                                 }
                             }
@@ -131,7 +131,6 @@ class TeamSelectActivity : AppCompatActivity() {
                 alreadyList = ArrayList()
                 accounts.forEach {
                     val bean = UserBean()
-                    bean.uid = it.toInt()
                     bean.uid = it.toInt()
                     bean.user_id = it.toInt()
                     alreadyList.add(bean)

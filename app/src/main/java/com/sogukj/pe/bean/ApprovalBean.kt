@@ -1,8 +1,5 @@
 package com.sogukj.pe.bean
 
-import android.graphics.Color
-import android.widget.TextView
-import org.jetbrains.anko.textColor
 import java.io.Serializable
 
 /**

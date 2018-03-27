@@ -23,6 +23,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.sogukj.pe.util.DownloadUtil
 import com.sogukj.pe.util.OpenFileUtil
+import com.sogukj.pe.util.Utils
 import kotlinx.android.synthetic.main.activity_splash.*
 import java.util.*
 import me.leolin.shortcutbadger.ShortcutBadger
@@ -39,6 +40,20 @@ class SplashActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
         ShortcutBadger.removeCount(this)
+        when (Utils.getEnvironment()) {
+            "civc" -> {
+                splash_bg.imageResource = R.drawable.img_logo_splash_zd
+            }
+            "ht" -> {
+                splash_bg.imageResource = R.drawable.img_logo_splash_ht
+                val params = splash_bg.layoutParams as FrameLayout.LayoutParams
+                params.setMargins(0, 0, 0, Utils.dpToPx(this, 40))
+                splash_bg.layoutParams = params
+            }
+            else -> {
+                splash_bg.imageResource = R.drawable.img_logo_splash
+            }
+        }
 //        val dialog = MaterialDialog.Builder(this)
 //                .customView(R.layout.dialog_updated, false)
 //                .theme(Theme.LIGHT)

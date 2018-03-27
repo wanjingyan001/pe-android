@@ -58,8 +58,8 @@
 
                 <ImageView
                     android:id="@+id/iv_search"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_gravity="center|right"
                     android:src="@drawable/ic_search" />
 
@@ -256,7 +256,7 @@
                             android:layout_weight="1"
                             android:background="@drawable/yongyin_t"
                             android:text="确定"
-                            android:textColor="#ffffff"
+                            android:textColor="@color/white"
                             android:textSize="16sp" />
                     </LinearLayout>
                 </LinearLayout>

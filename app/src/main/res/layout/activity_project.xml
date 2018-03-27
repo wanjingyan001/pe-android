@@ -64,28 +64,28 @@
                     android:id="@+id/im"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/lt" />
+                    android:background="@drawable/lt" />
 
                 <ImageView
                     android:id="@+id/history"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_marginLeft="20dp"
-                    android:src="@drawable/ls" />
+                    android:background="@drawable/ls" />
 
                 <ImageView
                     android:id="@+id/edit"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_marginLeft="20dp"
-                    android:src="@drawable/edit" />
+                    android:background="@drawable/edit" />
 
                 <ImageView
                     android:id="@+id/delete"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_marginLeft="20dp"
-                    android:src="@drawable/delete_all" />
+                    android:background="@drawable/delete_all" />
             </LinearLayout>
         </android.support.v7.widget.Toolbar>
 
@@ -335,8 +335,7 @@
                 android:id="@+id/list_negative"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
-                />
+                android:background="@color/white" />
             <!--<com.sogukj.pe.view.ListViewCompat-->
                 <!--android:id="@+id/list_negative"-->
                 <!--android:layout_width="match_parent"-->
@@ -398,8 +397,7 @@
                 android:id="@+id/list_yuqin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
-                />
+                android:background="@color/white" />
             <!--<com.sogukj.pe.view.ListViewCompat-->
                 <!--android:id="@+id/list_yuqin"-->
                 <!--android:layout_width="match_parent"-->

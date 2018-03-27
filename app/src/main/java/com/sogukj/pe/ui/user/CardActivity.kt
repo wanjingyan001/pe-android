@@ -65,7 +65,7 @@ class CardActivity : Activity() {
         cardCompanyName.text = bean.company
         cardPhone.text = bean.phone
         cardEmail.text = bean.email
-        cardAddress.text = bean.memo
+        cardAddress.text = bean.address
     }
 
     private fun inRangeOfView(view: View, event: MotionEvent): Boolean {

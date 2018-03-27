@@ -85,7 +85,7 @@ class FundUploadActivity : ToolbarActivity() {
         tv_user.text = user?.name
         Glide.with(this)
                 .load(user?.headImage())
-                .apply(RequestOptions().error(R.drawable.img_logo_user))
+                .apply(RequestOptions().error(Utils.defaultHeadImg()))
                 .into(iv_user)
         uploadAdapter = UploadAdapter(this, uploadList)
         upload_file_list.layoutManager = LinearLayoutManager(this)

@@ -5,9 +5,12 @@ import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.support.annotation.DrawableRes
 import android.support.constraint.ConstraintLayout
 import android.support.v7.app.AppCompatActivity
+import android.view.Gravity
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.google.gson.JsonSyntaxException
@@ -16,12 +19,14 @@ import com.umeng.message.PushAgent
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import com.sogukj.pe.R
+import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.find
+import org.jetbrains.anko.imageResource
 
 /**
  * Created by qinfei on 17/7/17.
  */
-abstract class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity : AppCompatActivity(),AnkoLogger {
     val context: BaseActivity
         get() = this
 
@@ -155,6 +160,30 @@ abstract class BaseActivity : AppCompatActivity() {
             is UnknownHostException -> showToast("网络连接出错，请联网")
             is SocketTimeoutException -> showToast("连接超时")
             else -> showToast("未知错误")
+        }
+    }
+
+
+    fun showCustomToast(@DrawableRes resId: Int?, text: CharSequence?) {
+        val inflate = layoutInflater.inflate(R.layout.layout_custom_toast, null)
+        val icon = inflate.find<ImageView>(R.id.toast_icon)
+        val tv = inflate.find<TextView>(R.id.toast_tv)
+        if (resId != null) {
+            icon.imageResource = resId
+        } else {
+            icon.visibility = View.GONE
+        }
+        tv.text = text
+        if (toast != null) {
+            toast!!.cancel()
+        } else {
+            toast = Toast(applicationContext)
+        }
+        toast?.let {
+            it.setGravity(Gravity.CENTER_VERTICAL, 0, -50)
+            it.duration = Toast.LENGTH_SHORT
+            it.view = inflate
+            it.show()
         }
     }
 

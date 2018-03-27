@@ -578,6 +578,7 @@ public class FileUtil {
     public static String getFileType(String filePath) {
         HashMap<String, String> mFileTypes = new HashMap<>();
         mFileTypes.put("FFD8FF", "jpg");
+        mFileTypes.put("89504E", "jpeg");
         mFileTypes.put("89504E47", "png");
         mFileTypes.put("47494638", "gif");
         mFileTypes.put("49492A00", "tif");
@@ -697,7 +698,7 @@ public class FileUtil {
         File file = new File(fileAbsolutePath);
         if (file.exists()){
             File[] subFile = file.listFiles();
-            if (subFile.length>0){
+            if (subFile!=null&&subFile.length>0){
                 for (File aSubFile : subFile) {
                     // 判断是否为文件夹
                     if (!aSubFile.isDirectory()) {

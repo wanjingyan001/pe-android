@@ -8,6 +8,7 @@
     tools:context="com.sogukj.pe.ui.SplashActivity">
 
     <ImageView
+        android:id="@+id/splash_bg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"

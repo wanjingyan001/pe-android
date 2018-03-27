@@ -15,7 +15,7 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
             // 设置支持的SO库架构
-            abiFilters 'armeabi' //, 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
+            abiFilters 'armeabi', 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
         }
     }
     signingConfigs {
@@ -79,17 +79,61 @@ Umeng_MESSAGE_SECRET: "a4bb361310d9aee916f2cc43c5dbda5c"
         javaMaxHeapSize "4g"
         maxProcessCount 4
     }
-//    productFlavors {
-//        ht {
-//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "ht"]
-//        }
-//        kuake {
-//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "kuake"]
-//        }
-//        yager {
-//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "yager"]
-//        }
-//    }
+    flavorDimensions "default"
+    productFlavors {
+        pe {
+            dimension "default"
+            applicationId "com.sogukj.pe"
+            resValue "string", "app_name", "海通创新"
+            resValue "bool", "isrRank", 'true'
+            buildConfigField "String", "ENVIRONMENT", '"pe"'
+            manifestPlaceholders = [appId               : "com.sogukj.pe",
+                                    app_icon            : "@mipmap/ic_launcher",
+                                    AMAP_KEY            : "9204f7dcdd8c2beba10c94dbe96bd062",
+                                    IM_KEY              : "a0af02d86ecfb1ee160dde8369a5035e",
+                                    Umeng_KEY           : "59b781c607fe652e44000165",
+                                    Umeng_MESSAGE_SECRET: "a4bb361310d9aee916f2cc43c5dbda5c",
+                                    NIMContentProvider  : "com.sogukj.pe.ipc.provider",
+                                    FileProvider        : "com.sogukj.pe.fileProvider",
+                                    UMENG_CHANNEL_VALUE : "pe"]
+        }
+        civc {
+            dimension "default"
+            applicationId "com.sougukj.civc"
+            resValue "string", "app_name", "中缔资本"
+            resValue "bool", "isrRank", 'true'
+            buildConfigField "String", "ENVIRONMENT", '"civc"'
+            manifestPlaceholders = [appId               : "com.sougukj.civc",
+                                    app_icon            : "@mipmap/ic_launcher_zd",
+                                    AMAP_KEY            : "36f1dcf32ce10480534b61fbfa1cebff",
+                                    IM_KEY              : "91e18e33451e352ee77614c9cddeb5f0",
+                                    Umeng_KEY           : "5aa746308f4a9d365a0001c1",
+                                    Umeng_MESSAGE_SECRET: "d2962317e2df71aa126b08585f45dece",
+                                    NIMContentProvider  : "com.sougukj.civc.ipc.provider",
+                                    FileProvider        : "com.sougukj.civc.fileProvider",
+                                    UMENG_CHANNEL_VALUE : "civc"]
+        }
+        ht {
+            dimension "default"
+            applicationId "com.sogukj.pe.ht"
+            resValue "string", "app_name", "海通创新"
+            resValue "bool", "isrRank", 'true'
+            buildConfigField "String", "ENVIRONMENT", '"ht"'
+            manifestPlaceholders = [appId               : "com.sogukj.pe.ht",
+                                    app_icon            : "@mipmap/ic_launcher_ht",
+                                    AMAP_KEY            : "9204f7dcdd8c2beba10c94dbe96bd062",
+                                    IM_KEY              : "5d8ada31fe2ba9cb419b5f63a95e8756",
+                                    Umeng_KEY           : "59ddf11e8f4a9d7c4b000116",
+                                    Umeng_MESSAGE_SECRET: "8a3cd80e07007a0463e9b12f758b727b",
+                                    NIMContentProvider  : "com.sogukj.pe.ht.ipc.provider",
+                                    FileProvider        : "com.sogukj.pe.ht.fileProvider",
+                                    UMENG_CHANNEL_VALUE : "ht"]
+        }
+    }
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
 //    applicationVariants.all { variant ->
 //        variant.outputs.each { output ->
 //            output.outputFile = new File(output.outputFile.parent,

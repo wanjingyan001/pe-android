@@ -182,7 +182,6 @@ class TeamScheduleFragment : BaseFragment(), ScheduleItemClickListener {
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         payload.payload?.let {
-                            Log.d("WJY", Gson().toJson(it))
                             val map = HashMap<String, String>()
                             it.forEach {
                                 map.put(it, "1")
@@ -201,7 +200,7 @@ class TeamScheduleFragment : BaseFragment(), ScheduleItemClickListener {
 
     var isLoading = false
     var isRefreshing = false
-    fun initList() {
+    private fun initList() {
         teamAdapter = TeamAdapter(context, data)
         teamList.layoutManager = LinearLayoutManager(context)
         teamList.adapter = teamAdapter
@@ -243,7 +242,6 @@ class TeamScheduleFragment : BaseFragment(), ScheduleItemClickListener {
     override fun onItemClick(view: View, position: Int) {
         when (view.id) {
             R.id.selectTv -> {
-//                SelectUserActivity.start(this, selectUser)
                 TeamSelectActivity.startForResult(this,true, selectUser,false,false)
             }
             R.id.teamItemLayout -> {
@@ -287,7 +285,7 @@ class TeamScheduleFragment : BaseFragment(), ScheduleItemClickListener {
         }
     }
 
-    fun getCompanyDetail(cId: Int, type: Int) {
+    private fun getCompanyDetail(cId: Int, type: Int) {
         SoguApi.getService(activity.application)
                 .singleCompany(cId)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -316,10 +314,10 @@ class TeamScheduleFragment : BaseFragment(), ScheduleItemClickListener {
 
     }
 
-    var selectUser: ArrayList<UserBean>? = null
+    private var selectUser: ArrayList<UserBean>? = null
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == Extras.REQUESTCODE && resultCode == Activity.RESULT_OK && data != null) {
+        if (requestCode == Extras.REQUESTCODE && resultCode == Extras.RESULTCODE && data != null) {
             selectUser = data.getSerializableExtra(Extras.DATA) as ArrayList<UserBean>
             selectUser?.let {
                 it.forEachIndexed { index, userBean ->

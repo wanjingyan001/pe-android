@@ -29,12 +29,29 @@ class ProjectAddActivity : ToolbarActivity() {
         } else if (type == "EDIT") {
             setTitle("编辑调研项目")
             var data = intent.getSerializableExtra(Extras.DATA) as ProjectBean
-            et_name.setText(data.name)
-            et_short_name.setText(data.shortName)
-            et_faren.setText(data.legalPersonName)
-            et_reg_address.setText(data.regLocation)
-            et_credit_code.setText(data.creditCode)
-            et_other.setText(data.info)
+            SoguApi.getService(application)
+                    .showProject(data.company_id!!)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (payload.isOk) {
+                            payload.payload?.apply {
+                                et_name.setText(name)
+                                et_name.setSelection(name!!.length)
+                                et_short_name.setText(shortName)
+                                et_faren.setText(legalPersonName)
+                                et_reg_address.setText(regLocation)
+                                et_credit_code.setText(creditCode)
+                                et_other.setText(info)
+                            }
+                        } else {
+                            showToast(payload.message)
+                        }
+
+                    }, { e ->
+                        Trace.e(e)
+                        ToastError(e)
+                    })
         }
         btn_commit.setOnClickListener {
             if (type == "ADD") {
@@ -106,7 +123,8 @@ class ProjectAddActivity : ToolbarActivity() {
         data.info = et_other?.text?.trim()?.toString()
 
         SoguApi.getService(application)
-                .addProject(name = data.name!!
+                .addProject(company_id = data.company_id
+                        , name = data.name!!
                         , shortName = data.shortName!!
                         , creditCode = data.creditCode
                         , legalPersonName = data.legalPersonName

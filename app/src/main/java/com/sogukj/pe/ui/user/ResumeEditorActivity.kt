@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.ImageView
+import android.widget.RelativeLayout
 import android.widget.TextView
 import cn.finalteam.rxgalleryfinal.rxbus.RxBus
 import com.framework.base.BaseActivity
@@ -41,6 +42,7 @@ class ResumeEditorActivity : BaseActivity(), View.OnClickListener {
         fun start2(ctx: Activity?, dataList: ArrayList<WorkEducationBean>) {
             val intent = Intent(ctx, ResumeEditorActivity::class.java)
             intent.putExtra(Extras.TYPE, WORK)
+            intent.flags = WORK
             intent.putParcelableArrayListExtra(Extras.LIST, dataList)
             ctx?.startActivity(intent)
         }
@@ -48,6 +50,7 @@ class ResumeEditorActivity : BaseActivity(), View.OnClickListener {
         fun start(ctx: Activity?, dataList: ArrayList<EducationBean>) {
             val intent = Intent(ctx, ResumeEditorActivity::class.java)
             intent.putExtra(Extras.TYPE, EDU)
+            intent.flags = EDU
             intent.putParcelableArrayListExtra(Extras.LIST, dataList)
             ctx?.startActivity(intent)
         }
@@ -57,13 +60,14 @@ class ResumeEditorActivity : BaseActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_resume_editor)
         Utils.setWindowStatusBarColor(this, R.color.white)
-        toolbar_title.text = "个人简历"
         addTv.text = "编辑"
         back.setOnClickListener(this)
         addTv.setOnClickListener(this)
-        intExtra = intent.getIntExtra(Extras.TYPE, -1)
+//        intExtra = intent.getIntExtra(Extras.TYPE, -1)
+        intExtra = intent.flags
         when (intExtra) {
             EDU -> {
+                toolbar_title.text = "教育经历"
                 tv_add_work_expericence.visibility = View.GONE
                 val list = intent.getParcelableArrayListExtra<EducationBean>(Extras.LIST)
                 eduadapter = RecyclerAdapter(this, { _adapter, parent, position ->
@@ -71,8 +75,10 @@ class ResumeEditorActivity : BaseActivity(), View.OnClickListener {
                     object : RecyclerHolder<EducationBean>(convertView) {
                         val name = convertView.find<TextView>(R.id.name)
                         val time = convertView.find<TextView>(R.id.time)
+                        val right = convertView.find<ImageView>(R.id.ic_right)
                         val delete = convertView.find<TextView>(R.id.delete)
                         val deleteImg = convertView.find<ImageView>(R.id.deleteImg)
+                        val content = convertView.find<RelativeLayout>(R.id.contentLayout)
                         val educationLayout = convertView.find<SwipeMenuLayout>(R.id.educationLayout)
                         override fun setData(view: View, data: EducationBean, position: Int) {
                             name.text = data.school
@@ -86,17 +92,25 @@ class ResumeEditorActivity : BaseActivity(), View.OnClickListener {
                             deleteImg.setOnClickListener {
                                 educationLayout.smoothExpand()
                             }
+                            if (data.isShow) {
+                                right.visibility = View.GONE
+                                content.setOnClickListener(null)
+                            } else {
+                                right.visibility = View.VISIBLE
+                                content.setOnClickListener {
+                                    EducationActivity.start(this@ResumeEditorActivity, data)
+                                }
+                            }
                         }
-
                     }
                 })
                 eduadapter.dataList.addAll(list)
                 resumeList.layoutManager = LinearLayoutManager(this)
                 resumeList.adapter = eduadapter
-
                 tv_add_education.setOnClickListener(this)
             }
             WORK -> {
+                toolbar_title.text = "工作经历"
                 tv_add_education.visibility = View.GONE
                 val list = intent.getParcelableArrayListExtra<WorkEducationBean>(Extras.LIST)
                 workAdapter = RecyclerAdapter(this, { _adapter, parent, position ->
@@ -104,8 +118,10 @@ class ResumeEditorActivity : BaseActivity(), View.OnClickListener {
                     object : RecyclerHolder<WorkEducationBean>(convertView) {
                         val name = convertView.find<TextView>(R.id.name)
                         val time = convertView.find<TextView>(R.id.time)
+                        val right = convertView.find<ImageView>(R.id.ic_right)
                         val delete = convertView.find<TextView>(R.id.delete)
                         val deleteImg = convertView.find<ImageView>(R.id.deleteImg)
+                        val content = convertView.find<RelativeLayout>(R.id.contentLayout)
                         val educationLayout = convertView.find<SwipeMenuLayout>(R.id.educationLayout)
                         override fun setData(view: View, data: WorkEducationBean, position: Int) {
                             name.text = data.company
@@ -115,9 +131,18 @@ class ResumeEditorActivity : BaseActivity(), View.OnClickListener {
                                     deleteExperience(it, 2, position)
                                 }
                             }
-                            deleteImg.visibility = if (data.isShow) View.VISIBLE else View.GONE
+                            deleteImg.visibility = if (data.isShow!!) View.VISIBLE else View.GONE
                             deleteImg.setOnClickListener {
                                 educationLayout.smoothExpand()
+                            }
+                            if (data.isShow!!) {
+                                right.visibility = View.GONE
+                                content.setOnClickListener(null)
+                            } else {
+                                right.visibility = View.VISIBLE
+                                content.setOnClickListener {
+                                    WorkExpericenceAddActivity.start(this@ResumeEditorActivity, data, data.trade_name)
+                                }
                             }
                         }
                     }
@@ -204,12 +229,37 @@ class ResumeEditorActivity : BaseActivity(), View.OnClickListener {
             when (resultCode) {
                 Extras.RESULTCODE -> {
                     val list = data.getParcelableExtra<WorkEducationBean>(Extras.LIST)
-                    workAdapter.dataList.add(list)
+                    val bean = workAdapter.dataList.find { it.id == list.id }
+                    if (bean == null) {
+                        workAdapter.dataList.add(list)
+                    } else {
+                        bean.employDate = list.employDate
+                        bean.leaveDate = list.leaveDate
+                        bean.company = list.company
+                        bean.responsibility = list.responsibility
+                        bean.jobInfo = list.jobInfo
+                        bean.department = list.department
+                        bean.companyScale = list.companyScale
+                        bean.companyProperty = list.companyProperty
+                        bean.trade = list.trade
+                        bean.trade_name = data.type
+                        bean.pid = list.pid
+                    }
                     workAdapter.notifyDataSetChanged()
                 }
                 Extras.RESULTCODE2 -> {
                     val list = data.getParcelableExtra<EducationBean>(Extras.LIST2)
-                    eduadapter.dataList.add(list)
+                    val bean = eduadapter.dataList.find { it.id == list.id }
+                    if (bean == null){
+                        eduadapter.dataList.add(list)
+                    }else{
+                        bean.toSchoolDate = list.toSchoolDate
+                        bean.graduationDate = list.graduationDate
+                        bean.school = list.school
+                        bean.education = list.education
+                        bean.major = list.major
+                        bean.majorInfo = list.majorInfo
+                    }
                     eduadapter.notifyDataSetChanged()
                 }
             }

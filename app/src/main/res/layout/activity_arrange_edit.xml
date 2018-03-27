@@ -3,13 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#f7f9fc"
     tools:context="com.sogukj.pe.ui.calendar.ArrangeEditActivity">
 
     <include layout="@layout/toolbar" />
 
     <com.sogukj.pe.view.HeaderRecyclerView
         android:id="@+id/arrangeEditList"
-        android:background="#f7f9fc"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

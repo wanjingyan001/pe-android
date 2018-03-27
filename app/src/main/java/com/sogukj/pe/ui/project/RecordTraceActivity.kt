@@ -101,12 +101,14 @@ class RecordTraceActivity : ToolbarActivity() {
     }
 
     fun load(it: Int) {
+        contentLayout.visibility = View.GONE
         SoguApi.getService(application)
                 .recodeInfo(it)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
+                        contentLayout.visibility = View.VISIBLE
                         var data = payload.payload
                         Log.d("WJY",Gson().toJson(payload.payload))
                         data?.apply {

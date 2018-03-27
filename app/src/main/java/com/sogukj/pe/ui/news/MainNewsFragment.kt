@@ -29,6 +29,9 @@ import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import com.lcodecore.tkrefreshlayout.footer.BallPulseView
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
+
+import com.sogukj.service.SoguApi
+import com.sogukj.util.Store
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.NewsBean
 import com.sogukj.pe.ui.main.MainActivity
@@ -39,8 +42,6 @@ import com.sogukj.pe.view.ArrayPagerAdapter
 import com.sogukj.pe.view.FlowLayout
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
-import com.sogukj.service.SoguApi
-import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_main_news.*
@@ -376,6 +377,7 @@ class MainNewsFragment : BaseFragment() {
     var key = ""
     var page = 1
     fun doSearch(text: String) {
+        search_view.et_search.setSelection(text.length)
         this.key = text
         if (TextUtils.isEmpty(key)) return
         val user = Store.store.getUser(baseActivity!!)

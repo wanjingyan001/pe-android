@@ -186,20 +186,20 @@ class WeeklyWaitToWatchFragment : BaseFragment(), View.OnClickListener {
 
 //        start.text = formatTime(startBean)
 //        end.text = formatTime(endBean)
-        start.text = ""
-        end.text = ""
+        start.text = "开始时间"
+        end.text = "结束时间"
 
         start.setOnClickListener {
             if (spinner_data.size == 0) {
                 return@setOnClickListener
             }
-            if (start.text != "") {
+            if (start.text != "开始时间") {
                 calendar.time = format.parse(start.text.toString())
             } else {
                 calendar = Calendar.getInstance()
             }
             val timePicker = TimePickerView.Builder(context, { date, view ->
-                if (end.text.trim() == "") {
+                if (end.text.trim() == "结束时间") {
                     start.text = format.format(date)
                     return@Builder
                 }
@@ -231,13 +231,13 @@ class WeeklyWaitToWatchFragment : BaseFragment(), View.OnClickListener {
             if (spinner_data.size == 0) {
                 return@setOnClickListener
             }
-            if (end.text != "") {
+            if (end.text != "结束时间") {
                 calendar.time = format.parse(end.text.toString())
             } else {
                 calendar = Calendar.getInstance()
             }
             val timePicker = TimePickerView.Builder(context, { date, view ->
-                if (start.text.trim() == "") {
+                if (start.text.trim() == "开始时间") {
                     end.text = format.format(date)
                     return@Builder
                 }

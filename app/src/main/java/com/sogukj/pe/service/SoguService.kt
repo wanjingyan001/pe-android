@@ -82,7 +82,8 @@ interface SoguService {
     @FormUrlEncoded
     @POST("/api/news/applyNewProject")
     fun addProject(
-            @Field("name") name: String
+            @Field("company_id") company_id: Int? = null
+            , @Field("name") name: String
             , @Field("shortName") shortName: String
             , @Field("legalPersonName") legalPersonName: String? = null
             , @Field("regLocation") regLocation: String? = null
@@ -91,6 +92,11 @@ interface SoguService {
             , @Field("type") type: Int? = null
             , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
     ): Observable<Payload<Object>>
+
+    @FormUrlEncoded
+    @POST("/api/news/showProject")
+    fun showProject(
+            @Field("company_id") company_id: Int):Observable<Payload<ProjectBean>>
 
     @FormUrlEncoded
     @POST("/api/Listinformation/volatility")
@@ -1187,4 +1193,47 @@ interface SoguService {
     @FormUrlEncoded
     @POST("/api/Approve/cancelLeave")
     fun cancalLeave(@Field("approval_id") approval_id: Int): Observable<Payload<Any>>
+    
+    
+       //每周工作安排列表
+    @FormUrlEncoded
+    @POST("/api/Weekly/getWeeklyWorkList")
+    fun getWeeklyWorkList(@Field("offset") offset: Int): Observable<Payload<List<WeeklyArrangeBean>>>
+
+    //提交|修改 每周工作安排
+    @FormUrlEncoded
+    @POST("/api/Weekly/submitWeeklyWork")
+    fun submitWeeklyWork(@Field("data") data: String): Observable<Payload<Any>>
+
+    //.栏目列表
+    @POST("/api/Partybuild/categoryList")
+    fun categoryList(): Observable<Payload<List<PartyTabBean>>>
+
+    //栏目下的文章和文件列表
+    @FormUrlEncoded
+    @POST("/api/Partybuild/categoryInfo")
+    fun categoryInfo(@Field("id") id: Int): Observable<Payload<PartyItemBean>>
+
+    //上传栏目的文件
+    @POST("/api/Partybuild/uploadCategoryFile")
+    fun uploadPartyFile(@Body body: RequestBody): Observable<Payload<Any>>
+
+    //文章详情
+    @FormUrlEncoded
+    @POST("/api/Partybuild/articleInfo")
+    fun articleInfo(@Field("id") id: Int): Observable<Payload<ArticleDetail>>
+
+    //栏目下的文章列表(查看更多)
+    @FormUrlEncoded
+    @POST("/api/Partybuild/articleList")
+    fun articleList(@Field("id") id: Int,
+                    @Field("page") page: Int,
+                    @Field("pageSize") pageSize: Int? = 20): Observable<Payload<List<ArticleBean>>>
+
+    //栏目下的文件列表(查看更多)
+    @FormUrlEncoded
+    @POST("api/Partybuild/categoryFileList")
+    fun categoryFileList(@Field("id") id: Int,
+                         @Field("page") page: Int,
+                         @Field("pageSize") pageSize: Int? = 20): Observable<Payload<List<FileBean>>>
 }

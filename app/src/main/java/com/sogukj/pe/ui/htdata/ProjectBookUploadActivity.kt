@@ -87,7 +87,7 @@ class ProjectBookUploadActivity : ToolbarActivity() {
 
         Glide.with(this)
                 .load(user?.headImage())
-                .apply(RequestOptions().error(R.drawable.img_logo_user))
+                .apply(RequestOptions().error(Utils.defaultHeadImg()))
                 .into(iv_user)
         tv_title.text = project.name
         uploadAdapter = UploadAdapter(this, uploadList)

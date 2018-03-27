@@ -109,6 +109,10 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                         selectTypeLayout.visibility = View.VISIBLE
                     }
                 }
+                start = Date(System.currentTimeMillis())
+                endTime = Date(System.currentTimeMillis() + 3600 * 1000)
+                startTime.text = Utils.getTime(start, "MM月dd日 E HH:mm")
+                deadline.text = Utils.getTime(endTime, "MM月dd日 E HH:mm")
             }
             MODIFY -> {
                 when (name) {
@@ -146,6 +150,7 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
         remind.setOnClickListener(this)
     }
 
+    var seconds: Int? = null
     fun doRequest() {
         data_id?.let {
             SoguApi.getService(application)
@@ -155,7 +160,6 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                     .subscribe({ payload ->
                         if (payload.isOk) {
                             payload.payload?.let {
-                                Log.d("WJY", Gson().toJson(it))
                                 companyId = it.company_id
                                 relatedProject.text = it.cName
                                 missionDetails.setText(it.info)
@@ -163,7 +167,20 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                                 endTime = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(it.end_time)
                                 startTime.text = Utils.getTime(start, "MM月dd日 E HH:mm")
                                 deadline.text = Utils.getTime(endTime, "MM月dd日 E HH:mm")
-                                remind.text = "截止前${(it.clock)?.div(60)}分钟"
+                                if (it.clock == null) {
+                                    remind.text = "不提醒"
+                                } else {
+                                    remind.text = when (it.clock!!.div(60)) {
+                                        0 -> "不提醒"
+                                        5 -> "提前5分钟"
+                                        15 -> "提前15分钟"
+                                        30 -> "提前30分钟"
+                                        60 -> "提前1小时"
+                                        60 * 24 -> "提前1天"
+                                        else -> "提前${it.clock!!.div(60)}分钟"
+                                    }
+                                }
+                                seconds = it.clock
                                 it.executor?.forEach {
                                     val bean = UserBean()
                                     bean.uid = it.id
@@ -217,6 +234,7 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
         time?.let {
             bean.clock = (it / 1000).toInt()
         }
+        bean.clock = seconds
         val exusers = StringBuilder()
         if (data2.isNotEmpty()) {
             data2.forEach {
@@ -308,7 +326,7 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                         //年月日时分秒 的显示与否，不设置则默认全部显示
                         .setType(booleanArrayOf(true, true, true, true, true, false))
                         .setDividerColor(Color.DKGRAY)
-                        .setContentSize(21)
+                        .setContentSize(18)
                         .setDate(selectedDate)
                         .setCancelColor(resources.getColor(R.color.shareholder_text_gray))
                         .setRangDate(startDate, endDate)
@@ -329,7 +347,7 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                         //年月日时分秒 的显示与否，不设置则默认全部显示
                         .setType(booleanArrayOf(true, true, true, true, true, false))
                         .setDividerColor(Color.DKGRAY)
-                        .setContentSize(21)
+                        .setContentSize(18)
                         .setDate(selectedDate)
                         .setCancelColor(resources.getColor(R.color.shareholder_text_gray))
                         .setRangDate(startDate, endDate)
@@ -346,60 +364,65 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                     showToast("请选择结束时间")
                     return
                 }
-                Utils.closeInput(context, missionDetails)
-                val selectedDate = Calendar.getInstance()//系统当前时间
-                val startDate = Calendar.getInstance()
-                startDate.set(
-                        selectedDate.get(Calendar.YEAR),
-                        selectedDate.get(Calendar.MONTH),
-                        selectedDate.get(Calendar.DAY_OF_MONTH),
-                        selectedDate.get(Calendar.HOUR_OF_DAY),
-                        selectedDate.get(Calendar.MINUTE)
-                )
-                val endDate = Calendar.getInstance()
-                if (selectT == 0) {
-                    endDate.set(Utils.getTime(start, "yyyy").toInt(),
-                            Utils.getTime(start, "MM").toInt() - 1,
-                            Utils.getTime(start, "dd").toInt(),
-                            Utils.getTime(start, "HH").toInt(),
-                            Utils.getTime(start, "mm").toInt())
-                } else {
-                    endDate.set(Utils.getTime(endTime, "yyyy").toInt(),
-                            Utils.getTime(endTime, "MM").toInt() - 1,
-                            Utils.getTime(endTime, "dd").toInt(),
-                            Utils.getTime(endTime, "HH").toInt(),
-                            Utils.getTime(endTime, "mm").toInt())
+                if (seconds == null) {
+                    seconds = 0
                 }
-                val timePicker = TimePickerView.Builder(this, { date, view ->
-                    if (selectT == 0) {
-                        time = start!!.time - date.time
-                        time?.let {
-                            if (it < 0) {
-                                showToast("提醒时间不能大于开始时间")
-                            } else {
-                                remind.text = "开始前${it / 1000 / 60}分钟"
-                            }
-                        }
-                    } else {
-                        time = endTime!!.time - date.time
-                        time?.let {
-                            if (it < 0) {
-                                showToast("提醒时间不能大于结束时间")
-                            } else {
-                                remind.text = "结束前${it / 1000 / 60}分钟"
-                            }
-                        }
-                    }
-                })
-                        //年月日时分秒 的显示与否，不设置则默认全部显示
-                        .setType(booleanArrayOf(true, true, true, true, true, false))
-                        .setDividerColor(Color.DKGRAY)
-                        .setContentSize(21)
-                        .setDate(selectedDate)
-                        .setCancelColor(resources.getColor(R.color.shareholder_text_gray))
-                        .setRangDate(startDate, endDate)
-                        .build()
-                timePicker.show()
+                RemindTimeActivity.start(this, seconds.toString())
+
+//                Utils.closeInput(context, missionDetails)
+//                val selectedDate = Calendar.getInstance()//系统当前时间
+//                val startDate = Calendar.getInstance()
+//                startDate.set(
+//                        selectedDate.get(Calendar.YEAR),
+//                        selectedDate.get(Calendar.MONTH),
+//                        selectedDate.get(Calendar.DAY_OF_MONTH),
+//                        selectedDate.get(Calendar.HOUR_OF_DAY),
+//                        selectedDate.get(Calendar.MINUTE)
+//                )
+//                val endDate = Calendar.getInstance()
+//                if (selectT == 0) {
+//                    endDate.set(Utils.getTime(start, "yyyy").toInt(),
+//                            Utils.getTime(start, "MM").toInt() - 1,
+//                            Utils.getTime(start, "dd").toInt(),
+//                            Utils.getTime(start, "HH").toInt(),
+//                            Utils.getTime(start, "mm").toInt())
+//                } else {
+//                    endDate.set(Utils.getTime(endTime, "yyyy").toInt(),
+//                            Utils.getTime(endTime, "MM").toInt() - 1,
+//                            Utils.getTime(endTime, "dd").toInt(),
+//                            Utils.getTime(endTime, "HH").toInt(),
+//                            Utils.getTime(endTime, "mm").toInt())
+//                }
+//                val timePicker = TimePickerView.Builder(this, { date, view ->
+//                    if (selectT == 0) {
+//                        time = start!!.time - date.time
+//                        time?.let {
+//                            if (it < 0) {
+//                                showToast("提醒时间不能大于开始时间")
+//                            } else {
+//                                remind.text = "开始前${it / 1000 / 60}分钟"
+//                            }
+//                        }
+//                    } else {
+//                        time = endTime!!.time - date.time
+//                        time?.let {
+//                            if (it < 0) {
+//                                showToast("提醒时间不能大于结束时间")
+//                            } else {
+//                                remind.text = "结束前${it / 1000 / 60}分钟"
+//                            }
+//                        }
+//                    }
+//                })
+//                        //年月日时分秒 的显示与否，不设置则默认全部显示
+//                        .setType(booleanArrayOf(true, true, true, true, true, false))
+//                        .setDividerColor(Color.DKGRAY)
+//                        .setContentSize(21)
+//                        .setDate(selectedDate)
+//                        .setCancelColor(resources.getColor(R.color.shareholder_text_gray))
+//                        .setRangDate(startDate, endDate)
+//                        .build()
+//                timePicker.show()
             }
         }
     }
@@ -419,6 +442,19 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                     1006 -> {
                         selectUser2.selectUsers = data.getSerializableExtra(Extras.DATA) as ArrayList<UserBean>
                         exAdapter.addAllData(selectUser2.selectUsers)
+                    }
+                    Extras.REQUESTCODE -> {
+                        val str = data.getStringExtra(Extras.DATA)
+                        remind.text = str
+                        seconds = when (remind.text) {
+                            "不提醒" -> 0
+                            "提前5分钟" -> 5 * 60
+                            "提前15分钟" -> 15 * 60
+                            "提前30分钟" -> 30 * 60
+                            "提前1小时" -> 60 * 60
+                            "提前1天" -> 24 * 60 * 60
+                            else -> null
+                        }
                     }
                 }
 
@@ -443,8 +479,6 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
 
     override fun addPerson(tag: String) {
         when (tag) {
-//            "CcPersonAdapter" -> SelectUserActivity.startForResult(this, tag, selectUser)
-//            "ExecutiveAdapter" -> SelectUserActivity.startForResult(this, tag, selectUser2)
             "CcPersonAdapter" -> {
                 TeamSelectActivity.startForResult(this, true, selectUser.selectUsers, false, false, requestCode = 1005)
             }

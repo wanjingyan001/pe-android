@@ -162,6 +162,7 @@ class UserResumeActivity : BaseActivity(), View.OnClickListener {
             workeducation.department = it.department
             workeducation.companyScale = it.companyScale
             workeducation.companyProperty = it.companyProperty
+            workeducation.trade_name = it.trade_name
             workeducation.id = it.id
             workAdapter.dataList.add(workeducation)
         }
@@ -282,7 +283,8 @@ class UserResumeActivity : BaseActivity(), View.OnClickListener {
             }
         })
         workAdapter.onItemClick = { v, position ->
-            WorkExpericenceAddActivity.start(this, workAdapter.dataList[position])
+            val bean = workAdapter.dataList[position]
+            WorkExpericenceAddActivity.start(this, bean,bean.trade_name)
         }
         workList.layoutManager = LinearLayoutManager(this)
         workList.adapter = workAdapter
@@ -424,7 +426,7 @@ class UserResumeActivity : BaseActivity(), View.OnClickListener {
                             it.companyScale = list.companyScale
                             it.companyProperty = list.companyProperty
                             it.trade = list.trade
-                            it.trade_name = list.trade_name
+                            it.trade_name = data.type
                             it.pid = list.pid
                             needChange = true
                         }

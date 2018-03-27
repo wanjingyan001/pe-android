@@ -6,24 +6,18 @@ import android.graphics.Color
 import android.os.Bundle
 import android.text.*
 import android.text.style.ForegroundColorSpan
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import cn.finalteam.rxgalleryfinal.RxGalleryFinal
 import cn.finalteam.rxgalleryfinal.imageloader.ImageLoaderType
 import cn.finalteam.rxgalleryfinal.rxbus.RxBusResultDisposable
 import cn.finalteam.rxgalleryfinal.rxbus.event.ImageRadioResultEvent
-import com.afollestad.materialdialogs.GravityEnum
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
 import com.framework.base.ToolbarActivity
 import com.google.gson.Gson
-import com.nbsp.materialfilepicker.MaterialFilePicker
-import com.nbsp.materialfilepicker.ui.FilePickerActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.*
@@ -80,7 +74,8 @@ class BuildSealActivity : ToolbarActivity() {
             paramTitle = intent.getStringExtra(Extras.TITLE)
         }
         if (paramId == -1 || paramType == -1) {
-            showToast("参数错误")
+//            showToast("参数错误")
+            showCustomToast(R.drawable.icon_toast_error,"参数错误")
             finish()
         }
         setContentView(R.layout.activity_build_seal)
@@ -141,7 +136,8 @@ class BuildSealActivity : ToolbarActivity() {
             if (flag) {
                 doConfirm()
             } else {
-                showToast("请填写完整后再提交")
+//                showToast("请填写完整后再提交")
+                showCustomToast(R.drawable.icon_toast_error,"请填写完整后再提交")
             }
         }
         toolbar_menu.setImageResource(R.drawable.copy)
@@ -264,8 +260,8 @@ class BuildSealActivity : ToolbarActivity() {
         val cancel = mDialog.find<Button>(R.id.cancel)
         val yes = mDialog.find<Button>(R.id.yes)
         content.text = "是否需要保存草稿"
-        cancel.text = "取消"
-        yes.text = "确定"
+        cancel.text = "否"
+        yes.text = "是"
         cancel.setOnClickListener {
             val builder = HashMap<String, Any>()
             paramId = XmlDb.open(context).get(Extras.ID, "").toInt()
@@ -295,13 +291,17 @@ class BuildSealActivity : ToolbarActivity() {
                     .subscribeOn(Schedulers.io())
                     .subscribe({ payload ->
                         if (payload.isOk) {
-                            showToast("草稿保存成功")
-                            super.onBackPressed()
+//                            showToast("草稿提交成功")
+                            showCustomToast(R.drawable.icon_toast_success,"草稿保存成功")
+                            handler.postDelayed({
+                                super.onBackPressed()
+                            },2000)
                         } else
                             showToast(payload.message)
                     }, { e ->
                         Trace.e(e)
-                        showToast("草稿保存失败")
+//                        showToast("草稿提交失败")
+                        showCustomToast(R.drawable.icon_toast_error,"草稿保存失败")
                     })
         }
     }
@@ -397,17 +397,21 @@ class BuildSealActivity : ToolbarActivity() {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe({ payload ->
-                        if (payload.isOk && payload.payload != null) {
-                            showToast("提交成功")
-                            val intent = Intent()
-                            intent.putExtra(Extras.ID, payload.payload!!)
-                            setResult(Activity.RESULT_OK, intent)
-                            finish()
+                        if (payload.isOk) {
+//                            showToast("提交成功")
+                            showCustomToast(R.drawable.icon_toast_success,"提交成功")
+                            handler.postDelayed({
+                                val intent = Intent()
+                                intent.putExtra(Extras.ID, payload.payload!!)
+                                setResult(Activity.RESULT_OK, intent)
+                                finish()
+                            },2000)
                         } else
                             showToast(payload.message)
                     }, { e ->
                         Trace.e(e)
-                        showToast("提交失败")
+//                        showToast("提交失败")
+                        showCustomToast(R.drawable.icon_toast_error,"提交失败")
                     })
         } else {
             builder.add("template_id", "${paramId}")
@@ -424,14 +428,18 @@ class BuildSealActivity : ToolbarActivity() {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe({ payload ->
-                        if (payload.isOk && payload.payload != null) {
-                            showToast("保存成功")
-                            finish()
+                        if (payload.isOk) {
+//                            showToast("提交成功")
+                            showCustomToast(R.drawable.icon_toast_success,"提交成功")
+                            handler.postDelayed({
+                                finish()
+                            },2000)
                         } else
                             showToast(payload.message)
                     }, { e ->
                         Trace.e(e)
-                        showToast("保存失败")
+//                        showToast("提交失败")
+                        showCustomToast(R.drawable.icon_toast_error,"提交失败")
                     })
         }
     }
@@ -799,14 +807,16 @@ class BuildSealActivity : ToolbarActivity() {
                     .subscribeOn(Schedulers.io())
                     .subscribe({ payload ->
                         if (payload.isOk && payload.payload != null) {
-                            showToast("上传成功")
+//                            showToast("上传成功")
+                            showCustomToast(R.drawable.icon_toast_success,"上传成功")
                             imagesBean.value_list?.add(payload.payload!!)
                             refreshImages(imagesBean, imagesView)
                         } else
                             showToast(payload.message)
                     }, { e ->
                         Trace.e(e)
-                        showToast("上传失败")
+//                        showToast("上传失败")
+                        showCustomToast(R.drawable.icon_toast_error,"上传失败")
                     })
         }
     }
@@ -902,14 +912,17 @@ class BuildSealActivity : ToolbarActivity() {
                     .subscribeOn(Schedulers.io())
                     .subscribe({ payload ->
                         if (payload.isOk && payload.payload != null) {
-                            showToast("上传成功")
+//                            showToast("上传成功")
+                            showCustomToast(R.drawable.icon_toast_success,"上传成功")
                             filesBean?.value_list?.add(payload.payload!!)
                             refreshFiles(filesBean!!, filesView!!)
                         } else
                             showToast(payload.message)
                     }, { e ->
                         Trace.e(e)
-                        showToast("上传失败")
+//                        showToast("上传失败")
+                        showCustomToast(R.drawable.icon_toast_error,"上传失败")
+                        hideProgress()
                     }, {
                         hideProgress()
                     }, {

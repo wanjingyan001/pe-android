@@ -14,7 +14,6 @@
         android:id="@+id/toContacts"
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:layout_marginTop="15dp"
         android:background="@color/white"
         android:orientation="horizontal">
 
@@ -38,6 +37,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/selectAllLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="15dp"
