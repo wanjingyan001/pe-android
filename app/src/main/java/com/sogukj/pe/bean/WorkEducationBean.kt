@@ -7,20 +7,20 @@ import android.os.Parcelable
  * Created by admin on 2017/12/4.
  */
 class WorkEducationBean() : Parcelable {
-    override fun writeToParcel(dest: Parcel?, flags: Int) {
-        dest?.writeInt(id)
-        dest?.writeString(if (employDate == null) "" else employDate)
-        dest?.writeString(if (leaveDate == null) "" else leaveDate)
-        dest?.writeString(if (company == null) "" else company)
-        dest?.writeString(if (responsibility == null) "" else responsibility)
-        dest?.writeString(if (jobInfo == null) "" else jobInfo)
-        dest?.writeString(if (department == null) "" else department)
-        dest?.writeString(if (companyScale == null) "" else companyScale)
-        dest?.writeString(if (companyProperty == null) "" else companyProperty)
-        dest?.writeString(if (trade_name == null) "" else trade_name)
-        dest?.writeInt(trade)
-        dest?.writeInt(pid)
-        dest?.writeInt(if (isShow) 0 else 1)
+    override fun writeToParcel(dest: Parcel, flags: Int) {
+        dest.writeInt(this.id)
+        dest.writeString(this.employDate)
+        dest.writeString(this.leaveDate)
+        dest.writeString(this.company)
+        dest.writeString(this.responsibility)
+        dest.writeString(this.jobInfo)
+        dest.writeString(this.department)
+        dest.writeString(this.companyScale)
+        dest.writeString(this.companyProperty)
+        dest.writeInt(this.trade)
+        dest.writeString(this.trade_name)
+        dest.writeInt(this.pid)
+        dest.writeByte(if (this.isShow) 1.toByte() else 0.toByte())
     }
 
     override fun describeContents(): Int = 0
@@ -52,7 +52,7 @@ class WorkEducationBean() : Parcelable {
         trade = parcel.readInt()
         trade_name = parcel.readString()
         pid = parcel.readInt()
-        isShow = parcel.readInt() == 0
+        this.isShow = parcel.readByte().toInt() != 0
     }
 
     companion object CREATOR : Parcelable.Creator<WorkEducationBean> {

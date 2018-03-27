@@ -153,9 +153,10 @@ class TeamInfoActivity : AppCompatActivity(), View.OnClickListener, SwitchButton
      */
     fun getUsersInfoAsync(accounts: List<String>) {
         NimUIKit.getUserInfoProvider().getUserInfoAsync(accounts) { success, result, code ->
+            teamMembers.clear()
             result.forEach {
                 val info = it as NimUserInfo
-                val uid = info.extensionMap["uid"] as Int
+                val uid = info.extensionMap["uid"].toString().toInt()
                 val user = UserBean()
                 user.uid = uid
                 user.user_id = uid
@@ -252,7 +253,7 @@ class TeamInfoActivity : AppCompatActivity(), View.OnClickListener, SwitchButton
         super.onPause()
         NIMClient.getService(TeamServiceObserver::class.java).observeTeamUpdate(teamUpdateObserver,false)
         val name = team_name.text.trim().toString()
-        if (name.isNotEmpty()) {
+        if (name.isNotEmpty()&& team_title.text!=name) {
             NIMClient.getService(TeamService::class.java).updateName(sessionId, name).setCallback(object : RequestCallbackWrapper<Void>() {
                 override fun onResult(code: Int, result: Void?, exception: Throwable?) {
                     Log.d("WJY", "$code+${result.toString()}")

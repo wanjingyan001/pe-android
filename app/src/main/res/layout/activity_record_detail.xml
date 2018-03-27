@@ -92,7 +92,7 @@
                 android:id="@+id/et_visiter"
                 style="@style/ItemTextValue"
                 android:layout_height="20dp"
-                android:gravity="right" />
+                android:gravity="left" />
         </TableRow>
 
     </TableLayout>
@@ -116,8 +116,6 @@
 
             <EditText
                 android:id="@+id/et_des"
-                android:layout_height="100dp"
-                android:gravity="left|top"
                 style="@style/ItemTextValue" />
         </TableRow>
     </TableLayout>

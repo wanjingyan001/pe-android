@@ -119,7 +119,10 @@ class MainMsgFragment : ToolbarFragment() {
                             }
                             msgIcon.imageResource = R.drawable.im_team_default
                         }
-                        tvDate.text = Utils.getTime(data.time, "MM月dd日")
+                        try {
+                            tvDate.text = Utils.getTimeDate(data.time)
+                        } catch (e: Exception) {
+                        }
                         val mutableMap = data.extension
                         if (mutableMap != null && mutableMap.isNotEmpty() &&  mutableMap[data.contactId] == "Mute") {
                             tvNum.visibility = View.VISIBLE

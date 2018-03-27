@@ -5,6 +5,7 @@
     android:layout_height="wrap_content">
 
     <RelativeLayout
+        android:id="@+id/contentLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -20,7 +21,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
             android:visibility="gone"
-            android:background="@drawable/bg_red_circle" />
+            android:background="@drawable/icon_red_delete" />
 
         <TextView
             android:id="@+id/name"
@@ -43,6 +44,7 @@
             android:textSize="14sp" />
 
         <ImageView
+            android:id="@+id/ic_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"

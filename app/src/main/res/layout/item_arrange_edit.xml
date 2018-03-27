@@ -5,7 +5,8 @@
     android:layout_height="250dp"
     android:background="@color/white"
     android:paddingLeft="20dp"
-    android:paddingTop="20dp">
+    android:paddingTop="20dp"
+    android:layout_marginBottom="15dp">
 
     <TextView
         android:id="@+id/weeklyTv"
@@ -90,14 +91,13 @@
             android:text="@string/people_attending" />
 
 
-        <com.sogukj.pe.view.WorkArrangePersonView
+        <com.sogukj.pe.view.WorkArrangePerson
             android:id="@+id/person_attend"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="60dp"
             android:layout_weight="1">
 
-        </com.sogukj.pe.view.WorkArrangePersonView>
+        </com.sogukj.pe.view.WorkArrangePerson>
 
         <ImageView
             android:layout_width="20dp"
@@ -139,14 +139,13 @@
             android:text="@string/people_participate" />
 
 
-        <com.sogukj.pe.view.WorkArrangePersonView
+        <com.sogukj.pe.view.WorkArrangePerson
             android:id="@+id/person_participate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="60dp"
             android:layout_weight="1">
 
-        </com.sogukj.pe.view.WorkArrangePersonView>
+        </com.sogukj.pe.view.WorkArrangePerson>
 
         <ImageView
             android:layout_width="20dp"
@@ -183,19 +182,22 @@
 
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
+            android:layout_weight="1"
             android:text="@string/arrange_address" />
 
 
         <EditText
+            android:id="@+id/addressEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:background="@null"
-            android:maxLines="2"
             android:hint="@string/address_edit_hint"
+            android:maxLines="2"
+            android:gravity="right"
+            android:textColor="@color/text_1"
             android:textSize="12sp" />
 
         <ImageView

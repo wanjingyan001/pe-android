@@ -56,9 +56,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
                 android:gravity="center"
-                android:orientation="horizontal"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp">
+                android:orientation="horizontal">
 
                 <ImageButton
                     android:id="@+id/fb_add"
@@ -71,7 +69,8 @@
                     android:id="@+id/iv_search"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginLeft="18dp"
+                    android:layout_marginRight="15dp"
                     android:background="@drawable/ic_search" />
             </LinearLayout>
         </android.support.v7.widget.Toolbar>

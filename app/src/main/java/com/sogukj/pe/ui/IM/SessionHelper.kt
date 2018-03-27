@@ -96,7 +96,7 @@ object SessionHelper {
                     Log.d("WJY", "sessionId:$sessionId,mine:${Store.store.getUser(context!!)!!.accid}")
                     NimUIKit.getUserInfoProvider().getUserInfoAsync(sessionId) { success, result, code ->
                         val info = result as NimUserInfo
-                        val uid = info.extensionMap["uid"] as Int
+                        val uid = info.extensionMap["uid"].toString().toInt()
                         Log.d("WJY", Gson().toJson(info))
                         PersonalInfoActivity.start(context, uid)
                     }

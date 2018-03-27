@@ -24,6 +24,7 @@ import com.sogukj.pe.bean.BrandBean
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
+import com.sogukj.pe.util.Utils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_list_common.*
@@ -63,7 +64,7 @@ class BrandListActivity : ToolbarActivity(),SupportEmptyView {
                     tvIntCls.text = "类别:${data.intCls}"
                     Glide.with(this@BrandListActivity)
                             .load(data.tmPic)
-                            .apply(RequestOptions().error(R.drawable.img_logo_user))
+                            .apply(RequestOptions().error(Utils.defaultHeadImg()))
                             .into(ivLogo)
                 }
 

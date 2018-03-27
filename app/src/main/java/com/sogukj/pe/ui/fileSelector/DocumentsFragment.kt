@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,6 +28,7 @@ import org.jetbrains.anko.find
 import org.jetbrains.anko.imageResource
 import org.jetbrains.anko.toast
 import java.io.File
+import java.util.*
 
 
 /**
@@ -81,8 +83,9 @@ class DocumentsFragment : Fragment() {
                 val list = FileUtil.getFiles(WX_DOC_PATH1)
                 val list1 = FileUtil.getFiles(WX_DOC_PATH2)
                 val list2 = FileUtil.getFiles(QQ_DOC_PATH)
+                val list4 = FileUtil.getFiles(QQ_DOC_PATH1)
                 val list3 = FileUtil.getFiles(FileUtil.getExternalFilesDir(fileActivity.applicationContext))
-                files = list.plus(list1).plus(list2).plus(list3)
+                files = list.plus(list1).plus(list2).plus(list3).plus(list4)
             }
             WX_DOC -> {
                 val list = FileUtil.getFiles(WX_DOC_PATH1)
@@ -90,11 +93,13 @@ class DocumentsFragment : Fragment() {
                 files = list.plus(list1)
             }
             QQ_DOC -> {
-                files = FileUtil.getFiles(QQ_DOC_PATH)
+                val list = FileUtil.getFiles(QQ_DOC_PATH)
+                val list1 = FileUtil.getFiles(QQ_DOC_PATH1)
+                files = list.plus(list1)
             }
         }
-        files.sortedByDescending { file ->
-            file.lastModified()
+        Collections.sort(files) { o1, o2 ->
+            o2.lastModified().compareTo(o1.lastModified())
         }
         adapter.dataList.addAll(files)
         adapter.notifyDataSetChanged()
@@ -104,6 +109,7 @@ class DocumentsFragment : Fragment() {
         private val TYPE = "type"
         private val ARG_PARAM2 = "param2"
         val QQ_DOC_PATH = Environment.getExternalStorageDirectory().path + "/tencent/QQfile_recv/"
+        val QQ_DOC_PATH1 = Environment.getExternalStorageDirectory().path + "/tencent/QQ_Images/"
         val WX_DOC_PATH1 = Environment.getExternalStorageDirectory().path + "/tencent/MicroMsg/WeiXin/"
         val WX_DOC_PATH2 = Environment.getExternalStorageDirectory().path + "/tencent/MicroMsg/Download/"
         val PE_LOACL = 0
@@ -128,7 +134,13 @@ class DocumentsFragment : Fragment() {
         val icon = view.find<ImageView>(R.id.file_icon)
         val name = view.find<TextView>(R.id.file_name)
         val info = view.find<TextView>(R.id.file_info)
+        val point = view.find<ImageView>(R.id.red_point)
         override fun setData(view: View, data: File, position: Int) {
+            if (position == 0) {
+                point.visibility = View.VISIBLE
+            } else {
+                point.visibility = View.GONE
+            }
             slector.isSelected = fileActivity.selectedFile.contains(data)
             if (FileUtil.getFileType(data.absolutePath) != null) {
                 Glide.with(context)

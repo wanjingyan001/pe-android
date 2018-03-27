@@ -56,7 +56,9 @@ class ProjectTcHistoryActivity : ToolbarActivity() {
                 override fun setData(view: View, data: QuitBean, position: Int) {
                     title.text = data.title
                     name.text = "操作人：${data.name}"
-                    outTime.text = data.outTime
+                    data.outTime?.let {
+                        outTime.text = it.substring(0, it.length - 5)
+                    }
                 }
             }
         })

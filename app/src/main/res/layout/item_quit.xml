@@ -29,7 +29,6 @@
                 android:gravity="center"
                 android:letterSpacing="0.04"
                 android:lineSpacingExtra="0sp"
-                android:text="第五次部分退出"
                 android:textColor="#282828"
                 android:textSize="14sp" />
 
@@ -45,7 +44,6 @@
                 android:gravity="center"
                 android:letterSpacing="0.04"
                 android:lineSpacingExtra="0sp"
-                android:text="2016年9月11日 14:00"
                 android:textColor="#a0a4aa"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -59,7 +57,6 @@
             android:gravity="center"
             android:letterSpacing="0.04"
             android:lineSpacingExtra="0sp"
-            android:text="操作人：张三三"
             android:textColor="#808080"
             android:textSize="12sp" />
 

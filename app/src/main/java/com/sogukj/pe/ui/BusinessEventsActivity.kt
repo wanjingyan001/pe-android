@@ -23,6 +23,7 @@ import com.sogukj.pe.bean.ProductBean
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
+import com.sogukj.pe.util.Utils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_list_common.*
@@ -59,7 +60,7 @@ class BusinessEventsActivity : ToolbarActivity(),SupportEmptyView {
                     tvDesc.text = "${getString(R.string.tv_proj_product_type)}${data.hangye}"
                     Glide.with(this@BusinessEventsActivity)
                             .load(data.logo)
-                            .apply(RequestOptions().error(R.drawable.img_logo_user))
+                            .apply(RequestOptions().error(Utils.defaultHeadImg()))
                             .into(ivUser)
 
                 }

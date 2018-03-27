@@ -9,10 +9,12 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
+import android.text.ClipboardManager
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.gson.Gson
@@ -29,7 +31,8 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_personal_info.*
 import org.jetbrains.anko.toast
 
-class PersonalInfoActivity : AppCompatActivity(), View.OnClickListener, TextWatcher {
+class PersonalInfoActivity : AppCompatActivity(), View.OnClickListener, TextWatcher, View.OnLongClickListener {
+
 
     lateinit var db: XmlDb
     var user: UserBean? = null
@@ -83,6 +86,13 @@ class PersonalInfoActivity : AppCompatActivity(), View.OnClickListener, TextWatc
         }
         sendMsg.setOnClickListener(this)
         call_phone.setOnClickListener(this)
+
+        company.setOnLongClickListener(this)
+        name_tv.setOnLongClickListener(this)
+        phone_tv.setOnLongClickListener(this)
+        email_tv.setOnLongClickListener(this)
+        department_tv.setOnLongClickListener(this)
+        position_tv.setOnLongClickListener(this)
     }
 
     private fun queryUserInfo(uid: Int) {
@@ -114,6 +124,15 @@ class PersonalInfoActivity : AppCompatActivity(), View.OnClickListener, TextWatc
                         }
                     }
                 })
+    }
+
+    override fun onLongClick(v: View?): Boolean {
+        val manager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        if (v is TextView) {
+            manager.text = v.text
+            toast("已复制到剪贴板")
+        }
+        return true
     }
 
     override fun onClick(v: View?) {

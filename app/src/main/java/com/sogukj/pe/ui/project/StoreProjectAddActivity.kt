@@ -101,6 +101,7 @@ class StoreProjectAddActivity : ToolbarActivity() {
 
     fun fillForm(bean: StoreProjectBean) {
         et_company_name.setText(bean.name)
+        et_company_name.setSelection(bean.name!!.length)
         et_short_name.setText(bean.shortName)
         et_info.setText(bean.info)
         et_estiblishTime.setText(bean.estiblishTime)

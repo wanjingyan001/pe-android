@@ -48,6 +48,6 @@
         android:layout_marginLeft="20dp"
         android:clickable="true"
         android:scaleType="center"
-        android:src="@drawable/ic_calendar_btn"
+        android:src="@drawable/icon_calendar_add"
         app:borderWidth="0.0dp" />
 </RelativeLayout>

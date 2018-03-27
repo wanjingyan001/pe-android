@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -12,8 +13,10 @@ import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.telephony.TelephonyManager;
@@ -29,12 +32,22 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.sogukj.pe.BuildConfig;
+import com.sogukj.pe.R;
+import com.sogukj.pe.bean.PartyTabBean;
+
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.reflect.Field;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -243,6 +256,90 @@ public class Utils {
         return format.format(new Date(time));
     }
 
+
+    public static String getTimeDate(long time) throws ParseException {
+        if (IsYesterday(getYMD(new Date(time)))) {
+            return "昨天";
+        } else if (IsToday(getYMD(new Date(time)))) {
+            return isAM(time) + "" + getTime(time, "hh:mm");
+        } else {
+            return getTime(time, "yyyy年MM月dd日");
+        }
+    }
+
+    public static String isAM(long time) {
+        Calendar mCalendar = Calendar.getInstance();
+        mCalendar.setTimeInMillis(time);
+        int apm = mCalendar.get(Calendar.AM_PM);
+        //apm=0 表示上午，apm=1表示下午
+        return apm == 0 ? "上午" : "下午";
+    }
+
+
+    /**
+     * 判断是否为今天(效率比较高)
+     *
+     * @param day 传入的 时间  "2016-06-28 10:10:30" "2016-06-28" 都可以
+     * @return true今天 false不是
+     * @throws ParseException
+     */
+    public static boolean IsToday(String day) throws ParseException {
+
+        Calendar pre = Calendar.getInstance();
+        Date predate = new Date(System.currentTimeMillis());
+        pre.setTime(predate);
+        Calendar cal = Calendar.getInstance();
+        Date date = getDateFormat().parse(day);
+        cal.setTime(date);
+        if (cal.get(Calendar.YEAR) == (pre.get(Calendar.YEAR))) {
+            int diffDay = cal.get(Calendar.DAY_OF_YEAR)
+                    - pre.get(Calendar.DAY_OF_YEAR);
+
+            if (diffDay == 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 判断是否为昨天(效率比较高)
+     *
+     * @param day 传入的 时间  "2016-06-28 10:10:30" "2016-06-28" 都可以
+     * @return true今天 false不是
+     * @throws ParseException
+     */
+    public static boolean IsYesterday(String day) throws ParseException {
+
+        Calendar pre = Calendar.getInstance();
+        Date predate = new Date(System.currentTimeMillis());
+        pre.setTime(predate);
+
+        Calendar cal = Calendar.getInstance();
+        Date date = getDateFormat().parse(day);
+        cal.setTime(date);
+
+        if (cal.get(Calendar.YEAR) == (pre.get(Calendar.YEAR))) {
+            int diffDay = cal.get(Calendar.DAY_OF_YEAR)
+                    - pre.get(Calendar.DAY_OF_YEAR);
+
+            if (diffDay == -1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static SimpleDateFormat getDateFormat() {
+        if (null == DateLocal.get()) {
+            DateLocal.set(new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA));
+        }
+        return DateLocal.get();
+    }
+
+
+    private static ThreadLocal<SimpleDateFormat> DateLocal = new ThreadLocal<SimpleDateFormat>();
+
     public static Long[] getSupportBeginDayofMonth(int year, int monthOfYear) {
         Calendar cal = Calendar.getInstance();
         // 不加下面2行，就是取当前时间前一个月的第一天及最后一天
@@ -374,5 +471,55 @@ public class Utils {
         } catch (Exception e) {
             return false;
         }
+    }
+
+
+    public static void saveImageToGallery(Context context, Bitmap bmp) {
+        // 首先保存图片
+        File appDir = new File(Environment.getExternalStorageDirectory(), "sougukj");
+        if (!appDir.exists()) {
+            appDir.mkdir();
+        }
+        String fileName = System.currentTimeMillis() + ".jpg";
+        File file = new File(appDir, fileName);
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            fos.flush();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // 其次把文件插入到系统图库
+        try {
+            MediaStore.Images.Media.insertImage(context.getContentResolver(),
+                    file.getAbsolutePath(), fileName, null);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        // 最后通知图库更新
+//        context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + path)));
+    }
+	   public static String getEnvironment() {
+        return BuildConfig.ENVIRONMENT;
+    }
+
+
+    public static int defaultHeadImg() {
+        int headImg ;
+        switch (getEnvironment()) {
+            case "civc":
+                headImg = R.drawable.img_logo_user;
+                break;
+            case "ht":
+                headImg = R.drawable.img_logo_user_ht;
+                break;
+            default:
+                headImg = R.drawable.default_head;
+                break;
+        }
+        return headImg;
     }
 }

@@ -25,6 +25,7 @@ import com.sogukj.pe.bean.AppBean
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
+import com.sogukj.pe.util.Utils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_list_common.*
@@ -56,7 +57,7 @@ class AppListActivity : ToolbarActivity() ,SupportEmptyView{
                 override fun setData(view: View, data: AppBean, position: Int) {
                     Glide.with(this@AppListActivity)
                             .load(data.icon)
-                            .apply(RequestOptions().error(R.drawable.img_logo_user))
+                            .apply(RequestOptions().error(Utils.defaultHeadImg()))
                             .into(ivLogo)
                     tvBrief.text = getString(R.string.tv_proj_app_brif, Html.fromHtml(data.brief))
                     tvClasses.text = "类型：${data.classes}"

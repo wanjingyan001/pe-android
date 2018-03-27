@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -42,13 +42,11 @@
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/contentLayout"
-        android:layout_width="316dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginEnd="20dp"
-        android:layout_marginStart="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintLeft_toRightOf="@+id/day_of_weekly_layout"
-        app:layout_constraintStart_toEndOf="@+id/day_of_weekly_layout">
+        android:layout_marginEnd="15dp"
+        android:layout_marginStart="20dp"
+        android:layout_toRightOf="@+id/day_of_weekly_layout">
 
 
         <TextView
@@ -56,9 +54,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="23dp"
+            android:ellipsize="end"
             android:lineSpacingExtra="6dp"
             android:maxLines="2"
-            android:text="参加搜股东会参加搜股股东会参加搜股股东会参加搜股股东会参加搜e股股东......."
             android:textColor="@color/text_1"
             android:textSize="14sp"
             app:layout_constraintTop_toTopOf="parent" />
@@ -68,7 +66,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="出席：李三四"
+            android:ellipsize="end"
+            android:maxWidth="100dp"
+            android:singleLine="true"
+            android:text="出席："
             android:textColor="@color/text_3"
             android:textSize="10sp"
             app:layout_constraintLeft_toLeftOf="@+id/arrangement_content"
@@ -79,12 +80,15 @@
             android:id="@+id/participate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="50dp"
+            android:layout_marginLeft="150dp"
+            android:ellipsize="end"
             android:gravity="left"
-            android:text="出席：李三四，刘东东…"
+            android:maxWidth="100dp"
+            android:singleLine="true"
+            android:text="参加："
             android:textColor="@color/text_3"
             android:textSize="10sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="@+id/arrangement_content"
             app:layout_constraintTop_toTopOf="@+id/attend" />
 
 
@@ -104,7 +108,6 @@
             android:layout_marginLeft="5dp"
             android:ellipsize="end"
             android:singleLine="true"
-            android:text="上海市·静安区江场三路199号410…"
             android:textColor="@color/approve_blue1"
             android:textSize="10sp"
             app:layout_constraintBottom_toBottomOf="@+id/address_icon"
@@ -149,4 +152,4 @@
     </LinearLayout>
 
 
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>

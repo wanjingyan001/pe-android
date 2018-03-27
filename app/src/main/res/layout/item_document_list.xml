@@ -24,6 +24,17 @@
         android:scaleType="centerInside"
         android:src="@drawable/file_default" />
 
+    <ImageView
+        android:id="@+id/red_point"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_alignRight="@+id/file_icon"
+        android:layout_alignTop="@+id/file_icon"
+        android:layout_marginTop="-4dp"
+        android:layout_marginLeft="-4dp"
+        android:visibility="gone"
+        android:src="@drawable/bg_new_file_point" />
+
     <TextView
         android:id="@+id/file_name"
         android:layout_width="wrap_content"
@@ -40,8 +51,8 @@
         android:id="@+id/file_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/file_name"
         android:layout_alignBottom="@+id/file_icon"
+        android:layout_alignLeft="@+id/file_name"
         android:layout_toRightOf="@+id/file_icon" />
 
     <View

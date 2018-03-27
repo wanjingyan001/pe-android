@@ -85,17 +85,17 @@ class WeeklyISendFragment : BaseFragment() {
 
         var calendar = Calendar.getInstance()
 
-        start.text = ""//formatTime(startBean)
-        end.text = ""//formatTime(endBean)
+        start.text = "开始时间"//formatTime(startBean)
+        end.text = "结束时间"//formatTime(endBean)
 
         start.setOnClickListener {
-            if (start.text != "") {
+            if (start.text != "开始时间") {
                 calendar.time = format.parse(start.text.toString())
             } else {
                 calendar = Calendar.getInstance()
             }
             val timePicker = TimePickerView.Builder(context, { date, view ->
-                if (end.text.trim() == "") {
+                if (end.text.trim() == "结束时间") {
                     start.text = format.format(date)
                     return@Builder
                 }
@@ -124,13 +124,13 @@ class WeeklyISendFragment : BaseFragment() {
         }
 
         end.setOnClickListener {
-            if (end.text != "") {
+            if (end.text != "结束时间") {
                 calendar.time = format.parse(end.text.toString())
             } else {
                 calendar = Calendar.getInstance()
             }
             val timePicker = TimePickerView.Builder(context, { date, view ->
-                if (start.text.trim() == "") {
+                if (start.text.trim() == "开始时间") {
                     end.text = format.format(date)
                     return@Builder
                 }

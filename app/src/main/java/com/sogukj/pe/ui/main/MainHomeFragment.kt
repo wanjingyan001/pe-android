@@ -38,10 +38,13 @@ import com.sogukj.util.Store
 import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.NIMClient
 import com.sogukj.pe.ui.approve.LeaveBusinessApproveActivity
+import com.sogukj.pe.ui.partyBuild.PartyMainActivity
+import com.sogukj.pe.util.Utils
 import com.umeng.message.PushAgent
 import com.umeng.message.UmengMessageHandler
 import com.umeng.message.entity.UMessage
 import me.leolin.shortcutbadger.ShortcutBadger
+import org.jetbrains.anko.imageResource
 import org.json.JSONObject
 
 
@@ -54,6 +57,17 @@ class MainHomeFragment : BaseFragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        when (Utils.getEnvironment()) {
+            "civc" -> {
+                home_banner.imageResource = R.mipmap.banner_zd
+            }
+            "ht" -> {
+                home_banner.imageResource = R.mipmap.banner_ht
+            }
+            else -> {
+                home_banner.imageResource = R.mipmap.banner
+            }
+        }
         //消息
 //        tv_zx.setOnClickListener {
 //            NewsListActivity.start(baseActivity)
@@ -74,7 +88,9 @@ class MainHomeFragment : BaseFragment() {
         tv_msg.setOnClickListener {
             NewsListActivity.start(baseActivity)
         }
-
+        party_build.setOnClickListener {
+            PartyMainActivity.start(context)
+        }
 
         adapter = HomeAdapter()
         stack_layout.adapter = adapter

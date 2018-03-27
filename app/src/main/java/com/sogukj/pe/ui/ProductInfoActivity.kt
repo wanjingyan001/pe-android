@@ -24,6 +24,7 @@ import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.service.SoguApi
+import com.sogukj.pe.util.Utils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_list_common.*
@@ -64,7 +65,7 @@ class ProductInfoActivity : ToolbarActivity() {
                     tvCompany.text = Html.fromHtml(getString(R.string.tv_proj_product_company, data.companyName))
                     Glide.with(this@ProductInfoActivity)
                             .load(data.icon)
-                            .apply(RequestOptions().error(R.drawable.img_logo_user))
+                            .apply(RequestOptions().error(Utils.defaultHeadImg()))
                             .into(ivUser)
                     tvRound.visibility = View.GONE
                     data.round?.trim()?.takeIf {

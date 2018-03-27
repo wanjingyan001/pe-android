@@ -34,6 +34,7 @@ import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
 import com.sogukj.util.XmlDb
+import com.sogukj.pe.util.Utils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_user_edit.*
@@ -441,7 +442,7 @@ class UserEditActivity : ToolbarActivity() {
         user.url = url
         Glide.with(this@UserEditActivity)
                 .load(url)
-                .apply(RequestOptions().error(R.drawable.img_logo_user))
+                .apply(RequestOptions().error(Utils.defaultHeadImg()))
                 .into(iv_user)
         val imgPath = compressImage(url, 160, 160, 1024 * 1024)
         val file = File(imgPath)

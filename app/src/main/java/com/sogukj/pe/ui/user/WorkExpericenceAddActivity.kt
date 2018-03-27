@@ -28,6 +28,7 @@ import java.util.*
 
 class WorkExpericenceAddActivity : BaseActivity(), View.OnClickListener {
     private var workEducationBean: WorkEducationBean? = null
+    var industry: Industry.Children = Industry().Children()
 
     companion object {
         fun start(ctx: Activity?) {
@@ -35,9 +36,10 @@ class WorkExpericenceAddActivity : BaseActivity(), View.OnClickListener {
             ctx?.startActivityForResult(intent, Extras.REQUESTCODE)
         }
 
-        fun start(ctx: Activity?, workeducation: WorkEducationBean) {
+        fun start(ctx: Activity?, workeducation: WorkEducationBean, tradeName: String?) {
             val intent = Intent(ctx, WorkExpericenceAddActivity::class.java)
             intent.putExtra(Extras.DATA, workeducation)
+            intent.type = tradeName
             ctx?.startActivityForResult(intent, Extras.REQUESTCODE)
         }
     }
@@ -46,9 +48,10 @@ class WorkExpericenceAddActivity : BaseActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_work_expericence_add)
         Utils.setWindowStatusBarColor(this, R.color.white)
+        val tradeName = intent.type
         workEducationBean = intent.getParcelableExtra<WorkEducationBean?>(Extras.DATA)
         workEducationBean?.let {
-            setData(it)
+            setData(it, tradeName)
         }
         if (workEducationBean == null) {
             toolbar_title.text = "添加工作经历"
@@ -65,16 +68,17 @@ class WorkExpericenceAddActivity : BaseActivity(), View.OnClickListener {
         tv_nature.setOnClickListener(this)
     }
 
-    fun setData(workEducationBean: WorkEducationBean) {
+    fun setData(workEducationBean: WorkEducationBean, tradeName: String?) {
         tv_start_date.text = workEducationBean.employDate
         tv_date_end.text = workEducationBean.leaveDate
         tv_company.setText(workEducationBean.company)
         tv_skill.setText(workEducationBean.responsibility)
         tv_desc.setText(workEducationBean.jobInfo)
-        tv_industry.text = workEducationBean.trade_name
+        tv_industry.text = tradeName
         tv_depart.setText(workEducationBean.department)
         tv_workers.text = workEducationBean.companyScale
         tv_nature.text = workEducationBean.companyProperty
+        industry.id = workEducationBean.id
     }
 
     override fun onClick(v: View?) {
@@ -136,12 +140,16 @@ class WorkExpericenceAddActivity : BaseActivity(), View.OnClickListener {
                 workeducation.department = tv_depart.text.toString()
                 workeducation.companyScale = tv_workers.text.toString()
                 workeducation.companyProperty = tv_nature.text.toString()
+                workeducation.trade_name = tv_industry.text.toString()
                 if (workEducationBean == null) {
                     reqBean.ae = workeducation
                     reqBean.type = 2
                     doRequest(reqBean)
                 } else {
                     workeducation.id = workEducationBean!!.id
+                    industry.pid?.let {
+                        workeducation.pid =it
+                    }
                     reqBean.ae = workeducation
                     reqBean.type = 2
                     doRequest2(reqBean)
@@ -222,6 +230,7 @@ class WorkExpericenceAddActivity : BaseActivity(), View.OnClickListener {
                     if (payload.isOk) {
                         payload.payload?.apply {
                             val intent = Intent()
+                            intent.type = this.trade_name
                             intent.putExtra(Extras.LIST, this)
                             setResult(Extras.RESULTCODE, intent)
                             finish()
@@ -231,7 +240,7 @@ class WorkExpericenceAddActivity : BaseActivity(), View.OnClickListener {
                     }
                 }, { e ->
                     Trace.e(e)
-                }, {}, {
+                }, { hideProgress() }, {
                     showProgress("正在保存,请稍后")
                 })
     }
@@ -246,6 +255,7 @@ class WorkExpericenceAddActivity : BaseActivity(), View.OnClickListener {
                     if (payload.isOk) {
                         payload.payload?.apply {
                             val intent = Intent()
+                            intent.type = this.trade_name
                             intent.putExtra(Extras.LIST, this)
                             setResult(Extras.RESULTCODE, intent)
                             finish()
@@ -255,13 +265,12 @@ class WorkExpericenceAddActivity : BaseActivity(), View.OnClickListener {
                     }
                 }, { e ->
                     Trace.e(e)
-                }, {}, {
+                }, { hideProgress() }, {
                     showProgress("正在保存修改,请稍后")
                 })
 
     }
 
-    lateinit var industry: Industry.Children
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

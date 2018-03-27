@@ -40,7 +40,9 @@ class SpinnerWindow(val context: Context, val listener: AdapterView.OnItemClickL
         height = WindowManager.LayoutParams.WRAP_CONTENT
         isFocusable = true
         isOutsideTouchable = true
-        elevation = Utils.dpToPx(context, 5).toFloat()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            elevation = Utils.dpToPx(context, 5).toFloat()
+        }
         setBackgroundDrawable(ColorDrawable(0x00000000))
     }
 }

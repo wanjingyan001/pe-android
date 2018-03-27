@@ -28,6 +28,7 @@ import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.backgroundResource
+import org.jetbrains.anko.imageResource
 import java.util.*
 
 /**
@@ -38,6 +39,17 @@ class LoginActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        when (Utils.getEnvironment()) {
+            "civc" -> {
+                login_logo.imageResource = R.drawable.img_logo_login_zd
+            }
+            "ht" -> {
+                login_logo.imageResource = R.drawable.img_logo_login_ht
+            }
+            else -> {
+                login_logo.imageResource = R.drawable.img_logo_login
+            }
+        }
         et_name.requestFocus()
         tv_code.setOnClickListener {
             doSendCode();

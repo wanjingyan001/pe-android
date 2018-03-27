@@ -23,6 +23,7 @@ import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.ui.news.NewsListFragment
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
+import com.sogukj.pe.util.Utils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_list_news.*
@@ -62,7 +63,7 @@ class FinanceEventListFragment : BaseFragment(),SupportEmptyView {
                     tvCompany.text = Html.fromHtml(getString(R.string.tv_proj_product_company, data.organization_name))
                     Glide.with(baseActivity!!)
                             .load(data.iconOssPath)
-                            .apply(RequestOptions().error(R.drawable.img_logo_user))
+                            .apply(RequestOptions().error(Utils.defaultHeadImg()))
                             .into(ivUser)
                 }
 

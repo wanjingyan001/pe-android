@@ -46,6 +46,7 @@ import com.sogukj.pe.bean.NewsBean
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
+import com.sogukj.pe.Consts
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_news_detail.*
@@ -144,7 +145,13 @@ class NewsDetailActivity : ToolbarActivity(), PlatformActionListener {
         val shareUrl = news!!.shareUrl
         val shareTitle = news!!.shareTitle
         val shareSummry = news!!.title
-        val shareImgUrl = File(Environment.getExternalStorageDirectory(), "img_logo.png").toString()
+        //val shareImgUrl = File(Environment.getExternalStorageDirectory(), "img_logo.png").toString()
+        var shareImgUrl = ""
+        if (Consts.HTTP_HOST.contains("zhongdi")) {
+            shareImgUrl = File(Environment.getExternalStorageDirectory(), "image_logo2.png").toString()
+        } else {
+            shareImgUrl = File(Environment.getExternalStorageDirectory(), "img_logo.png").toString()
+        }
         tvCopy.setOnClickListener {
             dialog.dismiss()
             Utils.copy(this, shareUrl)
@@ -280,7 +287,11 @@ class NewsDetailActivity : ToolbarActivity(), PlatformActionListener {
                 doRequest(table_id!!, data_id!!, this);
         }
         verifyStoragePermissions(this)
-        copyAssets("img_logo.png")
+        if (Consts.HTTP_HOST.contains("zhongdi")) {
+            copyAssets("image_logo2.png")
+        } else {
+            copyAssets("img_logo.png")
+        }
     }
 
     fun doRequest(table_id: Int, data_id: Int, data: NewsBean) {

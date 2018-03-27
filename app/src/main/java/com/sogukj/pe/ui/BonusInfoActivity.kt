@@ -58,6 +58,7 @@ class BonusInfoActivity : ToolbarActivity(),SupportEmptyView {
 
 
                 override fun setData(view: View, data: BonusBean, position: Int) {
+                    tvTime.text = data.boardDate
                     tvBoardDate.text = data.boardDate
                     tvShareholderDate.text = data.shareholderDate
                     tvImplementationDate.text = data.implementationDate

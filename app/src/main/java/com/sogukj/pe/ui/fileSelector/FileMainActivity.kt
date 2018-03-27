@@ -16,12 +16,17 @@ import android.view.KeyEvent
 import android.view.View
 import android.widget.AdapterView
 import android.widget.PopupWindow
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.Theme
 import com.nbsp.materialfilepicker.ui.DirectoryFragment
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.ui.partyBuild.PartyUploadActivity
 import com.sogukj.pe.util.FileUtil
+import com.sogukj.pe.util.Utils
 import kotlinx.android.synthetic.main.activity_file_main.*
 import kotlinx.android.synthetic.main.fragment_weekly_wait_to_watch.*
+import org.jetbrains.anko.toast
 import java.io.File
 import kotlin.properties.Delegates
 
@@ -33,6 +38,7 @@ class FileMainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_file_main)
+        Utils.setWindowStatusBarColor(this, R.color.white)
         maxSize = intent.getIntExtra(Extras.DATA, 9)
         isReplace = intent.getBooleanExtra(Extras.FLAG, false)
         back.setOnClickListener {
@@ -62,6 +68,16 @@ class FileMainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
             setResult(Activity.RESULT_OK, intent)
             finish()
         }
+        help.setOnClickListener {
+            MaterialDialog.Builder(this)
+                    .theme(Theme.LIGHT)
+                    .content(R.string.file_help)
+                    .positiveText("确定")
+                    .onPositive { dialog, which ->
+                        dialog.dismiss()
+                    }
+                    .show()
+        }
     }
 
     fun showSelectedInfo() {
@@ -75,12 +91,18 @@ class FileMainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
     }
 
     fun sendChangeFile(file: File) {
+        val requestCode = intent.getIntExtra(Extras.ID, -1)
         val intent = Intent()
-        intent.putExtra(Extras.DATA, file.path)
+        if (requestCode == PartyUploadActivity.SELECTFILE) {
+            intent.putExtra(Extras.DATA, file)
+        } else {
+            intent.putExtra(Extras.DATA, file.path)
+        }
         setResult(Activity.RESULT_OK, intent)
         finish()
     }
 
+    @SuppressLint("RestrictedApi")
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         supportFragmentManager.fragments.forEach {
             if (it is AllFileFragment) {
@@ -115,6 +137,7 @@ class FileMainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
             val intent = Intent(context, FileMainActivity::class.java)
             intent.putExtra(Extras.DATA, maxSize)
             intent.putExtra(Extras.FLAG, isReplace)
+            intent.putExtra(Extras.ID, requestCode)
             context.startActivityForResult(intent, requestCode)
         }
     }

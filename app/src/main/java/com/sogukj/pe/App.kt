@@ -1,13 +1,15 @@
 package com.sogukj.pe
 
+import android.annotation.TargetApi
 import android.app.Notification
+import android.app.Notification.VISIBILITY_PUBLIC
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+import android.os.Build
 import android.support.multidex.MultiDexApplication
 import android.util.Log
 import android.widget.RemoteViews
-import anet.channel.util.Utils.context
 import com.framework.base.ActivityHelper
 import com.google.gson.Gson
 import com.mob.MobSDK
@@ -18,6 +20,7 @@ import com.netease.nimlib.sdk.auth.AuthService
 import com.netease.nimlib.sdk.auth.AuthServiceObserver
 import com.netease.nimlib.sdk.auth.LoginInfo
 import com.netease.nimlib.sdk.util.NIMUtil
+import com.sogukj.pe.R
 import com.sogukj.pe.bean.NewsBean
 import com.sogukj.pe.ui.IM.SessionHelper
 import com.sogukj.pe.ui.IM.location.NimDemoLocationProvider
@@ -37,6 +40,7 @@ import com.sogukj.util.Store
 import com.sogukj.util.XmlDb
 import com.tencent.bugly.crashreport.CrashReport
 import com.umeng.message.IUmengRegisterCallback
+import com.umeng.message.MsgConstant
 import com.umeng.message.PushAgent
 import com.umeng.message.UmengMessageHandler
 import com.umeng.message.entity.UMessage
@@ -55,11 +59,12 @@ class App : MultiDexApplication() {
         super.onCreate()
         INSTANCE = this
 //        MobSDK.init(this, "137b5c5ce8f55", "b28db523803b31a66b590150cb96c4fd")
-        CrashReport.initCrashReport(this,"49fb9e37b7",true)
+        CrashReport.initCrashReport(this, "49fb9e37b7", true)
         MobSDK.init(this, "214eaf8217e6c", "c1ddfcaa333020a5a06812bc745d508c")
         val mPushAgent = PushAgent.getInstance(this)
         mPushAgent.setDebugMode(false)
-        mPushAgent.displayNotificationNumber = 0
+        mPushAgent.displayNotificationNumber = 5
+        mPushAgent.notificationPlayLights = MsgConstant.NOTIFICATION_PLAY_SDK_ENABLE
         mPushAgent.register(object : IUmengRegisterCallback {
 
             override fun onSuccess(deviceToken: String) {
@@ -75,9 +80,6 @@ class App : MultiDexApplication() {
         PushAgent.getInstance(this).messageHandler = object : UmengMessageHandler() {
             override fun getNotification(p0: Context?, p1: UMessage?): Notification {
                 Log.d("WJY", "推送==>" + Gson().toJson(p1))
-                p1?.let {
-                    ShortcutBadger.applyCount(this@App, it.extra["badge"]!!.toInt())
-                }
                 val builder = Notification.Builder(this@App)
                 val myNotificationView = RemoteViews(this@App.packageName, R.layout.upush_notification)
                 myNotificationView.setTextViewText(R.id.notification_title, p1?.title)
@@ -88,7 +90,19 @@ class App : MultiDexApplication() {
                         .setSmallIcon(R.mipmap.ic_launcher)
                         .setTicker(p1?.ticker)
                         .setAutoCancel(true)
-                return builder.notification
+                val notification = builder.notification
+                notification.defaults = Notification.DEFAULT_LIGHTS
+                try {
+                    p1?.let {
+                        if (it.extra != null && it.extra.containsKey("badge")) {
+                            it.extra["badge"]?.let {
+                                ShortcutBadger.applyCount(this@App, it.toInt())
+                            }
+                        }
+                    }
+                } catch (e: Exception) {
+                }
+                return notification
             }
         }
         PushAgent.getInstance(this).setNotificationClickHandler({ context, uMessage ->
@@ -128,7 +142,7 @@ class App : MultiDexApplication() {
                             intent.putExtra(Extras.ID, weekId)
                             intent.putExtra(Extras.NAME, "Push")
                             intent.putExtra(Extras.TYPE1, userId)
-                            intent.putExtra(Extras.TYPE2,postName)
+                            intent.putExtra(Extras.TYPE2, postName)
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                             context.startActivity(intent)
                         }
