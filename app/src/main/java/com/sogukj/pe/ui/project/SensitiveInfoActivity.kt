@@ -55,6 +55,17 @@ class SensitiveInfoActivity : BaseActivity(), View.OnClickListener {
             doRequest(data.id, it)
         }
         back.setOnClickListener(this)
+
+        if (data.sum == 0) {
+            status.text = "正常"
+            dangerImage.imageResource = R.drawable.ic_sensitive_green
+            //toDetail.setOnClickListener(null)
+        } else {
+            status.text = "风险人物"
+            dangerImage.imageResource = R.drawable.ic_sensitive_red
+            infoNumber.text = "${data.sum}条"
+            //toDetail.setOnClickListener(this@SensitiveInfoActivity)
+        }
     }
 
 
@@ -72,22 +83,22 @@ class SensitiveInfoActivity : BaseActivity(), View.OnClickListener {
                             info = this
                             this.crime?.let {
                                 setDangerousStatus(it)
-                                if (it.num == 0) {
-                                    status.text = "正常"
-                                    dangerImage.imageResource = R.drawable.ic_sensitive_green
-                                    toDetail.setOnClickListener(null)
-                                } else {
-                                    status.text = "风险人物"
-                                    dangerImage.imageResource = R.drawable.ic_sensitive_red
-                                    infoNumber.text = "${it.num}条"
-                                    toDetail.setOnClickListener(this@SensitiveInfoActivity)
-                                }
+//                                if (it.num == 0) {
+//                                    status.text = "正常"
+//                                    dangerImage.imageResource = R.drawable.ic_sensitive_green
+//                                    toDetail.setOnClickListener(null)
+//                                } else {
+//                                    status.text = "风险人物"
+//                                    dangerImage.imageResource = R.drawable.ic_sensitive_red
+//                                    infoNumber.text = "${it.num}条"
+//                                    toDetail.setOnClickListener(this@SensitiveInfoActivity)
+//                                }
                             }
-                            this.court?.let {
-                                setInfo(courtNoticeCount, it.item.fygg != 0, "${it.item.fygg}条记录")
-                                setInfo(courtroomtNoticeCount, it.item.ktgg != 0, "${it.item.ktgg}条记录")
-                                setInfo(refereeDocumentsCount, it.item.cpws != 0, "${it.item.cpws}条记录")
-                                setInfo(executiveBulletinCount, it.item.zxgg != 0, "${it.item.zxgg}条记录")
+                            this.court?.item?.let {
+                                setInfo(courtNoticeCount, it.fygg != 0, "${it.fygg}条记录")
+                                setInfo(courtroomtNoticeCount, it.ktgg != 0, "${it.ktgg}条记录")
+                                setInfo(refereeDocumentsCount, it.cpws != 0, "${it.cpws}条记录")
+                                setInfo(executiveBulletinCount, it.zxgg != 0, "${it.zxgg}条记录")
                                 recordNumber2.setOnClickListener(this@SensitiveInfoActivity)
                             }
                             this.dishonest?.let { setLostList(it) }
