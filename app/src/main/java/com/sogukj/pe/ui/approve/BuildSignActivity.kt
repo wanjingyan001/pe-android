@@ -165,10 +165,10 @@ class BuildSignActivity : ToolbarActivity() {
                 })
     }
 
-    override fun onPause() {
-        super.onPause()
-        onBackPressed()
-    }
+//    override fun onPause() {
+//        super.onPause()
+//        onBackPressed()
+//    }
 
     override fun onBackPressed() {
         var tmpMap = HashMap<String, Any?>()
