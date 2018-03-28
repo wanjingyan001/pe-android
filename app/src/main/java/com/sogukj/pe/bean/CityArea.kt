@@ -13,7 +13,7 @@ class CityArea : Serializable {
     var seclected = false
     var city: ArrayList<City>? = null//市相关信息
 
-    inner class City : Serializable  {
+    class City : Serializable  {
         var sortLetters:String = ""//显示数据拼音的首字母
         var id: Int? = null//id
         var name: String? = null//省

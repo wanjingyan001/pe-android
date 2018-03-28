@@ -1185,14 +1185,13 @@ interface SoguService {
                         @Field("pageSize") pageSize: Int? = 20): Observable<Payload<ArrayList<LeaveRecordBean>>>
 
     //修改出差请假提交
-    @FormUrlEncoded
     @POST("/api/Approve/editLeave")
-    fun editLeave(@Field("approval_id") approval_id: Int): Observable<Payload<Any>>
+    fun editLeave(@Body body: RequestBody): Observable<Payload<Any>>
 
     //撤销出差请假
     @FormUrlEncoded
     @POST("/api/Approve/cancelLeave")
-    fun cancalLeave(@Field("approval_id") approval_id: Int): Observable<Payload<Any>>
+    fun cancalLeave(@Field("approval_id") approval_id: Int, @Field("content") content: String): Observable<Payload<Any>>
     
     
        //每周工作安排列表

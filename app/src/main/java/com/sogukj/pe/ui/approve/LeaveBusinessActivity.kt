@@ -31,6 +31,9 @@ import com.sogukj.pe.util.Utils
 import okhttp3.FormBody
 import java.util.*
 import kotlin.collections.ArrayList
+import com.google.gson.internal.LinkedTreeMap
+import java.text.SimpleDateFormat
+
 
 class LeaveBusinessActivity : ToolbarActivity() {
 
@@ -53,6 +56,15 @@ class LeaveBusinessActivity : ToolbarActivity() {
             title = "请假"
             divider.visibility = View.GONE
         }
+        if (flagEdit == true) {
+            var paramsTitle = intent.getStringExtra(Extras.TITLE)
+            if (paramsTitle.equals("出差")) {
+                title = "出差"
+            } else if (paramsTitle.equals("请假")) {
+                title = "请假"
+                divider.visibility = View.GONE
+            }
+        }
 
         load()
 
@@ -72,30 +84,57 @@ class LeaveBusinessActivity : ToolbarActivity() {
 
     //出差  end_city  time_range（,）  total_hours  reasons   copy
     fun doConfirm() {
-        val builder = FormBody.Builder()
-        builder.add("template_id", "${paramId}")
-        for ((k, v) in paramMap) {
-            if (v == null) {
+        if (flagEdit) {
+            val builder = FormBody.Builder()
+            builder.add("approval_id", "${paramId}")
+            for ((k, v) in paramMap) {
+                if (v == null) {
 
-            } else if (v is String) {
-                builder.add(k, v)
-            } else
-                builder.add(k, Gson().toJson(v))
+                } else if (v is String) {
+                    builder.add(k, v)
+                } else
+                    builder.add(k, Gson().toJson(v))
+            }
+            SoguApi.getService(application)
+                    .editLeave(builder.build())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (payload.isOk) {
+                            showToast("提交成功")
+                            finish()
+                        } else
+                            showToast(payload.message)
+                    }, { e ->
+                        Trace.e(e)
+                        showToast("提交失败")
+                    })
+        } else {
+            val builder = FormBody.Builder()
+            builder.add("template_id", "${paramId}")
+            for ((k, v) in paramMap) {
+                if (v == null) {
+
+                } else if (v is String) {
+                    builder.add(k, v)
+                } else
+                    builder.add(k, Gson().toJson(v))
+            }
+            SoguApi.getService(application)
+                    .submitApprove(builder.build())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (payload.isOk) {
+                            showToast("提交成功")
+                            finish()
+                        } else
+                            showToast(payload.message)
+                    }, { e ->
+                        Trace.e(e)
+                        showToast("提交失败")
+                    })
         }
-        SoguApi.getService(application)
-                .submitApprove(builder.build())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ payload ->
-                    if (payload.isOk) {
-                        showToast("提交成功")
-                        finish()
-                    } else
-                        showToast(payload.message)
-                }, { e ->
-                    Trace.e(e)
-                    showToast("提交失败")
-                })
     }
 
     private var flagEdit = false
@@ -186,8 +225,14 @@ class LeaveBusinessActivity : ToolbarActivity() {
                 items.add(v.name)
                 map.put(v.name!!, v)
             }
+            if (flagEdit) {
+                if (v.is_select == 1) {
+                    etValue.text = v.name
+                    paramMap.put(bean.fields, v.id)
+                }
+            }
         }
-        paramMap.put(bean.fields, "")//TODO
+        //paramMap.put(bean.fields, "")//TODO
         if (map.isNotEmpty())
             etValue.setOnClickListener {
                 var pvOptions = OptionsPickerView.Builder(this, OptionsPickerView.OnOptionsSelectListener { options1, option2, options3, v ->
@@ -256,11 +301,21 @@ class LeaveBusinessActivity : ToolbarActivity() {
         if (!bean.value_map?.name.isNullOrEmpty()) {
             etValue.text = bean.value_map?.name
         }
-        var list = bean.value_map?.value as ArrayList<CityArea.City>
+        var list = bean.value_map?.value as ArrayList<LinkedTreeMap<String, Any>>
         if (list == null || list.size == 0) {
 
         } else {
-            initDstCity(list)
+            var changeList = ArrayList<CityArea.City>()
+            for (city in list) {
+                var item = CityArea.City()
+
+                item.id = city.get("id").toString().toDouble().toInt()
+                item.pid = city.get("pid").toString().toDouble().toInt()
+                item.name = city.get("name").toString()
+
+                changeList.add(item)
+            }
+            initDstCity(changeList)
         }
 
         //end_city
@@ -293,7 +348,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
 
     private fun add11(bean: CustomSealBean) {
         //time_range
-        var nameList = bean.name?.split("&") as ArrayList<String>
+        var nameList = bean.name?.split(",") as ArrayList<String>
         for (index in nameList.indices) {
             var name = nameList[index]
             val convertView = inflater.inflate(R.layout.cs_row_11, null)
@@ -311,9 +366,25 @@ class LeaveBusinessActivity : ToolbarActivity() {
 
             tvLabel.text = name
             etValue.hint = bean.value_map?.pla
-            if (!bean.value_map?.name.isNullOrEmpty()) {
-                etValue.text = bean.value_map?.name
+            var str = bean.value_map?.value as String?
+
+            if (!str.isNullOrEmpty()) {
+                var dates = str!!.split(",")
+                if (!dates[0].isNullOrEmpty()) {
+                    if (flagEdit == true) {
+                        var paramsTitle = intent.getStringExtra(Extras.TITLE)
+                        paramMap.put(bean.fields, str)
+                        if (paramsTitle.equals("出差")) {
+                            val format = SimpleDateFormat("yyyy-MM-dd")
+                            etValue.text = format.format(dates[index].toLong() * 1000)
+                        } else if (paramsTitle.equals("请假")) {
+                            val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                            etValue.text = format.format(dates[index].toLong() * 1000)
+                        }
+                    }
+                }
             }
+
             etValue.setOnClickListener {
                 if (index == 1) {
                     if (startDate == null) {
@@ -443,6 +514,16 @@ class LeaveBusinessActivity : ToolbarActivity() {
         tvLabel.text = bean.name
         etValue.hint = bean.value_map?.pla
         etValue.tag = bean.fields
+        //etValue.text = bean.value_map?.value as String?
+        if (flagEdit == true) {
+            var paramsTitle = intent.getStringExtra(Extras.TITLE)
+            var str = bean.value_map?.value as String?
+            if (paramsTitle.equals("出差")) {
+                etValue.text = "${str}天"
+            } else if (paramsTitle.equals("请假")) {
+                etValue.text = "${str}小时"
+            }
+        }
         if (bean.is_must == 1) {
             icon.visibility = View.VISIBLE
         } else {
@@ -621,10 +702,11 @@ class LeaveBusinessActivity : ToolbarActivity() {
     //出差-出差明细--item
 
     companion object {
-        fun start(ctx: Activity, edit: Boolean, id: Int) {
+        fun start(ctx: Activity, edit: Boolean, id: Int, title: String) {
             var intent = Intent(ctx, LeaveBusinessActivity::class.java)
             intent.putExtra(Extras.FLAG, edit)
             intent.putExtra(Extras.ID, id)
+            intent.putExtra(Extras.TITLE, title)
             ctx.startActivity(intent)
         }
     }

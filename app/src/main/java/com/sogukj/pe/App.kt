@@ -25,6 +25,7 @@ import com.sogukj.pe.bean.NewsBean
 import com.sogukj.pe.ui.IM.SessionHelper
 import com.sogukj.pe.ui.IM.location.NimDemoLocationProvider
 import com.sogukj.pe.ui.LoginActivity
+import com.sogukj.pe.ui.approve.LeaveBusinessApproveActivity
 import com.sogukj.pe.ui.approve.SealApproveActivity
 import com.sogukj.pe.ui.approve.SignApproveActivity
 import com.sogukj.pe.ui.calendar.ModifyTaskActivity
@@ -128,8 +129,15 @@ class App : MultiDexApplication() {
                         4 -> {
                             val approval_id = data.getInt("approval_id")
                             val is_mine = data.getInt("is_mine")
-                            if (data.has("qs")) {
+                            if (data.has("qs") && data.getInt("qs") == 1) {
                                 SignApproveActivity.start(context, approval_id, is_mine, "签字审批")
+                            } else if (data.has("qs") && data.getInt("qs") == 2) {
+                                var title = when (data.getInt("tid")) {
+                                    10 -> "出差"
+                                    11 -> "请假"
+                                    else -> ""
+                                }
+                                LeaveBusinessApproveActivity.start(context, approval_id, is_mine, title)
                             } else {
                                 SealApproveActivity.start(context, approval_id, is_mine, "用印审批")
                             }

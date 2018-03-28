@@ -79,6 +79,11 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
         refresh()
     }
 
+    override fun onResume() {
+        super.onResume()
+        refresh()
+    }
+
     fun refresh() {
         SoguApi.getService(application)
                 .showApprove(approval_id = paramId!!, classify = paramType, is_mine = is_mine)
@@ -150,51 +155,52 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
                     btn_right.text = "撤销"
                 }
                 btn_left.setOnClickListener {
-                    //                    SoguApi.getService(application)
-//                            .exportPdf(paramId!!)
-//                            .observeOn(AndroidSchedulers.mainThread())
-//                            .subscribeOn(Schedulers.io())
-//                            .subscribe({ payload ->
-//                                if (payload.isOk) {
-//                                    val bean = payload.payload
-//                                    bean?.let {
-//                                        PdfUtil.loadPdf(this, it.url, it.name)
-//                                    }
-//                                } else
-//                                    showToast(payload.message)
-//                            }, { e ->
-//                                Trace.e(e)
-//                                showToast("请求失败")
-//                            })
+                    LeaveBusinessActivity.start(context, true, paramId!!, paramTitle)
                 }
                 btn_right.setOnClickListener {
-                    //                    SoguApi.getService(application)
-//                            .finishApprove(paramId!!)
-//                            .observeOn(AndroidSchedulers.mainThread())
-//                            .subscribeOn(Schedulers.io())
-//                            .subscribe({ payload ->
-//                                if (payload.isOk) {
-//                                    refresh()
-//                                } else
-//                                    showToast(payload.message)
-//                            }, { e ->
-//                                Trace.e(e)
-//                                showToast("请求失败")
-//                            })
-                    SoguApi.getService(application)
-                            .cancalLeave(paramId!!)
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribeOn(Schedulers.io())
-                            .subscribe({ payload ->
-                                if (payload.isOk) {
-                                    showToast("撤销成功")
-                                    finish()
-                                } else
-                                    showToast(payload.message)
-                            }, { e ->
-                                Trace.e(e)
-                                showToast("请求失败")
-                            })
+                    val inflate = LayoutInflater.from(this).inflate(R.layout.layout_input_dialog, null)
+                    val dialog = MaterialDialog.Builder(this)
+                            .customView(inflate, false)
+                            .cancelable(true)
+                            .build()
+                    dialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                    val title = inflate.find<TextView>(R.id.approval_comments_title)
+                    val commentInput = inflate.find<EditText>(R.id.approval_comments_input)
+                    val veto = inflate.find<TextView>(R.id.veto_comment)
+                    val confirm = inflate.find<TextView>(R.id.confirm_comment)
+                    commentInput.filters = Utils.getFilter(this)
+                    title.text = "请输入撤销理由（提交后会重新审核）"
+                    title.textSize = 16.toFloat()
+                    commentInput.hint = ""
+                    veto.text = "取消"
+                    confirm.text = "提交"
+                    veto.setOnClickListener {
+                        if (dialog.isShowing) {
+                            dialog.dismiss()
+                        }
+                        //showConfirmDialog(-1, commentInput.text.toString())
+                    }
+                    confirm.setOnClickListener {
+                        if (dialog.isShowing) {
+                            dialog.dismiss()
+                        }
+                        //showConfirmDialog(1, commentInput.text.toString())
+                        SoguApi.getService(application)
+                                .cancalLeave(paramId!!, commentInput.text.toString())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribeOn(Schedulers.io())
+                                .subscribe({ payload ->
+                                    if (payload.isOk) {
+                                        showToast("撤销成功")
+                                        refresh()
+                                    } else
+                                        showToast(payload.message)
+                                }, { e ->
+                                    Trace.e(e)
+                                    showToast("请求失败")
+                                })
+                    }
+                    dialog.show()
                 }
             }
             5 -> {
