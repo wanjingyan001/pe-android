@@ -15,6 +15,7 @@ class ApproveViewBean {
     var copy: ArrayList<UserBean>? = null
 
     class FromBean {
+        var user_id: Int? = null//	string	申请人ID
         var name: String? = null//	string	申请人姓名
         var url: String? = null//   string    申请人头像地址    头像地址可能为空
         var number: String? = null//   string    编号

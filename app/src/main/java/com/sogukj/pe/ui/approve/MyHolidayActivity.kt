@@ -71,7 +71,7 @@ class MyHolidayActivity : ToolbarActivity() {
                 })
 
         record_detail.setOnClickListener {
-            VacationRecordActivity.start(context)
+            VacationRecordActivity.start(context, type = 1)
         }
     }
 

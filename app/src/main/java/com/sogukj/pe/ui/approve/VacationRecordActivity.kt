@@ -1,6 +1,6 @@
 package com.sogukj.pe.ui.approve
 
-import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -13,6 +13,7 @@ import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import com.lcodecore.tkrefreshlayout.footer.BallPulseView
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
+import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.LeaveRecordBean
 import com.sogukj.pe.ui.SupportEmptyView
@@ -32,11 +33,18 @@ class VacationRecordActivity : ToolbarActivity() {
 
     lateinit var adapter: RecyclerAdapter<LeaveRecordBean>
 
+    var typeCCQJ: Int = 0
+    var id: Int? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_vacation_record)
         title = "记录"
         setBack(true)
+
+        typeCCQJ = intent.getIntExtra(Extras.TYPE, 0)
+        id = intent.getIntExtra(Extras.TYPE, -1)
+        id = if (id == -1) null else id
 
         adapter = RecyclerAdapter(context, { _adapter, parent, type ->
             val convertView = _adapter.getView(R.layout.qj_record_item, parent)
@@ -57,9 +65,13 @@ class VacationRecordActivity : ToolbarActivity() {
                         Glide.with(context).load(data.url).into(icon)
                     }
                     title.text = data.title
-                    type1.text = "请假类型：${data.name}"
-                    start_time.text = data.start_time
-                    end_time.text = data.end_time
+                    if (typeCCQJ == 1) {
+                        type1.text = "请假类型：${data.name}"
+                    } else {
+                        type1.visibility = View.GONE
+                    }
+                    start_time.text = "开始时间：${data.start_time}"
+                    end_time.text = "结束时间：${data.end_time}"
                     time.text = data.add_time
                     status.text = when (data.status) {//-1=>不通过，0=>待审批，1=>审批中，4=>审批通过
                         -1 -> "审批未通过"
@@ -107,38 +119,71 @@ class VacationRecordActivity : ToolbarActivity() {
     var page = 1
 
     fun doRequest() {
-        SoguApi.getService(application)
-                .showLeaveRecode(page = page)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ payload ->
-                    if (payload.isOk) {
-                        if (page == 1)
-                            adapter.dataList.clear()
-                        payload.payload?.apply {
-                            adapter.dataList.addAll(this)
+        if (typeCCQJ == 1) {
+            SoguApi.getService(application)
+                    .showLeaveRecode(user_id = id, page = page)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (payload.isOk) {
+                            if (page == 1)
+                                adapter.dataList.clear()
+                            payload.payload?.apply {
+                                adapter.dataList.addAll(this)
+                            }
+                        } else {
+                            showToast(payload.message)
                         }
-                    } else {
-                        showToast(payload.message)
-                    }
-                }, { e ->
-                    Trace.e(e)
-                    showToast("暂无可用数据")
-                }, {
-                    SupportEmptyView.checkEmpty(this, adapter)
-                    refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
-                    adapter.notifyDataSetChanged()
-                    if (page == 1)
-                        refresh?.finishRefreshing()
-                    else
-                        refresh?.finishLoadmore()
-                })
+                    }, { e ->
+                        Trace.e(e)
+                        showToast("暂无可用数据")
+                    }, {
+                        SupportEmptyView.checkEmpty(this, adapter)
+                        refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
+                        adapter.notifyDataSetChanged()
+                        if (page == 1)
+                            refresh?.finishRefreshing()
+                        else
+                            refresh?.finishLoadmore()
+                    })
+        } else if (typeCCQJ == 0) {
+            SoguApi.getService(application)
+                    .showTravelRecode(user_id = id, page = page)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (payload.isOk) {
+                            if (page == 1)
+                                adapter.dataList.clear()
+                            payload.payload?.apply {
+                                adapter.dataList.addAll(this)
+                            }
+                        } else {
+                            showToast(payload.message)
+                        }
+                    }, { e ->
+                        Trace.e(e)
+                        showToast("暂无可用数据")
+                    }, {
+                        SupportEmptyView.checkEmpty(this, adapter)
+                        refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
+                        adapter.notifyDataSetChanged()
+                        if (page == 1)
+                            refresh?.finishRefreshing()
+                        else
+                            refresh?.finishLoadmore()
+                    })
+        }
     }
 
     companion object {
-        fun start(ctx: Activity?) {
+        //我的出差记录  user_id查看别人的	可空，空则是自己的
+        //type 0--出差，1--请假
+        fun start(ctx: Context, user_id: Int? = null, type: Int) {
             val intent = Intent(ctx, VacationRecordActivity::class.java)
-            ctx?.startActivity(intent)
+            intent.putExtra(Extras.TYPE, type)
+            intent.putExtra(Extras.ID, user_id)
+            ctx.startActivity(intent)
         }
     }
 }

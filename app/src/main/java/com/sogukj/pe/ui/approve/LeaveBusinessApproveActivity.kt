@@ -77,7 +77,11 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
         title = paramTitle
 
         history.setOnClickListener {
-            VacationRecordActivity.start(context)
+            if (paramTitle.equals("出差")) {
+                VacationRecordActivity.start(context, user_id = user_id, type = 0)
+            } else if (paramTitle.equals("请假")) {
+                VacationRecordActivity.start(context, user_id = user_id, type = 1)
+            }
         }
 
         refresh()
@@ -568,6 +572,8 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
         tv_info.text = Html.fromHtml(buff.toString())
     }
 
+    var user_id: Int? = null
+
     private fun initUser(fixation: ApproveViewBean.FromBean?) {
         if (null == fixation) return
         val ch = fixation.name?.first()
@@ -576,6 +582,7 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
                 .load(fixation.url)
                 .into(iv_user)
         tv_name.text = fixation.name
+        user_id = fixation.user_id
         tv_num.text = "审批编号:${fixation.number}"
     }
 
