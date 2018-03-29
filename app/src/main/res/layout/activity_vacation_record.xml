@@ -13,13 +13,13 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="10dp">
+        android:layout_height="match_parent">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:background="#f3f5f7"/>
 
         <include layout="@layout/layout_empty" />
     </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>

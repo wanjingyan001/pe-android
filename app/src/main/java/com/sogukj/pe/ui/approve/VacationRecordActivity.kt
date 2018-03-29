@@ -26,6 +26,7 @@ import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_vacation_record.*
+import org.jetbrains.anko.backgroundResource
 
 class VacationRecordActivity : ToolbarActivity() {
 
@@ -61,11 +62,16 @@ class VacationRecordActivity : ToolbarActivity() {
                     end_time.text = data.end_time
                     time.text = data.add_time
                     status.text = when (data.status) {//-1=>不通过，0=>待审批，1=>审批中，4=>审批通过
-                        -1 -> "不通过"
-                        0 -> "待审批"
-                        1 -> "审批中"
+                        -1 -> "审批未通过"
+                        0, 1 -> "待审批"
                         4 -> "审批通过"
                         else -> "未知状态"
+                    }
+                    status.backgroundResource = when (data.status) {//-1=>不通过，0=>待审批，1=>审批中，4=>审批通过
+                        -1 -> R.drawable.qj_bg1
+                        0, 1 -> R.drawable.qj_bg2
+                        4 -> R.drawable.qj_bg
+                        else -> R.drawable.qj_bg
                     }
                 }
             }
@@ -119,7 +125,7 @@ class VacationRecordActivity : ToolbarActivity() {
                     Trace.e(e)
                     showToast("暂无可用数据")
                 }, {
-                    SupportEmptyView.checkEmpty(this,adapter)
+                    SupportEmptyView.checkEmpty(this, adapter)
                     refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
                     adapter.notifyDataSetChanged()
                     if (page == 1)
