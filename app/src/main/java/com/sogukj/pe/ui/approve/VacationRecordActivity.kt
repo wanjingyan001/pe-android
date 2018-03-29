@@ -43,7 +43,7 @@ class VacationRecordActivity : ToolbarActivity() {
         setBack(true)
 
         typeCCQJ = intent.getIntExtra(Extras.TYPE, 0)
-        id = intent.getIntExtra(Extras.TYPE, -1)
+        id = intent.getIntExtra(Extras.ID, -1)
         id = if (id == -1) null else id
 
         adapter = RecyclerAdapter(context, { _adapter, parent, type ->
