@@ -75,13 +75,15 @@ class VacationRecordActivity : ToolbarActivity() {
                     time.text = data.add_time
                     status.text = when (data.status) {//-1=>不通过，0=>待审批，1=>审批中，4=>审批通过
                         -1 -> "审批未通过"
-                        0, 1 -> "待审批"
+                        0 -> "待审批"
+                        1 -> "审批中"
                         4 -> "审批通过"
                         else -> "未知状态"
                     }
                     status.backgroundResource = when (data.status) {//-1=>不通过，0=>待审批，1=>审批中，4=>审批通过
                         -1 -> R.drawable.qj_bg1
-                        0, 1 -> R.drawable.qj_bg2
+                        0 -> R.drawable.qj_bg2
+                        1 -> R.drawable.qj_bg3
                         4 -> R.drawable.qj_bg
                         else -> R.drawable.qj_bg
                     }
