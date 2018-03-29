@@ -16,7 +16,7 @@
         android:paddingBottom="8dp"
         android:paddingTop="8dp"
         android:text="沈阳"
-        android:textColor="#a0a4aa"
+        android:textColor="#ff1787fb"
         android:textSize="14sp" />
 
     <ImageView

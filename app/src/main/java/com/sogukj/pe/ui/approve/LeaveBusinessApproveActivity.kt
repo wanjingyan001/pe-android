@@ -397,9 +397,15 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
                 tvEdit.visibility = View.VISIBLE
                 if (v?.is_edit_file == 1) {
                     tvEdit.text = "文件已修改"
+                    if (paramTitle.equals("出差") || paramTitle.equals("请假")) {
+                        tvEdit.text = "内容已修改"
+                    }
                     tvEdit.setBackgroundResource(R.drawable.bg_tag_edit_file_1)
                 } else {
                     tvEdit.text = "文件未修改"
+                    if (paramTitle.equals("出差") || paramTitle.equals("请假")) {
+                        tvEdit.text = "内容未修改"
+                    }
                     tvEdit.setBackgroundResource(R.drawable.bg_tag_edit_file_0)
                 }
             } else

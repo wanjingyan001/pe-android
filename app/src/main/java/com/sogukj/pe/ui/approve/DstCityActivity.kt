@@ -60,6 +60,10 @@ class DstCityActivity : ToolbarActivity() {
         inflater = LayoutInflater.from(context)
 
         initView()
+
+        toolbar_menu.setOnClickListener {
+            mRootScrollView.smoothScrollTo(0, 0)
+        }
     }
 
     //实例化汉字转拼音类
@@ -118,10 +122,20 @@ class DstCityActivity : ToolbarActivity() {
         historyGrid.adapter = historyAdapter
         historyGrid.setOnItemClickListener { parent, view, position, id ->
             var city = historyAdapter.data.get(position)
-            if (chosenAdapter.data.contains(city)) {
+            var contains = false
+            var index = 0
+            var dataList = chosenAdapter.data
+            for (item in 0 until dataList.size) {
+                if (dataList[item].id == city.id) {
+                    contains = true
+                    index = item
+                    break
+                }
+            }
+            if (contains) {
                 //已点过
                 updateList(city, false)
-                chosenAdapter.data.remove(city)
+                chosenAdapter.data.removeAt(index)
                 chosenAdapter.notifyDataSetChanged()
                 if (chosenAdapter.data.size == 0) {
                     empty_chosen.visibility = View.VISIBLE
@@ -139,8 +153,6 @@ class DstCityActivity : ToolbarActivity() {
 
         doRequest()
     }
-
-    private var lastOffSet = 0
 
     //顶部状态栏（电量）+标题
     private fun getStatusBarHeight(): Int {
@@ -262,7 +274,15 @@ class DstCityActivity : ToolbarActivity() {
 
     fun addToCurrent(city: CityArea.City) {
         if (city.seclected == false) {//点两次
-            chosenAdapter.data.remove(city)
+            var index = 0
+            var dataList = chosenAdapter.data
+            for (item in 0 until dataList.size) {
+                if (dataList[item].id == city.id) {
+                    index = item
+                    break
+                }
+            }
+            chosenAdapter.data.removeAt(index)
             chosenAdapter.notifyDataSetChanged()
             if (chosenAdapter.data.size == 0) {
                 empty_chosen.visibility = View.VISIBLE
