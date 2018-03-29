@@ -40,7 +40,7 @@ class MyHolidayActivity : ToolbarActivity() {
                 override fun setData(view: View, data: VacationBean, position: Int) {
                     vac_type.text = data.name
                     if (data.status == 0) {//0=>已请了多长时间，1=>还剩多长时间
-                        shengyu.text = "已申请${data.hours}小时"
+                        shengyu.text = "已使用${data.hours}小时"
                     } else if (data.status == 1) {
                         shengyu.text = "剩余${data.hours}小时"
                     }

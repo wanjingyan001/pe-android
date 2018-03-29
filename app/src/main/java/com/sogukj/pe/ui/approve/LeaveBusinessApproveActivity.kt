@@ -10,13 +10,12 @@ import android.text.Html
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.view.ViewGroup
+import android.widget.*
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
@@ -29,9 +28,10 @@ import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_leave_business_approve.*
+import kotlinx.android.synthetic.main.fragment_home.*
 //import kotlinx.android.synthetic.main.seal_approve_part1.*
-import kotlinx.android.synthetic.main.seal_approve_part2.*
-import kotlinx.android.synthetic.main.seal_approve_part3.*
+//import kotlinx.android.synthetic.main.seal_approve_part2.*
+//import kotlinx.android.synthetic.main.seal_approve_part3.*
 import org.jetbrains.anko.collections.forEachWithIndex
 import org.jetbrains.anko.find
 import java.text.SimpleDateFormat
@@ -76,6 +76,10 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
         setBack(true)
         title = paramTitle
 
+        history.setOnClickListener {
+            VacationRecordActivity.start(context)
+        }
+
         refresh()
     }
 
@@ -95,7 +99,8 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
                         initInfo(payload.payload?.fixation, payload.payload?.relax)
                         //initFiles(payload.payload?.file_list)//查看pdf的
                         initApprovers(payload.payload?.approve)//审批人
-                        initSegments(payload.payload?.segment)//审批人评语
+                        //initSegments(payload.payload?.segment)//审批人评语
+                        initCS(payload.payload?.copy!!)
                         initButtons(payload.payload?.click)
 
                         iv_state_agreed.visibility = View.GONE
@@ -112,6 +117,11 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
                     Trace.e(e)
                     showToast("暂无可用数据")
                 })
+    }
+
+    fun initCS(list: ArrayList<UserBean>) {
+        var adapter = MyAdapter(context, list)
+        grid_chaosong_to.adapter = adapter
     }
 
     fun initButtons(click: Int?) {
@@ -336,49 +346,49 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
                 })
     }
 
-    fun initSegments(segments: List<ApproverBean>?) {
-        ll_segments.removeAllViews()
-        if (null == segments || segments.isEmpty()) {
-            part3.visibility = View.GONE
-            return
-        }
-        part3.visibility = View.VISIBLE
-        val inflater = LayoutInflater.from(this)
-        segments?.forEach { v ->
-            val convertView = inflater.inflate(R.layout.item_approve_seal_segment, null)
-            ll_segments.addView(convertView)
-
-            val tvPosition = convertView.findViewById(R.id.tv_position) as TextView
-            val ivUser = convertView.findViewById(R.id.iv_user) as com.sogukj.pe.view.CircleImageView
-            val tvName = convertView.findViewById(R.id.tv_name) as TextView
-            val tvStatus = convertView.findViewById(R.id.tv_status) as TextView
-            val tvTime = convertView.findViewById(R.id.tv_time) as TextView
-            tvPosition.text = v.position
-            tvName.text = v.name
-            tvStatus.text = v.status_str
-            tvTime.text = v.approval_time
-            if (null != v.approval_time || !TextUtils.isEmpty(v.approval_time)) {
-                tvTime.visibility = View.VISIBLE
-            } else {
-                tvTime.visibility = View.GONE
-            }
-            val ch = v.name?.first()
-            ivUser.setChar(ch)
-            Glide.with(this)
-                    .load(v.url)
-                    .into(ivUser)
-
-        }
-
-    }
+//    fun initSegments(segments: List<ApproverBean>?) {
+//        ll_segments.removeAllViews()
+//        if (null == segments || segments.isEmpty()) {
+//            part3.visibility = View.GONE
+//            return
+//        }
+//        part3.visibility = View.VISIBLE
+//        val inflater = LayoutInflater.from(this)
+//        segments?.forEach { v ->
+//            val convertView = inflater.inflate(R.layout.item_approve_seal_segment, null)
+//            ll_segments.addView(convertView)
+//
+//            val tvPosition = convertView.findViewById(R.id.tv_position) as TextView
+//            val ivUser = convertView.findViewById(R.id.iv_user) as com.sogukj.pe.view.CircleImageView
+//            val tvName = convertView.findViewById(R.id.tv_name) as TextView
+//            val tvStatus = convertView.findViewById(R.id.tv_status) as TextView
+//            val tvTime = convertView.findViewById(R.id.tv_time) as TextView
+//            tvPosition.text = v.position
+//            tvName.text = v.name
+//            tvStatus.text = v.status_str
+//            tvTime.text = v.approval_time
+//            if (null != v.approval_time || !TextUtils.isEmpty(v.approval_time)) {
+//                tvTime.visibility = View.VISIBLE
+//            } else {
+//                tvTime.visibility = View.GONE
+//            }
+//            val ch = v.name?.first()
+//            ivUser.setChar(ch)
+//            Glide.with(this)
+//                    .load(v.url)
+//                    .into(ivUser)
+//
+//        }
+//
+//    }
 
     private fun initApprovers(approveList: List<ApproverBean>?) {
         ll_approvers.removeAllViews()
-        if (null == approveList || approveList.isEmpty()) {
-            part2.visibility = View.GONE
-            return
-        }
-        part2.visibility = View.VISIBLE
+//        if (null == approveList || approveList.isEmpty()) {
+//            part2.visibility = View.GONE
+//            return
+//        }
+//        part2.visibility = View.VISIBLE
         val inflater = LayoutInflater.from(this)
         approveList?.forEach { v ->
             val convertView = inflater.inflate(R.layout.item_approve_seal_approver, null)
@@ -617,6 +627,46 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
             intent.putExtra(Extras.TYPE, type)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             ctx.startActivity(intent)
+        }
+    }
+
+    class MyAdapter(var context: Context, val list: ArrayList<UserBean>) : BaseAdapter() {
+
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+            var viewHolder: ViewHolder
+            var conView = convertView
+            if (conView == null) {
+                viewHolder = ViewHolder()
+                conView = LayoutInflater.from(context).inflate(R.layout.send_item, null) as LinearLayout
+                viewHolder.icon = conView.findViewById(R.id.icon) as com.netease.nim.uikit.common.ui.imageview.CircleImageView
+                viewHolder.name = conView.findViewById(R.id.name) as TextView
+                conView.setTag(viewHolder)
+            } else {
+                viewHolder = conView.tag as ViewHolder
+            }
+            Glide.with(context)
+                    .load(list[position].url)
+                    .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
+                    .into(viewHolder.icon)
+            viewHolder.name?.text = list[position].name
+            return conView
+        }
+
+        override fun getItem(position: Int): Any {
+            return list.get(position)
+        }
+
+        override fun getItemId(position: Int): Long {
+            return position.toLong()
+        }
+
+        override fun getCount(): Int {
+            return list.size
+        }
+
+        class ViewHolder {
+            var icon: com.netease.nim.uikit.common.ui.imageview.CircleImageView? = null
+            var name: TextView? = null
         }
     }
 }

@@ -12,6 +12,7 @@ class ApproveViewBean {
     var click: Int? = null    //number	按钮	1=>申请加急，2=>审批完成，3=>重新发起审批，4=>导出审批单，用印完成，5=>审批
     var segment: List<ApproverBean>? = null
     var mainStatus: Int? = null
+    var copy: ArrayList<UserBean>? = null
 
     class FromBean {
         var name: String? = null//	string	申请人姓名
