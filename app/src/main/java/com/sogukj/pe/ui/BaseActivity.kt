@@ -30,6 +30,7 @@ abstract class BaseActivity : AppCompatActivity(),AnkoLogger {
     val context: BaseActivity
         get() = this
 
+
     val handler = Handler();
 
     override fun onCreate(savedInstanceState: Bundle?) {

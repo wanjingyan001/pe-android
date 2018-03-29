@@ -37,6 +37,7 @@ import com.sogukj.pe.view.MyStackPageTransformer
 import com.sogukj.util.Store
 import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.NIMClient
+import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.ui.approve.LeaveBusinessApproveActivity
 import com.sogukj.pe.ui.partyBuild.PartyMainActivity
 import com.sogukj.pe.util.Utils
@@ -45,6 +46,7 @@ import com.umeng.message.UmengMessageHandler
 import com.umeng.message.entity.UMessage
 import me.leolin.shortcutbadger.ShortcutBadger
 import org.jetbrains.anko.imageResource
+import org.jetbrains.anko.support.v4.ctx
 import org.json.JSONObject
 
 
@@ -150,6 +152,7 @@ class MainHomeFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
+        ShortcutBadger.removeCount(ctx)
         page = 1
         doRequest()
     }

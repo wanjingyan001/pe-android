@@ -3,35 +3,24 @@ package com.sogukj.pe.ui.partyBuild
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
 import android.widget.TextView
 import com.framework.base.BaseActivity
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.PartyTabBean
 import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
-import com.sogukj.util.Store
 import com.sogukj.util.XmlDb
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_party_main.*
-import kotlinx.android.synthetic.main.fragment_common_documents.*
-import kotlinx.android.synthetic.main.item_rate.view.*
-import kotlinx.android.synthetic.main.layout_shareholder_toolbar.*
-import org.jetbrains.anko.*
-import u.aly.dp
+import org.jetbrains.anko.ctx
+import org.jetbrains.anko.find
 
 class PartyMainActivity : BaseActivity() {
     lateinit var adapter: PartyAdapter
@@ -49,9 +38,9 @@ class PartyMainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_party_main)
-        Utils.setWindowStatusBarColor(this, R.color.white)
+        Utils.setWindowStatusBarColor(this, R.color.party_toolbar_red)
+        toolbar.background = resources.getDrawable(R.color.party_toolbar_red)
         toolbar_title.text = "党建专栏"
-        addTv.textColor = Color.parseColor("#808080")
         categoryList()
         addTv.setOnClickListener {
             PartyUploadActivity.start(this)

@@ -30,7 +30,6 @@ import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_party_more.*
-import kotlinx.android.synthetic.main.layout_shareholder_toolbar.*
 import org.jetbrains.anko.ctx
 import org.jetbrains.anko.find
 import kotlin.properties.Delegates
@@ -55,7 +54,7 @@ class PartyMoreActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_party_more)
-        Utils.setWindowStatusBarColor(this, R.color.white)
+        Utils.setWindowStatusBarColor(this, R.color.party_toolbar_red)
         type = intent.getIntExtra(Extras.TYPE, 1)
         id = intent.getIntExtra(Extras.ID, 0)
         val title = intent.getStringExtra(Extras.NAME)
@@ -69,7 +68,6 @@ class PartyMoreActivity : BaseActivity() {
                 categoryFileList(id)
             }
         }
-        addTv.visibility = View.GONE
         adapter = RecyclerAdapter(this, { _adapter, parent, _ ->
             val convertView = _adapter.getView(R.layout.item_party_list, parent)
             object : RecyclerHolder<Any>(convertView) {

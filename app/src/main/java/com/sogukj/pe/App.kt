@@ -108,7 +108,9 @@ class App : MultiDexApplication() {
         }
         PushAgent.getInstance(this).setNotificationClickHandler({ context, uMessage ->
             try {
+                ShortcutBadger.removeCount(context)
                 Log.d("WJY", "推送==>${Gson().toJson(uMessage)}")
+
                 uMessage.custom?.apply {
                     Log.d("WJY", "推送内容==>${Gson().toJson(uMessage.custom)}")
                     com.sogukj.pe.util.Trace.i("uPush", this)

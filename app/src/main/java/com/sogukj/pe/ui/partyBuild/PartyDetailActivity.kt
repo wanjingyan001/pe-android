@@ -25,7 +25,6 @@ import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_party_detail.*
-import kotlinx.android.synthetic.main.layout_shareholder_toolbar.*
 import java.net.URL
 import kotlin.properties.Delegates
 
@@ -44,12 +43,9 @@ class PartyDetailActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_party_detail)
-        Utils.setWindowStatusBarColor(this, R.color.white)
+        Utils.setWindowStatusBarColor(this, R.color.party_toolbar_red)
         toolbar_title.text = intent.getStringExtra(Extras.NAME)
-        addTv.visibility = View.GONE
         id = intent.getIntExtra(Extras.ID, 0)
-
-
         val settings = contentWeb.settings
         settings.javaScriptEnabled = true
         settings.useWideViewPort = true

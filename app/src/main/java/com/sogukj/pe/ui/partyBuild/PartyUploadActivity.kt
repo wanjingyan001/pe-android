@@ -20,7 +20,6 @@ import com.sogukj.util.XmlDb
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_party_upload.*
-import kotlinx.android.synthetic.main.layout_shareholder_toolbar.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -42,7 +41,7 @@ class PartyUploadActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_party_upload)
-        Utils.setWindowStatusBarColor(this, R.color.white)
+        Utils.setWindowStatusBarColor(this, R.color.party_toolbar_red)
         toolbar_title.text = "文件上传"
         addTv.text = "上传"
 

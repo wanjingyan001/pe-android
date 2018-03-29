@@ -257,6 +257,7 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
                             sensitiveNews.text = "无敏感信息"
                             sensitiveNews.textColor = Color.parseColor("#50d59d")
                             sensitiveNews.background = resources.getDrawable(R.drawable.bg_shareholder_credit_item2)
+                            sensitiveNews.setOnClickListener(null)
                         }
                     }
                 } else {

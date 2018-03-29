@@ -73,10 +73,6 @@ class ArrangeListFragment : BaseFragment() {
         refresh.setHeaderView(arrHeader)
         val arrFooter = ArrangeFooterView(context)
         refresh.setBottomView(arrFooter)
-//        val header = ProgressLayout(context)
-//        header.setColorSchemeColors(ContextCompat.getColor(baseActivity, R.color.color_main))
-//        val footer = BallPulseView(context)
-//        footer.setAnimatingColor(ContextCompat.getColor(baseActivity, R.color.color_main))
         refresh.setEnableLoadmore(true)
         refresh.setAutoLoadMore(false)
         refresh.setOnRefreshListener(object : RefreshListenerAdapter() {
