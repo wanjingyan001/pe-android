@@ -304,6 +304,13 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
 
 
             }
+            7 -> {
+                btn_single.visibility = View.VISIBLE
+                btn_single.text = "修改"
+                btn_single.setOnClickListener {
+                    LeaveBusinessActivity.start(context, true, paramId!!, paramTitle)
+                }
+            }
         }
     }
 
