@@ -97,10 +97,10 @@ class WorkExpericenceAddActivity : BaseActivity(), View.OnClickListener {
                     showToast("请选择入职时间")
                     return
                 }
-                if (!tv_date_end.text.isNotEmpty()) {
-                    showToast("请选择离职时间")
-                    return
-                }
+//                if (!tv_date_end.text.isNotEmpty()) {
+//                    showToast("请选择离职时间")
+//                    return
+//                }
                 if (!tv_company.text.isNotEmpty()) {
                     showToast("请填写公司名称")
                     return
@@ -109,10 +109,10 @@ class WorkExpericenceAddActivity : BaseActivity(), View.OnClickListener {
                     showToast("请填写职能")
                     return
                 }
-                if (!tv_desc.text.isNotEmpty()) {
-                    showToast("请填写工作描述")
-                    return
-                }
+//                if (!tv_desc.text.isNotEmpty()) {
+//                    showToast("请填写工作描述")
+//                    return
+//                }
                 if (!tv_industry.text.isNotEmpty()) {
                     showToast("请选择行业")
                     return
@@ -121,14 +121,14 @@ class WorkExpericenceAddActivity : BaseActivity(), View.OnClickListener {
                     showToast("请填写部门")
                     return
                 }
-                if (!tv_workers.text.isNotEmpty()) {
-                    showToast("请选择公司规模")
-                    return
-                }
-                if (!tv_nature.text.isNotEmpty()) {
-                    showToast("请选择公司性质")
-                    return
-                }
+//                if (!tv_workers.text.isNotEmpty()) {
+//                    showToast("请选择公司规模")
+//                    return
+//                }
+//                if (!tv_nature.text.isNotEmpty()) {
+//                    showToast("请选择公司性质")
+//                    return
+//                }
                 val reqBean = WorkReqBean()
                 val workeducation = WorkEducationBean()
                 workeducation.employDate = tv_start_date.text.toString()
@@ -136,11 +136,13 @@ class WorkExpericenceAddActivity : BaseActivity(), View.OnClickListener {
                 workeducation.company = tv_company.text.toString()
                 workeducation.responsibility = tv_skill.text.toString()
                 workeducation.jobInfo = tv_desc.text.toString()
-                workeducation.trade = industry.id!!
+                if (industry.id != null) {
+                    workeducation.trade = industry.id!!
+                    workeducation.trade_name = tv_industry.text.toString()
+                }
                 workeducation.department = tv_depart.text.toString()
-                workeducation.companyScale = tv_workers.text.toString()
                 workeducation.companyProperty = tv_nature.text.toString()
-                workeducation.trade_name = tv_industry.text.toString()
+                workeducation.companyScale = tv_workers.text.toString()
                 if (workEducationBean == null) {
                     reqBean.ae = workeducation
                     reqBean.type = 2
@@ -148,7 +150,7 @@ class WorkExpericenceAddActivity : BaseActivity(), View.OnClickListener {
                 } else {
                     workeducation.id = workEducationBean!!.id
                     industry.pid?.let {
-                        workeducation.pid =it
+                        workeducation.pid = it
                     }
                     reqBean.ae = workeducation
                     reqBean.type = 2

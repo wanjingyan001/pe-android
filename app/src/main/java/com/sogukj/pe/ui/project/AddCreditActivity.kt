@@ -14,6 +14,7 @@ import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.framework.base.BaseActivity
+import com.google.gson.Gson
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.CreditReqBean
@@ -29,6 +30,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_add_credit.*
 import kotlinx.android.synthetic.main.layout_shareholder_toolbar.*
 import org.jetbrains.anko.find
+import org.jetbrains.anko.info
 import kotlin.properties.Delegates
 
 
@@ -160,6 +162,7 @@ class AddCreditActivity : BaseActivity(), View.OnClickListener {
         if (list.isNotEmpty()) {
             val info = QueryReqBean()
             info.info = list as ArrayList<CreditReqBean>
+            info { "RequestBean==>${Gson().toJson(info)}" }
             SoguApi.getService(application)
                     .queryCreditInfo(info)
                     .observeOn(AndroidSchedulers.mainThread())
@@ -212,6 +215,7 @@ class AddCreditActivity : BaseActivity(), View.OnClickListener {
                 phoneEdt.setText("")
                 IDCardEdt.setText("")
                 postEdt.setText("")
+                nameEdt.requestFocus()
             }
         }
     }

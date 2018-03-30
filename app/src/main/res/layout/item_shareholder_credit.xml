@@ -79,7 +79,8 @@
 
             <TextView
                 android:id="@+id/phoneNumberTv"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:gravity="center_vertical"
@@ -119,7 +120,8 @@
 
             <TextView
                 android:id="@+id/IDCardTv"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:gravity="center_vertical"

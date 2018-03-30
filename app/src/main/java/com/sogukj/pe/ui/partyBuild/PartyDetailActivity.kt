@@ -20,16 +20,22 @@ import com.framework.base.BaseActivity
 import com.google.gson.Gson
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.util.OnClickFastListener
 import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
+import com.sougukj.setOnClickFastListener
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_party_detail.*
+import kotlinx.coroutines.experimental.CoroutineScope
+import org.jetbrains.anko.sdk25.coroutines.onClick
 import java.net.URL
+import kotlin.coroutines.experimental.CoroutineContext
 import kotlin.properties.Delegates
 
 class PartyDetailActivity : BaseActivity() {
     var id: Int by Delegates.notNull()
+
     companion object {
         fun start(context: Context, id: Int, title: String) {
             val intent = Intent(context, PartyDetailActivity::class.java)
@@ -53,7 +59,7 @@ class PartyDetailActivity : BaseActivity() {
         settings.setSupportZoom(false)
         settings.loadsImagesAutomatically = true
         settings.cacheMode = WebSettings.LOAD_NO_CACHE
-        contentWeb.setWebViewClient(object :WebViewClient(){
+        contentWeb.setWebViewClient(object : WebViewClient() {
             @TargetApi(Build.VERSION_CODES.LOLLIPOP)
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
                 request?.let {
@@ -62,7 +68,7 @@ class PartyDetailActivity : BaseActivity() {
                 return true
             }
         })
-        back.setOnClickListener {
+        back.setOnClickFastListener {
             finish()
         }
         doRequest(id)
@@ -81,8 +87,8 @@ class PartyDetailActivity : BaseActivity() {
                             articleAuthor.text = "作者:${it.author}"
                             articleSource.text = "来源:${it.source}"
                             articleTime.text = "时间:${it.time}"
-                            contentWeb.loadDataWithBaseURL(null,getHtmlData(it.contents!!),
-                                    "text/html","utf-8", null)
+                            contentWeb.loadDataWithBaseURL(null, getHtmlData(it.contents!!),
+                                    "text/html", "utf-8", null)
                         }
                     }
                 })
@@ -95,4 +101,5 @@ class PartyDetailActivity : BaseActivity() {
                 "</head>"
         return "<html>$head<body>$bodyHTML</body></html>"
     }
+
 }

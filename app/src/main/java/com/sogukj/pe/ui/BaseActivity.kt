@@ -19,6 +19,7 @@ import com.umeng.message.PushAgent
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import com.sogukj.pe.R
+import com.sogukj.pe.util.OnClickFastListener
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.find
 import org.jetbrains.anko.imageResource
@@ -99,12 +100,14 @@ abstract class BaseActivity : AppCompatActivity(),AnkoLogger {
 
     var layout: ConstraintLayout? = null
     private fun initEmptyView() {
-        layout = findViewById(R.id.networkErrorLayout) as ConstraintLayout?
-        if (layout == null) {
-            return
-        } else {
-            layout?.let {
-                it.visibility = View.GONE
+        if (findViewById(R.id.networkErrorLayout) != null) {
+            layout = find(R.id.networkErrorLayout)
+            if (layout == null) {
+                return
+            } else {
+                layout?.let {
+                    it.visibility = View.GONE
+                }
             }
         }
     }

@@ -35,6 +35,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_shareholder_credit.*
 import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.find
+import org.jetbrains.anko.info
 import org.jetbrains.anko.textColor
 
 class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
@@ -150,10 +151,10 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun doInquire(list: List<CreditReqBean>) {
-        Log.d(TAG, Gson().toJson(list))
         if (list.isNotEmpty()) {
             val info = QueryReqBean()
             info.info = list as ArrayList<CreditReqBean>
+            info { Gson().toJson(info) }
             SoguApi.getService(application)
                     .queryCreditInfo(info)
                     .observeOn(AndroidSchedulers.mainThread())
@@ -288,6 +289,7 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
                                 if (data.isChange) {
                                     inquireStatus.text = "待查询"
                                     inquireStatus.textColor = Color.parseColor("#ffa715")
+                                    data.phone = phone
                                 }
                                 phoneNumberTv.text = phone
                                 Utils.closeInput(this@ShareholderCreditActivity, phoneEdt)
@@ -325,6 +327,7 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
                                 if (data.isChange) {
                                     inquireStatus.text = "待查询"
                                     inquireStatus.textColor = Color.parseColor("#ffa715")
+                                    data.idCard = idCard
                                 }
                                 Utils.closeInput(this@ShareholderCreditActivity, idEdt)
                                 IDCardTv.text = idCard
@@ -337,7 +340,6 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
                         .negativeText("取消")
                         .show()
             }
-//            saveReqBean(data, inquireStatus)
         }
 
         /**
@@ -421,6 +423,7 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
             R.id.back -> finish()
             R.id.addTv -> AddCreditActivity.startForResult(this, bean.company_id)
             R.id.inquireBtn -> {
+                queryDataList.clear()
                 directorsAdapter.dataList.forEach {
                     if (it.isChange) {
                         val reqBean = CreditReqBean()
