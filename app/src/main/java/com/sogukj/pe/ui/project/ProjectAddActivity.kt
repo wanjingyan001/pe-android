@@ -103,12 +103,7 @@ class ProjectAddActivity : ToolbarActivity() {
 
                 }, { e ->
                     Trace.e(e)
-                    hideProgress()
                     showToast("保存失败")
-                }, {
-                    hideProgress()
-                }, {
-                    showProgress("正在提交")
                 })
     }
 
@@ -143,12 +138,7 @@ class ProjectAddActivity : ToolbarActivity() {
 
                 }, { e ->
                     Trace.e(e)
-                    hideProgress()
                     showToast("保存失败")
-                }, {
-                    hideProgress()
-                }, {
-                    showProgress("正在提交")
                 })
     }
 

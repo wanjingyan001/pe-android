@@ -8,14 +8,12 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.framework.base.ToolbarActivity
-import com.google.gson.JsonSyntaxException
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.bean.QuitBean
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
-import com.sogukj.pe.view.DotView
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.pe.view.SpaceItemDecoration
@@ -23,8 +21,6 @@ import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_project_tc_history.*
-import kotlinx.android.synthetic.main.layout_empty.*
-import java.net.UnknownHostException
 
 class ProjectTcHistoryActivity : ToolbarActivity() {
 
