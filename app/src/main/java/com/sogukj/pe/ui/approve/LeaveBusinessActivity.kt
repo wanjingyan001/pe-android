@@ -490,7 +490,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
         tvLabel.text = bean.name
         etValue.text = bean.value_map?.value as String?
         etValue.setOnClickListener {
-            if (paramId == 11) {
+            if (paramId == 11 || (flagEdit && intent.getStringExtra(Extras.TITLE).equals("请假"))) {
                 MyHolidayActivity.start(context)
             }
         }
