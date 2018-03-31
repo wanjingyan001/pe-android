@@ -141,6 +141,10 @@ class LeaveBusinessActivity : ToolbarActivity() {
     private var isOneKey = false
 
     override fun onBackPressed() {
+        if (flagEdit && isOneKey == false) {
+            super.onBackPressed()
+            return
+        }
         var tmpMap = HashMap<String, Any?>()
         for ((k, v) in paramMap) {
             if (v == null) {
@@ -460,7 +464,21 @@ class LeaveBusinessActivity : ToolbarActivity() {
 
         //end_city
         etValue.setOnClickListener {
-            DstCityActivity.start(context, paramId!!, dstCity)
+            var input_id = XmlDb.open(context).get(Extras.ID, "").toInt()
+            if (flagEdit) {
+                var paramsTitle = intent.getStringExtra(Extras.TITLE)
+                if (paramsTitle.equals("出差")) {
+                    input_id = 10
+                } else if (paramsTitle.equals("请假")) {
+                    input_id = 11
+                }
+                if (isOneKey) {
+                    input_id = XmlDb.open(context).get(Extras.ID, "").toInt()
+                }
+            } else {
+                input_id = paramId!!
+            }
+            DstCityActivity.start(context, input_id!!, dstCity)
         }
 
         checkList.add {
