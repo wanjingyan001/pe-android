@@ -7,6 +7,7 @@ import com.sogukj.pe.Consts
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.util.Store
+import com.sougukj.service.LoggingInterceptor
 import okhttp3.CacheControl
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -40,6 +41,7 @@ class SoguApi {
                     Trace.i("http", "${request.url()} => ${response.code()}:${response.message()}")
                     response
                 }
+                .retryOnConnectionFailure(false)
                 .readTimeout(15, TimeUnit.SECONDS)
                 .connectTimeout(15, TimeUnit.SECONDS)
                 .build()

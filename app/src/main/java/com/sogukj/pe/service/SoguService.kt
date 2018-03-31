@@ -756,6 +756,8 @@ interface SoguService {
 //    @FormUrlEncoded
     @POST("/api/Credit/queryCreditInfo")
     fun queryCreditInfo(@Body info: QueryReqBean): Observable<Payload<Any>>
+//    fun queryCreditInfo(@Field("info")info: String): Observable<Payload<Any>>
+
 
     /**
      * 省市区选择

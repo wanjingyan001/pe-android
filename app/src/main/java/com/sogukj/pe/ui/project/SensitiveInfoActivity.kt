@@ -2,6 +2,7 @@ package com.sogukj.pe.ui.project
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -20,6 +21,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_sensitive_info.*
 import kotlinx.android.synthetic.main.layout_shareholder_toolbar.*
 import org.jetbrains.anko.imageResource
+import org.jetbrains.anko.info
 import org.jetbrains.anko.textColor
 
 class SensitiveInfoActivity : BaseActivity(), View.OnClickListener {
@@ -59,12 +61,12 @@ class SensitiveInfoActivity : BaseActivity(), View.OnClickListener {
         if (data.sum == 0) {
             status.text = "正常"
             dangerImage.imageResource = R.drawable.ic_sensitive_green
-            //toDetail.setOnClickListener(null)
+            toDetail.setOnClickListener(null)
         } else {
             status.text = "风险人物"
             dangerImage.imageResource = R.drawable.ic_sensitive_red
             infoNumber.text = "${data.sum}条"
-            //toDetail.setOnClickListener(this@SensitiveInfoActivity)
+            toDetail.setOnClickListener(this@SensitiveInfoActivity)
         }
     }
 
@@ -73,6 +75,7 @@ class SensitiveInfoActivity : BaseActivity(), View.OnClickListener {
         val map = HashMap<String, Any>()
         map.put("id", id)
         map.put("piece", piece)
+        info { "requestMap:${Gson().toJson(map)}" }
         SoguApi.getService(application)
                 .sensitiveData(map)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -163,27 +166,39 @@ class SensitiveInfoActivity : BaseActivity(), View.OnClickListener {
      * 危险身份
      */
     private fun setDangerousStatus(crime: SensitiveInfo.Crime) {
+        if (crime.checkCode.isEmpty()) {
+            identity_status.text = "正常"
+            identity_status.background = resources.getDrawable(R.drawable.bg_shareholder_green)
+            identity_status.textColor = Color.parseColor("#50D59D")
+        }
         crime.checkCode.forEach {
             when (it) {
                 "1" -> {
+                    identity_status.text = "危险"
                     isSuspects.text = "是"
                     isSuspects.textColor = resources.getColor(R.color.fund_deep_red)
                 }
                 "2" -> {
+                    identity_status.text = "危险"
                     isFormerStaff.text = "是"
                     isFormerStaff.textColor = resources.getColor(R.color.fund_deep_red)
                 }
                 "3" -> {
+                    identity_status.text = "危险"
                     isDrugRelated.text = "是"
                     isDrugRelated.textColor = resources.getColor(R.color.fund_deep_red)
                 }
                 "4" -> {
+                    identity_status.text = "危险"
                     isDrugAddicts.text = "是"
                     isDrugAddicts.textColor = resources.getColor(R.color.fund_deep_red)
                 }
             }
         }
         caseNumber2.text = "${crime.num}件"
+        if (crime.num == 0) {
+            toDetail.visibility = View.GONE
+        }
     }
 
     override fun onClick(v: View?) {

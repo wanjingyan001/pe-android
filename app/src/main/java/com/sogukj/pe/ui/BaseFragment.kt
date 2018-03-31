@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.google.gson.JsonSyntaxException
+import com.sogukj.pe.util.OnClickFastListener
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
