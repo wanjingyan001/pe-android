@@ -5,10 +5,15 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.framework.base.ToolbarActivity
@@ -32,7 +37,10 @@ import okhttp3.FormBody
 import java.util.*
 import kotlin.collections.ArrayList
 import com.google.gson.internal.LinkedTreeMap
+import com.sogukj.util.XmlDb
+import org.jetbrains.anko.find
 import java.text.SimpleDateFormat
+import kotlinx.android.synthetic.main.toolbar.*
 
 
 class LeaveBusinessActivity : ToolbarActivity() {
@@ -80,10 +88,141 @@ class LeaveBusinessActivity : ToolbarActivity() {
                 showToast("请填写完整后再提交")
             }
         }
+        toolbar_menu.setImageResource(R.drawable.copy)
+        toolbar_menu.visibility = View.VISIBLE
+        XmlDb.open(context).set(Extras.ID, "${paramId}")
+        var tmpId = XmlDb.open(context).get(Extras.ID, "")
+        SoguApi.getService(application)
+                .getLastApprove(tmpId.toInt())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        if (payload.payload?.sid == null) {
+                            toolbar_menu.visibility = View.INVISIBLE
+                        }
+                        //toolbar_menu 可能要隐藏，比如重新发起审批就不需要这个
+                        toolbar_menu.setOnClickListener {
+
+                            paramId = payload.payload?.sid
+                            flagEdit = true
+                            isOneKey = true
+                            var name = payload.payload?.name
+
+                            var mDialog = MaterialDialog.Builder(this@LeaveBusinessActivity)
+                                    .theme(Theme.LIGHT)
+                                    .canceledOnTouchOutside(true)
+                                    .customView(R.layout.dialog_yongyin, false).build()
+                            mDialog.show()
+                            val content = mDialog.find<TextView>(R.id.content)
+                            val cancel = mDialog.find<Button>(R.id.cancel)
+                            val yes = mDialog.find<Button>(R.id.yes)
+
+                            name = "“${name}”"
+                            val spannable1 = SpannableString("是否将上次${name}填写内容一键复制填写")
+                            spannable1.setSpan(ForegroundColorSpan(Color.parseColor("#808080")), 5, 5 + name.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                            content.text = spannable1
+
+                            cancel.setOnClickListener {
+                                mDialog.dismiss()
+                            }
+                            yes.setOnClickListener {
+                                load()
+                                mDialog.dismiss()
+                            }
+                        }
+                    }
+                }, { e ->
+                    Trace.e(e)
+                    //showToast("暂无可用数据")
+                })
+    }
+
+    private var isOneKey = false
+
+    override fun onBackPressed() {
+        var tmpMap = HashMap<String, Any?>()
+        for ((k, v) in paramMap) {
+            if (v == null) {
+
+            } else {
+                tmpMap.put(k, v)
+            }
+        }
+        paramMap.clear()
+        paramMap.putAll(tmpMap)
+
+        if ((paramMap.get("end_city") == null || (paramMap.get("end_city") as String?).isNullOrEmpty()) &&
+                (paramMap.get("reasons") == null || (paramMap.get("reasons") as String?).isNullOrEmpty()) &&
+                (paramMap.get("time_range") == null || (paramMap.get("time_range") as String?).isNullOrEmpty()) &&
+                (paramMap.get("total_hours") == null || (paramMap.get("total_hours") as String?).isNullOrEmpty()) &&
+                (paramMap.get("copier") == null || (paramMap.get("copier") as String?).isNullOrEmpty()) &&
+                (paramMap.get("leave_type") == null)) {
+            super.onBackPressed()
+            return
+        }
+        var mDialog = MaterialDialog.Builder(this@LeaveBusinessActivity)
+                .theme(Theme.LIGHT)
+                .canceledOnTouchOutside(true)
+                .customView(R.layout.dialog_yongyin, false).build()
+        mDialog.show()
+        val content = mDialog.find<TextView>(R.id.content)
+        val cancel = mDialog.find<Button>(R.id.cancel)
+        val yes = mDialog.find<Button>(R.id.yes)
+        content.text = "是否需要保存草稿"
+        cancel.text = "否"
+        yes.text = "是"
+        cancel.setOnClickListener {
+            val builder = HashMap<String, Any>()
+            paramId = XmlDb.open(context).get(Extras.ID, "").toInt()
+            builder.put("template_id", paramId!!)
+            builder.put("data", HashMap<String, Any?>())
+            SoguApi.getService(application)
+                    .saveDraft(builder)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (payload.isOk) {
+                            super.onBackPressed()
+                        } else
+                            showToast(payload.message)
+                    }, { e ->
+                        Trace.e(e)
+                    })
+        }
+        yes.setOnClickListener {
+            val builder = HashMap<String, Any>()
+            paramId = XmlDb.open(context).get(Extras.ID, "").toInt()
+            builder.put("template_id", paramId!!)
+            builder.put("data", paramMap)
+            SoguApi.getService(application)
+                    .saveDraft(builder)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (payload.isOk) {
+//                            showToast("草稿提交成功")
+                            showCustomToast(R.drawable.icon_toast_success, "草稿保存成功")
+                            mDialog.dismiss()
+                            handler.postDelayed({
+                                super.onBackPressed()
+                            }, 2000)
+                        } else
+                            showToast(payload.message)
+                    }, { e ->
+                        Trace.e(e)
+//                        showToast("草稿提交失败")
+                        showCustomToast(R.drawable.icon_toast_error, "草稿保存失败")
+                    })
+        }
     }
 
     //出差  end_city  time_range（,）  total_hours  reasons   copy
     fun doConfirm() {
+        if (isOneKey) {
+            flagEdit = false
+            paramId = XmlDb.open(context).get(Extras.ID, "").toInt()
+        }
         if (flagEdit) {
             val builder = FormBody.Builder()
             builder.add("approval_id", "${paramId}")
@@ -269,6 +408,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
         }
         tv_title.text = bean.name
         et_reason.setText(bean.value)
+        paramMap.put(bean.fields, bean.value)
         //reasons
         checkList.add {
             val str = et_reason.text?.toString()?.trim()
@@ -367,19 +507,45 @@ class LeaveBusinessActivity : ToolbarActivity() {
             tvLabel.text = name
             etValue.hint = bean.value_map?.pla
             var str = bean.value_map?.value as String?
+            paramMap.put(bean.fields, str)
 
             if (!str.isNullOrEmpty()) {
                 var dates = str!!.split(",")
                 if (!dates[0].isNullOrEmpty()) {
                     if (flagEdit == true) {
                         var paramsTitle = intent.getStringExtra(Extras.TITLE)
-                        paramMap.put(bean.fields, str)
                         if (paramsTitle.equals("出差")) {
                             val format = SimpleDateFormat("yyyy-MM-dd")
                             etValue.text = format.format(dates[index].toLong() * 1000)
                             startDate = format.parse(format.format(dates[0].toLong() * 1000))
                             endDate = format.parse(format.format(dates[1].toLong() * 1000))
                         } else if (paramsTitle.equals("请假")) {
+                            val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                            etValue.text = format.format(dates[index].toLong() * 1000)
+                            startDate = format.parse(format.format(dates[0].toLong() * 1000))
+                            endDate = format.parse(format.format(dates[1].toLong() * 1000))
+                        }
+                        if (isOneKey) {
+                            var tmpId = XmlDb.open(context).get(Extras.ID, "")
+                            if (tmpId.equals("10")) {
+                                val format = SimpleDateFormat("yyyy-MM-dd")
+                                etValue.text = format.format(dates[index].toLong() * 1000)
+                                startDate = format.parse(format.format(dates[0].toLong() * 1000))
+                                endDate = format.parse(format.format(dates[1].toLong() * 1000))
+                            } else if (tmpId.equals("11")) {
+                                val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                                etValue.text = format.format(dates[index].toLong() * 1000)
+                                startDate = format.parse(format.format(dates[0].toLong() * 1000))
+                                endDate = format.parse(format.format(dates[1].toLong() * 1000))
+                            }
+                        }
+                    } else {
+                        if (paramId == 10) {
+                            val format = SimpleDateFormat("yyyy-MM-dd")
+                            etValue.text = format.format(dates[index].toLong() * 1000)
+                            startDate = format.parse(format.format(dates[0].toLong() * 1000))
+                            endDate = format.parse(format.format(dates[1].toLong() * 1000))
+                        } else if (paramId == 11) {
                             val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
                             etValue.text = format.format(dates[index].toLong() * 1000)
                             startDate = format.parse(format.format(dates[0].toLong() * 1000))
@@ -438,13 +604,21 @@ class LeaveBusinessActivity : ToolbarActivity() {
                     if (paramsTitle.equals("出差")) {
                         builder.setType(booleanArrayOf(true, true, true, false, false, false)).build().show()
                     } else if (paramsTitle.equals("请假")) {
-                        builder.setType(booleanArrayOf(true, true, true, true, true, false)).build().show()
+                        builder.setType(booleanArrayOf(true, true, true, true, true, true)).build().show()
+                    }
+                    if (isOneKey) {
+                        var tmpId = XmlDb.open(context).get(Extras.ID, "").toInt()
+                        if (tmpId == 10) {
+                            builder.setType(booleanArrayOf(true, true, true, false, false, false)).build().show()
+                        } else if (tmpId == 11) {
+                            builder.setType(booleanArrayOf(true, true, true, true, true, true)).build().show()
+                        }
                     }
                 } else {
                     if (paramId == 10) {
                         builder.setType(booleanArrayOf(true, true, true, false, false, false)).build().show()
                     } else if (paramId == 11) {
-                        builder.setType(booleanArrayOf(true, true, true, true, true, false)).build().show()
+                        builder.setType(booleanArrayOf(true, true, true, true, true, true)).build().show()
                     }
                 }
             }
@@ -452,46 +626,89 @@ class LeaveBusinessActivity : ToolbarActivity() {
     }
 
     fun setTime(etValue: TextView, date: Date) {
-        if (paramId == 10) {
-            etValue.text = Utils.getTime(date, "yyyy-MM-dd")
-        } else if (paramId == 11) {
-            etValue.text = Utils.getTime(date, "yyyy-MM-dd HH:mm")
+        if (flagEdit) {
+            var paramsTitle = intent.getStringExtra(Extras.TITLE)
+            if (paramsTitle.equals("出差")) {
+                etValue.text = Utils.getTime(date, "yyyy-MM-dd")
+            } else if (paramsTitle.equals("请假")) {
+                etValue.text = Utils.getTime(date, "yyyy-MM-dd HH:mm:ss")
+            }
+            if (isOneKey) {
+                var tmpId = XmlDb.open(context).get(Extras.ID, "").toInt()
+                if (tmpId == 10) {
+                    etValue.text = Utils.getTime(date, "yyyy-MM-dd")
+                } else if (tmpId == 11) {
+                    etValue.text = Utils.getTime(date, "yyyy-MM-dd HH:mm:ss")
+                }
+            }
+        } else {
+            if (paramId == 10) {
+                etValue.text = Utils.getTime(date, "yyyy-MM-dd")
+            } else if (paramId == 11) {
+                etValue.text = Utils.getTime(date, "yyyy-MM-dd HH:mm:ss")
+            }
         }
     }
 
     fun calculateTime() {
-        var total = ll_content.findViewWithTag("total_hours") as TextView
-        if (paramId == 10) {
-            SoguApi.getService(application)
-                    .calcTotalTime(start_time = (startDate!!.time / 1000).toString(), end_time = (endDate!!.time / 1000).toString(), type = 1)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe({ payload ->
-                        if (payload.isOk) {
-                            total.text = payload.payload + "天"
-                            paramMap.put("total_hours", payload.payload)//total_hours
-                        } else
-                            showToast(payload.message)
-                    }, { e ->
-                        Trace.e(e)
-                        showToast("时间计算出错")
-                    })
-        } else if (paramId == 11) {
-            SoguApi.getService(application)
-                    .calcTotalTime(start_time = (startDate!!.time / 1000).toString(), end_time = (endDate!!.time / 1000).toString(), type = 2)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe({ payload ->
-                        if (payload.isOk) {
-                            total.text = payload.payload + "小时"
-                            paramMap.put("total_hours", payload.payload)//total_hours
-                        } else
-                            showToast(payload.message)
-                    }, { e ->
-                        Trace.e(e)
-                        showToast("时间计算出错")
-                    })
+        if (flagEdit) {
+            var paramsTitle = intent.getStringExtra(Extras.TITLE)
+            if (paramsTitle.equals("出差")) {
+                load10()
+            } else if (paramsTitle.equals("请假")) {
+                load11()
+            }
+            if (isOneKey) {
+                var tmpId = XmlDb.open(context).get(Extras.ID, "").toInt()
+                if (tmpId == 10) {
+                    load10()
+                } else if (tmpId == 11) {
+                    load11()
+                }
+            }
+        } else {
+            if (paramId == 10) {
+                load10()
+            } else if (paramId == 11) {
+                load11()
+            }
         }
+    }
+
+    fun load10() {
+        var total = ll_content.findViewWithTag("total_hours") as TextView
+        SoguApi.getService(application)
+                .calcTotalTime(start_time = (startDate!!.time / 1000).toString(), end_time = (endDate!!.time / 1000).toString(), type = 1)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        total.text = payload.payload + "天"
+                        paramMap.put("total_hours", payload.payload)//total_hours
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    showToast("时间计算出错")
+                })
+    }
+
+    fun load11() {
+        var total = ll_content.findViewWithTag("total_hours") as TextView
+        SoguApi.getService(application)
+                .calcTotalTime(start_time = (startDate!!.time / 1000).toString(), end_time = (endDate!!.time / 1000).toString(), type = 2)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        total.text = payload.payload + "小时"
+                        paramMap.put("total_hours", payload.payload)//total_hours
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    showToast("时间计算出错")
+                })
     }
 
     fun add12(bean: CustomSealBean) {
@@ -503,7 +720,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
         tvLabel.text = bean.name
         etValue.text = bean.value_map?.value as String?
         etValue.setOnClickListener {
-            if (paramId == 11 || (flagEdit && intent.getStringExtra(Extras.TITLE).equals("请假"))) {
+            if (paramId == 11 || (flagEdit && intent.getStringExtra(Extras.TITLE).equals("请假")) || isOneKey) {
                 MyHolidayActivity.start(context)
             }
         }
@@ -528,6 +745,9 @@ class LeaveBusinessActivity : ToolbarActivity() {
         etValue.hint = bean.value_map?.pla
         etValue.tag = bean.fields
         //etValue.text = bean.value_map?.value as String?
+        if (startDate != null && endDate != null) {
+            calculateTime()
+        }
         if (flagEdit == true) {
             var paramsTitle = intent.getStringExtra(Extras.TITLE)
             var str = bean.value_map?.value as String?
@@ -535,6 +755,14 @@ class LeaveBusinessActivity : ToolbarActivity() {
                 etValue.text = "${str}天"
             } else if (paramsTitle.equals("请假")) {
                 etValue.text = "${str}小时"
+            }
+            if (isOneKey) {
+                var tmpId = XmlDb.open(context).get(Extras.ID, "").toInt()
+                if (tmpId == 10) {
+                    etValue.text = "${str}天"
+                } else if (tmpId == 11) {
+                    etValue.text = "${str}小时"
+                }
             }
         }
         if (bean.is_must == 1) {
@@ -680,6 +908,13 @@ class LeaveBusinessActivity : ToolbarActivity() {
     fun initDstCity(list: ArrayList<CityArea.City>) {
         dstCity.clear()
         dstCity.addAll(list)
+
+        var cities = ""
+        for (city in dstCity) {
+            cities = "${cities}${city.id},"
+        }
+        cities = cities.removeSuffix(",")
+        paramMap.put("end_city", cities)
 
         var view = ll_content.findViewWithTag("time") as LinearLayout
         var citys = view.findViewById(R.id.cities) as LinearLayout
