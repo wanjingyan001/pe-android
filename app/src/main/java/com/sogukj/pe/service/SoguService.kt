@@ -1180,19 +1180,27 @@ interface SoguService {
                       @Field("end_time") end_time: String,
                       @Field("type") type: Int): Observable<Payload<String>>
 
-    //请假记录
-    @FormUrlEncoded
-    @POST("/api/Approve/showLeaveRecode")
-    fun showLeaveRecode(@Field("user_id") user_id: Int? = null,
-                        @Field("page") page: Int? = 1,
-                        @Field("pageSize") pageSize: Int? = 20): Observable<Payload<ArrayList<LeaveRecordBean>>>
+//    //请假记录
+//    @FormUrlEncoded
+//    @POST("/api/Approve/showLeaveRecode")
+//    fun showLeaveRecode(@Field("user_id") user_id: Int? = null,
+//                        @Field("page") page: Int? = 1,
+//                        @Field("pageSize") pageSize: Int? = 20): Observable<Payload<ArrayList<LeaveRecordBean>>>
+//
+//    //出差记录
+//    @FormUrlEncoded
+//    @POST("/api/Approve/showTravelRecode")
+//    fun showTravelRecode(@Field("user_id") user_id: Int? = null,
+//                        @Field("page") page: Int? = 1,
+//                        @Field("pageSize") pageSize: Int? = 20): Observable<Payload<ArrayList<LeaveRecordBean>>>
 
-    //出差记录
+    //type  1=>出差，2=>请假
     @FormUrlEncoded
-    @POST("/api/Approve/showTravelRecode")
-    fun showTravelRecode(@Field("user_id") user_id: Int? = null,
-                        @Field("page") page: Int? = 1,
-                        @Field("pageSize") pageSize: Int? = 20): Observable<Payload<ArrayList<LeaveRecordBean>>>
+    @POST("/api/Approve/showLeaveTravel")
+    fun showLeaveTravel(@Field("user_id") user_id: Int? = null,
+                        @Field("type") type: Int,
+                         @Field("page") page: Int? = 1,
+                         @Field("pageSize") pageSize: Int? = 20): Observable<Payload<ArrayList<LeaveRecordBean>>>
 
     //修改出差请假提交
     @POST("/api/Approve/editLeave")

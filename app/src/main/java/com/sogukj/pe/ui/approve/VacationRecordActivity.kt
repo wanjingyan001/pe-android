@@ -121,61 +121,36 @@ class VacationRecordActivity : ToolbarActivity() {
     var page = 1
 
     fun doRequest() {
-        if (typeCCQJ == 1) {
-            SoguApi.getService(application)
-                    .showLeaveRecode(user_id = id, page = page)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe({ payload ->
-                        if (payload.isOk) {
-                            if (page == 1)
-                                adapter.dataList.clear()
-                            payload.payload?.apply {
-                                adapter.dataList.addAll(this)
-                            }
-                        } else {
-                            showToast(payload.message)
-                        }
-                    }, { e ->
-                        Trace.e(e)
-                        showToast("暂无可用数据")
-                    }, {
-                        SupportEmptyView.checkEmpty(this, adapter)
-                        refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
-                        adapter.notifyDataSetChanged()
+//        var type = when(typeCCQJ){
+//            1 -> 2
+//            0 -> 1
+//        }
+        SoguApi.getService(application)
+                .showLeaveTravel(user_id = id, type = typeCCQJ + 1, page = page)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
                         if (page == 1)
-                            refresh?.finishRefreshing()
-                        else
-                            refresh?.finishLoadmore()
-                    })
-        } else if (typeCCQJ == 0) {
-            SoguApi.getService(application)
-                    .showTravelRecode(user_id = id, page = page)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe({ payload ->
-                        if (payload.isOk) {
-                            if (page == 1)
-                                adapter.dataList.clear()
-                            payload.payload?.apply {
-                                adapter.dataList.addAll(this)
-                            }
-                        } else {
-                            showToast(payload.message)
+                            adapter.dataList.clear()
+                        payload.payload?.apply {
+                            adapter.dataList.addAll(this)
                         }
-                    }, { e ->
-                        Trace.e(e)
-                        showToast("暂无可用数据")
-                    }, {
-                        SupportEmptyView.checkEmpty(this, adapter)
-                        refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
-                        adapter.notifyDataSetChanged()
-                        if (page == 1)
-                            refresh?.finishRefreshing()
-                        else
-                            refresh?.finishLoadmore()
-                    })
-        }
+                    } else {
+                        showToast(payload.message)
+                    }
+                }, { e ->
+                    Trace.e(e)
+                    showToast("暂无可用数据")
+                }, {
+                    SupportEmptyView.checkEmpty(this, adapter)
+                    refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
+                    adapter.notifyDataSetChanged()
+                    if (page == 1)
+                        refresh?.finishRefreshing()
+                    else
+                        refresh?.finishLoadmore()
+                })
     }
 
     companion object {

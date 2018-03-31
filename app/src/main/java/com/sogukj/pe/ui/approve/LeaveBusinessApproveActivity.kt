@@ -77,9 +77,9 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
         title = paramTitle
 
         history.setOnClickListener {
-            if (paramTitle.equals("出差")) {
+            if (leave_type == 10) {//出差
                 VacationRecordActivity.start(context, user_id = user_id, type = 0)
-            } else if (paramTitle.equals("请假")) {
+            } else if (leave_type == 11) {//请假
                 VacationRecordActivity.start(context, user_id = user_id, type = 1)
             }
         }
@@ -94,7 +94,7 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
 
     fun refresh() {
         SoguApi.getService(application)
-                .showApprove(approval_id = paramId!!, classify = paramType, is_mine = is_mine)
+                .showApprove(approval_id = paramId!!, is_mine = is_mine)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -104,7 +104,9 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
                         //initFiles(payload.payload?.file_list)//查看pdf的
                         initApprovers(payload.payload?.approve)//审批人
                         //initSegments(payload.payload?.segment)//审批人评语
-                        initCS(payload.payload?.copier!!)
+                        payload.payload?.copier?.apply {
+                            initCS(this)
+                        }
                         initButtons(payload.payload?.click)
 
                         iv_state_agreed.visibility = View.GONE
@@ -164,7 +166,7 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
             }
             4 -> {
                 ll_twins.visibility = View.VISIBLE
-                if (paramTitle.equals("出差") || paramTitle.equals("请假")) {
+                if (leave_type == 10 || leave_type == 11) {
                     btn_left.text = "修改"
                     btn_right.text = "撤销"
                 }
@@ -221,7 +223,7 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
                 btn_single.visibility = View.VISIBLE
                 btn_single.text = "审批"
                 btn_single.setOnClickListener {
-                    if (paramTitle.equals("请假") || paramTitle.equals("出差")) {
+                    if (leave_type == 10 || leave_type == 11) {
 
                         val inflate = LayoutInflater.from(this).inflate(R.layout.layout_input_dialog1, null)
                         val dialog = MaterialDialog.Builder(this)
@@ -418,13 +420,13 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
                 tvEdit.visibility = View.VISIBLE
                 if (v?.is_edit_file == 1) {
                     tvEdit.text = "文件已修改"
-                    if (paramTitle.equals("出差") || paramTitle.equals("请假")) {
+                    if (leave_type == 10 || leave_type == 11) {
                         tvEdit.text = "内容已修改"
                     }
                     tvEdit.setBackgroundResource(R.drawable.bg_tag_edit_file_1)
                 } else {
                     tvEdit.text = "文件未修改"
-                    if (paramTitle.equals("出差") || paramTitle.equals("请假")) {
+                    if (leave_type == 10 || leave_type == 11) {
                         tvEdit.text = "内容未修改"
                     }
                     tvEdit.setBackgroundResource(R.drawable.bg_tag_edit_file_0)
@@ -580,6 +582,7 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
     }
 
     var user_id: Int? = null
+    var leave_type: Int = 10 //10=>出差，11=>请假
 
     private fun initUser(fixation: ApproveViewBean.FromBean?) {
         if (null == fixation) return
@@ -591,6 +594,7 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
         tv_name.text = fixation.name
         user_id = fixation.user_id
         tv_num.text = "审批编号:${fixation.number}"
+        leave_type = fixation.leaveType!!
     }
 
     fun appendLine(buff: StringBuffer, k: String?, v: String?) {
