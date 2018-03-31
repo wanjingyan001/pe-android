@@ -377,9 +377,13 @@ class LeaveBusinessActivity : ToolbarActivity() {
                         if (paramsTitle.equals("出差")) {
                             val format = SimpleDateFormat("yyyy-MM-dd")
                             etValue.text = format.format(dates[index].toLong() * 1000)
+                            startDate = format.parse(format.format(dates[0].toLong() * 1000))
+                            endDate = format.parse(format.format(dates[1].toLong() * 1000))
                         } else if (paramsTitle.equals("请假")) {
                             val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
                             etValue.text = format.format(dates[index].toLong() * 1000)
+                            startDate = format.parse(format.format(dates[0].toLong() * 1000))
+                            endDate = format.parse(format.format(dates[1].toLong() * 1000))
                         }
                     }
                 }
@@ -429,10 +433,19 @@ class LeaveBusinessActivity : ToolbarActivity() {
                         .setContentSize(18)
                         .setDate(Calendar.getInstance())
                         .setCancelColor(resources.getColor(R.color.shareholder_text_gray))
-                if (paramId == 10) {
-                    builder.setType(booleanArrayOf(true, true, true, false, false, false)).build().show()
-                } else if (paramId == 11) {
-                    builder.setType(booleanArrayOf(true, true, true, true, true, false)).build().show()
+                if (flagEdit) {
+                    var paramsTitle = intent.getStringExtra(Extras.TITLE)
+                    if (paramsTitle.equals("出差")) {
+                        builder.setType(booleanArrayOf(true, true, true, false, false, false)).build().show()
+                    } else if (paramsTitle.equals("请假")) {
+                        builder.setType(booleanArrayOf(true, true, true, true, true, false)).build().show()
+                    }
+                } else {
+                    if (paramId == 10) {
+                        builder.setType(booleanArrayOf(true, true, true, false, false, false)).build().show()
+                    } else if (paramId == 11) {
+                        builder.setType(booleanArrayOf(true, true, true, true, true, false)).build().show()
+                    }
                 }
             }
         }
@@ -638,7 +651,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
                 copyid = "${copyid}${list[index].uid},"
             }
             copyid = copyid.removeSuffix(",")
-            paramMap.put("copy", copyid)
+            paramMap.put("copier", copyid)
             true
         }
     }

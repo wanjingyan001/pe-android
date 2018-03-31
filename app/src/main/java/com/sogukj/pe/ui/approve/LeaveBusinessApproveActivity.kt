@@ -223,58 +223,35 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
                 btn_single.visibility = View.VISIBLE
                 btn_single.text = "审批"
                 btn_single.setOnClickListener {
+                    val inflate = LayoutInflater.from(this).inflate(R.layout.layout_input_dialog, null)
+                    val dialog = MaterialDialog.Builder(this)
+                            .customView(inflate, false)
+                            .cancelable(true)
+                            .build()
+                    dialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                    val commentInput = inflate.find<EditText>(R.id.approval_comments_input)
+                    val veto = inflate.find<TextView>(R.id.veto_comment)
+                    val confirm = inflate.find<TextView>(R.id.confirm_comment)
+                    val title = inflate.find<TextView>(R.id.approval_comments_title)
+                    commentInput.filters = Utils.getFilter(this)
                     if (leave_type == 10 || leave_type == 11) {
-
-                        val inflate = LayoutInflater.from(this).inflate(R.layout.layout_input_dialog1, null)
-                        val dialog = MaterialDialog.Builder(this)
-                                .customView(inflate, false)
-                                .cancelable(true)
-                                .build()
-                        dialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                        val veto = inflate.find<TextView>(R.id.veto_comment)
-                        val confirm = inflate.find<TextView>(R.id.confirm_comment)
-                        val title = inflate.find<TextView>(R.id.approval_comments_title)
                         title.text = "是否同意此${paramTitle}申请？"
                         veto.text = "不同意"
-                        veto.setOnClickListener {
-                            if (dialog.isShowing) {
-                                dialog.dismiss()
-                            }
-                            examineApprove(-1, "")
-                        }
-                        confirm.setOnClickListener {
-                            if (dialog.isShowing) {
-                                dialog.dismiss()
-                            }
-                            examineApprove(1, "")
-                        }
-                        dialog.show()
-
-                    } else {
-                        val inflate = LayoutInflater.from(this).inflate(R.layout.layout_input_dialog, null)
-                        val dialog = MaterialDialog.Builder(this)
-                                .customView(inflate, false)
-                                .cancelable(true)
-                                .build()
-                        dialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                        val commentInput = inflate.find<EditText>(R.id.approval_comments_input)
-                        val veto = inflate.find<TextView>(R.id.veto_comment)
-                        val confirm = inflate.find<TextView>(R.id.confirm_comment)
-                        commentInput.filters = Utils.getFilter(this)
-                        veto.setOnClickListener {
-                            if (dialog.isShowing) {
-                                dialog.dismiss()
-                            }
-                            showConfirmDialog(-1, commentInput.text.toString())
-                        }
-                        confirm.setOnClickListener {
-                            if (dialog.isShowing) {
-                                dialog.dismiss()
-                            }
-                            showConfirmDialog(1, commentInput.text.toString())
-                        }
-                        dialog.show()
+                        commentInput.hint = ""
                     }
+                    veto.setOnClickListener {
+                        if (dialog.isShowing) {
+                            dialog.dismiss()
+                        }
+                        showConfirmDialog(-1, commentInput.text.toString())
+                    }
+                    confirm.setOnClickListener {
+                        if (dialog.isShowing) {
+                            dialog.dismiss()
+                        }
+                        showConfirmDialog(1, commentInput.text.toString())
+                    }
+                    dialog.show()
                 }
             }
             6 -> {
@@ -303,8 +280,6 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
                                 showToast("请求失败")
                             })
                 }
-
-
             }
             7 -> {
                 btn_single.visibility = View.VISIBLE
@@ -317,7 +292,12 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
     }
 
     private fun showConfirmDialog(type: Int, text: String = "") {
-        val title = if (type == 1) "是否确认通过审批？" else "是否确认否决审批？"
+        var title = ""
+        if (leave_type == 10 || leave_type == 11) {
+            title = if (type == 1) "是否确认同意此${paramTitle}申请？" else "是否确认否决此${paramTitle}申请？"
+        } else {
+            title = if (type == 1) "是否确认通过审批？" else "是否确认否决审批？"
+        }
         val build = MaterialDialog.Builder(this)
                 .theme(Theme.LIGHT)
                 .customView(R.layout.layout_confirm_approve, false)

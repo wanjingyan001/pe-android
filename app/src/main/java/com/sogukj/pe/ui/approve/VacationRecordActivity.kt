@@ -59,11 +59,14 @@ class VacationRecordActivity : ToolbarActivity() {
                 val status = convertView.findViewById(R.id.status) as TextView
 
                 override fun setData(view: View, data: LeaveRecordBean, position: Int) {
-                    if (data.url.isNullOrEmpty()) {
-                        icon.setImageResource(R.drawable.default_icon)
-                    } else {
-                        Glide.with(context).load(data.url).into(icon)
-                    }
+//                    if (data.url.isNullOrEmpty()) {
+//                        icon.setImageResource(R.drawable.default_icon)
+//                    } else {
+//                        Glide.with(context).load(data.url).into(icon)
+//                    }
+                    val ch = data.title?.first()
+                    icon.setChar(ch)
+                    Glide.with(context).load(data.url).into(icon)
                     title.text = data.title
                     if (typeCCQJ == 1) {
                         type1.text = "请假类型：${data.name}"

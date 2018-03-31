@@ -24,6 +24,7 @@ import com.ldf.calendar.view.Calendar;
 import com.ldf.calendar.view.MonthPager;
 import com.sogukj.pe.R;
 import com.sogukj.pe.ui.calendar.CustomDayView;
+import com.sogukj.pe.util.Utils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,6 +38,7 @@ public class CalendarDingDing extends View {
     private ViewGroup decorView;
     private ViewGroup rootView;
     private MonthPager mCalendarDateView;
+    private CalendarViewAdapter calendarAdapter;
     private TabLayout tabs;
     private WheelView mHour;
     private WheelView mMinute;
@@ -112,76 +114,45 @@ public class CalendarDingDing extends View {
         });
 
         //年月日
-        CustomDayView dayView = new CustomDayView(context, R.layout.custom_day);
-        mCalendarDateView.setAdapter(new CalendarViewAdapter(context, new OnSelectDateListener() {
+        mCalendarDateView.setViewheight(Utils.dpToPx(context, 270));
+        OnSelectDateListener onSelectDateListener = new OnSelectDateListener() {
             @Override
             public void onSelectDate(CalendarDate date) {
-
+                //your code
             }
 
             @Override
             public void onSelectOtherMonth(int offset) {
-
+                //偏移量 -1表示上一个月 ， 1表示下一个月
+                mCalendarDateView.selectOtherMonth(offset);
             }
-        }, CalendarAttr.CalendayType.MONTH, dayView));
-
-        CalendarViewAdapter adapter = (CalendarViewAdapter) mCalendarDateView.getAdapter();
-        adapter.notifyDataChanged(new CalendarDate());
-        adapter.weekArrayType = 1;
-
-        mCalendarDateView.setPageTransformer(false, new ViewPager.PageTransformer() {
-            @Override
-            public void transformPage(View page, float position) {
-                page.setAlpha((float) Math.sqrt((1 - Math.abs(position))));
-            }
-        });
+        };
+        CustomDayView dayView = new CustomDayView(context, R.layout.custom_day);
+        calendarAdapter = new CalendarViewAdapter(context,
+                onSelectDateListener,
+                CalendarAttr.CalendayType.MONTH, dayView);
+        calendarAdapter.weekArrayType = 1;
+        mCalendarDateView.setCurrentItem(MonthPager.CURRENT_DAY_INDEX);
+        mCalendarDateView.setAdapter(calendarAdapter);
         mCalendarDateView.addOnPageChangeListener(new MonthPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
             }
 
             @Override
             public void onPageSelected(int position) {
-                //切换月份
-                ArrayList<Calendar> currentCalendars = ((CalendarViewAdapter) mCalendarDateView.getAdapter()).getPagers();
-                CalendarDate date = currentCalendars.get(position % currentCalendars.size()).getSeedDate();
-                //monthSelect.onMonthSelect(date);
-                //this @ScheduleFragment.date ="${date.year}年${date.month}月"
-                //val time = Utils.getSupportBeginDayofMonth(date.year, date.month - 1)
-                //val time1 = Utils.getSupportBeginDayofMonth(date.year, date.month + 1)
+//                mCurrentPage = position;
+//                currentCalendars = calendarAdapter.getAllItems();
+//                if(currentCalendars.get(position % currentCalendars.size()) instanceof Calendar){
+//                    //you code
+//                }
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
-//        mCalendarDateView.setAdapter(new CaledarAdapter() {
-//            @Override
-//            public View getView(View convertView, ViewGroup parentView, CalendarBean bean) {
-//                TextView view;
-//                if (convertView == null) {
-//                    convertView = LayoutInflater.from(parentView.getContext()).inflate(R.layout.item_calendar, null);
-//                    ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(px(48), px(48));
-//                    convertView.setLayoutParams(params);
-//                }
-//                view = (TextView) convertView.findViewById(R.id.text);
-//                view.setText("" + bean.day);
-//                if (bean.mothFlag != 0) {
-//                    view.setTextColor(0xff9299a1);//不在当月的时间颜色
-//                } else {
-//                    view.setTextColor(0xff000000);//在当月的时间颜色，黑色
-//                }
-//                return convertView;
-//            }
-//        });
-//        mCalendarDateView.setOnItemClickListener(new CalendarView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(View view, int postion, CalendarBean bean) {
-//                tabs.getTabAt(0).setText(bean.year + "-" + getDisPlayNumber(bean.moth) + "-" + getDisPlayNumber(bean.day));
-//            }
-//        });
+        //calendarAdapter.notifyDataChanged(new CalendarDate());
 
         //切换
         tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -207,6 +178,7 @@ public class CalendarDingDing extends View {
         });
     }
 
+
 //    public void setData(Date date, boolean hasHourMinute) {
 //        data = CalendarUtil.getYMDHM(date);
 //        tabs.getTabAt(0).setText(data[0] + "-" + getDisPlayNumber(data[1]) + "-" + getDisPlayNumber(data[2]));
@@ -220,6 +192,10 @@ public class CalendarDingDing extends View {
         if (rootView.getParent() == null) {
             decorView.addView(rootView);
         }
+    }
+
+    public void set() {
+        calendarAdapter.notifyDataChanged(new CalendarDate());
     }
 
     private String getDisPlayNumber(int num) {

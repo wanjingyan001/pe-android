@@ -41,6 +41,7 @@ import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.ui.approve.LeaveBusinessApproveActivity
 import com.sogukj.pe.ui.partyBuild.PartyMainActivity
 import com.sogukj.pe.util.Utils
+import com.sogukj.pe.view.CalendarDingDing
 import com.umeng.message.PushAgent
 import com.umeng.message.UmengMessageHandler
 import com.umeng.message.entity.UMessage
@@ -80,6 +81,9 @@ class MainHomeFragment : BaseFragment() {
 //        }
         tv_sp.setOnClickListener {
             EntryApproveActivity.start(baseActivity, local_sp)
+//            var ding = CalendarDingDing(context)
+//            ding.set()
+//            ding.show()
         }
         tv_weekly.setOnClickListener { WeeklyActivity.start(baseActivity) }
 //        tv_jj.setOnClickListener { FundMainFragment.start(baseActivity) }

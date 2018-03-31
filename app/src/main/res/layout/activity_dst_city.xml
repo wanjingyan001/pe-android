@@ -49,10 +49,11 @@
             android:layout_height="match_parent"
             android:layout_gravity="right"
             android:gravity="center"
-            android:text="置顶"
-            style="@style/SoguTextTitle2"
             android:paddingLeft="20dp"
-            android:paddingRight="20dp" />
+            android:paddingRight="20dp"
+            android:text="置顶"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="14sp" />
     </android.support.v7.widget.Toolbar>
 
     <android.support.v4.widget.NestedScrollView
