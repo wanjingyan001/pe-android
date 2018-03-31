@@ -104,7 +104,7 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
                         //initFiles(payload.payload?.file_list)//查看pdf的
                         initApprovers(payload.payload?.approve)//审批人
                         //initSegments(payload.payload?.segment)//审批人评语
-                        initCS(payload.payload?.copy!!)
+                        initCS(payload.payload?.copier!!)
                         initButtons(payload.payload?.click)
 
                         iv_state_agreed.visibility = View.GONE
