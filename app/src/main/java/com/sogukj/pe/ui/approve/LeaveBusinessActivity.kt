@@ -615,6 +615,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
                         //年月日时分秒 的显示与否，不设置则默认全部显示
                         .setDividerColor(Color.DKGRAY)
                         .setContentSize(18)
+                        .isCyclic(true)
                         .setDate(Calendar.getInstance())
                         .setCancelColor(resources.getColor(R.color.shareholder_text_gray))
                 if (flagEdit) {

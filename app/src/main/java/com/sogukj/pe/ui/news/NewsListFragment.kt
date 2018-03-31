@@ -239,10 +239,11 @@ class NewsListFragment : BaseFragment(), SupportEmptyView {
 //                if (!TextUtils.isEmpty(strs.getOrNull(1))) {
 //                    tv_time.visibility = View.VISIBLE
 //                }
-                tv_date.text = strs
-                        .getOrNull(0)
-                tv_time.text = strs
-                        .getOrNull(1)
+//                tv_date.text = strs
+//                        .getOrNull(0)
+//                tv_time.text = strs
+//                        .getOrNull(1)
+                tv_date.text = strTime
             }
             tv_from.text = data.source
             data.setTags(baseActivity!!, tags)
