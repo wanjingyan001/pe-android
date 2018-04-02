@@ -235,6 +235,7 @@ class ApproveListActivity : ToolbarActivity(), TabLayout.OnTabSelectedListener {
             paramTemplates.clear()
             paramStates.clear()
             when (filterType) {
+                1 -> setFilterTags(filterBean!!.leave)
                 3 -> setFilterTags(filterBean!!.sign)
                 2 -> setFilterTags(filterBean!!.approve)
                 else -> {
@@ -260,6 +261,10 @@ class ApproveListActivity : ToolbarActivity(), TabLayout.OnTabSelectedListener {
         } else if (checkedId == R.id.rb_sign) {
             filterType = 3
             setFilterTags(filterBean!!.sign)
+            ll_filter_other.visibility = View.VISIBLE
+        } else if (checkedId == R.id.rb_leave) {
+            filterType = 1
+            setFilterTags(filterBean!!.leave)
             ll_filter_other.visibility = View.VISIBLE
         }
     }

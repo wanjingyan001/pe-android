@@ -81,6 +81,7 @@ class VacationRecordActivity : ToolbarActivity() {
                         0 -> "待审批"
                         1 -> "审批中"
                         4 -> "审批通过"
+                        5 -> "已撤销"
                         else -> "未知状态"
                     }
                     status.backgroundResource = when (data.status) {//-1=>不通过，0=>待审批，1=>审批中，4=>审批通过
@@ -88,6 +89,7 @@ class VacationRecordActivity : ToolbarActivity() {
                         0 -> R.drawable.qj_bg2
                         1 -> R.drawable.qj_bg3
                         4 -> R.drawable.qj_bg
+                        5 -> R.drawable.qj_bg4
                         else -> R.drawable.qj_bg
                     }
                 }

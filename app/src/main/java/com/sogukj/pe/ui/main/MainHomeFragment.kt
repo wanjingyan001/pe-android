@@ -1,17 +1,15 @@
 package com.sogukj.pe.ui.main
 
-import android.app.Notification
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.widget.TextView
 import com.framework.base.BaseFragment
 import com.sogukj.pe.R
-import com.sogukj.pe.ui.approve.EntryApproveActivity
 import com.sogukj.pe.ui.calendar.CalendarMainActivity
 import com.sogukj.pe.ui.weekly.WeeklyActivity
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -20,7 +18,6 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.bumptech.glide.Glide
 import com.fashare.stack_layout.StackLayout
-import com.google.gson.Gson
 import com.sogukj.pe.Extras
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
@@ -37,18 +34,16 @@ import com.sogukj.pe.view.MyStackPageTransformer
 import com.sogukj.util.Store
 import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.NIMClient
-import com.sogukj.pe.bean.UserBean
+import com.sogukj.pe.ui.approve.EntryApproveActivity
 import com.sogukj.pe.ui.approve.LeaveBusinessApproveActivity
+import com.sogukj.pe.ui.calendar.CalendarWindow
 import com.sogukj.pe.ui.partyBuild.PartyMainActivity
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.CalendarDingDing
-import com.umeng.message.PushAgent
-import com.umeng.message.UmengMessageHandler
-import com.umeng.message.entity.UMessage
 import me.leolin.shortcutbadger.ShortcutBadger
 import org.jetbrains.anko.imageResource
 import org.jetbrains.anko.support.v4.ctx
-import org.json.JSONObject
+import org.jetbrains.anko.support.v4.find
 
 
 /**
@@ -82,8 +77,12 @@ class MainHomeFragment : BaseFragment() {
         tv_sp.setOnClickListener {
             EntryApproveActivity.start(baseActivity, local_sp)
 //            var ding = CalendarDingDing(context)
-//            ding.set()
 //            ding.show()
+//            ding.set()
+//            var window = CalendarWindow(context, { date ->
+//
+//            })
+//            window.showAtLocation(find(R.id.root), Gravity.BOTTOM, 0, 0)
         }
         tv_weekly.setOnClickListener { WeeklyActivity.start(baseActivity) }
 //        tv_jj.setOnClickListener { FundMainFragment.start(baseActivity) }

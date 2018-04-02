@@ -132,8 +132,8 @@ public class CalendarDingDing extends View {
                 onSelectDateListener,
                 CalendarAttr.CalendayType.MONTH, dayView);
         calendarAdapter.weekArrayType = 1;
-        mCalendarDateView.setCurrentItem(MonthPager.CURRENT_DAY_INDEX);
         mCalendarDateView.setAdapter(calendarAdapter);
+        mCalendarDateView.setCurrentItem(MonthPager.CURRENT_DAY_INDEX);
         mCalendarDateView.addOnPageChangeListener(new MonthPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
