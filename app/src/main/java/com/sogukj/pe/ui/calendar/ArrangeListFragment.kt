@@ -2,6 +2,7 @@ package com.sogukj.pe.ui.calendar
 
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
 import android.support.v4.app.Fragment
@@ -35,6 +36,7 @@ import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_arrange_list.*
+import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.backgroundResource
 import org.jetbrains.anko.find
 import kotlin.properties.Delegates
@@ -288,6 +290,7 @@ class ArrangeListFragment : BaseFragment() {
                         val bean1 = arrangeAdapter.dataList[7] as WeeklyArrangeBean
                         val lastTime = bean1.date
                         weeklyTv.text = "${firstTime?.substring(5, firstTime.length)}~${lastTime?.substring(5, lastTime.length)}"
+                        itemView.backgroundColor = Color.parseColor("#f7f9fc")
                     }
                 }
             }

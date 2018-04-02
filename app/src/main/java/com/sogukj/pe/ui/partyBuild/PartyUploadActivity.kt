@@ -51,6 +51,11 @@ class PartyUploadActivity : BaseActivity() {
         fileNameEdtLayout.setOnClickListener {
             titleEdt.requestFocus()
         }
+        titleEdt.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus){
+                titleEdt.setSelection(titleEdt.text.length)
+            }
+        }
         columnLayout.setOnClickListener {
             val tabsJson = XmlDb.open(this).get(PartyMainActivity.TABS, "")
             if (tabsJson.isNotEmpty() && tabsJson != "") {

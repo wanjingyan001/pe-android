@@ -26,21 +26,22 @@ class SoguApi {
     private constructor(context: Application) {
         this.context = context
         val client = OkHttpClient.Builder()
-                .addInterceptor { chain ->
-                    val builder = chain.request().newBuilder()
-                    val user = Store.store.getUser(context);
-                    if (null != user && null != user.uid) {
-                        builder.addHeader("uid", user.uid.toString())
-                    }
-                    builder.addHeader("appkey", "d5f17cafef0829b5")
-                    builder.addHeader("version", Utils.getVersionName(context))
-                    builder.addHeader("client", "android")
-                    val request = builder.build()
-                    val response = chain.proceed(request)
-                    Trace.i("http", "RequestBody:${Gson().toJson(response.request().body())}")
-                    Trace.i("http", "${request.url()} => ${response.code()}:${response.message()}")
-                    response
-                }
+//                .addInterceptor { chain ->
+//                    val builder = chain.request().newBuilder()
+//                    val user = Store.store.getUser(context);
+//                    if (null != user && null != user.uid) {
+//                        builder.addHeader("uid", user.uid.toString())
+//                    }
+//                    builder.addHeader("appkey", "d5f17cafef0829b5")
+//                    builder.addHeader("version", Utils.getVersionName(context))
+//                    builder.addHeader("client", "android")
+//                    val request = builder.build()
+//                    val response = chain.proceed(request)
+//                    Trace.i("http", "RequestBody:${Gson().toJson(response.request().body())}")
+//                    Trace.i("http", "${request.url()} => ${response.code()}:${response.message()}")
+//                    response
+//                }
+                .addInterceptor(LoggingInterceptor(context))
                 .retryOnConnectionFailure(false)
                 .readTimeout(15, TimeUnit.SECONDS)
                 .connectTimeout(15, TimeUnit.SECONDS)
