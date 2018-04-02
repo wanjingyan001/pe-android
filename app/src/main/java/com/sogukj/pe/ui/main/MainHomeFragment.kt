@@ -42,6 +42,7 @@ import com.sogukj.pe.view.CalendarDingDing
 import me.leolin.shortcutbadger.ShortcutBadger
 import org.jetbrains.anko.imageResource
 import org.jetbrains.anko.support.v4.ctx
+import java.util.*
 
 
 /**
@@ -52,6 +53,7 @@ class MainHomeFragment : BaseFragment() {
         get() = R.layout.fragment_home
 
     private lateinit var window: CalendarWindow
+    private var mDate = Date()
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -76,11 +78,13 @@ class MainHomeFragment : BaseFragment() {
 //        }
         var ding = CalendarDingDing(context)
         tv_sp.setOnClickListener {
-            //EntryApproveActivity.start(baseActivity, local_sp)
-//            var ding = CalendarDingDing(context)
-            ding.show()
-            //ding.set()
-            //window.showAtLocation(find(R.id.root), Gravity.BOTTOM, 0, 0)
+            EntryApproveActivity.start(baseActivity, local_sp)
+//            ding.show(2, mDate, object : CalendarDingDing.onTimeClick {
+//                override fun onClick(date: Date?) {
+//                    mDate = date!!
+//                    Log.e("date", "${date.year}+${date.month}+${date.day}+${date.hours}+${date.minutes}")
+//                }
+//            })
         }
         tv_weekly.setOnClickListener { WeeklyActivity.start(baseActivity) }
 //        tv_jj.setOnClickListener { FundMainFragment.start(baseActivity) }

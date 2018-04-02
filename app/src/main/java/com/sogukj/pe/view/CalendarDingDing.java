@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 import com.bigkoo.pickerview.adapter.WheelAdapter;
 import com.bigkoo.pickerview.lib.WheelView;
 import com.bigkoo.pickerview.listener.OnItemSelectedListener;
+import com.bigkoo.pickerview.utils.PickerViewAnimateUtil;
 import com.ldf.calendar.component.CalendarAttr;
 import com.ldf.calendar.component.CalendarViewAdapter;
 import com.ldf.calendar.interf.OnSelectDateListener;
@@ -43,29 +46,33 @@ public class CalendarDingDing extends View {
     private WheelView mHour;
     private WheelView mMinute;
     private LinearLayout mMain, mSub;
-    private int[] data;
+    private int[] data = new int[5];
     private TextView mOK;
+    private Context mContext;
 
     public CalendarDingDing(Context context) {
         super(context);
-        init(context);
+        mContext = context;
+        init();
     }
 
     public CalendarDingDing(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        init(context);
+        mContext = context;
+        init();
     }
 
     public CalendarDingDing(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context);
+        mContext = context;
+        init();
     }
 
-    private void init(Context context) {
+    private void init() {
         if (decorView == null) {
-            decorView = (ViewGroup) ((Activity) context).getWindow().getDecorView().findViewById(android.R.id.content);
+            decorView = (ViewGroup) ((Activity) mContext).getWindow().getDecorView().findViewById(android.R.id.content);
         }
-        rootView = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.calendar_dingding, decorView, false);
+        rootView = (ViewGroup) LayoutInflater.from(mContext).inflate(R.layout.calendar_dingding, decorView, false);
         rootView.setLayoutParams(new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
         ));
@@ -80,7 +87,29 @@ public class CalendarDingDing extends View {
             @Override
             public void onClick(View view) {
                 if (rootView.getParent() != null) {
-                    decorView.removeView(rootView);
+                    Animation out = getOutAnimation();
+                    out.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            decorView.removeView(rootView);
+                            //Date mDate = new Date(data[0], data[1] - 1, data[2], data[3], data[4], 0);
+                            java.util.Calendar calendar = java.util.Calendar.getInstance();
+                            calendar.set(data[0], data[1] - 1, data[2], data[3], data[4], 0);
+                            Date mDate = calendar.getTime();
+                            mListener.onClick(mDate);
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    });
+                    rootView.startAnimation(out);
                 }
             }
         });
@@ -114,11 +143,17 @@ public class CalendarDingDing extends View {
         });
 
         //年月日
-        mCalendarDateView.setViewheight(Utils.dpToPx(context, 270));
+        //mCalendarDateView.setViewheight(Utils.dpToPx(mContext, 270));
         OnSelectDateListener onSelectDateListener = new OnSelectDateListener() {
             @Override
             public void onSelectDate(CalendarDate date) {
-                //your code
+                data[0] = date.year;
+                data[1] = date.month;
+                data[2] = date.day;
+                tabs.getTabAt(0).setText(data[0] + "-" + getDisPlayNumber(data[1]) + "-" + getDisPlayNumber(data[2]));
+                tabs.getTabAt(1).select();
+                mMain.setVisibility(View.GONE);
+                mSub.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -127,8 +162,8 @@ public class CalendarDingDing extends View {
                 mCalendarDateView.selectOtherMonth(offset);
             }
         };
-        CustomDayView dayView = new CustomDayView(context, R.layout.custom_day);
-        calendarAdapter = new CalendarViewAdapter(context,
+        CustomDayView dayView = new CustomDayView(mContext, R.layout.custom_day);
+        calendarAdapter = new CalendarViewAdapter(mContext,
                 onSelectDateListener,
                 CalendarAttr.CalendayType.MONTH, dayView);
         calendarAdapter.weekArrayType = 1;
@@ -141,11 +176,15 @@ public class CalendarDingDing extends View {
 
             @Override
             public void onPageSelected(int position) {
-//                mCurrentPage = position;
-//                currentCalendars = calendarAdapter.getAllItems();
-//                if(currentCalendars.get(position % currentCalendars.size()) instanceof Calendar){
-//                    //you code
-//                }
+                //mCurrentPage = position;
+                ArrayList<Calendar> currentCalendars = calendarAdapter.getPagers();
+                if (currentCalendars.get(position % currentCalendars.size()) instanceof Calendar) {
+                    CalendarDate date = currentCalendars.get(position % currentCalendars.size()).getSeedDate();
+                    data[0] = date.year;
+                    data[1] = date.month;
+                    data[2] = date.day;
+                    tabs.getTabAt(0).setText(data[0] + "-" + getDisPlayNumber(data[1]) + "-" + getDisPlayNumber(data[2]));
+                }
             }
 
             @Override
@@ -178,24 +217,37 @@ public class CalendarDingDing extends View {
         });
     }
 
-
-//    public void setData(Date date, boolean hasHourMinute) {
-//        data = CalendarUtil.getYMDHM(date);
-//        tabs.getTabAt(0).setText(data[0] + "-" + getDisPlayNumber(data[1]) + "-" + getDisPlayNumber(data[2]));
-//        tabs.getTabAt(1).setText(getDisPlayNumber(data[3]) + ":" + getDisPlayNumber(data[4]));
-//
-//        mHour.setCurrentItem(data[3]);
-//        mMinute.setCurrentItem(data[4]);
-//    }
-
-    public void show() {
+    //type    1天数   2时分
+    public void show(int type, Date date, onTimeClick listener) {
         if (rootView.getParent() == null) {
             decorView.addView(rootView);
+            rootView.startAnimation(getInAnimation());
         }
+        mListener = listener;
+
+        data = Utils.getYMDHMInCalendar(date);
+        tabs.getTabAt(0).setText(data[0] + "-" + getDisPlayNumber(data[1]) + "-" + getDisPlayNumber(data[2]));
+        tabs.getTabAt(1).setText(getDisPlayNumber(data[3]) + ":" + getDisPlayNumber(data[4]));
+
+        calendarAdapter.reInit(mContext, data);
+        mHour.setCurrentItem(data[3]);
+        mMinute.setCurrentItem(data[4]);
+
+        tabs.getTabAt(0).select();
+        mMain.setVisibility(View.VISIBLE);
+        mSub.setVisibility(View.GONE);
     }
 
-    public void set() {
-        calendarAdapter.notifyDataChanged(new CalendarDate());
+    private onTimeClick mListener;
+
+    public Animation getInAnimation() {
+        int res = PickerViewAnimateUtil.getAnimationResource(Gravity.BOTTOM, true);
+        return AnimationUtils.loadAnimation(mContext, res);
+    }
+
+    public Animation getOutAnimation() {
+        int res = PickerViewAnimateUtil.getAnimationResource(Gravity.BOTTOM, false);
+        return AnimationUtils.loadAnimation(mContext, res);
     }
 
     private String getDisPlayNumber(int num) {
@@ -223,5 +275,9 @@ public class CalendarDingDing extends View {
         public int indexOf(Integer o) {
             return o.intValue();
         }
+    }
+
+    public interface onTimeClick {
+        void onClick(Date date);
     }
 }

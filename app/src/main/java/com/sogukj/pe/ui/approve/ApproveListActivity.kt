@@ -32,6 +32,7 @@ import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_approve_list.*
+import kotlinx.android.synthetic.main.item_vacation.*
 import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.backgroundResource
 import org.jetbrains.anko.textColor
@@ -381,34 +382,63 @@ class ApproveListActivity : ToolbarActivity(), TabLayout.OnTabSelectedListener {
             pro_id = null
             status_tyoe = mType
         }
-        SoguApi.getService(application)
-                .listApproval(status = status_tyoe, page = page,
-                        fuzzyQuery = searchStr,
-                        type = filterType, template_id = templates, filter = status, project_id = pro_id)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ payload ->
-                    if (payload.isOk) {
+        if (mType != 4) {
+            SoguApi.getService(application)
+                    .listApproval(status = status_tyoe, page = page,
+                            fuzzyQuery = searchStr,
+                            type = filterType, template_id = templates, filter = status, project_id = pro_id)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (payload.isOk) {
+                            if (page == 1)
+                                adapter.dataList.clear()
+                            payload.payload?.apply {
+                                adapter.dataList.addAll(this)
+                            }
+                        } else
+                            showToast(payload.message)
+                    }, { e ->
+                        Trace.e(e)
+                        showToast("暂无可用数据")
+                        SupportEmptyView.checkEmpty(this, adapter)
+                    }, {
+                        SupportEmptyView.checkEmpty(this, adapter)
+                        refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
+                        adapter.notifyDataSetChanged()
                         if (page == 1)
-                            adapter.dataList.clear()
-                        payload.payload?.apply {
-                            adapter.dataList.addAll(this)
-                        }
-                    } else
-                        showToast(payload.message)
-                }, { e ->
-                    Trace.e(e)
-                    showToast("暂无可用数据")
-                    SupportEmptyView.checkEmpty(this, adapter)
-                }, {
-                    SupportEmptyView.checkEmpty(this, adapter)
-                    refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
-                    adapter.notifyDataSetChanged()
-                    if (page == 1)
-                        refresh?.finishRefreshing()
-                    else
-                        refresh?.finishLoadmore()
-                })
+                            refresh?.finishRefreshing()
+                        else
+                            refresh?.finishLoadmore()
+                    })
+        } else if (mType == 4) {
+            SoguApi.getService(application)
+                    .showCopy(page = page, template_id = templates)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (payload.isOk) {
+                            if (page == 1)
+                                adapter.dataList.clear()
+                            payload.payload?.apply {
+                                adapter.dataList.addAll(this)
+                            }
+                        } else
+                            showToast(payload.message)
+                    }, { e ->
+                        Trace.e(e)
+                        showToast("暂无可用数据")
+                        SupportEmptyView.checkEmpty(this, adapter)
+                    }, {
+                        SupportEmptyView.checkEmpty(this, adapter)
+                        refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
+                        adapter.notifyDataSetChanged()
+                        if (page == 1)
+                            refresh?.finishRefreshing()
+                        else
+                            refresh?.finishLoadmore()
+                    })
+        }
 
 
         SoguApi.getService(application)

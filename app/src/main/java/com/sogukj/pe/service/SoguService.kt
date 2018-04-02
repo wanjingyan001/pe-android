@@ -1253,4 +1253,12 @@ interface SoguService {
     fun categoryFileList(@Field("id") id: Int,
                          @Field("page") page: Int,
                          @Field("pageSize") pageSize: Int? = 20): Observable<Payload<List<FileBean>>>
+
+    //抄送我的
+    @FormUrlEncoded
+    @POST("/api/Approve/showCopy")
+    fun showCopy(
+            @Field("page") page: Int = 1
+            , @Field("pageSize") pageSize: Int = 20
+            , @Field("template_id") template_id: String? = null): Observable<Payload<List<ApprovalBean>>>
 }

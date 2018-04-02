@@ -267,6 +267,18 @@ public class Utils {
         }
     }
 
+    public static int[] getYMDInCalendar(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        return new int[]{cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DATE)};
+    }
+
+    public static int[] getYMDHMInCalendar(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        return new int[]{cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DATE), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE)};
+    }
+
     public static String isAM(long time) {
         Calendar mCalendar = Calendar.getInstance();
         mCalendar.setTimeInMillis(time);
@@ -502,13 +514,14 @@ public class Utils {
         // 最后通知图库更新
 //        context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + path)));
     }
-	   public static String getEnvironment() {
+
+    public static String getEnvironment() {
         return BuildConfig.ENVIRONMENT;
     }
 
 
     public static int defaultHeadImg() {
-        int headImg ;
+        int headImg;
         switch (getEnvironment()) {
             case "civc":
                 headImg = R.drawable.img_logo_user;
