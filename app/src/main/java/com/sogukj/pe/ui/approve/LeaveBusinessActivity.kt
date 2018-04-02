@@ -163,7 +163,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
                 (paramMap.get("reasons") == null || (paramMap.get("reasons") as String?).isNullOrEmpty()) &&
                 (paramMap.get("time_range") == null || (paramMap.get("time_range") as String?).isNullOrEmpty()) &&
                 (paramMap.get("total_hours") == null || (paramMap.get("total_hours") as String?).isNullOrEmpty()) &&
-                (paramMap.get("copier") == null || (paramMap.get("copier") as String?).isNullOrEmpty()) &&
+                //(paramMap.get("copier") == null || (paramMap.get("copier") as String?).isNullOrEmpty()) &&
                 (paramMap.get("leave_type") == null)) {
             super.onBackPressed()
             return
