@@ -5,7 +5,6 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
 import android.view.View
 import android.widget.TextView
 import com.framework.base.BaseFragment
@@ -43,7 +42,6 @@ import com.sogukj.pe.view.CalendarDingDing
 import me.leolin.shortcutbadger.ShortcutBadger
 import org.jetbrains.anko.imageResource
 import org.jetbrains.anko.support.v4.ctx
-import org.jetbrains.anko.support.v4.find
 
 
 /**
@@ -52,6 +50,8 @@ import org.jetbrains.anko.support.v4.find
 class MainHomeFragment : BaseFragment() {
     override val containerViewId: Int
         get() = R.layout.fragment_home
+
+    private lateinit var window: CalendarWindow
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -74,15 +74,13 @@ class MainHomeFragment : BaseFragment() {
 //        tv_me.setOnClickListener {
 //            UserFragment.start(baseActivity)
 //        }
+        var ding = CalendarDingDing(context)
         tv_sp.setOnClickListener {
-            EntryApproveActivity.start(baseActivity, local_sp)
+            //EntryApproveActivity.start(baseActivity, local_sp)
 //            var ding = CalendarDingDing(context)
-//            ding.show()
-//            ding.set()
-//            var window = CalendarWindow(context, { date ->
-//
-//            })
-//            window.showAtLocation(find(R.id.root), Gravity.BOTTOM, 0, 0)
+            ding.show()
+            //ding.set()
+            //window.showAtLocation(find(R.id.root), Gravity.BOTTOM, 0, 0)
         }
         tv_weekly.setOnClickListener { WeeklyActivity.start(baseActivity) }
 //        tv_jj.setOnClickListener { FundMainFragment.start(baseActivity) }
