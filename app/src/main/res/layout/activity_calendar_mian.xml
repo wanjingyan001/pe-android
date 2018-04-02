@@ -22,7 +22,7 @@
             app:tabBackground="?attr/colorPrimary"
             app:tabGravity="center"
             app:tabIndicatorColor="@color/white"
-            app:tabIndicatorHeight="2dp"
+            app:tabIndicatorHeight="0dp"
             app:tabMode="scrollable"
             app:tabSelectedTextColor="@color/white"
             app:tabTextColor="@color/calendar_text_alphe">

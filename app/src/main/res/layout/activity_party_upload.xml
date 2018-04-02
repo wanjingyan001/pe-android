@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     android:background="@color/bg_record"
     android:orientation="vertical"
+    android:focusableInTouchMode="true"
+    android:focusable="true"
     tools:context="com.sogukj.pe.ui.partyBuild.PartyUploadActivity">
 
     <android.support.v7.widget.Toolbar

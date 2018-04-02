@@ -7,13 +7,16 @@ import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
 import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
 import com.framework.base.ToolbarActivity
 import com.ldf.calendar.model.CalendarDate
 import com.sogukj.pe.R
 import com.sogukj.pe.util.Utils
 import kotlinx.android.synthetic.main.activity_calendar_mian.*
+import org.jetbrains.anko.find
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.Comparator
 
 class CalendarMainActivity : ToolbarActivity(), MonthSelectListener, ViewPager.OnPageChangeListener {
 
@@ -26,8 +29,8 @@ class CalendarMainActivity : ToolbarActivity(), MonthSelectListener, ViewPager.O
     override val menuId: Int
         get() = R.menu.calendar_menu
     val fragments = ArrayList<Fragment>()
-    val titles = arrayListOf("周工作安排","日历", "任务", "项目事项", "团队日程")
-    private lateinit var arrangeFragment:ArrangeListFragment
+    val titles = arrayListOf("周工作安排", "日历", "任务", "项目事项", "团队日程")
+    private lateinit var arrangeFragment: ArrangeListFragment
     private lateinit var scheduleFragment: ScheduleFragment
     private lateinit var teamScheduleFragment: TeamScheduleFragment
 
@@ -35,7 +38,7 @@ class CalendarMainActivity : ToolbarActivity(), MonthSelectListener, ViewPager.O
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calendar_mian)
         setBack(true)
-        arrangeFragment =  ArrangeListFragment.newInstance("", "")
+        arrangeFragment = ArrangeListFragment.newInstance("", "")
         scheduleFragment = ScheduleFragment.newInstance("", "")
         teamScheduleFragment = TeamScheduleFragment.newInstance("", "")
         scheduleFragment.monthSelect = this
@@ -45,19 +48,30 @@ class CalendarMainActivity : ToolbarActivity(), MonthSelectListener, ViewPager.O
         fragments.add(TaskFragment.newInstance("", ""))
         fragments.add(ProjectMattersFragment.newInstance("", ""))
         fragments.add(teamScheduleFragment)
-        val adapter = ContentAdapter(supportFragmentManager, fragments, titles)
-        contentPager.adapter = adapter
-        tabLayout.setupWithViewPager(contentPager)
-        Utils.setUpIndicatorWidth(tabLayout, 12, 12, this)
-
-        contentPager.addOnPageChangeListener(this)
-        contentPager.offscreenPageLimit = 3
-        contentPager.currentItem = 0
+        initPager()
         title = SimpleDateFormat("yyyy年MM月").format(Date(System.currentTimeMillis()))
         addSchedule.visibility = View.GONE
         addSchedule.setOnClickListener {
             ModifyTaskActivity.startForCreate(this, ModifyTaskActivity.Schedule)
         }
+    }
+
+    private fun initPager() {
+        val adapter = ContentAdapter(supportFragmentManager, fragments, titles)
+        contentPager.adapter = adapter
+        tabLayout.setupWithViewPager(contentPager)
+        for (i in 0 until titles.size){
+            val tab = tabLayout.getTabAt(i)
+            tab?.let {
+                it.setCustomView(R.layout.layout_calendar_main_tab)
+                if (i == 0){
+                    it.customView!!.isSelected = true
+                }
+                it.customView!!.find<TextView>(R.id.indicatorTv).text = titles[i]
+            }
+        }
+        contentPager.addOnPageChangeListener(this)
+        contentPager.offscreenPageLimit = 3
     }
 
     override fun onMonthSelect(date: CalendarDate) {
@@ -120,7 +134,7 @@ class CalendarMainActivity : ToolbarActivity(), MonthSelectListener, ViewPager.O
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.calendar_menu -> {
-                ArrangeEditActivity.start(this,arrangeFragment.getWeeklyData(),arrangeFragment.offset.toString())
+                ArrangeEditActivity.start(this, arrangeFragment.getWeeklyData(), arrangeFragment.offset.toString())
             }
         }
         return super.onOptionsItemSelected(item)

@@ -51,7 +51,10 @@ class ArrangePersonActivity : ToolbarActivity() {
             adapter.selectedItems.add(index)
         }
         if (alreadyList.isNotEmpty()){
+            selectAllLayout.visibility = View.VISIBLE
             selectAll.isSelected = true
+        }else{
+            selectAllLayout.visibility = View.INVISIBLE
         }
         adapter.dataList.addAll(alreadyList)
         resultList.layoutManager = LinearLayoutManager(this)
@@ -103,6 +106,12 @@ class ArrangePersonActivity : ToolbarActivity() {
             adapter.dataList.clear()
             adapter.dataList.addAll(alreadyList)
             adapter.notifyDataSetChanged()
+            if (alreadyList.isNotEmpty()){
+                selectAllLayout.visibility = View.VISIBLE
+                selectAll.isSelected = true
+            }else{
+                selectAllLayout.visibility = View.INVISIBLE
+            }
         }
     }
 
