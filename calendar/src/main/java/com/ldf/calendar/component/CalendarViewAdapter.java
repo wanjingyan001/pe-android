@@ -58,14 +58,6 @@ public class CalendarViewAdapter extends PagerAdapter {
         }
     }
 
-    public void reInit(Context context, int[] datas) {
-        CalendarDate d = new CalendarDate(datas[0], datas[1], datas[2]);
-        saveDate(d);
-        //初始化的种子日期为今天
-        seedDate = d.modifyDay(1);
-        notifyDataSetChanged();
-    }
-
     @Override
     public void setPrimaryItem(ViewGroup container, int position, Object object) {
         super.setPrimaryItem(container, position, object);

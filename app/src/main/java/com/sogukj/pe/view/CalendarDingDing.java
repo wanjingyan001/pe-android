@@ -229,7 +229,6 @@ public class CalendarDingDing extends View {
         tabs.getTabAt(0).setText(data[0] + "-" + getDisPlayNumber(data[1]) + "-" + getDisPlayNumber(data[2]));
         tabs.getTabAt(1).setText(getDisPlayNumber(data[3]) + ":" + getDisPlayNumber(data[4]));
 
-        calendarAdapter.reInit(mContext, data);
         mHour.setCurrentItem(data[3]);
         mMinute.setCurrentItem(data[4]);
 
