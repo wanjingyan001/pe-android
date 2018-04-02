@@ -145,6 +145,9 @@ class LeaveBusinessActivity : ToolbarActivity() {
             super.onBackPressed()
             return
         }
+        for (chk in checkList) {
+            chk()
+        }
         var tmpMap = HashMap<String, Any?>()
         for ((k, v) in paramMap) {
             if (v == null) {
@@ -367,8 +370,6 @@ class LeaveBusinessActivity : ToolbarActivity() {
             if (v.name != null && v.name!!.isNotEmpty()) {
                 items.add(v.name)
                 map.put(v.name!!, v)
-            }
-            if (flagEdit) {
                 if (v.is_select == 1) {
                     etValue.text = v.name
                     paramMap.put(bean.fields, v.id)
@@ -538,7 +539,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
                             startDate = format.parse(format.format(dates[0].toLong() * 1000))
                             endDate = format.parse(format.format(dates[1].toLong() * 1000))
                         } else if (paramsTitle.equals("请假")) {
-                            val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                            val format = SimpleDateFormat("yyyy-MM-dd HH:mm")
                             etValue.text = format.format(dates[index].toLong() * 1000)
                             startDate = format.parse(format.format(dates[0].toLong() * 1000))
                             endDate = format.parse(format.format(dates[1].toLong() * 1000))
@@ -551,7 +552,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
                                 startDate = format.parse(format.format(dates[0].toLong() * 1000))
                                 endDate = format.parse(format.format(dates[1].toLong() * 1000))
                             } else if (tmpId.equals("11")) {
-                                val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                                val format = SimpleDateFormat("yyyy-MM-dd HH:mm")
                                 etValue.text = format.format(dates[index].toLong() * 1000)
                                 startDate = format.parse(format.format(dates[0].toLong() * 1000))
                                 endDate = format.parse(format.format(dates[1].toLong() * 1000))
@@ -564,7 +565,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
                             startDate = format.parse(format.format(dates[0].toLong() * 1000))
                             endDate = format.parse(format.format(dates[1].toLong() * 1000))
                         } else if (paramId == 11) {
-                            val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                            val format = SimpleDateFormat("yyyy-MM-dd HH:mm")
                             etValue.text = format.format(dates[index].toLong() * 1000)
                             startDate = format.parse(format.format(dates[0].toLong() * 1000))
                             endDate = format.parse(format.format(dates[1].toLong() * 1000))
@@ -623,21 +624,21 @@ class LeaveBusinessActivity : ToolbarActivity() {
                     if (paramsTitle.equals("出差")) {
                         builder.setType(booleanArrayOf(true, true, true, false, false, false)).build().show()
                     } else if (paramsTitle.equals("请假")) {
-                        builder.setType(booleanArrayOf(true, true, true, true, true, true)).build().show()
+                        builder.setType(booleanArrayOf(true, true, true, true, true, false)).build().show()
                     }
                     if (isOneKey) {
                         var tmpId = XmlDb.open(context).get(Extras.ID, "").toInt()
                         if (tmpId == 10) {
                             builder.setType(booleanArrayOf(true, true, true, false, false, false)).build().show()
                         } else if (tmpId == 11) {
-                            builder.setType(booleanArrayOf(true, true, true, true, true, true)).build().show()
+                            builder.setType(booleanArrayOf(true, true, true, true, true, false)).build().show()
                         }
                     }
                 } else {
                     if (paramId == 10) {
                         builder.setType(booleanArrayOf(true, true, true, false, false, false)).build().show()
                     } else if (paramId == 11) {
-                        builder.setType(booleanArrayOf(true, true, true, true, true, true)).build().show()
+                        builder.setType(booleanArrayOf(true, true, true, true, true, false)).build().show()
                     }
                 }
             }
@@ -650,26 +651,54 @@ class LeaveBusinessActivity : ToolbarActivity() {
             if (paramsTitle.equals("出差")) {
                 etValue.text = Utils.getTime(date, "yyyy-MM-dd")
             } else if (paramsTitle.equals("请假")) {
-                etValue.text = Utils.getTime(date, "yyyy-MM-dd HH:mm:ss")
+                etValue.text = Utils.getTime(date, "yyyy-MM-dd HH:mm")
             }
             if (isOneKey) {
                 var tmpId = XmlDb.open(context).get(Extras.ID, "").toInt()
                 if (tmpId == 10) {
                     etValue.text = Utils.getTime(date, "yyyy-MM-dd")
                 } else if (tmpId == 11) {
-                    etValue.text = Utils.getTime(date, "yyyy-MM-dd HH:mm:ss")
+                    etValue.text = Utils.getTime(date, "yyyy-MM-dd HH:mm")
                 }
             }
         } else {
             if (paramId == 10) {
                 etValue.text = Utils.getTime(date, "yyyy-MM-dd")
             } else if (paramId == 11) {
-                etValue.text = Utils.getTime(date, "yyyy-MM-dd HH:mm:ss")
+                etValue.text = Utils.getTime(date, "yyyy-MM-dd HH:mm")
             }
         }
     }
 
     fun calculateTime() {
+        var pattern = ""
+        if (flagEdit) {
+            var paramsTitle = intent.getStringExtra(Extras.TITLE)
+            if (paramsTitle.equals("出差")) {
+                pattern = "yyyy-MM-dd"
+            } else if (paramsTitle.equals("请假")) {
+                pattern = "yyyy-MM-dd HH:mm"
+            }
+            if (isOneKey) {
+                var tmpId = XmlDb.open(context).get(Extras.ID, "").toInt()
+                if (tmpId == 10) {
+                    pattern = "yyyy-MM-dd"
+                } else if (tmpId == 11) {
+                    pattern = "yyyy-MM-dd HH:mm"
+                }
+            }
+        } else {
+            if (paramId == 10) {
+                pattern = "yyyy-MM-dd"
+            } else if (paramId == 11) {
+                pattern = "yyyy-MM-dd HH:mm"
+            }
+        }
+        if (Utils.getTime(startDate, pattern).equals(Utils.getTime(endDate, pattern))) {
+            showToast("选择的时长不能为0")
+            return
+        }
+
         if (flagEdit) {
             var paramsTitle = intent.getStringExtra(Extras.TITLE)
             if (paramsTitle.equals("出差")) {
