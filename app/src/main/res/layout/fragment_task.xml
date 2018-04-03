@@ -91,7 +91,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="10dp"
-        android:background="@drawable/divider2">
+        android:background="@color/calendar_bg_color">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/taskList"

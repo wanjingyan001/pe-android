@@ -21,6 +21,7 @@ import org.jetbrains.anko.info
 class LoggingInterceptor(private val context: Context) : Interceptor, AnkoLogger {
     override val loggerTag: String
         get() = "HttpRequest"
+
     override fun intercept(chain: Interceptor.Chain): Response {
         val builder = chain.request().newBuilder()
         val user = Store.store.getUser(context)
@@ -40,7 +41,9 @@ class LoggingInterceptor(private val context: Context) : Interceptor, AnkoLogger
                     for (i in 0 until body.size()) {
                         build.append(body.encodedName(i) + "=" + body.encodedValue(i) + ",")
                     }
-                    build.delete(build.length - 1, build.length)
+                    if (build.isNotEmpty()) {
+                        build.delete(build.length - 1, build.length)
+                    }
                     info {
                         "发送${request.method()}请求:${request.url()}\n" +
                                 " RequestParams:{$build}\n ${request.headers()}\n" +

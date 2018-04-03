@@ -19,6 +19,7 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.bean.WeeklyArrangeBean
+import com.sogukj.pe.bean.WeeklyReqBean
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.RecyclerAdapter
@@ -133,16 +134,21 @@ class ArrangeEditActivity : ToolbarActivity() {
     }
 
     private fun submitWeeklyWork() {
+        val newList = data.filter { !it.reasons.isNullOrEmpty() && it.reasons != ""}
+        if (newList.isEmpty()) {
+            toast("请填写工作内容")
+            return
+        }
         SoguApi.getService(application)
-                .submitWeeklyWork(Gson().toJson(data))
+                .submitWeeklyWork(WeeklyReqBean(newList))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         toast("保存成功")
                         val intent = Intent()
-                        intent.putExtra(Extras.DATA,data)
-                        setResult(Extras.RESULTCODE,intent)
+                        intent.putExtra(Extras.DATA, data)
+                        setResult(Extras.RESULTCODE, intent)
                         finish()
                     } else {
                         toast(payload.message.toString())
@@ -171,12 +177,14 @@ class ArrangeEditActivity : ToolbarActivity() {
         override fun setData(view: View, data: WeeklyArrangeBean, position: Int) {
             weeklyTv.text = data.weekday
             dayOfMonth.text = data.date?.substring(5, data.date?.length!!)
+            workContentEdit.filters = Utils.getFilter(ctx)
+            addressEdit.filters = Utils.getFilter(ctx)
+            if (data.reasons.isNullOrEmpty()) {
+                workContentEdit.setText("")
+            }
             data.reasons?.let {
                 workContentEdit.setText(it)
                 workContentEdit.setSelection(it.length)
-            }
-            if (data.reasons.isNullOrEmpty()){
-                workContentEdit.setText("")
             }
             val attList = ArrayList<UserBean>()
             data.attendee?.let {
@@ -192,7 +200,7 @@ class ArrangeEditActivity : ToolbarActivity() {
                 }
                 if (attList.isNotEmpty()) {
                     personAttend.setPersons(attList)
-                }else{
+                } else {
                     personAttend.setPersons(ArrayList())
                 }
             }
@@ -210,7 +218,7 @@ class ArrangeEditActivity : ToolbarActivity() {
                 }
                 if (particList.isNotEmpty()) {
                     personParticipate.setPersons(particList)
-                }else{
+                } else {
                     personParticipate.setPersons(ArrayList())
                 }
             }
@@ -240,10 +248,10 @@ class ArrangeEditActivity : ToolbarActivity() {
 
             }
             workContentEdit.setOnFocusChangeListener { v, hasFocus ->
-                if (hasFocus){
+                if (hasFocus) {
                     workContentEdit.setSelection(workContentEdit.text.length)
                     workContentEdit.addTextChangedListener(contentWatcher)
-                }else{
+                } else {
                     workContentEdit.removeTextChangedListener(contentWatcher)
                 }
             }
@@ -264,10 +272,10 @@ class ArrangeEditActivity : ToolbarActivity() {
                 }
             }
             addressEdit.setOnFocusChangeListener { v, hasFocus ->
-                if (hasFocus){
+                if (hasFocus) {
                     addressEdit.setSelection(addressEdit.text.toString().length)
                     addressEdit.addTextChangedListener(addressWatcher)
-                }else{
+                } else {
                     addressEdit.removeTextChangedListener(addressWatcher)
                 }
             }

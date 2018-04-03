@@ -1218,9 +1218,9 @@ interface SoguService {
     fun getWeeklyWorkList(@Field("offset") offset: Int): Observable<Payload<List<WeeklyArrangeBean>>>
 
     //提交|修改 每周工作安排
-    @FormUrlEncoded
+//    @FormUrlEncoded
     @POST("/api/Weekly/submitWeeklyWork")
-    fun submitWeeklyWork(@Field("data") data: String): Observable<Payload<Any>>
+    fun submitWeeklyWork(@Body body: WeeklyReqBean): Observable<Payload<Any>>
 
     //.栏目列表
     @POST("/api/Partybuild/categoryList")
