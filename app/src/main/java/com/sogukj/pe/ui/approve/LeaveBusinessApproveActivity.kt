@@ -108,7 +108,7 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
                         payload.payload?.copier?.apply {
                             initCS(this)
                         }
-                        initButtons(payload.payload?.click)
+                        initButtons(payload.payload?.click, payload.payload?.fixation?.state)
 
                         iv_state_agreed.visibility = View.GONE
                         iv_state_signed.visibility = View.GONE
@@ -134,7 +134,7 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
         grid_chaosong_to.adapter = adapter
     }
 
-    fun initButtons(click: Int?) {
+    fun initButtons(click: Int?, state: Int?) {
         btn_single.visibility = View.GONE
         ll_twins.visibility = View.GONE
         when (click) {
@@ -239,7 +239,11 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
                     val title = inflate.find<TextView>(R.id.approval_comments_title)
                     commentInput.filters = Utils.getFilter(this)
                     if (leave_type == 10 || leave_type == 11) {
-                        title.text = "是否同意此${paramTitle}申请？"
+                        if (state == 2) {
+                            title.text = "是否同意撤销此${paramTitle}申请？"
+                        } else {
+                            title.text = "是否同意此${paramTitle}申请？"
+                        }
                         veto.text = "不同意"
                         commentInput.hint = ""
                     }

@@ -57,4 +57,6 @@ object Extras {
     val SELECT_USER = "ext.selectUser"
     val USER_REMARKS = "ext.Remarks"
     val CAN_REMOVE_MEMBER = "ext.Remove.Member"
+
+    val DEFAULT = "ext.default"
 }

@@ -14,11 +14,7 @@ import android.text.Html
 import android.text.TextWatcher
 import android.view.*
 import android.view.inputmethod.EditorInfo
-import android.widget.BaseExpandableListAdapter
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
-import anet.channel.util.Utils.context
+import android.widget.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.netease.nim.uikit.business.team.activity.CustomExpandableListView
@@ -68,6 +64,9 @@ class TeamSelectActivity : AppCompatActivity() {
         getDataFromIntent()
         initSearchView()
         initResultList()
+
+        default = intent.getSerializableExtra(Extras.DEFAULT) as ArrayList<Int>?
+
         val organizationList = initOrganizationList()
 //        val contactList = initContactList()
         val layout = LinearLayout(this)
@@ -394,6 +393,12 @@ class TeamSelectActivity : AppCompatActivity() {
                         if (find != null && !canRemove) {
                             return@setOnClickListener
                         }
+
+                        if (default!!.contains(userBean.uid!!)) {
+                            Toast.makeText(this@TeamSelectActivity, "默认抄送人，无法取消", Toast.LENGTH_SHORT).show()
+                            return@setOnClickListener
+                        }
+
                         if (userBean.uid != mine.uid || !fromTeam) {
                             holder.selectIcon.isSelected = !holder.selectIcon.isSelected
                             userBean.uid?.let {
@@ -483,6 +488,12 @@ class TeamSelectActivity : AppCompatActivity() {
                     if (find != null && !canRemove) {
                         return@setOnClickListener
                     }
+
+                    if (default!!.contains(userBean.uid!!)) {
+                        Toast.makeText(this@TeamSelectActivity, "默认抄送人，无法取消", Toast.LENGTH_SHORT).show()
+                        return@setOnClickListener
+                    }
+
                     if (userBean.uid != mine!!.uid) {
                         holder.selectIcon.isSelected = !holder.selectIcon.isSelected
                         userBean.uid?.let {
@@ -516,6 +527,8 @@ class TeamSelectActivity : AppCompatActivity() {
         }
     }
 
+    var default: ArrayList<Int>? = null
+
     companion object {
 
         fun startForResult(context: Context, isSelectUser: Boolean? = null,
@@ -523,12 +536,14 @@ class TeamSelectActivity : AppCompatActivity() {
                            isCreateTeam: Boolean? = null,
                            fromTeam: Boolean? = null,
                            canRemoveMember: Boolean? = null,
-                           requestCode: Int? = null) {
+                           requestCode: Int? = null,
+                           defalut: ArrayList<Int>? = null) {
             val intent = Intent(context, TeamSelectActivity::class.java)
             intent.putExtra(Extras.SELECT_USER, isSelectUser)
             intent.putExtra(Extras.DATA, alreadySelect)
             intent.putExtra(Extras.CREATE_TEAM, isCreateTeam)
             intent.putExtra(Extras.FLAG, fromTeam)
+            intent.putExtra(Extras.DEFAULT, defalut)
             intent.putExtra(Extras.CAN_REMOVE_MEMBER, canRemoveMember)
             val code = requestCode ?: Extras.REQUESTCODE
             if (context is Fragment) {

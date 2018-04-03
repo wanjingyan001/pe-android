@@ -23,6 +23,7 @@ class ApproveViewBean {
         var sp_type: String? = null//  string    审批类型
         var depart: String? = null//  string    部门
         var leaveType: Int? = null//10=>出差，11=>请假
+        var state: Int? = null//0正常   1修改后    2撤销后
     }
 
     class ValueBean {

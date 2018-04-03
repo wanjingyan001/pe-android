@@ -316,6 +316,12 @@ class LeaveBusinessActivity : ToolbarActivity() {
                                 }
                                 payload.payload?.apply {
                                     addSP(sp!!)
+
+                                    default.clear()
+                                    for (user in cs!!) {
+                                        default.add(user.uid!!)
+                                    }
+
                                     cs!!.add(UserBean())
                                     addCS(cs!!)
                                 }
@@ -616,12 +622,14 @@ class LeaveBusinessActivity : ToolbarActivity() {
 
                             if (date_type == 1) {
                                 if (startDate!!.time / 1000 > endDate!!.time / 1000) {
-                                    showToast("开始时间不能大于结束时间")
+                                    //showToast("开始时间不能大于结束时间")
+                                    showCustomToast(R.drawable.icon_toast_error,"开始时间不能大于结束时间")
                                     return
                                 }
                             } else if (date_type == 2) {
                                 if (startDate!!.time / 1000 >= endDate!!.time / 1000) {
-                                    showToast("开始时间不能大于等于结束时间")
+                                    //showToast("开始时间不能大于等于结束时间")
+                                    showCustomToast(R.drawable.icon_toast_error,"开始时间不能大于等于结束时间")
                                     return
                                 }
                             }
@@ -631,7 +639,8 @@ class LeaveBusinessActivity : ToolbarActivity() {
                     })
                 } else if (index == 1) {
                     if (startDate == null) {
-                        showToast("请先选择开始时间")
+                        //showToast("请先选择开始时间")
+                        showCustomToast(R.drawable.icon_toast_error,"请先选择开始时间")
                         return@setOnClickListener
                     }
                     if (endDate == null) {
@@ -1032,6 +1041,8 @@ class LeaveBusinessActivity : ToolbarActivity() {
         }
     }
 
+    var default = ArrayList<Int>()
+
     fun addCS(list: ArrayList<UserBean>) {
         val convertView = inflater.inflate(R.layout.cs_row_sendto, null) as LinearLayout
         ll_content.addView(convertView)
@@ -1051,7 +1062,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
                 for (index in 0 until adapter.list.size - 1) {//不包含
                     list.add(adapter.list[index])
                 }
-                TeamSelectActivity.startForResult(this, true, list, false, false, true, SEND)
+                TeamSelectActivity.startForResult(this, true, list, false, false, true, SEND, default)
             } else {
                 adapter.list.removeAt(position)
                 adapter.notifyDataSetChanged()

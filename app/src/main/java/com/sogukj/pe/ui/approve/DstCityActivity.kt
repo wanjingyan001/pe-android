@@ -41,7 +41,7 @@ class DstCityActivity : ToolbarActivity() {
 
     override fun onBackPressed() {
         if (chosenAdapter.data.size == 0) {
-            showToast("未选择城市")
+            showCustomToast(R.drawable.icon_toast_error,"未选择城市")
             setResult(Extras.RESULTCODE2)
             super.onBackPressed()
             return
@@ -221,7 +221,7 @@ class DstCityActivity : ToolbarActivity() {
     fun doRequest() {
         var cacheData = cache.getCityCache("city")
         if (cacheData == null || cacheData.size == 0) {
-            showToast("获取城市列表，请等待")
+            //showToast("获取城市列表，请等待")
             SoguApi.getService(application)
                     .getCityArea()
                     .observeOn(AndroidSchedulers.mainThread())
@@ -334,7 +334,7 @@ class DstCityActivity : ToolbarActivity() {
             return
         }
         if (chosenAdapter.data.size == 6) {
-            showToast("目的城市数目不能超过6个")
+            showCustomToast(R.drawable.icon_toast_error,"目的城市数目不能超过6个")
             //添加不了，注意selected需要更新
             updateList(city, false)
             return
