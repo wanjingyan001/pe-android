@@ -1,5 +1,6 @@
 package com.sogukj.pe.ui.IM
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -17,10 +18,12 @@ import android.view.inputmethod.EditorInfo
 import android.widget.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.framework.base.BaseActivity
 import com.netease.nim.uikit.business.team.activity.CustomExpandableListView
 import com.netease.nim.uikit.common.ui.imageview.CircleImageView
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.R.layout.header
 import com.sogukj.pe.bean.DepartmentBean
 import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.util.Trace
@@ -33,7 +36,7 @@ import kotlinx.android.synthetic.main.activity_team_select.*
 import kotlinx.android.synthetic.main.item_fund_account_list.view.*
 import org.jetbrains.anko.*
 
-class TeamSelectActivity : AppCompatActivity() {
+class TeamSelectActivity : BaseActivity() {
     private val departList = ArrayList<DepartmentBean>() //组织架构
     private val contactList = ArrayList<UserBean>()//最近联系人
     private val resultData = ArrayList<UserBean>()//搜索结果
@@ -64,11 +67,8 @@ class TeamSelectActivity : AppCompatActivity() {
         getDataFromIntent()
         initSearchView()
         initResultList()
-
         default = intent.getSerializableExtra(Extras.DEFAULT) as ArrayList<Int>?
-
         header = initHeader()
-
         val organizationList = initOrganizationList()
 //        val contactList = initContactList()
         val layout = LinearLayout(this)
@@ -247,6 +247,7 @@ class TeamSelectActivity : AppCompatActivity() {
         resultList.adapter = resultAdapter
     }
 
+    @SuppressLint("SetTextI18n")
     fun doRequest() {
         SoguApi.getService(application)
                 .userDepart()
@@ -426,9 +427,11 @@ class TeamSelectActivity : AppCompatActivity() {
                             return@setOnClickListener
                         }
 
-                        if (default!!.contains(userBean.uid!!)) {
-                            Toast.makeText(this@TeamSelectActivity, "默认抄送人，无法取消", Toast.LENGTH_SHORT).show()
-                            return@setOnClickListener
+                        default?.let {
+                            if (it.contains(userBean.uid!!)) {
+                                Toast.makeText(this@TeamSelectActivity, "默认抄送人，无法取消", Toast.LENGTH_SHORT).show()
+                                return@setOnClickListener
+                            }
                         }
 
                         if (userBean.uid != mine.uid || !fromTeam) {
@@ -520,10 +523,11 @@ class TeamSelectActivity : AppCompatActivity() {
                     if (find != null && !canRemove) {
                         return@setOnClickListener
                     }
-
-                    if (default!!.contains(userBean.uid!!)) {
-                        Toast.makeText(this@TeamSelectActivity, "默认抄送人，无法取消", Toast.LENGTH_SHORT).show()
-                        return@setOnClickListener
+                    default?.let {
+                        if (it.contains(userBean.uid!!)) {
+                            Toast.makeText(this@TeamSelectActivity, "默认抄送人，无法取消", Toast.LENGTH_SHORT).show()
+                            return@setOnClickListener
+                        }
                     }
 
                     if (userBean.uid != mine!!.uid) {
