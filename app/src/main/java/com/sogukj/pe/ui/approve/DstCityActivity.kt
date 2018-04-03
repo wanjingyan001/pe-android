@@ -103,9 +103,9 @@ class DstCityActivity : ToolbarActivity() {
         var list = intent.getSerializableExtra(Extras.DATA) as ArrayList<CityArea.City>
         chosenAdapter.data.addAll(list)
         if (chosenAdapter.data.size == 0) {
-            empty_chosen.visibility = View.VISIBLE
-        } else {
             empty_chosen.visibility = View.GONE
+        } else {
+            empty_chosen.visibility = View.VISIBLE
         }
         chosenAdapter.notifyDataSetChanged()
         chosenGrid.setOnItemClickListener { parent, view, position, id ->
@@ -114,8 +114,9 @@ class DstCityActivity : ToolbarActivity() {
             chosenAdapter.data.remove(city)
             chosenAdapter.notifyDataSetChanged()
             if (chosenAdapter.data.size == 0) {
-                empty_chosen.visibility = View.VISIBLE
+                empty_chosen.visibility = View.GONE
             }
+            reCalculate()
         }
 
         historyAdapter = HistoryAdapter(context)
@@ -138,7 +139,7 @@ class DstCityActivity : ToolbarActivity() {
                 chosenAdapter.data.removeAt(index)
                 chosenAdapter.notifyDataSetChanged()
                 if (chosenAdapter.data.size == 0) {
-                    empty_chosen.visibility = View.VISIBLE
+                    empty_chosen.visibility = View.GONE
                 }
             } else {
                 //未点过
@@ -146,37 +147,65 @@ class DstCityActivity : ToolbarActivity() {
                 chosenAdapter.data.add(city)
                 chosenAdapter.notifyDataSetChanged()
                 if (chosenAdapter.data.size != 0) {
-                    empty_chosen.visibility = View.GONE
+                    empty_chosen.visibility = View.VISIBLE
                 }
             }
+            reCalculate()
         }
 
         doRequest()
-    }
-
-    //顶部状态栏（电量）+标题
-    private fun getStatusBarHeight(): Int {
-        var c: Class<*>? = null
-        var obj: Any? = null
-        var field: Field? = null
-        var x = 0
-        var sbar = 0
-        try {
-            c = Class.forName("com.android.internal.R\$dimen")
-            obj = c!!.newInstance()
-            field = c.getField("status_bar_height")
-            x = Integer.parseInt(field!!.get(obj).toString())
-            sbar = resources.getDimensionPixelSize(x)
-        } catch (e1: Exception) {
-            e1.printStackTrace()
-        }
-        return sbar + Utils.dpToPx(context, 56)
     }
 
     private var groups = ArrayList<String>()
     private var childs = ArrayList<ArrayList<CityArea.City>>()
     private var adapters = ArrayList<CityAdapter>()
     private var scrollDistance = ArrayList<Int>()
+    private var cellHeight = ArrayList<Int>()
+
+    fun reCalculate() {
+        cityLayout.post {
+            var childs = mRootScrollView.getChildAt(0) as LinearLayout
+            var h0 = childs.getChildAt(0).measuredHeight//15dp
+            var h1 = childs.getChildAt(1).measuredHeight//已选
+            var h2 = childs.getChildAt(2).measuredHeight//divider
+            var h3 = childs.getChildAt(3).measuredHeight//历史
+            var h4 = childs.getChildAt(4).measuredHeight//divider
+
+            scrollDistance.clear()
+
+            if (empty_chosen.visibility == View.GONE) {
+                scrollDistance.add(h0 + h2 + h3 + h4)
+            } else {
+                scrollDistance.add(h0 + h1 + h2 + h3 + h4)
+            }
+            for (distance in cellHeight) {
+                var previous = scrollDistance.get(scrollDistance.lastIndex)
+                scrollDistance.add((distance + previous))
+            }
+        }
+    }
+
+    fun calculateScroolDis() {
+        cityLayout.post {
+            //先找到cityLayout之前的距离
+            var childs = mRootScrollView.getChildAt(0) as LinearLayout
+            var h0 = childs.getChildAt(0).measuredHeight//15dp
+            var h1 = childs.getChildAt(1).measuredHeight//已选
+            var h2 = childs.getChildAt(2).measuredHeight//divider
+            var h3 = childs.getChildAt(3).measuredHeight//历史
+            var h4 = childs.getChildAt(4).measuredHeight//divider
+
+            var beforeDis = h0 + h1 + h2 + h3 + h4
+            scrollDistance.add(beforeDis)
+            for (viewIndex in 0 until (cityLayout.childCount - 2) step 2) {
+                var groupH = cityLayout.getChildAt(viewIndex).measuredHeight
+                var childH = cityLayout.getChildAt(viewIndex + 1).measuredHeight
+                var previous = scrollDistance.get(scrollDistance.lastIndex)
+                cellHeight.add(groupH + childH)
+                scrollDistance.add((groupH + childH + previous))
+            }
+        }
+    }
 
     fun doRequest() {
         showToast("获取城市列表，请等待")
@@ -197,23 +226,7 @@ class DstCityActivity : ToolbarActivity() {
                             updateList(city, true)
                         }
 
-                        //先找到cityLayout之前的距离
-                        var childs = mRootScrollView.getChildAt(0) as LinearLayout
-                        var h0 = childs.getChildAt(0).measuredHeight
-                        var h1 = childs.getChildAt(1).measuredHeight
-                        var h2 = childs.getChildAt(2).measuredHeight
-                        var h3 = childs.getChildAt(3).measuredHeight
-
-                        cityLayout.post {
-                            var beforeDis = h0 + h1 + h2 + h3 + Utils.dpToPx(context, 15)
-                            scrollDistance.add(beforeDis)
-                            for (viewIndex in 0 until (cityLayout.childCount - 2) step 2) {
-                                var groupH = cityLayout.getChildAt(viewIndex).measuredHeight
-                                var childH = cityLayout.getChildAt(viewIndex + 1).measuredHeight
-                                var previous = scrollDistance.get(scrollDistance.lastIndex)
-                                scrollDistance.add((groupH + childH + previous))
-                            }
-                        }
+                        calculateScroolDis()
                     } else {
                         showToast(payload.message)
                     }
@@ -230,9 +243,9 @@ class DstCityActivity : ToolbarActivity() {
                     if (payload.isOk) {
                         var list = payload.payload
                         if (list == null || list.isEmpty()) {
-
-                        } else {
                             empty_history.visibility = View.GONE
+                        } else {
+                            empty_history.visibility = View.VISIBLE
                             historyAdapter.data.addAll(list)
                             historyAdapter.notifyDataSetChanged()
                         }
@@ -285,8 +298,9 @@ class DstCityActivity : ToolbarActivity() {
             chosenAdapter.data.removeAt(index)
             chosenAdapter.notifyDataSetChanged()
             if (chosenAdapter.data.size == 0) {
-                empty_chosen.visibility = View.VISIBLE
+                empty_chosen.visibility = View.GONE
             }
+            reCalculate()
             return
         }
         if (chosenAdapter.data.size == 6) {
@@ -298,8 +312,9 @@ class DstCityActivity : ToolbarActivity() {
         chosenAdapter.data.add(city)
         chosenAdapter.notifyDataSetChanged()
         if (chosenAdapter.data.size != 0) {
-            empty_chosen.visibility = View.GONE
+            empty_chosen.visibility = View.VISIBLE
         }
+        reCalculate()
     }
 
     fun updateList(city: CityArea.City, newState: Boolean) {

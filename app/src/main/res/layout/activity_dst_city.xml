@@ -68,10 +68,15 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="15dp"
+                android:background="@android:color/transparent" />
+
             <LinearLayout
+                android:id="@+id/empty_chosen"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
                 android:background="#ffffff"
                 android:orientation="vertical">
 
@@ -86,31 +91,17 @@
                     android:textColor="#a0a4aa"
                     android:textSize="12sp" />
 
-                <FrameLayout
+                <GridView
+                    android:id="@+id/chosenGrid"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:layout_marginBottom="15dp"
-                    android:layout_marginTop="15dp">
-
-                    <GridView
-                        android:id="@+id/chosenGrid"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
-                        android:horizontalSpacing="12dp"
-                        android:numColumns="3"
-                        android:verticalSpacing="15dp" />
-
-                    <TextView
-                        android:id="@+id/empty_chosen"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="未选择任何城市"
-                        android:textColor="#ffd9d9d9"
-                        android:textSize="12sp" />
-                </FrameLayout>
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="15dp"
+                    android:horizontalSpacing="12dp"
+                    android:numColumns="3"
+                    android:verticalSpacing="15dp" />
             </LinearLayout>
 
             <View
@@ -121,6 +112,7 @@
                 android:background="#f1f1f1" />
 
             <LinearLayout
+                android:id="@+id/empty_history"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#ffffff"
@@ -137,31 +129,17 @@
                     android:textColor="#a0a4aa"
                     android:textSize="12sp" />
 
-                <FrameLayout
+                <GridView
+                    android:id="@+id/historyGrid"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:layout_marginBottom="15dp"
-                    android:layout_marginTop="15dp">
-
-                    <GridView
-                        android:id="@+id/historyGrid"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
-                        android:horizontalSpacing="12dp"
-                        android:numColumns="3"
-                        android:verticalSpacing="15dp" />
-
-                    <TextView
-                        android:id="@+id/empty_history"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="暂无历史选择"
-                        android:textColor="#ffd9d9d9"
-                        android:textSize="12sp" />
-                </FrameLayout>
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="15dp"
+                    android:horizontalSpacing="12dp"
+                    android:numColumns="3"
+                    android:verticalSpacing="15dp" />
             </LinearLayout>
 
             <View
