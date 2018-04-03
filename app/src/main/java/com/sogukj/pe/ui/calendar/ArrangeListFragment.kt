@@ -243,6 +243,8 @@ class ArrangeListFragment : BaseFragment() {
                                 substring += "..."
                             }
                             attendTv.text = "出席:$substring"
+                        } else {
+                            attendTv.text = "暂无出席人员"
                         }
                     }
                     data.participant?.let {
@@ -263,11 +265,13 @@ class ArrangeListFragment : BaseFragment() {
                                 substring += "..."
                             }
                             participateTv.text = "参加:$substring"
+                        } else {
+                            participateTv.text = "暂无参加人员"
                         }
                     }
                     if (data.place.isNullOrEmpty()) {
                         addressIcon.isEnabled = false
-                        address.hint = "暂无定位信息"
+                        address.hint = "暂无地址信息"
                     } else {
                         addressIcon.isEnabled = true
                         address.text = data.place

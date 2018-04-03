@@ -50,10 +50,10 @@ class ArrangePersonActivity : ToolbarActivity() {
         alreadyList.forEachIndexed { index, userBean ->
             adapter.selectedItems.add(index)
         }
-        if (alreadyList.isNotEmpty()){
+        if (alreadyList.isNotEmpty()) {
             selectAllLayout.visibility = View.VISIBLE
             selectAll.isSelected = true
-        }else{
+        } else {
             selectAllLayout.visibility = View.INVISIBLE
         }
         adapter.dataList.addAll(alreadyList)
@@ -86,6 +86,9 @@ class ArrangePersonActivity : ToolbarActivity() {
         when (item?.itemId) {
             R.id.action_confirm -> {
                 val intent = Intent()
+                if (adapter.selectedItems.isEmpty()) {
+                    alreadyList.clear()
+                }
                 intent.putExtra(Extras.DATA, alreadyList)
                 intent.putExtra(Extras.ID, getIntent().getIntExtra(Extras.ID, 0))
                 setResult(Extras.RESULTCODE, intent)
@@ -106,10 +109,10 @@ class ArrangePersonActivity : ToolbarActivity() {
             adapter.dataList.clear()
             adapter.dataList.addAll(alreadyList)
             adapter.notifyDataSetChanged()
-            if (alreadyList.isNotEmpty()){
+            if (alreadyList.isNotEmpty()) {
                 selectAllLayout.visibility = View.VISIBLE
                 selectAll.isSelected = true
-            }else{
+            } else {
                 selectAllLayout.visibility = View.INVISIBLE
             }
         }

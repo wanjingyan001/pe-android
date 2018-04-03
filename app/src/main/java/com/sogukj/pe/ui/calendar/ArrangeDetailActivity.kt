@@ -96,7 +96,7 @@ class ArrangeDetailActivity : ToolbarActivity() {
         if (data.place.isNullOrEmpty()) {
             address_icon.isEnabled = false
             addressTv.text = ""
-            addressTv.hint = "暂无定位信息"
+            addressTv.hint = "暂无地址信息"
         } else {
             address_icon.isEnabled = true
             addressTv.text = data.place
