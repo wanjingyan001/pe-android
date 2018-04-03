@@ -640,7 +640,7 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
             if (conView == null) {
                 viewHolder = ViewHolder()
                 conView = LayoutInflater.from(context).inflate(R.layout.send_item, null) as LinearLayout
-                viewHolder.icon = conView.findViewById(R.id.icon) as com.netease.nim.uikit.common.ui.imageview.CircleImageView
+                viewHolder.icon = conView.findViewById(R.id.icon) as CircleImageView
                 viewHolder.name = conView.findViewById(R.id.name) as TextView
                 conView.setTag(viewHolder)
             } else {
@@ -667,7 +667,7 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
         }
 
         class ViewHolder {
-            var icon: com.netease.nim.uikit.common.ui.imageview.CircleImageView? = null
+            var icon: CircleImageView? = null
             var name: TextView? = null
         }
     }

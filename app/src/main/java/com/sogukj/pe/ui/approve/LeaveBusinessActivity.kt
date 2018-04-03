@@ -17,7 +17,6 @@ import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.framework.base.ToolbarActivity
-import com.netease.nim.uikit.common.ui.imageview.CircleImageView
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.CustomSealBean
@@ -38,6 +37,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import com.google.gson.internal.LinkedTreeMap
 import com.sogukj.pe.view.CalendarDingDing
+import com.sogukj.pe.view.CircleImageView
 import com.sogukj.util.XmlDb
 import org.jetbrains.anko.find
 import java.text.SimpleDateFormat
@@ -344,7 +344,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
     }
 
     private fun add1(bean: CustomSealBean) {
-        val convertView = inflater.inflate(R.layout.cs_row_10, null)
+        val convertView = inflater.inflate(R.layout.cs_row_10, null) as LinearLayout
         ll_content.addView(convertView)
 
         val tvLabel = convertView.findViewById(R.id.tv_label) as TextView
@@ -379,7 +379,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
         }
         //paramMap.put(bean.fields, "")//TODO
         if (map.isNotEmpty())
-            etValue.setOnClickListener {
+            convertView.setOnClickListener {
                 var pvOptions = OptionsPickerView.Builder(this, OptionsPickerView.OnOptionsSelectListener { options1, option2, options3, v ->
                     val tx = items.get(options1)
                     etValue.text = tx
@@ -428,7 +428,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
     }
 
     private fun add10(bean: CustomSealBean) {
-        val convertView = inflater.inflate(R.layout.cs_row_10, null)
+        val convertView = inflater.inflate(R.layout.cs_row_10, null) as LinearLayout
         ll_content.addView(convertView)
         convertView.tag = "time"
 
@@ -465,7 +465,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
         }
 
         //end_city
-        etValue.setOnClickListener {
+        convertView.setOnClickListener {
             var input_id = XmlDb.open(context).get(Extras.ID, "").toInt()
             if (flagEdit) {
                 var paramsTitle = intent.getStringExtra(Extras.TITLE)
@@ -514,7 +514,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
         var nameList = bean.name?.split(",") as ArrayList<String>
         for (index in nameList.indices) {
             var name = nameList[index]
-            val convertView = inflater.inflate(R.layout.cs_row_11, null)
+            val convertView = inflater.inflate(R.layout.cs_row_11, null) as LinearLayout
             ll_content.addView(convertView)
 
             val tvLabel = convertView.findViewById(R.id.tv_label) as TextView
@@ -596,7 +596,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
             } else if (index == 1) {
                 ding_end = CalendarDingDing(context)
             }
-            etValue.setOnClickListener {
+            convertView.setOnClickListener {
                 if (index == 0) {
                     if (startDate == null) {
                         startDate = Date()
@@ -900,7 +900,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
         val etValue = convertView.findViewById(R.id.et_value) as TextView
         tvLabel.text = bean.name
         etValue.text = bean.value_map?.value as String?
-        etValue.setOnClickListener {
+        convertView.setOnClickListener {
             if (paramId == 11 || (flagEdit && intent.getStringExtra(Extras.TITLE).equals("请假")) || isOneKey) {
                 MyHolidayActivity.start(context)
             }
@@ -1005,10 +1005,14 @@ class LeaveBusinessActivity : ToolbarActivity() {
                 var view = inflater.inflate(R.layout.send_item, null) as LinearLayout
                 var icon = view.findViewById(R.id.icon) as CircleImageView
                 var name = view.findViewById(R.id.name) as TextView
-                Glide.with(context)
-                        .load(item.url)
-                        .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
-                        .into(icon)
+                if (item.url.isNullOrEmpty()) {
+                    icon.setChar(item.name.first())
+                } else {
+                    Glide.with(context)
+                            .load(item.url)
+                            .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
+                            .into(icon)
+                }
                 name.text = item.name
 
                 var params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
@@ -1208,10 +1212,14 @@ class LeaveBusinessActivity : ToolbarActivity() {
                         .into(viewHolder.icon)
                 viewHolder.name?.text = "添加"
             } else {
-                Glide.with(context)
-                        .load(list[position].url)
-                        .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
-                        .into(viewHolder.icon)
+                if (list[position].url.isNullOrEmpty()) {
+                    viewHolder.icon?.setChar(list[position].name.first())
+                } else {
+                    Glide.with(context)
+                            .load(list[position].url)
+                            .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
+                            .into(viewHolder.icon)
+                }
                 viewHolder.name?.text = list[position].name
             }
             return conView
