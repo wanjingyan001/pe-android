@@ -409,8 +409,9 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
                 val ch = v.name?.first()
                 ivUser.setChar(ch)
             } else {
-                Glide.with(this)
+                Glide.with(context)
                         .load(v.url)
+                        .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
                         .into(ivUser)
             }
             //0待审批，1审批中，2审批通过，4审批通过，5已撤销
