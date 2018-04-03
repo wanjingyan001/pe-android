@@ -20,6 +20,7 @@ import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.*
+import com.sogukj.pe.util.ColorUtil
 import com.sogukj.pe.util.PdfUtil
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
@@ -35,6 +36,7 @@ import kotlinx.android.synthetic.main.fragment_home.*
 import org.jetbrains.anko.collections.forEachWithIndex
 import org.jetbrains.anko.find
 import org.jetbrains.anko.imageResource
+import org.jetbrains.anko.textColor
 import java.text.SimpleDateFormat
 
 /**
@@ -385,46 +387,17 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
 
     private fun initApprovers(approveList: List<ApproverBean>?) {
         ll_approvers.removeAllViews()
-//        if (null == approveList || approveList.isEmpty()) {
-//            part2.visibility = View.GONE
-//            return
-//        }
-//        part2.visibility = View.VISIBLE
         val inflater = LayoutInflater.from(this)
         approveList?.forEach { v ->
-            val convertView = inflater.inflate(R.layout.item_approve_seal_approver, null)
+            val convertView = inflater.inflate(R.layout.item_leave_business, null)
             ll_approvers.addView(convertView)
 
-            val tvPosition = convertView.findViewById(R.id.tv_position) as TextView
             val ivUser = convertView.findViewById(R.id.iv_user) as CircleImageView
             val tvName = convertView.findViewById(R.id.tv_name) as TextView
             val tvStatus = convertView.findViewById(R.id.tv_status) as TextView
             val tvTime = convertView.findViewById(R.id.tv_time) as TextView
-            val tvEdit = convertView.findViewById(R.id.tv_edit) as TextView
             val tvContent = convertView.findViewById(R.id.tv_content) as TextView
-            val llComments = convertView.findViewById(R.id.ll_comments) as LinearLayout
 
-            if (v?.status == 3) {
-                tvEdit.visibility = View.VISIBLE
-                if (v?.is_edit_file == 1) {
-                    tvEdit.text = "文件已修改"
-                    if (leave_type == 10 || leave_type == 11) {
-                        tvEdit.text = "内容已修改"
-                    }
-                    tvEdit.setBackgroundResource(R.drawable.bg_tag_edit_file_1)
-                } else {
-                    tvEdit.text = "文件未修改"
-                    if (leave_type == 10 || leave_type == 11) {
-                        tvEdit.text = "内容未修改"
-                    }
-                    tvEdit.setBackgroundResource(R.drawable.bg_tag_edit_file_0)
-                }
-            } else
-                tvEdit.visibility = View.GONE
-            tvPosition.text = v.position
-            if (v.position.isNullOrEmpty()) {
-                tvPosition.visibility = View.GONE
-            }
             tvName.text = v.name
             tvTime.text = v.approval_time
             if (null != v.approval_time || !TextUtils.isEmpty(v.approval_time)) {
@@ -440,27 +413,25 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
                         .load(v.url)
                         .into(ivUser)
             }
+            //0待审批，1审批中，2审批通过，4审批通过，5已撤销
             tvStatus.text = v.status_str
+            tvStatus.textColor = when (v.status) {//-1=>不通过，0=>待审批，1=>审批中，4=>审批通过
+                -1 -> Color.parseColor("#ffff5858")
+                0 -> Color.parseColor("#ffffa715")
+                1 -> Color.parseColor("#ff4aaaf4")
+                4 -> Color.parseColor("#50d59d")
+                5 -> Color.parseColor("#d9d9d9")
+                else -> Color.parseColor("#50d59d")
+            }
             val buff = StringBuffer()
             if (null != v.content) {
-                appendLine(buff, "意见", v.content)
+                val sval = v.content
+                buff.append("<font color='#666666'>$sval</font><br/>")
             }
             tvContent.text = Html.fromHtml(buff.toString())
             tvContent.visibility = View.GONE
-            llComments.visibility = View.GONE
             if (null != v.content && !TextUtils.isEmpty(v.content)) {
                 tvContent.visibility = View.VISIBLE
-                tvContent.setOnClickListener {
-                    doComment(llComments, v.hid!!)
-                }
-
-                if (null != v.comment && v.comment!!.isNotEmpty()) {
-                    llComments.visibility = View.VISIBLE
-                    llComments.removeAllViews()
-                    v.comment?.forEach { data ->
-                        addComment(llComments, v.hid!!, data)
-                    }
-                }
             }
         }
     }
