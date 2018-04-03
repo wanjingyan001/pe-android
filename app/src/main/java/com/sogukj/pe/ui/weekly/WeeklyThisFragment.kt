@@ -42,7 +42,7 @@ import java.net.UnknownHostException
 import java.text.SimpleDateFormat
 import kotlin.collections.ArrayList
 import com.google.gson.JsonObject
-import com.netease.nim.uikit.common.ui.imageview.CircleImageView
+import com.sogukj.pe.view.CircleImageView
 
 //import kotlinx.android.synthetic.main.layout_network_error.*
 

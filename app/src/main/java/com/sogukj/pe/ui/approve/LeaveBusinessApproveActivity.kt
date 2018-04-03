@@ -432,11 +432,14 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
             } else {
                 tvTime.visibility = View.GONE
             }
-            val ch = v.name?.first()
-            ivUser.setChar(ch)
-            Glide.with(this)
-                    .load(v.url)
-                    .into(ivUser)
+            if (v.url.isNullOrEmpty()) {
+                val ch = v.name?.first()
+                ivUser.setChar(ch)
+            } else {
+                Glide.with(this)
+                        .load(v.url)
+                        .into(ivUser)
+            }
             tvStatus.text = v.status_str
             val buff = StringBuffer()
             if (null != v.content) {
@@ -650,10 +653,14 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
             } else {
                 viewHolder = conView.tag as ViewHolder
             }
-            Glide.with(context)
-                    .load(list[position].url)
-                    .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
-                    .into(viewHolder.icon)
+            if (list[position].url.isNullOrEmpty()) {
+                viewHolder.icon?.setChar(list[position].name.first())
+            } else {
+                Glide.with(context)
+                        .load(list[position].url)
+                        .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
+                        .into(viewHolder.icon)
+            }
             viewHolder.name?.text = list[position].name
             return conView
         }
