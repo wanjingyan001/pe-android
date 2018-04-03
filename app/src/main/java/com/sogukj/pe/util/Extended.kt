@@ -26,3 +26,5 @@ fun View.setOnClickFastListener(listener: OnClickFastListener.(v: View) -> Unit)
         }, it)
     }
 }
+
+fun <T> List<T>?.isNullOrEmpty(): Boolean = this == null || this.isEmpty()

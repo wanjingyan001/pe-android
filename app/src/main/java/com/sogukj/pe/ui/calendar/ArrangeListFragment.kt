@@ -39,6 +39,7 @@ import kotlinx.android.synthetic.main.fragment_arrange_list.*
 import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.backgroundResource
 import org.jetbrains.anko.find
+import org.jetbrains.anko.support.v4.ctx
 import kotlin.properties.Delegates
 
 
@@ -134,6 +135,16 @@ class ArrangeListFragment : BaseFragment() {
                         isRefresh = false
                     }
                     if (isLoadMore) {
+                        recycler_view.run {
+                            smoothScrollToPosition(0)
+                            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                                override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+                                    super.onScrolled(recyclerView, dx, dy)
+                                    scrollBy(0, -Utils.dpToPx(ctx, 50))
+                                    handler.postDelayed({ removeOnScrollListener(this) }, 1000)
+                                }
+                            })
+                        }
                         refresh.finishLoadmore()
                         isLoadMore = false
                     }
@@ -205,6 +216,7 @@ class ArrangeListFragment : BaseFragment() {
             val contentLayout = itemView.find<ConstraintLayout>(R.id.contentLayout)
             fun setData(view: View, data: WeeklyArrangeBean, position: Int) {
                 weekly.text = data.weekday
+
                 dayOfMonth.text = data.date?.substring(5, data.date?.length!!)
                 if (data.reasons == null || data.reasons!!.isEmpty()) {
                     emptyLayout.visibility = View.VISIBLE
@@ -231,6 +243,8 @@ class ArrangeListFragment : BaseFragment() {
                                 substring += "..."
                             }
                             attendTv.text = "出席:$substring"
+                        } else {
+                            attendTv.text = "暂无出席人员"
                         }
                     }
                     data.participant?.let {
@@ -251,11 +265,13 @@ class ArrangeListFragment : BaseFragment() {
                                 substring += "..."
                             }
                             participateTv.text = "参加:$substring"
+                        } else {
+                            participateTv.text = "暂无参加人员"
                         }
                     }
                     if (data.place.isNullOrEmpty()) {
                         addressIcon.isEnabled = false
-                        address.hint = "暂无定位信息"
+                        address.hint = "暂无地址信息"
                     } else {
                         addressIcon.isEnabled = true
                         address.text = data.place

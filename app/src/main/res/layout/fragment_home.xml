@@ -128,23 +128,27 @@
                     android:id="@+id/tv_sp"
                     android:layout_width="0dp"
                     android:layout_height="85dp"
-                    app:bg="@drawable/ic_sp"
-                    app:icon_main="@drawable/ic_main_sp"
+                    app:bg="@drawable/ic_lxr"
+                    app:icon_main="@drawable/ic_main_sp2"
                     app:layout_columnWeight="1"
                     app:sub_title="用印、签字、请假"
-                    app:tag_text="1"
+                    app:tag_text="3"
                     app:title="审批" />
+                <!--app:icon_main="@drawable/ic_main_sp"-->
+                <!--app:bg="@drawable/ic_sp"-->
 
                 <com.sogukj.pe.view.TipsViewMain
                     android:id="@+id/tv_weekly"
                     android:layout_width="0dp"
                     android:layout_height="85dp"
-                    app:bg="@drawable/ic_rl"
-                    app:icon_main="@drawable/ic_main_rl"
+                    app:bg="@drawable/ic_lxr"
+                    app:icon_main="@drawable/ic_main_rl2"
                     app:layout_columnWeight="1"
                     app:sub_title="员工周报"
-                    app:tag_text="2"
+                    app:tag_text="3"
                     app:title="周报" />
+                <!--app:icon_main="@drawable/ic_main_rl"-->
+                <!--app:bg="@drawable/ic_rl"-->
 
                 <com.sogukj.pe.view.TipsViewMain
                     android:id="@+id/tv_msg"

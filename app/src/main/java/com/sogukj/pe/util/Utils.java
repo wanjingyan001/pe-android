@@ -446,7 +446,7 @@ public class Utils {
 
     public static InputFilter[] getFilter(final Context context) {
         InputFilter filter = new InputFilter() {
-            Pattern pattern = Pattern.compile("[^a-zA-Z0-9\\u4E00-\\u9FA5_]");
+            Pattern pattern = Pattern.compile("[^a-zA-Z0-9\\u4E00-\\u9FA5_`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]");
 
             @Override
             public CharSequence filter(CharSequence charSequence, int i, int i1, Spanned spanned, int i2, int i3) {
@@ -454,7 +454,7 @@ public class Utils {
                 if (!matcher.find()) {
                     return null;
                 } else {
-                    Toast.makeText(context, "只能输入汉字,英文，数字", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "只能输入汉字,英文，数字和标点符号", Toast.LENGTH_SHORT).show();
                     return "";
                 }
 

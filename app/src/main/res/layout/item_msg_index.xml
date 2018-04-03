@@ -5,7 +5,6 @@
     android:layout_height="68dp"
     android:background="@drawable/bg_item_list"
     android:orientation="horizontal"
-    android:paddingLeft="5dp"
     android:paddingRight="15dp">
 
     <com.netease.nim.uikit.common.ui.imageview.CircleImageView

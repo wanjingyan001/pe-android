@@ -30,9 +30,8 @@ import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_team_select.*
-import org.jetbrains.anko.backgroundColor
-import org.jetbrains.anko.imageResource
-import org.jetbrains.anko.toast
+import kotlinx.android.synthetic.main.item_fund_account_list.view.*
+import org.jetbrains.anko.*
 
 class TeamSelectActivity : AppCompatActivity() {
     private val departList = ArrayList<DepartmentBean>() //组织架构
@@ -50,6 +49,7 @@ class TeamSelectActivity : AppCompatActivity() {
     private lateinit var orgAdapter: OrganizationAdapter
     private lateinit var contactAdapter: ContactAdapter
     private lateinit var resultAdapter: ContactAdapter
+    private lateinit var header: View
     private val selectMap = HashMap<String, Boolean>()
 
 
@@ -67,6 +67,8 @@ class TeamSelectActivity : AppCompatActivity() {
 
         default = intent.getSerializableExtra(Extras.DEFAULT) as ArrayList<Int>?
 
+        header = initHeader()
+
         val organizationList = initOrganizationList()
 //        val contactList = initContactList()
         val layout = LinearLayout(this)
@@ -77,10 +79,12 @@ class TeamSelectActivity : AppCompatActivity() {
             team_toolbar_title.text = "选择联系人"
             confirmSelectLayout.visibility = View.VISIBLE
 //            layout.addView(contactList, params)
+            layout.addView(header)
             layout.addView(organizationList, params)
         } else {
             team_toolbar_title.text = "通讯录"
             confirmSelectLayout.visibility = View.GONE
+            layout.addView(header)
             layout.addView(organizationList, params)
 //            layout.addView(contactList, params)
         }
@@ -180,6 +184,30 @@ class TeamSelectActivity : AppCompatActivity() {
         })
     }
 
+    private fun initHeader(): View {
+        val inflate = layoutInflater.inflate(R.layout.layout_team_select_list_header, null)
+        val icon = inflate.find<CircleImageView>(R.id.icon)
+        val name = inflate.find<TextView>(R.id.companyName)
+        when (Utils.getEnvironment()) {
+            "civc" -> {
+                icon.imageResource = R.mipmap.ic_launcher_zd
+                name.text = "中缔资本"
+            }
+            "ht" -> {
+                icon.imageResource = R.mipmap.ic_launcher_ht
+                name.text = "海通创新"
+            }
+            else -> {
+                icon.imageResource = R.mipmap.ic_launcher
+                name.text = "海通创新"
+            }
+        }
+        val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        params.bottomMargin = dip(10)
+        inflate.layoutParams = params
+        return inflate
+    }
+
     private fun initOrganizationList(): CustomExpandableListView {
         val organization = CustomExpandableListView(this)
         organization.setGroupIndicator(null)
@@ -226,10 +254,12 @@ class TeamSelectActivity : AppCompatActivity() {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
+                        var i = 0
                         departList.clear()
                         payload.payload?.forEach { depart ->
                             departList.add(depart)
                             depart.data?.forEach {
+                                i += 1
                                 it.depart_name = depart.de_name
                                 it.uid?.let {
                                     if (it == mine?.uid && fromTeam) {
@@ -245,6 +275,8 @@ class TeamSelectActivity : AppCompatActivity() {
                                 }
                             }
                         }
+                        val num = header.find<TextView>(R.id.num)
+                        num.text = "共${i}人"
                         orgAdapter.notifyDataSetChanged()
                     } else
                         toast(payload.message!!)
@@ -377,9 +409,9 @@ class TeamSelectActivity : AppCompatActivity() {
                 if (isSelectUser) {
                     holder.selectIcon.visibility = View.VISIBLE
                     userBean.uid?.let {
-                        if (it != mine.uid) {
-                            holder.selectIcon.isSelected = selectMap[it.toString()]!!
-                        }
+                        //                        if (it != mine.uid) {
+//                        }
+                        holder.selectIcon.isSelected = selectMap[it.toString()]!!
                     }
                 } else {
                     holder.selectIcon.visibility = View.GONE
