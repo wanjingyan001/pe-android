@@ -12,6 +12,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
+import com.sogukj.pe.bean.CityArea;
 import com.sogukj.pe.bean.MessageBean;
 
 import java.io.ByteArrayOutputStream;
@@ -106,10 +107,6 @@ public class CacheUtils {
         try {
             DiskLruCache.Editor editor = mDiskLruCache.edit(key);
             if (editor != null) {
-
-//                editor.set(DISK_CACHE_INDEX, gson.toJson(data));
-//                editor.commit();
-
                 OutputStream outputStream = editor
                         .newOutputStream(DISK_CACHE_INDEX);
                 outputStream.write(gson.toJson(data).getBytes("UTF-8"));
@@ -118,6 +115,50 @@ public class CacheUtils {
             }
         } catch (IOException e) {
         }
+    }
+
+    public void addToCityCache(String key, ArrayList<CityArea> data) {
+        try {
+            DiskLruCache.Editor editor = mDiskLruCache.edit(key);
+            if (editor != null) {
+                OutputStream outputStream = editor
+                        .newOutputStream(DISK_CACHE_INDEX);
+                outputStream.write(gson.toJson(data).getBytes("UTF-8"));
+                editor.commit();
+                mDiskLruCache.flush();
+            }
+        } catch (IOException e) {
+        }
+    }
+
+    public ArrayList<CityArea> getCityCache(String key) {
+        ArrayList<CityArea> retData = new ArrayList<CityArea>();
+        try {
+            //若snapshot为空，表明该key对应的文件不在缓存中
+            DiskLruCache.Snapshot snapshot = mDiskLruCache.get(key);
+            if (snapshot != null) {
+                FileInputStream fileInputStream = (FileInputStream) snapshot
+                        .getInputStream(DISK_CACHE_INDEX);
+                byte[] buffer = new byte[1024];//尽可能大
+                int len = 0;
+                ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+                while ((len = fileInputStream.read(buffer)) != -1) {
+                    outStream.write(buffer, 0, len);
+                }
+                String data = new String(outStream.toByteArray(), "UTF-8");
+                outStream.close();
+                snapshot.close();
+
+                //snapshot.getString(DISK_CACHE_INDEX);
+
+                retData = gson.fromJson(data, new TypeToken<ArrayList<CityArea>>() {
+                }.getType());//把JSON格式的字符串转为List
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return retData;
     }
 
     public void close() {

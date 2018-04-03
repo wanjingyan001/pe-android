@@ -11,11 +11,13 @@ import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.CityArea
+import com.sogukj.pe.util.CacheUtils
 import com.sogukj.pe.util.CharacterParser
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.*
 import com.sogukj.service.SoguApi
+import com.sogukj.util.Store
 import com.taobao.accs.utl.UT
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -59,12 +61,21 @@ class DstCityActivity : ToolbarActivity() {
 
         inflater = LayoutInflater.from(context)
 
+        cache = CacheUtils(context)
+
         initView()
 
         toolbar_menu.setOnClickListener {
             mRootScrollView.smoothScrollTo(0, 0)
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        cache.close()
+    }
+
+    lateinit var cache: CacheUtils
 
     //实例化汉字转拼音类
     private var characterParser = CharacterParser.getInstance()
@@ -208,31 +219,50 @@ class DstCityActivity : ToolbarActivity() {
     }
 
     fun doRequest() {
-        showToast("获取城市列表，请等待")
-        SoguApi.getService(application)
-                .getCityArea()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ payload ->
-                    if (payload.isOk) {
-                        filledData(payload.payload!!)
+        var cacheData = cache.getCityCache("city")
+        if (cacheData == null || cacheData.size == 0) {
+            showToast("获取城市列表，请等待")
+            SoguApi.getService(application)
+                    .getCityArea()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (payload.isOk) {
 
-                        side_bar.setB(groups)
+                            cache.addToCityCache("city", payload.payload!!)
 
-                        initAdapter()
+                            filledData(payload.payload!!)
 
-                        var list = intent.getSerializableExtra(Extras.DATA) as ArrayList<CityArea.City>
-                        for (city in list) {
-                            updateList(city, true)
+                            side_bar.setB(groups)
+
+                            initAdapter()
+
+                            var list = intent.getSerializableExtra(Extras.DATA) as ArrayList<CityArea.City>
+                            for (city in list) {
+                                updateList(city, true)
+                            }
+
+                            calculateScroolDis()
+                        } else {
+                            showToast(payload.message)
                         }
+                    }, { e ->
+                        Trace.e(e)
+                    })
+        } else {
+            filledData(cacheData)
 
-                        calculateScroolDis()
-                    } else {
-                        showToast(payload.message)
-                    }
-                }, { e ->
-                    Trace.e(e)
-                })
+            side_bar.setB(groups)
+
+            initAdapter()
+
+            var list = intent.getSerializableExtra(Extras.DATA) as ArrayList<CityArea.City>
+            for (city in list) {
+                updateList(city, true)
+            }
+
+            calculateScroolDis()
+        }
 
         var id = intent.getIntExtra(Extras.ID, 0)
         SoguApi.getService(application)

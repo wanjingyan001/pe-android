@@ -763,7 +763,7 @@ interface SoguService {
      * 省市区选择
      */
     @POST("/api/Index/getCityArea")
-    fun getCityArea(): Observable<Payload<List<CityArea>>>
+    fun getCityArea(): Observable<Payload<ArrayList<CityArea>>>
 
     /**
      * 行业分类
