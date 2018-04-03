@@ -99,7 +99,11 @@ public class CalendarDingDing extends View {
                             decorView.removeView(rootView);
                             //Date mDate = new Date(data[0], data[1] - 1, data[2], data[3], data[4], 0);
                             java.util.Calendar calendar = java.util.Calendar.getInstance();
-                            calendar.set(data[0], data[1] - 1, data[2], data[3], data[4], 0);
+                            if (mType == 2) {
+                                calendar.set(data[0], data[1] - 1, data[2], data[3], data[4], 0);
+                            } else if (mType == 1) {
+                                calendar.set(data[0], data[1] - 1, data[2], 0, 0, 0);
+                            }
                             Date mDate = calendar.getTime();
                             mListener.onClick(mDate);
                         }
@@ -143,7 +147,6 @@ public class CalendarDingDing extends View {
         });
 
         //年月日
-        //mCalendarDateView.setViewheight(Utils.dpToPx(mContext, 270));
         OnSelectDateListener onSelectDateListener = new OnSelectDateListener() {
             @Override
             public void onSelectDate(CalendarDate date) {
@@ -151,9 +154,11 @@ public class CalendarDingDing extends View {
                 data[1] = date.month;
                 data[2] = date.day;
                 tabs.getTabAt(0).setText(data[0] + "-" + getDisPlayNumber(data[1]) + "-" + getDisPlayNumber(data[2]));
-                tabs.getTabAt(1).select();
-                mMain.setVisibility(View.GONE);
-                mSub.setVisibility(View.VISIBLE);
+                if (mType != 1) {
+                    tabs.getTabAt(1).select();
+                    mMain.setVisibility(View.GONE);
+                    mSub.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
@@ -217,6 +222,8 @@ public class CalendarDingDing extends View {
         });
     }
 
+    private int mType;
+
     //type    1天数   2时分
     public void show(int type, Date date, onTimeClick listener) {
         if (rootView.getParent() == null) {
@@ -227,7 +234,6 @@ public class CalendarDingDing extends View {
 
         data = Utils.getYMDHMInCalendar(date);
         tabs.getTabAt(0).setText(data[0] + "-" + getDisPlayNumber(data[1]) + "-" + getDisPlayNumber(data[2]));
-        tabs.getTabAt(1).setText(getDisPlayNumber(data[3]) + ":" + getDisPlayNumber(data[4]));
 
         mHour.setCurrentItem(data[3]);
         mMinute.setCurrentItem(data[4]);
@@ -235,6 +241,15 @@ public class CalendarDingDing extends View {
         tabs.getTabAt(0).select();
         mMain.setVisibility(View.VISIBLE);
         mSub.setVisibility(View.GONE);
+
+        mType = type;
+        if (type == 1) {
+            if (tabs.getTabAt(1) != null) {
+                tabs.removeTabAt(1);
+            }
+        } else if (type == 2) {
+            tabs.getTabAt(1).setText(getDisPlayNumber(data[3]) + ":" + getDisPlayNumber(data[4]));
+        }
     }
 
     private onTimeClick mListener;

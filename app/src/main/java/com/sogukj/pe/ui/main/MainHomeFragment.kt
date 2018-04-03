@@ -76,15 +76,15 @@ class MainHomeFragment : BaseFragment() {
 //        tv_me.setOnClickListener {
 //            UserFragment.start(baseActivity)
 //        }
-        var ding = CalendarDingDing(context)
+//        var ding = CalendarDingDing(context)
         tv_sp.setOnClickListener {
-            //EntryApproveActivity.start(baseActivity, local_sp)
-            ding.show(2, mDate, object : CalendarDingDing.onTimeClick {
-                override fun onClick(date: Date?) {
-                    mDate = date!!
-                    Log.e("date", "${date.year}+${date.month}+${date.day}+${date.hours}+${date.minutes}")
-                }
-            })
+            EntryApproveActivity.start(baseActivity, local_sp)
+//            ding.show(1, mDate, object : CalendarDingDing.onTimeClick {
+//                override fun onClick(date: Date?) {
+//                    mDate = date!!
+//                    Log.e("date", "${date.year}+${date.month}+${date.day}+${date.hours}+${date.minutes}")
+//                }
+//            })
         }
         tv_weekly.setOnClickListener { WeeklyActivity.start(baseActivity) }
 //        tv_jj.setOnClickListener { FundMainFragment.start(baseActivity) }
