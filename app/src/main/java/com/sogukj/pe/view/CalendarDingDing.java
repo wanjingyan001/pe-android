@@ -49,6 +49,7 @@ public class CalendarDingDing extends View {
     private int[] data = new int[5];
     private TextView mOK;
     private Context mContext;
+    private View empty;
 
     public CalendarDingDing(Context context) {
         super(context);
@@ -83,38 +84,17 @@ public class CalendarDingDing extends View {
         mMain = (LinearLayout) rootView.findViewById(R.id.main);
         mSub = (LinearLayout) rootView.findViewById(R.id.sub);
         mOK = (TextView) rootView.findViewById(R.id.confirm);
+        empty = (View) rootView.findViewById(R.id.empty);
+        empty.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss(true);
+            }
+        });
         mOK.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (rootView.getParent() != null) {
-                    Animation out = getOutAnimation();
-                    out.setAnimationListener(new Animation.AnimationListener() {
-                        @Override
-                        public void onAnimationStart(Animation animation) {
-
-                        }
-
-                        @Override
-                        public void onAnimationEnd(Animation animation) {
-                            decorView.removeView(rootView);
-                            //Date mDate = new Date(data[0], data[1] - 1, data[2], data[3], data[4], 0);
-                            java.util.Calendar calendar = java.util.Calendar.getInstance();
-                            if (mType == 2) {
-                                calendar.set(data[0], data[1] - 1, data[2], data[3], data[4], 0);
-                            } else if (mType == 1) {
-                                calendar.set(data[0], data[1] - 1, data[2], 0, 0, 0);
-                            }
-                            Date mDate = calendar.getTime();
-                            mListener.onClick(mDate);
-                        }
-
-                        @Override
-                        public void onAnimationRepeat(Animation animation) {
-
-                        }
-                    });
-                    rootView.startAnimation(out);
-                }
+                dismiss(false);
             }
         });
 
@@ -220,6 +200,48 @@ public class CalendarDingDing extends View {
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
+
+        data = Utils.getYMDHMInCalendar(new Date());
+        tabs.getTabAt(0).setText(data[0] + "-" + getDisPlayNumber(data[1]) + "-" + getDisPlayNumber(data[2]));
+
+        mHour.setCurrentItem(data[3]);
+        mMinute.setCurrentItem(data[4]);
+    }
+
+    private void dismiss(final boolean isEmpty) {
+        if (rootView.getParent() != null) {
+            Animation out = getOutAnimation();
+            out.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    decorView.removeView(rootView);
+                    //Date mDate = new Date(data[0], data[1] - 1, data[2], data[3], data[4], 0);
+                    java.util.Calendar calendar = java.util.Calendar.getInstance();
+                    if (mType == 2) {
+                        calendar.set(data[0], data[1] - 1, data[2], data[3], data[4], 0);
+                    } else if (mType == 1) {
+                        calendar.set(data[0], data[1] - 1, data[2], 0, 0, 0);
+                    }
+                    Date mDate = calendar.getTime();
+                    if (isEmpty) {
+                        mListener.onClick(null);
+                    } else {
+                        mListener.onClick(mDate);
+                    }
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            rootView.startAnimation(out);
+        }
     }
 
     private int mType;

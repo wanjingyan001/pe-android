@@ -37,6 +37,7 @@ import okhttp3.FormBody
 import java.util.*
 import kotlin.collections.ArrayList
 import com.google.gson.internal.LinkedTreeMap
+import com.sogukj.pe.view.CalendarDingDing
 import com.sogukj.util.XmlDb
 import org.jetbrains.anko.find
 import java.text.SimpleDateFormat
@@ -504,6 +505,9 @@ class LeaveBusinessActivity : ToolbarActivity() {
 
     var startDate: Date? = null
     var endDate: Date? = null
+    var date_type: Int? = null
+    lateinit var ding_start: CalendarDingDing
+    lateinit var ding_end: CalendarDingDing
 
     private fun add11(bean: CustomSealBean) {
         //time_range
@@ -528,199 +532,328 @@ class LeaveBusinessActivity : ToolbarActivity() {
             var str = bean.value_map?.value as String?
             paramMap.put(bean.fields, str)
 
+            date_type = bean.value_map?.type// 1天数   2时分
+
             if (!str.isNullOrEmpty()) {
                 var dates = str!!.split(",")
                 if (!dates[0].isNullOrEmpty()) {
-                    if (flagEdit == true) {
-                        var paramsTitle = intent.getStringExtra(Extras.TITLE)
-                        if (paramsTitle.equals("出差")) {
-                            val format = SimpleDateFormat("yyyy-MM-dd")
-                            etValue.text = format.format(dates[index].toLong() * 1000)
-                            startDate = format.parse(format.format(dates[0].toLong() * 1000))
-                            endDate = format.parse(format.format(dates[1].toLong() * 1000))
-                        } else if (paramsTitle.equals("请假")) {
-                            val format = SimpleDateFormat("yyyy-MM-dd HH:mm")
-                            etValue.text = format.format(dates[index].toLong() * 1000)
-                            startDate = format.parse(format.format(dates[0].toLong() * 1000))
-                            endDate = format.parse(format.format(dates[1].toLong() * 1000))
-                        }
-                        if (isOneKey) {
-                            var tmpId = XmlDb.open(context).get(Extras.ID, "")
-                            if (tmpId.equals("10")) {
-                                val format = SimpleDateFormat("yyyy-MM-dd")
-                                etValue.text = format.format(dates[index].toLong() * 1000)
-                                startDate = format.parse(format.format(dates[0].toLong() * 1000))
-                                endDate = format.parse(format.format(dates[1].toLong() * 1000))
-                            } else if (tmpId.equals("11")) {
-                                val format = SimpleDateFormat("yyyy-MM-dd HH:mm")
-                                etValue.text = format.format(dates[index].toLong() * 1000)
-                                startDate = format.parse(format.format(dates[0].toLong() * 1000))
-                                endDate = format.parse(format.format(dates[1].toLong() * 1000))
-                            }
-                        }
-                    } else {
-                        if (paramId == 10) {
-                            val format = SimpleDateFormat("yyyy-MM-dd")
-                            etValue.text = format.format(dates[index].toLong() * 1000)
-                            startDate = format.parse(format.format(dates[0].toLong() * 1000))
-                            endDate = format.parse(format.format(dates[1].toLong() * 1000))
-                        } else if (paramId == 11) {
-                            val format = SimpleDateFormat("yyyy-MM-dd HH:mm")
-                            etValue.text = format.format(dates[index].toLong() * 1000)
-                            startDate = format.parse(format.format(dates[0].toLong() * 1000))
-                            endDate = format.parse(format.format(dates[1].toLong() * 1000))
-                        }
+                    if (date_type == 1) {
+                        val format = SimpleDateFormat("yyyy-MM-dd")
+                        etValue.text = format.format(dates[index].toLong() * 1000)
+                        startDate = format.parse(format.format(dates[0].toLong() * 1000))
+                        endDate = format.parse(format.format(dates[1].toLong() * 1000))
+                    } else if (date_type == 2) {
+                        val format = SimpleDateFormat("yyyy-MM-dd HH:mm")
+                        etValue.text = format.format(dates[index].toLong() * 1000)
+                        startDate = format.parse(format.format(dates[0].toLong() * 1000))
+                        endDate = format.parse(format.format(dates[1].toLong() * 1000))
                     }
+//                    if (flagEdit == true) {
+//                        var paramsTitle = intent.getStringExtra(Extras.TITLE)
+//                        if (paramsTitle.equals("出差")) {
+//                            val format = SimpleDateFormat("yyyy-MM-dd")
+//                            etValue.text = format.format(dates[index].toLong() * 1000)
+//                            startDate = format.parse(format.format(dates[0].toLong() * 1000))
+//                            endDate = format.parse(format.format(dates[1].toLong() * 1000))
+//                        } else if (paramsTitle.equals("请假")) {
+//                            val format = SimpleDateFormat("yyyy-MM-dd HH:mm")
+//                            etValue.text = format.format(dates[index].toLong() * 1000)
+//                            startDate = format.parse(format.format(dates[0].toLong() * 1000))
+//                            endDate = format.parse(format.format(dates[1].toLong() * 1000))
+//                        }
+//                        if (isOneKey) {
+//                            var tmpId = XmlDb.open(context).get(Extras.ID, "")
+//                            if (tmpId.equals("10")) {
+//                                val format = SimpleDateFormat("yyyy-MM-dd")
+//                                etValue.text = format.format(dates[index].toLong() * 1000)
+//                                startDate = format.parse(format.format(dates[0].toLong() * 1000))
+//                                endDate = format.parse(format.format(dates[1].toLong() * 1000))
+//                            } else if (tmpId.equals("11")) {
+//                                val format = SimpleDateFormat("yyyy-MM-dd HH:mm")
+//                                etValue.text = format.format(dates[index].toLong() * 1000)
+//                                startDate = format.parse(format.format(dates[0].toLong() * 1000))
+//                                endDate = format.parse(format.format(dates[1].toLong() * 1000))
+//                            }
+//                        }
+//                    } else {
+//                        if (paramId == 10) {
+//                            val format = SimpleDateFormat("yyyy-MM-dd")
+//                            etValue.text = format.format(dates[index].toLong() * 1000)
+//                            startDate = format.parse(format.format(dates[0].toLong() * 1000))
+//                            endDate = format.parse(format.format(dates[1].toLong() * 1000))
+//                        } else if (paramId == 11) {
+//                            val format = SimpleDateFormat("yyyy-MM-dd HH:mm")
+//                            etValue.text = format.format(dates[index].toLong() * 1000)
+//                            startDate = format.parse(format.format(dates[0].toLong() * 1000))
+//                            endDate = format.parse(format.format(dates[1].toLong() * 1000))
+//                        }
+//                    }
                 }
             }
 
+            if (index == 0) {
+                ding_start = CalendarDingDing(context)
+            } else if (index == 1) {
+                ding_end = CalendarDingDing(context)
+            }
             etValue.setOnClickListener {
-                if (index == 1) {
+                if (index == 0) {
                     if (startDate == null) {
+                        startDate = Date()
+                    }
+                    ding_start.show(date_type!!, startDate, object : CalendarDingDing.onTimeClick {
+                        override fun onClick(date: Date?) {
+                            if (date == null) {
+                                startDate = null
+                                return
+                            } else {
+                                startDate = date!!
+                                setTime(etValue, date!!, date_type!!)
+                                if (endDate == null) {
+                                    return
+                                }
+                            }
+
+                            if (date_type == 1) {
+                                if (startDate!!.time / 1000 > endDate!!.time / 1000) {
+                                    showToast("开始时间不能大于结束时间")
+                                    return
+                                }
+                            } else if (date_type == 2) {
+                                if (startDate!!.time / 1000 >= endDate!!.time / 1000) {
+                                    showToast("开始时间不能大于等于结束时间")
+                                    return
+                                }
+                            }
+                            setTime(etValue, date!!, date_type!!)
+                            calculateTime(date_type!!)
+                        }
+                    })
+                } else if (index == 1) {
+                    if (startDate == null) {
+                        showToast("请先选择开始时间")
                         return@setOnClickListener
                     }
-                }
-                val builder = TimePickerView.Builder(this, { date, view ->
-                    if (index == 0) {
-                        startDate = date
-                        if (endDate == null) {
-                            setTime(etValue, date)
-                            return@Builder
-                        }
-                        if (startDate!!.time > endDate!!.time) {
-                            return@Builder
-                        }
-                        setTime(etValue, date)
-                        calculateTime()
-                    } else if (index == 1) {
-                        endDate = date
-                        if (startDate!!.time > endDate!!.time) {
-                            return@Builder
-                        }
-                        setTime(etValue, date)
-                        calculateTime()
+                    if (endDate == null) {
+                        endDate = Date()
                     }
-                    checkList.add {
-                        if (bean.is_must == 1) {
-                            if (startDate != null && endDate != null) {
-                                paramMap.put(bean.fields, "${(startDate!!.time) / 1000},${(endDate!!.time) / 1000}")
-                                true
+                    ding_end.show(date_type!!, endDate, object : CalendarDingDing.onTimeClick {
+                        override fun onClick(date: Date?) {
+                            if (date == null) {
+                                endDate = null
+                                return
                             } else {
-                                false
+                                endDate = date!!
                             }
-                        } else {
-                            true
+
+                            if (date_type == 1) {
+                                if (startDate!!.time / 1000 > endDate!!.time / 1000) {
+                                    showToast("开始时间不能大于结束时间")
+                                    return
+                                }
+                            } else if (date_type == 2) {
+                                if (startDate!!.time / 1000 >= endDate!!.time / 1000) {
+                                    showToast("开始时间不能大于等于结束时间")
+                                    return
+                                }
+                            }
+                            setTime(etValue, date!!, date_type!!)
+                            calculateTime(date_type!!)
+                            if (!isTimeAdd) {
+                                checkList.add {
+                                    if (bean.is_must == 1) {
+                                        if (startDate != null && endDate != null) {
+                                            paramMap.put(bean.fields, "${(startDate!!.time) / 1000},${(endDate!!.time) / 1000}")
+                                            true
+                                        } else {
+                                            false
+                                        }
+                                    } else {
+                                        true
+                                    }
+                                }
+                                isTimeAdd = true
+                            }
                         }
-                    }
-                })
-                        //年月日时分秒 的显示与否，不设置则默认全部显示
-                        .setDividerColor(Color.DKGRAY)
-                        .setContentSize(18)
-                        .isCyclic(true)
-                        .setDate(Calendar.getInstance())
-                        .setCancelColor(resources.getColor(R.color.shareholder_text_gray))
-                if (flagEdit) {
-                    var paramsTitle = intent.getStringExtra(Extras.TITLE)
-                    if (paramsTitle.equals("出差")) {
-                        builder.setType(booleanArrayOf(true, true, true, false, false, false)).build().show()
-                    } else if (paramsTitle.equals("请假")) {
-                        builder.setType(booleanArrayOf(true, true, true, true, true, false)).build().show()
-                    }
-                    if (isOneKey) {
-                        var tmpId = XmlDb.open(context).get(Extras.ID, "").toInt()
-                        if (tmpId == 10) {
-                            builder.setType(booleanArrayOf(true, true, true, false, false, false)).build().show()
-                        } else if (tmpId == 11) {
-                            builder.setType(booleanArrayOf(true, true, true, true, true, false)).build().show()
-                        }
-                    }
-                } else {
-                    if (paramId == 10) {
-                        builder.setType(booleanArrayOf(true, true, true, false, false, false)).build().show()
-                    } else if (paramId == 11) {
-                        builder.setType(booleanArrayOf(true, true, true, true, true, false)).build().show()
-                    }
+                    })
                 }
+//                if (index == 1) {
+//                    if (startDate == null) {
+//                        return@setOnClickListener
+//                    }
+//                }
+//                val builder = TimePickerView.Builder(this, { date, view ->
+//                    if (index == 0) {
+//                        startDate = date
+//                        if (endDate == null) {
+//                            setTime(etValue, date)
+//                            return@Builder
+//                        }
+//                        if (startDate!!.time > endDate!!.time) {
+//                            return@Builder
+//                        }
+//                        setTime(etValue, date)
+//                        calculateTime()
+//                    } else if (index == 1) {
+//                        endDate = date
+//                        if (startDate!!.time > endDate!!.time) {
+//                            return@Builder
+//                        }
+//                        setTime(etValue, date)
+//                        calculateTime()
+//                    }
+//                    checkList.add {
+//                        if (bean.is_must == 1) {
+//                            if (startDate != null && endDate != null) {
+//                                paramMap.put(bean.fields, "${(startDate!!.time) / 1000},${(endDate!!.time) / 1000}")
+//                                true
+//                            } else {
+//                                false
+//                            }
+//                        } else {
+//                            true
+//                        }
+//                    }
+//                })
+//                        //年月日时分秒 的显示与否，不设置则默认全部显示
+//                        .setDividerColor(Color.DKGRAY)
+//                        .setContentSize(18)
+//                        .isCyclic(true)
+//                        .setDate(Calendar.getInstance())
+//                        .setCancelColor(resources.getColor(R.color.shareholder_text_gray))
+//                if (flagEdit) {
+//                    var paramsTitle = intent.getStringExtra(Extras.TITLE)
+//                    if (paramsTitle.equals("出差")) {
+//                        builder.setType(booleanArrayOf(true, true, true, false, false, false)).build().show()
+//                    } else if (paramsTitle.equals("请假")) {
+//                        builder.setType(booleanArrayOf(true, true, true, true, true, false)).build().show()
+//                    }
+//                    if (isOneKey) {
+//                        var tmpId = XmlDb.open(context).get(Extras.ID, "").toInt()
+//                        if (tmpId == 10) {
+//                            builder.setType(booleanArrayOf(true, true, true, false, false, false)).build().show()
+//                        } else if (tmpId == 11) {
+//                            builder.setType(booleanArrayOf(true, true, true, true, true, false)).build().show()
+//                        }
+//                    }
+//                } else {
+//                    if (paramId == 10) {
+//                        builder.setType(booleanArrayOf(true, true, true, false, false, false)).build().show()
+//                    } else if (paramId == 11) {
+//                        builder.setType(booleanArrayOf(true, true, true, true, true, false)).build().show()
+//                    }
+//                }
             }
         }
     }
 
-    fun setTime(etValue: TextView, date: Date) {
-        if (flagEdit) {
-            var paramsTitle = intent.getStringExtra(Extras.TITLE)
-            if (paramsTitle.equals("出差")) {
-                etValue.text = Utils.getTime(date, "yyyy-MM-dd")
-            } else if (paramsTitle.equals("请假")) {
-                etValue.text = Utils.getTime(date, "yyyy-MM-dd HH:mm")
-            }
-            if (isOneKey) {
-                var tmpId = XmlDb.open(context).get(Extras.ID, "").toInt()
-                if (tmpId == 10) {
-                    etValue.text = Utils.getTime(date, "yyyy-MM-dd")
-                } else if (tmpId == 11) {
-                    etValue.text = Utils.getTime(date, "yyyy-MM-dd HH:mm")
-                }
-            }
-        } else {
-            if (paramId == 10) {
-                etValue.text = Utils.getTime(date, "yyyy-MM-dd")
-            } else if (paramId == 11) {
-                etValue.text = Utils.getTime(date, "yyyy-MM-dd HH:mm")
-            }
+    private var isTimeAdd = false
+
+    fun setTime(etValue: TextView, date: Date, type: Int) {
+        if (type == 1) {
+            etValue.text = Utils.getTime(date, "yyyy-MM-dd")
+        } else if (type == 2) {
+            etValue.text = Utils.getTime(date, "yyyy-MM-dd HH:mm")
         }
+//        if (flagEdit) {
+//            var paramsTitle = intent.getStringExtra(Extras.TITLE)
+//            if (paramsTitle.equals("出差")) {
+//                etValue.text = Utils.getTime(date, "yyyy-MM-dd")
+//            } else if (paramsTitle.equals("请假")) {
+//                etValue.text = Utils.getTime(date, "yyyy-MM-dd HH:mm")
+//            }
+//            if (isOneKey) {
+//                var tmpId = XmlDb.open(context).get(Extras.ID, "").toInt()
+//                if (tmpId == 10) {
+//                    etValue.text = Utils.getTime(date, "yyyy-MM-dd")
+//                } else if (tmpId == 11) {
+//                    etValue.text = Utils.getTime(date, "yyyy-MM-dd HH:mm")
+//                }
+//            }
+//        } else {
+//            if (paramId == 10) {
+//                etValue.text = Utils.getTime(date, "yyyy-MM-dd")
+//            } else if (paramId == 11) {
+//                etValue.text = Utils.getTime(date, "yyyy-MM-dd HH:mm")
+//            }
+//        }
     }
 
-    fun calculateTime() {
+    fun calculateTime(type: Int) {
         var pattern = ""
-        if (flagEdit) {
-            var paramsTitle = intent.getStringExtra(Extras.TITLE)
-            if (paramsTitle.equals("出差")) {
-                pattern = "yyyy-MM-dd"
-            } else if (paramsTitle.equals("请假")) {
-                pattern = "yyyy-MM-dd HH:mm"
-            }
-            if (isOneKey) {
-                var tmpId = XmlDb.open(context).get(Extras.ID, "").toInt()
-                if (tmpId == 10) {
-                    pattern = "yyyy-MM-dd"
-                } else if (tmpId == 11) {
-                    pattern = "yyyy-MM-dd HH:mm"
-                }
-            }
-        } else {
-            if (paramId == 10) {
-                pattern = "yyyy-MM-dd"
-            } else if (paramId == 11) {
-                pattern = "yyyy-MM-dd HH:mm"
-            }
-        }
-        if (Utils.getTime(startDate, pattern).equals(Utils.getTime(endDate, pattern))) {
-            showToast("选择的时长不能为0")
-            return
-        }
+//        if (flagEdit) {
+//            var paramsTitle = intent.getStringExtra(Extras.TITLE)
+//            if (paramsTitle.equals("出差")) {
+//                pattern = "yyyy-MM-dd"
+//            } else if (paramsTitle.equals("请假")) {
+//                pattern = "yyyy-MM-dd HH:mm"
+//            }
+//            if (isOneKey) {
+//                var tmpId = XmlDb.open(context).get(Extras.ID, "").toInt()
+//                if (tmpId == 10) {
+//                    pattern = "yyyy-MM-dd"
+//                } else if (tmpId == 11) {
+//                    pattern = "yyyy-MM-dd HH:mm"
+//                }
+//            }
+//        } else {
+//            if (paramId == 10) {
+//                pattern = "yyyy-MM-dd"
+//            } else if (paramId == 11) {
+//                pattern = "yyyy-MM-dd HH:mm"
+//            }
+//        }
+//        if (type == 1) {
+//            pattern = "yyyy-MM-dd"
+//        } else if (type == 2) {
+//            pattern = "yyyy-MM-dd HH:mm"
+//        }
+//        if (Utils.getTime(startDate, pattern).equals(Utils.getTime(endDate, pattern))) {
+//            showToast("选择的时长不能为0")
+//            return
+//        }
 
-        if (flagEdit) {
-            var paramsTitle = intent.getStringExtra(Extras.TITLE)
-            if (paramsTitle.equals("出差")) {
-                load10()
-            } else if (paramsTitle.equals("请假")) {
-                load11()
-            }
-            if (isOneKey) {
-                var tmpId = XmlDb.open(context).get(Extras.ID, "").toInt()
-                if (tmpId == 10) {
-                    load10()
-                } else if (tmpId == 11) {
-                    load11()
-                }
-            }
-        } else {
-            if (paramId == 10) {
-                load10()
-            } else if (paramId == 11) {
-                load11()
-            }
-        }
+        var total = ll_content.findViewWithTag("total_hours") as TextView
+        SoguApi.getService(application)
+                .calcTotalTime(start_time = (startDate!!.time / 1000).toString(), end_time = (endDate!!.time / 1000).toString(), type = type)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        if (type == 1) {
+                            total.text = payload.payload + "天"
+                        } else if (type == 2) {
+                            total.text = payload.payload + "小时"
+                        }
+                        paramMap.put("total_hours", payload.payload)//total_hours
+                    } else
+                        showToast(payload.message)
+                }, { e ->
+                    Trace.e(e)
+                })
+
+//        if (flagEdit) {
+//            var paramsTitle = intent.getStringExtra(Extras.TITLE)
+//            if (paramsTitle.equals("出差")) {
+//                load10()
+//            } else if (paramsTitle.equals("请假")) {
+//                load11()
+//            }
+//            if (isOneKey) {
+//                var tmpId = XmlDb.open(context).get(Extras.ID, "").toInt()
+//                if (tmpId == 10) {
+//                    load10()
+//                } else if (tmpId == 11) {
+//                    load11()
+//                }
+//            }
+//        } else {
+//            if (paramId == 10) {
+//                load10()
+//            } else if (paramId == 11) {
+//                load11()
+//            }
+//        }
     }
 
     fun load10() {
@@ -794,7 +927,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
         etValue.tag = bean.fields
         //etValue.text = bean.value_map?.value as String?
         if (startDate != null && endDate != null) {
-            calculateTime()
+            calculateTime(date_type!!)
         }
         if (flagEdit == true) {
             var paramsTitle = intent.getStringExtra(Extras.TITLE)
