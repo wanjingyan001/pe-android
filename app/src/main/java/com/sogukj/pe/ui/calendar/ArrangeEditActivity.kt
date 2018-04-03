@@ -249,9 +249,7 @@ class ArrangeEditActivity : ToolbarActivity() {
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     val content = workContentEdit.text.toString()
-                    if (content.isNotEmpty()) {
-                        this@ArrangeEditActivity.data[position].reasons = content
-                    }
+                    this@ArrangeEditActivity.data[position].reasons = content
                 }
 
             }

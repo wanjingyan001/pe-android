@@ -200,11 +200,6 @@
             android:textColor="@color/text_1"
             android:textSize="12sp" />
 
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginLeft="8dp"
-            android:src="@drawable/ic_right" />
 
     </LinearLayout>
 
