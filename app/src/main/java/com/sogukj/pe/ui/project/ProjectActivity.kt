@@ -7,6 +7,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.PorterDuff
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
@@ -19,6 +20,7 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
@@ -224,7 +226,7 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
                 }, { e ->
                     Trace.e(e)
                     tv_more_yq.visibility = View.GONE
-                },{
+                }, {
                     if (adapterNeg.dataList.size <= 3)
                         tv_more.visibility = View.GONE
                     else
@@ -367,57 +369,71 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
     }
 
     fun doAdd() {
-        var title = ""
+        var titleStr = ""
         if (type == ProjectListFragment.TYPE_DY) {
-            title = "是否添加到储备"
+            titleStr = "是否添加到储备"
         } else if (type == ProjectListFragment.TYPE_CB) {
-            title = "是否添加到立项"
+            titleStr = "是否添加到立项"
         } else if (type == ProjectListFragment.TYPE_LX) {
-            title = "是否添加到已投"
+            titleStr = "是否添加到已投"
         } else if (type == ProjectListFragment.TYPE_YT) {
-            title = "是否添加到退出"
+            titleStr = "是否添加到退出"
         }
-        MaterialDialog.Builder(this)
-                .theme(Theme.LIGHT)
-                .title(title)
-                .positiveText("确定")
-                .negativeText("取消")
-                .onPositive { dialog, which ->
-                    val status = if (type == ProjectListFragment.TYPE_DY) 1 else if (type == ProjectListFragment.TYPE_CB) 2
-                    else if (type == ProjectListFragment.TYPE_LX) 3 else return@onPositive
-                    SoguApi.getService(application)
-                            //.editProject(project.company_id!!)
-                            .changeStatus(project.company_id!!, status)
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribeOn(Schedulers.io())
-                            .subscribe({ payload ->
-                                if (payload.isOk) {
-                                    if (type == ProjectListFragment.TYPE_DY) {
-                                        showToast("成功添加到储备")
-                                    } else if (type == ProjectListFragment.TYPE_CB) {
-                                        showToast("成功添加到立项")
-                                    } else if (type == ProjectListFragment.TYPE_LX) {
-                                        showToast("成功添加到已投")
-                                    } else if (type == ProjectListFragment.TYPE_YT) {
-                                        showToast("成功添加到退出")
-                                    }
-                                    setResult(Activity.RESULT_OK)
-                                    finish()
-                                } else showToast(payload.message)
-                            }, { e ->
-                                Trace.e(e)
-                                if (type == ProjectListFragment.TYPE_DY) {
-                                    showToast("添加到储备失败")
-                                } else if (type == ProjectListFragment.TYPE_CB) {
-                                    showToast("添加到立项失败")
-                                } else if (type == ProjectListFragment.TYPE_LX) {
-                                    showToast("添加到已投失败")
-                                } else if (type == ProjectListFragment.TYPE_YT) {
-                                    showToast("添加到退出失败")
-                                }
-                            })
-                }
-                .show()
+        val inflate = LayoutInflater.from(this).inflate(R.layout.layout_input_dialog1, null)
+        val dialog = MaterialDialog.Builder(this)
+                .customView(inflate, false)
+                .cancelable(true)
+                .build()
+        dialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val veto = inflate.find<TextView>(R.id.veto_comment)
+        val confirm = inflate.find<TextView>(R.id.confirm_comment)
+        val title = inflate.find<TextView>(R.id.approval_comments_title)
+        title.text = titleStr
+        veto.text = "取消"
+        confirm.text = "确定"
+        veto.setOnClickListener {
+            if (dialog.isShowing) {
+                dialog.dismiss()
+            }
+        }
+        confirm.setOnClickListener {
+            if (dialog.isShowing) {
+                dialog.dismiss()
+            }
+            val status = if (type == ProjectListFragment.TYPE_DY) 1 else if (type == ProjectListFragment.TYPE_CB) 2
+            else if (type == ProjectListFragment.TYPE_LX) 3 else return@setOnClickListener
+            SoguApi.getService(application)
+                    .changeStatus(project.company_id!!, status)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (payload.isOk) {
+                            if (type == ProjectListFragment.TYPE_DY) {
+                                showToast("成功添加到储备")
+                            } else if (type == ProjectListFragment.TYPE_CB) {
+                                showToast("成功添加到立项")
+                            } else if (type == ProjectListFragment.TYPE_LX) {
+                                showToast("成功添加到已投")
+                            } else if (type == ProjectListFragment.TYPE_YT) {
+                                showToast("成功添加到退出")
+                            }
+                            setResult(Activity.RESULT_OK)
+                            finish()
+                        } else showToast(payload.message)
+                    }, { e ->
+                        Trace.e(e)
+                        if (type == ProjectListFragment.TYPE_DY) {
+                            showToast("添加到储备失败")
+                        } else if (type == ProjectListFragment.TYPE_CB) {
+                            showToast("添加到立项失败")
+                        } else if (type == ProjectListFragment.TYPE_LX) {
+                            showToast("添加到已投失败")
+                        } else if (type == ProjectListFragment.TYPE_YT) {
+                            showToast("添加到退出失败")
+                        }
+                    })
+        }
+        dialog.show()
     }
 
     private fun createOrJoin() {

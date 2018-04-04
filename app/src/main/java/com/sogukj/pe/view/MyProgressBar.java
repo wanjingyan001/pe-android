@@ -109,7 +109,7 @@ public class MyProgressBar extends View {
 
         //text
         mPaintTxt.setColor(Color.parseColor("#90959b"));
-        mPaintTxt.setTextSize(sp2px(7));
+        mPaintTxt.setTextSize(sp2px(12));
         mPaintTxt.measureText(progress + "%");
         float x = width * progress / 100 - txtRect.width() / 2;
         float y = height - dp2px(8 + 4);

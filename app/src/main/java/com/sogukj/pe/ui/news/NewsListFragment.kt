@@ -194,7 +194,11 @@ class NewsListFragment : BaseFragment(), SupportEmptyView {
             adapter.dataList.clear()
             adapter.dataList.addAll(initialData)
             adapter.notifyDataSetChanged()
-            iv_empty.visibility = View.GONE
+            if (adapter.dataList.size == 0) {
+                iv_empty.visibility = View.VISIBLE
+            } else {
+                iv_empty.visibility = View.GONE
+            }
         } else {
             for (bean in initialData) {
                 var tags = bean.tag?.split("#")
