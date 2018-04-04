@@ -103,11 +103,12 @@ class SealApproveActivity : ToolbarActivity() {
                             iv_state_agreed.visibility = View.VISIBLE
                         }
 
-                    } else
-                        showToast(payload.message)
+                    } else {
+                        showCustomToast(R.drawable.icon_toast_error, payload.message)
+                    }
                 }, { e ->
                     Trace.e(e)
-                    showToast("暂无可用数据")
+                    showCustomToast(R.drawable.icon_toast_error, "暂无可用数据")
                 })
     }
 
@@ -130,8 +131,9 @@ class SealApproveActivity : ToolbarActivity() {
                                 if (payload.isOk) {
 //                                    showToast("提交成功")
                                     showCustomToast(R.drawable.icon_toast_success,"提交成功")
-                                } else
-                                    showToast(payload.message)
+                                } else {
+                                    showCustomToast(R.drawable.icon_toast_error, payload.message)
+                                }
                             }, { e ->
                                 Trace.e(e)
 //                                showToast("请求失败")
@@ -165,8 +167,9 @@ class SealApproveActivity : ToolbarActivity() {
 //                                        }
                                         PdfUtil.loadPdf(this, it.url,it.name)
                                     }
-                                } else
-                                    showToast(payload.message)
+                                } else {
+                                    showCustomToast(R.drawable.icon_toast_error, payload.message)
+                                }
                             }, { e ->
                                 Trace.e(e)
 //                                showToast("请求失败")
@@ -181,8 +184,9 @@ class SealApproveActivity : ToolbarActivity() {
                             .subscribe({ payload ->
                                 if (payload.isOk) {
                                     refresh()
-                                } else
-                                    showToast(payload.message)
+                                } else {
+                                    showCustomToast(R.drawable.icon_toast_error, payload.message)
+                                }
                             }, { e ->
                                 Trace.e(e)
 //                                showToast("请求失败")
@@ -238,8 +242,9 @@ class SealApproveActivity : ToolbarActivity() {
                                     bean?.let {
                                         PdfUtil.loadPdf(this, it.url,it.name)
                                     }
-                                } else
-                                    showToast(payload.message)
+                                } else {
+                                    showCustomToast(R.drawable.icon_toast_error, payload.message)
+                                }
                             }, { e ->
                                 Trace.e(e)
 //                                showToast("请求失败")
@@ -288,8 +293,9 @@ class SealApproveActivity : ToolbarActivity() {
 //                        showToast("提交成功")
                         showCustomToast(R.drawable.icon_toast_success,"提交成功")
                         refresh()
-                    } else
-                        showToast(payload.message)
+                    } else {
+                        showCustomToast(R.drawable.icon_toast_error, payload.message)
+                    }
                 }, { e ->
                     Trace.e(e)
 //                    showToast("提交失败")
@@ -443,8 +449,9 @@ class SealApproveActivity : ToolbarActivity() {
 //                                showToast("提交成功")
                                 showCustomToast(R.drawable.icon_toast_success,"提交成功")
                                 refresh()
-                            } else
-                                showToast(payload.message)
+                            } else {
+                                showCustomToast(R.drawable.icon_toast_error, payload.message)
+                            }
                         }, { e ->
                             Trace.e(e)
 //                            showToast("提交失败")

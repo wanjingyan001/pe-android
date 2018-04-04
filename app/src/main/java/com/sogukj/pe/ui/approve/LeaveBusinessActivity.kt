@@ -86,7 +86,8 @@ class LeaveBusinessActivity : ToolbarActivity() {
             if (flag) {
                 doConfirm()
             } else {
-                showToast("请填写完整后再提交")
+                //showToast("请填写完整后再提交")
+                showCustomToast(R.drawable.icon_toast_error,"请填写完整后再提交")
             }
         }
         toolbar_menu.setImageResource(R.drawable.copy)
@@ -192,8 +193,9 @@ class LeaveBusinessActivity : ToolbarActivity() {
                     .subscribe({ payload ->
                         if (payload.isOk) {
                             super.onBackPressed()
-                        } else
-                            showToast(payload.message)
+                        } else {
+                            showCustomToast(R.drawable.icon_toast_error, payload.message)
+                        }
                     }, { e ->
                         Trace.e(e)
                     })
@@ -215,8 +217,9 @@ class LeaveBusinessActivity : ToolbarActivity() {
                             handler.postDelayed({
                                 super.onBackPressed()
                             }, 2000)
-                        } else
-                            showToast(payload.message)
+                        } else {
+                            showCustomToast(R.drawable.icon_toast_error, payload.message)
+                        }
                     }, { e ->
                         Trace.e(e)
 //                        showToast("草稿提交失败")
@@ -248,13 +251,15 @@ class LeaveBusinessActivity : ToolbarActivity() {
                     .subscribeOn(Schedulers.io())
                     .subscribe({ payload ->
                         if (payload.isOk) {
-                            showToast("提交成功")
+                            showCustomToast(R.drawable.icon_toast_success, "提交成功")
+                            //showToast("提交成功")
                             finish()
                         } else
                             showToast(payload.message)
                     }, { e ->
                         Trace.e(e)
-                        showToast("提交失败")
+                        showCustomToast(R.drawable.icon_toast_error, "提交失败")
+                        //showToast("提交失败")
                     })
         } else {
             val builder = FormBody.Builder()
@@ -273,13 +278,15 @@ class LeaveBusinessActivity : ToolbarActivity() {
                     .subscribeOn(Schedulers.io())
                     .subscribe({ payload ->
                         if (payload.isOk) {
-                            showToast("提交成功")
+                            //showToast("提交成功")
+                            showCustomToast(R.drawable.icon_toast_success, "提交成功")
                             finish()
                         } else
                             showToast(payload.message)
                     }, { e ->
                         Trace.e(e)
-                        showToast("提交失败")
+                        showCustomToast(R.drawable.icon_toast_error, "提交失败")
+                        //showToast("提交失败")
                     })
         }
     }
@@ -327,11 +334,13 @@ class LeaveBusinessActivity : ToolbarActivity() {
                                 }
                             }, { e ->
                                 Trace.e(e)
-                                showToast("暂无可用数据")
+                                showCustomToast(R.drawable.icon_toast_error, "暂无可用数据")
+                                //showToast("暂无可用数据")
                             })
                 }, { e ->
                     Trace.e(e)
-                    showToast("暂无可用数据")
+                    //showToast("暂无可用数据")
+                    showCustomToast(R.drawable.icon_toast_error, "暂无可用数据")
                 })
     }
 
@@ -657,12 +666,14 @@ class LeaveBusinessActivity : ToolbarActivity() {
 
                             if (date_type == 1) {
                                 if (startDate!!.time / 1000 > endDate!!.time / 1000) {
-                                    showToast("开始时间不能大于结束时间")
+                                    //showToast("开始时间不能大于结束时间")
+                                    showCustomToast(R.drawable.icon_toast_error,"开始时间不能大于结束时间")
                                     return
                                 }
                             } else if (date_type == 2) {
                                 if (startDate!!.time / 1000 >= endDate!!.time / 1000) {
-                                    showToast("开始时间不能大于等于结束时间")
+                                    //showToast("开始时间不能大于等于结束时间")
+                                    showCustomToast(R.drawable.icon_toast_error,"开始时间不能大于等于结束时间")
                                     return
                                 }
                             }
@@ -835,8 +846,9 @@ class LeaveBusinessActivity : ToolbarActivity() {
                             total.text = payload.payload + "小时"
                         }
                         paramMap.put("total_hours", payload.payload)//total_hours
-                    } else
-                        showToast(payload.message)
+                    } else {
+                        showCustomToast(R.drawable.icon_toast_error,payload.message)
+                    }
                 }, { e ->
                     Trace.e(e)
                 })
@@ -875,11 +887,13 @@ class LeaveBusinessActivity : ToolbarActivity() {
                     if (payload.isOk) {
                         total.text = payload.payload + "天"
                         paramMap.put("total_hours", payload.payload)//total_hours
-                    } else
-                        showToast(payload.message)
+                    } else {
+                        showCustomToast(R.drawable.icon_toast_error,payload.message)
+                    }
                 }, { e ->
                     Trace.e(e)
-                    showToast("时间计算出错")
+                    showCustomToast(R.drawable.icon_toast_error, "时间计算出错")
+                    //showToast("时间计算出错")
                 })
     }
 
@@ -893,11 +907,12 @@ class LeaveBusinessActivity : ToolbarActivity() {
                     if (payload.isOk) {
                         total.text = payload.payload + "小时"
                         paramMap.put("total_hours", payload.payload)//total_hours
-                    } else
-                        showToast(payload.message)
+                    } else {
+                        showCustomToast(R.drawable.icon_toast_error,payload.message)
+                    }
                 }, { e ->
                     Trace.e(e)
-                    showToast("时间计算出错")
+                    showCustomToast(R.drawable.icon_toast_error, "时间计算出错")
                 })
     }
 

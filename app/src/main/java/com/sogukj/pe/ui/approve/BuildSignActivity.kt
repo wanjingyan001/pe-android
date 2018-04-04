@@ -116,7 +116,8 @@ class BuildSignActivity : ToolbarActivity() {
             if (flag) {
                 doConfirm()
             } else {
-                showToast("请填写完整后再提交")
+                showCustomToast(R.drawable.icon_toast_error,"请填写完整后再提交")
+                //showToast("请填写完整后再提交")
             }
         }
         toolbar_menu.setImageResource(R.drawable.copy)
@@ -217,8 +218,9 @@ class BuildSignActivity : ToolbarActivity() {
                     .subscribe({ payload ->
                         if (payload.isOk) {
                             super.onBackPressed()
-                        } else
-                            showToast(payload.message)
+                        } else {
+                            showCustomToast(R.drawable.icon_toast_error,payload.message)
+                        }
                     }, { e ->
                         Trace.e(e)
                     })
@@ -236,8 +238,9 @@ class BuildSignActivity : ToolbarActivity() {
                             //                            showToast("草稿保存成功")
                             showCustomToast(R.drawable.icon_toast_success,"草稿保存成功")
                             super.onBackPressed()
-                        } else
-                            showToast(payload.message)
+                        } else {
+                            showCustomToast(R.drawable.icon_toast_error,payload.message)
+                        }
                     }, { e ->
                         Trace.e(e)
 //                        showToast("草稿保存失败")
@@ -258,7 +261,7 @@ class BuildSignActivity : ToolbarActivity() {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (!payload.isOk) {
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_error,payload.message)
                         return@subscribe
                     }
                     payload.payload?.forEach { bean ->
@@ -266,7 +269,7 @@ class BuildSignActivity : ToolbarActivity() {
                     }
                 }, { e ->
                     Trace.e(e)
-                    showToast("暂无可用数据")
+                    showCustomToast(R.drawable.icon_toast_error, "暂无可用数据")
                 })
         requestApprove()
     }
@@ -279,7 +282,7 @@ class BuildSignActivity : ToolbarActivity() {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (!payload.isOk) {
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_error, payload.message)
                         return@subscribe
                     }
                     payload.payload?.forEach { bean ->
@@ -287,7 +290,8 @@ class BuildSignActivity : ToolbarActivity() {
                     }
                 }, { e ->
                     Trace.e(e)
-                    showToast("暂无可用数据")
+                    //showToast("暂无可用数据")
+                    showCustomToast(R.drawable.icon_toast_error, "暂无可用数据")
                 })
     }
 
@@ -313,8 +317,9 @@ class BuildSignActivity : ToolbarActivity() {
                         handler.postDelayed({
                             finish()
                         },2000)
-                    } else
-                        showToast(payload.message)
+                    } else {
+                        showCustomToast(R.drawable.icon_toast_error, payload.message)
+                    }
                 }, { e ->
                     Trace.e(e)
 //                    showToast("提交失败")
@@ -634,8 +639,9 @@ class BuildSignActivity : ToolbarActivity() {
                             showCustomToast(R.drawable.icon_toast_success,"上传成功")
                             imagesBean?.value_list?.add(payload.payload!!)
                             refreshImages(imagesBean!!, imagesView!!)
-                        } else
-                            showToast(payload.message)
+                        } else {
+                            showCustomToast(R.drawable.icon_toast_error,payload.message)
+                        }
                     }, { e ->
                         Trace.e(e)
 //                        showToast("上传失败")
@@ -739,8 +745,9 @@ class BuildSignActivity : ToolbarActivity() {
                             showCustomToast(R.drawable.icon_toast_success,"上传成功")
                             filesBean?.value_list?.add(payload.payload!!)
                             refreshFiles(filesBean!!, filesView!!)
-                        } else
-                            showToast(payload.message)
+                        } else {
+                            showCustomToast(R.drawable.icon_toast_error,payload.message)
+                        }
                     }, { e ->
                         Trace.e(e)
 //                        showToast("上传失败")

@@ -274,8 +274,9 @@ class BuildSealActivity : ToolbarActivity() {
                     .subscribe({ payload ->
                         if (payload.isOk) {
                             super.onBackPressed()
-                        } else
-                            showToast(payload.message)
+                        } else {
+                            showCustomToast(R.drawable.icon_toast_error, payload.message)
+                        }
                     }, { e ->
                         Trace.e(e)
                     })
@@ -296,8 +297,9 @@ class BuildSealActivity : ToolbarActivity() {
                             handler.postDelayed({
                                 super.onBackPressed()
                             },2000)
-                        } else
-                            showToast(payload.message)
+                        } else {
+                            showCustomToast(R.drawable.icon_toast_error, payload.message)
+                        }
                     }, { e ->
                         Trace.e(e)
 //                        showToast("草稿提交失败")
@@ -317,7 +319,8 @@ class BuildSealActivity : ToolbarActivity() {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (!payload.isOk) {
-                        showToast(payload.message)
+                        //showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_error, payload.message)
                         return@subscribe
                     }
                     payload.payload?.forEach { bean ->
@@ -349,7 +352,8 @@ class BuildSealActivity : ToolbarActivity() {
                     }
                 }, { e ->
                     Trace.e(e)
-                    showToast("暂无可用数据")
+                    //showToast("暂无可用数据")
+                    showCustomToast(R.drawable.icon_toast_error, "暂无可用数据")
                 })
 
         requestApprove()
@@ -363,7 +367,8 @@ class BuildSealActivity : ToolbarActivity() {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (!payload.isOk) {
-                        showToast(payload.message)
+                        //showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_error, payload.message)
                         return@subscribe
                     }
                     payload.payload?.forEach { bean ->
@@ -371,7 +376,8 @@ class BuildSealActivity : ToolbarActivity() {
                     }
                 }, { e ->
                     Trace.e(e)
-                    showToast("暂无可用数据")
+                    //showToast("暂无可用数据")
+                    showCustomToast(R.drawable.icon_toast_error, "暂无可用数据")
                 })
     }
 
@@ -406,8 +412,9 @@ class BuildSealActivity : ToolbarActivity() {
                                 setResult(Activity.RESULT_OK, intent)
                                 finish()
                             },2000)
-                        } else
-                            showToast(payload.message)
+                        } else {
+                            showCustomToast(R.drawable.icon_toast_error, payload.message)
+                        }
                     }, { e ->
                         Trace.e(e)
 //                        showToast("提交失败")
@@ -434,8 +441,9 @@ class BuildSealActivity : ToolbarActivity() {
                             handler.postDelayed({
                                 finish()
                             },2000)
-                        } else
-                            showToast(payload.message)
+                        } else {
+                            showCustomToast(R.drawable.icon_toast_error, payload.message)
+                        }
                     }, { e ->
                         Trace.e(e)
 //                        showToast("提交失败")
@@ -811,8 +819,9 @@ class BuildSealActivity : ToolbarActivity() {
                             showCustomToast(R.drawable.icon_toast_success,"上传成功")
                             imagesBean.value_list?.add(payload.payload!!)
                             refreshImages(imagesBean, imagesView)
-                        } else
-                            showToast(payload.message)
+                        } else {
+                            showCustomToast(R.drawable.icon_toast_error, payload.message)
+                        }
                     }, { e ->
                         Trace.e(e)
 //                        showToast("上传失败")

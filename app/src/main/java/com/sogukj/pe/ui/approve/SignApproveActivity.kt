@@ -104,8 +104,9 @@ class SignApproveActivity : ToolbarActivity() {
                         } else if (status != null && status >= 3) {
                             iv_state_agreed.visibility = View.VISIBLE
                         }
-                    } else
-                        showToast(payload.message)
+                    } else {
+                        showCustomToast(R.drawable.icon_toast_error,payload.message)
+                    }
                 }, { e ->
                     Trace.e(e)
 //                    showToast("请求失败")
@@ -150,8 +151,9 @@ class SignApproveActivity : ToolbarActivity() {
 //                                showToast("保存成功")
                                 showCustomToast(R.drawable.icon_toast_success,"保存成功")
                                 refresh()
-                            } else
-                                showToast(payload.message)
+                            } else {
+                                showCustomToast(R.drawable.icon_toast_error,payload.message)
+                            }
                         }, { e ->
                             Trace.e(e)
 //                            showToast("请求失败")
@@ -185,8 +187,9 @@ class SignApproveActivity : ToolbarActivity() {
                                 if (payload.isOk) {
 //                                    showToast("提交成功")
                                     showCustomToast(R.drawable.icon_toast_success,"提交成功")
-                                } else
-                                    showToast(payload.message)
+                                } else {
+                                    showCustomToast(R.drawable.icon_toast_error,payload.message)
+                                }
                             }, { e ->
                                 Trace.e(e)
 //                                showToast("请求失败")
@@ -234,8 +237,9 @@ class SignApproveActivity : ToolbarActivity() {
                                     bean?.let {
                                         PdfUtil.loadPdf(this, it.url,it.name)
                                     }
-                                } else
-                                    showToast(payload.message)
+                                } else {
+                                    showCustomToast(R.drawable.icon_toast_error,payload.message)
+                                }
                             }, { e ->
                                 Trace.e(e)
 //                                showToast("请求失败")
