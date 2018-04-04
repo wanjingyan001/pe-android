@@ -65,11 +65,10 @@
         <TextView
             android:id="@+id/confirm"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
+            android:layout_height="match_parent"
             android:layout_marginRight="20dp"
             android:layout_weight="1"
-            android:gravity="right"
+            android:gravity="right|center"
             android:text="确定"
             android:textColor="@android:color/holo_blue_bright" />
 
