@@ -12,7 +12,7 @@
         android:layout_height="240dp"
         android:background="@mipmap/banner" />
 
-    <com.sogukj.pe.view.MyNestedScrollView
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -174,7 +174,7 @@
             </android.support.v7.widget.GridLayout>
 
         </LinearLayout>
-    </com.sogukj.pe.view.MyNestedScrollView>
+    </android.support.v4.widget.NestedScrollView>
 
 
     <!--<ProgressBar-->
