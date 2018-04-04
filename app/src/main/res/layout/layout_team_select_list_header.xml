@@ -6,14 +6,14 @@
     android:gravity="center_vertical"
     android:orientation="horizontal">
 
+
     <com.netease.nim.uikit.common.ui.imageview.CircleImageView
-        android:id="@+id/icon"
+        android:id="@+id/companyIcon"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="8dp" />
-
+        android:layout_marginStart="20dp" />
 
 
     <TextView
@@ -21,7 +21,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15sp"
-        android:layout_marginStart="15dp"
         android:layout_weight="1"
         android:textColor="@color/text_1"
         android:textSize="14sp" />
