@@ -108,7 +108,7 @@
                         android:layout_alignBottom="@+id/icon_party_build"
                         android:layout_alignLeft="@+id/party_title"
                         android:text="动态、活动、两学一做"
-                        android:textColor="#ffb5af"
+                        android:textColor="@color/white"
                         android:textSize="10sp" />
                 </RelativeLayout>
 
