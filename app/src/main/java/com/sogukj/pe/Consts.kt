@@ -6,6 +6,8 @@ package com.sogukj.pe
 object Consts {
 //    const val HTTP_HOST = "http://dev.ht.stockalert.cn"
     const val HTTP_HOST = "http://pre.pe.stockalert.cn"
+//    const val HTTP_HOST = "http://dev.ht.stockalert.cn"
+//    const val HTTP_HOST = "http://pre.pe.stockalert.cn"
 //    const val HTTP_HOST = "http://ht.stockalert.cn"
 //    const val HTTP_HOST = "http://yager.stockalert.cn/"
 //    const val HTTP_HOST = "http://kuke.stockalert.cn/"
