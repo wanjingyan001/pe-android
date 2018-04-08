@@ -10,7 +10,6 @@ import android.view.MenuItem
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
-import com.bigkoo.pickerview.TimePickerView
 import com.framework.base.ToolbarActivity
 import com.google.gson.Gson
 import com.sogukj.pe.Extras
@@ -20,6 +19,7 @@ import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.ui.IM.TeamSelectActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
+import com.sogukj.pe.view.CalendarDingDing
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -148,6 +148,9 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
         startTime.setOnClickListener(this)
         deadline.setOnClickListener(this)
         remind.setOnClickListener(this)
+
+        startDD = CalendarDingDing(context)
+        deadDD = CalendarDingDing(context)
     }
 
     var seconds: Int? = null
@@ -281,6 +284,9 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
 
     }
 
+    lateinit var startDD: CalendarDingDing
+    lateinit var deadDD: CalendarDingDing
+
     var start: Date? = null
     var endTime: Date? = null
     override fun onClick(v: View?) {
@@ -319,19 +325,27 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                 startDate.set(1949, 10, 1)
                 val endDate = Calendar.getInstance()
                 endDate.set(2020, 12, 31)
-                val timePicker = TimePickerView.Builder(this, { date, view ->
-                    start = date
-                    startTime.text = Utils.getTime(date, "MM月dd日 E HH:mm")
+//                val timePicker = TimePickerView.Builder(this, { date, view ->
+//                    start = date
+//                    startTime.text = Utils.getTime(date, "MM月dd日 E HH:mm")
+//                })
+//                        //年月日时分秒 的显示与否，不设置则默认全部显示
+//                        .setType(booleanArrayOf(true, true, true, true, true, false))
+//                        .setDividerColor(Color.DKGRAY)
+//                        .setContentSize(18)
+//                        .setDate(selectedDate)
+//                        .setCancelColor(resources.getColor(R.color.shareholder_text_gray))
+//                        .setRangDate(startDate, endDate)
+//                        .build()
+//                timePicker.show()
+                startDD.show(2, selectedDate, object : CalendarDingDing.onTimeClick {
+                    override fun onClick(date: Date?) {
+                        if(date != null){
+                            start = date
+                            startTime.text = Utils.getTime(date, "MM月dd日 E HH:mm")
+                        }
+                    }
                 })
-                        //年月日时分秒 的显示与否，不设置则默认全部显示
-                        .setType(booleanArrayOf(true, true, true, true, true, false))
-                        .setDividerColor(Color.DKGRAY)
-                        .setContentSize(18)
-                        .setDate(selectedDate)
-                        .setCancelColor(resources.getColor(R.color.shareholder_text_gray))
-                        .setRangDate(startDate, endDate)
-                        .build()
-                timePicker.show()
             }
             R.id.deadline -> {
                 Utils.closeInput(context, missionDetails)
@@ -340,20 +354,27 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                 startDate.set(1949, 10, 1)
                 val endDate = Calendar.getInstance()
                 endDate.set(2020, 12, 31)
-                val timePicker = TimePickerView.Builder(this, { date, view ->
-                    endTime = date
-                    deadline.text = Utils.getTime(date, "MM月dd日 E HH:mm")
+//                val timePicker = TimePickerView.Builder(this, { date, view ->
+//                    endTime = date
+//                    deadline.text = Utils.getTime(date, "MM月dd日 E HH:mm")
+//                })
+//                        //年月日时分秒 的显示与否，不设置则默认全部显示
+//                        .setType(booleanArrayOf(true, true, true, true, true, false))
+//                        .setDividerColor(Color.DKGRAY)
+//                        .setContentSize(18)
+//                        .setDate(selectedDate)
+//                        .setCancelColor(resources.getColor(R.color.shareholder_text_gray))
+//                        .setRangDate(startDate, endDate)
+//                        .build()
+//                timePicker.show()
+                deadDD.show(2, selectedDate, object : CalendarDingDing.onTimeClick {
+                    override fun onClick(date: Date?) {
+                        if(date != null){
+                            endTime = date
+                            deadline.text = Utils.getTime(date, "MM月dd日 E HH:mm")
+                        }
+                    }
                 })
-                        //年月日时分秒 的显示与否，不设置则默认全部显示
-                        .setType(booleanArrayOf(true, true, true, true, true, false))
-                        .setDividerColor(Color.DKGRAY)
-                        .setContentSize(18)
-                        .setDate(selectedDate)
-                        .setCancelColor(resources.getColor(R.color.shareholder_text_gray))
-                        .setRangDate(startDate, endDate)
-                        .build()
-                timePicker.show()
-
             }
             R.id.remind -> {
                 if (start == null) {

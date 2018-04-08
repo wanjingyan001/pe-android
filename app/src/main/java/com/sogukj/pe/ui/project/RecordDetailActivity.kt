@@ -11,7 +11,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.DatePicker
 import android.widget.TimePicker
-import com.bigkoo.pickerview.TimePickerView
 import com.framework.base.ToolbarActivity
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
@@ -22,6 +21,7 @@ import com.sogukj.pe.bean.RecordInfoBean
 import com.sogukj.pe.util.DateUtils
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
+import com.sogukj.pe.view.CalendarDingDing
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -52,34 +52,50 @@ class RecordDetailActivity : ToolbarActivity() {
             tv_start_time.text = format.format(calendar.time)
             tv_end_time.text = format.format(calendar.time)
 
+            var startDD = CalendarDingDing(context)
             tv_start_time.setOnClickListener {
                 calendar.time = format.parse(tv_start_time.text.toString())
-                val timePicker = TimePickerView.Builder(this, { date, view ->
-                    tv_start_time.text = format.format(date)
+//                val timePicker = TimePickerView.Builder(this, { date, view ->
+//                    tv_start_time.text = format.format(date)
+//                })
+//                        //年月日时分秒 的显示与否，不设置则默认全部显示
+//                        .setType(booleanArrayOf(true, true, true, true, true, false))
+//                        .setDividerColor(Color.DKGRAY)
+//                        .setContentSize(15)
+//                        .setDate(calendar)
+//                        .setCancelColor(resources.getColor(R.color.shareholder_text_gray))
+//                        .build()
+//                timePicker.show()
+                startDD.show(2, calendar, object : CalendarDingDing.onTimeClick {
+                    override fun onClick(date: Date?) {
+                        if(date != null){
+                            tv_start_time.text = format.format(date)
+                        }
+                    }
                 })
-                        //年月日时分秒 的显示与否，不设置则默认全部显示
-                        .setType(booleanArrayOf(true, true, true, true, true, false))
-                        .setDividerColor(Color.DKGRAY)
-                        .setContentSize(15)
-                        .setDate(calendar)
-                        .setCancelColor(resources.getColor(R.color.shareholder_text_gray))
-                        .build()
-                timePicker.show()
             }
 
+            var deadDD = CalendarDingDing(context)
             tv_end_time.setOnClickListener {
                 calendar.time = format.parse(tv_end_time.text.toString())
-                val timePicker = TimePickerView.Builder(this, { date, view ->
-                    tv_end_time.text = format.format(date)
+//                val timePicker = TimePickerView.Builder(this, { date, view ->
+//                    tv_end_time.text = format.format(date)
+//                })
+//                        //年月日时分秒 的显示与否，不设置则默认全部显示
+//                        .setType(booleanArrayOf(true, true, true, true, true, false))
+//                        .setDividerColor(Color.DKGRAY)
+//                        .setContentSize(15)
+//                        .setDate(calendar)
+//                        .setCancelColor(resources.getColor(R.color.shareholder_text_gray))
+//                        .build()
+//                timePicker.show()
+                deadDD.show(2, calendar, object : CalendarDingDing.onTimeClick {
+                    override fun onClick(date: Date?) {
+                        if(date != null){
+                            tv_end_time.text = format.format(date)
+                        }
+                    }
                 })
-                        //年月日时分秒 的显示与否，不设置则默认全部显示
-                        .setType(booleanArrayOf(true, true, true, true, true, false))
-                        .setDividerColor(Color.DKGRAY)
-                        .setContentSize(15)
-                        .setDate(calendar)
-                        .setCancelColor(resources.getColor(R.color.shareholder_text_gray))
-                        .build()
-                timePicker.show()
             }
         } else if (type.equals("VIEW")) {
             setTitle("记录详情")

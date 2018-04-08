@@ -274,6 +274,33 @@ public class CalendarDingDing extends View {
         }
     }
 
+    public void show(int type, java.util.Calendar cal, onTimeClick listener) {
+        if (rootView.getParent() == null) {
+            decorView.addView(rootView);
+            rootView.startAnimation(getInAnimation());
+        }
+        mListener = listener;
+
+        data = new int[]{cal.get(java.util.Calendar.YEAR), cal.get(java.util.Calendar.MONTH) + 1, cal.get(java.util.Calendar.DATE), cal.get(java.util.Calendar.HOUR_OF_DAY), cal.get(java.util.Calendar.MINUTE)};
+        tabs.getTabAt(0).setText(data[0] + "-" + getDisPlayNumber(data[1]) + "-" + getDisPlayNumber(data[2]));
+
+        mHour.setCurrentItem(data[3]);
+        mMinute.setCurrentItem(data[4]);
+
+        tabs.getTabAt(0).select();
+        mMain.setVisibility(View.VISIBLE);
+        mSub.setVisibility(View.GONE);
+
+        mType = type;
+        if (type == 1) {
+            if (tabs.getTabAt(1) != null) {
+                tabs.removeTabAt(1);
+            }
+        } else if (type == 2) {
+            tabs.getTabAt(1).setText(getDisPlayNumber(data[3]) + ":" + getDisPlayNumber(data[4]));
+        }
+    }
+
     private onTimeClick mListener;
 
     public Animation getInAnimation() {

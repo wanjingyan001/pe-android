@@ -12,7 +12,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import com.bigkoo.pickerview.TimePickerView
 import com.framework.base.BaseFragment
 import com.google.gson.JsonSyntaxException
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
@@ -189,6 +188,7 @@ class WeeklyWaitToWatchFragment : BaseFragment(), View.OnClickListener {
         start.text = "开始时间"
         end.text = "结束时间"
 
+        var startDD = CalendarDingDing(context)
         start.setOnClickListener {
             if (spinner_data.size == 0) {
                 return@setOnClickListener
@@ -198,35 +198,59 @@ class WeeklyWaitToWatchFragment : BaseFragment(), View.OnClickListener {
             } else {
                 calendar = Calendar.getInstance()
             }
-            val timePicker = TimePickerView.Builder(context, { date, view ->
-                if (end.text.trim() == "结束时间") {
-                    start.text = format.format(date)
-                    return@Builder
+//            val timePicker = TimePickerView.Builder(context, { date, view ->
+//                if (end.text.trim() == "结束时间") {
+//                    start.text = format.format(date)
+//                    return@Builder
+//                }
+//
+//                var startBean = date
+//                var endBean = format.parse(end.text.toString())
+//                if (startBean.compareTo(endBean) > 0) {
+//                    showToast("日期选择错误")
+//                    return@Builder
+//                }
+//
+//                start.text = format.format(date)
+//
+//                adapter.dataList.clear()
+//                adapter.notifyDataSetChanged()
+//                doRequest()
+//            })
+//                    //年月日时分秒 的显示与否，不设置则默认全部显示
+//                    .setType(booleanArrayOf(true, true, true, false, false, false))
+//                    .setDividerColor(Color.DKGRAY)
+//                    .setContentSize(20)
+//                    .setDate(calendar)
+//                    .setCancelColor(resources.getColor(R.color.shareholder_text_gray))
+//                    .build()
+//            timePicker.show()
+            startDD.show(1, calendar, object : CalendarDingDing.onTimeClick {
+                override fun onClick(date: Date?) {
+                    if(date != null){
+                        if (end.text.trim() == "结束时间") {
+                            start.text = format.format(date)
+                            return
+                        }
+
+                        var startBean = date
+                        var endBean = format.parse(end.text.toString())
+                        if (startBean.compareTo(endBean) > 0) {
+                            showToast("日期选择错误")
+                            return
+                        }
+
+                        start.text = format.format(date)
+
+                        adapter.dataList.clear()
+                        adapter.notifyDataSetChanged()
+                        doRequest()
+                    }
                 }
-
-                var startBean = date
-                var endBean = format.parse(end.text.toString())
-                if (startBean.compareTo(endBean) > 0) {
-                    showToast("日期选择错误")
-                    return@Builder
-                }
-
-                start.text = format.format(date)
-
-                adapter.dataList.clear()
-                adapter.notifyDataSetChanged()
-                doRequest()
             })
-                    //年月日时分秒 的显示与否，不设置则默认全部显示
-                    .setType(booleanArrayOf(true, true, true, false, false, false))
-                    .setDividerColor(Color.DKGRAY)
-                    .setContentSize(20)
-                    .setDate(calendar)
-                    .setCancelColor(resources.getColor(R.color.shareholder_text_gray))
-                    .build()
-            timePicker.show()
         }
 
+        var deadDD = CalendarDingDing(context)
         end.setOnClickListener {
             if (spinner_data.size == 0) {
                 return@setOnClickListener
@@ -236,33 +260,56 @@ class WeeklyWaitToWatchFragment : BaseFragment(), View.OnClickListener {
             } else {
                 calendar = Calendar.getInstance()
             }
-            val timePicker = TimePickerView.Builder(context, { date, view ->
-                if (start.text.trim() == "开始时间") {
-                    end.text = format.format(date)
-                    return@Builder
+//            val timePicker = TimePickerView.Builder(context, { date, view ->
+//                if (start.text.trim() == "开始时间") {
+//                    end.text = format.format(date)
+//                    return@Builder
+//                }
+//
+//                var startBean = format.parse(start.text.toString())
+//                var endBean = date
+//                if (startBean.compareTo(endBean) > 0) {
+//                    showToast("日期选择错误")
+//                    return@Builder
+//                }
+//
+//                end.text = format.format(date)
+//
+//                adapter.dataList.clear()
+//                adapter.notifyDataSetChanged()
+//                doRequest()
+//            })
+//                    //年月日时分秒 的显示与否，不设置则默认全部显示
+//                    .setType(booleanArrayOf(true, true, true, false, false, false))
+//                    .setDividerColor(Color.DKGRAY)
+//                    .setContentSize(20)
+//                    .setDate(calendar)
+//                    .setCancelColor(resources.getColor(R.color.shareholder_text_gray))
+//                    .build()
+//            timePicker.show()
+            deadDD.show(1, calendar, object : CalendarDingDing.onTimeClick {
+                override fun onClick(date: Date?) {
+                    if(date != null){
+                        if (start.text.trim() == "开始时间") {
+                            end.text = format.format(date)
+                            return
+                        }
+
+                        var startBean = format.parse(start.text.toString())
+                        var endBean = date
+                        if (startBean.compareTo(endBean) > 0) {
+                            showToast("日期选择错误")
+                            return
+                        }
+
+                        end.text = format.format(date)
+
+                        adapter.dataList.clear()
+                        adapter.notifyDataSetChanged()
+                        doRequest()
+                    }
                 }
-
-                var startBean = format.parse(start.text.toString())
-                var endBean = date
-                if (startBean.compareTo(endBean) > 0) {
-                    showToast("日期选择错误")
-                    return@Builder
-                }
-
-                end.text = format.format(date)
-
-                adapter.dataList.clear()
-                adapter.notifyDataSetChanged()
-                doRequest()
             })
-                    //年月日时分秒 的显示与否，不设置则默认全部显示
-                    .setType(booleanArrayOf(true, true, true, false, false, false))
-                    .setDividerColor(Color.DKGRAY)
-                    .setContentSize(20)
-                    .setDate(calendar)
-                    .setCancelColor(resources.getColor(R.color.shareholder_text_gray))
-                    .build()
-            timePicker.show()
         }
 
         currentClick = 0
