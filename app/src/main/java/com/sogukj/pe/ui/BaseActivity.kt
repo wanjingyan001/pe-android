@@ -9,6 +9,7 @@ import android.support.annotation.DrawableRes
 import android.support.constraint.ConstraintLayout
 import android.support.v7.app.AppCompatActivity
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -41,6 +42,10 @@ abstract class BaseActivity : AppCompatActivity(),AnkoLogger {
         //        initStatusBar(getStatusBarTintRes());
         PushAgent.getInstance(this).onAppStart();
         initEmptyView()
+
+        inflate = layoutInflater.inflate(R.layout.layout_custom_toast, null)
+        icon = inflate.find<ImageView>(R.id.toast_icon)
+        tv = inflate.find<TextView>(R.id.toast_tv)
     }
 
     override fun onStart() {
@@ -167,23 +172,25 @@ abstract class BaseActivity : AppCompatActivity(),AnkoLogger {
         }
     }
 
+    lateinit var inflate:View
+    lateinit var icon:ImageView
+    lateinit var tv:TextView
+    private var toastView: Toast? = null
 
     fun showCustomToast(@DrawableRes resId: Int?, text: CharSequence?) {
-        val inflate = layoutInflater.inflate(R.layout.layout_custom_toast, null)
-        val icon = inflate.find<ImageView>(R.id.toast_icon)
-        val tv = inflate.find<TextView>(R.id.toast_tv)
+//        val inflate = layoutInflater.inflate(R.layout.layout_custom_toast, null)
+//        val icon = inflate.find<ImageView>(R.id.toast_icon)
+//        val tv = inflate.find<TextView>(R.id.toast_tv)
         if (resId != null) {
             icon.imageResource = resId
         } else {
             icon.visibility = View.GONE
         }
         tv.text = text
-        if (toast != null) {
-            toast!!.cancel()
-        } else {
-            toast = Toast(applicationContext)
+        if (toastView == null) {
+            toastView = Toast(applicationContext)
         }
-        toast?.let {
+        toastView?.let {
             it.setGravity(Gravity.CENTER_VERTICAL, 0, -50)
             it.duration = Toast.LENGTH_SHORT
             it.view = inflate

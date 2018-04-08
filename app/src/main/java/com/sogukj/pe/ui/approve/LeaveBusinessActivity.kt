@@ -87,7 +87,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
                 doConfirm()
             } else {
                 //showToast("请填写完整后再提交")
-                showCustomToast(R.drawable.icon_toast_error,"请填写完整后再提交")
+                showCustomToast(R.drawable.icon_toast_error, "请填写完整后再提交")
             }
         }
         toolbar_menu.setImageResource(R.drawable.copy)
@@ -534,6 +534,11 @@ class LeaveBusinessActivity : ToolbarActivity() {
 
             val tvLabel = convertView.findViewById(R.id.tv_label) as TextView
             val etValue = convertView.findViewById(R.id.et_value) as TextView
+            if (index == 0) {
+                etValue.tag = "index0"
+            } else {
+                etValue.tag = "index1"
+            }
 
             val iv_star = convertView.findViewById(R.id.star)
             if (bean.is_must == 1) {
@@ -619,7 +624,10 @@ class LeaveBusinessActivity : ToolbarActivity() {
                     ding_start.show(date_type!!, startDate, object : CalendarDingDing.onTimeClick {
                         override fun onClick(date: Date?) {
                             if (date == null) {
-                                startDate = null
+                                var etValue = ll_content.findViewWithTag("index0") as TextView
+                                if (etValue.text.trim().equals("")) {
+                                    startDate = null
+                                }
                                 return
                             } else {
                                 startDate = date!!
@@ -632,13 +640,13 @@ class LeaveBusinessActivity : ToolbarActivity() {
                             if (date_type == 1) {
                                 if (startDate!!.time / 1000 > endDate!!.time / 1000) {
                                     //showToast("开始时间不能大于结束时间")
-                                    showCustomToast(R.drawable.icon_toast_error,"开始时间不能大于结束时间")
+                                    showCustomToast(R.drawable.icon_toast_error, "开始时间不能大于结束时间")
                                     return
                                 }
                             } else if (date_type == 2) {
                                 if (startDate!!.time / 1000 >= endDate!!.time / 1000) {
                                     //showToast("开始时间不能大于等于结束时间")
-                                    showCustomToast(R.drawable.icon_toast_error,"开始时间不能大于等于结束时间")
+                                    showCustomToast(R.drawable.icon_toast_error, "开始时间不能大于等于结束时间")
                                     return
                                 }
                             }
@@ -649,7 +657,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
                 } else if (index == 1) {
                     if (startDate == null) {
                         //showToast("请先选择开始时间")
-                        showCustomToast(R.drawable.icon_toast_error,"请先选择开始时间")
+                        showCustomToast(R.drawable.icon_toast_error, "请先选择开始时间")
                         return@setOnClickListener
                     }
                     if (endDate == null) {
@@ -658,7 +666,10 @@ class LeaveBusinessActivity : ToolbarActivity() {
                     ding_end.show(date_type!!, endDate, object : CalendarDingDing.onTimeClick {
                         override fun onClick(date: Date?) {
                             if (date == null) {
-                                endDate = null
+                                var etValue = ll_content.findViewWithTag("index1") as TextView
+                                if (etValue.text.trim().equals("")) {
+                                    endDate = null
+                                }
                                 return
                             } else {
                                 endDate = date!!
@@ -667,13 +678,13 @@ class LeaveBusinessActivity : ToolbarActivity() {
                             if (date_type == 1) {
                                 if (startDate!!.time / 1000 > endDate!!.time / 1000) {
                                     //showToast("开始时间不能大于结束时间")
-                                    showCustomToast(R.drawable.icon_toast_error,"开始时间不能大于结束时间")
+                                    showCustomToast(R.drawable.icon_toast_error, "开始时间不能大于结束时间")
                                     return
                                 }
                             } else if (date_type == 2) {
                                 if (startDate!!.time / 1000 >= endDate!!.time / 1000) {
                                     //showToast("开始时间不能大于等于结束时间")
-                                    showCustomToast(R.drawable.icon_toast_error,"开始时间不能大于等于结束时间")
+                                    showCustomToast(R.drawable.icon_toast_error, "开始时间不能大于等于结束时间")
                                     return
                                 }
                             }
@@ -847,7 +858,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
                         }
                         paramMap.put("total_hours", payload.payload)//total_hours
                     } else {
-                        showCustomToast(R.drawable.icon_toast_error,payload.message)
+                        showCustomToast(R.drawable.icon_toast_error, payload.message)
                     }
                 }, { e ->
                     Trace.e(e)
@@ -888,7 +899,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
                         total.text = payload.payload + "天"
                         paramMap.put("total_hours", payload.payload)//total_hours
                     } else {
-                        showCustomToast(R.drawable.icon_toast_error,payload.message)
+                        showCustomToast(R.drawable.icon_toast_error, payload.message)
                     }
                 }, { e ->
                     Trace.e(e)
@@ -908,7 +919,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
                         total.text = payload.payload + "小时"
                         paramMap.put("total_hours", payload.payload)//total_hours
                     } else {
-                        showCustomToast(R.drawable.icon_toast_error,payload.message)
+                        showCustomToast(R.drawable.icon_toast_error, payload.message)
                     }
                 }, { e ->
                     Trace.e(e)
