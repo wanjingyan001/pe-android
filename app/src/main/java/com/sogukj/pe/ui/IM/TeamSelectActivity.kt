@@ -186,7 +186,7 @@ class TeamSelectActivity : BaseActivity() {
 
     private fun initHeader(): View {
         val inflate = layoutInflater.inflate(R.layout.layout_team_select_list_header, null)
-        val icon = inflate.find<CircleImageView>(R.id.companyIcon)
+        val icon = inflate.find<CircleImageView>(R.id.icon)
         val name = inflate.find<TextView>(R.id.companyName)
         when (Utils.getEnvironment()) {
             "civc" -> {
