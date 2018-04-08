@@ -3,6 +3,7 @@ package com.sogukj.pe.view;
 import android.content.Context;
 import android.support.v4.widget.NestedScrollView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import com.fashare.stack_layout.StackLayout;
@@ -34,14 +35,35 @@ public class MyNestedScrollView extends NestedScrollView {
 
     private StackLayout layout;
 
+    // 上下滑动   dispatchTouchEvent  onInterceptTouchEvent(2次),  dispatchTouchEvent  onTouchEvent
+    // 左右卡片滑动   dispatchTouchEvent   onInterceptTouchEvent
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
+        Log.e("MyNestedScrollView", "dispatchTouchEvent");
+//        int x = (int) ev.getRawX();
+//        int y = (int) ev.getRawY();
+//        if (!isTouchPointInView(x, y)) {
+//            return true;
+//        }
+        return super.dispatchTouchEvent(ev);
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        Log.e("MyNestedScrollView", "onInterceptTouchEvent");
         int x = (int) ev.getRawX();
         int y = (int) ev.getRawY();
         if (isTouchPointInView(x, y)) {
+            layout.requestDisallowInterceptTouchEvent(false);
             return true;
         }
-        return super.dispatchTouchEvent(ev);
+        return super.onInterceptTouchEvent(ev);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        Log.e("MyNestedScrollView", "onTouchEvent");
+        return super.onTouchEvent(ev);
     }
 
     //(x,y)是否在layout的区域内
