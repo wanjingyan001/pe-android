@@ -40,24 +40,37 @@ public class MyNestedScrollView extends NestedScrollView {
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         Log.e("MyNestedScrollView", "dispatchTouchEvent");
-//        int x = (int) ev.getRawX();
-//        int y = (int) ev.getRawY();
-//        if (!isTouchPointInView(x, y)) {
-//            return true;
-//        }
         return super.dispatchTouchEvent(ev);
     }
 
     @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
+    public boolean onInterceptTouchEvent(MotionEvent event) {
         Log.e("MyNestedScrollView", "onInterceptTouchEvent");
-        int x = (int) ev.getRawX();
-        int y = (int) ev.getRawY();
-        if (isTouchPointInView(x, y)) {
-            layout.requestDisallowInterceptTouchEvent(false);
-            return true;
+        boolean intercepted = false;
+        int x = (int) event.getX();
+        int y = (int) event.getY();
+
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN: {
+                intercepted = false;
+                break;
+            }
+            case MotionEvent.ACTION_MOVE: {
+                if (!isTouchPointInView(x, y)) {//父容器需要拦截当前点击事件的条件
+                    intercepted = true;
+                } else {
+                    intercepted = false;
+                }
+                break;
+            }
+            case MotionEvent.ACTION_UP: {
+                intercepted = false;
+                break;
+            }
+            default:
+                break;
         }
-        return super.onInterceptTouchEvent(ev);
+        return intercepted;
     }
 
     @Override
@@ -79,8 +92,10 @@ public class MyNestedScrollView extends NestedScrollView {
         int bottom = top + layout.getMeasuredHeight();
         if (y >= top && y <= bottom && x >= left
                 && x <= right) {
+            Log.e("区域", "在区域内");
             return true;
         }
+        Log.e("区域", "不在区域内");
         return false;
     }
 }
