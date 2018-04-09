@@ -39,7 +39,6 @@ public class MyNestedScrollView extends NestedScrollView {
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
         super.onInterceptTouchEvent(event);
-        Log.e("MyNestedScrollView", "onInterceptTouchEvent");
         boolean intercepted = false;
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN: {
@@ -54,7 +53,6 @@ public class MyNestedScrollView extends NestedScrollView {
                 } else {//卡片
                     intercepted = false;
                 }
-                Log.e("MyNestedScrollView", "" + intercepted);
                 break;
             }
             case MotionEvent.ACTION_UP: {
