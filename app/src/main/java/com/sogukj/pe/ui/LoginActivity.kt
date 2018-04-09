@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.text.TextUtils
 import android.util.Log
+import android.view.View
 import com.framework.base.ActivityHelper
 import com.framework.base.BaseActivity
 import com.jakewharton.rxbinding2.widget.RxTextView
@@ -29,6 +30,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.backgroundResource
 import org.jetbrains.anko.imageResource
+import org.jetbrains.anko.sdk25.coroutines.textChangedListener
 import java.util.*
 
 /**
@@ -83,6 +85,30 @@ class LoginActivity : BaseActivity() {
         val extra = intent.getBooleanExtra(Extras.FLAG, false)
         if (extra) {
             showToast("您的帐号已在其他设备登陆，您已被迫下线")
+        }
+        et_name.textChangedListener {
+            onTextChanged { charSequence, i1, i2, i3 ->
+                if (!charSequence.isNullOrEmpty()) {
+                    delete1.visibility = View.VISIBLE
+                    delete1.setOnClickListener {
+                        et_name.setText("")
+                    }
+                }else{
+                    delete1.visibility = View.GONE
+                }
+            }
+        }
+        et_pwd.textChangedListener {
+            onTextChanged { charSequence, i1, i2, i3 ->
+                if (!charSequence.isNullOrEmpty()) {
+                    delete2.visibility = View.VISIBLE
+                    delete2.setOnClickListener {
+                        et_pwd.setText("")
+                    }
+                }else{
+                    delete2.visibility = View.GONE
+                }
+            }
         }
     }
 

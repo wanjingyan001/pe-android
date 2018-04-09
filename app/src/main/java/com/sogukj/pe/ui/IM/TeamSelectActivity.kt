@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
@@ -13,12 +14,14 @@ import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.Html
 import android.text.TextWatcher
+import android.util.Log
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.framework.base.BaseActivity
+import com.google.gson.Gson
 import com.netease.nim.uikit.business.team.activity.CustomExpandableListView
 import com.netease.nim.uikit.common.ui.imageview.CircleImageView
 import com.sogukj.pe.Extras
@@ -65,6 +68,7 @@ class TeamSelectActivity : BaseActivity() {
         team_toolbar.setNavigationIcon(R.drawable.sogu_ic_back)
         team_toolbar.setNavigationOnClickListener { finish() }
         getDataFromIntent()
+        getShareFile()
         initSearchView()
         initResultList()
         default = intent.getSerializableExtra(Extras.DEFAULT) as ArrayList<Int>?
@@ -186,7 +190,7 @@ class TeamSelectActivity : BaseActivity() {
 
     private fun initHeader(): View {
         val inflate = layoutInflater.inflate(R.layout.layout_team_select_list_header, null)
-        val icon = inflate.find<CircleImageView>(R.id.companyIcon)
+        val icon = inflate.find<CircleImageView>(R.id.icon)
         val name = inflate.find<TextView>(R.id.companyName)
         when (Utils.getEnvironment()) {
             "civc" -> {
@@ -305,6 +309,20 @@ class TeamSelectActivity : BaseActivity() {
         resultAdapter.notifyDataSetChanged()
     }
 
+    private var pathByUri: String?= null
+    private fun getShareFile() {
+        if (intent.action == Intent.ACTION_SEND && intent.extras.containsKey(Intent.EXTRA_STREAM)) {
+            val uri = intent.extras.getParcelable<Uri>(Intent.EXTRA_STREAM)
+            pathByUri = Utils.getFileAbsolutePathByUri(this, uri)
+
+
+            AnkoLogger("WJY").info {
+                "分享的文件:${Gson().toJson(uri)}\n" +
+                        "path:${uri.path}--${uri.encodedPath}\n" +
+                        "pathByUri:$pathByUri"
+            }
+        }
+    }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         if (fromTeam) {
@@ -444,7 +462,7 @@ class TeamSelectActivity : BaseActivity() {
                         }
                     } else {
                         //查看详情
-                        PersonalInfoActivity.start(this@TeamSelectActivity, userBean)
+                        PersonalInfoActivity.start(this@TeamSelectActivity, userBean,pathByUri)
                     }
                 }
             }
@@ -540,7 +558,7 @@ class TeamSelectActivity : BaseActivity() {
                     }
                 } else {
                     //查看详情
-                    PersonalInfoActivity.start(this@TeamSelectActivity, userBean)
+                    PersonalInfoActivity.start(this@TeamSelectActivity, userBean,pathByUri)
                 }
             }
 

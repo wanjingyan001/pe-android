@@ -308,6 +308,16 @@ public class NimUIKit {
     }
 
     /**
+     * 打开单聊界面,并传递分享的文件
+     * @param context 上下文
+     * @param account 目标账号
+     * @param shareFilePath 分享的文件地址
+     */
+    public static void startP2PSession(Context context, String account, String shareFilePath) {
+        NimUIKitImpl.startP2PSession(context, account, null, shareFilePath);
+    }
+
+    /**
      * 同 {@link NimUIKitImpl#startP2PSession(Context, String)},同时聊天界面打开后，列表跳转至anchor位置
      *
      * @param context 上下文
@@ -555,6 +565,7 @@ public class NimUIKit {
 
     /**
      * 获取在线状态变更通知接口
+     *
      * @return
      */
     public static OnlineStateChangeObservable getOnlineStateChangeObservable() {

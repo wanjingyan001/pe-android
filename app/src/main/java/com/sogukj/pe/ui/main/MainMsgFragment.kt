@@ -6,14 +6,13 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Html
 import android.text.TextUtils
-import android.util.Log
 import android.view.View
 import android.widget.TextView
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.framework.base.ToolbarFragment
-import com.google.gson.Gson
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import com.lcodecore.tkrefreshlayout.footer.BallPulseView
@@ -21,7 +20,6 @@ import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.netease.nim.uikit.api.NimUIKit
 import com.netease.nim.uikit.business.recent.TeamMemberAitHelper
 import com.netease.nim.uikit.business.uinfo.UserInfoHelper
-import com.netease.nim.uikit.common.ui.drop.DropManager
 import com.netease.nim.uikit.common.ui.imageview.CircleImageView
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.Observer
@@ -31,7 +29,6 @@ import com.netease.nimlib.sdk.msg.MsgServiceObserve
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
 import com.netease.nimlib.sdk.msg.model.IMMessage
 import com.netease.nimlib.sdk.msg.model.RecentContact
-import com.netease.nimlib.sdk.team.constant.TeamMessageNotifyTypeEnum
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.MessageIndexBean
 import com.sogukj.pe.ui.SupportEmptyView
@@ -47,6 +44,7 @@ import kotlinx.android.synthetic.main.fragment_msg_center.*
 import kotlinx.android.synthetic.main.toolbar.*
 import org.jetbrains.anko.backgroundResource
 import org.jetbrains.anko.imageResource
+import org.jetbrains.anko.support.v4.ctx
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -68,7 +66,7 @@ class MainMsgFragment : ToolbarFragment() {
         setTitle("消息首页")
         toolbar_back.visibility = View.VISIBLE
         adapter = RecyclerAdapter(baseActivity!!, { _adapter, parent, type ->
-            val convertView = _adapter.getView(R.layout.item_msg_index, parent) as View
+            val convertView = _adapter.getView(R.layout.item_msg_index, parent)
             object : RecyclerHolder<Any>(convertView) {
                 val msgIcon = convertView.findViewById(R.id.msg_icon) as CircleImageView
                 val tvTitle = convertView.findViewById(R.id.tv_title) as TextView
@@ -111,7 +109,7 @@ class MainMsgFragment : ToolbarFragment() {
                             }
                         } else if (data.sessionType == SessionTypeEnum.Team) {
                             val value = data.msgStatus.value
-                            val fromNick =if (data.fromNick.isEmpty()) "" else "${data.fromNick}:"
+                            val fromNick = if (data.fromNick.isEmpty()) "" else "${data.fromNick}:"
                             when (value) {
                                 3 -> tvTitleMsg.text = Html.fromHtml("<font color='#a0a4aa'>[已读]</font>$fromNick${data.content}")
                                 4 -> tvTitleMsg.text = Html.fromHtml("<font color='#1787fb'>[未读]</font>$fromNick${data.content}")
@@ -120,11 +118,13 @@ class MainMsgFragment : ToolbarFragment() {
                             msgIcon.imageResource = R.drawable.im_team_default
                         }
                         try {
-                            tvDate.text = Utils.getTimeDate(data.time)
+//                            tvDate.text = Utils.getTimeDate(data.time)
+                            val time = Utils.getTime(data.time, "yyyy-MM-dd HH:mm:ss")
+                            tvDate.text = Utils.formatDate(time)
                         } catch (e: Exception) {
                         }
                         val mutableMap = data.extension
-                        if (mutableMap != null && mutableMap.isNotEmpty() &&  mutableMap[data.contactId] == "Mute") {
+                        if (mutableMap != null && mutableMap.isNotEmpty() && mutableMap[data.contactId] == "Mute") {
                             tvNum.visibility = View.VISIBLE
                             tvNum.text = ""
                             tvNum.backgroundResource = R.drawable.im_team_shield
@@ -155,6 +155,33 @@ class MainMsgFragment : ToolbarFragment() {
                     }
                 }
             }
+        }
+        adapter.onItemLongClick = { v, positon ->
+            val data = adapter.dataList[positon]
+            if (data is RecentContact) {
+                val top = if (isTagSet(data, RECENT_TAG_STICKY)) "取消置顶" else "置顶该聊天"
+                MaterialDialog.Builder(ctx)
+                        .theme(Theme.LIGHT)
+                        .items(mutableListOf(top, "删除"))
+                        .itemsCallback { dialog, itemView, position, text ->
+                            when (position) {
+                                0 -> {
+                                    if (isTagSet(data, RECENT_TAG_STICKY)) {
+                                        removeTag(data, RECENT_TAG_STICKY)
+                                    } else {
+                                        addTag(data, RECENT_TAG_STICKY)
+                                    }
+                                    NIMClient.getService(MsgService::class.java).updateRecent(data)
+                                    doRequest()
+                                }
+                                1 -> {
+                                    deleteRecentContact(data.contactId, data.sessionType)
+                                }
+                            }
+                        }
+                        .show()
+            }
+            true
         }
         val layoutManager = LinearLayoutManager(baseActivity)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
@@ -192,6 +219,7 @@ class MainMsgFragment : ToolbarFragment() {
         super.onResume()
         doRequest()
     }
+
     fun doRequest() {
         SoguApi.getService(baseActivity!!.application)
                 .msgIndex()
@@ -235,8 +263,14 @@ class MainMsgFragment : ToolbarFragment() {
                     }
                 }
                 Collections.sort(recentList) { o1, o2 ->
-                    val time = o1.time - o2.time
-                    return@sort if (time == 0L) 0 else if (time > 0) -1 else 1
+                    // 先比较置顶tag
+                    val sticky = (o1.tag and RECENT_TAG_STICKY) - (o2.tag and RECENT_TAG_STICKY)
+                    if (sticky != 0L) {
+                        return@sort if (sticky > 0) -1 else 1
+                    } else {
+                        val time = o1.time - o2.time
+                        return@sort if (time == 0L) 0 else if (time > 0) -1 else 1
+                    }
                 }
                 adapter.dataList.addAll(recentList)
                 adapter.notifyDataSetChanged()
@@ -257,15 +291,25 @@ class MainMsgFragment : ToolbarFragment() {
         })
     }
 
+    private fun deleteRecentContact(account: String, sessionType: SessionTypeEnum) {
+        NIMClient.getService(MsgService::class.java).deleteRecentContact2(account, sessionType)
+    }
+
     private fun registerObservers(register: Boolean) {
         val service = NIMClient.getService(MsgServiceObserve::class.java)
         service.observeRecentContact(messageObserver, register)
+        service.observeRecentContactDeleted(deleteObserver, register)
     }
 
 
-    var messageObserver: Observer<List<RecentContact>> = Observer { recentContacts ->
+    private var messageObserver: Observer<List<RecentContact>> = Observer { recentContacts ->
         onRecentContactChanged(recentContacts)
     }
+
+    private var deleteObserver: Observer<RecentContact> = Observer { recentContact ->
+        doRequest()
+    }
+
     // 暂存消息，当RecentContact 监听回来时使用，结束后清掉
     private val cacheMessages = HashMap<String, Set<IMMessage>>()
 
@@ -274,7 +318,7 @@ class MainMsgFragment : ToolbarFragment() {
         for (r in recentContacts) {
             index = -1
             for (i in recentList.indices) {
-                if (r.contactId == recentList.get(i).getContactId() && r.sessionType == recentList.get(i).getSessionType()) {
+                if (r.contactId == recentList[i].contactId && r.sessionType == recentList[i].sessionType) {
                     index = i
                     break
                 }
@@ -308,9 +352,20 @@ class MainMsgFragment : ToolbarFragment() {
         registerObservers(false)
     }
 
+    private fun addTag(recent: RecentContact, tag: Long) {
+        recent.tag = recent.tag or tag
+    }
+
+    private fun removeTag(recent: RecentContact, tag: Long) {
+        recent.tag = recent.tag and tag.inv()
+    }
+
+    private fun isTagSet(recent: RecentContact, tag: Long) = recent.tag and tag == tag
+
 
     companion object {
         val TAG = MainMsgFragment::class.java.simpleName
+        val RECENT_TAG_STICKY = 1L
 
         fun newInstance(): MainMsgFragment {
             val fragment = MainMsgFragment()

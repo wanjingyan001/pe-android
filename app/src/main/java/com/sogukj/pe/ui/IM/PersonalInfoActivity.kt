@@ -33,15 +33,16 @@ import org.jetbrains.anko.toast
 
 class PersonalInfoActivity : AppCompatActivity(), View.OnClickListener, TextWatcher, View.OnLongClickListener {
 
-
+    private var pathByUri: String? = null
     lateinit var db: XmlDb
     var user: UserBean? = null
     val CALL_PHONE_PERMISSION = arrayOf(Manifest.permission.CALL_PHONE)
 
     companion object {
-        fun start(ctx: Context, user: UserBean) {
+        fun start(ctx: Context, user: UserBean, pathByUri: String?) {
             val intent = Intent(ctx, PersonalInfoActivity::class.java)
             intent.putExtra(Extras.DATA, user)
+            intent.putExtra(Extras.DATA2, pathByUri)
             ctx.startActivity(intent)
         }
 
@@ -60,7 +61,7 @@ class PersonalInfoActivity : AppCompatActivity(), View.OnClickListener, TextWatc
         team_toolbar.setNavigationOnClickListener { finish() }
         db = XmlDb.open(this)
         user = intent.getSerializableExtra(Extras.DATA) as UserBean?
-        Log.d("WJY", Gson().toJson(user))
+        pathByUri = intent.getStringExtra(Extras.DATA2)
         val bean = Store.store.getUser(this)
         if (user != null) {
             user?.let {
@@ -139,7 +140,11 @@ class PersonalInfoActivity : AppCompatActivity(), View.OnClickListener, TextWatc
         when (v?.id) {
             R.id.sendMsg -> {
                 if (NimUIKit.getAccount().isNotEmpty() && user?.accid != null) {
-                    NimUIKit.startP2PSession(this, user?.accid)
+                    if (!pathByUri.isNullOrEmpty()) {
+                        NimUIKit.startP2PSession(this, user?.accid, pathByUri)
+                    } else {
+                        NimUIKit.startP2PSession(this, user?.accid)
+                    }
                 } else {
                     toast("信息有误")
                 }

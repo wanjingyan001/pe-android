@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.fragment_common_documents.*
 class CommonDocumentsFragment : Fragment() {
     private var mParam1: String? = null
     private var mParam2: String? = null
-    val titles = listOf("本应用", "微信", "QQ", "全部")
+    val titles = listOf("本应用", "微信", "QQ", "钉钉","全部")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +35,7 @@ class CommonDocumentsFragment : Fragment() {
                 DocumentsFragment.newInstance(DocumentsFragment.PE_LOACL),
                 DocumentsFragment.newInstance(DocumentsFragment.WX_DOC),
                 DocumentsFragment.newInstance(DocumentsFragment.QQ_DOC),
+                DocumentsFragment.newInstance(DocumentsFragment.DING_TALK),
                 DocumentsFragment.newInstance(DocumentsFragment.ALL_DOC))
         documentList.adapter = DocPageAdapter(childFragmentManager, fragments)
         tab.setupWithViewPager(documentList)

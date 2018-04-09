@@ -4,18 +4,22 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ClipboardManager;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
+import android.media.MediaScannerConnection;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
@@ -37,6 +41,7 @@ import com.google.gson.reflect.TypeToken;
 import com.sogukj.pe.BuildConfig;
 import com.sogukj.pe.R;
 import com.sogukj.pe.bean.PartyTabBean;
+import com.sogukj.pe.ui.user.CardActivity;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -267,6 +272,27 @@ public class Utils {
         }
     }
 
+    /**
+     * 对情报页面的时间进行处理
+     *
+     * @param time
+     * @return
+     * @throws ParseException
+     */
+    @SuppressLint("SimpleDateFormat")
+    public static String formatDate(String time) throws ParseException {
+        Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(time);
+        if (IsYesterday(time)) {
+            return "昨天  " + getTime(date, "HH:mm");
+        } else if (IsToday(time)) {
+            return  getTime(date, "HH:mm");
+        } else if (isThisYear(time)) {
+            return new SimpleDateFormat("MM月dd日 HH:mm").format(date);
+        } else {
+            return new SimpleDateFormat("yyyy年MM月dd日 HH:mm").format(date);
+        }
+    }
+
     public static int[] getYMDInCalendar(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
@@ -340,6 +366,17 @@ public class Utils {
             }
         }
         return false;
+    }
+
+    public static boolean isThisYear(String day) throws ParseException {
+        Calendar pre = Calendar.getInstance();
+        Date predate = new Date(System.currentTimeMillis());
+        pre.setTime(predate);
+
+        Calendar cal = Calendar.getInstance();
+        Date date = getDateFormat().parse(day);
+        cal.setTime(date);
+        return cal.get(Calendar.YEAR) == (pre.get(Calendar.YEAR));
     }
 
     public static SimpleDateFormat getDateFormat() {
@@ -417,7 +454,7 @@ public class Utils {
      */
     public static boolean saveImage(Activity activity, View v) {
         Bitmap bitmap;
-        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Download/BusinessCard.png";
+        String path = CardActivity.Companion.getPATH();
         View view = activity.getWindow().getDecorView();
         view.setDrawingCacheEnabled(true);
         view.buildDrawingCache();
@@ -486,33 +523,20 @@ public class Utils {
     }
 
 
-    public static void saveImageToGallery(Context context, Bitmap bmp) {
-        // 首先保存图片
-        File appDir = new File(Environment.getExternalStorageDirectory(), "sougukj");
-        if (!appDir.exists()) {
-            appDir.mkdir();
-        }
-        String fileName = System.currentTimeMillis() + ".jpg";
-        File file = new File(appDir, fileName);
-        try {
-            FileOutputStream fos = new FileOutputStream(file);
-            bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-            fos.flush();
-            fos.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public static void saveImageToGallery(Context context) {
+        File file = new File(CardActivity.Companion.getPATH());
         // 其次把文件插入到系统图库
         try {
             MediaStore.Images.Media.insertImage(context.getContentResolver(),
-                    file.getAbsolutePath(), fileName, null);
+                    file.getAbsolutePath(), "BusinessCard.png", null);
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+                MediaScannerConnection.scanFile(context, new String[]{file.getAbsolutePath()}, null, null);
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         // 最后通知图库更新
-//        context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + path)));
+        context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + Environment.getExternalStorageDirectory())));
     }
 
     public static String getEnvironment() {
@@ -534,5 +558,101 @@ public class Utils {
                 break;
         }
         return headImg;
+    }
+
+    public static String getFileAbsolutePathByUri(Activity context, Uri fileUri) {
+        if (context == null || fileUri == null) {
+            return null;
+        }
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT && DocumentsContract.isDocumentUri(context, fileUri)) {
+            if (isExternalStorageDocument(fileUri)) {
+                String docId = DocumentsContract.getDocumentId(fileUri);
+                String[] split = docId.split(":");
+                String type = split[0];
+                if ("primary".equalsIgnoreCase(type)) {
+                    return Environment.getExternalStorageDirectory() + "/" + split[1];
+                }
+            } else if (isDownloadsDocument(fileUri)) {
+                String id = DocumentsContract.getDocumentId(fileUri);
+                Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+                return getDataColumn(context, contentUri, null, null);
+            } else if (isMediaDocument(fileUri)) {
+                String docId = DocumentsContract.getDocumentId(fileUri);
+                String[] split = docId.split(":");
+                String type = split[0];
+                Uri contentUri = null;
+                if ("image".equals(type)) {
+                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                } else if ("video".equals(type)) {
+                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                } else if ("audio".equals(type)) {
+                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                }
+                String selection = MediaStore.Images.Media._ID + "=?";
+                String[] selectionArgs = new String[]{split[1]};
+                return getDataColumn(context, contentUri, selection, selectionArgs);
+            }
+        } // MediaStore (and general)
+        else if ("content".equalsIgnoreCase(fileUri.getScheme())) {
+            // Return the remote address
+            if (isGooglePhotosUri(fileUri)) {
+                return fileUri.getLastPathSegment();
+            }
+            return getDataColumn(context, fileUri, null, null);
+        }
+        // File
+        else if ("file".equalsIgnoreCase(fileUri.getScheme())) {
+            return fileUri.getPath();
+        }
+        return null;
+    }
+
+    public static String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {
+        Cursor cursor = null;
+        String[] projection = {MediaStore.Images.Media.DATA};
+        try {
+            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                int index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                return cursor.getString(index);
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is ExternalStorageProvider.
+     */
+    public static boolean isExternalStorageDocument(Uri uri) {
+        return "com.android.externalstorage.documents".equals(uri.getAuthority());
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is DownloadsProvider.
+     */
+    public static boolean isDownloadsDocument(Uri uri) {
+        return "com.android.providers.downloads.documents".equals(uri.getAuthority());
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is MediaProvider.
+     */
+    public static boolean isMediaDocument(Uri uri) {
+        return "com.android.providers.media.documents".equals(uri.getAuthority());
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is Google Photos.
+     */
+    public static boolean isGooglePhotosUri(Uri uri) {
+        return "com.google.android.apps.photos.content".equals(uri.getAuthority());
     }
 }

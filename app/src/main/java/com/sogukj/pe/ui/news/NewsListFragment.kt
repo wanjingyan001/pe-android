@@ -2,22 +2,18 @@ package com.sogukj.pe.ui.news
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Html
 import android.text.TextUtils
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import com.framework.base.BaseFragment
@@ -32,7 +28,6 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.NewsBean
 import com.sogukj.pe.ui.SupportEmptyView
-import com.sogukj.pe.ui.news.NewsDetailActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.FlowLayout
@@ -247,7 +242,12 @@ class NewsListFragment : BaseFragment(), SupportEmptyView {
 //                        .getOrNull(0)
 //                tv_time.text = strs
 //                        .getOrNull(1)
-                tv_date.text = strTime
+                try {
+                    tv_date.text = Utils.formatDate(strTime)
+                }catch (e:Exception){
+                    e.printStackTrace()
+                }
+//                tv_date.text = strTime
             }
             tv_from.text = data.source
             data.setTags(baseActivity!!, tags)

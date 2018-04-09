@@ -2,13 +2,10 @@ package com.sogukj.pe.ui.fileSelector
 
 
 import android.content.Context
-import android.content.pm.PackageManager
-import android.media.Image
 import android.os.Bundle
 import android.os.Environment
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -84,8 +81,9 @@ class DocumentsFragment : Fragment() {
                 val list1 = FileUtil.getFiles(WX_DOC_PATH2)
                 val list2 = FileUtil.getFiles(QQ_DOC_PATH)
                 val list4 = FileUtil.getFiles(QQ_DOC_PATH1)
+                val list5 = FileUtil.getFiles(DING_TALK_PATH)
                 val list3 = FileUtil.getFiles(FileUtil.getExternalFilesDir(fileActivity.applicationContext))
-                files = list.plus(list1).plus(list2).plus(list3).plus(list4)
+                files = list.plus(list1).plus(list2).plus(list3).plus(list4).plus(list5)
             }
             WX_DOC -> {
                 val list = FileUtil.getFiles(WX_DOC_PATH1)
@@ -96,6 +94,10 @@ class DocumentsFragment : Fragment() {
                 val list = FileUtil.getFiles(QQ_DOC_PATH)
                 val list1 = FileUtil.getFiles(QQ_DOC_PATH1)
                 files = list.plus(list1)
+            }
+            DING_TALK ->{
+               val list = FileUtil.getFiles(DING_TALK_PATH)
+                files = list
             }
         }
         Collections.sort(files) { o1, o2 ->
@@ -112,10 +114,12 @@ class DocumentsFragment : Fragment() {
         val QQ_DOC_PATH1 = Environment.getExternalStorageDirectory().path + "/tencent/QQ_Images/"
         val WX_DOC_PATH1 = Environment.getExternalStorageDirectory().path + "/tencent/MicroMsg/WeiXin/"
         val WX_DOC_PATH2 = Environment.getExternalStorageDirectory().path + "/tencent/MicroMsg/Download/"
+        val DING_TALK_PATH = Environment.getExternalStorageDirectory().path + "/DingTalk/"
         val PE_LOACL = 0
         val ALL_DOC = 1
         val WX_DOC = 2
         val QQ_DOC = 3
+        val DING_TALK = 4
 
 
         fun newInstance(type: Int, param2: String? = null): DocumentsFragment {
@@ -155,6 +159,7 @@ class DocumentsFragment : Fragment() {
             when {
                 data.absolutePath.contains("QQ") -> builder.append("QQ  ")
                 data.absolutePath.contains(context.packageName) -> builder.append("本应用  ")
+                data.absolutePath.contains("DingTalk") ->builder.append("钉钉  ")
                 else -> builder.append("微信  ")
             }
             val time = Utils.getTime(data.lastModified(), "yyyy/MM/dd HH:mm")

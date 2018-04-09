@@ -334,6 +334,10 @@ public final class NimUIKitImpl {
         NimUIKitImpl.startChatting(context, account, SessionTypeEnum.P2P, commonP2PSessionCustomization, anchor);
     }
 
+    public static void startP2PSession(Context context, String account, IMMessage anchor, String shareFilePath) {
+        P2PMessageActivity.start(context, account, commonP2PSessionCustomization, anchor, shareFilePath);
+    }
+
     public static void startTeamSession(Context context, String tid) {
         startTeamSession(context, tid, null);
     }
