@@ -20,7 +20,9 @@ import com.sogukj.pe.util.FileUtil
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
+import com.sougukj.setVisible
 import kotlinx.android.synthetic.main.fragment_documents.*
+import kotlinx.android.synthetic.main.layout_empty.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.imageResource
 import org.jetbrains.anko.toast
@@ -95,16 +97,23 @@ class DocumentsFragment : Fragment() {
                 val list1 = FileUtil.getFiles(QQ_DOC_PATH1)
                 files = list.plus(list1)
             }
-            DING_TALK ->{
-               val list = FileUtil.getFiles(DING_TALK_PATH)
+            DING_TALK -> {
+                val list = FileUtil.getFiles(DING_TALK_PATH)
                 files = list
             }
         }
         Collections.sort(files) { o1, o2 ->
             o2.lastModified().compareTo(o1.lastModified())
         }
-        adapter.dataList.addAll(files)
-        adapter.notifyDataSetChanged()
+        if (files.isEmpty()) {
+            documentList.setVisible(false)
+            iv_empty.setVisible(true)
+        } else {
+            documentList.setVisible(true)
+            iv_empty.setVisible(false)
+            adapter.dataList.addAll(files)
+            adapter.notifyDataSetChanged()
+        }
     }
 
     companion object {
@@ -159,7 +168,7 @@ class DocumentsFragment : Fragment() {
             when {
                 data.absolutePath.contains("QQ") -> builder.append("QQ  ")
                 data.absolutePath.contains(context.packageName) -> builder.append("本应用  ")
-                data.absolutePath.contains("DingTalk") ->builder.append("钉钉  ")
+                data.absolutePath.contains("DingTalk") -> builder.append("钉钉  ")
                 else -> builder.append("微信  ")
             }
             val time = Utils.getTime(data.lastModified(), "yyyy/MM/dd HH:mm")

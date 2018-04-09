@@ -48,6 +48,12 @@ class LoginActivity : BaseActivity() {
             "ht" -> {
                 login_logo.imageResource = R.drawable.img_logo_login_ht
             }
+            "kk" ->{
+                login_logo.imageResource = R.drawable.img_logo_login_kk
+            }
+            "yge"->{
+                login_logo.imageResource = R.drawable.img_logo_login_yge
+            }
             else -> {
                 login_logo.imageResource = R.drawable.img_logo_login
             }

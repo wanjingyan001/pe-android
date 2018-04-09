@@ -197,6 +197,7 @@ class SensitiveInfoActivity : BaseActivity(), View.OnClickListener {
         }
         caseNumber2.text = "${crime.num}件"
         if (crime.num == 0) {
+            caseNumber2.text = "无"
             toDetail.visibility = View.GONE
         }
     }

@@ -23,6 +23,7 @@ import com.sogukj.pe.R
 import com.sogukj.pe.util.OnClickFastListener
 import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
+import com.sougukj.execute
 import com.sougukj.setOnClickFastListener
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -77,21 +78,21 @@ class PartyDetailActivity : BaseActivity() {
     fun doRequest(id: Int) {
         SoguApi.getService(application)
                 .articleInfo(id)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ payload ->
-                    if (payload.isOk) {
-                        payload.payload?.let {
-                            Log.d("WJY", Gson().toJson(it))
-                            detailTitle.text = it.title
-                            articleAuthor.text = "作者:${it.author}"
-                            articleSource.text = "来源:${it.source}"
-                            articleTime.text = "时间:${it.time}"
-                            contentWeb.loadDataWithBaseURL(null, getHtmlData(it.contents!!),
-                                    "text/html", "utf-8", null)
+                .execute {
+                    onNext { payload ->
+                        if (payload.isOk) {
+                            payload.payload?.let {
+                                Log.d("WJY", Gson().toJson(it))
+                                detailTitle.text = it.title
+                                articleAuthor.text = "作者:${it.author}"
+                                articleSource.text = "来源:${it.source}"
+                                articleTime.text = "时间:${it.time}"
+                                contentWeb.loadDataWithBaseURL(null, getHtmlData(it.contents!!),
+                                        "text/html", "utf-8", null)
+                            }
                         }
                     }
-                })
+                }
     }
 
     private fun getHtmlData(bodyHTML: String): String {

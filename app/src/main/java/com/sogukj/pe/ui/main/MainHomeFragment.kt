@@ -40,6 +40,7 @@ import com.sogukj.pe.ui.partyBuild.PartyMainActivity
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.CalendarDingDing
 import me.leolin.shortcutbadger.ShortcutBadger
+import org.jetbrains.anko.backgroundResource
 import org.jetbrains.anko.imageResource
 import org.jetbrains.anko.support.v4.ctx
 import java.util.*
@@ -59,13 +60,16 @@ class MainHomeFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         when (Utils.getEnvironment()) {
             "civc" -> {
-                home_banner.imageResource = R.mipmap.banner_zd
+                home_banner.backgroundResource = R.mipmap.banner_zd
             }
             "ht" -> {
-                home_banner.imageResource = R.mipmap.banner_ht
+                home_banner.backgroundResource = R.mipmap.banner_ht
+            }
+            "pe" ->{
+                home_banner.backgroundResource = R.mipmap.banner
             }
             else -> {
-                home_banner.imageResource = R.mipmap.banner
+                home_banner.backgroundResource = R.mipmap.pe_banner
             }
         }
         //消息

@@ -113,6 +113,38 @@ android {
                                     FileProvider        : "com.sogukj.pe.ht.fileProvider",
                                     UMENG_CHANNEL_VALUE : "ht"]
         }
+        kuake{
+            dimension "default"
+            applicationId "com.sogukj.pe"
+            resValue "string", "app_name", "夸克"
+            resValue "bool", "isrRank", 'true'
+            buildConfigField "String", "ENVIRONMENT", '"kk"'
+            manifestPlaceholders = [appId               : "com.sogukj.pe",
+                                    app_icon            : "@mipmap/ic_launcher_kk",
+                                    AMAP_KEY            : "9204f7dcdd8c2beba10c94dbe96bd062",
+                                    IM_KEY              : "a3f6ffcbceb4f42ec007a28d75098fdb",
+                                    Umeng_KEY           : "59ddf11e8f4a9d7c4b000116",
+                                    Umeng_MESSAGE_SECRET: "8a3cd80e07007a0463e9b12f758b727b",
+                                    NIMContentProvider  : "com.sogukj.pe.ipc.provider",
+                                    FileProvider        : "com.sogukj.pe.fileProvider",
+                                    UMENG_CHANNEL_VALUE : "kk"]
+        }
+        yageer{
+            dimension "default"
+            applicationId "com.sogukj.pe"
+            resValue "string", "app_name", "雅戈尔"
+            resValue "bool", "isrRank", 'true'
+            buildConfigField "String", "ENVIRONMENT", '"yge"'
+            manifestPlaceholders = [appId               : "com.sogukj.pe",
+                                    app_icon            : "@mipmap/ic_launcher_yge",
+                                    AMAP_KEY            : "9204f7dcdd8c2beba10c94dbe96bd062",
+                                    IM_KEY              : "1b5749bc47e9f1eef0cd2cff240dc7da",
+                                    Umeng_KEY           : "59ddf11e8f4a9d7c4b000116",
+                                    Umeng_MESSAGE_SECRET: "8a3cd80e07007a0463e9b12f758b727b",
+                                    NIMContentProvider  : "com.sogukj.pe.ipc.provider",
+                                    FileProvider        : "com.sogukj.pe.fileProvider",
+                                    UMENG_CHANNEL_VALUE : "yge"]
+        }
     }
     lintOptions {
         checkReleaseBuilds false
