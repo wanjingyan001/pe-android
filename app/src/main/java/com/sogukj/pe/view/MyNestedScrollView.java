@@ -34,33 +34,27 @@ public class MyNestedScrollView extends NestedScrollView {
     }
 
     private StackLayout layout;
-
-    // 上下滑动   dispatchTouchEvent  onInterceptTouchEvent(2次),  dispatchTouchEvent  onTouchEvent
-    // 左右卡片滑动   dispatchTouchEvent   onInterceptTouchEvent
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        Log.e("MyNestedScrollView", "dispatchTouchEvent");
-        return super.dispatchTouchEvent(ev);
-    }
+    private int x, y;
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
+        super.onInterceptTouchEvent(event);
         Log.e("MyNestedScrollView", "onInterceptTouchEvent");
         boolean intercepted = false;
-        int x = (int) event.getX();
-        int y = (int) event.getY();
-
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN: {
+                x = (int) event.getX();
+                y = (int) event.getY();
                 intercepted = false;
                 break;
             }
             case MotionEvent.ACTION_MOVE: {
                 if (!isTouchPointInView(x, y)) {//父容器需要拦截当前点击事件的条件
-                    intercepted = true;
-                } else {
+                    intercepted = true;//调用onTouchEvent滑动
+                } else {//卡片
                     intercepted = false;
                 }
+                Log.e("MyNestedScrollView", "" + intercepted);
                 break;
             }
             case MotionEvent.ACTION_UP: {
@@ -71,12 +65,6 @@ public class MyNestedScrollView extends NestedScrollView {
                 break;
         }
         return intercepted;
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent ev) {
-        Log.e("MyNestedScrollView", "onTouchEvent");
-        return super.onTouchEvent(ev);
     }
 
     //(x,y)是否在layout的区域内
@@ -90,12 +78,9 @@ public class MyNestedScrollView extends NestedScrollView {
         int top = location[1];
         int right = left + layout.getMeasuredWidth();
         int bottom = top + layout.getMeasuredHeight();
-        if (y >= top && y <= bottom && x >= left
-                && x <= right) {
-            Log.e("区域", "在区域内");
+        if (y >= top && y <= bottom && x >= left && x <= right) {
             return true;
         }
-        Log.e("区域", "不在区域内");
         return false;
     }
 }
