@@ -190,6 +190,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
                     .subscribeOn(Schedulers.io())
                     .subscribe({ payload ->
                         if (payload.isOk) {
+                            mDialog.dismiss()
                             super.onBackPressed()
                         } else {
                             showCustomToast(R.drawable.icon_toast_fail, payload.message)
