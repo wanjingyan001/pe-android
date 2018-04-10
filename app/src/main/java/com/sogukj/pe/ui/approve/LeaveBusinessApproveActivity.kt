@@ -20,7 +20,6 @@ import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.*
-import com.sogukj.pe.util.ColorUtil
 import com.sogukj.pe.util.PdfUtil
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
@@ -29,11 +28,9 @@ import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_leave_business_approve.*
-import kotlinx.android.synthetic.main.fragment_home.*
 //import kotlinx.android.synthetic.main.seal_approve_part1.*
 //import kotlinx.android.synthetic.main.seal_approve_part2.*
 //import kotlinx.android.synthetic.main.seal_approve_part3.*
-import org.jetbrains.anko.collections.forEachWithIndex
 import org.jetbrains.anko.find
 import org.jetbrains.anko.imageResource
 import org.jetbrains.anko.textColor
@@ -123,12 +120,11 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
                             }
                         }
                     } else {
-                        showCustomToast(R.drawable.icon_toast_error,payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail,payload.message)
                     }
                 }, { e ->
                     Trace.e(e)
-                    //showToast("暂无可用数据")
-                    showCustomToast(R.drawable.icon_toast_error, "暂无可用数据")
+                    showCustomToast(R.drawable.icon_toast_common, "暂无可用数据")
                 })
     }
 
@@ -156,12 +152,11 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
                                 if (payload.isOk) {
                                     showCustomToast(R.drawable.icon_toast_success, "发送成功")
                                 } else {
-                                    showCustomToast(R.drawable.icon_toast_error, payload.message)
+                                    showCustomToast(R.drawable.icon_toast_fail, payload.message)
                                 }
                             }, { e ->
                                 Trace.e(e)
-                                showCustomToast(R.drawable.icon_toast_error, "请求失败")
-                                //showToast("请求失败")
+                                showCustomToast(R.drawable.icon_toast_fail, "请求失败")
                             })
                 }
             }
@@ -216,16 +211,14 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
                                 .subscribeOn(Schedulers.io())
                                 .subscribe({ payload ->
                                     if (payload.isOk) {
-
-                                        showToast("撤销成功")
+                                        showCustomToast(R.drawable.icon_toast_success, "撤销成功")
                                         refresh()
                                     } else {
-                                        showCustomToast(R.drawable.icon_toast_success, payload.message)
+                                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                                     }
                                 }, { e ->
                                     Trace.e(e)
-                                    showCustomToast(R.drawable.icon_toast_error, "请求失败")
-                                    //showToast("请求失败")
+                                    showCustomToast(R.drawable.icon_toast_fail, "请求失败")
                                 })
                     }
                     dialog.show()
@@ -290,12 +283,11 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
                                         PdfUtil.loadPdf(this, it.url, it.name)
                                     }
                                 } else {
-                                    showCustomToast(R.drawable.icon_toast_error, payload.message)
+                                    showCustomToast(R.drawable.icon_toast_fail, payload.message)
                                 }
                             }, { e ->
                                 Trace.e(e)
-                                //showToast("请求失败")
-                                showCustomToast(R.drawable.icon_toast_error, "请求失败")
+                                showCustomToast(R.drawable.icon_toast_fail, "请求失败")
                             })
                 }
             }
@@ -348,15 +340,13 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         showCustomToast(R.drawable.icon_toast_success, "提交成功")
-                        //showToast("提交成功")
                         refresh()
                     } else {
-                        showCustomToast(R.drawable.icon_toast_error, payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }
                 }, { e ->
                     Trace.e(e)
-                    showCustomToast(R.drawable.icon_toast_error, "提交失败")
-                    //showToast("提交失败")
+                    showCustomToast(R.drawable.icon_toast_fail, "提交失败")
                 })
     }
 
@@ -485,15 +475,13 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
                         .subscribe({ payload ->
                             if (payload.isOk) {
                                 showCustomToast(R.drawable.icon_toast_success, "提交成功")
-                                //showToast("提交成功")
                                 refresh()
                             } else {
-                                showCustomToast(R.drawable.icon_toast_error, payload.message)
+                                showCustomToast(R.drawable.icon_toast_fail, payload.message)
                             }
                         }, { e ->
                             Trace.e(e)
-                            showCustomToast(R.drawable.icon_toast_error, "提交失败")
-                            //showToast("提交失败")
+                            showCustomToast(R.drawable.icon_toast_fail, "提交失败")
                         })
         }
         dialog.show()

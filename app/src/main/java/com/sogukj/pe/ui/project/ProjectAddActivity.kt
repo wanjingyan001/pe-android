@@ -45,7 +45,7 @@ class ProjectAddActivity : ToolbarActivity() {
                                 et_other.setText(info)
                             }
                         } else {
-                            showToast(payload.message)
+                            showCustomToast(R.drawable.icon_toast_fail, payload.message)
                         }
 
                     }, { e ->
@@ -95,15 +95,15 @@ class ProjectAddActivity : ToolbarActivity() {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        showToast("保存成功")
+                        showCustomToast(R.drawable.icon_toast_success, "保存成功")
                         finish()
                     } else {
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }
 
                 }, { e ->
                     Trace.e(e)
-                    showToast("保存失败")
+                    showCustomToast(R.drawable.icon_toast_fail, "保存失败")
                 })
     }
 
@@ -130,15 +130,15 @@ class ProjectAddActivity : ToolbarActivity() {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        showToast("保存成功")
+                        showCustomToast(R.drawable.icon_toast_success, "保存成功")
                         finish()
                     } else {
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }
 
                 }, { e ->
                     Trace.e(e)
-                    showToast("保存失败")
+                    showCustomToast(R.drawable.icon_toast_fail, "保存失败")
                 })
     }
 

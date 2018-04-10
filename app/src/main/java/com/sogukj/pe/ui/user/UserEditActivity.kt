@@ -426,14 +426,16 @@ class UserEditActivity : ToolbarActivity() {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        showToast("信息保存成功")
+                        //showToast("信息保存成功")
+                        showCustomToast(R.drawable.icon_toast_success, "信息保存成功")
                         Store.store.setUser(this@UserEditActivity, user)
                         finish()
                     } else
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                 }, { e ->
                     Trace.e(e)
-                    showToast("保存失败")
+                    showCustomToast(R.drawable.icon_toast_fail, "保存失败")
+                    //showToast("保存失败")
                 })
     }
 
@@ -454,13 +456,15 @@ class UserEditActivity : ToolbarActivity() {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        showToast("头像上传成功")
+                        //showToast("头像上传成功")
+                        showCustomToast(R.drawable.icon_toast_success, "头像上传成功")
                         Store.store.setUser(this@UserEditActivity, user)
                     } else
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                 }, { e ->
                     Trace.e(e)
-                    showToast("头像上传失败")
+                    //showToast("头像上传失败")
+                    showCustomToast(R.drawable.icon_toast_fail, "头像上传失败")
                 })
     }
 

@@ -46,9 +46,9 @@ open class ShiDaGuDongActivity : ToolbarActivity() {
             override fun showData(convertView: View, position: Int, data: TimeGroupedShareHolderBean?) {
                 text.text = data?.time
                 if (position != selectedIndex)
-                    text.setTextColor(R.color.colorBlue)
+                    text.setTextColor(resources.getColor(R.color.colorBlue))
                 else
-                    text.setTextColor(R.color.text_2)
+                    text.setTextColor(resources.getColor(R.color.text_2))
             }
 
         }
@@ -146,7 +146,7 @@ open class ShiDaGuDongActivity : ToolbarActivity() {
                             adapterSelector.dataList.addAll(this)
                         }
                     } else
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     setGroup(0)
                     adapterSelector.notifyDataSetChanged()
                 }, { e ->

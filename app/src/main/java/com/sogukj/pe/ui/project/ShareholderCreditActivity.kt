@@ -126,7 +126,7 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
                             }
 
                         } else {
-                            showToast(payload.message)
+                            showCustomToast(R.drawable.icon_toast_fail, payload.message)
                         }
                     }, { e ->
                         Log.e(TAG, e.message)
@@ -164,7 +164,7 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
                             inquireBtn.text = "查询中，请稍后再看"
                             inquireBtn.isEnabled = false
                         } else {
-                            showToast(payload.message)
+                            showCustomToast(R.drawable.icon_toast_fail, payload.message)
                         }
                     }, { e ->
                         Trace.e(e)
@@ -296,7 +296,7 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
                                 dialog.dismiss()
                             } else {
                                 phoneEdt.setText("")
-                                showToast("请输入正确的手机号")
+                                showCustomToast(R.drawable.icon_toast_common, "请输入正确的手机号")
                             }
                         }
                         .positiveText("确定")
@@ -333,7 +333,7 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
                                 IDCardTv.text = idCard
                             } else {
                                 idEdt.setText("")
-                                showToast("请输入正确的身份证号")
+                                showCustomToast(R.drawable.icon_toast_common, "请输入正确的身份证号")
                             }
                         }
                         .positiveText("确定")
@@ -374,7 +374,7 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
                 val editText = v as EditText
                 if (!hasFocus && editText.text.isNotEmpty() && !Utils.isMobileExact(editText.text)) {
                     editText.setText("")
-                    showToast("请输入正确的手机号")
+                    showCustomToast(R.drawable.icon_toast_common, "请输入正确的手机号")
                 }
             }
             IDCardEdt.addTextChangedListener(object : TextWatcher {
@@ -405,7 +405,7 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
                 val editText = v as EditText
                 if (!hasFocus && editText.text.isNotEmpty() && !Utils.isIDCard18(editText.text)) {
                     editText.setText("")
-                    showToast("请输入正确的身份证号")
+                    showCustomToast(R.drawable.icon_toast_common, "请输入正确的身份证号")
                 }
             }
 //            if (reqBean.phone != null && reqBean.idCard != null) {

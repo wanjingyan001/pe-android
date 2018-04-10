@@ -108,7 +108,7 @@ class SensitiveInfoActivity : BaseActivity(), View.OnClickListener {
                             this.bankRisk?.let { setBankRisk(it) }
                         }
                     } else {
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }
                 }, { e ->
                     Trace.e(e)

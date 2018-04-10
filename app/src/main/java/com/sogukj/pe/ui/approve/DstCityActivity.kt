@@ -14,15 +14,11 @@ import com.sogukj.pe.bean.CityArea
 import com.sogukj.pe.util.CacheUtils
 import com.sogukj.pe.util.CharacterParser
 import com.sogukj.pe.util.Trace
-import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.*
 import com.sogukj.service.SoguApi
-import com.sogukj.util.Store
-import com.taobao.accs.utl.UT
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_dst_city.*
-import java.lang.reflect.Field
 import kotlin.collections.ArrayList
 
 class DstCityActivity : ToolbarActivity() {
@@ -41,7 +37,7 @@ class DstCityActivity : ToolbarActivity() {
 
     override fun onBackPressed() {
         if (chosenAdapter.data.size == 0) {
-            showCustomToast(R.drawable.icon_toast_error,"未选择城市")
+            showCustomToast(R.drawable.icon_toast_common,"未选择城市")
             setResult(Extras.RESULTCODE2)
             super.onBackPressed()
             return
@@ -244,7 +240,7 @@ class DstCityActivity : ToolbarActivity() {
 
                             calculateScroolDis()
                         } else {
-                            showToast(payload.message)
+                            showCustomToast(R.drawable.icon_toast_fail, payload.message)
                         }
                     }, { e ->
                         Trace.e(e)
@@ -280,7 +276,7 @@ class DstCityActivity : ToolbarActivity() {
                             historyAdapter.notifyDataSetChanged()
                         }
                     } else {
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }
                 }, { e ->
                     Trace.e(e)
@@ -334,7 +330,7 @@ class DstCityActivity : ToolbarActivity() {
             return
         }
         if (chosenAdapter.data.size == 6) {
-            showCustomToast(R.drawable.icon_toast_error,"目的城市数目不能超过6个")
+            showCustomToast(R.drawable.icon_toast_common,"目的城市数目不能超过6个")
             //添加不了，注意selected需要更新
             updateList(city, false)
             return

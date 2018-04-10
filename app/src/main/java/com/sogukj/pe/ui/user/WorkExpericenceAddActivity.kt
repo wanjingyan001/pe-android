@@ -94,7 +94,8 @@ class WorkExpericenceAddActivity : BaseActivity(), View.OnClickListener {
             R.id.addTv -> {
                 //保存
                 if (!tv_start_date.text.isNotEmpty()) {
-                    showToast("请选择入职时间")
+                    showCustomToast(R.drawable.icon_toast_common, "请选择入职时间")
+                    //showToast("请选择入职时间")
                     return
                 }
 //                if (!tv_date_end.text.isNotEmpty()) {
@@ -102,11 +103,13 @@ class WorkExpericenceAddActivity : BaseActivity(), View.OnClickListener {
 //                    return
 //                }
                 if (!tv_company.text.isNotEmpty()) {
-                    showToast("请填写公司名称")
+                    showCustomToast(R.drawable.icon_toast_common, "请填写公司名称")
+                    //showToast("请填写公司名称")
                     return
                 }
                 if (!tv_skill.text.isNotEmpty()) {
-                    showToast("请填写职能")
+                    showCustomToast(R.drawable.icon_toast_common, "请填写职能")
+                    //showToast("请填写职能")
                     return
                 }
 //                if (!tv_desc.text.isNotEmpty()) {
@@ -114,11 +117,13 @@ class WorkExpericenceAddActivity : BaseActivity(), View.OnClickListener {
 //                    return
 //                }
                 if (!tv_industry.text.isNotEmpty()) {
-                    showToast("请选择行业")
+                    showCustomToast(R.drawable.icon_toast_common, "请选择行业")
+                    //showToast("请选择行业")
                     return
                 }
                 if (!tv_depart.text.isNotEmpty()) {
-                    showToast("请填写部门")
+                    showCustomToast(R.drawable.icon_toast_common, "请填写部门")
+                    //showToast("请填写部门")
                     return
                 }
 //                if (!tv_workers.text.isNotEmpty()) {
@@ -238,7 +243,7 @@ class WorkExpericenceAddActivity : BaseActivity(), View.OnClickListener {
                             finish()
                         }
                     } else {
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }
                 }, { e ->
                     Trace.e(e)
@@ -263,7 +268,7 @@ class WorkExpericenceAddActivity : BaseActivity(), View.OnClickListener {
                             finish()
                         }
                     } else {
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }
                 }, { e ->
                     Trace.e(e)

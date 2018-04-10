@@ -236,12 +236,14 @@ class FundBookActivity : ToolbarActivity(), SupportEmptyView {
     }
 
     fun download(url: String, fileName: String) {
-        showToast("开始下载")
+        //showToast("开始下载")
+        showCustomToast(R.drawable.icon_toast_common, "开始下载")
         DownloadUtil.getInstance().download(url, externalCacheDir.toString(), fileName, object : DownloadUtil.OnDownloadListener {
             override fun onDownloadSuccess(path: String?) {
                 var intent = OpenFileUtil.openFile(context, path)
                 if (intent == null) {
-                    showToast("文件类型不合格")
+                    showCustomToast(R.drawable.icon_toast_fail, "文件类型不合格")
+                    //showToast("文件类型不合格")
                 } else {
                     startActivity(intent)
                 }
@@ -251,7 +253,8 @@ class FundBookActivity : ToolbarActivity(), SupportEmptyView {
             }
 
             override fun onDownloadFailed() {
-                showToast("下载失败")
+                //showToast("下载失败")
+                showCustomToast(R.drawable.icon_toast_fail, "下载失败")
             }
         })
     }
@@ -323,7 +326,7 @@ class FundBookActivity : ToolbarActivity(), SupportEmptyView {
                             adapter.dataList.addAll(this)
                         }
                     } else
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                 }, { e ->
                     Trace.e(e)
                 }, {
@@ -387,7 +390,7 @@ class FundBookActivity : ToolbarActivity(), SupportEmptyView {
                         adapter2.notifyDataSetChanged()
                         adapter3.notifyDataSetChanged()
                     } else {
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                         tv_more1.visibility = View.GONE
                         tv_more2.visibility = View.GONE
                         tv_more3.visibility = View.GONE
@@ -409,7 +412,7 @@ class FundBookActivity : ToolbarActivity(), SupportEmptyView {
                         setTags(filterList)
 
                     } else
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                 }, { e ->
                     Trace.e(e)
                 })

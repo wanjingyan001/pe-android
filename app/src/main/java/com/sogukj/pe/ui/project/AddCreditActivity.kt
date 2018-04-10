@@ -72,14 +72,16 @@ class AddCreditActivity : BaseActivity(), View.OnClickListener {
             val editText = v as EditText
             if (!hasFocus && editText.text.isNotEmpty() && !Utils.isMobileExact(editText.text)) {
                 editText.setText("")
-                showToast("请输入正确的手机号")
+                //showToast("请输入正确的手机号")
+                showCustomToast(R.drawable.icon_toast_common, "请输入正确的手机号")
             }
         }
         IDCardEdt.setOnFocusChangeListener { v, hasFocus ->
             val editText = v as EditText
             if (!hasFocus && editText.text.isNotEmpty() && !Utils.isIDCard18(editText.text)) {
                 editText.setText("")
-                showToast("请输入正确的身份证号")
+                //showToast("请输入正确的身份证号")
+                showCustomToast(R.drawable.icon_toast_common, "请输入正确的身份证号")
             }
         }
         popwin.setOnItemClickListener { v, select ->
@@ -138,11 +140,13 @@ class AddCreditActivity : BaseActivity(), View.OnClickListener {
 
     private fun saveReqBean(): CreditReqBean? {
         if (nameEdt.text.isEmpty() || "点击填写" == nameEdt.text.toString()) {
-            showToast("请填写名字")
+            //showToast("请填写名字")
+            showCustomToast(R.drawable.icon_toast_common, "请填写名字")
             return null
         }
         if (selectType == 1 && postEdt.text.toString().isEmpty()) {
-            showToast("请填写职位")
+            //showToast("请填写职位")
+            showCustomToast(R.drawable.icon_toast_common, "请填写职位")
             return null
         }
 
@@ -176,7 +180,8 @@ class AddCreditActivity : BaseActivity(), View.OnClickListener {
                             setResult(Extras.RESULTCODE, intent)
                             finish()
                         } else {
-                            showToast(payload.message)
+                            //showToast(payload.message)
+                            showCustomToast(R.drawable.icon_toast_fail, payload.message)
                         }
                     }, { e ->
                         Trace.e(e)

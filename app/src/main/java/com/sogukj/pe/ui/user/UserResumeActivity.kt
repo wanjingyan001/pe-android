@@ -194,7 +194,7 @@ class UserResumeActivity : BaseActivity(), View.OnClickListener {
                             }
                         }
                     } else {
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }
                 }, { e ->
                     Trace.e(e)
@@ -210,10 +210,10 @@ class UserResumeActivity : BaseActivity(), View.OnClickListener {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        showToast("修改成功")
+                        showCustomToast(R.drawable.icon_toast_success, "修改成功")
                         changeUserInfo()
                     } else {
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }
                 }, { e ->
                     Trace.e(e)
@@ -240,10 +240,12 @@ class UserResumeActivity : BaseActivity(), View.OnClickListener {
                                 Store.store.setUser(context, this)
                                 finish()
                             }
-                        } else showToast(payload.message)
+                        } else {
+                            showCustomToast(R.drawable.icon_toast_fail, payload.message)
+                        }
                     }, { e ->
                         Trace.e(e)
-                        showToast("提交失败")
+                        showCustomToast(R.drawable.icon_toast_fail, "提交失败")
                     })
         }
     }

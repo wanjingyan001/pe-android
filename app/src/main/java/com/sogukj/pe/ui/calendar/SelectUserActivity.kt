@@ -79,10 +79,10 @@ class SelectUserActivity : ToolbarActivity() {
                         }
                         setData(departList)
                     } else
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                 }, { e ->
                     Trace.e(e)
-                    showToast("数据获取失败")
+                    showCustomToast(R.drawable.icon_toast_fail, "数据获取失败")
                 })
     }
 

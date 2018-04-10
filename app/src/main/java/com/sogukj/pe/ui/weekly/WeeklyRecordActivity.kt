@@ -126,7 +126,7 @@ class WeeklyRecordActivity : BaseActivity() {
                 weekly_id = week.week_id
             }
             if (et_des.text.toString().trim() == "") {
-                showToast("工作内容不能为空")
+                showCustomToast(R.drawable.icon_toast_common, "工作内容不能为空")
                 return@setOnClickListener
             }
             SoguApi.getService(application)
@@ -160,7 +160,7 @@ class WeeklyRecordActivity : BaseActivity() {
                                 }
                             }
                         } else
-                            showToast(payload.message)
+                            showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }, { e ->
                         Trace.e(e)
                         ToastError(e)

@@ -148,7 +148,7 @@ class PartyMoreActivity : BaseActivity() {
                             adapter.dataList.addAll(it)
                         }
                     } else {
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }
                 }, { e -> Trace.e(e) }, {
                     if (page == 1) {
@@ -175,7 +175,7 @@ class PartyMoreActivity : BaseActivity() {
                             adapter.dataList.addAll(it)
                         }
                     } else {
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }
                 }, { e -> Trace.e(e) }, {
                     if (page == 1) {

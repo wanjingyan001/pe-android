@@ -90,7 +90,8 @@ class LoginActivity : BaseActivity() {
         })
         val extra = intent.getBooleanExtra(Extras.FLAG, false)
         if (extra) {
-            showToast("您的帐号已在其他设备登陆，您已被迫下线")
+            showCustomToast(R.drawable.icon_toast_common, "您的帐号已在其他设备登陆，您已被迫下线")
+            //showToast("您的帐号已在其他设备登陆，您已被迫下线")
         }
         et_name.textChangedListener {
             onTextChanged { charSequence, i1, i2, i3 ->
@@ -122,7 +123,8 @@ class LoginActivity : BaseActivity() {
         if (TextUtils.isEmpty(et_name.text) || !Utils.isMobile(et_name.text.trim())) {
             et_name.setText("")
             et_name.requestFocus()
-            showToast("请输入正确的手机号")
+            showCustomToast(R.drawable.icon_toast_common, "请输入正确的手机号")
+            //showToast("请输入正确的手机号")
             return
         }
         Timer().scheduleAtFixedRate(LoginTimer(60, Handler(), tv_code), 0, 1000);
@@ -133,15 +135,17 @@ class LoginActivity : BaseActivity() {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        showToast("验证码已经发送，请查收")
+                        showCustomToast(R.drawable.icon_toast_common, "验证码已经发送，请查收")
+                        //showToast("验证码已经发送，请查收")
                         et_pwd.setFocusable(true);//设置输入框可聚集
                         et_pwd.setFocusableInTouchMode(true);//设置触摸聚焦
                         et_pwd.requestFocus();//请求焦点
                         et_pwd.findFocus();//获取焦点
                     } else
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                 }, { e ->
-                    showToast("验证码发送失败")
+                    showCustomToast(R.drawable.icon_toast_fail, "验证码发送失败")
+                    //showToast("验证码发送失败")
                 })
 
 
@@ -156,13 +160,15 @@ class LoginActivity : BaseActivity() {
         if (TextUtils.isEmpty(et_name.text) || !Utils.isMobile(et_name.text.trim())) {
             et_name.setText("")
             et_name.requestFocus()
-            showToast("请输入正确的手机号")
+            showCustomToast(R.drawable.icon_toast_common, "请输入正确的手机号")
+            //showToast("请输入正确的手机号")
             return
         }
         if (TextUtils.isEmpty(et_pwd.text) || et_pwd.text.trim().length < 4) {
             et_pwd.setText("")
             et_pwd.requestFocus()
-            showToast("请输入正确的验证码")
+            showCustomToast(R.drawable.icon_toast_common, "请输入正确的验证码")
+            //showToast("请输入正确的验证码")
             return
         }
         val phone = et_name.text.toString()
@@ -173,7 +179,8 @@ class LoginActivity : BaseActivity() {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        showToast("登录成功")
+                        showCustomToast(R.drawable.icon_toast_success, "登录成功")
+                        //showToast("登录成功")
                         payload?.payload?.apply {
                             Store.store.setUser(this@LoginActivity, this)
                             Log.d("WJY", "$accid==>$token")
@@ -184,9 +191,10 @@ class LoginActivity : BaseActivity() {
                         startActivity(Intent(context, MainActivity::class.java))
                         finish()
                     } else
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                 }, { e ->
-                    showToast("登录失败")
+                    showCustomToast(R.drawable.icon_toast_fail, "登录失败")
+                    //showToast("登录失败")
                 })
     }
 
@@ -205,14 +213,17 @@ class LoginActivity : BaseActivity() {
 
             override fun onFailed(p0: Int) {
                 if (p0 == 302 || p0 == 404) {
-                    showToast("帐号或密码错误")
+                    showCustomToast(R.drawable.icon_toast_fail, "帐号或密码错误")
+                    //showToast("帐号或密码错误")
                 } else {
-                    showToast("登录失败")
+                    showCustomToast(R.drawable.icon_toast_fail, "登录失败")
+                    //showToast("登录失败")
                 }
             }
 
             override fun onException(p0: Throwable?) {
-                showToast("无效输入")
+                showCustomToast(R.drawable.icon_toast_common, "无效输入")
+                //showToast("无效输入")
             }
         })
     }

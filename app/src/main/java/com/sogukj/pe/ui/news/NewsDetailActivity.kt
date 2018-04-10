@@ -155,7 +155,7 @@ class NewsDetailActivity : ToolbarActivity(), PlatformActionListener {
         tvCopy.setOnClickListener {
             dialog.dismiss()
             Utils.copy(this, shareUrl)
-            showToast("已复制")
+            showCustomToast(R.drawable.icon_toast_common, "已复制")
         }
         tvQq.setOnClickListener {
             dialog.dismiss()
@@ -308,7 +308,7 @@ class NewsDetailActivity : ToolbarActivity(), PlatformActionListener {
                             setContent(table_id, this, data)
                         }
                     } else
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                 }, { e ->
                     Trace.e(e)
                 })

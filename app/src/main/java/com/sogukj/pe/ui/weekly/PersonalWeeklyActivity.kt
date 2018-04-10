@@ -99,7 +99,7 @@ class PersonalWeeklyActivity : BaseActivity() {
                             manager.beginTransaction().add(R.id.container, fragments[0]).commit()
                         }
                     } else
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                 }, { e ->
                     Trace.e(e)
                     ToastError(e)

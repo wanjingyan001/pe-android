@@ -164,12 +164,13 @@ abstract class BaseActivity : AppCompatActivity(),AnkoLogger {
     }
 
     fun ToastError(e:Throwable){
-        when (e) {
-            is JsonSyntaxException -> showToast("后台数据出错")
-            is UnknownHostException -> showToast("网络连接出错，请联网")
-            is SocketTimeoutException -> showToast("连接超时")
-            else -> showToast("未知错误")
+        var str = when (e) {
+            is JsonSyntaxException -> "后台数据出错"
+            is UnknownHostException -> "网络连接出错，请联网"
+            is SocketTimeoutException -> "连接超时"
+            else -> "未知错误"
         }
+        showCustomToast(R.drawable.icon_toast_fail, str)
     }
 
     lateinit var inflate:View

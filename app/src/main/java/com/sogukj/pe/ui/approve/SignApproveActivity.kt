@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Bundle
 import android.text.Html
 import android.text.TextUtils
@@ -105,12 +104,12 @@ class SignApproveActivity : ToolbarActivity() {
                             iv_state_agreed.visibility = View.VISIBLE
                         }
                     } else {
-                        showCustomToast(R.drawable.icon_toast_error,payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail,payload.message)
                     }
                 }, { e ->
                     Trace.e(e)
 //                    showToast("请求失败")
-                    showCustomToast(R.drawable.icon_toast_error,"请求失败")
+                    showCustomToast(R.drawable.icon_toast_fail,"请求失败")
                 })
     }
 
@@ -152,16 +151,16 @@ class SignApproveActivity : ToolbarActivity() {
                                 showCustomToast(R.drawable.icon_toast_success,"保存成功")
                                 refresh()
                             } else {
-                                showCustomToast(R.drawable.icon_toast_error,payload.message)
+                                showCustomToast(R.drawable.icon_toast_fail,payload.message)
                             }
                         }, { e ->
                             Trace.e(e)
 //                            showToast("请求失败")
-                            showCustomToast(R.drawable.icon_toast_error,"保存失败")
+                            showCustomToast(R.drawable.icon_toast_fail,"保存失败")
                         })
             } catch (e: Exception) {
 //                showToast("保存失败")
-                showCustomToast(R.drawable.icon_toast_error,"保存失败")
+                showCustomToast(R.drawable.icon_toast_fail,"保存失败")
             }
         }
         dialog.show()
@@ -188,12 +187,12 @@ class SignApproveActivity : ToolbarActivity() {
 //                                    showToast("提交成功")
                                     showCustomToast(R.drawable.icon_toast_success,"提交成功")
                                 } else {
-                                    showCustomToast(R.drawable.icon_toast_error,payload.message)
+                                    showCustomToast(R.drawable.icon_toast_fail,payload.message)
                                 }
                             }, { e ->
                                 Trace.e(e)
 //                                showToast("请求失败")
-                                showCustomToast(R.drawable.icon_toast_error,"请求失败")
+                                showCustomToast(R.drawable.icon_toast_fail,"请求失败")
                             })
                 }
             }
@@ -238,12 +237,12 @@ class SignApproveActivity : ToolbarActivity() {
                                         PdfUtil.loadPdf(this, it.url,it.name)
                                     }
                                 } else {
-                                    showCustomToast(R.drawable.icon_toast_error,payload.message)
+                                    showCustomToast(R.drawable.icon_toast_fail,payload.message)
                                 }
                             }, { e ->
                                 Trace.e(e)
 //                                showToast("请求失败")
-                                showCustomToast(R.drawable.icon_toast_error,"请求失败")
+                                showCustomToast(R.drawable.icon_toast_fail,"请求失败")
                             })
                 }
             }

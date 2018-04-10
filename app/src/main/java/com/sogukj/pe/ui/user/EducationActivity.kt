@@ -83,23 +83,28 @@ class EducationActivity : BaseActivity(), View.OnClickListener {
             R.id.addTv -> {
                 //保存
                 if (!tv_start_date.text.isNotEmpty()) {
-                    showToast("请选择入学时间")
+                    //showToast("请选择入学时间")
+                    showCustomToast(R.drawable.icon_toast_common, "请选择入学时间")
                     return
                 }
                 if (!tv_date_end.text.isNotEmpty()) {
-                    showToast("请选择毕业时间")
+                    //showToast("请选择毕业时间")
+                    showCustomToast(R.drawable.icon_toast_common, "请选择毕业时间")
                     return
                 }
                 if (!tv_school.text.isNotEmpty()) {
-                    showToast("请输入学校")
+                    //showToast("请输入学校")
+                    showCustomToast(R.drawable.icon_toast_common, "请输入学校")
                     return
                 }
                 if (!tv_education.text.isNotEmpty()) {
-                    showToast("请选择学历")
+                    //showToast("请选择学历")
+                    showCustomToast(R.drawable.icon_toast_common, "请选择学历")
                     return
                 }
                 if (!tv_profession.text.isNotEmpty()) {
-                    showToast("请输入专业")
+                    //showToast("请输入专业")
+                    showCustomToast(R.drawable.icon_toast_common, "请输入专业")
                     return
                 }
                 val education = EducationBean()
@@ -184,7 +189,8 @@ class EducationActivity : BaseActivity(), View.OnClickListener {
                             finish()
                         }
                     } else {
-                        showToast(payload.message)
+                        //showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }
                 }, { e ->
                     Trace.e(e)
@@ -210,7 +216,8 @@ class EducationActivity : BaseActivity(), View.OnClickListener {
                             finish()
                         }
                     } else {
-                        showToast(payload.message)
+                        //showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }
                 }, { e ->
                     Trace.e(e)

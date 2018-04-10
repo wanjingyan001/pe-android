@@ -98,7 +98,7 @@ class GaoGuanActivity : ToolbarActivity() ,SupportEmptyView{
                             adapter.dataList.addAll(this)
                         }
                     } else {
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }
                 }, { e ->
                     Trace.e(e)

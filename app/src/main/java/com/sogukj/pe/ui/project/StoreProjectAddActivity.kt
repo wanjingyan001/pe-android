@@ -89,12 +89,12 @@ class StoreProjectAddActivity : ToolbarActivity() {
                                 fillForm(bean);
                             }
                         } else {
-                            showToast(payload.message)
+                            showCustomToast(R.drawable.icon_toast_fail, payload.message)
                         }
 
                     }, { e ->
                         Trace.e(e)
-                        showToast("保存失败")
+                        showCustomToast(R.drawable.icon_toast_fail, "保存失败")
                     })
         }
     }
@@ -132,7 +132,7 @@ class StoreProjectAddActivity : ToolbarActivity() {
         val bean = StoreProjectBean()
         bean.name = et_company_name.text.trim().toString()
         if (TextUtils.isEmpty(bean.name)) {
-            showToast("公司名称不能为空")
+            showCustomToast(R.drawable.icon_toast_common, "公司名称不能为空")
             et_company_name.requestFocus()
             return
         }
@@ -177,15 +177,15 @@ class StoreProjectAddActivity : ToolbarActivity() {
                     .subscribeOn(Schedulers.io())
                     .subscribe({ payload ->
                         if (payload.isOk) {
-                            showToast("保存成功")
+                            showCustomToast(R.drawable.icon_toast_success, "保存成功")
                             finish()
                         } else {
-                            showToast(payload.message)
+                            showCustomToast(R.drawable.icon_toast_fail, payload.message)
                         }
 
                     }, { e ->
                         Trace.e(e)
-                        showToast("保存失败")
+                        showCustomToast(R.drawable.icon_toast_fail, "保存失败")
                     })
         else if (type == TYPE_EDIT)
             SoguApi.getService(application)
@@ -210,15 +210,15 @@ class StoreProjectAddActivity : ToolbarActivity() {
                     .subscribeOn(Schedulers.io())
                     .subscribe({ payload ->
                         if (payload.isOk) {
-                            showToast("保存成功")
+                            showCustomToast(R.drawable.icon_toast_success, "保存成功")
                             finish()
                         } else {
-                            showToast(payload.message)
+                            showCustomToast(R.drawable.icon_toast_fail, payload.message)
                         }
 
                     }, { e ->
                         Trace.e(e)
-                        showToast("保存失败")
+                        showCustomToast(R.drawable.icon_toast_fail, "保存失败")
                     })
     }
 

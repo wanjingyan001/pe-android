@@ -122,12 +122,12 @@ class LeaderActivity : ToolbarActivity() {
                             if (payload.isOk) {
                                 if (payload.payload == null || payload.payload!!.size == 0) {
                                     //暂无数据
-                                    showToast("暂无数据")
+                                    showCustomToast(R.drawable.icon_toast_common, "暂无可用数据")
                                 } else {
                                     ScoreDetailActivity.start(context, Extras.TYPE_INTERACT, null)
                                 }
                             } else
-                                showToast(payload.message)
+                                showCustomToast(R.drawable.icon_toast_fail, payload.message)
                             isLoading = false
                         }, { e ->
                             Trace.e(e)
@@ -152,14 +152,14 @@ class LeaderActivity : ToolbarActivity() {
                     .subscribe({ payload ->
                         if (payload.isOk) {
                             if (payload.payload == null || payload.payload!!.size == 0) {
-                                showToast("暂无数据")
+                                showCustomToast(R.drawable.icon_toast_common, "暂无可用数据")
                             } else {
                                 var bean = EmployeeInteractBean()
                                 bean.data = payload.payload
                                 JiXiaoActivity.start(context, Extras.JIXIAO, bean)
                             }
                         } else
-                            showToast(payload.message)
+                            showCustomToast(R.drawable.icon_toast_fail, payload.message)
                         isLoading = false
                     }, { e ->
                         Trace.e(e)
@@ -185,12 +185,12 @@ class LeaderActivity : ToolbarActivity() {
                             if (payload.isOk) {
                                 var data = payload.payload as ArrayList<ScoreBean>
                                 if (data == null || data.size == 0) {
-                                    showToast("暂无数据")
+                                    showCustomToast(R.drawable.icon_toast_common, "暂无可用数据")
                                 } else {
                                     ScoreListActivity.start(context, data)
                                 }
                             } else {
-                                showToast(payload.message)
+                                showCustomToast(R.drawable.icon_toast_fail, payload.message)
                             }
                             isLoading = false
                         }, { e ->
@@ -207,10 +207,10 @@ class LeaderActivity : ToolbarActivity() {
                                 if (payload.payload != null) {
                                     TotalScoreActivity.start(context, payload.payload!!)
                                 } else {
-                                    showToast("暂无数据")
+                                    showCustomToast(R.drawable.icon_toast_common, "暂无可用数据")
                                 }
                             } else
-                                showToast(payload.message)
+                                showCustomToast(R.drawable.icon_toast_fail, payload.message)
                             isLoading = false
                         }, { e ->
                             Trace.e(e)
@@ -232,12 +232,12 @@ class LeaderActivity : ToolbarActivity() {
                         if (payload.isOk) {
                             if (payload.payload == null || payload.payload?.size == 0) {
                                 //暂无数据
-                                showToast("暂无数据")
+                                showCustomToast(R.drawable.icon_toast_common, "暂无可用数据")
                             } else {
                                 RedBlackActivity.start(context, payload.payload!!)
                             }
                         } else
-                            showToast(payload.message)
+                            showCustomToast(R.drawable.icon_toast_fail, payload.message)
                         isLoading = false
                     }, { e ->
                         Trace.e(e)
@@ -323,7 +323,7 @@ class LeaderActivity : ToolbarActivity() {
                             }
                         }
                     } else
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                 }, { e ->
                     Trace.e(e)
                     ToastError(e)

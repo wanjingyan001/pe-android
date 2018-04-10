@@ -200,7 +200,7 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                                 }
                             }
                         } else {
-                            showToast(payload.message)
+                            showCustomToast(R.drawable.icon_toast_fail, payload.message)
                         }
                     }, { e ->
                         Trace.e(e)
@@ -211,15 +211,18 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
 
     private fun submitChange() {
         if (missionDetails.text.isEmpty()) {
-            showToast("请填写日程描述")
+            //showToast("请填写日程描述")
+            showCustomToast(R.drawable.icon_toast_common, "请填写日程描述")
             return
         }
         if (start == null || endTime == null) {
-            showToast("请选择时间")
+            //showToast("请选择时间")
+            showCustomToast(R.drawable.icon_toast_common, "请选择时间")
             return
         }
         if (start!!.time - endTime!!.time > 0) {
-            showToast("开始时间不能大于结束时间")
+            //showToast("开始时间不能大于结束时间")
+            showCustomToast(R.drawable.icon_toast_common, "开始时间不能大于结束时间")
             return
         }
         val reqBean = TaskModifyBean()
@@ -268,10 +271,11 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         Utils.closeInput(this, missionDetails)
-                        showToast("提交成功")
+                        //showToast("提交成功")
+                        showCustomToast(R.drawable.icon_toast_success, "提交成功")
                         finish()
                     } else {
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }
                 }, { e ->
                     Trace.e(e)
@@ -378,11 +382,13 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
             }
             R.id.remind -> {
                 if (start == null) {
-                    showToast("请选择开始时间")
+                    showCustomToast(R.drawable.icon_toast_common, "请选择开始时间")
+                    //showToast("请选择开始时间")
                     return
                 }
                 if (endTime == null) {
-                    showToast("请选择结束时间")
+                    showCustomToast(R.drawable.icon_toast_common, "请选择结束时间")
+                    //showToast("请选择结束时间")
                     return
                 }
                 if (seconds == null) {

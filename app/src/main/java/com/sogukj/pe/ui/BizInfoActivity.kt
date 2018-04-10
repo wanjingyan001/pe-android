@@ -61,7 +61,7 @@ class BizInfoActivity : ToolbarActivity() {
                             copySupport(tv_creditCode, creditCode)
                         }
                     } else
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                 }, { e ->
                     Trace.e(e)
                 })
@@ -71,7 +71,7 @@ class BizInfoActivity : ToolbarActivity() {
         v.setTextColor(ContextCompat.getColor(this,R.color.colorBlue))
         v.setOnLongClickListener {
             Utils.copy(this@BizInfoActivity, "" + text)
-            showToast("已复制")
+            showCustomToast(R.drawable.icon_toast_common, "已复制")
             true
         }
     }

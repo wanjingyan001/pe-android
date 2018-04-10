@@ -164,9 +164,9 @@ class ResumeEditorActivity : BaseActivity(), View.OnClickListener {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        showToast("删除成功")
+                        showCustomToast(R.drawable.icon_toast_success, "删除成功")
                     } else {
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }
                 }, { e ->
                     Trace.e(e)

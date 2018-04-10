@@ -111,7 +111,7 @@ class PartyUploadActivity : BaseActivity() {
         if (tabsJson.isNotEmpty() && tabsJson != "") {
             val tabs: List<PartyTabBean> = Gson().fromJson(tabsJson, object : TypeToken<List<PartyTabBean>>() {}.type)
             val map = tabs.map { it.classname }
-            adapter.dataList.addAll(map)
+            adapter.dataList.addAll(ArrayList<String>(map))
             adapter.onItemClick = { _, p ->
                 columnId = tabs[p].id
                 columnTv.text = adapter.dataList[p]
@@ -127,11 +127,11 @@ class PartyUploadActivity : BaseActivity() {
 
     private fun uploadFile() {
         if (selectFile == null) {
-            showToast("请选择文件")
+            showCustomToast(R.drawable.icon_toast_common, "请选择文件")
             return
         }
         if (columnId <= 0) {
-            showToast("请选择栏目")
+            showCustomToast(R.drawable.icon_toast_common, "请选择栏目")
             return
         }
         val name = if (titleEdt.text.toString().isNotEmpty() && titleEdt.hint != "不填则标题默认为文件名称") {
@@ -149,11 +149,11 @@ class PartyUploadActivity : BaseActivity() {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        showToast("上传成功")
+                        showCustomToast(R.drawable.icon_toast_success, "上传成功")
                         setResult(Extras.RESULTCODE)
                         finish()
                     } else {
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }
                 }, {
                     hideProgress()

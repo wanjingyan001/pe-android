@@ -222,7 +222,7 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
                             adapterNeg.notifyDataSetChanged()
                         }
                     } else
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                 }, { e ->
                     Trace.e(e)
                     tv_more_yq.visibility = View.GONE
@@ -355,14 +355,14 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
                             .subscribeOn(Schedulers.io())
                             .subscribe({ payload ->
                                 if (payload.isOk) {
-                                    showToast("删除成功")
+                                    showCustomToast(R.drawable.icon_toast_success, "删除成功")
                                     setResult(Activity.RESULT_OK)
                                     finish()
                                 } else
-                                    showToast(payload.message)
+                                    showCustomToast(R.drawable.icon_toast_fail, payload.message)
                             }, { e ->
                                 Trace.e(e)
-                                showToast("删除失败")
+                                showCustomToast(R.drawable.icon_toast_fail, "删除失败")
                             })
                 }
                 .show()
@@ -409,27 +409,29 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
                     .subscribe({ payload ->
                         if (payload.isOk) {
                             if (type == ProjectListFragment.TYPE_DY) {
-                                showToast("成功添加到储备")
+                                showCustomToast(R.drawable.icon_toast_success, "成功添加到储备")
                             } else if (type == ProjectListFragment.TYPE_CB) {
-                                showToast("成功添加到立项")
+                                showCustomToast(R.drawable.icon_toast_success, "成功添加到立项")
                             } else if (type == ProjectListFragment.TYPE_LX) {
-                                showToast("成功添加到已投")
+                                showCustomToast(R.drawable.icon_toast_success, "成功添加到已投")
                             } else if (type == ProjectListFragment.TYPE_YT) {
-                                showToast("成功添加到退出")
+                                showCustomToast(R.drawable.icon_toast_success, "成功添加到退出")
                             }
                             setResult(Activity.RESULT_OK)
                             finish()
-                        } else showToast(payload.message)
+                        } else {
+                            showCustomToast(R.drawable.icon_toast_fail, payload.message)
+                        }
                     }, { e ->
                         Trace.e(e)
                         if (type == ProjectListFragment.TYPE_DY) {
-                            showToast("添加到储备失败")
+                            showCustomToast(R.drawable.icon_toast_fail, "添加到储备失败")
                         } else if (type == ProjectListFragment.TYPE_CB) {
-                            showToast("添加到立项失败")
+                            showCustomToast(R.drawable.icon_toast_fail, "添加到立项失败")
                         } else if (type == ProjectListFragment.TYPE_LX) {
-                            showToast("添加到已投失败")
+                            showCustomToast(R.drawable.icon_toast_fail, "添加到已投失败")
                         } else if (type == ProjectListFragment.TYPE_YT) {
-                            showToast("添加到退出失败")
+                            showCustomToast(R.drawable.icon_toast_fail, "添加到退出失败")
                         }
                     })
         }
@@ -449,7 +451,7 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
                             NimUIKit.startTeamSession(this, it.toString())
                         }
                     } else {
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }
                 }, { e ->
                     Trace.e(e)
@@ -479,7 +481,7 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
                             project.is_ability = is_ability
                             project.is_business = is_business
                         } else
-                            showToast(payload.message)
+                            showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }, { e ->
                         Trace.e(e)
                         ToastError(e)

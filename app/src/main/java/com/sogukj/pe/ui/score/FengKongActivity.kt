@@ -116,7 +116,7 @@ class FengKongActivity : ToolbarActivity() {
                                         //JudgeActivity.start(context, TYPE_EMPLOYEE, FK)
                                         finish()
                                     } else
-                                        showToast(payload.message)
+                                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                                 }, { e ->
                                     Trace.e(e)
                                     ToastError(e)
@@ -181,7 +181,7 @@ class FengKongActivity : ToolbarActivity() {
                             }
                         }
                     } else
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                 }, { e ->
                     Trace.e(e)
                     ToastError(e)

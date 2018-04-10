@@ -5,9 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.net.Uri
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
 import android.text.Html
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -35,7 +33,6 @@ import kotlinx.android.synthetic.main.seal_approve_part2.*
 import kotlinx.android.synthetic.main.seal_approve_part3.*
 import org.jetbrains.anko.collections.forEachWithIndex
 import org.jetbrains.anko.find
-import org.jetbrains.anko.sdk25.coroutines.onClick
 import java.text.SimpleDateFormat
 
 /**
@@ -104,11 +101,11 @@ class SealApproveActivity : ToolbarActivity() {
                         }
 
                     } else {
-                        showCustomToast(R.drawable.icon_toast_error, payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }
                 }, { e ->
                     Trace.e(e)
-                    showCustomToast(R.drawable.icon_toast_error, "暂无可用数据")
+                    showCustomToast(R.drawable.icon_toast_common, "暂无可用数据")
                 })
     }
 
@@ -132,12 +129,12 @@ class SealApproveActivity : ToolbarActivity() {
 //                                    showToast("提交成功")
                                     showCustomToast(R.drawable.icon_toast_success,"提交成功")
                                 } else {
-                                    showCustomToast(R.drawable.icon_toast_error, payload.message)
+                                    showCustomToast(R.drawable.icon_toast_fail, payload.message)
                                 }
                             }, { e ->
                                 Trace.e(e)
 //                                showToast("请求失败")
-                                showCustomToast(R.drawable.icon_toast_error,"请求失败")
+                                showCustomToast(R.drawable.icon_toast_fail,"请求失败")
                             })
                 }
             }
@@ -168,12 +165,12 @@ class SealApproveActivity : ToolbarActivity() {
                                         PdfUtil.loadPdf(this, it.url,it.name)
                                     }
                                 } else {
-                                    showCustomToast(R.drawable.icon_toast_error, payload.message)
+                                    showCustomToast(R.drawable.icon_toast_fail, payload.message)
                                 }
                             }, { e ->
                                 Trace.e(e)
 //                                showToast("请求失败")
-                                showCustomToast(R.drawable.icon_toast_error,"请求失败")
+                                showCustomToast(R.drawable.icon_toast_fail,"请求失败")
                             })
                 }
                 btn_right.setOnClickListener {
@@ -185,12 +182,12 @@ class SealApproveActivity : ToolbarActivity() {
                                 if (payload.isOk) {
                                     refresh()
                                 } else {
-                                    showCustomToast(R.drawable.icon_toast_error, payload.message)
+                                    showCustomToast(R.drawable.icon_toast_fail, payload.message)
                                 }
                             }, { e ->
                                 Trace.e(e)
 //                                showToast("请求失败")
-                                showCustomToast(R.drawable.icon_toast_error,"请求失败")
+                                showCustomToast(R.drawable.icon_toast_fail,"请求失败")
                             })
                 }
             }
@@ -243,12 +240,12 @@ class SealApproveActivity : ToolbarActivity() {
                                         PdfUtil.loadPdf(this, it.url,it.name)
                                     }
                                 } else {
-                                    showCustomToast(R.drawable.icon_toast_error, payload.message)
+                                    showCustomToast(R.drawable.icon_toast_fail, payload.message)
                                 }
                             }, { e ->
                                 Trace.e(e)
 //                                showToast("请求失败")
-                                showCustomToast(R.drawable.icon_toast_error,"请求失败")
+                                showCustomToast(R.drawable.icon_toast_fail,"请求失败")
                             })
                 }
 
@@ -294,12 +291,12 @@ class SealApproveActivity : ToolbarActivity() {
                         showCustomToast(R.drawable.icon_toast_success,"提交成功")
                         refresh()
                     } else {
-                        showCustomToast(R.drawable.icon_toast_error, payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }
                 }, { e ->
                     Trace.e(e)
 //                    showToast("提交失败")
-                    showCustomToast(R.drawable.icon_toast_error,"提交失败")
+                    showCustomToast(R.drawable.icon_toast_fail,"提交失败")
                 })
     }
 
@@ -450,12 +447,12 @@ class SealApproveActivity : ToolbarActivity() {
                                 showCustomToast(R.drawable.icon_toast_success,"提交成功")
                                 refresh()
                             } else {
-                                showCustomToast(R.drawable.icon_toast_error, payload.message)
+                                showCustomToast(R.drawable.icon_toast_fail, payload.message)
                             }
                         }, { e ->
                             Trace.e(e)
 //                            showToast("提交失败")
-                            showCustomToast(R.drawable.icon_toast_error,"提交失败")
+                            showCustomToast(R.drawable.icon_toast_fail,"提交失败")
                         })
         }
         dialog.show()

@@ -396,11 +396,13 @@ class ApproveListActivity : ToolbarActivity(), TabLayout.OnTabSelectedListener {
                             payload.payload?.apply {
                                 adapter.dataList.addAll(this)
                             }
-                        } else
-                            showToast(payload.message)
+                        } else {
+                            showCustomToast(R.drawable.icon_toast_fail, payload.message)
+                        }
                     }, { e ->
                         Trace.e(e)
-                        showToast("暂无可用数据")
+                        //showToast("暂无可用数据")
+                        showCustomToast(R.drawable.icon_toast_common, "暂无可用数据")
                         SupportEmptyView.checkEmpty(this, adapter)
                     }, {
                         SupportEmptyView.checkEmpty(this, adapter)
@@ -423,11 +425,13 @@ class ApproveListActivity : ToolbarActivity(), TabLayout.OnTabSelectedListener {
                             payload.payload?.apply {
                                 adapter.dataList.addAll(this)
                             }
-                        } else
-                            showToast(payload.message)
+                        } else {
+                            showCustomToast(R.drawable.icon_toast_fail, payload.message)
+                        }
                     }, { e ->
                         Trace.e(e)
-                        showToast("暂无可用数据")
+                        //showToast("暂无可用数据")
+                        showCustomToast(R.drawable.icon_toast_common, "暂无可用数据")
                         SupportEmptyView.checkEmpty(this, adapter)
                     }, {
                         SupportEmptyView.checkEmpty(this, adapter)
@@ -448,8 +452,9 @@ class ApproveListActivity : ToolbarActivity(), TabLayout.OnTabSelectedListener {
                 .subscribe({ payload ->
                     if (payload.isOk && payload.payload != null) {
                         filterBean = payload.payload!!
-                    } else
-                        showToast(payload.message)
+                    } else {
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
+                    }
                 }, { e ->
                     Trace.e(e)
                 })

@@ -116,7 +116,7 @@ class SurveyDataActivity : ToolbarActivity() {
                             et_encourage.setText(team?.encourage)
                         }
                     } else
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                 }, { e ->
                     Trace.e(e)
                     ToastError(e)
@@ -215,10 +215,10 @@ class SurveyDataActivity : ToolbarActivity() {
                         if (payload.isOk) {
                             finish()
                         } else
-                            showToast(payload.message)
+                            showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }, { e ->
                         Trace.e(e)
-                        showToast("保存失败")
+                        showCustomToast(R.drawable.icon_toast_fail, "保存失败")
                     })
         }
     }

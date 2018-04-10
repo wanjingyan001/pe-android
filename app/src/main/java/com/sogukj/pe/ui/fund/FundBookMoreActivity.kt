@@ -117,12 +117,14 @@ class FundBookMoreActivity : ToolbarActivity() {
     }
 
     fun download(url: String, fileName: String) {
-        showToast("开始下载")
+        //showToast("开始下载")
+        showCustomToast(R.drawable.icon_toast_common, "开始下载")
         DownloadUtil.getInstance().download(url, externalCacheDir.toString(), fileName, object : DownloadUtil.OnDownloadListener {
             override fun onDownloadSuccess(path: String?) {
                 var intent = OpenFileUtil.openFile(context, path)
                 if (intent == null) {
-                    showToast("文件类型不合格")
+                    showCustomToast(R.drawable.icon_toast_fail, "文件类型不合格")
+                    //showToast("文件类型不合格")
                 } else {
                     startActivity(intent)
                 }
@@ -132,7 +134,8 @@ class FundBookMoreActivity : ToolbarActivity() {
             }
 
             override fun onDownloadFailed() {
-                showToast("下载失败")
+                showCustomToast(R.drawable.icon_toast_fail, "下载失败")
+                //showToast("下载失败")
             }
         })
     }
@@ -151,10 +154,10 @@ class FundBookMoreActivity : ToolbarActivity() {
                             adapter.dataList.addAll(this)
                         }
                     } else
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                 }, { e ->
                     Trace.e(e)
-                    showToast("暂无可用数据")
+                    showCustomToast(R.drawable.icon_toast_common, "暂无可用数据")
                 }, {
                     SupportEmptyView.checkEmpty(this, adapter)
                     refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)

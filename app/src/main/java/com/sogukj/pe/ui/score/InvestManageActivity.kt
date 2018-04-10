@@ -102,7 +102,7 @@ class InvestManageActivity : ToolbarActivity() {
                             }
                         }
                     } else
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                 }, { e ->
                     Trace.e(e)
                     ToastError(e)
@@ -137,7 +137,7 @@ class InvestManageActivity : ToolbarActivity() {
                             //JudgeActivity.start(context, 3, 100)
                             finish()
                         } else
-                            showToast(payload.message)
+                            showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }, { e ->
                         Trace.e(e)
                         ToastError(e)
@@ -291,7 +291,7 @@ class InvestManageActivity : ToolbarActivity() {
                         //JudgeActivity.start(context, 3, 100)
                         finish()
                     } else
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                 }, { e ->
                     Trace.e(e)
                     ToastError(e)

@@ -105,15 +105,15 @@ class ProjectBookUploadActivity : ToolbarActivity() {
 
     fun doCheck(bean: UploadBean): Boolean {
         if (bean.file.isNullOrEmpty()) {
-            showToast("请选择文件")
+            showCustomToast(R.drawable.icon_toast_common, "请选择文件")
             return false
         }
         if (null == bean.group) {
-            showToast("请选择分类")
+            showCustomToast(R.drawable.icon_toast_common, "请选择分类")
             return false
         }
         if (null == bean.type) {
-            showToast("请选择标签")
+            showCustomToast(R.drawable.icon_toast_common, "请选择标签")
             return false
         }
         return true
@@ -146,17 +146,17 @@ class ProjectBookUploadActivity : ToolbarActivity() {
                         index++
                         uploadBean.isSuccess = true
                     } else {
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }
                 }, { e ->
                     Trace.e(e)
                     hideProgress()
-                    showToast("上传失败")
+                    showCustomToast(R.drawable.icon_toast_fail, "上传失败")
                     btn_upload.isEnabled = true
                     btn_upload.backgroundResource = R.drawable.bg_btn_blue
                 }, {
                     if (index == uploadList.size) {
-                        showToast("上传成功")
+                        showCustomToast(R.drawable.icon_toast_success, "上传成功")
                         hideProgress()
                         finish()
                     }

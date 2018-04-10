@@ -60,7 +60,7 @@ class CompanyInfo2Activity : ToolbarActivity() {
                     if (payload.isOk) {
                         set13(payload.payload)
                     } else {
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }
                 }, { e ->
                     Trace.e(e)

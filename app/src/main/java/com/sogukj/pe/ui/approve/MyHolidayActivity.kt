@@ -62,7 +62,7 @@ class MyHolidayActivity : ToolbarActivity() {
                         adapter.dataList.addAll(payload.payload!!)
                         adapter.notifyDataSetChanged()
                     } else {
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                         empty.visibility = View.VISIBLE
                     }
                 }, { e ->

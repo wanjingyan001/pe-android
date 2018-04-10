@@ -83,7 +83,6 @@ class ScoreDetailActivity : ToolbarActivity() {
         score_list.setGroupIndicator(null)
         score_list.setOnChildClickListener(object : ExpandableListView.OnChildClickListener {
             override fun onChildClick(parent: ExpandableListView?, v: View?, groupPosition: Int, childPosition: Int, id: Long): Boolean {
-                showToast("${groupPosition}+++${childPosition}")
                 return false
             }
         })
@@ -110,7 +109,7 @@ class ScoreDetailActivity : ToolbarActivity() {
                             tv_empty.visibility = View.GONE
                         }
                     } else
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                 }, { e ->
                     Trace.e(e)
                     ToastError(e)

@@ -69,7 +69,7 @@ class TotalScoreActivity : ToolbarActivity() {
             ll_finish.visibility = View.GONE
             ll_unfinish.visibility = View.VISIBLE
             total.setTag()
-            showToast("请等待别人打完分")
+            showCustomToast(R.drawable.icon_toast_common, "请等待别人打完分")
         }
     }
 

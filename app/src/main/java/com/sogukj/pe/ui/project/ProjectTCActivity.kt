@@ -194,53 +194,53 @@ class ProjectTCActivity : ToolbarActivity() {
         var content = HashMap<String, Any>()
 
         if (et_cb.text.toString().isNullOrEmpty()) {
-            showToast("成本不能为空")
+            showCustomToast(R.drawable.icon_toast_common, "成本不能为空")
             return
         }
         if (et_tcsr.text.toString().isNullOrEmpty()) {
-            showToast("退出收入不能为空")
+            showCustomToast(R.drawable.icon_toast_common, "退出收入不能为空")
             return
         }
         if (et_fh.text.toString().isNullOrEmpty()) {
-            showToast("分红不能为空")
+            showCustomToast(R.drawable.icon_toast_common, "分红不能为空")
             return
         }
         if (et_tcsr.text.toString().isNullOrEmpty()) {
-            showToast("退出收益不能为空")
+            showCustomToast(R.drawable.icon_toast_common, "退出收益不能为空")
             return
         }
         if (et_tzsyl.text.toString().isNullOrEmpty()) {
-            showToast("投资收益率不能为空")
+            showCustomToast(R.drawable.icon_toast_common, "投资收益率不能为空")
             return
         }
         if (et_tzsj.text.toString().isNullOrEmpty()) {
-            showToast("投资时间不能为空")
+            showCustomToast(R.drawable.icon_toast_common, "投资时间不能为空")
             return
         }
         if (et_tcsj.text.toString().isNullOrEmpty()) {
-            showToast("退出时间不能为空")
+            showCustomToast(R.drawable.icon_toast_common, "退出时间不能为空")
             return
         }
         if (et_tzts.text.toString().isNullOrEmpty()) {
-            showToast("投资天数不能为空")
+            showCustomToast(R.drawable.icon_toast_common, "投资天数不能为空")
             return
         }
         if (et_nhsyl.text.toString().isNullOrEmpty()) {
-            showToast("年化收益率不能为空")
+            showCustomToast(R.drawable.icon_toast_common, "年化收益率不能为空")
             return
         }
         if (et_tzsc.text.toString().isNullOrEmpty()) {
-            showToast("投资时长不能为空")
+            showCustomToast(R.drawable.icon_toast_common, "投资时长不能为空")
             return
         }
         if (et_IRR.text.toString().isNullOrEmpty()) {
-            showToast("IRR(内部收益率)不能为空")
+            showCustomToast(R.drawable.icon_toast_common, "IRR(内部收益率)不能为空")
             return
         }
 
         if (mType == 1) {
             if (et_wtccb.text.toString().isNullOrEmpty()) {
-                showToast("未退出成本不能为空")
+                showCustomToast(R.drawable.icon_toast_common, "未退出成本不能为空")
                 return
             }
             content.put("company_id", project.company_id!!)
@@ -261,7 +261,7 @@ class ProjectTCActivity : ToolbarActivity() {
             content.put("summary", et_tczj.text.toString())
         } else if (mType == 2) {
             if (et_tzzt.text.toString().isNullOrEmpty()) {
-                showToast("投资主体不能为空")
+                showCustomToast(R.drawable.icon_toast_common, "投资主体不能为空")
                 return
             }
             content.put("company_id", project.company_id!!)
@@ -312,10 +312,10 @@ class ProjectTCActivity : ToolbarActivity() {
                         setResult(Activity.RESULT_OK)
                         finish()
                     } else
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                 }, { e ->
                     Trace.e(e)
-                    showToast("暂无可用数据")
+                    showCustomToast(R.drawable.icon_toast_common, "暂无可用数据")
                 })
     }
 
@@ -425,10 +425,10 @@ class ProjectTCActivity : ToolbarActivity() {
                             et_tczj.isFocusable = false
                         }
                     } else
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                 }, { e ->
                     Trace.e(e)
-                    showToast("暂无可用数据")
+                    showCustomToast(R.drawable.icon_toast_common, "暂无可用数据")
                 })
     }
 }

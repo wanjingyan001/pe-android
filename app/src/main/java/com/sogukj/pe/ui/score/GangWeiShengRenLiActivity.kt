@@ -120,7 +120,7 @@ class GangWeiShengRenLiActivity : ToolbarActivity() {
                             btn_commit.visibility = View.GONE
                         }
                     } else
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                 }, { e ->
                     Trace.e(e)
                     ToastError(e)
@@ -240,7 +240,7 @@ class GangWeiShengRenLiActivity : ToolbarActivity() {
                         if (payload.isOk) {
                             finish()
                         } else
-                            showToast(payload.message)
+                            showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }, { e ->
                         Trace.e(e)
                         ToastError(e)

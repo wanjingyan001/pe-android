@@ -162,11 +162,11 @@ class RecordDetailActivity : ToolbarActivity() {
         var end_Date = format.parse(tv_end_time.text.toString())
         end_Date.time /= 1000
         if (end_Date.time < start_Date.time) {
-            showToast("日期错误")
+            showCustomToast(R.drawable.icon_toast_common, "日期错误")
             return
         }
         if (et_des.text.toString().trim() == "") {
-            showToast("跟踪情况描述不能为空")
+            showCustomToast(R.drawable.icon_toast_common, "跟踪情况描述不能为空")
             return
         }
 
@@ -188,7 +188,7 @@ class RecordDetailActivity : ToolbarActivity() {
                         setResult(Activity.RESULT_OK)
                         finish()
                     } else
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                 }, { e ->
                     Trace.e(e)
                     ToastError(e)

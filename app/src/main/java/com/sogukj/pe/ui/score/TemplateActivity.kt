@@ -119,7 +119,7 @@ class TemplateActivity : ToolbarActivity() {
                             MAX = jxadapter.dataList.size + add_adapter.dataList.size + minus_adapter.dataList.size
                         }
                     } else
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                 }, { e ->
                     Trace.e(e)
                     ToastError(e)
@@ -247,7 +247,7 @@ class TemplateActivity : ToolbarActivity() {
                         LeaderActivity.start(context)
                         finish()
                     } else
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                 }, { e ->
                     Trace.e(e)
                     ToastError(e)

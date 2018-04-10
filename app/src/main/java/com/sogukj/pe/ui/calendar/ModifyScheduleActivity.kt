@@ -109,7 +109,7 @@ class ModifyScheduleActivity : ToolbarActivity(), AddPersonListener, View.OnClic
                             }
                         }
                     } else {
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }
                 }, { e ->
                     Trace.e(e)
@@ -118,15 +118,15 @@ class ModifyScheduleActivity : ToolbarActivity(), AddPersonListener, View.OnClic
 
     private fun submitChange() {
         if (missionDetails.text.isEmpty()) {
-            showToast("请填写日程描述")
+            showCustomToast(R.drawable.icon_toast_common, "请填写日程描述")
             return
         }
         if (startTime.text.isEmpty() || deadline.text.isEmpty()) {
-            showToast("请选择时间")
+            showCustomToast(R.drawable.icon_toast_common, "请选择时间")
             return
         }
         if (start!!.time - endTime!!.time > 0) {
-            showToast("开始时间不能大于结束时间")
+            showCustomToast(R.drawable.icon_toast_common, "开始时间不能大于结束时间")
             return
         }
         val reqBean = TaskModifyBean()
@@ -156,10 +156,10 @@ class ModifyScheduleActivity : ToolbarActivity(), AddPersonListener, View.OnClic
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        showToast("提交成功")
+                        showCustomToast(R.drawable.icon_toast_success, "提交成功")
                         finish()
                     } else {
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }
                 }, { e ->
                     Trace.e(e)
@@ -241,11 +241,11 @@ class ModifyScheduleActivity : ToolbarActivity(), AddPersonListener, View.OnClic
             R.id.remind -> {
                 //截止时间要在结束时间之前
                 if (start == null) {
-                    showToast("请选择开始时间")
+                    showCustomToast(R.drawable.icon_toast_common, "请选择开始时间")
                     return
                 }
                 if (endTime == null) {
-                    showToast("请选择结束时间")
+                    showCustomToast(R.drawable.icon_toast_common, "请选择结束时间")
                     return
                 }
                 Utils.closeInput(context, missionDetails)
@@ -286,7 +286,7 @@ class ModifyScheduleActivity : ToolbarActivity(), AddPersonListener, View.OnClic
                         if(date != null){
                             time = start!!.time - date.time
                             if (time < 0) {
-                                showToast("提醒时间不能大于开始时间")
+                                showCustomToast(R.drawable.icon_toast_common, "提醒时间不能大于开始时间")
                             } else {
                                 remind.text = "开始前${time / 1000 / 60}分钟"
                             }

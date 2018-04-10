@@ -74,7 +74,8 @@ class EntryApproveActivity : ToolbarActivity(), View.OnClickListener {
                         initView(payload.payload)
                         hideEmptyView()
                     } else {
-                        showToast(payload.message)
+                        //showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                         approveLayout.visibility = View.GONE
                         showEmptyView()
                         resetRefresh.setOnClickListener(this)

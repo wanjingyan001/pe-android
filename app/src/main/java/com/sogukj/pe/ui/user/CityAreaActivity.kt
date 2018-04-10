@@ -120,7 +120,8 @@ class CityAreaActivity : BaseActivity(), View.OnClickListener {
                             areaAdpater.notifyDataSetChanged()
                         }
                     } else {
-                        showToast(payload.message)
+                        //showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }
                 }, { e ->
                     Trace.e(e)

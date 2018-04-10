@@ -70,10 +70,11 @@ class FeedBackActivity : BaseActivity() {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        showToast("提交成功")
+                        //showToast("提交成功")
+                        showCustomToast(R.drawable.icon_toast_success, "提交成功")
                         finish()
                     } else {
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }
                 }, { e ->
                     Trace.e(e)

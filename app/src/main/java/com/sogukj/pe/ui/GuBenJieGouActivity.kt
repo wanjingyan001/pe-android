@@ -148,7 +148,7 @@ class GuBenJieGouActivity : ToolbarActivity() {
                             adapterSelector.dataList.addAll(this)
                         }
                     } else
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     setGroup(0)
                     adapterSelector.notifyDataSetChanged()
                 }, { e ->

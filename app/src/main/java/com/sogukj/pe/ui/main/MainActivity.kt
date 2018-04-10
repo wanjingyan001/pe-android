@@ -300,7 +300,8 @@ class MainActivity : BaseActivity() {
                             //mDialog.dismiss()
                         }
                     } else {
-                        showToast(payload.message)
+                        //showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                         //enterNext()
                         title.text = "更新失败"
                         //mDialog.dismiss()
