@@ -103,7 +103,7 @@ class InvestManageFragment : BaseFragment() {
                             btn_commit.visibility = View.GONE
                         }
                     } else
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                 }, { e ->
                     Trace.e(e)
                     ToastError(e)
@@ -276,7 +276,7 @@ class InvestManageFragment : BaseFragment() {
                     if (payload.isOk) {
                         baseActivity?.finish()
                     } else
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                 }, { e ->
                     Trace.e(e)
                     ToastError(e)

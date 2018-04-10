@@ -162,7 +162,7 @@ class TeamScheduleFragment : BaseFragment(), ScheduleItemClickListener {
                             data.addAll(it)
                         }
                     } else {
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }
                 }, { e ->
                     Trace.e(e)
@@ -190,7 +190,7 @@ class TeamScheduleFragment : BaseFragment(), ScheduleItemClickListener {
                             calendarAdapter.invalidateCurrentCalendar()
                         }
                     } else {
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }
                 }, { e ->
                     Trace.e(e)
@@ -303,7 +303,7 @@ class TeamScheduleFragment : BaseFragment(), ScheduleItemClickListener {
                             }
                         }
                     } else {
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }
                 }, { e ->
                     Trace.e(e)

@@ -297,7 +297,7 @@ class FundListFragment : BaseFragment() {
                             adapter.dataList.addAll(this)
                         }
                     } else
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     iv_loading?.visibility = View.GONE
                 }, { e ->
                     Trace.e(e)

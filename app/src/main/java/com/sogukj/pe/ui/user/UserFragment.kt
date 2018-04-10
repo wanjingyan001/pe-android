@@ -57,7 +57,7 @@ class UserFragment : ToolbarFragment(), View.OnClickListener {
                             departList.add(it)
                         }
                     } else
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                 }, { e ->
                     Trace.e(e)
                     ToastError(e)
@@ -135,7 +135,7 @@ class UserFragment : ToolbarFragment(), View.OnClickListener {
                             }
                         }
                     } else {
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }
                 }, { e ->
                     Trace.e(e)
@@ -167,7 +167,9 @@ class UserFragment : ToolbarFragment(), View.OnClickListener {
                             val user = payload.payload
                             user?.apply { Store.store.setUser(context, this) }
                             updateUser(user)
-                        } else showToast(payload.message)
+                        } else {
+                            showCustomToast(R.drawable.icon_toast_fail, payload.message)
+                        }
                     }, { e ->
                         Trace.e(e)
                         ToastError(e)

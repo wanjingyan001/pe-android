@@ -134,7 +134,7 @@ class MainHomeFragment : BaseFragment() {
         doRequest()
 
         refresh.setOnClickListener {
-            showToast("数据刷新中")
+            showCustomToast(R.drawable.icon_toast_common, "数据刷新中")
             onResume()
         }
     }
@@ -201,11 +201,10 @@ class MainHomeFragment : BaseFragment() {
                             }
                         }
                     } else
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     pb.visibility = View.GONE
                 }, { e ->
                     Trace.e(e)
-                    //showToast("暂无新数据")
                     ToastError(e)
                     pb.visibility = View.GONE
                     if (adapter.dataList.size == 0) {
@@ -213,7 +212,7 @@ class MainHomeFragment : BaseFragment() {
                         if (page == 1) {
                             iv_empty.setBackgroundResource(R.drawable.img_empty1)
                         } else {
-                            showToast("暂无最新数据")
+                            showCustomToast(R.drawable.icon_toast_common, "暂无最新数据")
                             iv_empty.setBackgroundResource(R.drawable.img_empty2)
                         }
                         stack_layout.visibility = View.GONE
@@ -225,7 +224,7 @@ class MainHomeFragment : BaseFragment() {
                         if (page == 1) {
                             iv_empty.setBackgroundResource(R.drawable.img_empty1)
                         } else {
-                            showToast("暂无最新数据")
+                            showCustomToast(R.drawable.icon_toast_common, "暂无最新数据")
                             iv_empty.setBackgroundResource(R.drawable.img_empty2)
                         }
                         stack_layout.visibility = View.GONE
@@ -256,10 +255,9 @@ class MainHomeFragment : BaseFragment() {
                             }
                         }
                     } else
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                 }, { e ->
                     Trace.e(e)
-                    //showToast("暂无新数据")
                     ToastError(e)
                 })
         val msgUnreadCount = NIMClient.getService(MsgService::class.java).totalUnreadCount

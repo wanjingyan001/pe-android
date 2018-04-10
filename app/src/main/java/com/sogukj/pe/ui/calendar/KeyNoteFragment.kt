@@ -78,7 +78,7 @@ class KeyNoteFragment : BaseFragment() {
                             adapter.notifyDataSetChanged()
                         }
                     } else {
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }
                 }, { e ->
                     Trace.e(e)

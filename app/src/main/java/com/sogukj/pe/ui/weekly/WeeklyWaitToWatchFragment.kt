@@ -236,7 +236,7 @@ class WeeklyWaitToWatchFragment : BaseFragment(), View.OnClickListener {
                         var startBean = date
                         var endBean = format.parse(end.text.toString())
                         if (startBean.compareTo(endBean) > 0) {
-                            showToast("日期选择错误")
+                            showCustomToast(R.drawable.icon_toast_common, "日期选择错误")
                             return
                         }
 
@@ -298,7 +298,7 @@ class WeeklyWaitToWatchFragment : BaseFragment(), View.OnClickListener {
                         var startBean = format.parse(start.text.toString())
                         var endBean = date
                         if (startBean.compareTo(endBean) > 0) {
-                            showToast("日期选择错误")
+                            showCustomToast(R.drawable.icon_toast_common, "日期选择错误")
                             return
                         }
 
@@ -362,19 +362,19 @@ class WeeklyWaitToWatchFragment : BaseFragment(), View.OnClickListener {
                             arr_adapter.notifyDataSetChanged()
                         }
                     } else
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                 }, { e ->
                     Trace.e(e)
-                    ToastError(e)
+                    //ToastError(e)
                     when (e) {
-                        is JsonSyntaxException -> showToast("后台数据出错")
+                        is JsonSyntaxException -> showCustomToast(R.drawable.icon_toast_fail, "后台数据出错")
                         is UnknownHostException -> {
-                            showToast("网络出错")
+                            showCustomToast(R.drawable.icon_toast_fail, "网络出错")
                             root.visibility = View.GONE
                             networkErrorLayout.visibility = View.VISIBLE
                             resetRefresh.setOnClickListener(this)
                         }
-                        else -> showToast("未知错误")
+                        else -> showCustomToast(R.drawable.icon_toast_fail, "未知错误")
                     }
                 })
     }
@@ -414,7 +414,7 @@ class WeeklyWaitToWatchFragment : BaseFragment(), View.OnClickListener {
                             //adapter.notifyDataSetChanged()
                         }
                     } else
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                 }, { e ->
                     Trace.e(e)
                     ToastError(e)

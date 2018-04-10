@@ -156,7 +156,7 @@ class ScheduleFragment : BaseFragment() {
                             data.addAll(it)
                         }
                     } else {
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }
                 }, { e ->
                     Trace.e(e)
@@ -184,7 +184,7 @@ class ScheduleFragment : BaseFragment() {
                             calendarAdapter.invalidateCurrentCalendar()
                         }
                     } else {
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }
                 }, { e ->
                     Trace.e(e)
@@ -202,13 +202,13 @@ class ScheduleFragment : BaseFragment() {
 
                         payload.payload?.let {
                             if (it == 1) {
-                                showToast("您完成了该日程")
+                                showCustomToast(R.drawable.icon_toast_success, "您完成了该日程")
                             } else {
-                                showToast("您重新打开了该日程")
+                                showCustomToast(R.drawable.icon_toast_success, "您重新打开了该日程")
                             }
                         }
                     } else {
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }
                 }, { e ->
                     Trace.e(e)
@@ -314,7 +314,7 @@ class ScheduleFragment : BaseFragment() {
                             }
                         }
                     } else {
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }
                 }, { e ->
                     Trace.e(e)

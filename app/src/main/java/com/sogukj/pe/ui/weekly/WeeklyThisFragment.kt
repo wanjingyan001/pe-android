@@ -156,7 +156,7 @@ class WeeklyThisFragment : BaseFragment(), View.OnClickListener {
                                 initView(this)
                             }
                         } else
-                            showToast(payload.message)
+                            showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }, { e ->
                         Trace.e(e)
                         ToastError(e)
@@ -339,7 +339,7 @@ class WeeklyThisFragment : BaseFragment(), View.OnClickListener {
         btn_commit.setOnClickListener {
 
             if (send_adapter.list.size == 0) {
-                showToast("发送人不可为空")
+                showCustomToast(R.drawable.icon_toast_common, "发送人不可为空")
                 return@setOnClickListener
             }
 
@@ -350,7 +350,7 @@ class WeeklyThisFragment : BaseFragment(), View.OnClickListener {
                 }
             } catch (e: Exception) {
                 //week未初始化
-                showToast("补充记录不能为空")
+                showCustomToast(R.drawable.icon_toast_common, "补充记录不能为空")
                 return@setOnClickListener
             }
             var accept_uid: String = ""
@@ -389,7 +389,7 @@ class WeeklyThisFragment : BaseFragment(), View.OnClickListener {
                             }
                             baseActivity?.finish()
                         } else
-                            showToast(payload.message)
+                            showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }, { e ->
                         Trace.e(e)
                         ToastError(e)
@@ -486,7 +486,7 @@ class WeeklyThisFragment : BaseFragment(), View.OnClickListener {
                             }
                         }
                     } else {
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }
                 }, { e ->
                     Trace.e(e)

@@ -112,7 +112,7 @@ class FengKongFragment : BaseFragment() {
                             }
                         }
                     } else
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                 }, { e ->
                     Trace.e(e)
                     ToastError(e)
@@ -234,7 +234,7 @@ class FengKongFragment : BaseFragment() {
                     if (payload.isOk) {
                         baseActivity?.finish()
                     } else
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                 }, { e ->
                     Trace.e(e)
                     ToastError(e)

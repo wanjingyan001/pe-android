@@ -278,7 +278,7 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                             adapter.dataList.addAll(this)
                         }
                     } else
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     iv_loading?.visibility = View.GONE
                 }, { e ->
                     Trace.e(e)
@@ -347,14 +347,14 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        showToast("删除成功")
+                        showCustomToast(R.drawable.icon_toast_success, "删除成功")
                         adapter.dataList.removeAt(position)
                         adapter.notifyDataSetChanged()
                     } else
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                 }, { e ->
                     Trace.e(e)
-                    showToast("删除失败")
+                    showCustomToast(R.drawable.icon_toast_fail, "删除失败")
                 })
     }
 
@@ -369,19 +369,21 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         if (type == TYPE_LX) {
-                            showToast("添加拟投成功")
+                            showCustomToast(R.drawable.icon_toast_success, "添加拟投成功")
                         } else if (type == TYPE_YT) {
-                            showToast("已添加到退出")
+                            showCustomToast(R.drawable.icon_toast_success, "已添加到退出")
                         }
                         adapter.dataList.removeAt(position)
                         adapter.notifyDataSetChanged()
-                    } else showToast(payload.message)
+                    } else {
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
+                    }
                 }, { e ->
                     Trace.e(e)
                     if (type == TYPE_LX) {
-                        showToast("添加拟投失败")
+                        showCustomToast(R.drawable.icon_toast_fail, "添加拟投失败")
                     } else if (type == TYPE_YT) {
-                        showToast("添加到退出失败")
+                        showCustomToast(R.drawable.icon_toast_fail, "添加到退出失败")
                     }
                 })
 
@@ -532,11 +534,11 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        showToast("修改成功")
+                        showCustomToast(R.drawable.icon_toast_success, "修改成功")
                         adapter.dataList.removeAt(position)
                         adapter.notifyDataSetChanged()
                     } else {
-                        showToast("修改失败")
+                        showCustomToast(R.drawable.icon_toast_fail, "修改失败")
                     }
                 }, { e -> Trace.e(e) })
     }

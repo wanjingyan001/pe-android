@@ -117,7 +117,7 @@ class TaskFragment : BaseFragment(), View.OnClickListener, TaskFilterWindow.Filt
                         }
 
                     } else {
-                        showToast(payload.message)
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }
                 }, { e ->
                     Trace.e(e)
