@@ -62,3 +62,11 @@ fun <T> Observable<T>.execute(init: Ex_T0_Unit<SubscriberHelper<T>>) {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(subscriberHelper)
 }
+
+
+fun CharSequence?.checkEmpty():CharSequence{
+    return if (this == null || this.isEmpty() || this == "null")
+        ""
+    else
+        this
+}

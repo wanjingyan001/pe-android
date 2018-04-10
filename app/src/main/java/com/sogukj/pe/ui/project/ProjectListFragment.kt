@@ -47,6 +47,7 @@ import com.sogukj.pe.view.*
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
 import com.sogukj.util.XmlDb
+import com.sougukj.checkEmpty
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_list_project.*
@@ -762,7 +763,7 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                 label = data.name
             tvTitle.text = label
 
-            tvDSZ.text = "董事长：${data.chairman}"
+            tvDSZ.text = "董事长：${data.chairman.checkEmpty()}"
 
             val strTime = data.add_time
             if (!TextUtils.isEmpty(strTime)) {

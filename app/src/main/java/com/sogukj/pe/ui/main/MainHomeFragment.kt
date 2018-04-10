@@ -68,6 +68,12 @@ class MainHomeFragment : BaseFragment() {
             "pe" ->{
                 home_banner.backgroundResource = R.mipmap.banner
             }
+            "yge"->{
+                home_banner.backgroundResource = R.mipmap.banner_yge
+            }
+            "kk" ->{
+                home_banner.backgroundResource = R.mipmap.banner_kk
+            }
             else -> {
                 home_banner.backgroundResource = R.mipmap.pe_banner
             }

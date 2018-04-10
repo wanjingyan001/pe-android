@@ -1,13 +1,30 @@
 package com.sogukj.pe
 
+import com.sogukj.pe.util.Utils
+
 /**
  * Created by qinfei on 17/7/18.
  */
-object Consts {
-    const val HTTP_HOST = "http://dev.ht.stockalert.cn"
-//    const val HTTP_HOST = "http://pre.pe.stockalert.cn"
-//    const val HTTP_HOST = "http://ht.stockalert.cn"
-//    const val HTTP_HOST = "http://yager.stockalert.cn/"
-//    const val HTTP_HOST = "http://kuke.stockalert.cn/"
-//    const val HTTP_HOST = "http://zhongdi.pe.stockalert.cn/"//中缔
+class Consts {
+    companion object {
+        val HTTP_HOST = when (Utils.getEnvironment()) {
+            "civc" -> {
+                "http://zhongdi.pe.stockalert.cn/"//中缔
+            }
+            "ht" -> {
+                "http://ht.stockalert.cn"
+            }
+            "kk" -> {
+                "http://kuake.stockalert.cn/"
+            }
+            "yge" -> {
+                "http://yager.stockalert.cn/"
+            }
+            else -> {
+                "http://dev.ht.stockalert.cn"
+//                "http://pre.pe.stockalert.cn"
+            }
+        }
+
+    }
 }
