@@ -24,6 +24,7 @@ import com.netease.nim.uikit.business.session.module.ModuleProxy;
 import com.netease.nim.uikit.business.session.module.input.InputPanel;
 import com.netease.nim.uikit.business.session.module.list.MessageListPanelEx;
 import com.netease.nim.uikit.common.fragment.TFragment;
+import com.netease.nim.uikit.common.util.file.FileUtil;
 import com.netease.nim.uikit.impl.NimUIKitImpl;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
@@ -44,6 +45,7 @@ import com.netease.nimlib.sdk.robot.model.NimRobotInfo;
 import com.netease.nimlib.sdk.robot.model.RobotAttachment;
 import com.netease.nimlib.sdk.robot.model.RobotMsgType;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -72,6 +74,7 @@ public class MessageFragment extends TFragment implements ModuleProxy {
 
     protected AitManager aitManager;
     private IMMessage anchor;
+    private String shareFilePath;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -97,6 +100,24 @@ public class MessageFragment extends TFragment implements ModuleProxy {
                 SessionTypeEnum.None);
         inputPanel.onPause();
         messageListPanel.onPause();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (!TextUtils.isEmpty(shareFilePath)){
+            IMMessage message;
+            File file = new File(shareFilePath);
+            if (FileUtil.getFileType(shareFilePath)!=null){
+                //图片类型
+                message = MessageBuilder.createImageMessage(sessionId, sessionType, file, file.getName());
+            }else {
+                //文件类型
+                message = MessageBuilder.createFileMessage(sessionId,
+                        sessionType, file, file.getName());
+            }
+            sendMessage(message);
+        }
     }
 
     @Override
@@ -137,6 +158,7 @@ public class MessageFragment extends TFragment implements ModuleProxy {
         anchor = (IMMessage) getArguments().getSerializable(Extras.EXTRA_ANCHOR);
 
         customization = (SessionCustomization) getArguments().getSerializable(Extras.EXTRA_CUSTOMIZATION);
+        shareFilePath = getArguments().getString(Extras.EXTRA_SHARE_FILE);
         Container container = new Container(getActivity(), sessionId, sessionType, this);
 
         if (messageListPanel == null) {

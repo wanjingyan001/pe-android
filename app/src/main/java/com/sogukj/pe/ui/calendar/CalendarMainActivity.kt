@@ -17,6 +17,7 @@ import org.jetbrains.anko.find
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.Comparator
+import kotlin.properties.Delegates
 
 class CalendarMainActivity : ToolbarActivity(), MonthSelectListener, ViewPager.OnPageChangeListener {
 
@@ -28,8 +29,9 @@ class CalendarMainActivity : ToolbarActivity(), MonthSelectListener, ViewPager.O
 
     override val menuId: Int
         get() = R.menu.calendar_menu
+    private var currentPosition: Int by Delegates.notNull()
     val fragments = ArrayList<Fragment>()
-    val titles = arrayListOf("周工作安排", "日历", "任务", "项目事项", "团队日程")
+    private val titles = arrayListOf("周工作安排", "日历", "任务", "项目事项", "团队日程")
     private lateinit var arrangeFragment: ArrangeListFragment
     private lateinit var scheduleFragment: ScheduleFragment
     private lateinit var teamScheduleFragment: TeamScheduleFragment
@@ -38,6 +40,7 @@ class CalendarMainActivity : ToolbarActivity(), MonthSelectListener, ViewPager.O
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calendar_mian)
         setBack(true)
+        currentPosition = 0
         arrangeFragment = ArrangeListFragment.newInstance("", "")
         scheduleFragment = ScheduleFragment.newInstance("", "")
         teamScheduleFragment = TeamScheduleFragment.newInstance("", "")
@@ -60,11 +63,11 @@ class CalendarMainActivity : ToolbarActivity(), MonthSelectListener, ViewPager.O
         val adapter = ContentAdapter(supportFragmentManager, fragments, titles)
         contentPager.adapter = adapter
         tabLayout.setupWithViewPager(contentPager)
-        for (i in 0 until titles.size){
+        for (i in 0 until titles.size) {
             val tab = tabLayout.getTabAt(i)
             tab?.let {
                 it.setCustomView(R.layout.layout_calendar_main_tab)
-                if (i == 0){
+                if (i == 0) {
                     it.customView!!.isSelected = true
                 }
                 it.customView!!.find<TextView>(R.id.indicatorTv).text = titles[i]
@@ -86,28 +89,27 @@ class CalendarMainActivity : ToolbarActivity(), MonthSelectListener, ViewPager.O
 
     }
 
+
     override fun onPageSelected(position: Int) {
+        currentPosition = position
         when (position) {
             0 -> {
                 mMenu.getItem(0).isVisible = true
-                addSchedule.visibility = View.GONE
                 title = scheduleFragment.date
-                addSchedule.setOnClickListener {
-                    ModifyTaskActivity.startForCreate(this, ModifyTaskActivity.Schedule)
-                }
+                addSchedule.visibility = View.GONE
             }
             1 -> {
-                mMenu.getItem(0).isVisible = false
+                mMenu.getItem(0).isVisible = true
                 title = scheduleFragment.date
-                addSchedule.visibility = View.VISIBLE
+                addSchedule.visibility = View.GONE
                 addSchedule.setOnClickListener {
                     ModifyTaskActivity.startForCreate(this, ModifyTaskActivity.Schedule)
                 }
             }
             2 -> {
-                mMenu.getItem(0).isVisible = false
+                mMenu.getItem(0).isVisible = true
                 title = "日历"
-                addSchedule.visibility = View.VISIBLE
+                addSchedule.visibility = View.GONE
                 addSchedule.setOnClickListener {
                     ModifyTaskActivity.startForCreate(this, ModifyTaskActivity.Task)
                 }
@@ -116,17 +118,11 @@ class CalendarMainActivity : ToolbarActivity(), MonthSelectListener, ViewPager.O
                 mMenu.getItem(0).isVisible = false
                 title = "日历"
                 addSchedule.visibility = View.GONE
-                addSchedule.setOnClickListener {
-                    ModifyTaskActivity.startForCreate(this, "")
-                }
             }
             4 -> {
                 mMenu.getItem(0).isVisible = false
                 title = teamScheduleFragment.date
                 addSchedule.visibility = View.GONE
-                addSchedule.setOnClickListener {
-                    ModifyTaskActivity.startForCreate(this, ModifyTaskActivity.Schedule)
-                }
             }
         }
     }
@@ -134,7 +130,12 @@ class CalendarMainActivity : ToolbarActivity(), MonthSelectListener, ViewPager.O
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.calendar_menu -> {
-                ArrangeEditActivity.start(this, arrangeFragment.getWeeklyData(), arrangeFragment.offset.toString())
+                when (currentPosition) {
+                    0 -> ArrangeEditActivity.start(this, arrangeFragment.getWeeklyData(), arrangeFragment.offset.toString())
+                    1 -> ModifyTaskActivity.startForCreate(this, ModifyTaskActivity.Schedule)
+                    2 -> ModifyTaskActivity.startForCreate(this, ModifyTaskActivity.Task)
+                }
+
             }
         }
         return super.onOptionsItemSelected(item)

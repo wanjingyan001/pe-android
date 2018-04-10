@@ -3,6 +3,7 @@ package com.netease.nim.uikit.business.session.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,6 +45,7 @@ public class P2PMessageActivity extends BaseMessageActivity {
 
     private boolean isResume = false;
     private TextView bigTitle;
+    private String shareFilePath;
 
     public static void start(Context context, String contactId, SessionCustomization customization, IMMessage anchor) {
         Intent intent = new Intent();
@@ -58,10 +60,25 @@ public class P2PMessageActivity extends BaseMessageActivity {
         context.startActivity(intent);
     }
 
+
+    public static void start(Context context, String contactId, SessionCustomization customization, IMMessage anchor, String shareFilePath) {
+        Intent intent = new Intent();
+        intent.putExtra(Extras.EXTRA_ACCOUNT, contactId);
+        intent.putExtra(Extras.EXTRA_CUSTOMIZATION, customization);
+        intent.putExtra(Extras.EXTRA_SHARE_FILE, shareFilePath);
+        if (anchor != null) {
+            intent.putExtra(Extras.EXTRA_ANCHOR, anchor);
+        }
+        intent.setClass(context, P2PMessageActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        context.startActivity(intent);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        shareFilePath = getIntent().getStringExtra(Extras.EXTRA_SHARE_FILE);
         // 单聊特例话数据，包括个人信息，
         requestBuddyInfo();
         displayOnlineState();
@@ -215,6 +232,9 @@ public class P2PMessageActivity extends BaseMessageActivity {
     protected MessageFragment fragment() {
         Bundle arguments = getIntent().getExtras();
         arguments.putSerializable(Extras.EXTRA_TYPE, SessionTypeEnum.P2P);
+        if (!TextUtils.isEmpty(shareFilePath)) {
+            arguments.putString(Extras.EXTRA_SHARE_FILE, shareFilePath);
+        }
         MessageFragment fragment = new MessageFragment();
         fragment.setArguments(arguments);
         fragment.setContainerId(R.id.message_fragment_container);

@@ -118,7 +118,7 @@ class PartyMainActivity : BaseActivity() {
         override fun getCount(): Int = tabs.size
 
         override fun getPageTitle(position: Int): CharSequence {
-            return tabs[position].classname!!
+            return tabs[position].classname
         }
     }
 }

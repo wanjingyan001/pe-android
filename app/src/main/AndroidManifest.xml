@@ -636,7 +636,14 @@
         <activity android:name=".ui.IM.TeamHistoryFileActivity" />
         <activity android:name=".ui.IM.TeamSearchActivity" />
         <activity android:name=".ui.IM.TeamPictureActivity" />
-        <activity android:name=".ui.IM.TeamSelectActivity" />
+        <activity android:name=".ui.IM.TeamSelectActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="image/*" />
+                <data android:mimeType="application/*"/>
+            </intent-filter>
+        </activity>
         <activity android:name=".ui.IM.PersonalInfoActivity" />
         <activity android:name=".ui.IM.TeamCreateActivity" />
         <activity android:name=".ui.IM.DisplayMessageActivity" />

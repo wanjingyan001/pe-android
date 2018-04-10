@@ -53,7 +53,8 @@ class ProjectTcHistoryActivity : ToolbarActivity() {
                     title.text = data.title
                     name.text = "操作人：${data.name}"
                     data.outTime?.let {
-                        outTime.text = it.substring(0, it.length - 5)
+//                        outTime.text = it.substring(0, it.length - 5)
+                        outTime.text = it
                     }
                 }
             }

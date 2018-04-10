@@ -1,6 +1,7 @@
 package com.sogukj.pe.ui.calendar
 
 
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
@@ -58,6 +59,9 @@ class ArrangeListFragment : BaseFragment() {
     lateinit var inflate: View
     var isRefresh = false
     var isLoadMore = false
+    var isNextWeekly = false
+    var isLastWeekly = false
+    private var isUpwards = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,6 +87,10 @@ class ArrangeListFragment : BaseFragment() {
                 if (!isRefresh) {
                     offset += 1
                     isRefresh = true
+                    if (offset > 1) {
+                        isNextWeekly = true
+                        isLastWeekly = false
+                    }
                     doRequest()
                 }
             }
@@ -91,11 +99,22 @@ class ArrangeListFragment : BaseFragment() {
                 if (!isLoadMore) {
                     offset -= 1
                     isLoadMore = true
+                    if (offset < -1) {
+                        isNextWeekly = false
+                        isLastWeekly = true
+                    }
                     doRequest()
                 }
             }
 
         })
+        backImg.setOnClickListener {
+            offset = 0
+            isNextWeekly = false
+            isLastWeekly = false
+
+            doRequest()
+        }
     }
 
     fun getWeeklyData(): ArrayList<WeeklyArrangeBean> {
@@ -150,6 +169,26 @@ class ArrangeListFragment : BaseFragment() {
                     }
                     //arrangeAdapter.notifyDataSetChanged()无效
                     recycler_view.adapter = arrangeAdapter
+
+                    if (isNextWeekly) {
+                        backImg.visibility = View.VISIBLE
+                        if (isUpwards) {
+                            val animator = ObjectAnimator.ofFloat(backImg, "rotation", 0f, 180f)
+                            animator.duration = 500
+                            animator.start()
+                            isUpwards = false
+                        }
+                    }
+                    if (isLastWeekly) {
+                        backImg.visibility = View.VISIBLE
+                        if (!isUpwards) {
+                            val animator = ObjectAnimator.ofFloat(backImg, "rotation", 180f, 0f)
+                            animator.duration = 500
+                            animator.start()
+                            isUpwards = true
+                        }
+                    }
+
                 })
     }
 
@@ -290,14 +329,17 @@ class ArrangeListFragment : BaseFragment() {
                     -1 -> {
                         itemView.backgroundResource = R.drawable.bg_last_week
                         weeklyTv.text = "上周"
+                        backImg.visibility = View.GONE
                     }
                     0 -> {
                         itemView.backgroundResource = R.drawable.bg_this_week
                         weeklyTv.text = "本周"
+                        backImg.visibility = View.GONE
                     }
                     1 -> {
                         itemView.backgroundResource = R.drawable.bg_next_week
                         weeklyTv.text = "下周"
+                        backImg.visibility = View.GONE
                     }
                     else -> {
                         itemView.background = resources.getDrawable(R.color.white)

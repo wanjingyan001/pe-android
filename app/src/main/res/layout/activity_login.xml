@@ -44,15 +44,24 @@
                 android:drawableLeft="@drawable/ic_login_name"
                 android:drawablePadding="15dp"
                 android:ems="11"
-                android:maxLength="11"
                 android:hint="请输入手机号"
                 android:inputType="phone"
+                android:maxLength="11"
                 android:padding="18dp"
                 android:textColor="@color/text_1"
                 android:textSize="18sp" />
+
+            <ImageView
+                android:id="@+id/delete1"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center_vertical|end"
+                android:layout_marginEnd="15dp"
+                android:src="@drawable/ic_refuse_disable"
+                android:visibility="gone" />
         </FrameLayout>
 
-        <FrameLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="18dp"
@@ -62,6 +71,7 @@
                 android:id="@+id/et_pwd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignRight="@+id/delete2"
                 android:layout_gravity="center"
                 android:background="@drawable/divider_bottom"
                 android:drawableLeft="@drawable/ic_login_pwd"
@@ -76,12 +86,23 @@
                 android:id="@+id/tv_code"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right|center_vertical"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
                 android:layout_margin="15dp"
                 android:text="点击获取"
                 android:textColor="@color/color_main"
                 android:textSize="16sp" />
-        </FrameLayout>
+
+            <ImageView
+                android:id="@+id/delete2"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="15dp"
+                android:layout_toStartOf="@+id/tv_code"
+                android:src="@drawable/ic_refuse_disable"
+                android:visibility="gone" />
+        </RelativeLayout>
 
 
         <Button

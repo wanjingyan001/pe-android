@@ -238,7 +238,7 @@
         android:gravity="center"
         android:padding="18dp"
         android:text="退出群聊"
-        android:textColor="@color/black"
+        android:textColor="@color/color_prompt_red"
         android:textSize="14sp" />
 
 </LinearLayout>

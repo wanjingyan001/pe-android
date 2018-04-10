@@ -50,6 +50,18 @@ class SplashActivity : BaseActivity() {
                 params.setMargins(0, 0, 0, Utils.dpToPx(this, 40))
                 splash_bg.layoutParams = params
             }
+            "kk" ->{
+                splash_bg.imageResource = R.drawable.img_logo_splash_kk
+                val params = splash_bg.layoutParams as FrameLayout.LayoutParams
+                params.setMargins(0, 0, 0, Utils.dpToPx(this, 40))
+                splash_bg.layoutParams = params
+            }
+            "yge"->{
+                splash_bg.imageResource = R.drawable.img_logo_splash_yge
+                val params = splash_bg.layoutParams as FrameLayout.LayoutParams
+                params.setMargins(0, 0, 0, Utils.dpToPx(this, 40))
+                splash_bg.layoutParams = params
+            }
             else -> {
                 splash_bg.imageResource = R.drawable.img_logo_splash
             }
