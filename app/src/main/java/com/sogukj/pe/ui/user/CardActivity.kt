@@ -111,16 +111,17 @@ class CardActivity : Activity(), PlatformActionListener {
             wechat.platformActionListener = this@CardActivity
             wechat.share(sp)
         }
-        dialog.find<TextView>(R.id.tv_qq).setOnClickFastListener {
-            dialog.dismiss()
-            val sp = Platform.ShareParams()
-            sp.title = "我的名片"
-            sp.text = "这是${userBean.name}的名片"
-            sp.imagePath = PATH
-            val qq = ShareSDK.getPlatform(QQ.NAME)
-            qq.platformActionListener = this@CardActivity
-            qq.share(sp)
-        }
+        dialog.find<TextView>(R.id.tv_qq).visibility = View.GONE
+//        setOnClickFastListener {
+//            dialog.dismiss()
+//            val sp = Platform.ShareParams()
+//            sp.title = "我的名片"
+//            sp.text = "这是${userBean.name}的名片"
+//            sp.imagePath = PATH
+//            val qq = ShareSDK.getPlatform(QQ.NAME)
+//            qq.platformActionListener = this@CardActivity
+//            qq.share(sp)
+//        }
     }
 
     fun setData(bean: UserBean) {
