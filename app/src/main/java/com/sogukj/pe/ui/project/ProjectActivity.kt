@@ -31,6 +31,7 @@ import com.bumptech.glide.request.transition.Transition
 import com.framework.base.ToolbarActivity
 import com.google.gson.JsonSyntaxException
 import com.netease.nim.uikit.api.NimUIKit
+import com.sogukj.pe.App
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.NewsBean
@@ -194,7 +195,7 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
         disable(tv_xmzy)
         val user = Store.store.getUser(this)
         SoguApi.getService(application)
-                .projectPage(pageSize = 3, page = 1, company_id = project.company_id!!, uid = user?.uid)
+                .projectPage(pageSize = 20, page = 1, company_id = project.company_id!!, uid = user?.uid)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -343,29 +344,67 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
     }
 
     fun doDel() {
-        MaterialDialog.Builder(this)
-                .theme(Theme.LIGHT)
-                .title("是否删除该项目")
-                .positiveText("确定")
-                .negativeText("取消")
-                .onPositive { dialog, which ->
-                    SoguApi.getService(application)
-                            .delProject(project.company_id!!)
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribeOn(Schedulers.io())
-                            .subscribe({ payload ->
-                                if (payload.isOk) {
-                                    showCustomToast(R.drawable.icon_toast_success, "删除成功")
-                                    setResult(Activity.RESULT_OK)
-                                    finish()
-                                } else
-                                    showCustomToast(R.drawable.icon_toast_fail, payload.message)
-                            }, { e ->
-                                Trace.e(e)
-                                showCustomToast(R.drawable.icon_toast_fail, "删除失败")
-                            })
-                }
-                .show()
+//        MaterialDialog.Builder(this)
+//                .theme(Theme.LIGHT)
+//                .title("是否删除该项目")
+//                .positiveText("确定")
+//                .negativeText("取消")
+//                .onPositive { dialog, which ->
+//                    SoguApi.getService(application)
+//                            .delProject(project.company_id!!)
+//                            .observeOn(AndroidSchedulers.mainThread())
+//                            .subscribeOn(Schedulers.io())
+//                            .subscribe({ payload ->
+//                                if (payload.isOk) {
+//                                    showCustomToast(R.drawable.icon_toast_success, "删除成功")
+//                                    setResult(Activity.RESULT_OK)
+//                                    finish()
+//                                } else
+//                                    showCustomToast(R.drawable.icon_toast_fail, payload.message)
+//                            }, { e ->
+//                                Trace.e(e)
+//                                showCustomToast(R.drawable.icon_toast_fail, "删除失败")
+//                            })
+//                }
+//                .show()
+        val inflate = LayoutInflater.from(this).inflate(R.layout.layout_input_dialog1, null)
+        val dialog = MaterialDialog.Builder(this)
+                .customView(inflate, false)
+                .cancelable(true)
+                .build()
+        dialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val veto = inflate.find<TextView>(R.id.veto_comment)
+        val confirm = inflate.find<TextView>(R.id.confirm_comment)
+        val title = inflate.find<TextView>(R.id.approval_comments_title)
+        title.text = "是否删除该项目?"
+        veto.text = "取消"
+        confirm.text = "确定"
+        veto.setOnClickListener {
+            if (dialog.isShowing) {
+                dialog.dismiss()
+            }
+        }
+        confirm.setOnClickListener {
+            if (dialog.isShowing) {
+                dialog.dismiss()
+            }
+            SoguApi.getService(application)
+                    .delProject(project.company_id!!)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (payload.isOk) {
+                            showCustomToast(R.drawable.icon_toast_success, "删除成功")
+                            setResult(Activity.RESULT_OK)
+                            finish()
+                        } else
+                            showCustomToast(R.drawable.icon_toast_fail, payload.message)
+                    }, { e ->
+                        Trace.e(e)
+                        showCustomToast(R.drawable.icon_toast_fail, "删除失败")
+                    })
+        }
+        dialog.show()
     }
 
     fun doAdd() {

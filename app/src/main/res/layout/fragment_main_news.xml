@@ -58,18 +58,18 @@
 
                 <ImageView
                     android:id="@+id/iv_search"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:padding="15dp"
                     android:layout_gravity="center|right"
                     android:src="@drawable/ic_search" />
 
                 <ImageView
                     android:id="@+id/iv_filter"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:padding="15dp"
                     android:layout_gravity="center|right"
-                    android:layout_marginLeft="18dp"
-                    android:layout_marginRight="15dp"
                     android:src="@drawable/ic_project_book_filter" />
             </LinearLayout>
 

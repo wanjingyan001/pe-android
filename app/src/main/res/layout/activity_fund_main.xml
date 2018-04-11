@@ -50,29 +50,42 @@
                 android:singleLine="true"
                 android:text="基金" />
 
-            <LinearLayout
-                android:id="@+id/toolbar_menu"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="right"
-                android:gravity="center"
-                android:orientation="horizontal">
+            <FrameLayout
+                android:id="@+id/iv_search"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="right">
 
-                <ImageButton
-                    android:id="@+id/fb_add"
+                <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:background="@drawable/tj_main"
-                    android:visibility="gone" />
-
-                <ImageButton
-                    android:id="@+id/iv_search"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginLeft="18dp"
-                    android:layout_marginRight="15dp"
+                    android:layout_gravity="center"
                     android:background="@drawable/ic_search" />
-            </LinearLayout>
+
+            </FrameLayout>
+
+            <!--<LinearLayout-->
+            <!--android:id="@+id/toolbar_menu"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_gravity="right"-->
+            <!--android:gravity="center"-->
+            <!--android:orientation="horizontal">-->
+
+            <!--<ImageButton-->
+            <!--android:id="@+id/fb_add"-->
+            <!--android:layout_width="20dp"-->
+            <!--android:layout_height="20dp"-->
+            <!--android:background="@drawable/tj_main"-->
+            <!--android:visibility="gone" />-->
+
+            <!--<ImageButton-->
+            <!--android:id="@+id/iv_search"-->
+            <!--android:layout_width="50dp"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:padding="15dp"-->
+            <!--android:background="@drawable/ic_search" />-->
+            <!--</LinearLayout>-->
         </android.support.v7.widget.Toolbar>
 
         <View

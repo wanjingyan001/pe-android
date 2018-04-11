@@ -425,7 +425,7 @@ interface SoguService {
     fun projectPage(
             @Field("company_id") company_id: Int
             , @Field("page") page: Int = 1
-            , @Field("pageSize") pageSize: Int = 3
+            , @Field("pageSize") pageSize: Int = 20
             , @Field("uid") uid: Int?
             , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
     ): Observable<Payload<ProjectDetailBean>>

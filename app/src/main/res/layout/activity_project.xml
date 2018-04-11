@@ -56,36 +56,36 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
-                android:layout_marginRight="15dp"
                 android:gravity="center"
                 android:orientation="horizontal">
 
                 <ImageView
                     android:id="@+id/im"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:background="@drawable/lt" />
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:padding="15dp"
+                    android:src="@drawable/lt" />
 
                 <ImageView
                     android:id="@+id/history"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:background="@drawable/ls" />
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:padding="15dp"
+                    android:src="@drawable/ls" />
 
                 <ImageView
                     android:id="@+id/edit"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:background="@drawable/edit" />
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:padding="15dp"
+                    android:src="@drawable/edit" />
 
                 <ImageView
                     android:id="@+id/delete"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:background="@drawable/delete_all" />
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:padding="15dp"
+                    android:src="@drawable/delete_all" />
             </LinearLayout>
         </android.support.v7.widget.Toolbar>
 
