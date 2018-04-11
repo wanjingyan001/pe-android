@@ -125,7 +125,6 @@ class RecordTraceActivity : ToolbarActivity() {
                                 adapter.dataList.addAll(list)
                                 adapter.notifyDataSetChanged()
                             } else {
-                                showCustomToast(R.drawable.icon_toast_common, "无信息列表")
                                 contentLayout.visibility = View.GONE
                                 iv_empty.visibility = View.VISIBLE
                             }

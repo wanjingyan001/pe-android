@@ -69,10 +69,9 @@
                         style="@style/ItemTextLabel"
                         android:text="整体战略" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/et_generalStrategy"
-                        style="@style/ItemTextValue"
-                        android:hint="" />
+                        style="@style/ItemTextValue" />
                 </TableRow>
 
                 <TableRow
