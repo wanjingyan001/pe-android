@@ -60,7 +60,7 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
         setContentView(R.layout.activity_shareholder_credit)
         bean = intent.getSerializableExtra(Extras.DATA) as ProjectBean
         cardCompanyName.text = bean.name
-        toolbar_title.text = "征信"
+        toolbar_title.text = "高管征信"
         initAdapter()
         back.setOnClickListener(this)
         addTv.setOnClickListener(this)

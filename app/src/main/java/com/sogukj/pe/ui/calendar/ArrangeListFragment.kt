@@ -87,7 +87,7 @@ class ArrangeListFragment : BaseFragment() {
                 if (!isRefresh) {
                     offset += 1
                     isRefresh = true
-                    if (offset > 1) {
+                    if (offset > 0) {
                         isNextWeekly = true
                         isLastWeekly = false
                     }
@@ -99,7 +99,7 @@ class ArrangeListFragment : BaseFragment() {
                 if (!isLoadMore) {
                     offset -= 1
                     isLoadMore = true
-                    if (offset < -1) {
+                    if (offset < 0) {
                         isNextWeekly = false
                         isLastWeekly = true
                     }
