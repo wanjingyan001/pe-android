@@ -191,7 +191,7 @@ class ArrangeEditActivity : ToolbarActivity() {
                 workContentEdit.setText("")
             }
             data.reasons?.let {
-                workContentEdit.setText(it)
+                workContentEdit.setText(it.trim())
 //                if (it.isNotEmpty())
 //                    workContentEdit.setSelection(it.length)
             }
@@ -231,7 +231,9 @@ class ArrangeEditActivity : ToolbarActivity() {
                     personParticipate.setPersons(ArrayList())
                 }
             }
-            addressEdit.setText(data.place)
+            data.place?.let {
+                addressEdit.setText(it.trim())
+            }
             attendLayout.setOnClickListener {
                 ArrangePersonActivity.start(this@ArrangeEditActivity, attList, attendRequestCode, position)
             }
@@ -248,7 +250,7 @@ class ArrangeEditActivity : ToolbarActivity() {
                 }
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    val content = workContentEdit.text.toString()
+                    val content = workContentEdit.text.toString().trim()
                     this@ArrangeEditActivity.data[position].reasons = content
                 }
 
@@ -266,7 +268,7 @@ class ArrangeEditActivity : ToolbarActivity() {
             }
             val addressWatcher: TextWatcher = object : TextWatcher {
                 override fun afterTextChanged(s: Editable?) {
-                    this@ArrangeEditActivity.data[position].place = addressEdit.text.toString()
+                    this@ArrangeEditActivity.data[position].place = addressEdit.text.toString().trim()
                 }
 
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {

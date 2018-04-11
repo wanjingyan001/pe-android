@@ -281,17 +281,81 @@ public class Utils {
      */
     @SuppressLint("SimpleDateFormat")
     public static String formatDate(String time) throws ParseException {
-        Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(time);
+        Date date;
+        if (time.contains(" ")) {
+            date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(time);
+        } else {
+            date = new SimpleDateFormat("yyyy-MM-dd").parse(time);
+        }
         if (IsYesterday(time)) {
             return "昨天  " + getTime(date, "HH:mm");
         } else if (IsToday(time)) {
-            return  getTime(date, "HH:mm");
+            return getTime(date, "HH:mm");
         } else if (isThisYear(time)) {
             return new SimpleDateFormat("MM月dd日 HH:mm").format(date);
         } else {
             return new SimpleDateFormat("yyyy年MM月dd日 HH:mm").format(date);
         }
     }
+
+    /**
+     * 对情报页面的时间进行处理
+     *
+     * @param time
+     * @return
+     * @throws ParseException
+     */
+    @SuppressLint("SimpleDateFormat")
+    public static String formatDate2(String time) throws ParseException {
+        Date date;
+        if (time.contains(" ")) {
+            date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(time);
+        } else {
+            date = new SimpleDateFormat("yyyy-MM-dd").parse(time);
+        }
+        if (IsYesterday(time)) {
+            return "昨天";
+        } else if (IsToday(time)) {
+            return "";
+        } else if (isThisYear(time)) {
+            return new SimpleDateFormat("MM月dd日").format(date);
+        } else {
+            return new SimpleDateFormat("yyyy年MM月dd日").format(date);
+        }
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    public static String formatDate(String time, String format) throws ParseException {
+        Date date = new SimpleDateFormat(format).parse(time);
+        String formatStr;
+        if (IsYesterday(time)) {
+            if (time.contains(" ")) {
+                formatStr = "昨天" + getTime(date, "HH:mm");
+            } else {
+                formatStr = "昨天";
+            }
+        } else if (IsToday(time)) {
+            if (time.contains(" ")) {
+                formatStr = "" + getTime(date, "HH:mm");
+            } else {
+                formatStr = "";
+            }
+        } else if (isThisYear(time)) {
+            if (time.contains(" ")) {
+                formatStr = new SimpleDateFormat("MM月dd日 HH:mm").format(date);
+            } else {
+                formatStr = new SimpleDateFormat("MM月dd日").format(date);
+            }
+        } else {
+            if (time.contains(" ")) {
+                formatStr = new SimpleDateFormat("yyyy年MM月dd日 HH:mm").format(date);
+            } else {
+                formatStr = new SimpleDateFormat("yyyy年MM月dd日").format(date);
+            }
+        }
+        return formatStr;
+    }
+
 
     public static int[] getYMDInCalendar(Date date) {
         Calendar cal = Calendar.getInstance();

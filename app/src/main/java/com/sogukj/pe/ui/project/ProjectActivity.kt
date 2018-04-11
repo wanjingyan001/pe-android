@@ -701,7 +701,12 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
                 if (!TextUtils.isEmpty(strs.getOrNull(1))) {
                     tv_time.visibility = View.VISIBLE
                 }
-                tv_date.text = strs.getOrNull(0)
+//                tv_date.text = strs.getOrNull(0)
+                try {
+                    tv_date.text = Utils.formatDate2(strTime)
+                }catch (e:Exception){
+                    e.printStackTrace()
+                }
                 tv_time.text = strs.getOrNull(1)
             }
             tv_from.text = data?.source
