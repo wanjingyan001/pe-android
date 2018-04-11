@@ -11,6 +11,7 @@ import android.widget.TextView
 import cn.finalteam.rxgalleryfinal.rxbus.RxBus
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
+import com.bigkoo.pickerview.OptionsPickerView
 import com.framework.base.BaseActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
@@ -316,23 +317,30 @@ class UserResumeActivity : BaseActivity(), View.OnClickListener {
                 editResumeBaseInfo(reqBean)
             }
             R.id.tv_sex -> {
-                val position: Int
+                var position: Int
                 when {
                     tv_sex.text == "男" -> position = 0
                     tv_sex.text == "女" -> position = 1
-                    else -> position = -1
+                    else -> position = 0
                 }
-                MaterialDialog.Builder(this)
-                        .title("选择性别")
-                        .theme(Theme.LIGHT)
-                        .items(arrayListOf("男", "女"))
-                        .itemsCallbackSingleChoice(position) { dialog, itemView, which, text ->
-                            tv_sex.text = text
-                            true
-                        }
-                        .positiveText("确定")
-                        .negativeText("取消")
-                        .show()
+//                MaterialDialog.Builder(this)
+//                        .title("选择性别")
+//                        .theme(Theme.LIGHT)
+//                        .items(arrayListOf("男", "女"))
+//                        .itemsCallbackSingleChoice(position) { dialog, itemView, which, text ->
+//                            tv_sex.text = text
+//                            true
+//                        }
+//                        .positiveText("确定")
+//                        .negativeText("取消")
+//                        .show()
+                var dataList = arrayListOf("男", "女")
+                var pvOptions = OptionsPickerView.Builder(this, OptionsPickerView.OnOptionsSelectListener { options1, option2, options3, v ->
+                    tv_sex.text = dataList.get(options1)
+                }).build()
+                pvOptions.setPicker(dataList, null, null)
+                pvOptions.setSelectOptions(position)
+                pvOptions.show()
 
             }
             R.id.tv_language -> {
@@ -366,33 +374,60 @@ class UserResumeActivity : BaseActivity(), View.OnClickListener {
             R.id.tv_woek_experience -> {
                 val experience = ArrayList<String>()
                 (1..30).mapTo(experience) { "${it}年" }
-                MaterialDialog.Builder(this)
-                        .title("选择工作年限")
-                        .theme(Theme.LIGHT)
-                        .items(experience)
-                        .itemsCallbackSingleChoice(0) { dialog, itemView, which, text ->
-                            tv_woek_experience.text = text
-                            true
-                        }
-                        .positiveText("确定")
-                        .negativeText("取消")
-                        .show()
+//                MaterialDialog.Builder(this)
+//                        .title("选择工作年限")
+//                        .theme(Theme.LIGHT)
+//                        .items(experience)
+//                        .itemsCallbackSingleChoice(0) { dialog, itemView, which, text ->
+//                            tv_woek_experience.text = text
+//                            true
+//                        }
+//                        .positiveText("确定")
+//                        .negativeText("取消")
+//                        .show()
+                var position = 0
+                for (index in experience.indices){
+                    if(experience.get(index).contains(tv_woek_experience.text)){
+                        position = index
+                        break
+                    }
+                }
+                var pvOptions = OptionsPickerView.Builder(this, OptionsPickerView.OnOptionsSelectListener { options1, option2, options3, v ->
+                    tv_woek_experience.text = experience.get(options1)
+                }).build()
+                pvOptions.setPicker(experience)
+                pvOptions.setSelectOptions(position)
+                pvOptions.show()
             }
             R.id.tv_city -> {
                 CityAreaActivity.start(this)
             }
             R.id.tv_education -> {
-                MaterialDialog.Builder(this)
-                        .title("选择最高学历")
-                        .theme(Theme.LIGHT)
-                        .items(resources.getStringArray(R.array.Education).toList())
-                        .itemsCallbackSingleChoice(0) { dialog, itemView, which, text ->
-                            tv_education.text = text
-                            true
-                        }
-                        .positiveText("确定")
-                        .negativeText("取消")
-                        .show()
+//                MaterialDialog.Builder(this)
+//                        .title("选择最高学历")
+//                        .theme(Theme.LIGHT)
+//                        .items(resources.getStringArray(R.array.Education).toList())
+//                        .itemsCallbackSingleChoice(0) { dialog, itemView, which, text ->
+//                            tv_education.text = text
+//                            true
+//                        }
+//                        .positiveText("确定")
+//                        .negativeText("取消")
+//                        .show()
+                var dataList = resources.getStringArray(R.array.Education).toList()
+                var position = 0
+                for (index in dataList.indices){
+                    if(dataList.get(index).contains(tv_education.text)){
+                        position = index
+                        break
+                    }
+                }
+                var pvOptions = OptionsPickerView.Builder(this, OptionsPickerView.OnOptionsSelectListener { options1, option2, options3, v ->
+                    tv_education.text = dataList.get(options1)
+                }).build()
+                pvOptions.setPicker(dataList)
+                pvOptions.setSelectOptions(position)
+                pvOptions.show()
             }
             R.id.educationLayout -> {
                 val dataList = educationAdapter.dataList as ArrayList<EducationBean>

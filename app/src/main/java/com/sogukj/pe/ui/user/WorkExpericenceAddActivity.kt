@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
+import com.bigkoo.pickerview.OptionsPickerView
 import com.bigkoo.pickerview.TimePickerView
 import com.framework.base.BaseActivity
 import com.google.gson.Gson
@@ -198,34 +199,53 @@ class WorkExpericenceAddActivity : BaseActivity(), View.OnClickListener {
             }
             R.id.tv_workers -> {
                 //公司规模
-                MaterialDialog.Builder(this)
-                        .title("选择公司规模")
-                        .theme(Theme.LIGHT)
-                        .items(resources.getStringArray(R.array.workers).toList())
-                        .itemsCallbackSingleChoice(0) { dialog, itemView, which, text ->
-                            tv_workers.text = text
-                            true
-                        }
-                        .positiveText("确定")
-                        .negativeText("取消")
-                        .show()
+//                MaterialDialog.Builder(this)
+//                        .title("选择公司规模")
+//                        .theme(Theme.LIGHT)
+//                        .items(resources.getStringArray(R.array.workers).toList())
+//                        .itemsCallbackSingleChoice(0) { dialog, itemView, which, text ->
+//                            tv_workers.text = text
+//                            true
+//                        }
+//                        .positiveText("确定")
+//                        .negativeText("取消")
+//                        .show()
+                var dataList = resources.getStringArray(R.array.workers).toList()
+                var pvOptions = OptionsPickerView.Builder(this, OptionsPickerView.OnOptionsSelectListener { options1, option2, options3, v ->
+                    tv_workers.text = dataList.get(options1)
+                    gsgmIndex = options1
+                }).build()
+                pvOptions.setPicker(dataList, null, null)
+                pvOptions.setSelectOptions(gsgmIndex)
+                pvOptions.show()
             }
             R.id.tv_nature -> {
                 //公司性质
-                MaterialDialog.Builder(this)
-                        .title("选择公司性质")
-                        .theme(Theme.LIGHT)
-                        .items(resources.getStringArray(R.array.BusinessNature).toList())
-                        .itemsCallbackSingleChoice(0) { dialog, itemView, which, text ->
-                            tv_nature.text = text
-                            true
-                        }
-                        .positiveText("确定")
-                        .negativeText("取消")
-                        .show()
+//                MaterialDialog.Builder(this)
+//                        .title("选择公司性质")
+//                        .theme(Theme.LIGHT)
+//                        .items(resources.getStringArray(R.array.BusinessNature).toList())
+//                        .itemsCallbackSingleChoice(0) { dialog, itemView, which, text ->
+//                            tv_nature.text = text
+//                            true
+//                        }
+//                        .positiveText("确定")
+//                        .negativeText("取消")
+//                        .show()
+                var dataList = resources.getStringArray(R.array.BusinessNature).toList()
+                var pvOptions = OptionsPickerView.Builder(this, OptionsPickerView.OnOptionsSelectListener { options1, option2, options3, v ->
+                    tv_nature.text = dataList.get(options1)
+                    gsxzIndex = options1
+                }).build()
+                pvOptions.setPicker(dataList)
+                pvOptions.setSelectOptions(gsxzIndex)
+                pvOptions.show()
             }
         }
     }
+
+    var gsgmIndex = 0
+    var gsxzIndex = 0
 
 
     fun doRequest(reqBean: WorkReqBean) {

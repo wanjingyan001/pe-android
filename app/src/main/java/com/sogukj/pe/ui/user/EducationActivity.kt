@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
+import com.bigkoo.pickerview.OptionsPickerView
 import com.bigkoo.pickerview.TimePickerView
 import com.framework.base.BaseActivity
 import com.google.gson.Gson
@@ -160,20 +161,30 @@ class EducationActivity : BaseActivity(), View.OnClickListener {
             }
             R.id.tv_education -> {
                 //学历
-                MaterialDialog.Builder(this)
-                        .title("选择学历")
-                        .theme(Theme.LIGHT)
-                        .items(resources.getStringArray(R.array.Education).toList())
-                        .itemsCallbackSingleChoice(0) { dialog, itemView, which, text ->
-                            tv_education.text = text
-                            true
-                        }
-                        .positiveText("确定")
-                        .negativeText("取消")
-                        .show()
+//                MaterialDialog.Builder(this)
+//                        .title("选择学历")
+//                        .theme(Theme.LIGHT)
+//                        .items(resources.getStringArray(R.array.Education).toList())
+//                        .itemsCallbackSingleChoice(0) { dialog, itemView, which, text ->
+//                            tv_education.text = text
+//                            true
+//                        }
+//                        .positiveText("确定")
+//                        .negativeText("取消")
+//                        .show()
+                var dataList = resources.getStringArray(R.array.Education).toList()
+                var pvOptions = OptionsPickerView.Builder(this, OptionsPickerView.OnOptionsSelectListener { options1, option2, options3, v ->
+                    tv_education.text = dataList.get(options1)
+                    index = options1
+                }).build()
+                pvOptions.setPicker(dataList, null, null)
+                pvOptions.setSelectOptions(index)
+                pvOptions.show()
             }
         }
     }
+
+    var index = 0
 
     fun doRequest(reqBean: EducationReqBean) {
         SoguApi.getService(application)

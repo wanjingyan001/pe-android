@@ -21,6 +21,7 @@ import cn.finalteam.rxgalleryfinal.rxbus.RxBusResultDisposable
 import cn.finalteam.rxgalleryfinal.rxbus.event.ImageRadioResultEvent
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
+import com.bigkoo.pickerview.OptionsPickerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.framework.base.ToolbarActivity
@@ -66,33 +67,51 @@ class UserEditActivity : ToolbarActivity() {
         }
         tv_depart.setOnClickListener {
             val items = ArrayList<String?>()
-            var position = -1
+//            var position = -1
             departList?.forEach {
                 items.add(it.de_name)
             }
-            items.forEachIndexed { index, s ->
-                if (s!! == tv_depart.text) {
+//            items.forEachIndexed { index, s ->
+//                if (s!! == tv_depart.text) {
+//                    position = index
+//                }
+//            }
+//
+//            MaterialDialog.Builder(this@UserEditActivity)
+//                    .theme(Theme.LIGHT)
+//                    .title("选择部门")
+//                    .items(items)
+//                    .itemsCallbackSingleChoice(position, MaterialDialog.ListCallbackSingleChoice { dialog, v, p, s ->
+//                        if (p == -1) return@ListCallbackSingleChoice false
+//                        val data = departList?.get(p)
+//                        data?.apply {
+//                            user.depart_id = depart_id
+//                            user.depart_name = de_name
+//                        }
+//                        tv_depart.text = user.depart_name
+//                        true
+//                    })
+//                    .positiveText("确定")
+//                    .negativeText("取消")
+//                    .show()
+            var position = 0
+            for (index in items.indices){
+                if(items.get(index)!!.contains(tv_depart.text)){
                     position = index
+                    break
                 }
             }
-
-            MaterialDialog.Builder(this@UserEditActivity)
-                    .theme(Theme.LIGHT)
-                    .title("选择部门")
-                    .items(items)
-                    .itemsCallbackSingleChoice(position, MaterialDialog.ListCallbackSingleChoice { dialog, v, p, s ->
-                        if (p == -1) return@ListCallbackSingleChoice false
-                        val data = departList?.get(p)
-                        data?.apply {
-                            user.depart_id = depart_id
-                            user.depart_name = de_name
-                        }
-                        tv_depart.text = user.depart_name
-                        true
-                    })
-                    .positiveText("确定")
-                    .negativeText("取消")
-                    .show()
+            var pvOptions = OptionsPickerView.Builder(this, OptionsPickerView.OnOptionsSelectListener { options1, option2, options3, v ->
+                val data = departList?.get(options1)
+                data?.apply {
+                    user.depart_id = depart_id
+                    user.depart_name = de_name
+                }
+                tv_depart.text = items.get(options1)
+            }).build()
+            pvOptions.setPicker(items)
+            pvOptions.setSelectOptions(position)
+            pvOptions.show()
         }
         tr_icon.setOnClickListener {
             //            var intent = Intent()

@@ -54,11 +54,12 @@ class WeeklyRecordActivity : BaseActivity() {
             tv_start_time.text = week.start_time
             tv_end_time.text = week.end_time
             et_des.setText(week.info)
+            et_des.setSelection(week.info!!.length)
         }
         addTv.visibility = View.GONE
         back.setOnClickListener { finish() }
         var startDD = CalendarDingDing(context)
-        tv_start_time.setOnClickListener {
+        tr_start_time.setOnClickListener {
             if (tag == "EDIT" || tag == "ADD") {
                 return@setOnClickListener
             }
@@ -85,7 +86,7 @@ class WeeklyRecordActivity : BaseActivity() {
         }
 
         var deadDD = CalendarDingDing(context)
-        tv_end_time.setOnClickListener {
+        tr_end_time.setOnClickListener {
             if (tag == "EDIT" || tag == "ADD") {
                 return@setOnClickListener
             }
