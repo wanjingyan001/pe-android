@@ -329,7 +329,6 @@ class ArrangeListFragment : BaseFragment() {
                     -1 -> {
                         itemView.backgroundResource = R.drawable.bg_last_week
                         weeklyTv.text = "上周"
-                        backImg.visibility = View.GONE
                     }
                     0 -> {
                         itemView.backgroundResource = R.drawable.bg_this_week
@@ -339,7 +338,6 @@ class ArrangeListFragment : BaseFragment() {
                     1 -> {
                         itemView.backgroundResource = R.drawable.bg_next_week
                         weeklyTv.text = "下周"
-                        backImg.visibility = View.GONE
                     }
                     else -> {
                         itemView.background = resources.getDrawable(R.color.white)
