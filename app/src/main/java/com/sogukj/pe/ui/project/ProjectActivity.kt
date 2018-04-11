@@ -211,14 +211,26 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
                         payload.payload?.yuQing?.let { list ->
                             adapterYuqin.dataList.clear()
                             payload.payload?.let {
-                                adapterYuqin.dataList.addAll(list)
+                                if(list.size <= 3){
+                                    adapterYuqin.dataList.addAll(list)
+                                    tv_more_yq.visibility = View.GONE
+                                } else {
+                                    adapterYuqin.dataList.addAll(list.subList(0, 3))
+                                    tv_more_yq.visibility = View.VISIBLE
+                                }
                             }
                             adapterYuqin.notifyDataSetChanged()
                         }
                         payload.payload?.fuMian?.let { list ->
                             adapterNeg.dataList.clear()
                             payload.payload?.let {
-                                adapterNeg.dataList.addAll(list)
+                                if(list.size <= 3){
+                                    adapterNeg.dataList.addAll(list)
+                                    tv_more.visibility = View.GONE
+                                } else {
+                                    adapterNeg.dataList.addAll(list.subList(0, 3))
+                                    tv_more.visibility = View.VISIBLE
+                                }
                             }
                             adapterNeg.notifyDataSetChanged()
                         }
@@ -227,16 +239,6 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
                 }, { e ->
                     Trace.e(e)
                     tv_more_yq.visibility = View.GONE
-                }, {
-                    if (adapterNeg.dataList.size <= 3)
-                        tv_more.visibility = View.GONE
-                    else
-                        tv_more.visibility = View.VISIBLE
-
-                    if (adapterYuqin.dataList.size <= 3)
-                        tv_more_yq.visibility = View.GONE
-                    else
-                        tv_more_yq.visibility = View.VISIBLE
                 })
 
         is_business = project.is_business
