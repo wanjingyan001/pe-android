@@ -146,11 +146,23 @@ class NewsDetailActivity : ToolbarActivity(), PlatformActionListener {
         val shareTitle = news!!.shareTitle
         val shareSummry = news!!.title
         //val shareImgUrl = File(Environment.getExternalStorageDirectory(), "img_logo.png").toString()
-        var shareImgUrl = ""
-        if (Consts.HTTP_HOST.contains("zhongdi")) {
-            shareImgUrl = File(Environment.getExternalStorageDirectory(), "image_logo2.png").toString()
-        } else {
-            shareImgUrl = File(Environment.getExternalStorageDirectory(), "img_logo.png").toString()
+        val shareImgUrl:String
+        when (Utils.getEnvironment()) {
+            "civc" -> {
+                shareImgUrl = File(Environment.getExternalStorageDirectory(), "ic_launcher_zd.png").toString()
+            }
+            "ht" -> {
+                shareImgUrl = File(Environment.getExternalStorageDirectory(), "ic_launcher_ht.png").toString()
+            }
+            "kk" -> {
+                shareImgUrl = File(Environment.getExternalStorageDirectory(), "ic_launcher_kk.png").toString()
+            }
+            "yge" -> {
+                shareImgUrl = File(Environment.getExternalStorageDirectory(), "ic_launcher_yge.png").toString()
+            }
+            else -> {
+                shareImgUrl = File(Environment.getExternalStorageDirectory(), "img_logo.png").toString()
+            }
         }
         tvCopy.setOnClickListener {
             dialog.dismiss()
@@ -287,10 +299,22 @@ class NewsDetailActivity : ToolbarActivity(), PlatformActionListener {
                 doRequest(table_id!!, data_id!!, this);
         }
         verifyStoragePermissions(this)
-        if (Consts.HTTP_HOST.contains("zhongdi")) {
-            copyAssets("image_logo2.png")
-        } else {
-            copyAssets("img_logo.png")
+        when (Utils.getEnvironment()) {
+            "civc" -> {
+                copyAssets("ic_launcher_zd.png")
+            }
+            "ht" -> {
+                copyAssets("ic_launcher_ht.png")
+            }
+            "kk" -> {
+                copyAssets("ic_launcher_kk.png")
+            }
+            "yge" -> {
+                copyAssets("ic_launcher_yge.png")
+            }
+            else -> {
+                copyAssets("img_logo.png")
+            }
         }
     }
 

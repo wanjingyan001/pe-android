@@ -120,7 +120,7 @@ android {
             resValue "bool", "isrRank", 'true'
             buildConfigField "String", "ENVIRONMENT", '"kk"'
             manifestPlaceholders = [appId               : "com.sogukj.pe",
-                                    app_icon            : "@mipmap/ic_launcher_kk",
+                                    app_icon            : "@drawable/img_logo_splash_kk",
                                     AMAP_KEY            : "9204f7dcdd8c2beba10c94dbe96bd062",
                                     IM_KEY              : "a3f6ffcbceb4f42ec007a28d75098fdb",
                                     Umeng_KEY           : "59ddf11e8f4a9d7c4b000116",
@@ -136,7 +136,7 @@ android {
             resValue "bool", "isrRank", 'true'
             buildConfigField "String", "ENVIRONMENT", '"yge"'
             manifestPlaceholders = [appId               : "com.sogukj.pe",
-                                    app_icon            : "@mipmap/ic_launcher_yge",
+                                    app_icon            : "@drawable/img_logo_splash_yge",
                                     AMAP_KEY            : "9204f7dcdd8c2beba10c94dbe96bd062",
                                     IM_KEY              : "1b5749bc47e9f1eef0cd2cff240dc7da",
                                     Umeng_KEY           : "59ddf11e8f4a9d7c4b000116",
@@ -227,6 +227,7 @@ dependencies {
     compile project(':stack-layout')
     implementation project(':library')
     compile 'com.tencent.bugly:crashreport:latest.release'
+    compile 'com.google.zxing:android-core:3.3.0'
 
     //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.2.0
     implementation files('libs/pinyin4j-2.5.0.jar')

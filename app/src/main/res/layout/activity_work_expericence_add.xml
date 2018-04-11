@@ -41,12 +41,12 @@
                         android:hint="请选择" />
 
 
-                    <ImageView
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_gravity="center_vertical"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/ic_arrow_r" />
+                    <!--<ImageView-->
+                        <!--android:layout_width="25dp"-->
+                        <!--android:layout_height="25dp"-->
+                        <!--android:layout_gravity="center_vertical"-->
+                        <!--android:scaleType="centerInside"-->
+                        <!--android:src="@drawable/ic_arrow_r" />-->
                 </TableRow>
 
                 <TableRow android:background="@drawable/divider_bottom">
@@ -62,12 +62,12 @@
                         android:hint="请选择" />
 
 
-                    <ImageView
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_gravity="center_vertical"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/ic_arrow_r" />
+                    <!--<ImageView-->
+                        <!--android:layout_width="25dp"-->
+                        <!--android:layout_height="25dp"-->
+                        <!--android:layout_gravity="center_vertical"-->
+                        <!--android:scaleType="centerInside"-->
+                        <!--android:src="@drawable/ic_arrow_r" />-->
                 </TableRow>
 
                 <TableRow android:background="@drawable/divider_bottom">
@@ -83,12 +83,12 @@
                         android:hint="请填写" />
 
 
-                    <ImageView
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_gravity="center_vertical"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/ic_arrow_r" />
+                    <!--<ImageView-->
+                        <!--android:layout_width="25dp"-->
+                        <!--android:layout_height="25dp"-->
+                        <!--android:layout_gravity="center_vertical"-->
+                        <!--android:scaleType="centerInside"-->
+                        <!--android:src="@drawable/ic_arrow_r" />-->
                 </TableRow>
 
                 <TableRow android:background="@drawable/divider_bottom">
@@ -104,12 +104,12 @@
                         android:hint="请填写" />
 
 
-                    <ImageView
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_gravity="center_vertical"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/ic_arrow_r" />
+                    <!--<ImageView-->
+                        <!--android:layout_width="25dp"-->
+                        <!--android:layout_height="25dp"-->
+                        <!--android:layout_gravity="center_vertical"-->
+                        <!--android:scaleType="centerInside"-->
+                        <!--android:src="@drawable/ic_arrow_r" />-->
                 </TableRow>
 
                 <TableRow android:background="@drawable/divider_bottom">
@@ -125,12 +125,12 @@
                         android:hint="请填写" />
 
 
-                    <ImageView
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_gravity="center_vertical"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/ic_arrow_r" />
+                    <!--<ImageView-->
+                        <!--android:layout_width="25dp"-->
+                        <!--android:layout_height="25dp"-->
+                        <!--android:layout_gravity="center_vertical"-->
+                        <!--android:scaleType="centerInside"-->
+                        <!--android:src="@drawable/ic_arrow_r" />-->
                 </TableRow>
 
                 <TableRow android:background="@drawable/divider_bottom">
@@ -147,7 +147,7 @@
 
 
                     <ImageView
-                        android:layout_width="25dp"
+                        android:layout_width="15dp"
                         android:layout_height="25dp"
                         android:layout_gravity="center_vertical"
                         android:scaleType="centerInside"
@@ -167,12 +167,12 @@
                         android:hint="请填写" />
 
 
-                    <ImageView
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_gravity="center_vertical"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/ic_arrow_r" />
+                    <!--<ImageView-->
+                        <!--android:layout_width="25dp"-->
+                        <!--android:layout_height="25dp"-->
+                        <!--android:layout_gravity="center_vertical"-->
+                        <!--android:scaleType="centerInside"-->
+                        <!--android:src="@drawable/ic_arrow_r" />-->
                 </TableRow>
 
                 <TableRow android:background="@drawable/divider_bottom">
@@ -188,12 +188,12 @@
                         android:hint="请选择" />
 
 
-                    <ImageView
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_gravity="center_vertical"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/ic_arrow_r" />
+                    <!--<ImageView-->
+                        <!--android:layout_width="25dp"-->
+                        <!--android:layout_height="25dp"-->
+                        <!--android:layout_gravity="center_vertical"-->
+                        <!--android:scaleType="centerInside"-->
+                        <!--android:src="@drawable/ic_arrow_r" />-->
                 </TableRow>
 
                 <TableRow android:background="@drawable/divider_bottom">
@@ -209,12 +209,12 @@
                         android:hint="请选择" />
 
 
-                    <ImageView
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_gravity="center_vertical"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/ic_arrow_r" />
+                    <!--<ImageView-->
+                        <!--android:layout_width="25dp"-->
+                        <!--android:layout_height="25dp"-->
+                        <!--android:layout_gravity="center_vertical"-->
+                        <!--android:scaleType="centerInside"-->
+                        <!--android:src="@drawable/ic_arrow_r" />-->
                 </TableRow>
 
                 <!--<TableRow android:background="@drawable/divider_bottom">-->

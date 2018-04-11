@@ -346,7 +346,11 @@ class TeamSelectActivity : BaseActivity() {
                 layout.orientation = LinearLayout.VERTICAL
                 layout.removeAllViews()
                 if (isSelectUser) {
-                    team_toolbar_title.text = "选择联系人"
+                    if (isCreateTeam){
+                        team_toolbar_title.text = "创建群组"
+                    }else{
+                        team_toolbar_title.text = "选择联系人"
+                    }
                     confirmSelectLayout.visibility = View.VISIBLE
 //                    layout.addView(conLayout, params)
                     layout.addView(orgList, params)
