@@ -288,14 +288,11 @@ class MainProjectFragment : BaseFragment() {
         //view_pager.setPageTransformer(true, transFormer)
 
         val user = Store.store.getUser(baseActivity!!)
-//        var headImg = toolbar.getChildAt(0) as ImageView
-//        toolbar.getChildAt(1)
-//        toolbar.getChildAt(2)
-//        if (user?.url.isNullOrEmpty()) {
-//            headImg.setChar(user?.name?.first())
-//        } else {
-//            Glide.with(context).load(user?.url).into(headImg)
-//        }
+        if (user?.url.isNullOrEmpty()) {
+            header.setChar(user?.name?.first())
+        } else {
+            Glide.with(context).load(user?.url).into(header)
+        }
         tabs?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab?) {
 

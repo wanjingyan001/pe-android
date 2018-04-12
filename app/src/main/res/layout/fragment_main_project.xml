@@ -38,8 +38,7 @@
                     android:layout_height="35dp"
                     android:layout_gravity="left"
                     android:gravity="center"
-                    android:src="@drawable/sogu_ic_back"
-                    android:visibility="gone"/>
+                    android:src="@drawable/sogu_ic_back" />
 
                 <TextView
                     android:id="@id/toolbar_title"
