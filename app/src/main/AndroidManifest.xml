@@ -598,8 +598,8 @@
         <activity
             android:name=".ui.calendar.ModifyTaskActivity"
             android:configChanges="orientation|screenSize"
-            android:screenOrientation="portrait"
             android:launchMode="singleTop"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|stateUnchanged" />
         <activity android:name=".ui.calendar.CompanySelectActivity" />
         <activity
@@ -638,10 +638,12 @@
         <activity android:name=".ui.IM.TeamPictureActivity" />
         <activity android:name=".ui.IM.TeamSelectActivity">
             <intent-filter>
-                <action android:name="android.intent.action.SEND"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="image/*" />
-                <data android:mimeType="application/*"/>
+                <data android:mimeType="application/*" />
             </intent-filter>
         </activity>
         <activity android:name=".ui.IM.PersonalInfoActivity" />
@@ -664,13 +666,14 @@
         <activity android:name=".ui.approve.VacationRecordActivity" />
         <activity android:name=".ui.approve.MultiCityActivity" />
         <activity android:name=".ui.approve.DstCityActivity" />
-        <activity android:name=".ui.approve.LeaveBusinessApproveActivity"></activity>
-	<activity android:name=".ui.calendar.ArrangeDetailActivity" />
+        <activity android:name=".ui.approve.LeaveBusinessApproveActivity" />
+        <activity android:name=".ui.calendar.ArrangeDetailActivity" />
         <activity android:name=".ui.partyBuild.PartyMainActivity" />
         <activity android:name=".ui.partyBuild.PartyUploadActivity" />
         <activity android:name=".ui.partyBuild.PartyDetailActivity" />
-        <activity android:name=".ui.partyBuild.PartyMoreActivity"></activity>
-        <activity android:name=".ui.calendar.RemindTimeActivity"/>
+        <activity android:name=".ui.partyBuild.PartyMoreActivity" />
+        <activity android:name=".ui.calendar.RemindTimeActivity" />
+        <activity android:name=".ui.fund.FundEditActivity"></activity>
     </application>
 
 </manifest>

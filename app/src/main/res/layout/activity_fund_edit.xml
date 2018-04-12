@@ -23,7 +23,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
-                android:background="@drawable/divider2"/>
+                android:background="@drawable/divider2" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -59,13 +59,16 @@
                     android:text="管理人&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;"
                     android:textColor="@color/text_1" />
 
-                <TextView
+                <EditText
+                    android:background="@null"
+                    android:textSize="14sp"
                     android:id="@+id/administrator"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:layout_weight="1"
-                    android:gravity="end" />
+                    android:gravity="left"
+                    android:textColor="@color/text_1" />
 
             </LinearLayout>
 
@@ -88,13 +91,16 @@
                     android:text="设立时间&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;"
                     android:textColor="@color/text_1" />
 
-                <TextView
+                <EditText
+                    android:background="@null"
+                    android:textSize="14sp"
                     android:id="@+id/regTime"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:layout_weight="1"
-                    android:gravity="end" />
+                    android:gravity="left"
+                    android:textColor="@color/text_1" />
 
             </LinearLayout>
 
@@ -117,13 +123,16 @@
                     android:text="认缴规模（亿元）"
                     android:textColor="@color/text_1" />
 
-                <TextView
+                <EditText
+                    android:background="@null"
+                    android:textSize="14sp"
                     android:id="@+id/contributeSize"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:layout_weight="1"
-                    android:gravity="end" />
+                    android:gravity="left"
+                    android:textColor="@color/text_1" />
 
             </LinearLayout>
 
@@ -146,13 +155,16 @@
                     android:text="实缴规模（亿元）"
                     android:textColor="@color/text_1" />
 
-                <TextView
+                <EditText
+                    android:background="@null"
+                    android:textSize="14sp"
                     android:id="@+id/actualSize"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:layout_weight="1"
-                    android:gravity="end" />
+                    android:gravity="left"
+                    android:textColor="@color/text_1" />
 
             </LinearLayout>
 
@@ -175,13 +187,16 @@
                     android:text="存续期限&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;"
                     android:textColor="@color/text_1" />
 
-                <TextView
+                <EditText
+                    android:background="@null"
+                    android:textSize="14sp"
                     android:id="@+id/duration"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:layout_weight="1"
-                    android:gravity="end" />
+                    android:gravity="left"
+                    android:textColor="@color/text_1" />
 
             </LinearLayout>
 
@@ -204,13 +219,16 @@
                     android:text="合伙人人数&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;"
                     android:textColor="@color/text_1" />
 
-                <TextView
+                <EditText
+                    android:background="@null"
+                    android:textSize="14sp"
                     android:id="@+id/partners"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:layout_weight="1"
-                    android:gravity="end" />
+                    android:gravity="left"
+                    android:textColor="@color/text_1" />
 
             </LinearLayout>
 
@@ -230,16 +248,19 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="GP模式&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;"
+                    android:text="GP模式&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;"
                     android:textColor="@color/text_1" />
 
-                <TextView
+                <EditText
+                    android:background="@null"
+                    android:textSize="14sp"
                     android:id="@+id/mode"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:layout_weight="1"
-                    android:gravity="end" />
+                    android:gravity="left"
+                    android:textColor="@color/text_1" />
 
             </LinearLayout>
 
@@ -262,13 +283,16 @@
                     android:text="投委会通过方式&#8194;&#8194;"
                     android:textColor="@color/text_1" />
 
-                <TextView
+                <EditText
+                    android:background="@null"
+                    android:textSize="14sp"
                     android:id="@+id/commission"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:layout_weight="1"
-                    android:gravity="end"
+                    android:gravity="left"
+                    android:textColor="@color/text_1"
                     android:letterSpacing="0.04"
                     android:lineSpacingExtra="10sp" />
 
@@ -322,13 +346,16 @@
                     android:text="管理费&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;"
                     android:textColor="@color/text_1" />
 
-                <TextView
+                <EditText
+                    android:background="@null"
+                    android:textSize="14sp"
                     android:id="@+id/manageFees"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:layout_weight="1"
-                    android:gravity="end" />
+                    android:gravity="left"
+                    android:textColor="@color/text_1" />
 
             </LinearLayout>
 
@@ -351,95 +378,23 @@
                     android:text="carry分成&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;"
                     android:textColor="@color/text_1" />
 
-                <TextView
+                <EditText
+                    android:background="@null"
+                    android:textSize="14sp"
                     android:id="@+id/carry"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:layout_weight="1"
-                    android:gravity="end" />
+                    android:gravity="left"
+                    android:textColor="@color/text_1"/>
 
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
-                android:background="@drawable/divider2"/>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="38dp"
-                android:layout_marginTop="10dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <View
-                    android:layout_width="4dp"
-                    android:layout_height="12dp"
-                    android:layout_marginLeft="20dp"
-                    android:background="@color/color_main" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:text="相关数据"
-                    android:textColor="@color/textColorBlack"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="55dp"
-                android:orientation="horizontal">
-
-                <com.sogukj.pe.view.TipsView
-                    android:id="@+id/structure"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:drawableTop="@drawable/ic_proj_qsgg"
-                    android:gravity="center"
-                    android:paddingBottom="13dp"
-                    android:paddingTop="13dp"
-                    android:text="公司架构" />
-
-                <com.sogukj.pe.view.TipsView
-                    android:id="@+id/fundsDetail"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:drawableTop="@drawable/ic_proj_jyyc"
-                    android:gravity="center"
-                    android:paddingBottom="13dp"
-                    android:paddingTop="13dp"
-                    android:text="基金总台账" />
-
-                <com.sogukj.pe.view.TipsView
-                    android:id="@+id/fundsWenShu"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:drawableTop="@drawable/ic_proj_jjws"
-                    android:gravity="center"
-                    android:paddingBottom="13dp"
-                    android:paddingTop="13dp"
-                    android:text="基金文书" />
-
-                <com.sogukj.pe.view.TipsView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:drawableTop="@drawable/ic_proj_jyyc"
-                    android:gravity="center"
-                    android:paddingBottom="13dp"
-                    android:paddingTop="13dp"
-                    android:text="基金文书111"
-                    android:visibility="invisible" />
-            </LinearLayout>
+                android:background="@drawable/divider2" />
 
         </LinearLayout>
 

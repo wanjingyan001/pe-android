@@ -5,11 +5,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import android.text.SpannableStringBuilder
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.EditText
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -26,21 +27,12 @@ import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_fund_detail.*
+import kotlinx.android.synthetic.main.activity_fund_edit.*
 import org.jetbrains.anko.find
 
-class FundDetailActivity : ToolbarActivity() {
+class FundEditActivity : ToolbarActivity() {
+
     lateinit var adapter: RecyclerAdapter<FundDetail.NameList>
-
-    companion object {
-        val TAG = FundDetailActivity::class.java.simpleName
-
-        fun start(ctx: Context?, data: FundSmallBean) {
-            val intent = Intent(ctx, FundDetailActivity::class.java)
-            intent.putExtra(Extras.DATA, data)
-            ctx?.startActivity(intent)
-        }
-    }
 
     override val menuId: Int
         get() = R.menu.menu_mark
@@ -48,27 +40,25 @@ class FundDetailActivity : ToolbarActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val flag = super.onCreateOptionsMenu(menu)
         val menuMark = menu.findItem(R.id.action_mark) as MenuItem
-        menuMark?.title = "编辑"
+        menuMark?.title = "保存"
         return flag
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.action_mark -> {
-                val intent = Intent(context, FundEditActivity::class.java)
-                intent.putExtra(Extras.DATA, data)
-                startActivityForResult(intent, 0x001)
+                setResult(Activity.RESULT_OK)
+                //基金保存接口
+                finish()
             }
         }
         return false
     }
 
-    lateinit var data: FundSmallBean
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_fund_detail)
-        data = intent.getSerializableExtra(Extras.DATA) as FundSmallBean
+        setContentView(R.layout.activity_fund_edit)
+        val data = intent.getSerializableExtra(Extras.DATA) as FundSmallBean
         setBack(true)
         title = data.fundName
         run {
@@ -79,15 +69,10 @@ class FundDetailActivity : ToolbarActivity() {
                     val commissionName = convertView.find<TextView>(R.id.commissionName)
                     override fun setData(view: View, data: FundDetail.NameList, position: Int) {
                         commissionName.text = data.name
-//                        data.url.apply {
-//                            Glide.with(this@FundDetailActivity)
-//                                    .load(this)
-//                                    .into(headImg)
-//                        }
                         if (data.url.isNullOrEmpty()) {
                             headImg.setImageResource(R.drawable.nim_avatar_default)
                         } else {
-                            Glide.with(this@FundDetailActivity)
+                            Glide.with(this@FundEditActivity)
                                     .load(data.url)
                                     .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
                                     .into(headImg)
@@ -102,12 +87,6 @@ class FundDetailActivity : ToolbarActivity() {
         }
 
         getFundDetail(data.id)
-
-        run {
-            structure.setOnClickListener({ FundStructureActivity.start(this, data) })
-            fundsDetail.setOnClickListener({ FundAccountActivity.start(this, data) })
-            fundsWenShu.setOnClickListener({ FundBookActivity.start(this, data) })
-        }
     }
 
 
@@ -119,19 +98,33 @@ class FundDetailActivity : ToolbarActivity() {
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         payload.payload?.apply {
-                            Log.d(TAG, Gson().toJson(this))
-                            find<TextView>(R.id.administrator).text = administrator
-                            find<TextView>(R.id.regTime).text = regTime
-                            find<TextView>(R.id.contributeSize).text = contributeSize
-                            find<TextView>(R.id.actualSize).text = actualSize
-                            find<TextView>(R.id.duration).text = duration
-                            find<TextView>(R.id.partners).text = partners
-                            find<TextView>(R.id.mode).text = mode
-                            find<TextView>(R.id.commission).text = commission
-                            find<TextView>(R.id.manageFees).text = manageFees
-                            find<TextView>(R.id.carry).text = carry
+                            Log.d(FundDetailActivity.TAG, Gson().toJson(this))
+                            find<EditText>(R.id.administrator).setText(administrator)
+                            find<EditText>(R.id.regTime).setText(regTime)
+                            find<EditText>(R.id.contributeSize).setText(contributeSize)
+                            find<EditText>(R.id.actualSize).setText(actualSize)
+                            find<EditText>(R.id.duration).setText(duration)
+                            find<EditText>(R.id.partners).setText(partners)
+                            find<EditText>(R.id.mode).setText(mode)
+                            find<EditText>(R.id.commission).setText(commission)
+                            find<EditText>(R.id.manageFees).setText(manageFees)
+                            find<EditText>(R.id.carry).setText(carry)
+
+                            if(administrator.isNullOrEmpty()){
+                                find<EditText>(R.id.administrator).setSelection(0)
+                            } else {
+                                find<EditText>(R.id.administrator).setSelection(administrator!!.length)
+                            }
+//                            find<EditText>(R.id.regTime).setSelection(regTime.length)
+//                            find<EditText>(R.id.contributeSize).setSelection(contributeSize.length)
+//                            find<EditText>(R.id.actualSize).setSelection(actualSize.length)
+//                            find<EditText>(R.id.duration).setSelection(duration.length)
+//                            find<EditText>(R.id.partners).setSelection(partners.length)
+//                            find<EditText>(R.id.mode).setSelection(mode.length)
+//                            find<EditText>(R.id.commission).setSelection(commission.length)
+//                            find<EditText>(R.id.manageFees).setSelection(manageFees.length)
+//                            find<EditText>(R.id.carry).setSelection(carry.length)
                             list?.let {
-                                adapter.dataList.clear()
                                 adapter.dataList.addAll(it)
                                 adapter.notifyDataSetChanged()
                             }
@@ -142,12 +135,4 @@ class FundDetailActivity : ToolbarActivity() {
                     Trace.e(e)
                 })
     }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data1: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data1)
-        if (requestCode == 0x001 && resultCode == Activity.RESULT_OK) {
-            getFundDetail(data.id)
-        }
-    }
-
 }
