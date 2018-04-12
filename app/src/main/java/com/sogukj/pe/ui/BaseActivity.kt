@@ -187,6 +187,7 @@ abstract class BaseActivity : AppCompatActivity(),AnkoLogger {
         } else {
             icon.visibility = View.GONE
         }
+        tv.maxWidth = screenWidth / 3
         tv.text = text
         if (toastView == null) {
             toastView = Toast(applicationContext)

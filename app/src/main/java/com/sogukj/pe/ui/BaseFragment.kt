@@ -88,6 +88,8 @@ abstract class BaseFragment : android.support.v4.app.Fragment() {
         } else {
             icon.visibility = View.GONE
         }
+        var width = baseActivity!!.windowManager.defaultDisplay.width
+        tv.maxWidth = width / 3
         tv.text = text
         if (toastView == null) {
             toastView = Toast(activity)

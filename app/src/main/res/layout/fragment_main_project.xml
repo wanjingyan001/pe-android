@@ -32,16 +32,14 @@
                 app:popupTheme="@style/AppTheme.PopupOverlay"
                 app:theme="@style/AppTheme.AppBarOverlay">
 
-                <ImageView
-                    android:id="@+id/toolbar_back"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                <com.sogukj.pe.view.CircleImageView
+                    android:id="@+id/header"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
                     android:layout_gravity="left"
                     android:gravity="center"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
                     android:src="@drawable/sogu_ic_back"
-                    android:visibility="gone" />
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@id/toolbar_title"
@@ -78,10 +76,10 @@
                 </LinearLayout>
             </android.support.v7.widget.Toolbar>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:background="@color/colorPrimary" />
+            <!--<View-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="30dp"-->
+                <!--android:background="@color/colorPrimary" />-->
         </LinearLayout>
 
         <FrameLayout

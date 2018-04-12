@@ -19,6 +19,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
+import com.bumptech.glide.Glide
 import com.framework.base.BaseFragment
 import com.google.gson.Gson
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
@@ -287,6 +288,14 @@ class MainProjectFragment : BaseFragment() {
         //view_pager.setPageTransformer(true, transFormer)
 
         val user = Store.store.getUser(baseActivity!!)
+//        var headImg = toolbar.getChildAt(0) as ImageView
+//        toolbar.getChildAt(1)
+//        toolbar.getChildAt(2)
+//        if (user?.url.isNullOrEmpty()) {
+//            headImg.setChar(user?.name?.first())
+//        } else {
+//            Glide.with(context).load(user?.url).into(headImg)
+//        }
         tabs?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab?) {
 
