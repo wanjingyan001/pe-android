@@ -64,6 +64,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="170dp"
+        android:layout_marginTop="10dp"
         android:clipChildren="false">
 
         <com.sogukj.pe.view.NoLeftScrollViewPager
@@ -114,7 +115,7 @@
             android:id="@+id/tv_rl"
             android:layout_width="0dp"
             android:layout_height="85dp"
-            app:icon_main="@drawable/ic_main_sp2"
+            app:icon_main="@drawable/ap"
             app:layout_columnWeight="1"
             app:title="安排" />
 
@@ -122,7 +123,7 @@
             android:id="@+id/tv_msg"
             android:layout_width="0dp"
             android:layout_height="85dp"
-            app:icon_main="@drawable/ic_main_rl2"
+            app:icon_main="@drawable/qb"
             app:layout_columnWeight="1"
             app:title="情报" />
 
@@ -130,7 +131,7 @@
             android:id="@+id/tv_sp"
             android:layout_width="0dp"
             android:layout_height="85dp"
-            app:icon_main="@drawable/ic_main_msg1"
+            app:icon_main="@drawable/sp"
             app:layout_columnWeight="1"
             app:title="审批" />
 
@@ -138,14 +139,14 @@
             android:id="@+id/tv_weekly"
             android:layout_width="0dp"
             android:layout_height="85dp"
-            app:icon_main="@drawable/ic_main_weekly"
+            app:icon_main="@drawable/zb"
             app:layout_columnWeight="1"
             app:title="周报" />
 
         <com.sogukj.pe.view.TipsViewMain2
             android:layout_width="0dp"
             android:layout_height="85dp"
-            app:icon_main="@drawable/ic_main_weekly"
+            app:icon_main="@drawable/zx"
             app:layout_columnWeight="1"
             app:title="征信" />
     </android.support.v7.widget.GridLayout>

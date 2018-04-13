@@ -38,6 +38,7 @@ import android.view.View
 import android.widget.*
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
+import com.sogukj.pe.ui.TeamSelectFragment
 import com.sogukj.pe.util.DownloadUtil
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
@@ -66,12 +67,17 @@ class MainActivity : BaseActivity() {
 //    val fgMine = UserFragment.newInstance()
 
     val fragments = arrayOf(
-            MainNewsFragment.newInstance(),
+            //MainNewsFragment.newInstance(),
             //    val fgMsg = MainMsgFragment.newInstance()
-            MainProjectFragment.newInstance(),
+            //MainProjectFragment.newInstance(),
+            //MainHomeFragment.newInstance(),
+            //FundMainFragment.newInstance(),
+            MainMsgFragment.newInstance(),
+            //UserFragment.newInstance(),
+            TeamSelectFragment.newInstance(),
             MainHomeFragment.newInstance(),
-            FundMainFragment.newInstance(),
-            UserFragment.newInstance()
+            MainProjectFragment.newInstance(),
+            FundMainFragment.newInstance()
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -123,7 +129,7 @@ class MainActivity : BaseActivity() {
 
         manager = supportFragmentManager
         manager.beginTransaction().add(R.id.container, fragments[2]).commit()
-        Trace.e("AndroidPE",""+Utils.isApkInDebug(this))
+        Trace.e("AndroidPE", "" + Utils.isApkInDebug(this))
         updateVersion()
     }
 
@@ -172,11 +178,11 @@ class MainActivity : BaseActivity() {
 //                .commit()
         var currentId = 2
         when (checkId) {
-            R.id.rb_msg -> currentId = 0
-            R.id.rb_project -> currentId = 1
+            R.id.rb_chat -> currentId = 0
+            R.id.rb_phone -> currentId = 1
             R.id.rb_home -> currentId = 2
-            R.id.rb_fund -> currentId = 3
-            R.id.rb_my -> currentId = 4
+            R.id.rb_project -> currentId = 3
+            R.id.rb_fund -> currentId = 4
         }
         //viewpager.setCurrentItem(currentId, false)
         if (currentId == current) {
@@ -193,15 +199,17 @@ class MainActivity : BaseActivity() {
         } else {
             doCheck(checkId)
 
-            var rb_home = rg_tab_main.getChildAt(2) as RadioButton
-            var draws = rb_home.compoundDrawables
-            // top = draws[1]
-            //获取drawables
-            var r = Rect(0, 0, Utils.dpToPx(context, 57), Utils.dpToPx(context, 57))
-            //定义一个Rect边界
-            draws[1].setBounds(r)
-            //给drawable设置边界
-            rb_home.setCompoundDrawables(null, draws[1], null, null)
+            for (index in 0 until rg_tab_main.childCount) {
+                var rb_home = rg_tab_main.getChildAt(index) as RadioButton
+                var draws = rb_home.compoundDrawables
+                // top = draws[1]
+                //获取drawables
+                var r = Rect(0, 0, Utils.dpToPx(context, 25), Utils.dpToPx(context, 25))
+                //定义一个Rect边界
+                draws[1].setBounds(r)
+                //给drawable设置边界
+                rb_home.setCompoundDrawables(null, draws[1], null, null)
+            }
 
             rg_tab_main.setOnCheckedChangeListener { group, checkedId ->
                 doCheck(checkedId)

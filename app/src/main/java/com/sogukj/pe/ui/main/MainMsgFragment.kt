@@ -64,7 +64,7 @@ class MainMsgFragment : ToolbarFragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setTitle("消息首页")
-        toolbar_back.visibility = View.VISIBLE
+        toolbar_back.visibility = View.INVISIBLE
         adapter = RecyclerAdapter(baseActivity!!, { _adapter, parent, type ->
             val convertView = _adapter.getView(R.layout.item_msg_index, parent)
             object : RecyclerHolder<Any>(convertView) {

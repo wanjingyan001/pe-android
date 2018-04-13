@@ -89,7 +89,7 @@
         android:orientation="horizontal">
 
         <RadioButton
-            android:id="@+id/rb_msg"
+            android:id="@+id/rb_chat"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
@@ -99,17 +99,49 @@
             android:background="@null"
             android:button="@null"
             android:checked="true"
-            android:drawableTop="@drawable/bg_main_qb"
+            android:drawableTop="@drawable/bg_main_liaotian"
             android:gravity="center"
-            android:text="情报"
+            android:text="聊天"
             android:textColor="@color/tx_checkable"
             android:textSize="10sp" />
 
+        <RadioButton
+            android:id="@+id/rb_phone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_weight="1"
+            android:background="@null"
+            android:button="@null"
+            android:drawableTop="@drawable/bg_main_phone"
+            android:gravity="center"
+            android:text="通讯录"
+            android:textColor="@color/tx_checkable"
+            android:textSize="10sp" />
+
+        <RadioButton
+            android:id="@+id/rb_home"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_weight="1"
+            android:background="@null"
+            android:button="@null"
+            android:checked="true"
+            android:drawableTop="@drawable/bg_main_home"
+            android:gravity="center"
+            android:text="首页"
+            android:textColor="@color/tx_checkable"
+            android:textSize="10sp"/>
 
         <RadioButton
             android:id="@+id/rb_project"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_marginBottom="4dp"
             android:layout_marginTop="4dp"
@@ -121,20 +153,6 @@
             android:text="项目"
             android:textColor="@color/tx_checkable"
             android:textSize="10sp" />
-
-        <RadioButton
-            android:id="@+id/rb_home"
-            android:layout_width="match_parent"
-            android:layout_height="57dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="3dp"
-            android:layout_weight="1"
-            android:background="@null"
-            android:button="@null"
-            android:checked="true"
-            android:drawableTop="@drawable/bg_main_home"
-            android:gravity="center"
-            android:textColor="@color/tx_checkable" />
 
         <RadioButton
             android:id="@+id/rb_fund"
@@ -149,22 +167,6 @@
             android:drawableTop="@drawable/bg_main_fund"
             android:gravity="center"
             android:text="基金"
-            android:textColor="@color/tx_checkable"
-            android:textSize="10sp" />
-
-        <RadioButton
-            android:id="@+id/rb_my"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_marginBottom="4dp"
-            android:layout_marginTop="4dp"
-            android:layout_weight="1"
-            android:background="@null"
-            android:button="@null"
-            android:drawableTop="@drawable/bg_main_my"
-            android:gravity="center"
-            android:text="我的"
             android:textColor="@color/tx_checkable"
             android:textSize="10sp" />
     </RadioGroup>
