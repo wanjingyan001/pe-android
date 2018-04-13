@@ -38,6 +38,7 @@
                     android:layout_height="35dp"
                     android:layout_gravity="left"
                     android:gravity="center"
+                    android:layout_marginLeft="10dp"
                     android:src="@drawable/sogu_ic_back" />
 
                 <TextView
@@ -64,14 +65,16 @@
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:padding="15dp"
-                        android:background="@drawable/tj_main" />
+                        android:src="@drawable/tj_main"
+                        android:background="@color/transparent"/>
 
                     <ImageButton
                         android:id="@+id/fb_search"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:padding="15dp"
-                        android:background="@drawable/ic_search" />
+                        android:src="@drawable/ic_search"
+                        android:background="@color/transparent"/>
                 </LinearLayout>
             </android.support.v7.widget.Toolbar>
 

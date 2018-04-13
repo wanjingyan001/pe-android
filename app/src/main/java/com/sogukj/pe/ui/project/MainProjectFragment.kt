@@ -14,7 +14,6 @@ import android.text.InputType
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
-import android.view.ViewTreeObserver
 import android.widget.ImageView
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
@@ -31,7 +30,10 @@ import com.sogukj.pe.R
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
-import com.sogukj.pe.view.*
+import com.sogukj.pe.view.ArrayPagerAdapter
+import com.sogukj.pe.view.ProjectPageTransformer
+import com.sogukj.pe.view.RecyclerAdapter
+import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers

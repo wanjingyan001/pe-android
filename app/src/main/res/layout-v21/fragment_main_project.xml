@@ -32,16 +32,14 @@
                 app:popupTheme="@style/AppTheme.PopupOverlay"
                 app:theme="@style/AppTheme.AppBarOverlay">
 
-                <ImageView
-                    android:id="@+id/toolbar_back"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                <com.sogukj.pe.view.CircleImageView
+                    android:id="@+id/header"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
                     android:layout_gravity="left"
                     android:gravity="center"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:src="@drawable/sogu_ic_back"
-                    android:visibility="gone" />
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/sogu_ic_back" />
 
                 <TextView
                     android:id="@id/toolbar_title"
@@ -64,24 +62,26 @@
 
                     <ImageButton
                         android:id="@+id/fb_add"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:background="@drawable/tj_main" />
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:padding="15dp"
+                        android:src="@drawable/tj_main"
+                        android:background="@color/transparent"/>
 
                     <ImageButton
                         android:id="@+id/fb_search"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_marginLeft="18dp"
-                        android:layout_marginRight="15dp"
-                        android:background="@drawable/ic_search" />
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:padding="15dp"
+                        android:src="@drawable/ic_search"
+                        android:background="@color/transparent"/>
                 </LinearLayout>
             </android.support.v7.widget.Toolbar>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:background="@color/colorPrimary" />
+            <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="30dp"-->
+            <!--android:background="@color/colorPrimary" />-->
         </LinearLayout>
 
         <FrameLayout
@@ -108,35 +108,30 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:icon="@drawable/dy_1_select"
-                    android:background="?android:attr/selectableItemBackground"
                     android:text="调研" />
-                <!--android:background="@drawable/ripple_bg"-->
+
                 <android.support.design.widget.TabItem
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:icon="@drawable/cb_1_unselect"
-                    android:background="?android:attr/selectableItemBackgroundBorderless"
                     android:text="储备" />
-                <!--android:background="@drawable/ripple_bg"-->
+
                 <android.support.design.widget.TabItem
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:icon="@drawable/lx_1_unselect"
-                    android:background="@drawable/ripple_bg"
                     android:text="立项" />
 
                 <android.support.design.widget.TabItem
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:icon="@drawable/yt_1_unselect"
-                    android:background="@drawable/ripple_bg"
                     android:text="已投" />
 
                 <android.support.design.widget.TabItem
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:icon="@drawable/tc_1_unselect"
-                    android:background="@drawable/ripple_bg"
                     android:text="退出" />
             </android.support.design.widget.TabLayout>
         </FrameLayout>
