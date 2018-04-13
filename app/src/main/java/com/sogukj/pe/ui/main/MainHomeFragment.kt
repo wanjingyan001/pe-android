@@ -227,21 +227,21 @@ class MainHomeFragment : BaseFragment() {
                     if (payload.isOk) {
                         payload.payload?.apply {
                             local_sp = sp
-                            if (sp == null || sp == 0) {
-                                tv_sp.isRedEnable(false)
-                            } else {
-                                tv_sp.isRedEnable(true)
-                            }
-                            if (rl == null || rl == 0) {
-                                tv_rl.isRedEnable(false)
-                            } else {
-                                tv_rl.isRedEnable(true)
-                            }
-                            if (zb == null || zb == 0) {
-                                tv_weekly.isRedEnable(false)
-                            } else {
-                                tv_weekly.isRedEnable(true)
-                            }
+//                            if (sp == null || sp == 0) {
+//                                tv_sp.isRedEnable(false)
+//                            } else {
+//                                tv_sp.isRedEnable(true)
+//                            }
+//                            if (rl == null || rl == 0) {
+//                                tv_rl.isRedEnable(false)
+//                            } else {
+//                                tv_rl.isRedEnable(true)
+//                            }
+//                            if (zb == null || zb == 0) {
+//                                tv_weekly.isRedEnable(false)
+//                            } else {
+//                                tv_weekly.isRedEnable(true)
+//                            }
                         }
                     } else
                         showCustomToast(R.drawable.icon_toast_fail, payload.message)
@@ -249,12 +249,12 @@ class MainHomeFragment : BaseFragment() {
                     Trace.e(e)
                     ToastError(e)
                 })
-        val msgUnreadCount = NIMClient.getService(MsgService::class.java).totalUnreadCount
-        if (msgUnreadCount > 0) {
-            tv_msg.isRedEnable(true)
-        } else {
-            tv_msg.isRedEnable(false)
-        }
+//        val msgUnreadCount = NIMClient.getService(MsgService::class.java).totalUnreadCount
+//        if (msgUnreadCount > 0) {
+//            tv_msg.isRedEnable(true)
+//        } else {
+//            tv_msg.isRedEnable(false)
+//        }
 
     }
 

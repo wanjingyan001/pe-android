@@ -68,10 +68,10 @@
 
         <com.sogukj.pe.view.NoLeftScrollViewPager
             android:id="@+id/noleftviewpager"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp" />
 
         <ImageView
             android:id="@+id/iv_empty"
@@ -103,58 +103,51 @@
     <android.support.v7.widget.GridLayout
         android:id="@+id/grid"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
-        app:columnCount="2"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        app:columnCount="4"
         app:orientation="horizontal"
         app:rowCount="2">
 
-        <com.sogukj.pe.view.TipsViewMain
-            android:id="@+id/tv_sp"
-            android:layout_width="0dp"
-            android:layout_height="85dp"
-            app:bg="@drawable/ic_lxr"
-            app:icon_main="@drawable/ic_main_sp2"
-            app:layout_columnWeight="1"
-            app:sub_title="用印、签字、请假"
-            app:tag_text="3"
-            app:title="审批" />
-        <!--app:icon_main="@drawable/ic_main_sp"-->
-        <!--app:bg="@drawable/ic_sp"-->
-
-        <com.sogukj.pe.view.TipsViewMain
-            android:id="@+id/tv_weekly"
-            android:layout_width="0dp"
-            android:layout_height="85dp"
-            app:bg="@drawable/ic_lxr"
-            app:icon_main="@drawable/ic_main_rl2"
-            app:layout_columnWeight="1"
-            app:sub_title="员工周报"
-            app:tag_text="3"
-            app:title="周报" />
-        <!--app:icon_main="@drawable/ic_main_rl"-->
-        <!--app:bg="@drawable/ic_rl"-->
-
-        <com.sogukj.pe.view.TipsViewMain
-            android:id="@+id/tv_msg"
-            android:layout_width="0dp"
-            android:layout_height="85dp"
-            app:bg="@drawable/ic_lxr"
-            app:icon_main="@drawable/ic_main_msg1"
-            app:layout_columnWeight="1"
-            app:sub_title="IM、云秘、审批等"
-            app:tag_text="3"
-            app:title="消息" />
-
-        <com.sogukj.pe.view.TipsViewMain
+        <com.sogukj.pe.view.TipsViewMain2
             android:id="@+id/tv_rl"
             android:layout_width="0dp"
             android:layout_height="85dp"
-            app:bg="@drawable/ic_lxr"
+            app:icon_main="@drawable/ic_main_sp2"
+            app:layout_columnWeight="1"
+            app:title="安排" />
+
+        <com.sogukj.pe.view.TipsViewMain2
+            android:id="@+id/tv_msg"
+            android:layout_width="0dp"
+            android:layout_height="85dp"
+            app:icon_main="@drawable/ic_main_rl2"
+            app:layout_columnWeight="1"
+            app:title="情报" />
+
+        <com.sogukj.pe.view.TipsViewMain2
+            android:id="@+id/tv_sp"
+            android:layout_width="0dp"
+            android:layout_height="85dp"
+            app:icon_main="@drawable/ic_main_msg1"
+            app:layout_columnWeight="1"
+            app:title="审批" />
+
+        <com.sogukj.pe.view.TipsViewMain2
+            android:id="@+id/tv_weekly"
+            android:layout_width="0dp"
+            android:layout_height="85dp"
             app:icon_main="@drawable/ic_main_weekly"
             app:layout_columnWeight="1"
-            app:sub_title="日历、日程、会议"
-            app:tag_text="4"
-            app:title="安排" />
+            app:title="周报" />
+
+        <com.sogukj.pe.view.TipsViewMain2
+            android:layout_width="0dp"
+            android:layout_height="85dp"
+            app:icon_main="@drawable/ic_main_weekly"
+            app:layout_columnWeight="1"
+            app:title="征信" />
     </android.support.v7.widget.GridLayout>
 
 </LinearLayout>
