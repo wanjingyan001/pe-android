@@ -30,7 +30,7 @@ public class MyNestedScrollView extends NestedScrollView {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        layout = (StackLayout) findViewById(R.id.stack_layout);
+        //layout = (StackLayout) findViewById(R.id.stack_layout);
     }
 
     private StackLayout layout;

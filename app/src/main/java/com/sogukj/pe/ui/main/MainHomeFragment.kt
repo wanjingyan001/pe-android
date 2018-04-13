@@ -1,9 +1,12 @@
 package com.sogukj.pe.ui.main
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.support.v4.view.PagerAdapter
+import android.support.v4.view.ViewPager
 import android.util.Log
 import android.view.View
 import android.widget.TextView
@@ -29,21 +32,16 @@ import com.sogukj.pe.ui.msg.MessageListActivity
 import com.sogukj.pe.ui.news.NewsListActivity
 import com.sogukj.pe.util.CacheUtils
 import com.sogukj.pe.util.ColorUtil
-import com.sogukj.pe.view.MyStackPageTransformer
 import com.sogukj.util.Store
 import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.NIMClient
 import com.sogukj.pe.ui.approve.EntryApproveActivity
 import com.sogukj.pe.ui.approve.LeaveBusinessApproveActivity
-import com.sogukj.pe.ui.calendar.CalendarWindow
 import com.sogukj.pe.ui.partyBuild.PartyMainActivity
-import com.sogukj.pe.util.Utils
-import com.sogukj.pe.view.CalendarDingDing
 import me.leolin.shortcutbadger.ShortcutBadger
-import org.jetbrains.anko.backgroundResource
-import org.jetbrains.anko.imageResource
 import org.jetbrains.anko.support.v4.ctx
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 /**
@@ -53,31 +51,28 @@ class MainHomeFragment : BaseFragment() {
     override val containerViewId: Int
         get() = R.layout.fragment_home
 
-    private lateinit var window: CalendarWindow
-    private var mDate = Date()
-
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        when (Utils.getEnvironment()) {
-            "civc" -> {
-                home_banner.backgroundResource = R.mipmap.banner_zd
-            }
-            "ht" -> {
-                home_banner.backgroundResource = R.mipmap.banner_ht
-            }
-            "pe" ->{
-                home_banner.backgroundResource = R.mipmap.banner
-            }
-            "yge"->{
-                home_banner.backgroundResource = R.mipmap.banner_yge
-            }
-            "kk" ->{
-                home_banner.backgroundResource = R.mipmap.banner_kk
-            }
-            else -> {
-                home_banner.backgroundResource = R.mipmap.pe_banner
-            }
-        }
+//        when (Utils.getEnvironment()) {
+//            "civc" -> {
+//                home_banner.backgroundResource = R.mipmap.banner_zd
+//            }
+//            "ht" -> {
+//                home_banner.backgroundResource = R.mipmap.banner_ht
+//            }
+//            "pe" ->{
+//                home_banner.backgroundResource = R.mipmap.banner
+//            }
+//            "yge"->{
+//                home_banner.backgroundResource = R.mipmap.banner_yge
+//            }
+//            "kk" ->{
+//                home_banner.backgroundResource = R.mipmap.banner_kk
+//            }
+//            else -> {
+//                home_banner.backgroundResource = R.mipmap.pe_banner
+//            }
+//        }
         //消息
 //        tv_zx.setOnClickListener {
 //            NewsListActivity.start(baseActivity)
@@ -86,15 +81,8 @@ class MainHomeFragment : BaseFragment() {
 //        tv_me.setOnClickListener {
 //            UserFragment.start(baseActivity)
 //        }
-//        var ding = CalendarDingDing(context)
         tv_sp.setOnClickListener {
             EntryApproveActivity.start(baseActivity, local_sp)
-//            ding.show(1, mDate, object : CalendarDingDing.onTimeClick {
-//                override fun onClick(date: Date?) {
-//                    mDate = date!!
-//                    Log.e("date", "${date.year}+${date.month}+${date.day}+${date.hours}+${date.minutes}")
-//                }
-//            })
         }
         tv_weekly.setOnClickListener { WeeklyActivity.start(baseActivity) }
 //        tv_jj.setOnClickListener { FundMainFragment.start(baseActivity) }
@@ -109,43 +97,38 @@ class MainHomeFragment : BaseFragment() {
             PartyMainActivity.start(context)
         }
 
-        adapter = HomeAdapter()
-        stack_layout.adapter = adapter
+        val user = Store.store.getUser(baseActivity!!)
+        if (user?.url.isNullOrEmpty()) {
+            header.setChar(user?.name?.first())
+        } else {
+            Glide.with(context).load(user?.url).into(header)
+        }
 
-        stack_layout.addPageTransformer(
-                MyStackPageTransformer()
-        )
+        adapter = ViewPagerAdapter(ArrayList<MessageBean>(), context)
+        noleftviewpager.adapter = adapter
+        noleftviewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrollStateChanged(state: Int) {
+            }
 
-        stack_layout.setOnSwipeListener(object : StackLayout.OnSwipeListener() {
-            override fun onSwiped(swipedView: View, swipedItemPos: Int, isSwipeLeft: Boolean, itemLeft: Int) {
-                //Log.e("tagtagtag", (if (isSwipeLeft) "往左" else "往右") + "移除" + mData.get(swipedItemPos) + "." + "剩余" + itemLeft + "项")
-                Log.e("tagtagtag", "剩余" + itemLeft + "项")
-                if (itemLeft == 0) {
-                    iv_empty.visibility = View.VISIBLE
-                    iv_empty.setBackgroundResource(R.drawable.img_empty2)
-                    stack_layout.visibility = View.GONE
-                    iv_empty.setOnClickListener {
-                        iv_empty.visibility = View.GONE
-                        stack_layout.visibility = View.VISIBLE
-                        page++
-                        doRequest()
-                    }
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+            }
+
+            override fun onPageSelected(position: Int) {
+                if (position == adapter.datas.size - 1) {
+                    page++
+                    doRequest()
                 }
             }
         })
+        noleftviewpager.isScrollble = false
 
         cache = CacheUtils(context)
         Glide.with(context).asGif().load(R.drawable.loading).into(pb)
         pb.visibility = View.VISIBLE
         doRequest()
-
-        refresh.setOnClickListener {
-            showCustomToast(R.drawable.icon_toast_common, "数据刷新中")
-            onResume()
-        }
     }
 
-    lateinit var adapter: HomeAdapter
+    lateinit var adapter: ViewPagerAdapter
     lateinit var cache: CacheUtils
     var page = 1
 
@@ -174,14 +157,13 @@ class MainHomeFragment : BaseFragment() {
 
     fun doRequest() {
         iv_empty.visibility = View.GONE
-        stack_layout.visibility = View.VISIBLE
+        noleftviewpager.visibility = View.VISIBLE
         totalData = ArrayList<MessageBean>()
         var cacheData = cache.getDiskCache("${Store.store.getUser(context)?.uid}")
         if (cacheData != null) {
             if (page == 1) {
-                stack_layout.mCurrentItem = 0
-                adapter.dataList.clear()
-                adapter.dataList.addAll(cacheData)
+                adapter.datas.clear()
+                adapter.datas.addAll(cacheData)
                 adapter.notifyDataSetChanged()
 
                 totalData.clear()
@@ -195,9 +177,10 @@ class MainHomeFragment : BaseFragment() {
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         payload.payload?.apply {
-                            stack_layout.mCurrentItem = 0
-                            adapter.dataList.clear()
-                            adapter.dataList.addAll(this)
+                            if (page == 1) {
+                                adapter.datas.clear()
+                            }
+                            adapter.datas.addAll(this)
                             adapter.notifyDataSetChanged()
 
                             if (page == 1) {
@@ -213,7 +196,7 @@ class MainHomeFragment : BaseFragment() {
                     Trace.e(e)
                     ToastError(e)
                     pb.visibility = View.GONE
-                    if (adapter.dataList.size == 0) {
+                    if (adapter.datas.size == 0) {
                         iv_empty.visibility = View.VISIBLE
                         if (page == 1) {
                             iv_empty.setBackgroundResource(R.drawable.img_empty1)
@@ -221,11 +204,11 @@ class MainHomeFragment : BaseFragment() {
                             showCustomToast(R.drawable.icon_toast_common, "暂无最新数据")
                             iv_empty.setBackgroundResource(R.drawable.img_empty2)
                         }
-                        stack_layout.visibility = View.GONE
+                        noleftviewpager.visibility = View.GONE
                     }
                 }, {
                     pb.visibility = View.GONE
-                    if (adapter.dataList.size == 0) {
+                    if (adapter.datas.size == 0) {
                         iv_empty.visibility = View.VISIBLE
                         if (page == 1) {
                             iv_empty.setBackgroundResource(R.drawable.img_empty1)
@@ -233,7 +216,7 @@ class MainHomeFragment : BaseFragment() {
                             showCustomToast(R.drawable.icon_toast_common, "暂无最新数据")
                             iv_empty.setBackgroundResource(R.drawable.img_empty2)
                         }
-                        stack_layout.visibility = View.GONE
+                        noleftviewpager.visibility = View.GONE
                     }
                 })
         SoguApi.getService(baseActivity!!.application)
@@ -394,6 +377,135 @@ class MainHomeFragment : BaseFragment() {
             val intent = Bundle()
             fragment.arguments = intent
             return fragment
+        }
+    }
+
+    inner class ViewPagerAdapter(var datas: ArrayList<MessageBean>, private val mContext: Context) : PagerAdapter() {
+
+        private var mViewCache: LinkedList<View>? = null
+
+        private var mLayoutInflater: LayoutInflater? = null
+
+
+        init {
+            this.mLayoutInflater = LayoutInflater.from(mContext)
+            this.mViewCache = LinkedList()
+        }
+
+        override fun getCount(): Int {
+            Log.e("test", "getCount ")
+            return this.datas!!.size
+        }
+
+        override fun getItemPosition(`object`: Any): Int {
+            return super.getItemPosition(`object`)
+        }
+
+        override fun instantiateItem(container: ViewGroup, position: Int): Any {
+            var holder: ViewHolder? = null
+            var convertView: View? = null
+            Log.e("size", mViewCache!!.size.toString() + "")
+            if (mViewCache!!.size == 0) {
+                convertView = mLayoutInflater!!.inflate(R.layout.item_msg_content_main, null, false)
+                holder = ViewHolder()
+                holder.tvTitle = convertView.findViewById(R.id.tv_title) as TextView
+                holder.tvSeq = convertView.findViewById(R.id.sequense) as TextView
+                holder.tvNum = convertView.findViewById(R.id.tv_num) as TextView
+                holder.tvState = convertView.findViewById(R.id.tv_state) as TextView
+                holder.tvFrom = convertView.findViewById(R.id.tv_from) as TextView
+                holder.tvType = convertView.findViewById(R.id.tv_type) as TextView
+                holder.tvMsg = convertView.findViewById(R.id.tv_msg) as TextView
+                holder.tvUrgent = convertView.findViewById(R.id.tv_urgent) as TextView
+                holder.ll_content = convertView.findViewById(R.id.ll_content) as LinearLayout
+                holder.tvMore = convertView.findViewById(R.id.more) as TextView
+
+                convertView.tag = holder
+            } else {
+                convertView = mViewCache!!.removeFirst()
+                holder = convertView!!.tag as ViewHolder
+            }
+
+            var data = datas!![position]
+            val strType = when (data.type) {
+                1 -> "出勤休假"
+                2 -> "用印审批"
+                3 -> "签字审批"
+                else -> ""
+            }
+            //ColorUtil.setColorStatus(holder.tvState!!, data)
+            try {
+                holder.tvTitle?.text = strType
+                holder.tvSeq?.text = data.title
+            } catch (e: Exception) {
+            }
+            holder.tvFrom?.text = "发起人:" + data.username
+            holder.tvType?.text = "类型:" + data.type_name
+            holder.tvMsg?.text = "审批事由:" + data.reasons
+            val cnt = data.message_count
+            holder.tvNum?.text = "${cnt}"
+            if (cnt != null && cnt > 0)
+                holder.tvNum?.visibility = View.VISIBLE
+            else
+                holder.tvNum?.visibility = View.GONE
+            val urgnet = data.urgent_count
+            holder.tvUrgent?.text = "加急x${urgnet}"
+            if (urgnet != null && urgnet > 0)
+                holder.tvUrgent?.visibility = View.VISIBLE
+            else
+                holder.tvUrgent?.visibility = View.GONE
+
+            holder.tvMore?.setOnClickListener {
+                val intent = Intent(context, MessageListActivity::class.java)
+                startActivity(intent)
+            }
+            holder.ll_content?.setOnClickListener {
+                val is_mine = if (data.status == -1 || data.status == 4) 1 else 2
+                if (data.type == 2) {
+                    //SealApproveActivity.start(context, data, is_mine)
+                    val intent = Intent(context, SealApproveActivity::class.java)
+                    intent.putExtra("is_mine", is_mine)
+                    intent.putExtra(Extras.DATA, data)
+                    startActivity(intent)
+                } else if (data.type == 3) {
+                    //SignApproveActivity.start(context, data, is_mine)
+                    val intent = Intent(context, SignApproveActivity::class.java)
+                    intent.putExtra(Extras.DATA, data)
+                    intent.putExtra("is_mine", is_mine)
+                    startActivity(intent)
+                } else if (data.type == 1) {
+                    val intent = Intent(context, LeaveBusinessApproveActivity::class.java)
+                    intent.putExtra(Extras.DATA, data)
+                    intent.putExtra("is_mine", is_mine)
+                    startActivity(intent)
+                }
+            }
+
+            container.addView(convertView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+
+            return convertView
+        }
+
+        override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
+            val contentView = `object` as View
+            container.removeView(contentView)
+            this.mViewCache!!.add(contentView)
+        }
+
+        override fun isViewFromObject(view: View, o: Any): Boolean {
+            return view === o
+        }
+
+        inner class ViewHolder {
+            var tvTitle: TextView? = null
+            var tvSeq: TextView? = null
+            var tvNum: TextView? = null
+            var tvState: TextView? = null
+            var tvFrom: TextView? = null
+            var tvType: TextView? = null
+            var tvMsg: TextView? = null
+            var tvUrgent: TextView? = null
+            var ll_content: LinearLayout? = null
+            var tvMore: TextView? = null
         }
     }
 }
