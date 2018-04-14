@@ -33,15 +33,16 @@ import com.sogukj.pe.R
 import com.sogukj.pe.bean.MessageIndexBean
 import com.sogukj.pe.ui.SupportEmptyView
 import com.sogukj.pe.ui.msg.MessageListActivity
+import com.sogukj.pe.ui.user.UserActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.service.SoguApi
+import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_msg_center.*
-import kotlinx.android.synthetic.main.toolbar.*
 import org.jetbrains.anko.backgroundResource
 import org.jetbrains.anko.imageResource
 import org.jetbrains.anko.support.v4.ctx
@@ -60,11 +61,20 @@ class MainMsgFragment : ToolbarFragment() {
     lateinit var adapter: RecyclerAdapter<Any>
     val extMap = HashMap<String, Any>()
 
-
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setTitle("消息首页")
-        toolbar_back.visibility = View.INVISIBLE
+
+        val user = Store.store.getUser(baseActivity!!)
+        if (user?.url.isNullOrEmpty()) {
+            toolbar_back.setChar(user?.name?.first())
+        } else {
+            Glide.with(context).load(user?.url).into(toolbar_back)
+        }
+        toolbar_back.setOnClickListener {
+            UserActivity.start(context)
+        }
+
         adapter = RecyclerAdapter(baseActivity!!, { _adapter, parent, type ->
             val convertView = _adapter.getView(R.layout.item_msg_index, parent)
             object : RecyclerHolder<Any>(convertView) {

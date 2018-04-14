@@ -33,7 +33,7 @@
                 app:theme="@style/AppTheme.AppBarOverlay">
 
                 <com.sogukj.pe.view.CircleImageView
-                    android:id="@+id/header"
+                    android:id="@+id/headerIcon"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:layout_gravity="left"

@@ -30,9 +30,11 @@ import com.sogukj.pe.bean.FundSmallBean.Companion.RegTimeAsc
 import com.sogukj.pe.bean.FundSmallBean.Companion.RegTimeDesc
 import com.sogukj.pe.ui.SupportEmptyView
 import com.sogukj.pe.ui.main.MainActivity
+import com.sogukj.pe.ui.user.UserActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.*
 import com.sogukj.service.SoguApi
+import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_fund_main.*
@@ -69,6 +71,16 @@ class FundMainFragment : BaseFragment(), View.OnClickListener {
             ll_order_time_1.setOnClickListener(this)
 //            iv_user.setOnClickListener(this)
             iv_search.setOnClickListener(this)
+        }
+
+        val user = Store.store.getUser(baseActivity!!)
+        if (user?.url.isNullOrEmpty()) {
+            toolbar_back.setChar(user?.name?.first())
+        } else {
+            Glide.with(context).load(user?.url).into(toolbar_back)
+        }
+        toolbar_back.setOnClickListener {
+            UserActivity.start(context)
         }
 
         run {

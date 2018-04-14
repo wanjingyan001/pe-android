@@ -28,6 +28,7 @@ import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.ProjectBean
+import com.sogukj.pe.ui.user.UserActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.ArrayPagerAdapter
@@ -62,6 +63,11 @@ class MainProjectFragment : BaseFragment() {
     lateinit var hisAdapter: RecyclerAdapter<String>
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        headerIcon.setOnClickListener {
+            UserActivity.start(context)
+        }
+
         adapter = RecyclerAdapter<ProjectBean>(baseActivity!!, { _adapter, parent, type ->
             val convertView = _adapter.getView(R.layout.item_main_project_search, parent) as View
             object : RecyclerHolder<ProjectBean>(convertView) {
@@ -291,9 +297,9 @@ class MainProjectFragment : BaseFragment() {
 
         val user = Store.store.getUser(baseActivity!!)
         if (user?.url.isNullOrEmpty()) {
-            header.setChar(user?.name?.first())
+            headerIcon.setChar(user?.name?.first())
         } else {
-            Glide.with(context).load(user?.url).into(header)
+            Glide.with(context).load(user?.url).into(headerIcon)
         }
         tabs?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab?) {

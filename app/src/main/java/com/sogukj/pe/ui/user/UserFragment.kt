@@ -37,15 +37,16 @@ import kotlinx.android.synthetic.main.activity_user.*
 /**
  * Created by qinfei on 17/7/18.
  */
-
 class UserFragment : ToolbarFragment(), View.OnClickListener {
     override val containerViewId: Int
         get() = R.layout.activity_user
 
-
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         toolbar_title.text = "个人中心"
+        toolbar_back.setOnClickListener {
+            baseActivity!!.finish()
+        }
         SoguApi.getService(activity.application)
                 .userDepart()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -62,9 +63,6 @@ class UserFragment : ToolbarFragment(), View.OnClickListener {
                     Trace.e(e)
                     ToastError(e)
                 })
-
-
-
 
         ll_user.setOnClickListener {
             UserEditActivity.start(activity, departList)

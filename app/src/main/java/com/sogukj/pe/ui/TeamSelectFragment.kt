@@ -29,6 +29,7 @@ import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.ui.IM.PersonalInfoActivity
 import com.sogukj.pe.ui.IM.TeamBean
 import com.sogukj.pe.ui.IM.TeamInfoActivity
+import com.sogukj.pe.ui.user.UserActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
@@ -66,6 +67,16 @@ class TeamSelectFragment : BaseFragment() {
         initOrganizationList()
 //        val contactList = initContactList()
         doRequest()
+
+        val user = Store.store.getUser(baseActivity!!)
+        if (user?.url.isNullOrEmpty()) {
+            toolbar_back.setChar(user?.name?.first())
+        } else {
+            Glide.with(context).load(user?.url).into(toolbar_back)
+        }
+        toolbar_back.setOnClickListener {
+            UserActivity.start(context)
+        }
     }
 
     private fun initSearchView() {

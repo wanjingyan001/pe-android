@@ -38,6 +38,7 @@ import com.netease.nimlib.sdk.NIMClient
 import com.sogukj.pe.ui.approve.EntryApproveActivity
 import com.sogukj.pe.ui.approve.LeaveBusinessApproveActivity
 import com.sogukj.pe.ui.partyBuild.PartyMainActivity
+import com.sogukj.pe.ui.user.UserActivity
 import me.leolin.shortcutbadger.ShortcutBadger
 import org.jetbrains.anko.support.v4.ctx
 import java.util.*
@@ -102,6 +103,9 @@ class MainHomeFragment : BaseFragment() {
             header.setChar(user?.name?.first())
         } else {
             Glide.with(context).load(user?.url).into(header)
+        }
+        header.setOnClickListener {
+            UserActivity.start(context)
         }
 
         adapter = ViewPagerAdapter(ArrayList<MessageBean>(), context)
