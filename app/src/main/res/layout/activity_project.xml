@@ -11,7 +11,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="56dp"
         android:background="@drawable/project_bg"
         android:orientation="vertical">
 
@@ -88,56 +88,6 @@
                     android:src="@drawable/delete_all" />
             </LinearLayout>
         </android.support.v7.widget.Toolbar>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/imgIcon"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center|left"
-                android:layout_marginLeft="20dp"
-                android:background="@drawable/project_icon"
-                android:padding="3dp"
-                android:src="@drawable/default_icon" />
-
-            <TextView
-                android:id="@+id/companyTitle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:letterSpacing="0.04"
-                android:lineSpacingExtra="0sp"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:text="搜股创新乐知信息科技有限公司"
-                android:textColor="#ffffff"
-                android:textSize="16sp" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center|right"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/proj_stage"
-                    android:layout_width="75dp"
-                    android:layout_height="30dp"
-                    android:background="@drawable/rectangle_tag"
-                    android:gravity="center"
-                    android:letterSpacing="0.04"
-                    android:lineSpacingExtra="0sp"
-                    android:text="储 备"
-                    android:textColor="#ffffff"
-                    android:textSize="14sp" />
-            </LinearLayout>
-
-        </LinearLayout>
     </LinearLayout>
 
     <android.support.v4.widget.NestedScrollView
@@ -149,6 +99,57 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@drawable/project_bg"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imgIcon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center|left"
+                    android:layout_marginLeft="20dp"
+                    android:background="@drawable/project_icon"
+                    android:padding="3dp"
+                    android:src="@drawable/default_icon" />
+
+                <TextView
+                    android:id="@+id/companyTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:letterSpacing="0.04"
+                    android:lineSpacingExtra="0sp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:text="搜股创新乐知信息科技有限公司"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center|right"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/proj_stage"
+                        android:layout_width="75dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/rectangle_tag"
+                        android:gravity="center"
+                        android:letterSpacing="0.04"
+                        android:lineSpacingExtra="0sp"
+                        android:text="储 备"
+                        android:textColor="#ffffff"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+            </LinearLayout>
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -503,13 +504,6 @@
                 android:background="@color/divider" />
 
 
-
-
-
-
-
-
-
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -571,16 +565,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
                 android:background="@color/divider" />
-
-
-
-
-
-
-
-
-
-
 
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -682,7 +666,7 @@
                     style="@style/ItemGridProject"
                     android:drawableTop="@drawable/ic_proj_thglsj"
                     android:tag="tv_xmzw"
-                    android:text="投后管理数据"
+                    android:text="投后管理"
                     app:layout_columnWeight="1" />
 
                 <com.sogukj.pe.view.TipsView
@@ -693,12 +677,6 @@
                     android:text="审批历史"
                     app:layout_columnWeight="1" />
             </android.support.v7.widget.GridLayout>
-
-
-
-
-
-
 
 
             <View
@@ -740,14 +718,31 @@
                     android:tag="tv_cwsj"
                     android:text="股权信息"
                     app:layout_columnWeight="1" />
+
+                <com.sogukj.pe.view.TipsView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/qqxx"
+                    android:tag="tv_cwsj"
+                    android:text="股权信息"
+                    android:visibility="invisible"
+                    app:layout_columnWeight="1" />
+
+                <com.sogukj.pe.view.TipsView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/qqxx"
+                    android:tag="tv_cwsj"
+                    android:text="股权信息"
+                    android:visibility="invisible"
+                    app:layout_columnWeight="1" />
+
+                <com.sogukj.pe.view.TipsView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/qqxx"
+                    android:tag="tv_cwsj"
+                    android:text="股权信息"
+                    android:visibility="invisible"
+                    app:layout_columnWeight="1" />
             </android.support.v7.widget.GridLayout>
-
-
-
-
-
-
-
 
 
             <LinearLayout
