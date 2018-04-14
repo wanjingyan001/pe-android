@@ -41,6 +41,7 @@ import com.sogukj.pe.ui.partyBuild.PartyMainActivity
 import com.sogukj.pe.ui.user.UserActivity
 import me.leolin.shortcutbadger.ShortcutBadger
 import org.jetbrains.anko.support.v4.ctx
+import java.net.UnknownHostException
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -175,7 +176,7 @@ class MainHomeFragment : BaseFragment() {
             }
         }
         SoguApi.getService(baseActivity!!.application)
-                .msgList(page = page, pageSize = 10, status = 1)
+                .msgList(page = page, pageSize = 20, status = 1)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -186,6 +187,18 @@ class MainHomeFragment : BaseFragment() {
                             }
                             adapter.datas.addAll(this)
                             adapter.notifyDataSetChanged()
+
+                            if (this.size == 0) {
+                                iv_empty.visibility = View.VISIBLE
+                                iv_empty.setBackgroundResource(R.drawable.sl)
+                                noleftviewpager.visibility = View.GONE
+                                iv_empty.setOnClickListener {
+                                    iv_empty.visibility = View.GONE
+                                    noleftviewpager.visibility = View.VISIBLE
+                                    page = 1
+                                    doRequest()
+                                }
+                            }
 
                             if (page == 1) {
                                 cache.addToDiskCache("${Store.store.getUser(context)?.uid}", this)
@@ -203,22 +216,33 @@ class MainHomeFragment : BaseFragment() {
                     if (adapter.datas.size == 0) {
                         iv_empty.visibility = View.VISIBLE
                         if (page == 1) {
-                            iv_empty.setBackgroundResource(R.drawable.img_empty1)
+                            iv_empty.setBackgroundResource(R.drawable.zw)
                         } else {
                             showCustomToast(R.drawable.icon_toast_common, "暂无最新数据")
-                            iv_empty.setBackgroundResource(R.drawable.img_empty2)
+                            iv_empty.setBackgroundResource(R.drawable.sl)
                         }
                         noleftviewpager.visibility = View.GONE
+                    }
+                    if (e is UnknownHostException) {
+                        iv_empty.visibility = View.VISIBLE
+                        iv_empty.setBackgroundResource(R.drawable.dw)
+                        noleftviewpager.visibility = View.GONE
+                        iv_empty.setOnClickListener {
+                            iv_empty.visibility = View.GONE
+                            noleftviewpager.visibility = View.VISIBLE
+                            page = 1
+                            doRequest()
+                        }
                     }
                 }, {
                     pb.visibility = View.GONE
                     if (adapter.datas.size == 0) {
                         iv_empty.visibility = View.VISIBLE
                         if (page == 1) {
-                            iv_empty.setBackgroundResource(R.drawable.img_empty1)
+                            iv_empty.setBackgroundResource(R.drawable.zw)
                         } else {
                             showCustomToast(R.drawable.icon_toast_common, "暂无最新数据")
-                            iv_empty.setBackgroundResource(R.drawable.img_empty2)
+                            iv_empty.setBackgroundResource(R.drawable.sl)
                         }
                         noleftviewpager.visibility = View.GONE
                     }
@@ -437,6 +461,7 @@ class MainHomeFragment : BaseFragment() {
                 else -> ""
             }
             //ColorUtil.setColorStatus(holder.tvState!!, data)
+            holder.tvState!!.text = data.status_str
             try {
                 holder.tvTitle?.text = strType
                 holder.tvSeq?.text = data.title
