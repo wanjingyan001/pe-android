@@ -284,6 +284,7 @@
                     android:textSize="12sp" />
 
                 <TextView
+                    android:id="@+id/neg_num"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -308,6 +309,7 @@
                     android:textSize="12sp" />
 
                 <TextView
+                    android:id="@+id/yq_num"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -322,49 +324,6 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
-
-                <ImageView
-                    android:id="@+id/iv_arrow"
-                    android:layout_width="13dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center"
-                    android:layout_marginRight="10dp"
-                    android:alpha="0.5"
-                    android:background="@drawable/ic_arrow_r" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/qingbao_bg"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="70dp"
-                    android:layout_height="50dp"
-                    android:background="@drawable/qingbaojiankong" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="企业运行良好"
-                    android:textColor="#ff282828"
-                    android:textSize="12sp" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="5" />
 
                 <ImageView
                     android:layout_width="13dp"
@@ -414,15 +373,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white" />
-            <!--<com.sogukj.pe.view.ListViewCompat-->
-            <!--android:id="@+id/list_negative"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:background="@color/white"-->
-            <!--android:divider="@color/divider"-->
-            <!--android:dividerHeight="1px"-->
-            <!--android:listSelector="@drawable/bg_item_list" />-->
-
 
             <TextView
                 android:id="@+id/tv_more"
