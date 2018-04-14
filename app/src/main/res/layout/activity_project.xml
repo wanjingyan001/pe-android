@@ -333,10 +333,52 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/qingbao_bg"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/qingbaojiankong" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="企业运行良好"
+                    android:textColor="#ff282828"
+                    android:textSize="12sp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="5" />
+
+                <ImageView
+                    android:layout_width="13dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="10dp"
+                    android:alpha="0.5"
+                    android:background="@drawable/ic_arrow_r" />
+
+            </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
-                android:background="@color/divider" />∂
+                android:background="@color/divider" />
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
@@ -460,6 +502,87 @@
                 android:layout_height="10dp"
                 android:background="@color/divider" />
 
+
+
+
+
+
+
+
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <View
+                    android:layout_width="5dp"
+                    android:layout_height="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@color/color_main" />
+
+                <TextView
+                    style="@style/SoguTextNormal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="常用功能" />
+            </LinearLayout>
+
+            <android.support.v7.widget.GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="10dp"
+                app:columnCount="4"
+                app:rowCount="2">
+
+                <com.sogukj.pe.view.TipsView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_spls"
+                    android:tag="tv_cwsj"
+                    android:text="审批历史"
+                    app:layout_columnWeight="1" />
+
+                <com.sogukj.pe.view.TipsView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_gsxx"
+                    android:tag="tv_xmzw"
+                    android:text="工商信息"
+                    app:layout_columnWeight="1" />
+
+                <com.sogukj.pe.view.TipsView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_gdzx"
+                    android:tag="tv_gdzx"
+                    android:text="高管征信"
+                    app:layout_columnWeight="1" />
+
+                <com.sogukj.pe.view.TipsView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/ic_proj_xmws"
+                    android:tag="tv_xmws"
+                    android:text="项目文书"
+                    app:layout_columnWeight="1" />
+            </android.support.v7.widget.GridLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="@color/divider" />
+
+
+
+
+
+
+
+
+
+
+
+
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -570,6 +693,62 @@
                     android:text="审批历史"
                     app:layout_columnWeight="1" />
             </android.support.v7.widget.GridLayout>
+
+
+
+
+
+
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="@color/divider" />
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <View
+                    android:layout_width="5dp"
+                    android:layout_height="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@color/color_main" />
+
+                <TextView
+                    style="@style/SoguTextNormal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="企业上传" />
+            </LinearLayout>
+
+            <android.support.v7.widget.GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="10dp"
+                app:columnCount="4"
+                app:rowCount="2">
+
+                <com.sogukj.pe.view.TipsView
+                    style="@style/ItemGridProject"
+                    android:drawableTop="@drawable/qqxx"
+                    android:tag="tv_cwsj"
+                    android:text="股权信息"
+                    app:layout_columnWeight="1" />
+            </android.support.v7.widget.GridLayout>
+
+
+
+
+
+
+
+
 
             <LinearLayout
                 android:id="@+id/ll_shangshi"

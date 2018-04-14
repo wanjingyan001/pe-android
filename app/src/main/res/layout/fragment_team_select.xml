@@ -13,6 +13,13 @@
         android:id="@+id/team_toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
+        app:contentInsetEnd="0dp"
+        app:contentInsetLeft="0dp"
+        app:contentInsetRight="0dp"
+        app:contentInsetStart="0dp"
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        app:theme="@style/AppTheme.AppBarOverlay"
         android:background="@color/color_blue_0888ff">
 
         <com.sogukj.pe.view.CircleImageView
@@ -34,6 +41,17 @@
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/toolbar_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:gravity="center"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:src="@drawable/sogu_ic_menu_help"
+            android:visibility="gone" />
     </android.support.v7.widget.Toolbar>
 
 
