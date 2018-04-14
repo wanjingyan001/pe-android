@@ -24,8 +24,8 @@
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_gravity="left"
-            android:gravity="center"
             android:layout_marginLeft="10dp"
+            android:gravity="center"
             android:src="@drawable/sogu_ic_back" />
 
         <TextView
@@ -47,33 +47,84 @@
             android:gravity="center"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:src="@drawable/sogu_ic_menu_help"
-            android:visibility="gone" />
+            android:src="@drawable/plus" />
     </android.support.v7.widget.Toolbar>
 
-    <include
-        layout="@layout/search_box"
-        android:visibility="gone" />
-
-    <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/refresh"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+        <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/recycler_view"
+            android:id="@+id/refresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                app:layoutManager="LinearLayoutManager"
+                tools:listitem="@layout/item_msg_index" />
+
+            <include layout="@layout/layout_empty" />
+        </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white"
-            android:orientation="vertical"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            app:layoutManager="LinearLayoutManager"
-            tools:listitem="@layout/item_msg_index" />
+            android:background="#19000000"
+            android:gravity="right|top">
 
-        <include layout="@layout/layout_empty" />
-    </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
+            <LinearLayout
+                android:layout_width="115dp"
+                android:layout_height="85dp"
+                android:background="@drawable/add_bg"
+                android:orientation="vertical"
+                android:paddingBottom="4dp"
+                android:paddingTop="4dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:drawableLeft="@drawable/qunliao1"
+                    android:gravity="center"
+                    android:letterSpacing="0.04"
+                    android:lineSpacingExtra="0sp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:text="发起群聊"
+                    android:textColor="#282828"
+                    android:textSize="12sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#f1f1f1" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:drawableLeft="@drawable/saoyisao"
+                    android:gravity="center"
+                    android:letterSpacing="0.04"
+                    android:lineSpacingExtra="0sp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:text="扫一扫"
+                    android:textColor="#ff282828"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+    </FrameLayout>
 </LinearLayout>
