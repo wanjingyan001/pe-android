@@ -182,6 +182,11 @@ abstract class BaseActivity : AppCompatActivity(),AnkoLogger {
 //        val inflate = layoutInflater.inflate(R.layout.layout_custom_toast, null)
 //        val icon = inflate.find<ImageView>(R.id.toast_icon)
 //        val tv = inflate.find<TextView>(R.id.toast_tv)
+
+        if (!(context is Activity)) {
+            return
+        }
+
         if (resId != null) {
             icon.imageResource = resId
         } else {
@@ -190,7 +195,7 @@ abstract class BaseActivity : AppCompatActivity(),AnkoLogger {
         tv.maxWidth = screenWidth / 3
         tv.text = text
         if (toastView == null) {
-            toastView = Toast(applicationContext)
+            toastView = Toast(this)
         }
         toastView?.let {
             it.setGravity(Gravity.CENTER_VERTICAL, 0, -50)

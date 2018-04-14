@@ -65,7 +65,7 @@ class TeamSelectFragment : BaseFragment() {
         initHeader()
         initGroupDiscuss()
         initOrganizationList()
-//        val contactList = initContactList()
+        initContactList()
         doRequest()
 
         val user = Store.store.getUser(baseActivity!!)
@@ -176,26 +176,25 @@ class TeamSelectFragment : BaseFragment() {
         organizationList.setAdapter(orgAdapter)
     }
 
-    private fun initContactList(): LinearLayout {
-        val layout = LinearLayout(context)
-        layout.orientation = LinearLayout.VERTICAL
-        layout.backgroundColor = Color.WHITE
-        val title = TextView(context)
-        title.setTextColor(Color.BLACK)
-        title.text = "最近联系人"
-        val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-        layoutParams.leftMargin = Utils.dpToPx(context, 10)
-        layoutParams.topMargin = Utils.dpToPx(context, 20)
-        layoutParams.bottomMargin = Utils.dpToPx(context, 20)
-        title.layoutParams = layoutParams
-        val contact = RecyclerView(context)
-        contact.layoutManager = LinearLayoutManager(context)
+    private fun initContactList() {
+        contactLayout.layoutManager = LinearLayoutManager(context)
         contactAdapter = ContactAdapter(contactList)
-        contact.adapter = contactAdapter
-        layout.addView(title)
-        layout.addView(contact)
-        layout.id = R.id.contactLayout
-        return layout
+        contactLayout.adapter = contactAdapter
+//        SoguApi.getService(baseActivity!!.application)
+//                .recentContacts()
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribeOn(Schedulers.io())
+//                .subscribe({ payload ->
+//                    if (payload.isOk) {
+//                        contactList.clear()
+//                        contactList.addAll(payload.payload!!)
+//                        contactAdapter.notifyDataSetChanged()
+//                    } else
+//                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
+//                }, { e ->
+//                    Trace.e(e)
+//                    showCustomToast(R.drawable.icon_toast_fail, "数据获取失败")
+//                })
     }
 
     private fun initResultList() {

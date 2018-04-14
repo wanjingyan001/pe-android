@@ -1,5 +1,6 @@
 package com.framework.base
 
+import android.app.Activity
 import android.os.Bundle
 import android.os.Handler
 import android.support.annotation.DrawableRes
@@ -55,7 +56,7 @@ abstract class BaseFragment : android.support.v4.app.Fragment() {
     private var toast: Toast? = null
     fun showToast(text: CharSequence?) {
         if (toast == null) {
-            toast = Toast.makeText(activity,
+            toast = Toast.makeText(baseActivity,
                     text?.toString(),
                     Toast.LENGTH_SHORT)
         } else {
@@ -92,7 +93,7 @@ abstract class BaseFragment : android.support.v4.app.Fragment() {
         tv.maxWidth = width / 3
         tv.text = text
         if (toastView == null) {
-            toastView = Toast(activity)
+            toastView = Toast(baseActivity)
         }
         toastView?.let {
             it.setGravity(Gravity.CENTER_VERTICAL, 0, -50)
