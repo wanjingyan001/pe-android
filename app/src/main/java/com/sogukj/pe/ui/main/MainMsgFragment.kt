@@ -31,6 +31,8 @@ import com.netease.nimlib.sdk.msg.model.IMMessage
 import com.netease.nimlib.sdk.msg.model.RecentContact
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.MessageIndexBean
+import com.sogukj.pe.ui.IM.TeamSearchActivity
+import com.sogukj.pe.ui.IM.TeamSelectActivity
 import com.sogukj.pe.ui.SupportEmptyView
 import com.sogukj.pe.ui.msg.MessageListActivity
 import com.sogukj.pe.ui.user.UserActivity
@@ -73,6 +75,22 @@ class MainMsgFragment : ToolbarFragment() {
         }
         toolbar_back.setOnClickListener {
             UserActivity.start(context)
+        }
+
+        toolbar_menu.setOnClickListener {
+            if (add_layout.visibility == View.VISIBLE) {
+                add_layout.visibility = View.GONE
+                refresh.visibility = View.VISIBLE
+            } else {
+                add_layout.visibility = View.VISIBLE
+                refresh.visibility = View.GONE
+            }
+        }
+        start_chat.setOnClickListener {
+            TeamSelectActivity.start(context, isSelectUser = true, isCreateTeam = true)
+        }
+        scan.setOnClickListener {
+
         }
 
         adapter = RecyclerAdapter(baseActivity!!, { _adapter, parent, type ->
