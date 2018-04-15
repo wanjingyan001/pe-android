@@ -3,11 +3,9 @@ package com.sogukj.pe.ui.project
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Color
-import android.graphics.PorterDuff
+import android.graphics.*
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
@@ -16,13 +14,8 @@ import android.support.v7.widget.Toolbar
 import android.text.Html
 import android.text.TextUtils
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
+import android.view.*
+import android.widget.*
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
@@ -36,6 +29,7 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.NewsBean
 import com.sogukj.pe.bean.ProjectBean
+import com.sogukj.pe.bean.ProjectDetailBean
 import com.sogukj.pe.ui.*
 import com.sogukj.pe.ui.approve.ApproveListActivity
 import com.sogukj.pe.ui.htdata.ProjectBookActivity
@@ -49,6 +43,8 @@ import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_project.*
+import okhttp3.internal.Util
+import org.jetbrains.anko.backgroundResource
 import org.jetbrains.anko.find
 import org.jetbrains.anko.textColor
 import java.net.UnknownHostException
@@ -158,87 +154,95 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
 //            divide1.visibility = View.GONE
 //            divide2.visibility = View.VISIBLE
 //        }
-        divide1.visibility = View.VISIBLE
+//        divide1.visibility = View.VISIBLE
         divide2.visibility = View.VISIBLE
 
-        ll_shangshi.visibility = if (project.is_volatility == 0) View.GONE else View.VISIBLE
+        shangshi_layout.visibility = if (project.is_volatility == 0) View.GONE else View.VISIBLE
 //        adapterNeg = ListAdapter<NewsBean> { NewsHolder() }
-        adapterNeg = RecyclerAdapter(context, { adapter, parent, type ->
-            NewsHolder(adapter.getView(R.layout.item_main_news, parent))
-        })
-        adapterYuqin = RecyclerAdapter(context, { adapter, parent, type ->
-            NewsHolder(adapter.getView(R.layout.item_main_news, parent))
-        })
-        list_negative.layoutManager = LinearLayoutManager(this)
-        list_negative.isNestedScrollingEnabled = false
-        list_negative.adapter = adapterNeg
-        list_yuqin.layoutManager = LinearLayoutManager(this)
-        list_yuqin.adapter = adapterYuqin
-        list_yuqin.isNestedScrollingEnabled = false
-
-        tv_more.setOnClickListener {
-            NegativeNewsActivity.start(this, project, 1)
-        }
-        tv_more_yq.setOnClickListener {
-            NegativeNewsActivity.start(this, project, 2)
-        }
-        adapterNeg.onItemClick = { view, position ->
-            val data = adapterNeg.dataList[position]
-            NewsDetailActivity.start(this, data)
-        }
-        adapterYuqin.onItemClick = { view, position ->
-            val data = adapterYuqin.dataList[position]
-            NewsDetailActivity.start(this, data)
-        }
-        disable(tv_cwsj)
-//        disable(tv_gdzx)
-        disable(tv_xmzy)
+//        adapterNeg = RecyclerAdapter(context, { adapter, parent, type ->
+//            NewsHolder(adapter.getView(R.layout.item_main_news, parent))
+//        })
+//        adapterYuqin = RecyclerAdapter(context, { adapter, parent, type ->
+//            NewsHolder(adapter.getView(R.layout.item_main_news, parent))
+//        })
+//        list_negative.layoutManager = LinearLayoutManager(this)
+//        list_negative.isNestedScrollingEnabled = false
+//        list_negative.adapter = adapterNeg
+//        list_yuqin.layoutManager = LinearLayoutManager(this)
+//        list_yuqin.adapter = adapterYuqin
+//        list_yuqin.isNestedScrollingEnabled = false
+//
+//        tv_more.setOnClickListener {
+//            NegativeNewsActivity.start(this, project, 1)
+//        }
+//        tv_more_yq.setOnClickListener {
+//            NegativeNewsActivity.start(this, project, 2)
+//        }
+//        adapterNeg.onItemClick = { view, position ->
+//            val data = adapterNeg.dataList[position]
+//            NewsDetailActivity.start(this, data)
+//        }
+//        adapterYuqin.onItemClick = { view, position ->
+//            val data = adapterYuqin.dataList[position]
+//            NewsDetailActivity.start(this, data)
+//        }
         val user = Store.store.getUser(this)
         SoguApi.getService(application)
-                .projectPage(pageSize = 20, page = 1, company_id = project.company_id!!, uid = user?.uid)
+                .projectPage(company_id = project.company_id!!)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         payload.payload?.counts?.apply {
-                            refresh(gl_shangshi, this, Color.parseColor("#5785f3"))
-                            refresh(gl_qiyebeijin, this, Color.parseColor("#fe5f39"))
-                            refresh(gl_qiyefazhan, this, Color.parseColor("#5785f3"))
-                            refresh(gl_jinyinzhuankuang, this, Color.parseColor("#fe5f39"))
-                            refresh(gl_zhishichanquan, this, Color.parseColor("#5785f3"))
-                            refreshView()
-                        }
-                        payload.payload?.yuQing?.let { list ->
-                            adapterYuqin.dataList.clear()
-                            payload.payload?.let {
-                                if(list.size <= 3){
-                                    adapterYuqin.dataList.addAll(list)
-                                    tv_more_yq.visibility = View.GONE
-                                } else {
-                                    adapterYuqin.dataList.addAll(list.subList(0, 3))
-                                    tv_more_yq.visibility = View.VISIBLE
-                                }
+                            refreshGrid(gl_changyonggongneng, get(0).value!!, Color.parseColor("#5785f3"))
+                            refreshGrid(gl_qiyeshangchuan, get(1).value!!, Color.parseColor("#5785f3"))
+                            refreshGrid(gl_xiangmudanganku, get(2).value!!, Color.parseColor("#5785f3"))
+                            refreshGrid(gl_shangshi, get(3).value!!, Color.parseColor("#5785f3"))
+                            refreshGrid(gl_qiyebeijin, get(4).value!!, Color.parseColor("#fe5f39"))
+                            refreshGrid(gl_qiyefazhan, get(5).value!!, Color.parseColor("#5785f3"))
+                            refreshGrid(gl_jinyinzhuankuang, get(6).value!!, Color.parseColor("#fe5f39"))
+                            refreshGrid(gl_zhishichanquan, get(7).value!!, Color.parseColor("#5785f3"))
+                            if (get(0).value!!.size == 0) {
+                                changyonggongneng_layout.visibility = View.GONE
                             }
-                            adapterYuqin.notifyDataSetChanged()
-                        }
-                        payload.payload?.fuMian?.let { list ->
-                            adapterNeg.dataList.clear()
-                            payload.payload?.let {
-                                if(list.size <= 3){
-                                    adapterNeg.dataList.addAll(list)
-                                    tv_more.visibility = View.GONE
-                                } else {
-                                    adapterNeg.dataList.addAll(list.subList(0, 3))
-                                    tv_more.visibility = View.VISIBLE
-                                }
+                            if (get(1).value!!.size == 0) {
+                                qiyeshangchuan_layout.visibility = View.GONE
                             }
-                            adapterNeg.notifyDataSetChanged()
+                            if (get(2).value!!.size == 0) {
+                                xiangmudanganku_layout.visibility = View.GONE
+                            }
+                            if (get(3).value!!.size == 0) {
+                                shangshi_layout.visibility = View.GONE
+                            }
+                            if (get(4).value!!.size == 0) {
+                                qiyebeijin_layout.visibility = View.GONE
+                            }
+                            if (get(5).value!!.size == 0) {
+                                qiyefazhan_layout.visibility = View.GONE
+                            }
+                            if (get(6).value!!.size == 0) {
+                                jinyinzhuankuang_layout.visibility = View.GONE
+                            }
+                            if (get(7).value!!.size == 0) {
+                                zhishichanquan_layout.visibility = View.GONE
+                            }
                         }
+
+                        if (payload.payload!!.fu == 0) {
+                            neg_num.text = "运营良好"
+                            neg_num.textColor = Color.parseColor("#ff27d2ab")
+                            neg_num.backgroundResource = R.drawable.neg_yq_bg2
+                        } else {
+                            neg_num.text = "${payload.payload!!.yu}条"
+                            neg_num.textColor = Color.parseColor("#ffff5858")
+                            neg_num.backgroundResource = R.drawable.neg_yq_bg
+                        }
+                        yq_num.text = "${payload.payload!!.yu}条"
+
                     } else
                         showCustomToast(R.drawable.icon_toast_fail, payload.message)
                 }, { e ->
                     Trace.e(e)
-                    tv_more_yq.visibility = View.GONE
                 })
 
         is_business = project.is_business
@@ -346,29 +350,6 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
     }
 
     fun doDel() {
-//        MaterialDialog.Builder(this)
-//                .theme(Theme.LIGHT)
-//                .title("是否删除该项目")
-//                .positiveText("确定")
-//                .negativeText("取消")
-//                .onPositive { dialog, which ->
-//                    SoguApi.getService(application)
-//                            .delProject(project.company_id!!)
-//                            .observeOn(AndroidSchedulers.mainThread())
-//                            .subscribeOn(Schedulers.io())
-//                            .subscribe({ payload ->
-//                                if (payload.isOk) {
-//                                    showCustomToast(R.drawable.icon_toast_success, "删除成功")
-//                                    setResult(Activity.RESULT_OK)
-//                                    finish()
-//                                } else
-//                                    showCustomToast(R.drawable.icon_toast_fail, payload.message)
-//                            }, { e ->
-//                                Trace.e(e)
-//                                showCustomToast(R.drawable.icon_toast_fail, "删除失败")
-//                            })
-//                }
-//                .show()
         val inflate = LayoutInflater.from(this).inflate(R.layout.layout_input_dialog1, null)
         val dialog = MaterialDialog.Builder(this)
                 .customView(inflate, false)
@@ -530,42 +511,113 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
         })
     }
 
-    fun refresh(grid: android.support.v7.widget.GridLayout, data: Map<String, Int?>, color: Int = Color.RED) {
-        val size = grid.childCount
-        for (i in 0 until size) {
-            val child = grid.getChildAt(i) as TipsView
-            val icon = child.compoundDrawables[1]
-            val tag = child.getTag()
-            if (null != tag && tag is String) {
-                var count: Int? = null
-                if (data.containsKey(tag.toLowerCase())) {
-                    count = data[tag.toLowerCase()]
-                } else {
-                    count = data[tag]
-                }
-                if (count != null && count > 0) {
-                    icon?.clearColorFilter()
-                    child.display(count, color)
-                    child.setOnClickListener(this)
-//                    child.setOnClickListener(this::onClick)
-                } else {
-                    icon?.setColorFilter(colorGray, PorterDuff.Mode.SRC_ATOP)
-                    child.setOnClickListener(null)
-                }
-            } else {
-                icon?.setColorFilter(colorGray, PorterDuff.Mode.SRC_ATOP)
-                child.setOnClickListener(null)
-            }
-        }
+    //"status": 1,
+    //"module": 1
+    //"count": "0"
+    //module=1 右上角不需要数字
+    //module=0 count=0 灰色
+    fun refreshGrid(grid: GridView, value: ArrayList<ProjectDetailBean.DetailBean.DetailSmallBean>, color: Int = Color.RED) {
+//        var titleList = HashMap<String, ProjectDetailBean.DetailBean.DetailSmallBean>()
+//        for (bean in value) {
+//            titleList.put(bean.name!!, bean)
+//        }
+//
+//        val size = grid.childCount
+//        for (i in 0 until size) {
+//            val child = grid.getChildAt(i) as TipsView
+//            val icon = child.compoundDrawables[1]
+//            val tag = child.text//child.getTag()
+//            if (null != tag && tag is String) {
+//                var count: Int? = null
+//
+//                if (titleList.containsKey(tag.toLowerCase())) {
+//                    count = data[tag.toLowerCase()]
+//                } else {
+//                    count = data[tag]
+//                }
+//
+//                if (count != null && count > 0) {
+//                    icon?.clearColorFilter()
+//                    child.display(count, color)
+//                    child.setOnClickListener(this)
+//                } else {
+//                    icon?.setColorFilter(colorGray, PorterDuff.Mode.SRC_ATOP)
+//                    child.setOnClickListener(null)
+//                }
+//            } else {
+//                icon?.setColorFilter(colorGray, PorterDuff.Mode.SRC_ATOP)
+//                child.setOnClickListener(null)
+//            }
+//        }
+
+        var adapter = GridAdapter(context, value, color)
+        grid.adapter = adapter
+        adapter.notifyDataSetChanged()
+        grid.verticalSpacing = Utils.dpToPx(context, 10)
     }
 
-    fun refreshView() {
-        val size = gl_htdata.childCount
-        for (i in 0 until size) {
-            if (gl_htdata.getChildAt(i) != null) {
-                val child = gl_htdata.getChildAt(i) as TipsView
-                child.setOnClickListener(this)
+    inner class GridAdapter(var context: Context, val list: ArrayList<ProjectDetailBean.DetailBean.DetailSmallBean>, val color: Int = Color.RED) : BaseAdapter() {
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+            var view = convertView
+            var bean = list.get(position)
+            var holder: ViewHolder? = null
+            if (view == null) {
+                holder = ViewHolder()
+                view = LayoutInflater.from(context).inflate(R.layout.project_detail_item, null)
+                holder.icon = view.findViewById(R.id.icon) as ImageView
+                holder.seq = view.findViewById(R.id.seq) as TextView
+                holder.title = view.findViewById(R.id.title) as TextView
+                view.tag = holder
+            } else {
+                holder = view.tag as ViewHolder
             }
+            holder.title!!.text = bean.name
+            holder.icon!!.setImageResource(IdToDrawable(bean.id!!))
+            //holder.title!!.textSize = Utils.dpToPx(context, if (bean.name!!.length == 1) 10 else if (bean.name!!.length == 2) 9 else 8).toFloat()
+            view!!.id = bean.id!!
+
+            var count = bean.count
+            if (bean.module == 1) {
+                holder.seq!!.visibility = View.GONE
+                if (bean.status == 1) {
+                    holder.icon!!.clearColorFilter()
+                    view.setOnClickListener(this@ProjectActivity)
+                } else {
+                    holder.icon!!.setColorFilter(colorGray, PorterDuff.Mode.SRC_ATOP)
+                    view.setOnClickListener(null)
+                }
+            } else {
+                if (count != null && count.toInt() > 0) {
+                    holder.seq!!.setText(count)
+                    holder.seq!!.textColor = color
+                    holder.icon!!.clearColorFilter()
+                    view.setOnClickListener(this@ProjectActivity)
+                } else {
+                    holder.seq!!.visibility = View.GONE
+                    holder.icon!!.setColorFilter(colorGray, PorterDuff.Mode.SRC_ATOP)
+                    view.setOnClickListener(null)
+                }
+            }
+
+            return view
+        }
+
+        override fun getItem(position: Int): Any {
+            return list.get(position)
+        }
+
+        override fun getItemId(position: Int): Long {
+            return position.toLong()
+        }
+
+        override fun getCount(): Int {
+            return list.size
+        }
+
+        inner class ViewHolder {
+            var icon: ImageView? = null
+            var seq: TextView? = null
+            var title: TextView? = null
         }
     }
 
@@ -574,114 +626,136 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
         view.setOnClickListener(null)
     }
 
+    fun IdToDrawable(id: Int): Int {
+        return when (id) {
+            1 -> R.drawable.ic_proj_gsxx//工商信息
+            2 -> R.drawable.ic_proj_qygx//企业关系
+            3 -> R.drawable.ic_proj_gudong//股东信息
+            4 -> R.drawable.ic_proj_gqjg//股权结构
+            5 -> R.drawable.ic_proj_zyry//主要人员
+            6 -> R.drawable.ic_proj_dwtz//对外投资
+            7 -> R.drawable.ic_proj_bgjl//变更记录
+            8 -> R.drawable.ic_proj_qynb//企业年报
+            9 -> R.drawable.ic_proj_fzjg//分支机构
+            10 -> R.drawable.ic_proj_gsjj//公司简介
+            11 -> R.drawable.ic_proj_rzls//融资历史
+            12 -> R.drawable.ic_proj_tzsj//投资事件
+            13 -> R.drawable.ic_proj_hxtd//核心团队
+            14 -> R.drawable.ic_proj_qyyw//企业业务
+            15 -> R.drawable.ic_proj_jpxx//竞品信息
+            16 -> R.drawable.ic_proj_zpxx//招聘信息
+            17 -> R.drawable.ic_proj_zqxx//债券信息
+            18 -> R.drawable.ic_proj_swpj//税务评级
+            19 -> R.drawable.ic_proj_gdxx//购地信息
+            20 -> R.drawable.ic_proj_ztb//招投标
+            21 -> R.drawable.ic_proj_zzzs//资质证书
+            22 -> R.drawable.ic_proj_ccjc//抽查检查
+            23 -> R.drawable.ic_proj_cpxx//产品信息
+            24 -> R.drawable.ic_proj_xzxk//行政许可
+            25 -> R.drawable.ic_proj_qsxx//清算信息
+            26 -> R.drawable.ic_proj_gsyg//公司员工
+            27 -> R.drawable.ic_proj_cwzl//财务总览
+            28 -> R.drawable.ic_proj_lrb//利润表
+            29 -> R.drawable.ic_proj_zcfzb//资产负债表
+            30 -> R.drawable.ic_proj_xjllb//现金流量表
+            31 -> R.drawable.ic_proj_jckxyxx//进出口信用信息
+            32 -> R.drawable.ic_proj_sbxx//商标信息
+            33 -> R.drawable.ic_proj_zlxx//专利信息
+            34 -> R.drawable.ic_proj_zzq//著作权
+            35 -> R.drawable.ic_proj_rzq//软著权
+            36 -> R.drawable.ic_proj_wzba//网站备案
+            37 -> R.drawable.ic_proj_qyzs//企业证书
+            38 -> R.drawable.ic_proj_gphq//股票行情
+            39 -> R.drawable.ic_proj_qyjs//企业简介
+            40 -> R.drawable.ic_proj_ggxx//高管信息
+            41 -> R.drawable.ic_proj_cgkg//参股控股
+            42 -> R.drawable.ic_proj_ssgg//上市公告
+            43 -> R.drawable.ic_proj_sdgd//十大股东
+            44 -> R.drawable.ic_proj_sdlt//十大流通股东
+            45 -> R.drawable.ic_proj_fxxg//发行相关
+            46 -> R.drawable.ic_proj_gbjg//股本结构
+            47 -> R.drawable.ic_proj_gbbd//股本变动
+            48 -> R.drawable.ic_proj_fhqk//分红情况
+            49 -> R.drawable.ic_proj_pgqk//配股情况
+            50 -> R.drawable.ic_proj_cwsj//财务数据
+            51 -> R.drawable.ic_proj_gdzx//股东征信
+            52 -> R.drawable.ic_proj_xmws//项目文书
+            53 -> R.drawable.ic_proj_xmgy//项目概要
+            54 -> R.drawable.ic_proj_xmcb//储备信息
+            55 -> R.drawable.ic_proj_gzjl//跟踪记录
+            56 -> R.drawable.ic_proj_jdsj//尽调数据
+            57 -> R.drawable.ic_proj_tjsj//投决数据
+            58 -> R.drawable.ic_proj_thglsj//投后管理数据
+            59 -> R.drawable.ic_proj_spls//审批历史
+            60 -> R.drawable.qqxx//股权信息
+            else -> 0
+        }
+    }
+
     val colorGray = Color.parseColor("#D9D9D9")
     override fun onClick(view: View) {
         when (view.id) {
-            R.id.tv_stock -> StockInfoActivity.start(this@ProjectActivity, project)
-            R.id.tv_company -> CompanyInfoActivity.start(this@ProjectActivity, project)
-            R.id.tv_gaoguan -> GaoGuanActivity.start(this@ProjectActivity, project)
-            R.id.tv_cangukonggu -> CanGuActivity.start(this@ProjectActivity, project)
-            R.id.tv_shangshigonggao -> AnnouncementActivity.start(this@ProjectActivity, project)
-            R.id.tv_shidagudong -> ShiDaGuDongActivity.start(this@ProjectActivity, project)
-            R.id.tv_shidaliutong -> ShiDaLiuTongGuDongActivity.start(this@ProjectActivity, project)
-            R.id.tv_faxinxiangguan -> IssueRelatedActivity.start(this@ProjectActivity, project)
-            R.id.tv_gubenbiandong -> EquityChangeActivity.start(this@ProjectActivity, project)
-            R.id.tv_fenhong -> BonusInfoActivity.start(this@ProjectActivity, project)
-            R.id.tv_peigu -> AllotmentListActivity.start(this@ProjectActivity, project)
-            R.id.tv_gubenjiegou -> GuBenJieGouActivity.start(this@ProjectActivity, project)
+            38 -> StockInfoActivity.start(this@ProjectActivity, project)//股票行情
+            39 -> CompanyInfoActivity.start(this@ProjectActivity, project)//企业简介
+            40 -> GaoGuanActivity.start(this@ProjectActivity, project)//高管信息
+            41 -> CanGuActivity.start(this@ProjectActivity, project)//参股控股
+            42 -> AnnouncementActivity.start(this@ProjectActivity, project)//上市公告
+            43 -> ShiDaGuDongActivity.start(this@ProjectActivity, project)//十大股东
+            44 -> ShiDaLiuTongGuDongActivity.start(this@ProjectActivity, project)//十大流通
+            45 -> IssueRelatedActivity.start(this@ProjectActivity, project)//发行相关
+            47 -> EquityChangeActivity.start(this@ProjectActivity, project)//股本变动
+            48 -> BonusInfoActivity.start(this@ProjectActivity, project)//分红情况
+            49 -> AllotmentListActivity.start(this@ProjectActivity, project)//配股情况
+            46 -> GuBenJieGouActivity.start(this@ProjectActivity, project)//股本结构
 
-            R.id.tv_bizinfo -> BizInfoActivity.start(this@ProjectActivity, project)
-            R.id.tv_shareholder_info -> ShareHolderInfoActivity.start(this@ProjectActivity, project)
-            R.id.tv_qiyelianbao -> QiYeLianBaoActivity.start(this@ProjectActivity, project)
-            R.id.tv_change_record -> ChangeRecordActivity.start(this@ProjectActivity, project)
-            R.id.tv_investment -> InvestmentActivity.start(this@ProjectActivity, project)
-            R.id.tv_key_personal -> KeyPersonalActivity.start(this@ProjectActivity, project)
-            R.id.tv_equity_structure -> EquityStructureActivity.start(this@ProjectActivity, project)
-            R.id.tv_branch -> BranchListActivity.start(this@ProjectActivity, project)
-            R.id.tv_gsjj -> CompanyInfo2Activity.start(this@ProjectActivity, project)
+            1 -> BizInfoActivity.start(this@ProjectActivity, project)//工商信息
+            3 -> ShareHolderInfoActivity.start(this@ProjectActivity, project)//股东信息
+            8 -> QiYeLianBaoActivity.start(this@ProjectActivity, project)//企业年报
+            7 -> ChangeRecordActivity.start(this@ProjectActivity, project)//变更记录
+            6 -> InvestmentActivity.start(this@ProjectActivity, project)//对外投资
+            5 -> KeyPersonalActivity.start(this@ProjectActivity, project)//主要人员
+            4 -> EquityStructureActivity.start(this@ProjectActivity, project)//股权结构
+            9 -> BranchListActivity.start(this@ProjectActivity, project)//分支机构
+            10 -> CompanyInfo2Activity.start(this@ProjectActivity, project)//公司简介
 
-            R.id.tv_rongzilishi -> FinanceHistoryActivity.start(this@ProjectActivity, project)
-            R.id.tv_touzishijian -> InvestEventActivity.start(this@ProjectActivity, project)
-            R.id.tv_hexintuandui -> CoreTeamActivity.start(this@ProjectActivity, project)
-            R.id.tv_qiyeyewu -> BusinessEventsActivity.start(this@ProjectActivity, project)
-            R.id.tv_jinpinxinxi -> ProductInfoActivity.start(this@ProjectActivity, project)
-            R.id.tv_zhaopinxinxi -> RecruitActivity.start(this@ProjectActivity, project)
+            11 -> FinanceHistoryActivity.start(this@ProjectActivity, project)//融资历史
+            12 -> InvestEventActivity.start(this@ProjectActivity, project)//投资事件
+            13 -> CoreTeamActivity.start(this@ProjectActivity, project)//核心团队
+            14 -> BusinessEventsActivity.start(this@ProjectActivity, project)//企业业务
+            15 -> ProductInfoActivity.start(this@ProjectActivity, project)//竞品信息
+            16 -> RecruitActivity.start(this@ProjectActivity, project)//招聘信息
 
-            R.id.tv_zhaopinxinxi -> RecruitActivity.start(this@ProjectActivity, project)
-            R.id.tv_zhaiquanxinxi -> BondActivity.start(this@ProjectActivity, project)
-            R.id.tv_shuiwupinji -> TaxRateActivity.start(this@ProjectActivity, project)
-            R.id.tv_goudixinxi -> LandPurchaseActivity.start(this@ProjectActivity, project)
-            R.id.tv_zhaotoubiao -> BidsActivity.start(this@ProjectActivity, project)
-            R.id.tv_zizhizhenshu -> QualificationListActivity.start(this@ProjectActivity, project)
-            R.id.tv_chouchajiancha -> CheckListActivity.start(this@ProjectActivity, project)
-            R.id.tv_chanpinxinxi -> AppListActivity.start(this@ProjectActivity, project)
+            17 -> BondActivity.start(this@ProjectActivity, project)//债券信息
+            18 -> TaxRateActivity.start(this@ProjectActivity, project)//税务评级
+            19 -> LandPurchaseActivity.start(this@ProjectActivity, project)//购地信息
+            20 -> BidsActivity.start(this@ProjectActivity, project)//招投标
+            21 -> QualificationListActivity.start(this@ProjectActivity, project)//资质证书
+            22 -> CheckListActivity.start(this@ProjectActivity, project)//抽查检查
+            23 -> AppListActivity.start(this@ProjectActivity, project)//产品信息
 
-            R.id.tv_shangbiao -> BrandListActivity.start(this@ProjectActivity, project)
-            R.id.tv_zhuanli -> PatentListActivity.start(this@ProjectActivity, project)
-            R.id.tv_ranzhuquan -> CopyrightListActivity.start(this@ProjectActivity, project, 1)
-            R.id.tv_zhuzuoquan -> CopyrightListActivity.start(this@ProjectActivity, project, 2)
-            R.id.tv_wangzhanbeian -> ICPListActivity.start(this@ProjectActivity, project)
+            32 -> BrandListActivity.start(this@ProjectActivity, project)//商标信息
+            33 -> PatentListActivity.start(this@ProjectActivity, project)//专利信息
+            34 -> CopyrightListActivity.start(this@ProjectActivity, project, 1)//软著权
+            35 -> CopyrightListActivity.start(this@ProjectActivity, project, 2)//著作权
+            36 -> ICPListActivity.start(this@ProjectActivity, project)//网站备案
 
-            R.id.tv_xmws -> ProjectBookActivity.start(this@ProjectActivity, project)
-            R.id.tv_xmcb -> StoreProjectAddActivity.startView(this@ProjectActivity, project)
-            R.id.tv_gdzx -> ShareholderCreditActivity.start(this@ProjectActivity, project)
+            52 -> ProjectBookActivity.start(this@ProjectActivity, project)//项目文书
+            54 -> StoreProjectAddActivity.startView(this@ProjectActivity, project)//储备信息
+            51 -> ShareholderCreditActivity.start(this@ProjectActivity, project)//高管征信（股东征信）
 
         // 跟踪记录,尽调数据,投决数据,投后管理数据
-            R.id.tv_xmgz -> RecordTraceActivity.start(this@ProjectActivity, project)
-            R.id.tv_xmjd -> SurveyDataActivity.start(this@ProjectActivity, project)
-            R.id.tv_xmtj -> InvestSuggestActivity.start(this@ProjectActivity, project)
-            R.id.tv_xmthgl -> ManageDataActivity.start(this@ProjectActivity, project)
+            55 -> RecordTraceActivity.start(this@ProjectActivity, project)//跟踪记录
+            56 -> SurveyDataActivity.start(this@ProjectActivity, project)//尽调数据
+            57 -> InvestSuggestActivity.start(this@ProjectActivity, project)//投决数据
+            58 -> ManageDataActivity.start(this@ProjectActivity, project)//投后管理
 
-            R.id.tv_spls -> ApproveListActivity.start(this@ProjectActivity, null, project.company_id)
+            59 -> ApproveListActivity.start(this@ProjectActivity, null, project.company_id)//审批历史
 
             R.id.im -> {
                 createOrJoin()
             }
         }
     }
-
-//    override val menuId: Int
-//        get() = R.menu.menu_mark
-//
-//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-//        val flag = super.onCreateOptionsMenu(menu)
-//        val menuMark = menu.findItem(R.id.action_mark) as MenuItem
-//        if (null != project) {
-//            when (project?.is_focus) {
-//                1 -> menuMark?.title = ("已关注")
-//                else -> menuMark?.title = ("关注")
-//            }
-//        }
-//        return flag
-//    }
-//
-//    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-//        when (item?.itemId) {
-//            R.id.action_mark -> {
-//                toggleMark(item!!)
-//            }
-//        }
-//        return false
-//    }
-//
-//    fun toggleMark(item: MenuItem) {
-//        val user = Store.store.getUser(this)
-//        if (null == user) return
-//        val mark = if (project.is_focus == 1) 0 else 1
-//        SoguApi.getService(application)
-//                .mark(uid = user!!.uid!!, company_id = project.company_id!!, type = mark)
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribeOn(Schedulers.io())
-//                .subscribe({ payload ->
-//                    if (payload.isOk) {
-//                        project.is_focus = mark
-//                        item.title = if (mark == 1) "已关注" else "关注"
-//                    }
-//                }, { e ->
-//                    Trace.e(e)
-//                })
-//
-//    }
 
     inner class NewsHolder(convertView: View) : RecyclerHolder<NewsBean>(convertView) {
         val tv_summary: TextView = convertView.find(R.id.tv_summary)
@@ -692,9 +766,6 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
         val icon: ImageView = convertView.find(R.id.imageIcon)
         override fun setData(view: View, data: NewsBean, position: Int) {
             var label = data?.title
-//                if (!TextUtils.isEmpty(label) && !TextUtils.isEmpty(key)) {
-//                    label = label!!.replaceFirst(key, "<font color='#ff3300'>${key}</font>")
-//                }
             tv_summary.text = Html.fromHtml(label)
             val strTime = data?.time
             tv_time.visibility = View.GONE
@@ -706,7 +777,7 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
 //                tv_date.text = strs.getOrNull(0)
                 try {
                     tv_date.text = Utils.formatDate2(strTime)
-                }catch (e:Exception){
+                } catch (e: Exception) {
                     e.printStackTrace()
                 }
                 tv_time.text = strs.getOrNull(1)
