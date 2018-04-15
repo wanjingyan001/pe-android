@@ -74,23 +74,30 @@ class TeamSelectActivity : BaseActivity() {
         default = intent.getSerializableExtra(Extras.DEFAULT) as ArrayList<Int>?
         header = initHeader()
         val organizationList = initOrganizationList()
-//        val contactList = initContactList()
+        val contactList = initContactList()
         val layout = LinearLayout(this)
         val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
         params.bottomMargin = Utils.dpToPx(this, 10)
         layout.orientation = LinearLayout.VERTICAL
+
+        var orgHeader = initOrgHead()
+        var contactHeader = initContactHead()
+
         if (isSelectUser) {
             team_toolbar_title.text = "选择联系人"
             confirmSelectLayout.visibility = View.VISIBLE
-//            layout.addView(contactList, params)
-            layout.addView(header)
+            //layout.addView(header)
+            layout.addView(contactHeader)
+            layout.addView(contactList, params)
+            layout.addView(orgHeader)
             layout.addView(organizationList, params)
         } else {
             team_toolbar_title.text = "通讯录"
             confirmSelectLayout.visibility = View.GONE
             layout.addView(header)
+            layout.addView(orgHeader)
             layout.addView(organizationList, params)
-//            layout.addView(contactList, params)
+            layout.addView(contactList, params)
         }
         listContent.addView(layout)
         doRequest()
@@ -212,6 +219,20 @@ class TeamSelectActivity : BaseActivity() {
         return inflate
     }
 
+    private fun initOrgHead(): LinearLayout {
+        var view = layoutInflater.inflate(R.layout.org_header, null) as LinearLayout
+        return view
+    }
+
+    private fun initContactHead(): LinearLayout {
+        var view = layoutInflater.inflate(R.layout.org_header, null) as LinearLayout
+        var icon = view.findViewById(R.id.icon) as ImageView
+        var title = view.findViewById(R.id.title) as TextView
+        icon.setBackgroundResource(R.drawable.contact)
+        title.text = "最近联系人"
+        return view
+    }
+
     private fun initOrganizationList(): CustomExpandableListView {
         val organization = CustomExpandableListView(this)
         organization.setGroupIndicator(null)
@@ -227,21 +248,38 @@ class TeamSelectActivity : BaseActivity() {
         val layout = LinearLayout(this)
         layout.orientation = LinearLayout.VERTICAL
         layout.backgroundColor = Color.WHITE
-        val title = TextView(this)
-        title.setTextColor(Color.BLACK)
-        title.text = "最近联系人"
-        val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        layoutParams.leftMargin = Utils.dpToPx(this, 10)
-        layoutParams.topMargin = Utils.dpToPx(this, 20)
-        layoutParams.bottomMargin = Utils.dpToPx(this, 20)
-        title.layoutParams = layoutParams
+//        val title = TextView(this)
+//        title.setTextColor(Color.BLACK)
+//        title.text = "最近联系人"
+//        val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+//        layoutParams.leftMargin = Utils.dpToPx(this, 10)
+//        layoutParams.topMargin = Utils.dpToPx(this, 20)
+//        layoutParams.bottomMargin = Utils.dpToPx(this, 20)
+//        title.layoutParams = layoutParams
         val contact = RecyclerView(this)
         contact.layoutManager = LinearLayoutManager(this)
         contactAdapter = ContactAdapter(contactList)
         contact.adapter = contactAdapter
-        layout.addView(title)
+        //layout.addView(title)
         layout.addView(contact)
         layout.id = R.id.contactLayout
+
+        SoguApi.getService(application)
+                .recentContacts()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        contactList.clear()
+                        contactList.addAll(payload.payload!!)
+                        contactAdapter.notifyDataSetChanged()
+                    } else
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    showCustomToast(R.drawable.icon_toast_fail, "最近联系人数据获取失败")
+                })
+
         return layout
     }
 
@@ -309,7 +347,7 @@ class TeamSelectActivity : BaseActivity() {
         resultAdapter.notifyDataSetChanged()
     }
 
-    private var pathByUri: String?= null
+    private var pathByUri: String? = null
     private fun getShareFile() {
         if (intent.action == Intent.ACTION_SEND && intent.extras.containsKey(Intent.EXTRA_STREAM)) {
             val uri = intent.extras.getParcelable<Uri>(Intent.EXTRA_STREAM)
@@ -346,9 +384,9 @@ class TeamSelectActivity : BaseActivity() {
                 layout.orientation = LinearLayout.VERTICAL
                 layout.removeAllViews()
                 if (isSelectUser) {
-                    if (isCreateTeam){
+                    if (isCreateTeam) {
                         team_toolbar_title.text = "创建群组"
-                    }else{
+                    } else {
                         team_toolbar_title.text = "选择联系人"
                     }
                     confirmSelectLayout.visibility = View.VISIBLE
@@ -466,7 +504,7 @@ class TeamSelectActivity : BaseActivity() {
                         }
                     } else {
                         //查看详情
-                        PersonalInfoActivity.start(this@TeamSelectActivity, userBean,pathByUri)
+                        PersonalInfoActivity.start(this@TeamSelectActivity, userBean, pathByUri)
                     }
                 }
             }
@@ -562,7 +600,7 @@ class TeamSelectActivity : BaseActivity() {
                     }
                 } else {
                     //查看详情
-                    PersonalInfoActivity.start(this@TeamSelectActivity, userBean,pathByUri)
+                    PersonalInfoActivity.start(this@TeamSelectActivity, userBean, pathByUri)
                 }
             }
 
