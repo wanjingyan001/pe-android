@@ -227,8 +227,6 @@ dependencies {
     compile project(':stack-layout')
     implementation project(':library')
     compile 'com.tencent.bugly:crashreport:latest.release'
-    compile 'com.google.zxing:android-core:3.3.0'
-
     //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.2.0
     implementation files('libs/pinyin4j-2.5.0.jar')
 }
