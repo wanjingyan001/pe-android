@@ -270,183 +270,75 @@
                     android:layout_height="50dp"
                     android:background="@drawable/qingbaojiankong" />
 
-                <View
+                <LinearLayout
+                    android:id="@+id/neg"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="负面讯息"
-                    android:textColor="#ff282828"
-                    android:textSize="12sp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="负面讯息"
+                        android:textColor="#ff282828"
+                        android:textSize="12sp" />
 
-                <TextView
-                    android:id="@+id/neg_num"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="6dp"
-                    android:background="@drawable/neg_yq_bg"
-                    android:padding="2dp"
-                    android:text="201条"
-                    android:textColor="#ffff5858"
-                    android:textSize="10sp" />
+                    <TextView
+                        android:id="@+id/neg_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="6dp"
+                        android:background="@drawable/neg_yq_bg"
+                        android:padding="2dp"
+                        android:text="201条"
+                        android:textColor="#ffff5858"
+                        android:textSize="10sp" />
+                </LinearLayout>
 
-                <View
+
+                <LinearLayout
+                    android:id="@+id/yuqing"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="企业舆情"
-                    android:textColor="#ff282828"
-                    android:textSize="12sp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="企业舆情"
+                        android:textColor="#ff282828"
+                        android:textSize="12sp" />
 
-                <TextView
-                    android:id="@+id/yq_num"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="6dp"
-                    android:background="@drawable/neg_yq_bg"
-                    android:padding="2dp"
-                    android:text="201条"
-                    android:textColor="#ffff5858"
-                    android:textSize="10sp" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1" />
+                    <TextView
+                        android:id="@+id/yq_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="6dp"
+                        android:background="@drawable/neg_yq_bg"
+                        android:padding="2dp"
+                        android:text="201条"
+                        android:textColor="#ffff5858"
+                        android:textSize="10sp" />
+                </LinearLayout>
 
                 <ImageView
                     android:layout_width="13dp"
                     android:layout_height="16dp"
                     android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:alpha="0.5"
                     android:background="@drawable/ic_arrow_r" />
 
             </LinearLayout>
-
-            <!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:gravity="center_vertical"-->
-            <!--android:orientation="horizontal"-->
-            <!--android:padding="10dp">-->
-
-            <!--<View-->
-            <!--android:layout_width="5dp"-->
-            <!--android:layout_height="10dp"-->
-            <!--android:layout_marginRight="10dp"-->
-            <!--android:background="@color/color_main" />-->
-
-            <!--<TextView-->
-            <!--style="@style/SoguTextNormal"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="负面信息" />-->
-
-            <!--<ImageView-->
-            <!--android:id="@+id/point1"-->
-            <!--android:layout_width="6dp"-->
-            <!--android:layout_height="6dp"-->
-            <!--android:layout_gravity="top"-->
-            <!--android:src="@drawable/red_point"-->
-            <!--android:visibility="invisible" />-->
-            <!--</LinearLayout>-->
-
-            <!--<android.support.v7.widget.RecyclerView-->
-            <!--android:id="@+id/list_negative"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:background="@color/white" />-->
-
-            <!--<TextView-->
-            <!--android:id="@+id/tv_more"-->
-            <!--style="@style/SoguTextNormal"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:background="@drawable/bg_item_list"-->
-            <!--android:gravity="center"-->
-            <!--android:paddingBottom="13dp"-->
-            <!--android:paddingTop="12dp"-->
-            <!--android:text="查看更多"-->
-            <!--android:textColor="@color/text_more"-->
-            <!--android:textSize="15sp" />-->
-
-            <!--<View-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="10dp"-->
-            <!--android:background="@color/divider" />-->
-
-            <!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:gravity="center_vertical"-->
-            <!--android:orientation="horizontal"-->
-            <!--android:padding="10dp">-->
-
-            <!--<View-->
-            <!--android:layout_width="5dp"-->
-            <!--android:layout_height="10dp"-->
-            <!--android:layout_marginRight="10dp"-->
-            <!--android:background="@color/color_main" />-->
-
-            <!--<TextView-->
-            <!--style="@style/SoguTextNormal"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="企业舆情" />-->
-
-            <!--<ImageView-->
-            <!--android:id="@+id/point2"-->
-            <!--android:layout_width="6dp"-->
-            <!--android:layout_height="6dp"-->
-            <!--android:layout_gravity="top"-->
-            <!--android:src="@drawable/red_point"-->
-            <!--android:visibility="invisible" />-->
-            <!--</LinearLayout>-->
-
-
-            <!--<android.support.v7.widget.RecyclerView-->
-            <!--android:id="@+id/list_yuqin"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:background="@color/white" />-->
-            <!--&lt;!&ndash;<com.sogukj.pe.view.ListViewCompat&ndash;&gt;-->
-            <!--&lt;!&ndash;android:id="@+id/list_yuqin"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:background="@color/white"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:divider="@color/divider"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:dividerHeight="1px"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:listSelector="@drawable/bg_item_list" />&ndash;&gt;-->
-            <!--<TextView-->
-            <!--android:id="@+id/tv_more_yq"-->
-            <!--style="@style/SoguTextNormal"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:background="@drawable/bg_item_list"-->
-            <!--android:gravity="center"-->
-            <!--android:paddingBottom="13dp"-->
-            <!--android:paddingTop="12dp"-->
-            <!--android:text="查看更多"-->
-            <!--android:textColor="@color/text_more"-->
-            <!--android:textSize="15sp" />-->
-
-            <!--<View-->
-            <!--android:id="@+id/divide1"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="10dp"-->
-            <!--android:background="@color/divider" />-->
 
             <LinearLayout
                 android:id="@+id/changyonggongneng_layout"

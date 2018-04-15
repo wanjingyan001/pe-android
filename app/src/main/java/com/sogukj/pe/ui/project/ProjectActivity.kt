@@ -186,6 +186,7 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
 //            val data = adapterYuqin.dataList[position]
 //            NewsDetailActivity.start(this, data)
 //        }
+
         val user = Store.store.getUser(this)
         SoguApi.getService(application)
                 .projectPage(company_id = project.company_id!!)
@@ -232,12 +233,23 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
                             neg_num.text = "运营良好"
                             neg_num.textColor = Color.parseColor("#ff27d2ab")
                             neg_num.backgroundResource = R.drawable.neg_yq_bg2
+                            neg.setOnClickListener(null)
                         } else {
-                            neg_num.text = "${payload.payload!!.yu}条"
+                            neg_num.text = "${payload.payload!!.fu}条"
                             neg_num.textColor = Color.parseColor("#ffff5858")
                             neg_num.backgroundResource = R.drawable.neg_yq_bg
+                            neg.setOnClickListener {
+                                ProjectNewsActivity.start(context, "负面讯息", 1, project.company_id!!)
+                            }
                         }
                         yq_num.text = "${payload.payload!!.yu}条"
+                        if (payload.payload!!.yu == 0) {
+                            yuqing.setOnClickListener(null)
+                        } else {
+                            yuqing.setOnClickListener {
+                                ProjectNewsActivity.start(context, "企业舆情", 2, project.company_id!!)
+                            }
+                        }
 
                     } else
                         showCustomToast(R.drawable.icon_toast_fail, payload.message)
@@ -517,39 +529,6 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
     //module=1 右上角不需要数字
     //module=0 count=0 灰色
     fun refreshGrid(grid: GridView, value: ArrayList<ProjectDetailBean.DetailBean.DetailSmallBean>, color: Int = Color.RED) {
-//        var titleList = HashMap<String, ProjectDetailBean.DetailBean.DetailSmallBean>()
-//        for (bean in value) {
-//            titleList.put(bean.name!!, bean)
-//        }
-//
-//        val size = grid.childCount
-//        for (i in 0 until size) {
-//            val child = grid.getChildAt(i) as TipsView
-//            val icon = child.compoundDrawables[1]
-//            val tag = child.text//child.getTag()
-//            if (null != tag && tag is String) {
-//                var count: Int? = null
-//
-//                if (titleList.containsKey(tag.toLowerCase())) {
-//                    count = data[tag.toLowerCase()]
-//                } else {
-//                    count = data[tag]
-//                }
-//
-//                if (count != null && count > 0) {
-//                    icon?.clearColorFilter()
-//                    child.display(count, color)
-//                    child.setOnClickListener(this)
-//                } else {
-//                    icon?.setColorFilter(colorGray, PorterDuff.Mode.SRC_ATOP)
-//                    child.setOnClickListener(null)
-//                }
-//            } else {
-//                icon?.setColorFilter(colorGray, PorterDuff.Mode.SRC_ATOP)
-//                child.setOnClickListener(null)
-//            }
-//        }
-
         var adapter = GridAdapter(context, value, color)
         grid.adapter = adapter
         adapter.notifyDataSetChanged()

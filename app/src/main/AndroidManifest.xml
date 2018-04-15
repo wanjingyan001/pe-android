@@ -674,7 +674,8 @@
         <activity android:name=".ui.partyBuild.PartyMoreActivity" />
         <activity android:name=".ui.calendar.RemindTimeActivity" />
         <activity android:name=".ui.fund.FundEditActivity" />
-        <activity android:name=".ui.user.UserActivity"></activity>
+        <activity android:name=".ui.user.UserActivity" />
+        <activity android:name=".ui.project.ProjectNewsActivity"></activity>
     </application>
 
 </manifest>
