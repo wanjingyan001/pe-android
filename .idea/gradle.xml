@@ -15,6 +15,7 @@
             <option value="$PROJECT_DIR$/shareSDK" />
             <option value="$PROJECT_DIR$/stack-layout" />
             <option value="$PROJECT_DIR$/uikit" />
+            <option value="$PROJECT_DIR$/zxingLib" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

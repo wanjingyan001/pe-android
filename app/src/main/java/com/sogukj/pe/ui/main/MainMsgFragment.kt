@@ -1,11 +1,14 @@
 package com.sogukj.pe.ui.main
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Html
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
@@ -42,6 +45,7 @@ import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
+import com.xuexuan.zxing.android.activity.CaptureActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_msg_center.*
@@ -90,7 +94,8 @@ class MainMsgFragment : ToolbarFragment() {
             TeamSelectActivity.start(context, isSelectUser = true, isCreateTeam = true)
         }
         scan.setOnClickListener {
-
+            val openCameraIntent = Intent(context, CaptureActivity::class.java)
+            startActivityForResult(openCameraIntent, 0)
         }
 
         adapter = RecyclerAdapter(baseActivity!!, { _adapter, parent, type ->
@@ -240,6 +245,15 @@ class MainMsgFragment : ToolbarFragment() {
 
         toolbar_back.setOnClickListener { activity.onBackPressed() }
         registerObservers(true)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            val bundle = data!!.extras
+            val scanResult = bundle!!.getString("result")
+            Log.e("11111111111", scanResult)
+        }
     }
 
     var page = 1

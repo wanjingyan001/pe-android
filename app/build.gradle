@@ -188,6 +188,7 @@ dependencies {
     // Coroutine listeners for Anko Layouts
     compile "org.jetbrains.anko:anko-sdk25-coroutines:$anko_version"
     compile "org.jetbrains.anko:anko-appcompat-v7-coroutines:$anko_version"
+
     // Anko SQLite
     compile "org.jetbrains.anko:anko-sqlite:$anko_version"
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
@@ -227,6 +228,8 @@ dependencies {
     compile project(':stack-layout')
     implementation project(':library')
     compile 'com.tencent.bugly:crashreport:latest.release'
+
     //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.2.0
     implementation files('libs/pinyin4j-2.5.0.jar')
+    implementation project(':zxingLib')
 }
