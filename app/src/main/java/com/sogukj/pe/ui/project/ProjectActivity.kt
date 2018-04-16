@@ -53,8 +53,6 @@ import java.net.UnknownHostException
  * Created by qinfei on 17/7/18.
  */
 class ProjectActivity : ToolbarActivity(), View.OnClickListener {
-    lateinit var adapterNeg: RecyclerAdapter<NewsBean>
-    lateinit var adapterYuqin: RecyclerAdapter<NewsBean>
     lateinit var project: ProjectBean
     var position = 0
     var type = 0
@@ -65,7 +63,6 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
         intent.putExtra(Extras.CODE, position)
         setResult(Activity.RESULT_CANCELED, intent)
         super.onBackPressed()
-        Log.e("onBackPressed", "onBackPressed")
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -86,7 +83,6 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
         toolbar?.apply {
             this.setBackgroundColor(resources.getColor(R.color.transparent))
         }
-        //setTitle(project.name)
         if (project.logo.isNullOrEmpty()) {
             imgIcon.setImageResource(R.drawable.default_icon)
         } else {
@@ -147,45 +143,9 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
             ProjectTcHistoryActivity.start(context, project)
         }
 
-//        if (project.type == 6) {
-//            divide1.visibility = View.VISIBLE
-//            divide2.visibility = View.GONE
-//        } else {
-//            divide1.visibility = View.GONE
-//            divide2.visibility = View.VISIBLE
-//        }
-//        divide1.visibility = View.VISIBLE
         divide2.visibility = View.VISIBLE
 
         shangshi_layout.visibility = if (project.is_volatility == 0) View.GONE else View.VISIBLE
-//        adapterNeg = ListAdapter<NewsBean> { NewsHolder() }
-//        adapterNeg = RecyclerAdapter(context, { adapter, parent, type ->
-//            NewsHolder(adapter.getView(R.layout.item_main_news, parent))
-//        })
-//        adapterYuqin = RecyclerAdapter(context, { adapter, parent, type ->
-//            NewsHolder(adapter.getView(R.layout.item_main_news, parent))
-//        })
-//        list_negative.layoutManager = LinearLayoutManager(this)
-//        list_negative.isNestedScrollingEnabled = false
-//        list_negative.adapter = adapterNeg
-//        list_yuqin.layoutManager = LinearLayoutManager(this)
-//        list_yuqin.adapter = adapterYuqin
-//        list_yuqin.isNestedScrollingEnabled = false
-//
-//        tv_more.setOnClickListener {
-//            NegativeNewsActivity.start(this, project, 1)
-//        }
-//        tv_more_yq.setOnClickListener {
-//            NegativeNewsActivity.start(this, project, 2)
-//        }
-//        adapterNeg.onItemClick = { view, position ->
-//            val data = adapterNeg.dataList[position]
-//            NewsDetailActivity.start(this, data)
-//        }
-//        adapterYuqin.onItemClick = { view, position ->
-//            val data = adapterYuqin.dataList[position]
-//            NewsDetailActivity.start(this, data)
-//        }
 
         val user = Store.store.getUser(this)
         SoguApi.getService(application)
@@ -552,7 +512,6 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
             }
             holder.title!!.text = bean.name
             holder.icon!!.setImageResource(IdToDrawable(bean.id!!))
-            //holder.title!!.textSize = Utils.dpToPx(context, if (bean.name!!.length == 1) 10 else if (bean.name!!.length == 2) 9 else 8).toFloat()
             view!!.id = bean.id!!
 
             var count = bean.count
@@ -720,7 +679,7 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
 
             52 -> ProjectBookActivity.start(this@ProjectActivity, project)//项目文书
             54 -> StoreProjectAddActivity.startView(this@ProjectActivity, project)//储备信息
-            //51 -> ShareholderCreditActivity.start(this@ProjectActivity, project)//高管征信（股东征信）
+        //51 -> ShareholderCreditActivity.start(this@ProjectActivity, project)//高管征信（股东征信）
             51 -> ShareHolderDescActivity.start(this@ProjectActivity, project)//高管征信（股东征信）
 
         // 跟踪记录,尽调数据,投决数据,投后管理数据
@@ -735,62 +694,6 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
                 createOrJoin()
             }
         }
-    }
-
-    inner class NewsHolder(convertView: View) : RecyclerHolder<NewsBean>(convertView) {
-        val tv_summary: TextView = convertView.find(R.id.tv_summary)
-        val tv_time: TextView = convertView.find(R.id.tv_time)
-        val tv_from: TextView = convertView.find(R.id.tv_from)
-        val tags: FlowLayout = convertView.find(R.id.tags)
-        val tv_date: TextView = convertView.find(R.id.tv_date)
-        val icon: ImageView = convertView.find(R.id.imageIcon)
-        override fun setData(view: View, data: NewsBean, position: Int) {
-            var label = data?.title
-            tv_summary.text = Html.fromHtml(label)
-            val strTime = data?.time
-            tv_time.visibility = View.GONE
-            if (!TextUtils.isEmpty(strTime)) {
-                val strs = strTime!!.trim().split(" ")
-                if (!TextUtils.isEmpty(strs.getOrNull(1))) {
-                    tv_time.visibility = View.VISIBLE
-                }
-//                tv_date.text = strs.getOrNull(0)
-                try {
-                    tv_date.text = Utils.formatDate2(strTime)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-                tv_time.text = strs.getOrNull(1)
-            }
-            tv_from.text = data?.source
-            tags.removeAllViews()
-            data?.tag?.split("#")
-                    ?.forEach { str ->
-                        if (!TextUtils.isEmpty(str)) {
-                            val itemTag = View.inflate(this@ProjectActivity, R.layout.item_tag_news, null)
-                            val tvTag = itemTag.find<TextView>(R.id.tv_tag)
-                            tvTag.text = str
-                            tags.addView(itemTag)
-                            data.setTags(this@ProjectActivity, tags)
-                        }
-                    }
-
-            if (data?.url.isNullOrEmpty()) {
-                var bitmap = BitmapFactory.decodeResource(resources, R.drawable.default_icon)
-                var draw = RoundedBitmapDrawableFactory.create(resources, bitmap) as RoundedBitmapDrawable
-                draw.setCornerRadius(Utils.dpToPx(context, 4).toFloat())
-                icon.setBackgroundDrawable(draw)
-            } else {
-                Glide.with(context).asBitmap().load(data?.url).into(object : SimpleTarget<Bitmap>() {
-                    override fun onResourceReady(bitmap: Bitmap?, glideAnimation: Transition<in Bitmap>?) {
-                        var draw = RoundedBitmapDrawableFactory.create(resources, bitmap) as RoundedBitmapDrawable
-                        draw.setCornerRadius(Utils.dpToPx(context, 4).toFloat())
-                        icon.setBackgroundDrawable(draw)
-                    }
-                })
-            }
-        }
-
     }
 
     companion object {
