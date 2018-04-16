@@ -37,6 +37,7 @@ import com.sogukj.pe.R
 import com.sogukj.pe.bean.MessageIndexBean
 import com.sogukj.pe.ui.IM.TeamSearchActivity
 import com.sogukj.pe.ui.IM.TeamSelectActivity
+import com.sogukj.pe.ui.ScanResultActivity
 import com.sogukj.pe.ui.SupportEmptyView
 import com.sogukj.pe.ui.msg.MessageListActivity
 import com.sogukj.pe.ui.user.UserActivity
@@ -85,10 +86,8 @@ class MainMsgFragment : BaseFragment() {
         toolbar_menu.setOnClickListener {
             if (add_layout.visibility == View.VISIBLE) {
                 add_layout.visibility = View.GONE
-                refresh.visibility = View.VISIBLE
             } else {
                 add_layout.visibility = View.VISIBLE
-                refresh.visibility = View.GONE
             }
         }
         start_chat.setOnClickListener {
@@ -253,6 +252,7 @@ class MainMsgFragment : BaseFragment() {
             val bundle = data!!.extras
             val scanResult = bundle!!.getString("result")
             Log.e("11111111111", scanResult)
+            ScanResultActivity.start(baseActivity)
         }
     }
 

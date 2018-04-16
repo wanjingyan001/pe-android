@@ -686,7 +686,8 @@
             android:stateNotNeeded="true"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".ui.project.ShareHolderDescActivity" />
-        <activity android:name=".ui.news.MainNewsActivity"></activity>
+        <activity android:name=".ui.news.MainNewsActivity" />
+        <activity android:name=".ui.ScanResultActivity"></activity>
     </application>
 
 </manifest>
