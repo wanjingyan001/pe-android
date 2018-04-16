@@ -140,13 +140,13 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         beepManager = new BeepManager(this);
 //        ambientLightManager = new AmbientLightManager(this);
 
-//        TranslateAnimation animation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0.0f, Animation
-//                .RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT,
-//                0.9f);
-//        animation.setDuration(2000);
-//        animation.setRepeatCount(-1);
-//        animation.setRepeatMode(Animation.RESTART);
-//        scanLine.startAnimation(animation);
+        TranslateAnimation animation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0.0f, Animation
+                .RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT,
+                0.9f);
+        animation.setDuration(2000);
+        animation.setRepeatCount(-1);
+        animation.setRepeatMode(Animation.RESTART);
+        scanLine.startAnimation(animation);
 
         TextView back = (TextView) findViewById(R.id.back);
         Drawable d = getResources().getDrawable(R.drawable.back);
@@ -159,30 +159,30 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
             }
         });
 
-        scanCropView.post(new Runnable() {
-            @Override
-            public void run() {
-                WindowManager manager = getWindowManager();
-                DisplayMetrics outMetrics = new DisplayMetrics();
-                manager.getDefaultDisplay().getMetrics(outMetrics);
-                int width = outMetrics.widthPixels;
-                int height = outMetrics.heightPixels;
-
-                FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) scanCropView.getLayoutParams();
-                params.width = width * 2 / 3;
-                params.height = width * 2 / 3;
-                scanCropView.setLayoutParams(params);
-
-                scanLine.invalidate();
-                TranslateAnimation animation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0.0f, Animation
-                        .RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT,
-                        0.9f);
-                animation.setDuration(2000);
-                animation.setRepeatCount(-1);
-                animation.setRepeatMode(Animation.RESTART);
-                scanLine.startAnimation(animation);
-            }
-        });
+//        scanCropView.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                WindowManager manager = getWindowManager();
+//                DisplayMetrics outMetrics = new DisplayMetrics();
+//                manager.getDefaultDisplay().getMetrics(outMetrics);
+//                int width = outMetrics.widthPixels;
+//                int height = outMetrics.heightPixels;
+//
+//                FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) scanCropView.getLayoutParams();
+//                params.width = width * 2 / 3;
+//                params.height = width * 2 / 3;
+//                scanCropView.setLayoutParams(params);
+//
+//                scanLine.invalidate();
+//                TranslateAnimation animation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0.0f, Animation
+//                        .RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT,
+//                        0.9f);
+//                animation.setDuration(2000);
+//                animation.setRepeatCount(-1);
+//                animation.setRepeatMode(Animation.RESTART);
+//                scanLine.startAnimation(animation);
+//            }
+//        });
     }
 
     @Override
