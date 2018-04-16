@@ -720,7 +720,8 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
 
             52 -> ProjectBookActivity.start(this@ProjectActivity, project)//项目文书
             54 -> StoreProjectAddActivity.startView(this@ProjectActivity, project)//储备信息
-            51 -> ShareholderCreditActivity.start(this@ProjectActivity, project)//高管征信（股东征信）
+            //51 -> ShareholderCreditActivity.start(this@ProjectActivity, project)//高管征信（股东征信）
+            51 -> ShareHolderDescActivity.start(this@ProjectActivity, project)//高管征信（股东征信）
 
         // 跟踪记录,尽调数据,投决数据,投后管理数据
             55 -> RecordTraceActivity.start(this@ProjectActivity, project)//跟踪记录

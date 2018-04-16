@@ -1,6 +1,11 @@
 package com.sougukj
 
+import android.annotation.TargetApi
+import android.app.Activity
+import android.graphics.Color
+import android.os.Build
 import android.view.View
+import android.view.WindowManager
 import android.widget.EditText
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -69,4 +74,22 @@ fun CharSequence?.checkEmpty():CharSequence{
         ""
     else
         this
+}
+
+@TargetApi(Build.VERSION_CODES.LOLLIPOP)
+fun Activity.fullScreen() {
+    val sdkInt = Build.VERSION.SDK_INT
+    if (sdkInt >= Build.VERSION_CODES.KITKAT) {
+        if (sdkInt >= Build.VERSION_CODES.LOLLIPOP) {
+            val decorView = window.decorView
+            val option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN.or(View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
+            decorView.systemUiVisibility = option
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.statusBarColor = Color.TRANSPARENT
+        }
+    } else {
+        val attributes = window.attributes
+        attributes.flags = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+        window.attributes = attributes
+    }
 }

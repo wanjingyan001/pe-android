@@ -673,17 +673,19 @@
         <activity android:name=".ui.partyBuild.PartyDetailActivity" />
         <activity android:name=".ui.partyBuild.PartyMoreActivity" />
         <activity android:name=".ui.calendar.RemindTimeActivity" />
-        <activity android:name=".ui.fund.FundEditActivity"
+        <activity
+            android:name=".ui.fund.FundEditActivity"
             android:configChanges="keyboard|orientation|screenSize"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity android:name=".ui.user.UserActivity" />
-        <activity android:name=".ui.project.ProjectNewsActivity"></activity>
+        <activity android:name=".ui.project.ProjectNewsActivity" />
         <activity
             android:name="com.xuexuan.zxing.android.activity.CaptureActivity"
             android:screenOrientation="portrait"
             android:stateNotNeeded="true"
-            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity android:name=".ui.project.ShareHolderDescActivity"></activity>
     </application>
 
 </manifest>
