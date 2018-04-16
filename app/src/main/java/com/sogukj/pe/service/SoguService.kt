@@ -1251,4 +1251,8 @@ interface SoguService {
 
     @POST("/api/Message/recentContacts")
     fun recentContacts(): Observable<Payload<ArrayList<UserBean>>>
+
+
+    @POST("/api/Foundation/editFundInfo")
+    fun editFundInfo(@Body map: HashMap<String, Any?>): Observable<Payload<Object>>
 }

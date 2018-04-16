@@ -20,6 +20,7 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.FundDetail
 import com.sogukj.pe.bean.FundSmallBean
+import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
@@ -30,7 +31,7 @@ import kotlinx.android.synthetic.main.activity_fund_detail.*
 import org.jetbrains.anko.find
 
 class FundDetailActivity : ToolbarActivity() {
-    lateinit var adapter: RecyclerAdapter<FundDetail.NameList>
+    lateinit var adapter: RecyclerAdapter<UserBean>
 
     companion object {
         val TAG = FundDetailActivity::class.java.simpleName
@@ -74,16 +75,11 @@ class FundDetailActivity : ToolbarActivity() {
         run {
             adapter = RecyclerAdapter(this, { _adapter, parent, type ->
                 val convertView = _adapter.getView(R.layout.item_fund_detail_name_list, parent)
-                object : RecyclerHolder<FundDetail.NameList>(convertView) {
+                object : RecyclerHolder<UserBean>(convertView) {
                     val headImg = convertView.find<CircleImageView>(R.id.commissionHeadImg)
                     val commissionName = convertView.find<TextView>(R.id.commissionName)
-                    override fun setData(view: View, data: FundDetail.NameList, position: Int) {
+                    override fun setData(view: View, data: UserBean, position: Int) {
                         commissionName.text = data.name
-//                        data.url.apply {
-//                            Glide.with(this@FundDetailActivity)
-//                                    .load(this)
-//                                    .into(headImg)
-//                        }
                         if (data.url.isNullOrEmpty()) {
                             headImg.setImageResource(R.drawable.nim_avatar_default)
                         } else {

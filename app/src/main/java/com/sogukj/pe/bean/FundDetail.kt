@@ -18,10 +18,11 @@ class FundDetail : Serializable {
     var manageFees: String? = null//管理费
     var carry: String? = null//carry分成
     var administrator: String? = null//管理人
-    var list: Collection<NameList>? = null
+    var list: Collection<UserBean>? = null
 
-    inner class NameList {
-        var name: String = ""
-        var url: String = ""
-    }
+//    class NameList {
+//        var name: String = ""
+//        var url: String = ""
+//        var user_id:Int? = null
+//    }
 }

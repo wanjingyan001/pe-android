@@ -673,7 +673,10 @@
         <activity android:name=".ui.partyBuild.PartyDetailActivity" />
         <activity android:name=".ui.partyBuild.PartyMoreActivity" />
         <activity android:name=".ui.calendar.RemindTimeActivity" />
-        <activity android:name=".ui.fund.FundEditActivity" />
+        <activity android:name=".ui.fund.FundEditActivity"
+            android:configChanges="keyboard|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity android:name=".ui.user.UserActivity" />
         <activity android:name=".ui.project.ProjectNewsActivity"></activity>
         <activity
