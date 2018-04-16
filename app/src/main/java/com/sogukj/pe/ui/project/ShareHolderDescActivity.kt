@@ -31,7 +31,7 @@ class ShareHolderDescActivity : BaseActivity() {
 
         start.setOnClickListener {
             var bean = intent.getSerializableExtra(Extras.DATA) as ProjectBean
-            ShareHolderDescActivity.start(this@ShareHolderDescActivity, bean)//高管征信（股东征信）
+            ShareholderCreditActivity.start(this@ShareHolderDescActivity, bean)//高管征信（股东征信）
         }
     }
 }
