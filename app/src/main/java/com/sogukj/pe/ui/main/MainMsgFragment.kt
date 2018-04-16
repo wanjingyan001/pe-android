@@ -15,6 +15,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.framework.base.BaseFragment
 import com.framework.base.ToolbarFragment
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
@@ -59,7 +60,7 @@ import kotlin.collections.HashMap
 /**
  * Created by qinfei on 17/10/11.
  */
-class MainMsgFragment : ToolbarFragment() {
+class MainMsgFragment : BaseFragment() {
     lateinit var recentList: ArrayList<RecentContact>
     override val containerViewId: Int
         get() = R.layout.fragment_msg_center
@@ -69,7 +70,7 @@ class MainMsgFragment : ToolbarFragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setTitle("消息首页")
+        toolbar_title.text = "消息首页"
 
         val user = Store.store.getUser(baseActivity!!)
         if (user?.url.isNullOrEmpty()) {
@@ -243,7 +244,6 @@ class MainMsgFragment : ToolbarFragment() {
         })
         refresh.setAutoLoadMore(true)
 
-        toolbar_back.setOnClickListener { activity.onBackPressed() }
         registerObservers(true)
     }
 

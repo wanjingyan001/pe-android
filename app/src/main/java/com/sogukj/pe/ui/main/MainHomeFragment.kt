@@ -37,6 +37,7 @@ import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.NIMClient
 import com.sogukj.pe.ui.approve.EntryApproveActivity
 import com.sogukj.pe.ui.approve.LeaveBusinessApproveActivity
+import com.sogukj.pe.ui.news.MainNewsActivity
 import com.sogukj.pe.ui.partyBuild.PartyMainActivity
 import com.sogukj.pe.ui.user.UserActivity
 import me.leolin.shortcutbadger.ShortcutBadger
@@ -93,7 +94,8 @@ class MainHomeFragment : BaseFragment() {
 //        disable(tv_rl)
         //disable(tv_lxr)
         tv_msg.setOnClickListener {
-            NewsListActivity.start(baseActivity)
+            //NewsListActivity.start(baseActivity)
+            MainNewsActivity.start(baseActivity)
         }
         party_build.setOnClickListener {
             PartyMainActivity.start(context)

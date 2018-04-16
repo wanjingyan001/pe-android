@@ -57,15 +57,35 @@ class FundEditActivity : ToolbarActivity() {
 
                 var map = HashMap<String, Any?>()
                 map.put("fund_id", data.id)
-                map.put("administrator", administrator.text.toString())
+                //map.put("administrator", administrator.text.toString())
                 map.put("regTime", regTime.text.toString())
-                map.put("contributeSize", contributeSize.text.toString())
-                map.put("actualSize", actualSize.text.toString())
+
+                try {
+                    var size1 = contributeSize.text.toString().toDouble()
+                    map.put("contributeSize", size1)
+                } catch (e: Exception) {
+                    map.put("contributeSize", 0)
+                }
+
+                try {
+                    var size2 = actualSize.text.toString().toDouble()
+                    map.put("actualSize", size2)
+                } catch (e: Exception) {
+                    map.put("actualSize", 0)
+                }
+
                 map.put("duration", duration.text.toString())
                 map.put("partners", partners.text.toString())
                 map.put("mode", mode.text.toString())
                 map.put("commission", commission.text.toString())
-                map.put("manageFees", manageFees.text.toString())
+
+                try {
+                    var size3 = manageFees.text.toString().toDouble()
+                    map.put("manageFees", size3)
+                } catch (e: Exception) {
+                    map.put("manageFees", 0)
+                }
+
                 map.put("carry", carry.text.toString())
 
                 var id_list = ArrayList<Int>()
@@ -207,7 +227,7 @@ class FundEditActivity : ToolbarActivity() {
                     if (payload.isOk) {
                         payload.payload?.apply {
                             Log.d(FundDetailActivity.TAG, Gson().toJson(this))
-                            find<EditText>(R.id.administrator).setText(administrator)
+                            find<TextView>(R.id.administrator).setText(administrator)
                             find<TextView>(R.id.regTime).setText(regTime)
                             find<EditText>(R.id.contributeSize).setText(contributeSize)
                             find<EditText>(R.id.actualSize).setText(actualSize)
@@ -218,10 +238,10 @@ class FundEditActivity : ToolbarActivity() {
                             find<EditText>(R.id.manageFees).setText(manageFees)
                             find<EditText>(R.id.carry).setText(carry)
 
-                            if (administrator.isNullOrEmpty()) {
-                                find<EditText>(R.id.administrator).setSelection(0)
+                            if (contributeSize.isNullOrEmpty()) {
+                                find<EditText>(R.id.contributeSize).setSelection(0)
                             } else {
-                                find<EditText>(R.id.administrator).setSelection(administrator!!.length)
+                                find<EditText>(R.id.contributeSize).setSelection(contributeSize!!.length)
                             }
                             list?.let {
                                 adapter.dataList.addAll(it)
