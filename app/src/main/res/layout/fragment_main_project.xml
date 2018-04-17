@@ -77,11 +77,6 @@
                         android:background="@color/transparent"/>
                 </LinearLayout>
             </android.support.v7.widget.Toolbar>
-
-            <!--<View-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="30dp"-->
-                <!--android:background="@color/colorPrimary" />-->
         </LinearLayout>
 
         <FrameLayout
@@ -140,17 +135,6 @@
             android:id="@+id/view_pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-
-        <!--<com.sogukj.pe.view.MyNestedScrollChild-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:orientation="vertical">-->
-
-        <!--<android.support.v4.view.ViewPager-->
-        <!--android:id="@+id/view_pager"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent" />-->
-        <!--</com.sogukj.pe.view.MyNestedScrollChild>-->
     </com.sogukj.pe.view.MyNestedScrollParent2>
 
     <RelativeLayout
