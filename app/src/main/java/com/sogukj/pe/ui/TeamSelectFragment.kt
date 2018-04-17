@@ -19,7 +19,6 @@ import com.framework.base.BaseFragment
 import com.google.gson.Gson
 import com.netease.nim.uikit.api.NimUIKit
 import com.netease.nim.uikit.business.team.activity.CustomExpandableListView
-import com.netease.nim.uikit.common.ui.imageview.CircleImageView
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.RequestCallback
 import com.netease.nimlib.sdk.team.TeamService
@@ -33,6 +32,7 @@ import com.sogukj.pe.ui.IM.TeamInfoActivity
 import com.sogukj.pe.ui.user.UserActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
+import com.sogukj.pe.view.CircleImageView
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers

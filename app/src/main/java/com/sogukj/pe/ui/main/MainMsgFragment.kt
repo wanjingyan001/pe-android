@@ -3,7 +3,12 @@ package com.sogukj.pe.ui.main
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import android.support.v13.app.FragmentCompat
+import android.support.v4.app.ActivityCompat
+import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
@@ -36,6 +41,7 @@ import com.netease.nimlib.sdk.msg.MsgServiceObserve
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
 import com.netease.nimlib.sdk.msg.model.IMMessage
 import com.netease.nimlib.sdk.msg.model.RecentContact
+import com.sogukj.pe.Manifest
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.MessageIndexBean
 import com.sogukj.pe.ui.IM.TeamSearchActivity
@@ -44,6 +50,7 @@ import com.sogukj.pe.ui.ScanResultActivity
 import com.sogukj.pe.ui.SupportEmptyView
 import com.sogukj.pe.ui.msg.MessageListActivity
 import com.sogukj.pe.ui.user.UserActivity
+import com.sogukj.pe.util.PermissionUtils
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.RecyclerAdapter
@@ -158,6 +165,22 @@ class MainMsgFragment : BaseFragment() {
 
     lateinit var searchKey: String
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (grantResults.size > 0) {
+            for (result in grantResults) {
+                if (result != PackageManager.PERMISSION_GRANTED)
+                    return
+            }
+            if (requestCode == 200) {
+                val openCameraIntent = Intent(context, CaptureActivity::class.java)
+                startActivityForResult(openCameraIntent, 0)
+            }
+        } else {
+            showCustomToast(R.drawable.icon_toast_common, "该功能需要相机权限")
+        }
+    }
+
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         toolbar_title.text = "消息首页"
@@ -181,8 +204,13 @@ class MainMsgFragment : BaseFragment() {
             TeamSelectActivity.start(context, isSelectUser = true, isCreateTeam = true)
         }
         scan.setOnClickListener {
-            val openCameraIntent = Intent(context, CaptureActivity::class.java)
-            startActivityForResult(openCameraIntent, 0)
+            var per = "android.permission.CAMERA"
+            if (ContextCompat.checkSelfPermission(context, per) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(arrayOf(per), 200)
+            } else {
+                val openCameraIntent = Intent(context, CaptureActivity::class.java)
+                startActivityForResult(openCameraIntent, 0)
+            }
         }
 
         adapter = RecyclerAdapter(baseActivity!!, { _adapter, parent, type ->
