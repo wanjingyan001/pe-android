@@ -62,20 +62,6 @@
                 android:text="YYXZ029384756 "
                 android:textColor="@color/white"
                 android:textSize="10sp" />
-
-            <TextView
-                android:id="@+id/tv_urgent"
-                android:layout_width="wrap_content"
-                android:layout_height="12dp"
-                android:layout_marginLeft="8dp"
-                android:background="@drawable/bg_tag_urgent"
-                android:drawableLeft="@drawable/ic_urgent"
-                android:gravity="left"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:textColor="@color/white"
-                android:textSize="8sp"
-                tools:text="07/07 12:00" />
         </LinearLayout>
 
         <LinearLayout
@@ -135,18 +121,39 @@
             android:textSize="14sp" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/tv_state"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
         android:layout_marginTop="21dp"
-        android:layout_marginRight="5dp"
-        android:layout_weight="1"
-        android:background="@drawable/state_bg"
-        android:gravity="center"
-        android:paddingBottom="5dp"
-        android:text="审批中"
-        android:textColor="#ff4a90e2"
-        android:textSize="12sp" />
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/state_bg"
+            android:gravity="center"
+            android:paddingBottom="5dp"
+            android:text="审批中"
+            android:textColor="#ff4a90e2"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_urgent"
+            android:layout_width="wrap_content"
+            android:layout_height="12dp"
+            android:layout_gravity="left"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/bg_tag_urgent"
+            android:drawableLeft="@drawable/ic_urgent"
+            android:gravity="center"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:textColor="@color/white"
+            android:textSize="8sp"
+            tools:text="07/07 12:00" />
+    </LinearLayout>
 </FrameLayout>
