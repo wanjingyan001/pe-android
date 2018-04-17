@@ -1,5 +1,6 @@
 package com.sogukj.pe.ui.fund
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.TabLayout
@@ -62,6 +63,31 @@ class FundMainFragment : BaseFragment(), View.OnClickListener {
             FundListFragment.newInstance(FundListFragment.TYPE_TC)
     )
 
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (hidden) {   // 不在最前端显示 相当于调用了onPause();
+
+        } else {  // 在最前端显示 相当于调用了onResume();
+            loadHead()
+        }
+    }
+
+    fun loadHead() {
+        val user = Store.store.getUser(baseActivity!!)
+        if (user?.url.isNullOrEmpty()) {
+            toolbar_back.setChar(user?.name?.first())
+        } else {
+            Glide.with(context).load(user?.url).into(toolbar_back)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 0x789) {
+            loadHead()
+        }
+    }
+
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         fundTitle.text = "基金"
@@ -73,14 +99,11 @@ class FundMainFragment : BaseFragment(), View.OnClickListener {
             iv_search.setOnClickListener(this)
         }
 
-        val user = Store.store.getUser(baseActivity!!)
-        if (user?.url.isNullOrEmpty()) {
-            toolbar_back.setChar(user?.name?.first())
-        } else {
-            Glide.with(context).load(user?.url).into(toolbar_back)
-        }
+        loadHead()
         toolbar_back.setOnClickListener {
-            UserActivity.start(context)
+            //UserActivity.start(context)
+            val intent = Intent(context, UserActivity::class.java)
+            startActivityForResult(intent, 0x789)
         }
 
         run {

@@ -69,18 +69,33 @@ class MainMsgFragment : BaseFragment() {
     lateinit var adapter: RecyclerAdapter<Any>
     val extMap = HashMap<String, Any>()
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        toolbar_title.text = "消息首页"
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (hidden) {   // 不在最前端显示 相当于调用了onPause();
 
+        } else {  // 在最前端显示 相当于调用了onResume();
+            loadHead()
+        }
+    }
+
+    fun loadHead() {
         val user = Store.store.getUser(baseActivity!!)
         if (user?.url.isNullOrEmpty()) {
             toolbar_back.setChar(user?.name?.first())
         } else {
             Glide.with(context).load(user?.url).into(toolbar_back)
         }
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        toolbar_title.text = "消息首页"
+
+        loadHead()
         toolbar_back.setOnClickListener {
-            UserActivity.start(context)
+            //UserActivity.start(context)
+            val intent = Intent(context, UserActivity::class.java)
+            startActivityForResult(intent, 0x789)
         }
 
         toolbar_menu.setOnClickListener {
@@ -253,6 +268,8 @@ class MainMsgFragment : BaseFragment() {
             val scanResult = bundle!!.getString("result")
             Log.e("11111111111", scanResult)
             ScanResultActivity.start(baseActivity)
+        } else if (requestCode == 0x789) {
+            loadHead()
         }
     }
 

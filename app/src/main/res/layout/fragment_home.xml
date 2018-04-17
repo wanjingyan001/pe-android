@@ -98,7 +98,6 @@
         android:layout_height="70dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:layout_marginTop="10dp"
         android:background="@drawable/bg_party_build" />
 
     <android.support.v7.widget.GridLayout
@@ -107,7 +106,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
         app:columnCount="4"
         app:orientation="horizontal"
         app:rowCount="2">

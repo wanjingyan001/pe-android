@@ -1,6 +1,7 @@
 package com.sogukj.pe.ui
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -56,6 +57,31 @@ class TeamSelectFragment : BaseFragment() {
     override val containerViewId: Int
         get() = R.layout.fragment_team_select
 
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (hidden) {   // 不在最前端显示 相当于调用了onPause();
+
+        } else {  // 在最前端显示 相当于调用了onResume();
+            loadHead()
+        }
+    }
+
+    fun loadHead() {
+        val user = Store.store.getUser(baseActivity!!)
+        if (user?.url.isNullOrEmpty()) {
+            toolbar_back.setChar(user?.name?.first())
+        } else {
+            Glide.with(context).load(user?.url).into(toolbar_back)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 0x789) {
+            loadHead()
+        }
+    }
+
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Utils.setWindowStatusBarColor(baseActivity, R.color.color_blue_0888ff)
@@ -68,14 +94,11 @@ class TeamSelectFragment : BaseFragment() {
         initContactList()
         doRequest()
 
-        val user = Store.store.getUser(baseActivity!!)
-        if (user?.url.isNullOrEmpty()) {
-            toolbar_back.setChar(user?.name?.first())
-        } else {
-            Glide.with(context).load(user?.url).into(toolbar_back)
-        }
+        loadHead()
         toolbar_back.setOnClickListener {
-            UserActivity.start(context)
+            //UserActivity.start(context)
+            val intent = Intent(context, UserActivity::class.java)
+            startActivityForResult(intent, 0x789)
         }
     }
 

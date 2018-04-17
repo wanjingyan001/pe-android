@@ -54,6 +54,13 @@ class MainHomeFragment : BaseFragment() {
     override val containerViewId: Int
         get() = R.layout.fragment_home
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 0x789) {
+            loadHead()
+        }
+    }
+
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 //        when (Utils.getEnvironment()) {
@@ -101,14 +108,11 @@ class MainHomeFragment : BaseFragment() {
             PartyMainActivity.start(context)
         }
 
-        val user = Store.store.getUser(baseActivity!!)
-        if (user?.url.isNullOrEmpty()) {
-            header.setChar(user?.name?.first())
-        } else {
-            Glide.with(context).load(user?.url).into(header)
-        }
+        loadHead()
         header.setOnClickListener {
-            UserActivity.start(context)
+            //UserActivity.start(context)
+            val intent = Intent(context, UserActivity::class.java)
+            startActivityForResult(intent, 0x789)
         }
 
         adapter = ViewPagerAdapter(ArrayList<MessageBean>(), context)
@@ -150,6 +154,16 @@ class MainHomeFragment : BaseFragment() {
 
         } else {  // 在最前端显示 相当于调用了onResume();
             onResume()
+            loadHead()
+        }
+    }
+
+    fun loadHead() {
+        val user = Store.store.getUser(baseActivity!!)
+        if (user?.url.isNullOrEmpty()) {
+            header.setChar(user?.name?.first())
+        } else {
+            Glide.with(context).load(user?.url).into(header)
         }
     }
 

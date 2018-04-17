@@ -60,12 +60,33 @@ class MainProjectFragment : BaseFragment() {
     )
     lateinit var adapter: RecyclerAdapter<ProjectBean>
 
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (hidden) {   // 不在最前端显示 相当于调用了onPause();
+
+        } else {  // 在最前端显示 相当于调用了onResume();
+            loadHead()
+        }
+    }
+
+    fun loadHead() {
+        val user = Store.store.getUser(baseActivity!!)
+        if (user?.url.isNullOrEmpty()) {
+            headerIcon.setChar(user?.name?.first())
+        } else {
+            Glide.with(context).load(user?.url).into(headerIcon)
+        }
+    }
+
     lateinit var hisAdapter: RecyclerAdapter<String>
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        loadHead()
         headerIcon.setOnClickListener {
-            UserActivity.start(context)
+            //UserActivity.start(context)
+            val intent = Intent(context, UserActivity::class.java)
+            startActivityForResult(intent, 0x789)
         }
 
         adapter = RecyclerAdapter<ProjectBean>(baseActivity!!, { _adapter, parent, type ->
@@ -295,12 +316,6 @@ class MainProjectFragment : BaseFragment() {
         var transFormer = ProjectPageTransformer()
         //view_pager.setPageTransformer(true, transFormer)
 
-        val user = Store.store.getUser(baseActivity!!)
-        if (user?.url.isNullOrEmpty()) {
-            headerIcon.setChar(user?.name?.first())
-        } else {
-            Glide.with(context).load(user?.url).into(headerIcon)
-        }
         tabs?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab?) {
 
@@ -378,8 +393,10 @@ class MainProjectFragment : BaseFragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == 0x543){
+        if (requestCode == 0x543) {
             fragments.get(view_pager.currentItem).request()
+        } else if (requestCode == 0x789) {
+            loadHead()
         }
     }
 
