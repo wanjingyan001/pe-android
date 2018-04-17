@@ -14,7 +14,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.framework.base.ToolbarActivity
 import com.google.gson.Gson
-import com.netease.nim.uikit.common.ui.imageview.CircleImageView
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.FundDetail
@@ -25,6 +24,7 @@ import com.sogukj.pe.ui.IM.TeamSelectActivity
 import com.sogukj.pe.ui.weekly.WeeklyThisFragment
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.CalendarDingDing
+import com.sogukj.pe.view.CircleImageView
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.service.SoguApi
@@ -143,10 +143,19 @@ class FundEditActivity : ToolbarActivity() {
                             headImg.setImageResource(R.drawable.send_add)
                         } else {
                             commissionName.text = data.name
+//                            if (data.url.isNullOrEmpty()) {
+//                                headImg.setImageResource(R.drawable.nim_avatar_default)
+//                            } else {
+//                                Glide.with(this@FundEditActivity)
+//                                        .load(data.url)
+//                                        .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
+//                                        .into(headImg)
+//                            }
                             if (data.url.isNullOrEmpty()) {
-                                headImg.setImageResource(R.drawable.nim_avatar_default)
+                                val ch = data.name?.first()
+                                headImg.setChar(ch)
                             } else {
-                                Glide.with(this@FundEditActivity)
+                                Glide.with(context)
                                         .load(data.url)
                                         .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
                                         .into(headImg)

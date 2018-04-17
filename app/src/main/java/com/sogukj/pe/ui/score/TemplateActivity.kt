@@ -13,6 +13,7 @@ import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.framework.base.ToolbarActivity
 import com.google.gson.JsonSyntaxException
 import com.jakewharton.rxbinding2.widget.RxTextView
@@ -22,6 +23,7 @@ import com.sogukj.pe.bean.TemplateBean
 import com.sogukj.pe.bean.TouZiUpload
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
+import com.sogukj.pe.view.CircleImageView
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.service.SoguApi
@@ -50,7 +52,17 @@ class TemplateActivity : ToolbarActivity() {
 
         var bean = Store.store.getUser(context)
         bean?.let {
-            Glide.with(context).load(it.url).into(icon)
+            var icon = findViewById(R.id.icon) as CircleImageView
+            //Glide.with(context).load(it.url).into(icon)
+            if (it.url.isNullOrEmpty()) {
+                val ch = it.name?.first()
+                icon.setChar(ch)
+            } else {
+                Glide.with(context)
+                        .load(it.url)
+                        .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
+                        .into(icon)
+            }
             name.text = it.name
             depart.text = it.depart_name
             position.text = it.position

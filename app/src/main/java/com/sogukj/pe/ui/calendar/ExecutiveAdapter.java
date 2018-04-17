@@ -2,6 +2,7 @@ package com.sogukj.pe.ui.calendar;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +10,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.netease.nim.uikit.common.ui.imageview.CircleImageView;
 import com.sogukj.pe.R;
 import com.sogukj.pe.bean.UserBean;
+import com.sogukj.pe.view.CircleImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,10 +57,19 @@ public class ExecutiveAdapter extends RecyclerView.Adapter<ExecutiveAdapter.Exec
         } else {
             final UserBean userBean = exPersons.get(position);
             holder.userName.setText(userBean.getName());
-            Glide.with(context)
-                    .load(userBean.getUrl())
-                    .apply(new RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
-                    .into(holder.userHeader);
+//            Glide.with(context)
+//                    .load(userBean.getUrl())
+//                    .apply(new RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
+//                    .into(holder.userHeader);
+            if (!TextUtils.isEmpty(userBean.getUrl())) {
+                char ch = userBean.getName().charAt(0);
+                holder.userHeader.setChar(ch);
+            } else {
+                Glide.with(context)
+                        .load(userBean.getUrl())
+                        .apply(new RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
+                        .into(holder.userHeader);
+            }
             holder.view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

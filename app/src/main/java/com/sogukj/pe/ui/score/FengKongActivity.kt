@@ -24,6 +24,7 @@ import android.widget.*
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.gson.JsonSyntaxException
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.sogukj.pe.Extras
@@ -59,7 +60,17 @@ class FengKongActivity : ToolbarActivity() {
 
         var bean = Store.store.getUser(context)
         bean?.let {
-            Glide.with(context).load(it.url).into(icon)
+            //Glide.with(context).load(it.url).into(icon)
+            var icon = findViewById(R.id.icon) as CircleImageView
+            if (it.url.isNullOrEmpty()) {
+                val ch = bean?.name?.first()
+                icon.setChar(ch)
+            } else {
+                Glide.with(context)
+                        .load(it.url)
+                        .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
+                        .into(icon)
+            }
             name.text = it.name
             depart.text = it.depart_name
             position.text = it.position

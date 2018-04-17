@@ -12,7 +12,6 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.framework.base.ToolbarActivity
-import com.netease.nim.uikit.common.ui.imageview.CircleImageView
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.UserBean
@@ -127,10 +126,19 @@ class ArrangePersonActivity : ToolbarActivity() {
         override fun setData(view: View, data: UserBean, position: Int) {
             selectIcon.visibility = View.VISIBLE
             selectIcon.isSelected = adapter.isSelected(position)
-            Glide.with(this@ArrangePersonActivity)
-                    .load(data.url)
-                    .apply(RequestOptions().error(R.drawable.nim_avatar_default).placeholder(R.drawable.nim_avatar_default))
-                    .into(userImg)
+            if (data.url.isNullOrEmpty()) {
+                val ch = data.name?.first()
+                userImg.setChar(ch)
+            } else {
+                Glide.with(context)
+                        .load(data.url)
+                        .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
+                        .into(userImg)
+            }
+//            Glide.with(this@ArrangePersonActivity)
+//                    .load(data.url)
+//                    .apply(RequestOptions().error(R.drawable.nim_avatar_default).placeholder(R.drawable.nim_avatar_default))
+//                    .into(userImg)
             userName.text = data.name
             userPosition.text = data.position
             convertView.setOnClickListener {

@@ -95,8 +95,8 @@ class UserEditActivity : ToolbarActivity() {
 //                    .negativeText("取消")
 //                    .show()
             var position = 0
-            for (index in items.indices){
-                if(items.get(index)!!.contains(tv_depart.text)){
+            for (index in items.indices) {
+                if (items.get(index)!!.contains(tv_depart.text)) {
                     position = index
                     break
                 }
@@ -227,11 +227,20 @@ class UserEditActivity : ToolbarActivity() {
             if (!TextUtils.isEmpty(memo))
                 tv_note?.setText(memo)
             iv_user.setChar(user.name.first())
-            if (!TextUtils.isEmpty(url))
-                Glide.with(this@UserEditActivity)
-                        .load(headImage())
-//                        .error(R.drawable.img_logo_user)
+//            if (!TextUtils.isEmpty(url))
+//                Glide.with(this@UserEditActivity)
+//                        .load(headImage())
+////                        .error(R.drawable.img_logo_user)
+//                        .into(iv_user)
+            if (url.isNullOrEmpty()) {
+                val ch = name?.first()
+                iv_user.setChar(ch)
+            } else {
+                Glide.with(context)
+                        .load(url)
+                        .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
                         .into(iv_user)
+            }
             if (full != null) {
                 tv_resume.text = "简历完整度:${full}"
             }

@@ -19,6 +19,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.fashare.stack_layout.StackLayout
 import com.sogukj.pe.Extras
 import com.sogukj.pe.util.Trace
@@ -164,10 +165,19 @@ class MainHomeFragment : BaseFragment() {
 
     fun loadHead() {
         val user = Store.store.getUser(baseActivity!!)
+//        if (user?.url.isNullOrEmpty()) {
+//            header.setChar(user?.name?.first())
+//        } else {
+//            Glide.with(context).load(user?.url).into(header)
+//        }
         if (user?.url.isNullOrEmpty()) {
-            header.setChar(user?.name?.first())
+            val ch = user?.name?.first()
+            header.setChar(ch)
         } else {
-            Glide.with(context).load(user?.url).into(header)
+            Glide.with(context)
+                    .load(user?.url)
+                    .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
+                    .into(header)
         }
     }
 

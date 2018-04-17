@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.framework.base.ToolbarActivity
 import com.google.gson.JsonSyntaxException
 import com.sogukj.pe.Extras
@@ -44,7 +45,16 @@ class TotalScoreActivity : ToolbarActivity() {
 
         var bean = Store.store.getUser(context)
         bean?.let {
-            Glide.with(context).load(it.url).into(icon)
+            //Glide.with(context).load(it.url).into(icon)
+            if (it.url.isNullOrEmpty()) {
+                val ch = it.name?.first()
+                icon.setChar(ch)
+            } else {
+                Glide.with(context)
+                        .load(it.url)
+                        .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
+                        .into(icon)
+            }
             name.text = it.name
         }
 

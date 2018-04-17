@@ -43,7 +43,7 @@ abstract class BaseFragment : android.support.v4.app.Fragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         inflateView = layoutInflater.inflate(R.layout.layout_custom_toast, null)
-        icon = inflateView.find<ImageView>(R.id.toast_icon)
+        iconImg = inflateView.find<ImageView>(R.id.toast_icon)
         tv = inflateView.find<TextView>(R.id.toast_tv)
 
         if (containerViewId != 0) {
@@ -76,7 +76,7 @@ abstract class BaseFragment : android.support.v4.app.Fragment() {
     }
 
     lateinit var inflateView:View
-    lateinit var icon: ImageView
+    lateinit var iconImg: ImageView
     lateinit var tv: TextView
     private var toastView: Toast? = null
 
@@ -85,9 +85,9 @@ abstract class BaseFragment : android.support.v4.app.Fragment() {
 //        val icon = inflate.find<ImageView>(R.id.toast_icon)
 //        val tv = inflate.find<TextView>(R.id.toast_tv)
         if (resId != null) {
-            icon.imageResource = resId
+            iconImg.imageResource = resId
         } else {
-            icon.visibility = View.GONE
+            iconImg.visibility = View.GONE
         }
         var width = baseActivity!!.windowManager.defaultDisplay.width
         tv.maxWidth = width / 3

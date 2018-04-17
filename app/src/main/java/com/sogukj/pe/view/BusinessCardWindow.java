@@ -13,6 +13,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.sogukj.pe.R;
 import com.sogukj.pe.bean.UserBean;
 
@@ -23,7 +24,7 @@ import com.sogukj.pe.bean.UserBean;
 public class BusinessCardWindow extends PopupWindow {
 
     private View inflate;
-    private ImageView headerImg;
+    private CircleImageView headerImg;
     private TextView cardName;
     private TextView cardPosition;
     private TextView cardCompanyName;
@@ -41,7 +42,7 @@ public class BusinessCardWindow extends PopupWindow {
 
     private void initView(final Activity context, View.OnClickListener listener) {
         inflate = LayoutInflater.from(context).inflate(R.layout.layout_card_window, null);
-        headerImg = (ImageView) inflate.findViewById(R.id.headerImage);
+        headerImg = (CircleImageView) inflate.findViewById(R.id.headerImage);
         cardName = ((TextView) inflate.findViewById(R.id.cardName));
         cardPosition = ((TextView) inflate.findViewById(R.id.cardPosition));
         cardCompanyName = ((TextView) inflate.findViewById(R.id.cardCompanyName));
@@ -60,9 +61,18 @@ public class BusinessCardWindow extends PopupWindow {
     }
 
     public void setData(@NonNull UserBean bean) {
+//        if (!TextUtils.isEmpty(bean.getUrl())) {
+//            Glide.with(context)
+//                    .load(bean.headImage())
+//                    .into(headerImg);
+//        }
         if (!TextUtils.isEmpty(bean.getUrl())) {
+            char ch = bean.getName().charAt(0);
+            headerImg.setChar(ch);
+        } else {
             Glide.with(context)
                     .load(bean.headImage())
+                    .apply(new RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
                     .into(headerImg);
         }
         cardName.setText(bean.getName());

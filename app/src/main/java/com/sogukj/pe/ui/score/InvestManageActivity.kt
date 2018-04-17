@@ -42,6 +42,7 @@ import org.jetbrains.anko.textColor
 import java.net.UnknownHostException
 import io.reactivex.functions.Function
 
+//已废弃
 class InvestManageActivity : ToolbarActivity() {
 
     companion object {

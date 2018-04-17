@@ -44,7 +44,7 @@ abstract class BaseActivity : AppCompatActivity(),AnkoLogger {
         initEmptyView()
 
         inflate = layoutInflater.inflate(R.layout.layout_custom_toast, null)
-        icon = inflate.find<ImageView>(R.id.toast_icon)
+        iconImg = inflate.find<ImageView>(R.id.toast_icon)
         tv = inflate.find<TextView>(R.id.toast_tv)
     }
 
@@ -174,7 +174,7 @@ abstract class BaseActivity : AppCompatActivity(),AnkoLogger {
     }
 
     lateinit var inflate:View
-    lateinit var icon:ImageView
+    lateinit var iconImg:ImageView
     lateinit var tv:TextView
     private var toastView: Toast? = null
 
@@ -188,9 +188,9 @@ abstract class BaseActivity : AppCompatActivity(),AnkoLogger {
         }
 
         if (resId != null) {
-            icon.imageResource = resId
+            iconImg.imageResource = resId
         } else {
-            icon.visibility = View.GONE
+            iconImg.visibility = View.GONE
         }
         tv.maxWidth = screenWidth / 3
         tv.text = text

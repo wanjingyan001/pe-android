@@ -1027,8 +1027,17 @@ class LeaveBusinessActivity : ToolbarActivity() {
                 var view = inflater.inflate(R.layout.send_item, null) as LinearLayout
                 var icon = view.findViewById(R.id.icon) as CircleImageView
                 var name = view.findViewById(R.id.name) as TextView
+//                if (item.url.isNullOrEmpty()) {
+//                    icon.setChar(item.name.first())
+//                } else {
+//                    Glide.with(context)
+//                            .load(item.url)
+//                            .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
+//                            .into(icon)
+//                }
                 if (item.url.isNullOrEmpty()) {
-                    icon.setChar(item.name.first())
+                    val ch = item.name?.first()
+                    icon.setChar(ch)
                 } else {
                     Glide.with(context)
                             .load(item.url)
@@ -1179,10 +1188,19 @@ class LeaveBusinessActivity : ToolbarActivity() {
                 conView = LayoutInflater.from(context).inflate(R.layout.send_item, null) as LinearLayout
                 var icon = conView.findViewById(R.id.icon) as CircleImageView
                 var name = conView.findViewById(R.id.name) as TextView
-                Glide.with(context)
-                        .load(list[position].url)
-                        .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
-                        .into(icon)
+//                Glide.with(context)
+//                        .load(list[position].url)
+//                        .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
+//                        .into(icon)
+                if (list[position].url.isNullOrEmpty()) {
+                    val ch = list[position].name?.first()
+                    icon.setChar(ch)
+                } else {
+                    Glide.with(context)
+                            .load(list[position].url)
+                            .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
+                            .into(icon)
+                }
                 name.text = list[position].name
             }
             return conView

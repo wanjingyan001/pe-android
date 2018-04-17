@@ -68,10 +68,19 @@ class TeamSelectFragment : BaseFragment() {
 
     fun loadHead() {
         val user = Store.store.getUser(baseActivity!!)
+//        if (user?.url.isNullOrEmpty()) {
+//            toolbar_back.setChar(user?.name?.first())
+//        } else {
+//            Glide.with(context).load(user?.url).into(toolbar_back)
+//        }
         if (user?.url.isNullOrEmpty()) {
-            toolbar_back.setChar(user?.name?.first())
+            val ch = user?.name?.first()
+            toolbar_back.setChar(ch)
         } else {
-            Glide.with(context).load(user?.url).into(toolbar_back)
+            Glide.with(context)
+                    .load(user?.url)
+                    .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
+                    .into(toolbar_back)
         }
     }
 

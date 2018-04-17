@@ -19,6 +19,7 @@ import cn.sharesdk.tencent.qzone.QQClientNotExistException
 import cn.sharesdk.wechat.friends.Wechat
 import cn.sharesdk.wechat.utils.WechatClientNotExistException
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.UserBean
@@ -126,9 +127,18 @@ class CardActivity : Activity(), PlatformActionListener {
 
     fun setData(bean: UserBean) {
         headerImage.setChar(bean.name.first())
-        if (!TextUtils.isEmpty(bean.url)) {
+//        if (!TextUtils.isEmpty(bean.url)) {
+//            Glide.with(this)
+//                    .load(bean.headImage())
+//                    .into(headerImage)
+//        }
+        if (bean.url.isNullOrEmpty()) {
+            val ch = bean.name?.first()
+            headerImage.setChar(ch)
+        } else {
             Glide.with(this)
                     .load(bean.headImage())
+                    .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
                     .into(headerImage)
         }
         cardName.text = bean.name

@@ -19,6 +19,7 @@ import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.framework.base.BaseFragment
 import com.google.gson.Gson
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
@@ -71,10 +72,19 @@ class MainProjectFragment : BaseFragment() {
 
     fun loadHead() {
         val user = Store.store.getUser(baseActivity!!)
+//        if (user?.url.isNullOrEmpty()) {
+//            headerIcon.setChar(user?.name?.first())
+//        } else {
+//            Glide.with(context).load(user?.url).into(headerIcon)
+//        }
         if (user?.url.isNullOrEmpty()) {
-            headerIcon.setChar(user?.name?.first())
+            val ch = user?.name?.first()
+            headerIcon.setChar(ch)
         } else {
-            Glide.with(context).load(user?.url).into(headerIcon)
+            Glide.with(context)
+                    .load(user?.url)
+                    .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
+                    .into(headerIcon)
         }
     }
 

@@ -13,7 +13,7 @@
         android:visibility="gone"
         android:background="@drawable/team_select_bg" />
 
-    <com.netease.nim.uikit.common.ui.imageview.CircleImageView
+    <com.sogukj.pe.view.CircleImageView
         android:id="@+id/userHeadImg"
         android:layout_width="40dp"
         android:layout_height="40dp"
