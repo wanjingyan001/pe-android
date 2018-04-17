@@ -6,10 +6,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
+import android.text.Editable
 import android.text.Html
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
@@ -76,6 +79,7 @@ class MainMsgFragment : BaseFragment() {
         } else {  // 在最前端显示 相当于调用了onResume();
             loadHead()
             add_layout.visibility = View.GONE
+            search_edt.isFocusable = false
         }
     }
 
@@ -88,11 +92,69 @@ class MainMsgFragment : BaseFragment() {
         }
     }
 
+    private fun initSearchView() {
+        search_edt.filters = Utils.getFilter(context)
+        search_edt.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus) {
+                search_hint.visibility = View.GONE
+                search_icon.visibility = View.VISIBLE
+            } else {
+                search_hint.visibility = View.VISIBLE
+                search_icon.visibility = View.GONE
+                search_edt.clearFocus()
+            }
+        }
+        search_edt.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                searchKey = search_edt.text.toString()
+                searchWithName()
+                true
+            } else {
+                false
+            }
+        }
+        search_edt.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (search_edt.text.toString().isEmpty()) {
+                    searchKey = ""
+//                    listContent.visibility = View.VISIBLE
+//                    resultList.visibility = View.GONE
+                    adapter.dataList.clear()
+                    adapter.dataList.add(zhushou)
+                    adapter.dataList.addAll(recentList)
+                    adapter.notifyDataSetChanged()
+                }
+            }
+        })
+    }
+
+    private fun searchWithName() {
+        val result = ArrayList<RecentContact>()
+        recentList.forEach {
+            if (it.fromNick.contains(searchKey)) {
+                result.add(it)
+            }
+        }
+        adapter.dataList.clear()
+        adapter.dataList.addAll(result)
+        adapter.notifyDataSetChanged()
+    }
+
+    lateinit var searchKey: String
+
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         toolbar_title.text = "消息首页"
 
         loadHead()
+        initSearchView()
         toolbar_back.setOnClickListener {
             //UserActivity.start(context)
             val intent = Intent(context, UserActivity::class.java)
@@ -291,6 +353,7 @@ class MainMsgFragment : BaseFragment() {
                         adapter.dataList.clear()
                         payload.payload?.apply {
                             adapter.dataList.add(this)
+                            zhushou = this
                         }
                     } else
                         showCustomToast(R.drawable.icon_toast_fail, payload.message)
@@ -301,6 +364,8 @@ class MainMsgFragment : BaseFragment() {
                     getIMRecentContact()
                 })
     }
+
+    lateinit var zhushou: MessageIndexBean
 
     private fun getIMRecentContact() {
         recentList = ArrayList()
