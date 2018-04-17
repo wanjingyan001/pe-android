@@ -16,6 +16,7 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.ui.IM.TeamSelectActivity
+import com.sogukj.pe.view.CircleImageView
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import kotlinx.android.synthetic.main.activity_arrange_person.*
