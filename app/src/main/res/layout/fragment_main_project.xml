@@ -58,21 +58,22 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="right"
                     android:gravity="center"
+                    android:layout_marginRight="10dp"
                     android:orientation="horizontal">
 
                     <ImageButton
                         android:id="@+id/fb_add"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:padding="15dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:padding="10dp"
                         android:src="@drawable/tj_main"
                         android:background="@color/transparent"/>
 
                     <ImageButton
                         android:id="@+id/fb_search"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:padding="15dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:padding="10dp"
                         android:src="@drawable/ic_search"
                         android:background="@color/transparent"/>
                 </LinearLayout>

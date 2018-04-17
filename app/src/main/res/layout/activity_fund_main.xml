@@ -54,23 +54,24 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
                 android:gravity="center"
+                android:layout_marginRight="10dp"
                 android:orientation="horizontal">
 
                 <ImageButton
                     android:id="@+id/fb_add"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:background="@color/transparent"
-                    android:padding="15dp"
+                    android:padding="10dp"
                     android:src="@drawable/tj_main"
                     android:visibility="gone" />
 
                 <ImageButton
                     android:id="@+id/iv_search"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:background="@color/transparent"
-                    android:padding="15dp"
+                    android:padding="10dp"
                     android:src="@drawable/ic_search" />
             </LinearLayout>
         </android.support.v7.widget.Toolbar>
