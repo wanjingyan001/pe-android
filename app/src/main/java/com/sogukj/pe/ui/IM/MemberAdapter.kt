@@ -7,9 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.netease.nim.uikit.common.ui.imageview.CircleImageView
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.UserBean
+import com.sogukj.pe.view.CircleImageView
 
 /**
  * Created by admin on 2018/1/25.
@@ -27,10 +27,15 @@ class MemberAdapter(val ctx: Context, private val members: ArrayList<UserBean>) 
             holder.headImg.setImageResource(R.drawable.invalid_name3)
         } else {
             val userBean = members[position]
-            Glide.with(ctx)
-                    .load(userBean.headImage())
-                    .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
-                    .into(holder.headImg)
+            if (userBean.url.isNullOrEmpty()) {
+                val ch = userBean.name.first()
+                holder.headImg.setChar(ch)
+            } else {
+                Glide.with(ctx)
+                        .load(userBean.headImage())
+                        .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
+                        .into(holder.headImg)
+            }
         }
         holder.headImg.setOnClickListener {
             TeamSelectActivity.startForResult(ctx, true, members, false)
@@ -38,7 +43,6 @@ class MemberAdapter(val ctx: Context, private val members: ArrayList<UserBean>) 
     }
 
     override fun getItemCount(): Int = members.size + 1
-
 
     class MemberHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val headImg: CircleImageView = itemView.findViewById(R.id.member_headImg) as CircleImageView

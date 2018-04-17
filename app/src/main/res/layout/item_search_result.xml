@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="60dp">
 
-    <com.netease.nim.uikit.common.ui.imageview.CircleImageView
+    <com.sogukj.pe.view.CircleImageView
         android:id="@+id/result_avatar"
         android:layout_width="40dp"
         android:layout_height="40dp"

@@ -23,7 +23,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.framework.base.BaseActivity
 import com.google.gson.Gson
 import com.netease.nim.uikit.business.team.activity.CustomExpandableListView
-import com.netease.nim.uikit.common.ui.imageview.CircleImageView
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.R.layout.header
@@ -31,6 +30,7 @@ import com.sogukj.pe.bean.DepartmentBean
 import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
+import com.sogukj.pe.view.CircleImageView
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers

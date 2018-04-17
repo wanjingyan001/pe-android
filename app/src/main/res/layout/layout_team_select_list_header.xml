@@ -7,7 +7,7 @@
     android:orientation="horizontal">
 
 
-    <com.netease.nim.uikit.common.ui.imageview.CircleImageView
+    <com.sogukj.pe.view.CircleImageView
         android:id="@+id/icon"
         android:layout_width="40dp"
         android:layout_height="40dp"

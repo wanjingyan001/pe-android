@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/white">
 
-                <com.netease.nim.uikit.common.ui.imageview.CircleImageView
+                <com.sogukj.pe.view.CircleImageView
                     android:id="@+id/team_logo"
                     android:layout_width="75dp"
                     android:layout_height="75dp"

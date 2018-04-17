@@ -26,7 +26,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.netease.nim.uikit.api.NimUIKit;
-import com.netease.nim.uikit.common.ui.imageview.CircleImageView;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.lucene.LuceneService;
@@ -36,6 +35,7 @@ import com.netease.nimlib.sdk.search.model.MsgIndexRecord;
 import com.netease.nimlib.sdk.uinfo.model.UserInfo;
 import com.sogukj.pe.R;
 import com.sogukj.pe.util.Utils;
+import com.sogukj.pe.view.CircleImageView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -215,7 +215,6 @@ public class TeamSearchActivity extends AppCompatActivity implements View.OnClic
             Glide.with(TeamSearchActivity.this)
                     .load(userInfo.getAvatar())
                     .apply(options)
-
                     .into(holder.resultAvatar);
             String format = new SimpleDateFormat("yyyy/MM/dd").format(new Date(record.getTime()));
             holder.resultTime.setText(format);

@@ -5,7 +5,7 @@
     android:layout_marginTop="10dp"
     android:background="@color/white">
 
-    <com.netease.nim.uikit.common.ui.imageview.CircleImageView
+    <com.sogukj.pe.view.CircleImageView
         android:id="@+id/headerImage"
         android:layout_width="36dp"
         android:layout_height="36dp"

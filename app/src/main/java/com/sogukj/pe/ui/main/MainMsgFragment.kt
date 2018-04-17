@@ -4,11 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
-import android.support.v13.app.FragmentCompat
-import android.support.v4.app.ActivityCompat
-import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
@@ -32,7 +28,6 @@ import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.netease.nim.uikit.api.NimUIKit
 import com.netease.nim.uikit.business.recent.TeamMemberAitHelper
 import com.netease.nim.uikit.business.uinfo.UserInfoHelper
-import com.netease.nim.uikit.common.ui.imageview.CircleImageView
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.Observer
 import com.netease.nimlib.sdk.RequestCallback
@@ -53,6 +48,7 @@ import com.sogukj.pe.ui.user.UserActivity
 import com.sogukj.pe.util.PermissionUtils
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
+import com.sogukj.pe.view.CircleImageView
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.service.SoguApi

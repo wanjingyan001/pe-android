@@ -7,7 +7,7 @@
     android:orientation="horizontal"
     android:paddingRight="15dp">
 
-    <com.netease.nim.uikit.common.ui.imageview.CircleImageView
+    <com.sogukj.pe.view.CircleImageView
         android:id="@+id/msg_icon"
         android:layout_width="50dp"
         android:layout_height="50dp"

@@ -18,11 +18,11 @@ import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.framework.base.ToolbarActivity
-import com.netease.nim.uikit.common.ui.imageview.CircleImageView
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.ScheduleBean
 import com.sogukj.pe.util.Trace
+import com.sogukj.pe.view.CircleImageView
 import com.sogukj.pe.view.CommentWindow
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder

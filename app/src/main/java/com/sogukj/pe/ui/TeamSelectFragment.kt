@@ -2,7 +2,6 @@ package com.sogukj.pe.ui
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -18,7 +17,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.framework.base.BaseFragment
 import com.google.gson.Gson
 import com.netease.nim.uikit.api.NimUIKit
-import com.netease.nim.uikit.business.team.activity.CustomExpandableListView
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.RequestCallback
 import com.netease.nimlib.sdk.team.TeamService
@@ -28,7 +26,6 @@ import com.sogukj.pe.bean.DepartmentBean
 import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.ui.IM.PersonalInfoActivity
 import com.sogukj.pe.ui.IM.TeamBean
-import com.sogukj.pe.ui.IM.TeamInfoActivity
 import com.sogukj.pe.ui.user.UserActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
@@ -39,7 +36,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_team_select.*
 import org.jetbrains.anko.*
-import org.jetbrains.anko.support.v4.ctx
 import java.util.*
 import kotlin.collections.ArrayList
 
