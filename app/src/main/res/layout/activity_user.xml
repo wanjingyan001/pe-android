@@ -376,12 +376,14 @@
                 android:drawableRight="@drawable/ic_right"
                 android:gravity="start|center_vertical"
                 android:padding="18dp"
-                android:text="公司组织架构" />
+                android:text="公司组织架构"
+                android:visibility="gone"/>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:background="@color/divider2" />
+                android:background="@color/divider2"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/setting"
