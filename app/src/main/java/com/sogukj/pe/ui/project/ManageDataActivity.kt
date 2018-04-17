@@ -57,6 +57,12 @@ class ManageDataActivity : ToolbarActivity() {
                             et_clause.setText(clause)
                             et_opinion.setText(opinion)
                             et_bonus.setText(bonus)
+
+                            if (majorEvents == null) {
+                                et_majorEvents.setSelection(0)
+                            } else {
+                                et_majorEvents.setSelection(majorEvents!!.length)
+                            }
                         }
                     } else
                         showCustomToast(R.drawable.icon_toast_fail, payload.message)
@@ -79,13 +85,26 @@ class ManageDataActivity : ToolbarActivity() {
         manageDataBean.put("clause", et_clause.text.toString())
         manageDataBean.put("opinion", et_opinion.text.toString())
         manageDataBean.put("bonus", et_bonus.text.toString())
+        if (isTotalEmpty) {
+            for ((k, v) in manageDataBean) {
+                if (!v.isNullOrEmpty()) {
+                    isTotalEmpty = false
+                }
+            }
+        }
         paramMap.put("ae", manageDataBean)
     }
 
+    var isTotalEmpty = true
 
     fun upload() {
         project.company_id?.let {
             prepareParams(it)
+            if (isTotalEmpty) {
+                showCustomToast(R.drawable.icon_toast_common, "未填写任何数据")
+                finish()
+                return
+            }
             SoguApi.getService(application)
                     .addEditManageData(paramMap)
                     .observeOn(AndroidSchedulers.mainThread())

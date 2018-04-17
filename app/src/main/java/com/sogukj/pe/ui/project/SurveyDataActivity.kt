@@ -114,6 +114,12 @@ class SurveyDataActivity : ToolbarActivity() {
                             et_entrepreneur.setText(team?.entrepreneur)
                             et_introduce.setText(team?.introduce)
                             et_encourage.setText(team?.encourage)
+
+                            if (company?.developStage == null) {
+                                et_developStage.setSelection(0)
+                            } else {
+                                et_developStage.setSelection(company?.developStage!!.length)
+                            }
                         }
                     } else
                         showCustomToast(R.drawable.icon_toast_fail, payload.message)
@@ -146,6 +152,13 @@ class SurveyDataActivity : ToolbarActivity() {
         company.put("potentialDebt", et_potentialDebt.text.toString())
         company.put("marketBarriers", et_marketBarriers.text.toString())
         company.put("riskChance", et_riskChance.text.toString())
+        if (isTotalEmpty) {
+            for ((k, v) in company) {
+                if (!v.isNullOrEmpty()) {
+                    isTotalEmpty = false
+                }
+            }
+        }
         paramMap.put("ac", company)
 
         var system = HashMap<String, String>()
@@ -160,6 +173,13 @@ class SurveyDataActivity : ToolbarActivity() {
         system.put("production", et_production.text.toString())
         system.put("quality", et_quality.text.toString())
         system.put("seal", et_seal.text.toString())
+        if (isTotalEmpty) {
+            for ((k, v) in system) {
+                if (!v.isNullOrEmpty()) {
+                    isTotalEmpty = false
+                }
+            }
+        }
         paramMap.put("as", system)
 
         var law = HashMap<String, String>()
@@ -170,6 +190,13 @@ class SurveyDataActivity : ToolbarActivity() {
         law.put("invisibleProperty", et_invisibleProperty.text.toString())
         law.put("legalDispute", et_legalDispute.text.toString())
         law.put("otherRisk", et_otherRisk.text.toString())
+        if (isTotalEmpty) {
+            for ((k, v) in law) {
+                if (!v.isNullOrEmpty()) {
+                    isTotalEmpty = false
+                }
+            }
+        }
         paramMap.put("al", law)
 
         var vocation = HashMap<String, String>()
@@ -185,6 +212,13 @@ class SurveyDataActivity : ToolbarActivity() {
         vocation.put("relate", et_relate.text.toString())
         vocation.put("report", et_report.text.toString())
         vocation.put("tradeRisk", et_tradeRisk.text.toString())
+        if (isTotalEmpty) {
+            for ((k, v) in vocation) {
+                if (!v.isNullOrEmpty()) {
+                    isTotalEmpty = false
+                }
+            }
+        }
         paramMap.put("av", vocation)
 
         var team = HashMap<String, String>()
@@ -200,13 +234,26 @@ class SurveyDataActivity : ToolbarActivity() {
         team.put("entrepreneur", et_entrepreneur.text.toString())
         team.put("introduce", et_introduce.text.toString())
         team.put("encourage", et_encourage.text.toString())
+        if (isTotalEmpty) {
+            for ((k, v) in team) {
+                if (!v.isNullOrEmpty()) {
+                    isTotalEmpty = false
+                }
+            }
+        }
         paramMap.put("at", team)
     }
 
+    var isTotalEmpty = true
 
     private fun upload() {
         project.company_id?.let {
             prepareParams(it)
+            if (isTotalEmpty) {
+                showCustomToast(R.drawable.icon_toast_common, "未填写任何数据")
+                finish()
+                return
+            }
             SoguApi.getService(application)
                     .addEditSurveyData(paramMap)
                     .observeOn(AndroidSchedulers.mainThread())

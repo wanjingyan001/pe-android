@@ -64,6 +64,12 @@ class InvestSuggestActivity : ToolbarActivity() {
                             et_sensibilyAnalysis.setText(other?.sensibilyAnalysis)
                             et_otherIssue.setText(other?.otherIssue)
                             et_contract.setText(other?.contract)
+
+                            if (plan?.valuation == null) {
+                                et_valuation.setSelection(0)
+                            } else {
+                                et_valuation.setSelection(plan?.valuation!!.length)
+                            }
                         }
                     } else
                         showCustomToast(R.drawable.icon_toast_fail, payload.message)
@@ -92,13 +98,26 @@ class InvestSuggestActivity : ToolbarActivity() {
         investBean.put("sensibilyAnalysis", et_sensibilyAnalysis.text.toString())
         investBean.put("otherIssue", et_otherIssue.text.toString())
         investBean.put("contract", et_contract.text.toString())
+        if (isTotalEmpty) {
+            for ((k, v) in investBean) {
+                if (!v.isNullOrEmpty()) {
+                    isTotalEmpty = false
+                }
+            }
+        }
         paramMap.put("ae", investBean)
     }
 
+    var isTotalEmpty = true
 
     fun upload() {
         project.company_id?.let {
             prepareParams(it)
+            if (isTotalEmpty) {
+                showCustomToast(R.drawable.icon_toast_common, "未填写任何数据")
+                finish()
+                return
+            }
             SoguApi.getService(application)
                     .addEditInvestSuggest(paramMap)
                     .observeOn(AndroidSchedulers.mainThread())
