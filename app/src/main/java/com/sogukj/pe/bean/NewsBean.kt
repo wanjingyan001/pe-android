@@ -43,7 +43,7 @@ class NewsBean : Serializable, NewsType {
                         val radius = Utils.dpToPx(baseActivity, 9)
                         val drawable = GradientDrawable()
                         drawable.cornerRadius = radius.toFloat()
-                        var color = Color.parseColor("#9e9e9e")
+                        var color = Color.parseColor("#4e7eef")
                         try {
                             color = Color.parseColor(map[str!!])
                         } catch (e: Exception) {

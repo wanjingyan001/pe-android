@@ -6,13 +6,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
 import android.view.Gravity
 import android.view.View
 import android.widget.EditText
-import android.widget.TextView
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.Theme
 import com.framework.base.BaseActivity
 import com.google.gson.Gson
 import com.sogukj.pe.Extras
@@ -22,13 +18,11 @@ import com.sogukj.pe.bean.QueryReqBean
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.IOSPopwindow
-import com.sogukj.pe.view.RecyclerAdapter
-import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_add_credit.*
-import kotlinx.android.synthetic.main.layout_shareholder_toolbar.*
+import kotlinx.android.synthetic.main.toolbar.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.info
 import kotlin.properties.Delegates
@@ -36,7 +30,6 @@ import kotlin.properties.Delegates
 
 class AddCreditActivity : BaseActivity(), View.OnClickListener {
     private lateinit var popwin: IOSPopwindow
-    lateinit var adapter: RecyclerAdapter<CreditReqBean>
     private var selectType = 1
     var id: Int by Delegates.notNull()
 
@@ -61,11 +54,8 @@ class AddCreditActivity : BaseActivity(), View.OnClickListener {
         Utils.setWindowStatusBarColor(this, R.color.white)
         id = intent.getIntExtra(Extras.ID, -1)
         toolbar_title.text = "添加人员"
-        addTv.text = "完成"
         popwin = IOSPopwindow(this)
-        initList()
-        back.setOnClickListener(this)
-        addTv.setOnClickListener(this)
+        toolbar_back.setOnClickListener(this)
         typeSelect.setOnClickListener(this)
         save.setOnClickListener(this)
         phoneEdt.setOnFocusChangeListener { v, hasFocus ->
@@ -94,48 +84,6 @@ class AddCreditActivity : BaseActivity(), View.OnClickListener {
             }
             selectType = select
         }
-    }
-
-    private fun initList() {
-        adapter = RecyclerAdapter(this, { _adapter, parent, type ->
-            val convertView = _adapter.getView(R.layout.item_shareholder_credit, parent)
-            object : RecyclerHolder<CreditReqBean>(convertView) {
-                private val directorName = convertView.find<TextView>(R.id.directorName)
-                private val directorPosition = convertView.find<TextView>(R.id.directorPosition)
-                private val phoneNumberEdt = convertView.find<EditText>(R.id.phoneNumberEdt)
-                private val IDCardEdt = convertView.find<EditText>(R.id.IDCardEdt)
-                override fun setData(view: View, data: CreditReqBean, position: Int) {
-                    convertView.find<TextView>(R.id.inquireStatus).visibility = View.GONE
-                    convertView.find<TextView>(R.id.sensitiveNews).visibility = View.GONE
-                    directorName.text = data.name
-                    if (data.type == 1) {
-                        directorPosition.text = data.position
-                    } else {
-                        directorPosition.text = "股东"
-                    }
-                    phoneNumberEdt.setText(data.phone)
-                    phoneNumberEdt.isEnabled = false
-                    IDCardEdt.setText(data.idCard)
-                    IDCardEdt.isEnabled = false
-                }
-            }
-        })
-        adapter.onItemLongClick = { v, position ->
-            MaterialDialog.Builder(this@AddCreditActivity)
-                    .theme(Theme.LIGHT)
-                    .title("提示")
-                    .content("确定要删除这条数据?")
-                    .onPositive { materialDialog, dialogAction ->
-                        adapter.dataList.removeAt(position)
-                        adapter.notifyItemChanged(position)
-                    }
-                    .positiveText("确定")
-                    .negativeText("取消")
-                    .show()
-            true
-        }
-        saveMsgList.layoutManager = LinearLayoutManager(this)
-        saveMsgList.adapter = adapter
     }
 
     private fun saveReqBean(): CreditReqBean? {
@@ -174,7 +122,7 @@ class AddCreditActivity : BaseActivity(), View.OnClickListener {
                     .subscribe({ payload ->
                         if (payload.isOk) {
                             val query = QueryReqBean()
-                            query.info = adapter.dataList as ArrayList<CreditReqBean>
+                            //query.info = adapter.dataList as ArrayList<CreditReqBean>
                             val intent = Intent()
                             intent.putExtra(Extras.DATA, query)
                             setResult(Extras.RESULTCODE, intent)
@@ -198,29 +146,17 @@ class AddCreditActivity : BaseActivity(), View.OnClickListener {
     @TargetApi(Build.VERSION_CODES.KITKAT)
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.back -> finish()
-            R.id.addTv -> {
-                if (adapter.dataList.isNotEmpty()) {
-                    doInquire(adapter.dataList)
-                } else {
-                    finish()
-                }
-            }
+            R.id.toolbar_back -> finish()
+//            R.id.addTv -> {
+//                if (adapter.dataList.isNotEmpty()) {
+//                    doInquire(adapter.dataList)
+//                } else {
+//                    finish()
+//                }
+//            }
             R.id.typeSelect -> {
                 Utils.closeInput(this, IDCardEdt)
                 popwin.showAtLocation(find(R.id.add_layout),  Gravity.BOTTOM, 0,0)
-            }
-            R.id.save -> {
-                val bean = saveReqBean() ?: return
-                bean.let {
-                    adapter.dataList.add(it)
-                    adapter.notifyDataSetChanged()
-                }
-                nameEdt.setText("")
-                phoneEdt.setText("")
-                IDCardEdt.setText("")
-                postEdt.setText("")
-                nameEdt.requestFocus()
             }
         }
     }
