@@ -40,6 +40,7 @@ import com.sogukj.pe.ui.approve.LeaveBusinessApproveActivity
 import com.sogukj.pe.ui.news.MainNewsActivity
 import com.sogukj.pe.ui.partyBuild.PartyMainActivity
 import com.sogukj.pe.ui.user.UserActivity
+import com.sogukj.pe.util.Utils
 import me.leolin.shortcutbadger.ShortcutBadger
 import org.jetbrains.anko.support.v4.ctx
 import java.net.UnknownHostException
@@ -58,6 +59,9 @@ class MainHomeFragment : BaseFragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 0x789) {
             loadHead()
+        } else if (requestCode == SHENPI) {
+            page = 1
+            doRequest()
         }
     }
 
@@ -183,12 +187,17 @@ class MainHomeFragment : BaseFragment() {
         var cacheData = cache.getDiskCache("${Store.store.getUser(context)?.uid}")
         if (cacheData != null) {
             if (page == 1) {
-                adapter.datas.clear()
-                adapter.datas.addAll(cacheData)
-                adapter.notifyDataSetChanged()
+                if (Utils.isNetworkError(context)) {
+                    adapter.datas.clear()
+                    adapter.datas.addAll(cacheData)
+                    adapter.notifyDataSetChanged()
 
-                totalData.clear()
-                totalData.addAll(cacheData)
+                    totalData.clear()
+                    totalData.addAll(cacheData)
+                } else {
+                    adapter.datas.clear()
+                    adapter.notifyDataSetChanged()
+                }
             }
         }
         SoguApi.getService(baseActivity!!.application)
@@ -424,6 +433,8 @@ class MainHomeFragment : BaseFragment() {
         }
     }
 
+    var SHENPI = 0x500
+
     inner class ViewPagerAdapter(var datas: ArrayList<MessageBean>, private val mContext: Context) : PagerAdapter() {
 
         private var mViewCache: LinkedList<View>? = null
@@ -510,18 +521,18 @@ class MainHomeFragment : BaseFragment() {
                     val intent = Intent(context, SealApproveActivity::class.java)
                     intent.putExtra("is_mine", is_mine)
                     intent.putExtra(Extras.DATA, data)
-                    startActivity(intent)
+                    startActivityForResult(intent, SHENPI)
                 } else if (data.type == 3) {
                     //SignApproveActivity.start(context, data, is_mine)
                     val intent = Intent(context, SignApproveActivity::class.java)
                     intent.putExtra(Extras.DATA, data)
                     intent.putExtra("is_mine", is_mine)
-                    startActivity(intent)
+                    startActivityForResult(intent, SHENPI)
                 } else if (data.type == 1) {
                     val intent = Intent(context, LeaveBusinessApproveActivity::class.java)
                     intent.putExtra(Extras.DATA, data)
                     intent.putExtra("is_mine", is_mine)
-                    startActivity(intent)
+                    startActivityForResult(intent, SHENPI)
                 }
             }
 
