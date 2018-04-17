@@ -34,15 +34,16 @@
                     android:scaleType="center"
                     android:src="@drawable/sogu_ic_back" />
 
-
                 <TextView
                     android:id="@id/toolbar_title"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
+                    android:layout_marginRight="32dp"
                     android:layout_marginTop="2dp"
                     android:gravity="center"
                     android:singleLine="true"
+                    android:text="高管征信"
                     android:textColor="@color/white"
                     android:textSize="@dimen/text_size_large"
                     android:textStyle="bold" />

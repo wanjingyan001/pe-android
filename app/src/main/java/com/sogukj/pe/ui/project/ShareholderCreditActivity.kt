@@ -244,8 +244,9 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
             R.id.back -> finish()
         //R.id.addTv -> AddCreditActivity.startForResult(this, bean.company_id)
             R.id.inquireBtn -> {
-                queryDataList.clear()
-                doInquire(queryDataList)
+//                queryDataList.clear()
+//                doInquire(queryDataList)
+                AddCreditActivity.start(context, 0)
             }
         }
     }

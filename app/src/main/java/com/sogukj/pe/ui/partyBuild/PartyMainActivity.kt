@@ -13,6 +13,7 @@ import com.google.gson.Gson
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.PartyTabBean
+import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
 import com.sogukj.util.XmlDb
@@ -93,6 +94,9 @@ class PartyMainActivity : BaseActivity() {
                             initPager(it)
                         }
                     }
+                }, { e ->
+                    Trace.e(e)
+                    ToastError(e)
                 })
     }
 

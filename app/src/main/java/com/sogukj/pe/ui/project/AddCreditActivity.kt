@@ -54,7 +54,9 @@ class AddCreditActivity : BaseActivity(), View.OnClickListener {
         Utils.setWindowStatusBarColor(this, R.color.white)
         id = intent.getIntExtra(Extras.ID, -1)
         toolbar_title.text = "添加人员"
+
         popwin = IOSPopwindow(this)
+        toolbar_back.visibility = View.VISIBLE
         toolbar_back.setOnClickListener(this)
         typeSelect.setOnClickListener(this)
         save.setOnClickListener(this)
@@ -77,10 +79,8 @@ class AddCreditActivity : BaseActivity(), View.OnClickListener {
         popwin.setOnItemClickListener { v, select ->
             if (select == 1) {
                 typeSelectTv.text = "董监高"
-                postLayout.visibility = View.VISIBLE
             } else {
                 typeSelectTv.text = "股东"
-                postLayout.visibility = View.GONE
             }
             selectType = select
         }
@@ -92,11 +92,10 @@ class AddCreditActivity : BaseActivity(), View.OnClickListener {
             showCustomToast(R.drawable.icon_toast_common, "请填写名字")
             return null
         }
-        if (selectType == 1 && postEdt.text.toString().isEmpty()) {
-            //showToast("请填写职位")
-            showCustomToast(R.drawable.icon_toast_common, "请填写职位")
-            return null
-        }
+//        if (selectType == 1 && postEdt.text.toString().isEmpty()) {
+//            showCustomToast(R.drawable.icon_toast_common, "请填写职位")
+//            return null
+//        }
 
         val creditReq = CreditReqBean()
         creditReq.company_id = id
@@ -104,9 +103,9 @@ class AddCreditActivity : BaseActivity(), View.OnClickListener {
         creditReq.phone = phoneEdt.text.toString()
         creditReq.idCard = IDCardEdt.text.toString()
         creditReq.type = selectType
-        if (selectType == 1) {
-            creditReq.position = postEdt.text.toString()
-        }
+//        if (selectType == 1) {
+//            creditReq.position = postEdt.text.toString()
+//        }
         return creditReq
     }
 
@@ -134,9 +133,9 @@ class AddCreditActivity : BaseActivity(), View.OnClickListener {
                     }, { e ->
                         Trace.e(e)
                         hideProgress()
-                    },{
+                    }, {
                         hideProgress()
-                    },{
+                    }, {
                         showProgress("正在提交")
                     })
 
@@ -156,7 +155,7 @@ class AddCreditActivity : BaseActivity(), View.OnClickListener {
 //            }
             R.id.typeSelect -> {
                 Utils.closeInput(this, IDCardEdt)
-                popwin.showAtLocation(find(R.id.add_layout),  Gravity.BOTTOM, 0,0)
+                popwin.showAtLocation(find(R.id.add_layout), Gravity.BOTTOM, 0, 0)
             }
         }
     }

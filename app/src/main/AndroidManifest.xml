@@ -528,7 +528,7 @@
             android:name=".ui.project.AddCreditActivity"
             android:configChanges="keyboard|orientation|screenSize"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
+            android:windowSoftInputMode="stateUnchanged|adjustPan" />
         <activity
             android:name=".ui.project.SensitiveInfoActivity"
             android:configChanges="keyboard|orientation|screenSize"
