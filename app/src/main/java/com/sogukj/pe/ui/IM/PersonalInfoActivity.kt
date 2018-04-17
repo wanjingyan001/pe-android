@@ -65,16 +65,16 @@ class PersonalInfoActivity : AppCompatActivity(), View.OnClickListener, TextWatc
         val bean = Store.store.getUser(this)
         if (user != null) {
             user?.let {
-                if (it.accid == bean!!.accid) {
-                    communicationLayout.visibility = View.INVISIBLE
-                }
+//                if (it.accid == bean!!.accid) {
+//                    communicationLayout.visibility = View.INVISIBLE
+//                }
                 name.text = it.name
                 position.text = it.position
                 company.text = it.company
                 name_tv.text = it.name
                 phone_tv.text = it.phone
                 email_tv.text = it.email
-                department_tv.text = it.depart_name
+                department_tv.text = bean!!.depart_name//从通讯录中的组拿过来的
                 position_tv.text = it.position
                 Glide.with(this)
                         .load(it.headImage())
