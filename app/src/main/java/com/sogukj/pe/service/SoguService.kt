@@ -1265,4 +1265,8 @@ interface SoguService {
 
     @POST("/api/News/hotTag")
     fun getHotTag(): Observable<Payload<ArrayList<String>>>
+
+    @FormUrlEncoded
+    @POST("/api/News/saveClick")
+    fun saveClick(@Field("click_id") click_id: Int): Observable<Payload<Object>>
 }

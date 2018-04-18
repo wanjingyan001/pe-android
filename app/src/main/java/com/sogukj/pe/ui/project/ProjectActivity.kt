@@ -640,6 +640,18 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
 
     val colorGray = Color.parseColor("#D9D9D9")
     override fun onClick(view: View) {
+        if (view.id >= 1 && view.id <= 60) {
+            SoguApi.getService(application)
+                    .saveClick(view.id)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ payload ->
+                        if (payload.isOk) {
+                        } else {
+                        }
+                    }, { e ->
+                    })
+        }
         when (view.id) {
             38 -> StockInfoActivity.start(this@ProjectActivity, project)//股票行情
             39 -> CompanyInfoActivity.start(this@ProjectActivity, project)//企业简介
