@@ -12,8 +12,10 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:orientation="horizontal">
+        android:layout_height="140dp"
+        android:orientation="horizontal"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -23,7 +25,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="40dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -65,7 +67,7 @@
             <TextView
                 android:id="@+id/IDCardTv"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="40dp"
                 android:layout_marginLeft="25dp"
                 android:drawableLeft="@drawable/id_card"
                 android:drawablePadding="12dp"
@@ -77,7 +79,7 @@
             <TextView
                 android:id="@+id/companyTv"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="40dp"
                 android:layout_marginLeft="25dp"
                 android:drawableLeft="@drawable/zhengxin_company"
                 android:drawablePadding="12dp"
@@ -94,22 +96,22 @@
             android:orientation="vertical">
 
             <FrameLayout
-                android:layout_width="50dp"
-                android:layout_height="50dp">
+                android:layout_width="40dp"
+                android:layout_height="40dp">
 
                 <ImageView
                     android:id="@+id/inquireStatus"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:gravity="center"
                     android:src="@drawable/zhengxin_fail" />
 
                 <TextView
                     android:id="@+id/number"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center|right"
-                    android:layout_marginRight="7dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center|right"
+                    android:paddingRight="4dp"
                     android:text="99+"
                     android:textColor="#FFFFFFFF"
                     android:textSize="12sp" />
@@ -122,10 +124,10 @@
 
             <ImageView
                 android:id="@+id/edit"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:gravity="center"
-                android:padding="15dp"
+                android:padding="10dp"
                 android:src="@drawable/zhengxin_edit" />
 
         </LinearLayout>

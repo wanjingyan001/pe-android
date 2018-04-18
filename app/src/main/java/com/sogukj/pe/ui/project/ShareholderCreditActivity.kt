@@ -208,7 +208,11 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
 
         override fun setData(view: View, data: CreditInfo.Item, position: Int) {
             directorName.text = data.name
-            directorPosition.text = data.position
+            directorPosition.text = when (data.type) {
+                1 -> "董监高"
+                2 -> "股东"
+                else -> ""
+            }
             phoneNumberTv.text = data.phone
             IDCardTv.text = data.idCard
             if (data.company.isNullOrEmpty()) {
