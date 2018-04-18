@@ -13,22 +13,22 @@
         android:id="@+id/team_toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
+        android:background="@color/color_blue_0888ff"
         app:contentInsetEnd="0dp"
         app:contentInsetLeft="0dp"
         app:contentInsetRight="0dp"
         app:contentInsetStart="0dp"
         app:layout_scrollFlags="scroll|enterAlways"
         app:popupTheme="@style/AppTheme.PopupOverlay"
-        app:theme="@style/AppTheme.AppBarOverlay"
-        android:background="@color/color_blue_0888ff">
+        app:theme="@style/AppTheme.AppBarOverlay">
 
         <com.sogukj.pe.view.CircleImageView
             android:id="@+id/toolbar_back"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_gravity="left"
-            android:gravity="center"
             android:layout_marginLeft="15dp"
+            android:gravity="center"
             android:src="@drawable/sogu_ic_back" />
 
         <TextView
@@ -50,8 +50,7 @@
             android:gravity="center"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:src="@drawable/sogu_ic_menu_help"
-            android:visibility="gone" />
+            android:src="@drawable/menu_create_imteam" />
     </android.support.v7.widget.Toolbar>
 
 
@@ -109,12 +108,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:descendantFocusability="blocksDescendants"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
                 android:background="@color/white"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
@@ -148,8 +147,10 @@
             </LinearLayout>
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/groupDiscuss1"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
+                android:layout_marginTop="10dp"
                 android:background="@color/white"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
@@ -179,11 +180,42 @@
                 android:groupIndicator="@null" />
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/contactLayout1"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
+                android:layout_marginTop="10dp"
                 android:background="@color/white"
                 android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/contact" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="最近联系人"
+                    android:textColor="#ff282828"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/contactLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white" />
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
                 android:layout_marginTop="10dp"
+                android:background="@color/white"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -209,37 +241,6 @@
                 android:background="@color/white"
                 android:divider="@null"
                 android:groupIndicator="@null" />
-
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:background="@color/white"
-                android:gravity="center_vertical"
-                android:visibility="gone"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_marginLeft="15dp"
-                    android:background="@drawable/zuzhijiagou" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:text="最近联系人"
-                    android:textColor="#ff282828"
-                    android:textSize="16sp" />
-
-            </LinearLayout>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/contactLayout"
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white" />
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
@@ -252,5 +253,42 @@
         android:visibility="gone">
 
     </android.support.v7.widget.RecyclerView>
+
+    <RelativeLayout
+        android:id="@+id/confirmSelectLayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentTop="true"
+            android:background="#f1f1f1" />
+
+        <TextView
+            android:id="@+id/selectNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:gravity="left"
+            android:text="已选择："
+            android:textColor="#1787fb"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/confirmTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/select_confirm_bg"
+            android:text="确定"
+            android:textColor="@color/white" />
+
+    </RelativeLayout>
 
 </LinearLayout>

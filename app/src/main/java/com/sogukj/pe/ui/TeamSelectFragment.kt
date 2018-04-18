@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.Html
 import android.text.TextWatcher
-import android.util.Log
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.*
@@ -26,6 +25,7 @@ import com.sogukj.pe.bean.DepartmentBean
 import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.ui.IM.PersonalInfoActivity
 import com.sogukj.pe.ui.IM.TeamBean
+import com.sogukj.pe.ui.IM.TeamCreateActivity
 import com.sogukj.pe.ui.user.UserActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
@@ -64,11 +64,6 @@ class TeamSelectFragment : BaseFragment() {
 
     fun loadHead() {
         val user = Store.store.getUser(baseActivity!!)
-//        if (user?.url.isNullOrEmpty()) {
-//            toolbar_back.setChar(user?.name?.first())
-//        } else {
-//            Glide.with(context).load(user?.url).into(toolbar_back)
-//        }
         if (user?.url.isNullOrEmpty()) {
             val ch = user?.name?.first()
             toolbar_back.setChar(ch)
@@ -94,9 +89,9 @@ class TeamSelectFragment : BaseFragment() {
         initSearchView()
         initResultList()
         initHeader()
-        initGroupDiscuss()
+        //initGroupDiscuss()
         initOrganizationList()
-        initContactList()
+        //initContactList()
         doRequest()
 
         loadHead()
@@ -104,6 +99,83 @@ class TeamSelectFragment : BaseFragment() {
             //UserActivity.start(context)
             val intent = Intent(context, UserActivity::class.java)
             startActivityForResult(intent, 0x789)
+        }
+
+        isSelectUser = false
+
+        loadByIsSelectUser()
+
+        confirmTv.setOnClickListener {
+            if (isSelectUser) {
+                var alreadyList = ArrayList<UserBean>()//已选中的
+                val map = selectMap.filterValues { it }
+                if (map.isNotEmpty()) {
+                    map.keys.forEach {
+                        val id = it
+                        departList.forEach {
+                            it.data?.forEach {
+                                if (id == it.uid.toString()) {
+                                    alreadyList.add(it)
+                                }
+                            }
+                        }
+                    }
+                }
+                if (alreadyList.size == 0) {
+                    return@setOnClickListener
+                }
+                TeamCreateActivity.start(context, alreadyList)
+
+                isSelectUser = false
+                var list = ArrayList<DepartmentBean>(departList)
+                list.forEach {
+                    it.data!!.forEach {
+                        it.uid?.let {
+                            selectMap.put(it.toString(), false)
+                        }
+                    }
+                }
+                loadByIsSelectUser()
+            }
+        }
+    }
+
+    /*
+     * false表示仅仅通讯录，只需要群组和组织架构
+     * true表示创建群聊，需要常用联系人和组织架构
+     */
+    var isSelectUser = false
+
+    fun loadByIsSelectUser() {
+        if (isSelectUser) {
+            team_toolbar_title.text = "创建群组"
+            groupDiscuss1.visibility = View.GONE
+            groupDiscuss.visibility = View.GONE
+            contactLayout1.visibility = View.VISIBLE
+            contactLayout.visibility = View.VISIBLE
+            initGroupDiscuss()
+            confirmSelectLayout.visibility = View.VISIBLE
+        } else {
+            team_toolbar_title.text = "通讯录"
+            groupDiscuss1.visibility = View.VISIBLE
+            groupDiscuss.visibility = View.VISIBLE
+            contactLayout1.visibility = View.GONE
+            contactLayout.visibility = View.GONE
+            initContactList()
+            confirmSelectLayout.visibility = View.GONE
+        }
+
+        listContent.smoothScrollTo(0, 0)
+
+        orgAdapter.notifyDataSetChanged()
+        contactAdapter.notifyDataSetChanged()
+        resultAdapter.notifyDataSetChanged()
+
+        toolbar_menu.setOnClickListener {
+            search_edt.clearFocus()
+            isSelectUser = !isSelectUser
+
+            loadByIsSelectUser()
         }
     }
 
@@ -175,10 +247,8 @@ class TeamSelectFragment : BaseFragment() {
                         if (team.isMyTeam) {
                             val bean = Gson().fromJson(team.extension, TeamBean::class.java)
                             if (bean != null) {
-                                Log.e("zzz", "讨论组" + team.name)
                                 tlz.add(team)
                             } else {
-                                Log.e("zzz", "群聊" + team.name)
                                 ql.add(team)
                             }
                         }
@@ -208,21 +278,21 @@ class TeamSelectFragment : BaseFragment() {
         contactLayout.layoutManager = LinearLayoutManager(context)
         contactAdapter = ContactAdapter(contactList)
         contactLayout.adapter = contactAdapter
-//        SoguApi.getService(baseActivity!!.application)
-//                .recentContacts()
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribeOn(Schedulers.io())
-//                .subscribe({ payload ->
-//                    if (payload.isOk) {
-//                        contactList.clear()
-//                        contactList.addAll(payload.payload!!)
-//                        contactAdapter.notifyDataSetChanged()
-//                    } else
-//                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
-//                }, { e ->
-//                    Trace.e(e)
-//                    showCustomToast(R.drawable.icon_toast_fail, "数据获取失败")
-//                })
+        SoguApi.getService(baseActivity!!.application)
+                .recentContacts()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        contactList.clear()
+                        contactList.addAll(payload.payload!!)
+                        contactAdapter.notifyDataSetChanged()
+                    } else
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    showCustomToast(R.drawable.icon_toast_fail, "数据获取失败")
+                })
     }
 
     private fun initResultList() {
@@ -244,6 +314,11 @@ class TeamSelectFragment : BaseFragment() {
                         payload.payload?.forEach { depart ->
                             departList.add(depart)
                             i += depart.data!!.size
+                            depart.data!!.forEach {
+                                it.uid?.let {
+                                    selectMap.put(it.toString(), false)
+                                }
+                            }
                         }
                         num.text = "共${i}人"
                         orgAdapter.notifyDataSetChanged()
@@ -420,8 +495,31 @@ class TeamSelectFragment : BaseFragment() {
                 holder.userName.text = userBean.name
                 holder.userPosition.text = userBean.position
                 holder.selectIcon.visibility = View.GONE
-                holder.itemView.setOnClickListener {
-                    search_edt.clearFocus()
+            }
+            if (isSelectUser) {
+                holder.selectIcon.visibility = View.VISIBLE
+                val userBean = parents[groupPosition].data!![childPosition]
+                userBean.uid?.let {
+                    holder.selectIcon.isSelected = selectMap[it.toString()]!!
+                }
+            } else {
+                holder.selectIcon.visibility = View.GONE
+            }
+            holder.itemView.setOnClickListener {
+                search_edt.clearFocus()
+                val userBean = parents[groupPosition].data!![childPosition]
+                if (isSelectUser) {
+                    //选人
+                    if (userBean.uid != mine!!.uid) {
+                        holder.selectIcon.isSelected = !holder.selectIcon.isSelected
+                        userBean.uid?.let {
+                            selectMap.put(it.toString(), holder.selectIcon.isSelected)
+                            val map = selectMap.filterValues { it }
+                            selectNumber.text = "已选择: ${map.size}人"
+                        }
+                    }
+                } else {
+                    //查看详情
                     PersonalInfoActivity.start(context, userBean, null)
                 }
             }
@@ -475,12 +573,31 @@ class TeamSelectFragment : BaseFragment() {
             holder.userName.text = Html.fromHtml(name)
             holder.userPosition.text = userBean.position
             holder.selectIcon.visibility = View.GONE
+            if (isSelectUser) {
+                holder.selectIcon.visibility = View.VISIBLE
+                userBean.uid?.let {
+                    holder.selectIcon.isSelected = selectMap[it.toString()]!!
+                }
+            } else {
+                holder.selectIcon.visibility = View.GONE
+            }
             holder.itemView.setOnClickListener {
                 search_edt.clearFocus()
-                //查看详情
-                PersonalInfoActivity.start(context, userBean, null)
+                if (isSelectUser) {
+                    //选人
+                    if (userBean.uid != mine?.uid) {
+                        holder.selectIcon.isSelected = !holder.selectIcon.isSelected
+                        userBean.uid?.let {
+                            selectMap.put(it.toString(), holder.selectIcon.isSelected)
+                            val map = selectMap.filterValues { it }
+                            selectNumber.text = "已选择: ${map.size}人"
+                        }
+                    }
+                } else {
+                    //查看详情
+                    PersonalInfoActivity.start(context, userBean, null)
+                }
             }
-
         }
 
         override fun getItemCount(): Int = datas.size
