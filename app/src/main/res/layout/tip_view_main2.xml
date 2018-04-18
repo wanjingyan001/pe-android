@@ -8,8 +8,8 @@
 
     <com.sogukj.pe.view.CircleImageView
         android:id="@+id/icon"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
         android:src="@drawable/oval" />
 
     <TextView

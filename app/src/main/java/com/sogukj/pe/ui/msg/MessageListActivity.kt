@@ -16,6 +16,7 @@ import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import com.lcodecore.tkrefreshlayout.footer.BallPulseView
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.R
+import com.sogukj.pe.bean.ApproveFilterBean
 import com.sogukj.pe.bean.MessageBean
 import com.sogukj.pe.ui.SupportEmptyView
 import com.sogukj.pe.ui.approve.LeaveBusinessApproveActivity
@@ -32,13 +33,15 @@ import kotlinx.android.synthetic.main.activity_list_common.*
 
 class MessageListActivity : ToolbarActivity() {
 
+    lateinit var inflater: LayoutInflater
+
     lateinit var adapter: RecyclerAdapter<MessageBean>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list_common)
         title = "系统消息助手"
         setBack(true)
-        val inflater = LayoutInflater.from(this)
+        inflater = LayoutInflater.from(this)
         adapter = RecyclerAdapter<MessageBean>(this, { _adapter, parent, type ->
             val convertView = _adapter.getView(R.layout.item_msg_content, parent)
             object : RecyclerHolder<MessageBean>(convertView) {
@@ -125,9 +128,192 @@ class MessageListActivity : ToolbarActivity() {
 
         })
 
-        handler.postDelayed({
+        stateDefault()
+
+        kotlin.run {
+            fl_filter.setOnClickListener {
+                stateDefault()
+            }
+            iv_filter.setOnClickListener {
+                if (fl_filter.visibility == View.VISIBLE) {
+                    stateDefault()
+                } else {
+                    stateFilter()
+                }
+            }
+        }
+
+        SoguApi.getService(application)
+                .approveFilter()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk && payload.payload != null) {
+                        filterBean = payload.payload!!
+                    } else {
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
+                    }
+                }, { e ->
+                    Trace.e(e)
+                })
+    }
+
+    var filterBean: ApproveFilterBean? = null
+    var paramTemplates = ArrayList<String>()
+    var paramStates = ArrayList<String>()
+    var filterType: Int? = null
+
+    fun stateDefault() {
+        page = 1
+        fl_filter.visibility = View.GONE
+        paramStates.clear()
+        paramTemplates.clear()
+        doRequest()
+    }
+
+    private fun setFilterTab(checkedId: Int) {
+        if (checkedId == R.id.rb_all) {
+            filterType = null
+            ll_filter_other.visibility = View.GONE
+            setFilterTags(ApproveFilterBean.ItemBean())
+        } else if (checkedId == R.id.rb_seal) {
+            filterType = 2
+            ll_filter_other.visibility = View.VISIBLE
+            setFilterTags(filterBean!!.approve)
+        } else if (checkedId == R.id.rb_sign) {
+            filterType = 3
+            setFilterTags(filterBean!!.sign)
+            ll_filter_other.visibility = View.VISIBLE
+        } else if (checkedId == R.id.rb_leave) {
+            filterType = 1
+            setFilterTags(filterBean!!.leave)
+            ll_filter_other.visibility = View.VISIBLE
+        }
+    }
+
+    fun stateFilter() {
+        page = 1
+        if (filterBean == null) return
+        fl_filter.visibility = View.VISIBLE
+        tag_all.setOnClickListener {
+            stateDefault()
+        }
+        rg_category.check(R.id.rb_all)
+        setFilterTab(R.id.rb_all)
+        rg_category.setOnCheckedChangeListener { group, checkedId ->
+            setFilterTab(checkedId)
+        }
+
+        btn_reset.setOnClickListener {
+            paramTemplates.clear()
+            paramStates.clear()
+            when (filterType) {
+                1 -> setFilterTags(filterBean!!.leave)
+                3 -> setFilterTags(filterBean!!.sign)
+                2 -> setFilterTags(filterBean!!.approve)
+                else -> {
+                }
+            }
+
+        }
+        btn_ok.setOnClickListener {
+            fl_filter.visibility = View.GONE
             doRequest()
-        }, 100)
+        }
+    }
+
+    fun setFilterTags(itemBean: ApproveFilterBean.ItemBean?) {
+        if (itemBean == null) return
+        tags_type.removeAllViews()
+        tags_state.removeAllViews()
+        val textColor1 = resources.getColor(R.color.white)
+        val textColor0 = resources.getColor(R.color.text_1)
+        val bgColor0 = R.drawable.bg_tag_filter_0
+        val bgColor1 = R.drawable.bg_tag_filter_1
+        val onClickTemplate: (View) -> Unit = { v ->
+            val tvTag = v as TextView
+            val ftag = tvTag.tag as String
+            if (paramTemplates.contains(ftag)) {
+                paramTemplates.remove(ftag)
+                tvTag.setTextColor(textColor0)
+                tvTag.setBackgroundResource(bgColor0)
+            } else {
+                paramTemplates.add(ftag)
+                tvTag.setTextColor(textColor1)
+                tvTag.setBackgroundResource(bgColor1)
+            }
+        }
+
+        val onClickStatus: (View) -> Unit = { v ->
+            val tvTag = v as TextView
+            val ftag = tvTag.tag as String
+            if (paramStates.contains(ftag)) {
+                paramStates.remove(ftag)
+                tvTag.setTextColor(textColor0)
+                tvTag.setBackgroundResource(bgColor0)
+            } else {
+                paramStates.add(ftag)
+                tvTag.setTextColor(textColor1)
+                tvTag.setBackgroundResource(bgColor1)
+            }
+        }
+        run {
+            val itemTag = inflater.inflate(R.layout.item_tag_filter2, null)
+            val tvTag = itemTag.findViewById(R.id.tv_tag) as TextView
+            tvTag.text = "全部"
+            tvTag.setOnClickListener(onClickTemplate)
+            tags_type.addView(itemTag)
+            tvTag.setOnClickListener {
+                paramStates.clear()
+                paramTemplates.clear()
+                fl_filter.visibility = View.GONE
+                doRequest()
+            }
+        }
+
+        run {
+            val itemTag = inflater.inflate(R.layout.item_tag_filter2, null)
+            val tvTag = itemTag.findViewById(R.id.tv_tag) as TextView
+            tvTag.text = "全部"
+            tvTag.setOnClickListener(onClickTemplate)
+            tags_state.addView(itemTag)
+            tvTag.setOnClickListener {
+                paramStates.clear()
+                paramTemplates.clear()
+                fl_filter.visibility = View.GONE
+                doRequest()
+            }
+        }
+        itemBean.kind?.entries?.forEach { e ->
+            val itemTag = inflater.inflate(R.layout.item_tag_filter2, null)
+            val tvTag = itemTag.findViewById(R.id.tv_tag) as TextView
+            tvTag.text = e.value
+            tvTag.tag = e.key
+            tvTag.setOnClickListener(onClickTemplate)
+            tags_type.addView(itemTag)
+            if (paramTemplates.contains(e.key)) {
+                tvTag.setTextColor(textColor1)
+                tvTag.setBackgroundResource(bgColor1)
+            } else {
+                tvTag.setTextColor(textColor0)
+                tvTag.setBackgroundResource(bgColor0)
+            }
+        }
+        itemBean.status?.entries?.forEach { e ->
+            val itemTag = inflater.inflate(R.layout.item_tag_filter2, null)
+            val tvTag = itemTag.findViewById(R.id.tv_tag) as TextView
+            tvTag.text = e.value
+            tvTag.tag = e.key
+            tvTag.setOnClickListener(onClickStatus)
+            tags_state.addView(itemTag)
+            if (paramStates.contains(e.key)) {
+                tvTag.setTextColor(textColor1)
+                tvTag.setBackgroundResource(bgColor1)
+            } else {
+                tvTag.setTextColor(textColor0)
+                tvTag.setBackgroundResource(bgColor0)
+            }
+        }
     }
 
     override fun onResume() {
@@ -145,8 +331,21 @@ class MessageListActivity : ToolbarActivity() {
                     if (payload.isOk) {
                         if (page == 1)
                             adapter.dataList.clear()
-                        payload.payload?.apply {
-                            adapter.dataList.addAll(this)
+
+                        //filter   data.type=paramTemplates.key
+                        var oriData = payload.payload!!
+                        if (paramTemplates.size == 0) {
+                            adapter.dataList.addAll(oriData)
+                        } else {
+                            var filtered = ArrayList<MessageBean>()
+                            for (item in oriData) {
+                                for (filter in paramTemplates) {
+                                    if (item.type == filter.toInt()) {
+                                        filtered.add(item)
+                                    }
+                                }
+                            }
+                            adapter.dataList.addAll(filtered)
                         }
                     } else
                         showCustomToast(R.drawable.icon_toast_fail, payload.message)

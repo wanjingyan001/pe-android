@@ -64,15 +64,15 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="170dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:clipChildren="false">
 
         <com.sogukj.pe.view.NoLeftScrollViewPager
             android:id="@+id/noleftviewpager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp" />
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp" />
 
         <ImageView
             android:id="@+id/iv_empty"
@@ -96,8 +96,8 @@
         android:id="@+id/party_build"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:background="@drawable/bg_party_build" />
 
     <android.support.v7.widget.GridLayout
@@ -114,7 +114,7 @@
         <com.sogukj.pe.view.TipsViewMain2
             android:id="@+id/tv_rl"
             android:layout_width="0dp"
-            android:layout_height="85dp"
+            android:layout_height="95dp"
             app:icon_main="@drawable/ap"
             app:layout_columnWeight="1"
             app:title="安排" />
@@ -122,7 +122,7 @@
         <com.sogukj.pe.view.TipsViewMain2
             android:id="@+id/tv_msg"
             android:layout_width="0dp"
-            android:layout_height="85dp"
+            android:layout_height="95dp"
             app:icon_main="@drawable/qb"
             app:layout_columnWeight="1"
             app:title="情报" />
@@ -130,7 +130,7 @@
         <com.sogukj.pe.view.TipsViewMain2
             android:id="@+id/tv_sp"
             android:layout_width="0dp"
-            android:layout_height="85dp"
+            android:layout_height="95dp"
             app:icon_main="@drawable/sp"
             app:layout_columnWeight="1"
             app:title="审批" />
@@ -138,14 +138,14 @@
         <com.sogukj.pe.view.TipsViewMain2
             android:id="@+id/tv_weekly"
             android:layout_width="0dp"
-            android:layout_height="85dp"
+            android:layout_height="95dp"
             app:icon_main="@drawable/zb"
             app:layout_columnWeight="1"
             app:title="周报" />
 
         <com.sogukj.pe.view.TipsViewMain2
             android:layout_width="0dp"
-            android:layout_height="85dp"
+            android:layout_height="95dp"
             app:icon_main="@drawable/zx"
             app:layout_columnWeight="1"
             app:title="征信" />
