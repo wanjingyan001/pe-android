@@ -11,6 +11,7 @@
         android:background="@drawable/msg_border1"
         android:gravity="center"
         android:orientation="vertical"
+        android:layout_marginRight="3dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp">
 
@@ -52,16 +53,17 @@
                 android:id="@+id/sequense"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
+                android:layout_marginLeft="10dp"
                 android:background="@drawable/seq_bg"
                 android:lineSpacingExtra="0sp"
-                android:paddingBottom="3dp"
+                android:paddingBottom="2dp"
                 android:paddingLeft="6dp"
                 android:paddingRight="6dp"
-                android:paddingTop="3dp"
+                android:paddingTop="2dp"
+                android:layout_gravity="center"
                 android:text="YYXZ029384756 "
                 android:textColor="@color/white"
-                android:textSize="10sp" />
+                android:textSize="9sp" />
         </LinearLayout>
 
         <LinearLayout

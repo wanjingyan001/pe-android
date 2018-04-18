@@ -36,7 +36,7 @@ class MessageListActivity : ToolbarActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list_common)
-        title = "消息助手"
+        title = "系统消息助手"
         setBack(true)
         val inflater = LayoutInflater.from(this)
         adapter = RecyclerAdapter<MessageBean>(this, { _adapter, parent, type ->

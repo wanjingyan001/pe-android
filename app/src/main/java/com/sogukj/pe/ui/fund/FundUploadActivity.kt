@@ -344,6 +344,10 @@ class FundUploadActivity : ToolbarActivity() {
 
                 //上传
                 btn_upload.setOnClickListener {
+                    if (uploadList.size == 0) {
+                        showCustomToast(R.drawable.icon_toast_common, "未选择文件")
+                        return@setOnClickListener
+                    }
                     handler.postDelayed({
                         uploadList.forEach {
                             doSave(it, btn_upload)
