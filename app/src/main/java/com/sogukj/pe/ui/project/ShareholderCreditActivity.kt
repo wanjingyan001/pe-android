@@ -15,6 +15,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -68,6 +69,7 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
         bean = intent.getSerializableExtra(Extras.DATA) as ProjectBean
         toolbar_title.text = "高管征信"
         initAdapter()
+        initSearchView()
         back.setOnClickListener(this)
         inquireBtn.setOnClickListener(this)
 
@@ -75,6 +77,47 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
             override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
                 var alpha = Math.abs(verticalOffset) * 1.0 / Utils.dpToPx(context, 60)
                 down.alpha = 1 - alpha.toFloat()
+            }
+        })
+    }
+
+    private fun initSearchView() {
+        search_edt.filters = Utils.getFilter(context)
+        search_edt.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus) {
+                search_hint.visibility = View.GONE
+                search_icon.visibility = View.VISIBLE
+            } else {
+                search_hint.visibility = View.VISIBLE
+                search_icon.visibility = View.GONE
+                search_edt.clearFocus()
+            }
+        }
+        search_edt.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+//                searchKey = search_edt.text.toString()
+//                searchWithName()
+                true
+            } else {
+                false
+            }
+        }
+        search_edt.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (search_edt.text.toString().isEmpty()) {
+//                    searchKey = ""
+//                    adapter.dataList.clear()
+//                    adapter.dataList.add(zhushou)
+//                    adapter.dataList.addAll(recentList)
+//                    adapter.notifyDataSetChanged()
+                }
             }
         })
     }
