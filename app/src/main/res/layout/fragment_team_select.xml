@@ -24,11 +24,11 @@
 
         <com.sogukj.pe.view.CircleImageView
             android:id="@+id/toolbar_back"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_gravity="left"
             android:gravity="center"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="15dp"
             android:src="@drawable/sogu_ic_back" />
 
         <TextView
