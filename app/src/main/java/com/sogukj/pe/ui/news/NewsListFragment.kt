@@ -134,33 +134,25 @@ class NewsListFragment : BaseFragment(), SupportEmptyView {
         doRequest()
     }
 
-    var initialData = ArrayList<NewsBean>()
-
     var page = 1
     fun doRequest() {
-        val user = Store.store.getUser(baseActivity!!)
-        val userId = if (index == 0) null else user?.uid
         SoguApi.getService(baseActivity!!.application)
-                .listNews(page = page, type = type, uid = userId)
+                .listNews(page = page, type = type, fuzzyQuery = queryTxt)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         if (page == 1) {
-                            initialData.clear()
                             adapter.dataList.clear()
                         }
                         payload.payload?.apply {
-                            initialData.addAll(this)
-                            filter()
-                            //adapter.dataList.addAll(this)
+                            adapter.dataList.addAll(this)
                         }
                     } else
                         showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     iv_loading?.visibility = View.GONE
                 }, { e ->
                     Trace.e(e)
-//                    showToast("暂无可用数据")
                     iv_loading?.visibility = View.GONE
                     SupportEmptyView.checkEmpty(this, adapter)
                 }, {
@@ -174,42 +166,20 @@ class NewsListFragment : BaseFragment(), SupportEmptyView {
                 })
     }
 
-    private var tagList = ArrayList<String>()
+    private var queryTxt = ""
 
     public fun setTagList(tags: ArrayList<String>) {
-        tagList.clear()
-        tagList.addAll(tags)
-        filter()
-    }
-
-    private fun filter() {
-        //过滤tag
-        var filterData = ArrayList<NewsBean>()
-        if (tagList.size == 0) {
-            adapter.dataList.clear()
-            adapter.dataList.addAll(initialData)
-            adapter.notifyDataSetChanged()
-            if (adapter.dataList.size == 0) {
-                iv_empty.visibility = View.VISIBLE
-            } else {
-                iv_empty.visibility = View.GONE
-            }
+        page = 1
+        queryTxt = ""
+        if (tags.size == 0) {
+            queryTxt = ""
         } else {
-            for (bean in initialData) {
-                var tags = bean.tag?.split("#")
-                if (tags!!.containsAll(tagList)) {
-                    filterData.add(bean)
-                }
+            for (tag in tags) {
+                queryTxt = "${queryTxt},${tag}"
             }
-            adapter.dataList.clear()
-            adapter.dataList.addAll(filterData)
-            adapter.notifyDataSetChanged()
-            if (filterData.size == 0) {
-                iv_empty.visibility = View.VISIBLE
-            } else {
-                iv_empty.visibility = View.GONE
-            }
+            queryTxt = queryTxt.substring(1)
         }
+        doRequest()
     }
 
     val fmt = SimpleDateFormat("yyyy/MM/dd HH:mm")
@@ -244,7 +214,7 @@ class NewsListFragment : BaseFragment(), SupportEmptyView {
 //                        .getOrNull(1)
                 try {
                     tv_date.text = Utils.formatDate(strTime)
-                }catch (e:Exception){
+                } catch (e: Exception) {
                     e.printStackTrace()
                 }
 //                tv_date.text = strTime

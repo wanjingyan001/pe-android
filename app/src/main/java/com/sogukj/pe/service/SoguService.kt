@@ -36,13 +36,11 @@ interface SoguService {
     fun userInfo(@Field("uid") uid: Int, @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE): Observable<Payload<UserBean>>
 
     @FormUrlEncoded
-    @POST("/api/news/newsLists")
+    @POST("/api/news/newsData")
     fun listNews(@Field("page") page: Int, @Field("pageSize") pageSize: Int = 20
-                 , @Field("uid") uid: Int? = null
                  , @Field("type") type: Int? = null
                  , @Field("company_id") company_id: Int? = null
-                 , @Field("fuzzyQuery") fuzzyQuery: String? = null
-                 , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE)
+                 , @Field("fuzzyQuery") fuzzyQuery: String? = null)
             : Observable<Payload<List<NewsBean>>>
 
     @FormUrlEncoded
@@ -1264,4 +1262,7 @@ interface SoguService {
 
     @POST("/api/Foundation/editFundInfo")
     fun editFundInfo(@Body map: HashMap<String, Any?>): Observable<Payload<Object>>
+
+    @POST("/api/News/hotTag")
+    fun getHotTag(): Observable<Payload<ArrayList<String>>>
 }

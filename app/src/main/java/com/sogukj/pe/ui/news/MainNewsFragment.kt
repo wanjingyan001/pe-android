@@ -1,8 +1,10 @@
 package com.sogukj.pe.ui.news
 
+import android.annotation.TargetApi
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.content.ContextCompat
@@ -14,6 +16,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.text.Html
 import android.text.InputType
 import android.text.TextUtils
+import android.view.Gravity
 import android.view.View
 import android.widget.ImageView
 import android.widget.RadioGroup
@@ -329,20 +332,45 @@ class MainNewsFragment : BaseFragment() {
             fl_filter.visibility = View.GONE
         }
 
-        for (i in 0 until grid.childCount) {
-            var child = grid.getChildAt(i) as TextView
-            child.setOnClickListener {
-                if (child.tag.equals("F")) {
-                    child.textColor = Color.parseColor("#1787fb")
-                    child.setBackgroundResource(R.drawable.tg_bg_t)
-                    child.tag = "T"
-                } else {
-                    child.textColor = Color.parseColor("#808080")
-                    child.setBackgroundResource(R.drawable.tag_bg_f)
-                    child.tag = "F"
-                }
-            }
-        }
+        loadTags()
+    }
+
+    fun loadTags() {
+        SoguApi.getService(baseActivity!!.application)
+                .getHotTag()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        var tags = payload.payload!!
+                        for (i in 0 until grid.childCount) {
+                            var child = grid.getChildAt(i) as TextView
+                            try {
+                                var tag = tags.get(i)
+                                child.text = tag
+                                child.setOnClickListener {
+                                    if (child.tag.equals("F")) {
+                                        child.textColor = Color.parseColor("#1787fb")
+                                        child.setBackgroundResource(R.drawable.tg_bg_t)
+                                        child.tag = "T"
+                                    } else {
+                                        child.textColor = Color.parseColor("#808080")
+                                        child.setBackgroundResource(R.drawable.tag_bg_f)
+                                        child.tag = "F"
+                                    }
+                                }
+                            } catch (e: IndexOutOfBoundsException) {
+                                child.visibility = View.GONE
+                                child.text = ""
+                            }
+                        }
+                    } else {
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
+                    }
+                }, { e ->
+                    Trace.e(e)
+                    showCustomToast(R.drawable.icon_toast_fail, "请求失败")
+                })
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
@@ -361,6 +389,9 @@ class MainNewsFragment : BaseFragment() {
         fl_filter.visibility = View.GONE
         for (i in 0 until grid.childCount) {
             var child = grid.getChildAt(i) as TextView
+            if (child.text.isEmpty() && child.visibility == View.GONE) {
+                continue
+            }
             child.textColor = Color.parseColor("#808080")
             child.setBackgroundResource(R.drawable.tag_bg_f)
             child.tag = "F"
@@ -372,6 +403,9 @@ class MainNewsFragment : BaseFragment() {
         var tagList = ArrayList<String>()
         for (i in 0 until grid.childCount) {
             var child = grid.getChildAt(i) as TextView
+            if (child.text.isEmpty() && child.visibility == View.GONE) {
+                continue
+            }
             if (child.tag.equals("T")) {
                 tagList.add(child.text.toString())
             }
@@ -389,8 +423,6 @@ class MainNewsFragment : BaseFragment() {
         search_view.et_search.setSelection(text.length)
         this.key = text
         if (TextUtils.isEmpty(key)) return
-        val user = Store.store.getUser(baseActivity!!)
-        val userId = if (tabs.selectedTabPosition == 0) null else user?.uid
         var type = when (tabs.selectedTabPosition) {
             0 -> null
             1 -> 3
@@ -401,7 +433,7 @@ class MainNewsFragment : BaseFragment() {
         tmplist.add(text)
         Store.store.newsSearch(baseActivity!!, tmplist)
         SoguApi.getService(baseActivity!!.application)
-                .listNews(page = page, pageSize = 20, type = type, uid = userId, fuzzyQuery = text)
+                .listNews(page = page, pageSize = 20, type = type, fuzzyQuery = text)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
