@@ -129,6 +129,7 @@
                     android:paddingLeft="30dp"
                     android:paddingRight="8dp"
                     android:singleLine="true"
+                    android:focusable="false"
                     android:textColor="@color/black" />
 
                 <TextView
@@ -154,12 +155,23 @@
 
             </RelativeLayout>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/lister"
+            <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
+                android:id="@+id/refresh"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginBottom="15dp"
-                android:layout_marginTop="15dp" />
+                android:layout_marginTop="15dp"
+                android:background="@drawable/divider2">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/lister"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    app:layoutManager="LinearLayoutManager" />
+
+                <include layout="@layout/layout_empty" />
+            </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
 
             <Button
                 android:id="@+id/inquireBtn"

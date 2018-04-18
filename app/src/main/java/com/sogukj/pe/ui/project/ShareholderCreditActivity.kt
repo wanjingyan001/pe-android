@@ -8,6 +8,7 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.text.Editable
@@ -21,12 +22,17 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.framework.base.BaseActivity
 import com.google.gson.Gson
+import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
+import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
+import com.lcodecore.tkrefreshlayout.footer.BallPulseView
+import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.CreditInfo
 import com.sogukj.pe.bean.CreditReqBean
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.bean.QueryReqBean
+import com.sogukj.pe.ui.SupportEmptyView
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.RecyclerAdapter
@@ -81,6 +87,28 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
         lister.layoutManager = LinearLayoutManager(this)
         lister.addItemDecoration(SpaceItemDecoration(Utils.dpToPx(context, 15)))
         lister.adapter = mAdapter
+
+        val header = ProgressLayout(this)
+        header.setColorSchemeColors(ContextCompat.getColor(this, R.color.color_main))
+        refresh.setHeaderView(header)
+        val footer = BallPulseView(this)
+        footer.setAnimatingColor(ContextCompat.getColor(this, R.color.color_main))
+        refresh.setBottomView(footer)
+        refresh.setOverScrollRefreshShow(false)
+        refresh.setEnableLoadmore(true)
+        refresh.setOnRefreshListener(object : RefreshListenerAdapter() {
+            override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
+                page = 1
+                doRequest(bean.company_id)
+            }
+
+            override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
+                ++page
+                doRequest(bean.company_id)
+            }
+
+        })
+        refresh.setAutoLoadMore(true)
     }
 
     override fun onResume() {
@@ -88,29 +116,37 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
         doRequest(bean.company_id)
     }
 
+    var page = 1
 
     fun doRequest(companyId: Int?) {
         if (companyId != null) {
             SoguApi.getService(application)
-                    .showCreditInfo(companyId)
+                    .showCreditList(company_id = companyId, page = page)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe({ payload ->
                         Log.d(TAG, Gson().toJson(payload))
                         if (payload.isOk) {
-                            payload.payload?.apply {
+                            if (page == 1)
                                 mAdapter.dataList.clear()
-                                this.item.forEach {
-                                    mAdapter.dataList.add(it)
-                                }
+                            payload.payload?.forEach {
+                                mAdapter.dataList.add(it)
                             }
-
                         } else {
                             showCustomToast(R.drawable.icon_toast_fail, payload.message)
                         }
                     }, { e ->
                         Log.e(TAG, e.message)
                         Trace.e(e)
+                        SupportEmptyView.checkEmpty(this, mAdapter)
+                    }, {
+                        SupportEmptyView.checkEmpty(this, mAdapter)
+                        refresh?.setEnableLoadmore(mAdapter.dataList.size % 20 == 0)
+                        mAdapter.notifyDataSetChanged()
+                        if (page == 1)
+                            refresh?.finishRefreshing()
+                        else
+                            refresh?.finishLoadmore()
                     })
         }
     }
@@ -156,16 +192,13 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
             phoneNumberTv.text = data.phone
             IDCardTv.text = data.idCard
             //公司名字(可能消失)
+            if (data.company.isNullOrEmpty()) {
+                companyTv.visibility = View.GONE
+            } else {
+                companyTv.visibility = View.VISIBLE
+                companyTv.text = data.company
+            }
             when (data.status) {
-                0 -> {
-//                    inquireStatus.text = "信息待填写"
-//                    inquireStatus.textColor = Color.parseColor("#ffa715")
-                }
-                1 -> {
-//                    inquireStatus.text = "查询中"
-//                    inquireStatus.textColor = Color.parseColor("#608cf8")
-                    inquireStatus.setImageResource(R.drawable.zhengxin_chaxunzhong)
-                }
                 2 -> {
 //                    inquireStatus.text = "查询完成"
 //                    inquireStatus.textColor = Color.parseColor("#50d59d")

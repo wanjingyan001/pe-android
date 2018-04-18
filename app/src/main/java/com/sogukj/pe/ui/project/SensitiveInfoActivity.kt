@@ -52,10 +52,10 @@ class SensitiveInfoActivity : BaseActivity(), View.OnClickListener {
         toolbar_title.text = "征信"
         name.text = data.name
         post.text = data.position
-        data.piece?.let {
-            Log.d("WJY", Gson().toJson(it))
-            doRequest(data.id, it)
-        }
+//        data.piece?.let {
+//            Log.d("WJY", Gson().toJson(it))
+//            doRequest(data.id, it)
+//        }
         back.setOnClickListener(this)
 
         if (data.sum == 0) {
