@@ -9,7 +9,53 @@
     android:orientation="vertical"
     tools:context="com.sogukj.pe.ui.project.AddCreditActivity">
 
-    <include layout="@layout/toolbar" />
+    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:background="?attr/colorPrimary"
+        app:contentInsetEnd="0dp"
+        app:contentInsetLeft="0dp"
+        app:contentInsetRight="0dp"
+        app:contentInsetStart="0dp"
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        app:theme="@style/AppTheme.AppBarOverlay">
+
+        <ImageView
+            android:id="@+id/toolbar_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="left"
+            android:gravity="center"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:src="@drawable/sogu_ic_back"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@id/toolbar_title"
+            style="@style/SoguTextTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginTop="2dp"
+            android:gravity="center"
+            android:singleLine="true"
+            tools:text="主    页" />
+
+        <ImageView
+            android:id="@+id/toolbar_menu"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_gravity="right"
+            android:padding="10dp"
+            android:gravity="center"
+            android:src="@drawable/delete_all"
+            android:visibility="gone"/>
+    </android.support.v7.widget.Toolbar>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -82,6 +128,8 @@
             <EditText
                 android:id="@+id/IDCardEdt"
                 style="@style/creditEdtStyle"
+                android:inputType="number"
+                android:maxLength="18"
                 android:singleLine="true" />
 
         </LinearLayout>
@@ -132,6 +180,7 @@
                 android:text="公司&#8194;&#8194;" />
 
             <LinearLayout
+                android:id="@+id/companySelect"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
@@ -141,6 +190,7 @@
                 android:paddingLeft="18dp">
 
                 <TextView
+                    android:id="@+id/companyName"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -190,7 +240,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="董监高"
+                    android:hint="请选择"
                     android:textColor="@color/text_1"
                     android:textSize="@dimen/text_size_medium" />
 

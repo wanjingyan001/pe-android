@@ -748,8 +748,8 @@ interface SoguService {
      * 一键查询
      */
 //    @FormUrlEncoded
-    @POST("/api/Credit/queryCreditInfo")
-    fun queryCreditInfo(@Body info: QueryReqBean): Observable<Payload<Any>>
+    @POST("/api/Credit/surveyCredit")
+    fun queryCreditInfo(@Body map: HashMap<String, Any>): Observable<Payload<CreditInfo.Item>>
 //    fun queryCreditInfo(@Field("info")info: String): Observable<Payload<Any>>
 
 

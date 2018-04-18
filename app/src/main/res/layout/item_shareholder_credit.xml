@@ -93,12 +93,27 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/inquireStatus"
+            <FrameLayout
                 android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:gravity="center"
-                android:src="@drawable/zhengxin_chaxunzhong" />
+                android:layout_height="50dp">
+
+                <ImageView
+                    android:id="@+id/inquireStatus"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:src="@drawable/zhengxin_fail" />
+
+                <TextView
+                    android:id="@+id/number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|right"
+                    android:layout_marginRight="7dp"
+                    android:text="99+"
+                    android:textColor="#FFFFFFFF"
+                    android:textSize="12sp" />
+            </FrameLayout>
 
             <View
                 android:layout_width="50dp"

@@ -17,6 +17,7 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
@@ -194,31 +195,6 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
-    private fun doInquire(list: List<CreditReqBean>) {
-        if (list.isNotEmpty()) {
-            val info = QueryReqBean()
-            info.info = list as ArrayList<CreditReqBean>
-            info { Gson().toJson(info) }
-            SoguApi.getService(application)
-                    .queryCreditInfo(info)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe({ payload ->
-                        if (payload.isOk) {
-                            inquireBtn.text = "查询中，请稍后再看"
-                            inquireBtn.isEnabled = false
-                        } else {
-                            showCustomToast(R.drawable.icon_toast_fail, payload.message)
-                        }
-                    }, { e ->
-                        Trace.e(e)
-                    })
-
-        }
-    }
-
-    private val queryDataList = ArrayList<CreditReqBean>()
-
     inner class ShareHolder(convertView: View) : RecyclerHolder<CreditInfo.Item>(convertView) {
 
         private val directorName = convertView.find<TextView>(R.id.directorName)
@@ -228,13 +204,13 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
         private val IDCardTv = convertView.find<TextView>(R.id.IDCardTv)
         private val companyTv = convertView.find<TextView>(R.id.companyTv)
         private val edit = convertView.find<ImageView>(R.id.edit)
+        private val number = convertView.find<TextView>(R.id.number)
 
         override fun setData(view: View, data: CreditInfo.Item, position: Int) {
             directorName.text = data.name
             directorPosition.text = data.position
             phoneNumberTv.text = data.phone
             IDCardTv.text = data.idCard
-            //公司名字(可能消失)
             if (data.company.isNullOrEmpty()) {
                 companyTv.visibility = View.GONE
             } else {
@@ -245,103 +221,45 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
                 2 -> {
 //                    inquireStatus.text = "查询完成"
 //                    inquireStatus.textColor = Color.parseColor("#50d59d")
+                    if (data.sum == null || data.sum == 0) {
+                        number.visibility = View.GONE
+                        inquireStatus.setImageResource(R.drawable.zhengxin_zhengchang)
+                    } else {
+                        number.visibility = View.VISIBLE
+                        number.text = "${data.sum}"
+                        inquireStatus.setImageResource(R.drawable.zhengxin_fail)
+                    }
                 }
                 3 -> {
 //                    inquireStatus.text = "查询失败"
 //                    inquireStatus.textColor = Color.parseColor("#f7b62b")
+                    number.visibility = View.GONE
                     inquireStatus.setImageResource(R.drawable.zhengxin_chaxunshibai)
                 }
             }
             edit.setOnClickListener {
-                //AddCreditActivity
+                AddCreditActivity.start(context, "EDIT", data, 0x002)
             }
-        }
-
-        /**
-         * 修改数据后,保存
-         */
-        private fun saveReqBean(data: CreditInfo.Item, inquireStatus: TextView) {
-//            phoneNumberEdt.addTextChangedListener(object : TextWatcher {
-//                override fun afterTextChanged(s: Editable?) {
-//                    data.phone = s.toString()
-//                    s?.let {
-//                        if (!it.equals(data.phone)) {
-//                            inquireBtn.isEnabled = true
-//                            inquireBtn.text = "一键查询"
-//                            data.isChange = true
-//                        }
-//                        if (data.isChange) {
-//                            inquireStatus.text = "待查询"
-//                            inquireStatus.textColor = Color.parseColor("#ffa715")
-//                        }
-//                    }
-//                }
-//
-//                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-//                }
-//
-//                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//
-//                }
-//
-//            })
-//            phoneNumberEdt.setOnFocusChangeListener { v, hasFocus ->
-//                val editText = v as EditText
-//                if (!hasFocus && editText.text.isNotEmpty() && !Utils.isMobileExact(editText.text)) {
-//                    editText.setText("")
-//                    showCustomToast(R.drawable.icon_toast_common, "请输入正确的手机号")
-//                }
-//            }
-
-
-//            IDCardEdt.addTextChangedListener(object : TextWatcher {
-//                override fun afterTextChanged(s: Editable?) {
-//                    data.idCard = s.toString()
-//                    s?.let {
-//                        if (it.isNotEmpty()) {
-//                            inquireBtn.isEnabled = true
-//
-//                        }
-//                    }
-//                }
-//
-//                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-//                }
-//
-//                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//
-//                }
-//
-//            })
-//            IDCardEdt.setOnFocusChangeListener { v, hasFocus ->
-//                val editText = v as EditText
-//                if (!hasFocus && editText.text.isNotEmpty() && !Utils.isIDCard18(editText.text)) {
-//                    editText.setText("")
-//                    showCustomToast(R.drawable.icon_toast_common, "请输入正确的身份证号")
-//                }
-//            }
         }
     }
 
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.back -> finish()
-        //R.id.addTv -> AddCreditActivity.startForResult(this, bean.company_id)
             R.id.inquireBtn -> {
-//                queryDataList.clear()
-//                doInquire(queryDataList)
-                AddCreditActivity.start(context, 0)
+                AddCreditActivity.start(context, "ADD", null, 0x001)
             }
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == Extras.REQUESTCODE && resultCode == Extras.RESULTCODE && data != null) {
-            val reqBean = data.getSerializableExtra(Extras.DATA) as QueryReqBean
-//            if (reqBean.info.isNotEmpty()) {
-//                doInquire(reqBean.info)
-//            }
+        if (requestCode == 0x001) {
+            data?.apply {
+                var bean = this.getSerializableExtra(Extras.DATA) as CreditInfo.Item
+            }
+        } else if (requestCode == 0x002) {
+
         }
     }
 }

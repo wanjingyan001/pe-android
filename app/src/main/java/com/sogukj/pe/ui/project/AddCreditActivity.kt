@@ -13,8 +13,11 @@ import com.framework.base.BaseActivity
 import com.google.gson.Gson
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.bean.CreditInfo
 import com.sogukj.pe.bean.CreditReqBean
+import com.sogukj.pe.bean.CustomSealBean
 import com.sogukj.pe.bean.QueryReqBean
+import com.sogukj.pe.ui.approve.ListSelectorActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.IOSPopwindow
@@ -22,7 +25,8 @@ import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_add_credit.*
-import kotlinx.android.synthetic.main.toolbar.*
+import kotlinx.android.synthetic.main.item_arrange_weekly.*
+import kotlinx.android.synthetic.main.item_rate.view.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.info
 import kotlin.properties.Delegates
@@ -30,21 +34,17 @@ import kotlin.properties.Delegates
 
 class AddCreditActivity : BaseActivity(), View.OnClickListener {
     private lateinit var popwin: IOSPopwindow
-    private var selectType = 1
-    var id: Int by Delegates.notNull()
-
+    private var selectType = 0
+    var data: CreditInfo.Item? = null
+    var type = ""
+    var selectId = 0
 
     companion object {
-        fun start(ctx: Context?, id: Int?) {
+        fun start(ctx: Activity?, type: String, data: CreditInfo.Item? = null, code: Int) {
             val intent = Intent(ctx, AddCreditActivity::class.java)
-            intent.putExtra(Extras.ID, id)
-            ctx?.startActivity(intent)
-        }
-
-        fun startForResult(ctx: Activity?, id: Int?) {
-            val intent = Intent(ctx, AddCreditActivity::class.java)
-            intent.putExtra(Extras.ID, id)
-            ctx?.startActivityForResult(intent, Extras.REQUESTCODE)
+            intent.putExtra(Extras.TYPE, type)
+            intent.putExtra(Extras.DATA, data)
+            ctx?.startActivityForResult(intent, code)
         }
     }
 
@@ -52,19 +52,45 @@ class AddCreditActivity : BaseActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_credit)
         Utils.setWindowStatusBarColor(this, R.color.white)
-        id = intent.getIntExtra(Extras.ID, -1)
-        toolbar_title.text = "添加人员"
+        type = intent.getStringExtra(Extras.TYPE)
+        if (type.equals("ADD")) {
+            toolbar_title.text = "添加人员"
+        } else if (type.equals("EDIT")) {
+            data = intent.getSerializableExtra(Extras.DATA) as CreditInfo.Item
+            data?.apply {
+                nameEdt.setText(name)
+                IDCardEdt.setText(idCard)
+                phoneEdt.setText(phone)
+                companyName.text = company
+                selectId = company_id
+                typeSelectTv.text =
+                        when (type) {
+                            1 -> "董监高"
+                            2 -> "股东"
+                            else -> ""
+                        }
+                selectType = type
+
+                if (name.isNullOrEmpty()) {
+                    nameEdt.setSelection(0)
+                } else {
+                    nameEdt.setSelection(name.length)
+                }
+            }
+            toolbar_menu.visibility = View.VISIBLE
+            toolbar_menu.setOnClickListener(this)
+        }
 
         popwin = IOSPopwindow(this)
         toolbar_back.visibility = View.VISIBLE
         toolbar_back.setOnClickListener(this)
         typeSelect.setOnClickListener(this)
+        companySelect.setOnClickListener(this)
         save.setOnClickListener(this)
         phoneEdt.setOnFocusChangeListener { v, hasFocus ->
             val editText = v as EditText
             if (!hasFocus && editText.text.isNotEmpty() && !Utils.isMobileExact(editText.text)) {
                 editText.setText("")
-                //showToast("请输入正确的手机号")
                 showCustomToast(R.drawable.icon_toast_common, "请输入正确的手机号")
             }
         }
@@ -72,7 +98,6 @@ class AddCreditActivity : BaseActivity(), View.OnClickListener {
             val editText = v as EditText
             if (!hasFocus && editText.text.isNotEmpty() && !Utils.isIDCard18(editText.text)) {
                 editText.setText("")
-                //showToast("请输入正确的身份证号")
                 showCustomToast(R.drawable.icon_toast_common, "请输入正确的身份证号")
             }
         }
@@ -86,77 +111,94 @@ class AddCreditActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
-    private fun saveReqBean(): CreditReqBean? {
-        if (nameEdt.text.isEmpty() || "点击填写" == nameEdt.text.toString()) {
-            //showToast("请填写名字")
-            showCustomToast(R.drawable.icon_toast_common, "请填写名字")
-            return null
-        }
-//        if (selectType == 1 && postEdt.text.toString().isEmpty()) {
-//            showCustomToast(R.drawable.icon_toast_common, "请填写职位")
-//            return null
-//        }
+    var params = HashMap<String, Any>()
 
-        val creditReq = CreditReqBean()
-        creditReq.company_id = id
-        creditReq.name = nameEdt.text.toString()
-        creditReq.phone = phoneEdt.text.toString()
-        creditReq.idCard = IDCardEdt.text.toString()
-        creditReq.type = selectType
-//        if (selectType == 1) {
-//            creditReq.position = postEdt.text.toString()
-//        }
-        return creditReq
+    private fun prepare(): Boolean {
+        if (nameEdt.text.isEmpty()) {
+            showCustomToast(R.drawable.icon_toast_common, "请填写名字")
+            return false
+        }
+        if (IDCardEdt.text.toString().isEmpty()) {
+            showCustomToast(R.drawable.icon_toast_common, "请填写身份证")
+            return false
+        }
+
+        var tmp = HashMap<String, Any>()
+        if (type.equals("ADD")) {
+            tmp.put("phone", phoneEdt.text.toString())
+            tmp.put("name", nameEdt.text.toString())
+            tmp.put("idCard", IDCardEdt.text.toString())
+            tmp.put("company_id", selectId)
+            tmp.put("company", companyName.text.toString())
+            tmp.put("type", selectType)
+        } else if (type.equals("EDIT")) {
+            tmp.put("id", data!!.id)
+            tmp.put("phone", phoneEdt.text.toString())
+            tmp.put("name", nameEdt.text.toString())
+            tmp.put("idCard", IDCardEdt.text.toString())
+            tmp.put("company_id", selectId)
+            tmp.put("company", companyName.text.toString())
+            tmp.put("type", selectType)
+        }
+
+        params.put("ae", tmp)
+        return true
     }
 
-    private fun doInquire(list: List<CreditReqBean>) {
-        if (list.isNotEmpty()) {
-            val info = QueryReqBean()
-            info.info = list as ArrayList<CreditReqBean>
-            info { "RequestBean==>${Gson().toJson(info)}" }
-            SoguApi.getService(application)
-                    .queryCreditInfo(info)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe({ payload ->
-                        if (payload.isOk) {
-                            val query = QueryReqBean()
-                            //query.info = adapter.dataList as ArrayList<CreditReqBean>
-                            val intent = Intent()
-                            intent.putExtra(Extras.DATA, query)
-                            setResult(Extras.RESULTCODE, intent)
-                            finish()
-                        } else {
-                            //showToast(payload.message)
-                            showCustomToast(R.drawable.icon_toast_fail, payload.message)
-                        }
-                    }, { e ->
-                        Trace.e(e)
-                        hideProgress()
-                    }, {
-                        hideProgress()
-                    }, {
-                        showProgress("正在提交")
-                    })
-
+    private fun doInquire() {
+        if (!prepare()) {
+            return
         }
+        SoguApi.getService(application)
+                .queryCreditInfo(params)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        val intent = Intent()
+                        intent.putExtra(Extras.DATA, payload.payload)
+                        setResult(Extras.RESULTCODE, intent)
+                        finish()
+                    } else {
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
+                    }
+                }, { e ->
+                    Trace.e(e)
+                    showCustomToast(R.drawable.icon_toast_fail, "提交失败")
+                })
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.toolbar_back -> finish()
-//            R.id.addTv -> {
-//                if (adapter.dataList.isNotEmpty()) {
-//                    doInquire(adapter.dataList)
-//                } else {
-//                    finish()
-//                }
-//            }
+            R.id.save -> {
+                doInquire()
+            }
+            R.id.companySelect -> {
+                var map = CustomSealBean.ValueBean()
+                map.type = 2
+                var bean = CustomSealBean()
+                bean.name = "公司名称"
+                bean.value_map = map
+                ListSelectorActivity.start(this, bean)
+            }
             R.id.typeSelect -> {
                 Utils.closeInput(this, IDCardEdt)
                 popwin.showAtLocation(find(R.id.add_layout), Gravity.BOTTOM, 0, 0)
             }
+            R.id.toolbar_menu -> {
+
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == ListSelectorActivity.REQ_LIST_SELECTOR && resultCode === Activity.RESULT_OK) {
+            val valueBean = data!!.getSerializableExtra(Extras.DATA2) as CustomSealBean.ValueBean
+            companyName.text = valueBean.name
+            selectId = valueBean.id!!
         }
     }
 
