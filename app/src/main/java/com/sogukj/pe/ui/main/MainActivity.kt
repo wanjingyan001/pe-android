@@ -128,8 +128,9 @@ class MainActivity : BaseActivity() {
 //        })
 
         manager = supportFragmentManager
-        manager.beginTransaction().add(R.id.container, fragments[2]).commit()
-        Trace.e("AndroidPE", "" + Utils.isApkInDebug(this))
+        manager.beginTransaction().add(R.id.container, fragments[0]).commit()
+        rg_tab_main.check(checkId)
+//        Trace.e("AndroidPE", "" + Utils.isApkInDebug(this))
         updateVersion()
     }
 
@@ -160,8 +161,8 @@ class MainActivity : BaseActivity() {
 
     }
 
-    var checkId = R.id.rb_home
-    var current = 2
+    var checkId = R.id.rb_chat
+    var current = 0
 
     fun doCheck(checkedId: Int) {
         this.checkId = checkedId
@@ -176,7 +177,7 @@ class MainActivity : BaseActivity() {
 //        supportFragmentManager.beginTransaction()
 //                .replace(R.id.container, fragment)
 //                .commit()
-        var currentId = 2
+        var currentId = 0
         when (checkId) {
             R.id.rb_chat -> currentId = 0
             R.id.rb_phone -> currentId = 1
@@ -200,15 +201,15 @@ class MainActivity : BaseActivity() {
             doCheck(checkId)
 
             for (index in 0 until rg_tab_main.childCount) {
-                var rb_home = rg_tab_main.getChildAt(index) as RadioButton
-                var draws = rb_home.compoundDrawables
+                var radio_btn = rg_tab_main.getChildAt(index) as RadioButton
+                var draws = radio_btn.compoundDrawables
                 // top = draws[1]
                 //获取drawables
                 var r = Rect(0, 0, Utils.dpToPx(context, 25), Utils.dpToPx(context, 25))
                 //定义一个Rect边界
                 draws[1].setBounds(r)
                 //给drawable设置边界
-                rb_home.setCompoundDrawables(null, draws[1], null, null)
+                radio_btn.setCompoundDrawables(null, draws[1], null, null)
             }
 
             rg_tab_main.setOnCheckedChangeListener { group, checkedId ->

@@ -56,13 +56,10 @@
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="55dp"
             android:layout_marginBottom="10dp"
             android:background="@color/white"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="6dp"
-            android:paddingBottom="6dp">
+            android:padding="10dp">
 
             <EditText
                 android:id="@+id/search_edt"
@@ -104,14 +101,14 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="55dp"
             android:background="@color/divider2" />
 
         <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/refresh"
-            android:layout_marginTop="42dp"
+            android:layout_marginTop="57dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
