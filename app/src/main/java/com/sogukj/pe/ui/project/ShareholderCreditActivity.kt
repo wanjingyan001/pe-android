@@ -7,6 +7,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.support.design.widget.AppBarLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.text.Editable
@@ -63,6 +64,13 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
         initAdapter()
         back.setOnClickListener(this)
         inquireBtn.setOnClickListener(this)
+
+        AppBarLayout.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
+            override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
+                var alpha = Math.abs(verticalOffset) * 1.0 / Utils.dpToPx(context, 60)
+                down.alpha = 1 - alpha.toFloat()
+            }
+        })
     }
 
     private fun initAdapter() {

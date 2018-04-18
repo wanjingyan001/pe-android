@@ -7,6 +7,7 @@ import android.graphics.*
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.support.design.widget.AppBarLayout
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
 import android.support.v7.widget.LinearLayoutManager
@@ -319,6 +320,13 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
             manager_assess()
         }
         im.setOnClickListener(this)
+
+        AppBarLayout.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
+            override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
+                var alpha = Math.abs(verticalOffset) * 1.0 / Utils.dpToPx(context, 60)
+                down.alpha = 1 - alpha.toFloat()
+            }
+        })
     }
 
     fun doDel() {
