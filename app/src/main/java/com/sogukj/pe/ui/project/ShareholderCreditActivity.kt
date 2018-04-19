@@ -82,6 +82,8 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
         })
     }
 
+    var searchKey: String? = null
+
     private fun initSearchView() {
         search_edt.filters = Utils.getFilter(context)
         search_edt.setOnFocusChangeListener { v, hasFocus ->
@@ -96,8 +98,9 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
         }
         search_edt.setOnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-//                searchKey = search_edt.text.toString()
-//                searchWithName()
+                searchKey = search_edt.text.toString()
+                page = 1
+                doRequest(bean.company_id)
                 true
             } else {
                 false
@@ -113,11 +116,9 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (search_edt.text.toString().isEmpty()) {
-//                    searchKey = ""
-//                    adapter.dataList.clear()
-//                    adapter.dataList.add(zhushou)
-//                    adapter.dataList.addAll(recentList)
-//                    adapter.notifyDataSetChanged()
+                    searchKey = ""
+                    page = 1
+                    doRequest(bean.company_id)
                 }
             }
         })
@@ -165,7 +166,7 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
     fun doRequest(companyId: Int?) {
         if (companyId != null) {
             SoguApi.getService(application)
-                    .showCreditList(company_id = companyId, page = page)
+                    .showCreditList(company_id = companyId, page = page, fuzzyQuery = searchKey)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe({ payload ->

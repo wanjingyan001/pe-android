@@ -727,7 +727,8 @@ interface SoguService {
     @POST("/api/Credit/creditList")
     fun showCreditList(@Field("company_id") company_id: Int? = null,
                         @Field("page") page: Int = 1,
-                        @Field("pageSize") pageSize: Int = 20): Observable<Payload<ArrayList<CreditInfo.Item>>>
+                        @Field("pageSize") pageSize: Int = 20,
+                        @Field("fuzzyQuery") fuzzyQuery: String? = null): Observable<Payload<ArrayList<CreditInfo.Item>>>
 
     /**
      * 征信-敏感信息
