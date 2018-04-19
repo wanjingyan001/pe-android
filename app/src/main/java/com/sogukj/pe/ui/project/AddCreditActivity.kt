@@ -189,7 +189,23 @@ class AddCreditActivity : BaseActivity(), View.OnClickListener {
                 popwin.showAtLocation(find(R.id.add_layout), Gravity.BOTTOM, 0, 0)
             }
             R.id.toolbar_menu -> {
-
+                SoguApi.getService(application)
+                        .deleteCredit(data!!.id)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({ payload ->
+                            if (payload.isOk) {
+                                val intent = Intent()
+                                intent.putExtra(Extras.DATA, data)
+                                intent.putExtra(Extras.TYPE, "DELETE")
+                                setResult(Extras.RESULTCODE, intent)
+                                finish()
+                            } else {
+                                showCustomToast(R.drawable.icon_toast_fail, payload.message)
+                            }
+                        }, { e ->
+                            showCustomToast(R.drawable.icon_toast_fail, "删除失败")
+                        })
             }
         }
     }

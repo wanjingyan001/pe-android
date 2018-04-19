@@ -1205,8 +1205,8 @@ interface SoguService {
     @FormUrlEncoded
     @POST("/api/Approve/cancelLeave")
     fun cancalLeave(@Field("approval_id") approval_id: Int, @Field("content") content: String): Observable<Payload<Any>>
-    
-    
+
+
        //每周工作安排列表
     @FormUrlEncoded
     @POST("/api/Weekly/getWeeklyWorkList")
@@ -1270,4 +1270,8 @@ interface SoguService {
     @FormUrlEncoded
     @POST("/api/News/saveClick")
     fun saveClick(@Field("click_id") click_id: Int): Observable<Payload<Object>>
+
+    @FormUrlEncoded
+    @POST("/api/Credit/deleteCredit")
+    fun deleteCredit(@Field("id") id: Int): Observable<Payload<Object>>
 }

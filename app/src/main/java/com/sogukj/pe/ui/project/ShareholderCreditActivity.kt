@@ -90,6 +90,9 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
                 down.alpha = 1 - alpha.toFloat()
             }
         })
+
+        page = 1
+        doRequest(bean.company_id)
     }
 
     var searchKey: String? = null
@@ -154,11 +157,6 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        doRequest(bean.company_id)
-    }
-
     var page = 1
 
     fun doRequest(companyId: Int?) {
@@ -182,6 +180,7 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
                         Trace.e(e)
                         iv_empty.visibility = if (mAdapter.dataList.isEmpty()) View.VISIBLE else View.GONE
                     }, {
+                        mAdapter.notifyDataSetChanged()
                         iv_empty.visibility = if (mAdapter.dataList.isEmpty()) View.VISIBLE else View.GONE
                     })
         }
@@ -249,9 +248,32 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
         if (requestCode == 0x001) {
             data?.apply {
                 var bean = this.getSerializableExtra(Extras.DATA) as CreditInfo.Item
+                mAdapter.dataList.add(bean)
+                mAdapter.notifyDataSetChanged()
             }
         } else if (requestCode == 0x002) {
-
+            data?.apply {
+                var bean = this.getSerializableExtra(Extras.DATA) as CreditInfo.Item
+                var type = ""
+                try {
+                    type = this.getSerializableExtra(Extras.TYPE) as String
+                } catch (e: Exception) {
+                }
+                var list = ArrayList<CreditInfo.Item>(mAdapter.dataList)
+                for (index in list.indices) {
+                    if (list[index].id == bean.id) {
+                        if (type.equals("DELETE")) {
+                            list.removeAt(index)
+                        } else {
+                            list[index] = bean
+                        }
+                        break
+                    }
+                }
+                mAdapter.dataList.clear()
+                mAdapter.dataList.addAll(list)
+                mAdapter.notifyDataSetChanged()
+            }
         }
     }
 }
