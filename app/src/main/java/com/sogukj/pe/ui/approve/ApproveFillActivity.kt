@@ -55,6 +55,35 @@ class ApproveFillActivity : ToolbarActivity() {
     var isOneKey = false
     var gson = Gson()
 
+    companion object {
+        fun start(ctx: Activity?, itemBean: SpGroupItemBean) {
+            val intent = Intent(ctx, ApproveFillActivity::class.java)
+            intent.putExtra(Extras.DATA, itemBean)
+            ctx?.startActivity(intent)
+        }
+
+        fun start(ctx: Activity?, bean: ApprovalBean) {
+            val intent = Intent(ctx, ApproveFillActivity::class.java)
+            intent.putExtra(Extras.DATA, bean)
+            ctx?.startActivity(intent)
+        }
+
+        fun start(ctx: Activity?, bean: MessageBean) {
+            val intent = Intent(ctx, ApproveFillActivity::class.java)
+            intent.putExtra(Extras.DATA, bean)
+            ctx?.startActivity(intent)
+        }
+
+        fun start(ctx: Activity, edit: Boolean, paramType: Int, id: Int, title: String) {
+            var intent = Intent(ctx, LeaveBusinessActivity::class.java)
+            intent.putExtra(Extras.FLAG, edit)
+            intent.putExtra(Extras.ID, id)
+            intent.putExtra(Extras.TYPE, paramType)
+            intent.putExtra(Extras.TITLE, title)
+            ctx.startActivity(intent)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_approve_fill)
