@@ -51,10 +51,10 @@
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_gravity="right"
-            android:padding="10dp"
             android:gravity="center"
+            android:padding="10dp"
             android:src="@drawable/delete_all"
-            android:visibility="gone"/>
+            android:visibility="gone" />
     </android.support.v7.widget.Toolbar>
 
     <LinearLayout
@@ -259,6 +259,20 @@
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:background="@color/divider2" />
+
+        <TextView
+            android:id="@+id/reasonTxt"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@color/white"
+            android:gravity="center"
+            android:maxLines="2"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:text="查询查询查询查询查询查询查询查询查询查询查询查询查询查询查询查询查询查询查询查询查询查询查询查询查询查询查询查询查询查询查询查询"
+            android:textColor="@color/colorRed"
+            android:textSize="@dimen/text_size_normal"
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/saveLayout"

@@ -23,6 +23,7 @@ class CreditInfo : Serializable {
         var sum: Int? = null//负面信息总数(第一次进入不返回此字段)
         //var piece: Piece? = null//负面信息分布(进入详情时带入（第一次进入不返回此字段）)
         var company: String? = null
+        var reason: String? = null
 
         inner class Piece : Serializable {
             var ns = 0

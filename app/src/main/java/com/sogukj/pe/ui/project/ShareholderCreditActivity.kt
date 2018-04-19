@@ -68,7 +68,12 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
         doRequest(bean.company_id)
 
         mAdapter.onItemClick = { v, p ->
-            SensitiveInfoActivity.start(context, mAdapter.dataList.get(p))
+            var cell = mAdapter.dataList.get(p)
+            if (cell.status == 2) {
+                SensitiveInfoActivity.start(context, cell)
+            } else if (cell.status == 3) {
+                AddCreditActivity.start(context, "EDIT", cell, 0x002)
+            }
         }
     }
 
