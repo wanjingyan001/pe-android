@@ -1,15 +1,16 @@
 package com.sogukj.pe.ui.approve
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.*
 import android.text.style.ForegroundColorSpan
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.*
 import cn.finalteam.rxgalleryfinal.RxGalleryFinal
 import cn.finalteam.rxgalleryfinal.imageloader.ImageLoaderType
@@ -19,16 +20,19 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.bigkoo.pickerview.OptionsPickerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.framework.base.ToolbarActivity
 import com.google.gson.Gson
 import com.google.gson.internal.LinkedTreeMap
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.*
+import com.sogukj.pe.ui.IM.TeamSelectActivity
 import com.sogukj.pe.ui.fileSelector.FileMainActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.CalendarDingDing
+import com.sogukj.pe.view.CircleImageView
 import com.sogukj.pe.view.FlowLayout
 import com.sogukj.service.SoguApi
 import com.sogukj.util.XmlDb
@@ -195,11 +199,17 @@ class ApproveFillActivity : ToolbarActivity() {
         for (list in checkList) {
             list()
         }
+
+        var tmpMap = HashMap<String, Any?>()
         for ((k, v) in paramMap) {
             if (v == null) {
-                paramMap.remove(k)
+
+            } else {
+                tmpMap.put(k, v)
             }
         }
+        paramMap.clear()
+        paramMap.putAll(tmpMap)
 
         //签字申请
         //project_id          项目名称                2
@@ -293,6 +303,27 @@ class ApproveFillActivity : ToolbarActivity() {
         }
     }
 
+    private fun judgeIsLeaveBusiness(): Boolean {
+        var isLeaveBusiness = false
+        if (flagEdit) {
+            var paramsTitle = intent.getStringExtra(Extras.TITLE)
+            if (paramsTitle.equals("出差") || paramsTitle.equals("请假")) {
+                isLeaveBusiness = true
+            }
+            if (isOneKey) {
+                var tmpId = XmlDb.open(context).get(Extras.ID, "").toInt()
+                if (tmpId == 10 || tmpId == 11) {
+                    isLeaveBusiness = true
+                }
+            }
+        } else {
+            if (paramId == 10 || paramId == 11) {
+                isLeaveBusiness = true
+            }
+        }
+        return isLeaveBusiness
+    }
+
     private fun load() {
         checkList.clear()
         ll_up.removeAllViews()
@@ -308,7 +339,7 @@ class ApproveFillActivity : ToolbarActivity() {
                         return@subscribe
                     }
                     payload.payload?.forEach { bean ->
-                        addRow(bean, inflater)
+                        addRow(bean)
                     }
                     //用印申请
                     hideFields.forEach { field ->
@@ -335,11 +366,48 @@ class ApproveFillActivity : ToolbarActivity() {
                             }
                         }
                     }
+
+                    if (judgeIsLeaveBusiness()) {
+                        head_approver.visibility = View.GONE
+                        requestLeaveInfo()
+                    }
                 }, { e ->
                     Trace.e(e)
                     showCustomToast(R.drawable.icon_toast_common, "暂无可用数据")
                 })
-        requestApprove()
+
+        if (!judgeIsLeaveBusiness()) {
+            head_approver.visibility = View.VISIBLE
+            requestApprove()
+        }
+    }
+
+    private fun requestLeaveInfo() {
+        SoguApi.getService(application)
+                .leaveInfo(template_id = if (flagEdit) null else paramId!!,
+                        sid = if (!flagEdit) null else paramId!!)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (!payload.isOk) {
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
+                        return@subscribe
+                    }
+                    payload.payload?.apply {
+                        addSP(sp!!)
+
+                        default.clear()
+                        for (user in cs!!) {
+                            default.add(user.uid!!)
+                        }
+
+                        cs!!.add(UserBean())
+                        addCS(cs!!)
+                    }
+                }, { e ->
+                    Trace.e(e)
+                    showCustomToast(R.drawable.icon_toast_common, "暂无可用数据")
+                })
     }
 
     private fun requestApprove(fund_id: Int? = null) {
@@ -459,6 +527,7 @@ class ApproveFillActivity : ToolbarActivity() {
     val viewMap = HashMap<String, TextView>()
     val hideFields = ArrayList<String>()
     val REQ_SELECT_FILE = 0xf0
+    var SEND = 0x007
     var filesBean: CustomSealBean? = null
     var filesView: LinearLayout? = null
     var dstCity = ArrayList<CityArea.City>()
@@ -468,7 +537,7 @@ class ApproveFillActivity : ToolbarActivity() {
     lateinit var ding_start: CalendarDingDing
     lateinit var ding_end: CalendarDingDing
 
-    private fun addRow(bean: CustomSealBean, inflater: LayoutInflater) {
+    private fun addRow(bean: CustomSealBean) {
         when (bean.control) {
             1 -> add1(bean)
             2 -> add2(bean)
@@ -497,7 +566,7 @@ class ApproveFillActivity : ToolbarActivity() {
         if (bean.is_must == 1) {
             iv_star.visibility = View.VISIBLE
         } else {
-            iv_star.visibility = View.GONE
+            iv_star.visibility = View.INVISIBLE
         }
 
         tvLabel.text = bean.name
@@ -550,7 +619,7 @@ class ApproveFillActivity : ToolbarActivity() {
         if (bean.is_must == 1) {
             iv_star.visibility = View.VISIBLE
         } else {
-            iv_star.visibility = View.GONE
+            iv_star.visibility = View.INVISIBLE
         }
         etValue.text = bean.value_map?.name
         viewMap.put(bean.fields, etValue)
@@ -584,7 +653,7 @@ class ApproveFillActivity : ToolbarActivity() {
         if (bean.is_must == 1) {
             iv_star.visibility = View.VISIBLE
         } else {
-            iv_star.visibility = View.GONE
+            iv_star.visibility = View.INVISIBLE
         }
         etValue.filters = Utils.getFilter(this)
 
@@ -605,7 +674,12 @@ class ApproveFillActivity : ToolbarActivity() {
     }
 
     private fun add4(bean: CustomSealBean) {
-        val convertView = inflater.inflate(R.layout.cs_row_edit_box, null);
+        var convertView: View
+        if (judgeIsLeaveBusiness()) {
+            convertView = inflater.inflate(R.layout.cs_row_reason, null);
+        } else {
+            convertView = inflater.inflate(R.layout.cs_row_edit_box, null);
+        }
         ll_up.addView(convertView)
         fieldMap.put(bean.fields, convertView)
 
@@ -616,22 +690,18 @@ class ApproveFillActivity : ToolbarActivity() {
         if (bean.is_must == 1) {
             iv_star.visibility = View.VISIBLE
         } else {
-            iv_star.visibility = View.GONE
+            iv_star.visibility = View.INVISIBLE
         }
         etValue.setText(bean.value)
         etValue.filters = Utils.getFilter(this)
 
-        val iv_alert = convertView.findViewById(R.id.iv_alert)
-        iv_alert.visibility = View.GONE
         paramMap.put(bean.fields, bean.value)// TODO
         checkList.add {
             val str = etValue.text?.toString()
             paramMap.put(bean.fields, str)
             if (bean.is_must == 1 && str.isNullOrEmpty()) {
-                iv_alert.visibility = View.VISIBLE
                 false
             } else {
-                iv_alert.visibility = View.GONE
                 true
             }
         }
@@ -650,7 +720,7 @@ class ApproveFillActivity : ToolbarActivity() {
         if (bean.is_must == 1) {
             iv_star.visibility = View.VISIBLE
         } else {
-            iv_star.visibility = View.GONE
+            iv_star.visibility = View.INVISIBLE
         }
         val iv_alert = convertView.findViewById(R.id.iv_alert)
         iv_alert.visibility = View.GONE
@@ -703,7 +773,7 @@ class ApproveFillActivity : ToolbarActivity() {
         if (bean.is_must == 1) {
             iv_star.visibility = View.VISIBLE
         } else {
-            iv_star.visibility = View.GONE
+            iv_star.visibility = View.INVISIBLE
         }
 
         val ll_check = convertView.findViewById(R.id.ll_check) as LinearLayout
@@ -795,7 +865,7 @@ class ApproveFillActivity : ToolbarActivity() {
         if (bean.is_must == 1) {
             iv_star.visibility = View.VISIBLE
         } else {
-            iv_star.visibility = View.GONE
+            iv_star.visibility = View.INVISIBLE
         }
 
         val ll_images = convertView.findViewById(R.id.ll_images) as FlowLayout
@@ -814,7 +884,7 @@ class ApproveFillActivity : ToolbarActivity() {
         if (bean.is_must == 1) {
             iv_star.visibility = View.VISIBLE
         } else {
-            iv_star.visibility = View.GONE
+            iv_star.visibility = View.INVISIBLE
         }
 
         val ll_files = convertView.findViewById(R.id.ll_files) as LinearLayout
@@ -840,7 +910,7 @@ class ApproveFillActivity : ToolbarActivity() {
         if (bean.is_must == 1) {
             iv_star.visibility = View.VISIBLE
         } else {
-            iv_star.visibility = View.GONE
+            iv_star.visibility = View.INVISIBLE
         }
 
         tvLabel.text = bean.name
@@ -1319,6 +1389,7 @@ class ApproveFillActivity : ToolbarActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQ_SELECT_FILE && resultCode === Activity.RESULT_OK) {
             val paths = data?.getStringArrayListExtra(Extras.LIST)
             paths?.forEach {
@@ -1327,12 +1398,232 @@ class ApproveFillActivity : ToolbarActivity() {
         } else if (requestCode == ListSelectorActivity.REQ_LIST_SELECTOR && resultCode === Activity.RESULT_OK) {
             val bean = data?.getSerializableExtra(Extras.DATA) as CustomSealBean
             val data = data?.getSerializableExtra(Extras.DATA2) as CustomSealBean.ValueBean
+            paramMap.put(bean.fields, data.id)
             if (paramTitle == "基金用印") {
                 ll_approver.removeAllViews()
                 requestApprove(data.id)
             }
             refreshListSelector(bean, data)
+        } else if (requestCode == SEND && resultCode == Extras.RESULTCODE) {
+            var grid_to = ll_up.findViewWithTag("CS") as GridView
+            if (grid_to != null) {
+                var adapter = grid_to.adapter as MyCSAdapter
+                adapter.list.clear()
+                adapter.list.addAll(data!!.getSerializableExtra(Extras.DATA) as ArrayList<UserBean>)
+                adapter.list.add(UserBean())
+                adapter.notifyDataSetChanged()
+            }
+        } else if (requestCode == Extras.REQUESTCODE && resultCode == Extras.RESULTCODE) {
+            var list = data!!.getSerializableExtra(Extras.DATA) as ArrayList<CityArea.City>
+            initDstCity(list)
         }
-        super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    var default = ArrayList<Int>()
+
+    fun addSP(list: ArrayList<ArrayList<UserBean>>) {
+        var datalist = ArrayList<UserBean>()
+        for (inner in list) {
+            datalist.add(UserBean())
+            datalist.addAll(inner)
+        }
+        datalist.removeAt(0)
+
+        val convertView = inflater.inflate(R.layout.cs_row_sendto, null) as LinearLayout
+        ll_up.addView(convertView)
+        var grid_to = convertView.findViewById(R.id.grid_chaosong_to) as GridView
+        var adapter = MySPAdapter(context, datalist)
+        //grid_to.adapter = adapter
+
+        val tvLabel = convertView.findViewById(R.id.tv_label) as TextView
+        val icon = convertView.findViewById(R.id.starIcon) as ImageView
+
+        grid_to.tag = "SP"
+        icon.visibility = View.VISIBLE
+        tvLabel.text = "审批人"
+
+        grid_to.visibility = View.GONE
+        var content = convertView.findViewById(R.id.llll) as LinearLayout
+        content.visibility = View.VISIBLE
+        for (index in 0 until datalist.size) {
+            var item = datalist[index]
+            if (item.name.equals("")) {
+                var view = inflater.inflate(R.layout.send_item11, null) as LinearLayout
+
+                var params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                params.leftMargin = Utils.dpToPx(context, 7)
+                params.rightMargin = Utils.dpToPx(context, 7)
+                view.layoutParams = params
+
+                content.addView(view)
+            } else {
+                var view = inflater.inflate(R.layout.send_item, null) as LinearLayout
+                var icon = view.findViewById(R.id.icon) as CircleImageView
+                var name = view.findViewById(R.id.name) as TextView
+                if (item.url.isNullOrEmpty()) {
+                    val ch = item.name?.first()
+                    icon.setChar(ch)
+                } else {
+                    Glide.with(context)
+                            .load(item.url)
+                            .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
+                            .into(icon)
+                }
+                name.text = item.name
+
+                var params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                if (index == 0) {
+                    params.leftMargin = Utils.dpToPx(context, 15)
+                } else {
+                    if (datalist[index - 1].name.equals("")) {
+                        params.leftMargin = Utils.dpToPx(context, 0)
+                    } else {
+                        params.leftMargin = Utils.dpToPx(context, 15)
+                    }
+                }
+                view.layoutParams = params
+
+                content.addView(view)
+            }
+        }
+    }
+
+    fun addCS(list: ArrayList<UserBean>) {
+        val convertView = inflater.inflate(R.layout.cs_row_sendto, null) as LinearLayout
+        ll_up.addView(convertView)
+        var grid_to = convertView.findViewById(R.id.grid_chaosong_to) as GridView
+        var adapter = MyCSAdapter(context, list)
+        grid_to.adapter = adapter
+
+        val tvLabel = convertView.findViewById(R.id.tv_label) as TextView
+        val icon = convertView.findViewById(R.id.starIcon) as ImageView
+
+        icon.visibility = View.INVISIBLE
+        tvLabel.text = "抄送人"
+        grid_to.tag = "CS"
+        grid_to.setOnItemClickListener { parent, view, position, id ->
+            if (position == adapter.list.size - 1) {
+                var list = ArrayList<UserBean>()
+                for (index in 0 until adapter.list.size - 1) {//不包含
+                    list.add(adapter.list[index])
+                }
+                TeamSelectActivity.startForResult(this, true, list, false, false, true, SEND, default)
+            } else {
+                adapter.list.removeAt(position)
+                adapter.notifyDataSetChanged()
+            }
+        }
+        checkList.add {
+            var copyid = ""
+            var list = adapter.list
+            for (index in 0 until (list.size - 1)) {
+                copyid = "${copyid}${list[index].uid},"
+            }
+            copyid = copyid.removeSuffix(",")
+            paramMap.put("copier", copyid)
+            true
+        }
+    }
+
+    class MySPAdapter(var context: Context, val list: ArrayList<UserBean>) : BaseAdapter() {
+
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+            var conView = convertView
+
+            if (getItemViewType(position) == 0) {
+                conView = LayoutInflater.from(context).inflate(R.layout.send_item11, null) as LinearLayout
+            } else {
+                conView = LayoutInflater.from(context).inflate(R.layout.send_item, null) as LinearLayout
+                var icon = conView.findViewById(R.id.icon) as CircleImageView
+                var name = conView.findViewById(R.id.name) as TextView
+                if (list[position].url.isNullOrEmpty()) {
+                    val ch = list[position].name?.first()
+                    icon.setChar(ch)
+                } else {
+                    Glide.with(context)
+                            .load(list[position].url)
+                            .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
+                            .into(icon)
+                }
+                name.text = list[position].name
+            }
+            return conView
+        }
+
+        override fun getItem(position: Int): Any {
+            return list.get(position)
+        }
+
+        override fun getItemId(position: Int): Long {
+            return position.toLong()
+        }
+
+        override fun getItemViewType(position: Int): Int {
+            if (list[position].name.equals("")) {
+                return 0
+            } else {
+                return 1
+            }
+        }
+
+        override fun getViewTypeCount(): Int {
+            return 2
+        }
+
+        override fun getCount(): Int {
+            return list.size
+        }
+    }
+
+    class MyCSAdapter(var context: Context, val list: ArrayList<UserBean>) : BaseAdapter() {
+
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+            var viewHolder: ViewHolder
+            var conView = convertView
+            if (conView == null) {
+                viewHolder = ViewHolder()
+                conView = LayoutInflater.from(context).inflate(R.layout.send_item, null) as LinearLayout
+                viewHolder.icon = conView.findViewById(R.id.icon) as CircleImageView
+                viewHolder.name = conView.findViewById(R.id.name) as TextView
+                conView.setTag(viewHolder)
+            } else {
+                viewHolder = conView.tag as ViewHolder
+            }
+            if (position == list.size - 1) {
+                Glide.with(context)
+                        .load("android.resource://" + context.packageName + "/drawable/" + R.drawable.send_add)
+                        .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
+                        .into(viewHolder.icon)
+                viewHolder.name?.text = "添加"
+            } else {
+                if (list[position].url.isNullOrEmpty()) {
+                    viewHolder.icon?.setChar(list[position].name.first())
+                } else {
+                    Glide.with(context)
+                            .load(list[position].url)
+                            .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
+                            .into(viewHolder.icon)
+                }
+                viewHolder.name?.text = list[position].name
+            }
+            return conView
+        }
+
+        override fun getItem(position: Int): Any {
+            return list.get(position)
+        }
+
+        override fun getItemId(position: Int): Long {
+            return position.toLong()
+        }
+
+        override fun getCount(): Int {
+            return list.size
+        }
+
+        class ViewHolder {
+            var icon: CircleImageView? = null
+            var name: TextView? = null
+        }
     }
 }

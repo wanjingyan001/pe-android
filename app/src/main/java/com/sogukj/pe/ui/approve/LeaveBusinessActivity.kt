@@ -413,7 +413,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
         ll_content.addView(convertView)
         val icon = convertView.findViewById(R.id.starIcon) as ImageView
         val tv_title = convertView.findViewById(R.id.tv_label) as TextView
-        val et_reason = convertView.findViewById(R.id.reason) as EditText
+        val et_reason = convertView.findViewById(R.id.et_value) as EditText
 
         if (bean.is_must == 1) {
             icon.visibility = View.VISIBLE

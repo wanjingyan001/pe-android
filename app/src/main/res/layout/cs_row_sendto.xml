@@ -7,7 +7,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="15dp"
+        android:layout_height="8dp"
         android:background="#f3f5f7" />
 
     <LinearLayout
@@ -15,7 +15,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:gravity="left|center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingLeft="3dp">
 
         <ImageView
             android:id="@+id/starIcon"
@@ -49,9 +50,9 @@
         android:id="@+id/llll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginBottom="20dp"
         android:layout_marginTop="20dp"
-        android:visibility="gone"/>
+        android:orientation="horizontal"
+        android:visibility="gone" />
 
 </LinearLayout>

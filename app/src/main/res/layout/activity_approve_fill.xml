@@ -79,11 +79,6 @@
 
     </android.support.v4.widget.NestedScrollView>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="8dp"
-        android:background="@color/divider2" />
-
     <LinearLayout
         android:id="@+id/ll_btn"
         android:layout_width="match_parent"
