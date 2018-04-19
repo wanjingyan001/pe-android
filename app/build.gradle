@@ -229,6 +229,9 @@ dependencies {
     implementation project(':library')
     compile 'com.tencent.bugly:crashreport:latest.release'
 
+    compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.5.1'
+    compile 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.5.1'
+
     //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.2.0
     implementation files('libs/pinyin4j-2.5.0.jar')
     implementation project(':zxingLib')

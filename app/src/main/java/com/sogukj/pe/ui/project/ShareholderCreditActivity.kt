@@ -22,12 +22,20 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
+import com.bumptech.glide.Glide
 import com.framework.base.BaseActivity
 import com.google.gson.Gson
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import com.lcodecore.tkrefreshlayout.footer.BallPulseView
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
+import com.scwang.smartrefresh.layout.SmartRefreshLayout
+import com.scwang.smartrefresh.layout.api.*
+import com.scwang.smartrefresh.layout.constant.SpinnerStyle
+import com.scwang.smartrefresh.layout.footer.BallPulseFooter
+import com.scwang.smartrefresh.layout.footer.ClassicsFooter
+import com.scwang.smartrefresh.layout.header.BezierRadarHeader
+import com.scwang.smartrefresh.layout.header.ClassicsHeader
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.CreditInfo
@@ -73,6 +81,8 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
         initSearchView()
         back.setOnClickListener(this)
         inquireBtn.setOnClickListener(this)
+
+        Glide.with(context).asGif().load(R.drawable.dynamic).into(gif)
 
         AppBarLayout.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
             override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
@@ -133,27 +143,55 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
         lister.addItemDecoration(SpaceItemDecoration(Utils.dpToPx(context, 15)))
         lister.adapter = mAdapter
 
-        val header = ProgressLayout(this)
-        header.setColorSchemeColors(ContextCompat.getColor(this, R.color.color_main))
-        refresh.setHeaderView(header)
-        val footer = BallPulseView(this)
-        footer.setAnimatingColor(ContextCompat.getColor(this, R.color.color_main))
-        refresh.setBottomView(footer)
-        refresh.setOverScrollRefreshShow(false)
-        refresh.setEnableLoadmore(true)
-        refresh.setOnRefreshListener(object : RefreshListenerAdapter() {
-            override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
-                page = 1
-                doRequest(bean.company_id)
-            }
+        //val header = ProgressLayout(this)
+        //header.setColorSchemeColors(ContextCompat.getColor(this, R.color.color_main))
+        //refresh.setHeaderView(header)
+        //val footer = BallPulseView(this)
+        //footer.setAnimatingColor(ContextCompat.getColor(this, R.color.color_main))
+        //refresh.setBottomView(footer)
+        //refresh.setOverScrollRefreshShow(false)
+        //refresh.setEnableLoadmore(true)
+//        refresh.setOnRefreshListener(object : RefreshListenerAdapter() {
+//            override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
+//                page = 1
+//                doRequest(bean.company_id)
+//            }
+//
+//            override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
+//                ++page
+//                doRequest(bean.company_id)
+//            }
+//
+//        })
+//        refresh.setAutoLoadMore(true)
 
-            override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
-                ++page
-                doRequest(bean.company_id)
-            }
 
-        })
-        refresh.setAutoLoadMore(true)
+//        SmartRefreshLayout.setDefaultRefreshHeaderCreator(object : DefaultRefreshHeaderCreator {
+//            override fun createRefreshHeader(context: Context, layout: RefreshLayout): RefreshHeader {
+//                var header = BezierRadarHeader(context).setEnableHorizontalDrag(true)
+//                layout.setRefreshHeader(header)
+//                return header
+//            }
+//        })
+//        SmartRefreshLayout.setDefaultRefreshFooterCreator(object : DefaultRefreshFooterCreator {
+//            override fun createRefreshFooter(context: Context, layout: RefreshLayout): RefreshFooter {
+//                var footer = BallPulseFooter(context).setSpinnerStyle(SpinnerStyle.Scale)
+//                layout.setRefreshFooter(footer)
+//                return footer
+//            }
+//        })
+//        refresh.setRefreshHeader(BezierRadarHeader(context).setEnableHorizontalDrag(true))
+//        refresh.setRefreshFooter(BallPulseFooter(context).setSpinnerStyle(SpinnerStyle.Scale))
+        refresh.setOnRefreshListener {
+            page = 1
+            doRequest(bean.company_id)
+            refresh.finishRefresh(1000)
+        }
+        refresh.setOnLoadMoreListener {
+            ++page
+            doRequest(bean.company_id)
+            refresh.finishLoadMore(1000)
+        }
     }
 
     override fun onResume() {
@@ -183,15 +221,15 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
                     }, { e ->
                         Log.e(TAG, e.message)
                         Trace.e(e)
-                        SupportEmptyView.checkEmpty(this, mAdapter)
+                        //SupportEmptyView.checkEmpty(this, mAdapter)
                     }, {
-                        SupportEmptyView.checkEmpty(this, mAdapter)
-                        refresh?.setEnableLoadmore(mAdapter.dataList.size % 20 == 0)
-                        mAdapter.notifyDataSetChanged()
-                        if (page == 1)
-                            refresh?.finishRefreshing()
-                        else
-                            refresh?.finishLoadmore()
+                        //SupportEmptyView.checkEmpty(this, mAdapter)
+//                        refresh?.setEnableLoadmore(mAdapter.dataList.size % 20 == 0)
+//                        mAdapter.notifyDataSetChanged()
+//                        if (page == 1)
+//                            refresh?.finishRefreshing()
+//                        else
+//                            refresh?.finishLoadmore()
                     })
         }
     }
