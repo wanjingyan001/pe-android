@@ -10,7 +10,7 @@ class CreditInfo : Serializable {
     var item = ArrayList<Item>()
 
 
-    inner class Item : Serializable {
+    class Item : Serializable {
         var id = 0//id
         var company_id = 0//公司id
         var name = ""//名字

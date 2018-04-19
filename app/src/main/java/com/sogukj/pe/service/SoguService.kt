@@ -737,6 +737,13 @@ interface SoguService {
     fun sensitiveData(@Body map: HashMap<String, Any>): Observable<Payload<SensitiveInfo>>
 
     /**
+     * 征信-敏感信息(修改)
+     */
+    @FormUrlEncoded
+    @POST("/api/Credit/sensitiveInfo")
+    fun sensitiveInfo(@Field("idCard") idCard: String): Observable<Payload<SensitiveInfo>>
+
+    /**
      * 涉诉信息相关
      */
     @FormUrlEncoded

@@ -36,16 +36,18 @@ class SensitiveInfo : Serializable {
     }
 
     inner class Crime : Serializable {
-        var checkCode = ArrayList<String>()//类型 可能同时命中两个  (0=>未比中； 1=>比中在逃； 2=>比中前科； 3=>比中涉毒； 4=>比中吸毒)   返回格式类似[1]或[1,2]
-        var num = 0//数量
-        var item = ArrayList<Item>()//案件详情
-
-        inner class Item : Serializable {
-            var caseSource = ""//案件来源
-            var caseTime = ""//案发时间区间
-            var caseType = ""//案件类别
-            var caseLevel = ""//案件级别
-        }
+        var checkCode = ""//类型 可能同时命中两个  (0=>未比中； 1=>比中在逃； 2=>比中前科； 3=>比中涉毒； 4=>比中吸毒)   返回格式   "1,2"
+        var num = ""//数量
+        var caseSource = ""//案件来源
+        var caseTime = ""//案发时间区间
+//        var item = ArrayList<Item>()//案件详情
+//
+//        inner class Item : Serializable {
+//            var caseSource = ""//案件来源
+//            var caseTime = ""//案发时间区间
+//            var caseType = ""//案件类别
+//            var caseLevel = ""//案件级别
+//        }
     }
 
     inner class Court : Serializable {

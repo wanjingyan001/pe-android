@@ -8,7 +8,7 @@
     android:orientation="vertical"
     tools:context="com.sogukj.pe.ui.project.SecondaryActivity">
 
-    <include layout="@layout/layout_shareholder_toolbar" />
+    <include layout="@layout/toolbar" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"

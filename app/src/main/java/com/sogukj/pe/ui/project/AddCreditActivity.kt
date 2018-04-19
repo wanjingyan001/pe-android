@@ -53,10 +53,14 @@ class AddCreditActivity : BaseActivity(), View.OnClickListener {
         setContentView(R.layout.activity_add_credit)
         Utils.setWindowStatusBarColor(this, R.color.white)
         type = intent.getStringExtra(Extras.TYPE)
+        data = intent.getSerializableExtra(Extras.DATA) as CreditInfo.Item
         if (type.equals("ADD")) {
             toolbar_title.text = "添加人员"
+            data?.apply {
+                companyName.text = company
+                selectId = company_id
+            }
         } else if (type.equals("EDIT")) {
-            data = intent.getSerializableExtra(Extras.DATA) as CreditInfo.Item
             data?.apply {
                 nameEdt.setText(name)
                 IDCardEdt.setText(idCard)

@@ -1,14 +1,9 @@
 package com.sogukj.pe.ui.project
 
-import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.text.Editable
@@ -16,46 +11,24 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
 import com.framework.base.BaseActivity
 import com.google.gson.Gson
-import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
-import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
-import com.lcodecore.tkrefreshlayout.footer.BallPulseView
-import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
-import com.scwang.smartrefresh.layout.SmartRefreshLayout
-import com.scwang.smartrefresh.layout.api.*
-import com.scwang.smartrefresh.layout.constant.SpinnerStyle
-import com.scwang.smartrefresh.layout.footer.BallPulseFooter
-import com.scwang.smartrefresh.layout.footer.ClassicsFooter
-import com.scwang.smartrefresh.layout.header.BezierRadarHeader
-import com.scwang.smartrefresh.layout.header.ClassicsHeader
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.CreditInfo
-import com.sogukj.pe.bean.CreditReqBean
 import com.sogukj.pe.bean.ProjectBean
-import com.sogukj.pe.bean.QueryReqBean
-import com.sogukj.pe.ui.SupportEmptyView
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
-import com.sogukj.pe.view.SpaceItemDecoration
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_shareholder_credit.*
-import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.find
-import org.jetbrains.anko.info
-import org.jetbrains.anko.textColor
 
 class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
 
@@ -93,6 +66,10 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
 
         page = 1
         doRequest(bean.company_id)
+
+        mAdapter.onItemClick = { v, p ->
+            SensitiveInfoActivity.start(context, mAdapter.dataList.get(p))
+        }
     }
 
     var searchKey: String? = null
@@ -204,6 +181,9 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
                 2 -> "股东"
                 else -> ""
             }
+            if (data.type == 0) {
+                directorPosition.visibility = View.GONE
+            }
             phoneNumberTv.text = data.phone
             IDCardTv.text = data.idCard
             if (data.company.isNullOrEmpty()) {
@@ -238,7 +218,10 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
         when (v?.id) {
             R.id.back -> finish()
             R.id.inquireBtn -> {
-                AddCreditActivity.start(context, "ADD", null, 0x001)
+                var item = CreditInfo.Item()
+                item.company = bean.name
+                item.company_id = bean.company_id!!
+                AddCreditActivity.start(context, "ADD", item, 0x001)
             }
         }
     }

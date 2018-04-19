@@ -19,7 +19,7 @@ import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_sensitive_info.*
-import kotlinx.android.synthetic.main.layout_shareholder_toolbar.*
+import kotlinx.android.synthetic.main.toolbar.*
 import org.jetbrains.anko.imageResource
 import org.jetbrains.anko.info
 import org.jetbrains.anko.textColor
@@ -48,36 +48,31 @@ class SensitiveInfoActivity : BaseActivity(), View.OnClickListener {
         setContentView(R.layout.activity_sensitive_info)
         Utils.setWindowStatusBarColor(this, R.color.white)
         data = intent.getSerializableExtra(Extras.DATA) as CreditInfo.Item
-        addTv.visibility = View.GONE
+        toolbar_menu.visibility = View.VISIBLE
+        toolbar_menu.setOnClickListener(this)
+        toolbar_menu.setImageResource(R.drawable.refresh)
         toolbar_title.text = "征信"
         name.text = data.name
         post.text = data.position
-//        data.piece?.let {
-//            Log.d("WJY", Gson().toJson(it))
-//            doRequest(data.id, it)
-//        }
-        back.setOnClickListener(this)
+        toolbar_back.visibility = View.VISIBLE
+        toolbar_back.setOnClickListener(this)
 
         if (data.sum == 0) {
             status.text = "正常"
             dangerImage.imageResource = R.drawable.ic_sensitive_green
-            toDetail.setOnClickListener(null)
         } else {
             status.text = "风险人物"
             dangerImage.imageResource = R.drawable.ic_sensitive_red
             infoNumber.text = "${data.sum}条"
-            toDetail.setOnClickListener(this@SensitiveInfoActivity)
         }
+
+        doRequest()
     }
 
 
-    fun doRequest(id: Int, piece: CreditInfo.Item.Piece) {
-        val map = HashMap<String, Any>()
-        map.put("id", id)
-        map.put("piece", piece)
-        info { "requestMap:${Gson().toJson(map)}" }
+    fun doRequest() {
         SoguApi.getService(application)
-                .sensitiveData(map)
+                .sensitiveInfo(data.idCard!!)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -86,16 +81,20 @@ class SensitiveInfoActivity : BaseActivity(), View.OnClickListener {
                             info = this
                             this.crime?.let {
                                 setDangerousStatus(it)
-//                                if (it.num == 0) {
-//                                    status.text = "正常"
-//                                    dangerImage.imageResource = R.drawable.ic_sensitive_green
-//                                    toDetail.setOnClickListener(null)
-//                                } else {
-//                                    status.text = "风险人物"
-//                                    dangerImage.imageResource = R.drawable.ic_sensitive_red
-//                                    infoNumber.text = "${it.num}条"
-//                                    toDetail.setOnClickListener(this@SensitiveInfoActivity)
-//                                }
+                                var number = 0
+                                try {
+                                    number = it.num.toInt()
+                                } catch (e: Exception) {
+                                    number = 0
+                                }
+                                if (number == 0) {
+                                    status.text = "正常"
+                                    dangerImage.imageResource = R.drawable.ic_sensitive_green
+                                } else {
+                                    status.text = "风险人物"
+                                    dangerImage.imageResource = R.drawable.ic_sensitive_red
+                                    infoNumber.text = "${it.num}条"
+                                }
                             }
                             this.court?.item?.let {
                                 setInfo(courtNoticeCount, it.fygg != 0, "${it.fygg}条记录")
@@ -170,8 +169,15 @@ class SensitiveInfoActivity : BaseActivity(), View.OnClickListener {
             identity_status.text = "正常"
             identity_status.background = resources.getDrawable(R.drawable.bg_shareholder_green)
             identity_status.textColor = Color.parseColor("#50D59D")
+            return
         }
-        crime.checkCode.forEach {
+        var tagList = ArrayList<String>()
+        try {
+            tagList = crime.checkCode.split(",") as ArrayList<String>
+        } catch (e: Exception) {
+            return
+        }
+        tagList.forEach {
             when (it) {
                 "1" -> {
                     identity_status.text = "危险"
@@ -195,22 +201,20 @@ class SensitiveInfoActivity : BaseActivity(), View.OnClickListener {
                 }
             }
         }
-        caseNumber2.text = "${crime.num}件"
-        if (crime.num == 0) {
-            caseNumber2.text = "无"
-            toDetail.visibility = View.GONE
-        }
+        caseNumber2.text = crime.caseSource
+        time.text = crime.caseTime
     }
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.back -> finish()
-            R.id.courtNoticeCount -> SecondaryActivity.start(this, COURTNOTICE, info, data.id)
-            R.id.courtroomtNoticeCount -> SecondaryActivity.start(this, COURTROOMT, info, data.id)
-            R.id.refereeDocumentsCount -> SecondaryActivity.start(this, REFEREEDOCUMENTS, info, data.id)
-            R.id.executiveBulletinCount -> SecondaryActivity.start(this, EXECUTIVEBULLETIN, info, data.id)
-            R.id.recordNumber2 -> SecondaryActivity.start(this, LOSSCREDIT, info, data.id)
-            R.id.toDetail -> SecondaryActivity.start(this, CASEDETEIL, info, data.id)
+            R.id.toolbar_back -> finish()
+            R.id.toolbar_menu -> doRequest()
+//            R.id.courtNoticeCount -> SecondaryActivity.start(this, COURTNOTICE, info, data.id)
+//            R.id.courtroomtNoticeCount -> SecondaryActivity.start(this, COURTROOMT, info, data.id)
+//            R.id.refereeDocumentsCount -> SecondaryActivity.start(this, REFEREEDOCUMENTS, info, data.id)
+//            R.id.executiveBulletinCount -> SecondaryActivity.start(this, EXECUTIVEBULLETIN, info, data.id)
+//            R.id.recordNumber2 -> SecondaryActivity.start(this, LOSSCREDIT, info, data.id)
+//            R.id.toDetail -> SecondaryActivity.start(this, CASEDETEIL, info, data.id)
         }
     }
 

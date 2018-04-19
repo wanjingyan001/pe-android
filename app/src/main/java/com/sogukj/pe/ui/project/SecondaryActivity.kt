@@ -21,7 +21,7 @@ import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_secondary.*
-import kotlinx.android.synthetic.main.layout_shareholder_toolbar.*
+import kotlinx.android.synthetic.main.toolbar.*
 import org.jetbrains.anko.find
 import kotlin.properties.Delegates
 
@@ -53,7 +53,6 @@ class SecondaryActivity : BaseActivity(), View.OnClickListener {
         setContentView(R.layout.activity_secondary)
         Utils.setWindowStatusBarColor(this, R.color.white)
 
-        addTv.visibility = View.GONE
         type = intent.getIntExtra(Extras.TYPE, -1)
         info = intent.getSerializableExtra(Extras.DATA) as SensitiveInfo
         id = intent.getIntExtra(Extras.ID, -1)
@@ -98,12 +97,13 @@ class SecondaryActivity : BaseActivity(), View.OnClickListener {
             SensitiveInfoActivity.CASEDETEIL -> {
                 toolbar_title.text = "案件详情"
                 info.crime?.let {
-                    adapter.dataList.addAll(it.item)
+                    // TODO
+                    //adapter.dataList.addAll(it.item)
                     adapter.notifyDataSetChanged()
                 }
             }
         }
-        back.setOnClickListener(this)
+        toolbar_back.setOnClickListener(this)
 
     }
 
@@ -136,7 +136,7 @@ class SecondaryActivity : BaseActivity(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.back -> finish()
+            R.id.toolbar_back -> finish()
         }
     }
 
@@ -169,16 +169,17 @@ class SecondaryActivity : BaseActivity(), View.OnClickListener {
         override fun setData(view: View, data: Any, position: Int) {
             when (type) {
                 SensitiveInfoActivity.CASEDETEIL -> {
-                    if (data is SensitiveInfo.Crime.Item) {
-                        tv1.text = "案件来源"
-                        tv2.text = "案发时间区间"
-                        tv3.text = "案件类别"
-                        tv4.text = "案件级别"
-                        courtTime.text = data.caseSource
-                        plaintiff.text = data.caseTime
-                        courtName.text = data.caseType
-                        abstractTv.text = data.caseLevel
-                    }
+                    // TODO
+//                    if (data is SensitiveInfo.Crime.Item) {
+//                        tv1.text = "案件来源"
+//                        tv2.text = "案发时间区间"
+//                        tv3.text = "案件类别"
+//                        tv4.text = "案件级别"
+//                        courtTime.text = data.caseSource
+//                        plaintiff.text = data.caseTime
+//                        courtName.text = data.caseType
+//                        abstractTv.text = data.caseLevel
+//                    }
                 }
                 else -> {
                     if (data is SecondaryBean)
