@@ -164,7 +164,8 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
                 btn_single.visibility = View.VISIBLE
                 btn_single.text = "重新发起审批"
                 btn_single.setOnClickListener {
-                    BuildSealActivity.start(this, paramId!!, paramType, paramTitle, true)
+                    //BuildSealActivity.start(this, paramId!!, paramType, paramTitle, true)
+                    ApproveFillActivity.start(context, true, paramType!!, paramId!!, paramTitle!!)
                     finish()
                 }
             }
@@ -175,7 +176,8 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
                     btn_right.text = "撤销"
                 }
                 btn_left.setOnClickListener {
-                    LeaveBusinessActivity.start(context, true, paramId!!, paramTitle)
+                    //LeaveBusinessActivity.start(context, true, paramId!!, paramTitle)
+                    ApproveFillActivity.start(context, true, -1, paramId!!, paramTitle)
                 }
                 btn_right.setOnClickListener {
                     val inflate = LayoutInflater.from(this).inflate(R.layout.layout_input_dialog, null)
@@ -295,7 +297,8 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
                 btn_single.visibility = View.VISIBLE
                 btn_single.text = "修改"
                 btn_single.setOnClickListener {
-                    LeaveBusinessActivity.start(context, true, paramId!!, paramTitle)
+                    //LeaveBusinessActivity.start(context, true, paramId!!, paramTitle)
+                    ApproveFillActivity.start(context, true, -1, paramId!!, paramTitle)
                 }
             }
         }

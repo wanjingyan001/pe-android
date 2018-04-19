@@ -142,7 +142,8 @@ class SealApproveActivity : ToolbarActivity() {
                 btn_single.visibility = View.VISIBLE
                 btn_single.text = "重新发起审批"
                 btn_single.setOnClickListener {
-                    BuildSealActivity.start(this, paramId!!, paramType, paramTitle, true)
+                    //BuildSealActivity.start(this, paramId!!, paramType, paramTitle, true)
+                    ApproveFillActivity.start(context, true, paramType!!, paramId!!, paramTitle!!)
                     finish()
                 }
             }
