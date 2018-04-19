@@ -13,9 +13,14 @@ import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.CustomSealBean
+import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.ui.approve.ListSelectorActivity
+import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.IOSPopwindow
+import com.sogukj.service.SoguApi
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_share_holder_step.*
 import org.jetbrains.anko.backgroundResource
 import org.jetbrains.anko.find
@@ -24,9 +29,12 @@ class ShareHolderStepActivity : ToolbarActivity(), View.OnClickListener {
 
     companion object {
 
-        fun start(ctx: Context?, step: Int) {
+        //step=1，后面两个参数不需要
+        fun start(ctx: Context?, step: Int, company_id: Int, company_name: String) {
             val intent = Intent(ctx, ShareHolderStepActivity::class.java)
             intent.putExtra(Extras.DATA, step)
+            intent.putExtra(Extras.ID, company_id)
+            intent.putExtra(Extras.NAME, company_name)
             ctx?.startActivity(intent)
         }
     }
@@ -89,6 +97,8 @@ class ShareHolderStepActivity : ToolbarActivity(), View.OnClickListener {
         }
     }
 
+    var params = HashMap<String, Any>()
+
     private fun prepare(): Boolean {
         if (nameEdt.text.isEmpty()) {
             showCustomToast(R.drawable.icon_toast_common, "请填写名字")
@@ -98,6 +108,16 @@ class ShareHolderStepActivity : ToolbarActivity(), View.OnClickListener {
             showCustomToast(R.drawable.icon_toast_common, "请填写身份证")
             return false
         }
+
+        var tmp = HashMap<String, Any>()
+        tmp.put("phone", phoneEdt.text.toString())
+        tmp.put("name", nameEdt.text.toString())
+        tmp.put("idCard", IDCardEdt.text.toString())
+        tmp.put("company_id", intent.getIntExtra(Extras.ID, 0))
+        tmp.put("company", intent.getStringExtra(Extras.NAME))
+        tmp.put("type", selectType)
+
+        params.put("ae", tmp)
         return true
     }
 
@@ -105,7 +125,35 @@ class ShareHolderStepActivity : ToolbarActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.enter -> {
-
+                if (step == 1) {
+                    ShareHolderStepActivity.start(context, 2, selectId, companyName.text.toString())
+                    finish()
+                } else if (step == 2) {
+                    if (!prepare()) {
+                        return
+                    }
+                    SoguApi.getService(application)
+                            .queryCreditInfo(params)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(Schedulers.io())
+                            .subscribe({ payload ->
+                                if (payload.isOk) {
+//                                    val intent = Intent()
+//                                    intent.putExtra(Extras.DATA, payload.payload)
+//                                    setResult(Extras.RESULTCODE, intent)
+                                    var project = ProjectBean()
+                                    project.name = intent.getStringExtra(Extras.NAME)
+                                    project.company_id = intent.getIntExtra(Extras.ID, 0)
+                                    ShareholderCreditActivity.start(this@ShareHolderStepActivity, project)
+                                    finish()
+                                } else {
+                                    showCustomToast(R.drawable.icon_toast_fail, payload.message)
+                                }
+                            }, { e ->
+                                Trace.e(e)
+                                showCustomToast(R.drawable.icon_toast_fail, "查询失败")
+                            })
+                }
             }
             R.id.companySelect -> {
                 var map = CustomSealBean.ValueBean()

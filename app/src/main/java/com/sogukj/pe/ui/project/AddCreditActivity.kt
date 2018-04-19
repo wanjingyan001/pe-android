@@ -169,7 +169,7 @@ class AddCreditActivity : BaseActivity(), View.OnClickListener {
                     }
                 }, { e ->
                     Trace.e(e)
-                    showCustomToast(R.drawable.icon_toast_fail, "提交失败")
+                    showCustomToast(R.drawable.icon_toast_fail, "查询失败")
                 })
     }
 

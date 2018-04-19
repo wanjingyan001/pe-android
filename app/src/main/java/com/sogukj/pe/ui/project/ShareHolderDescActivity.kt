@@ -38,7 +38,7 @@ class ShareHolderDescActivity : BaseActivity() {
             if (type.equals("INNER")) {
                 ShareholderCreditActivity.start(this@ShareHolderDescActivity, bean)//高管征信（股东征信）
             } else if (type.equals("OUTER")) {//此时bean是空的，不是null
-                ShareHolderStepActivity.start(context, 1)
+                ShareHolderStepActivity.start(context, 1, 0, "")
             }
             finish()
         }

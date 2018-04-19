@@ -53,7 +53,14 @@ class SensitiveInfoActivity : BaseActivity(), View.OnClickListener {
         toolbar_menu.setImageResource(R.drawable.refresh)
         toolbar_title.text = "征信"
         name.text = data.name
-        post.text = data.position
+        post.text = when (data.type) {
+            1 -> "董监高"
+            2 -> "股东"
+            else -> ""
+        }
+        if (data.type == 0) {
+            post.visibility = View.INVISIBLE
+        }
         toolbar_back.visibility = View.VISIBLE
         toolbar_back.setOnClickListener(this)
 
@@ -83,7 +90,7 @@ class SensitiveInfoActivity : BaseActivity(), View.OnClickListener {
                                 setDangerousStatus(it)
                                 var number = 0
                                 try {
-                                    number = it.num.toInt()
+                                    number = it.num!!.toInt()
                                 } catch (e: Exception) {
                                     number = 0
                                 }
@@ -165,7 +172,7 @@ class SensitiveInfoActivity : BaseActivity(), View.OnClickListener {
      * 危险身份
      */
     private fun setDangerousStatus(crime: SensitiveInfo.Crime) {
-        if (crime.checkCode.isEmpty()) {
+        if (crime.checkCode.isNullOrEmpty()) {
             identity_status.text = "正常"
             identity_status.background = resources.getDrawable(R.drawable.bg_shareholder_green)
             identity_status.textColor = Color.parseColor("#50D59D")
@@ -173,7 +180,7 @@ class SensitiveInfoActivity : BaseActivity(), View.OnClickListener {
         }
         var tagList = ArrayList<String>()
         try {
-            tagList = crime.checkCode.split(",") as ArrayList<String>
+            tagList = crime.checkCode!!.split(",") as ArrayList<String>
         } catch (e: Exception) {
             return
         }
@@ -208,7 +215,10 @@ class SensitiveInfoActivity : BaseActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.toolbar_back -> finish()
-            R.id.toolbar_menu -> doRequest()
+            R.id.toolbar_menu -> {
+                showCustomToast(R.drawable.icon_toast_common, "重新加载数据中")
+                doRequest()
+            }
 //            R.id.courtNoticeCount -> SecondaryActivity.start(this, COURTNOTICE, info, data.id)
 //            R.id.courtroomtNoticeCount -> SecondaryActivity.start(this, COURTROOMT, info, data.id)
 //            R.id.refereeDocumentsCount -> SecondaryActivity.start(this, REFEREEDOCUMENTS, info, data.id)

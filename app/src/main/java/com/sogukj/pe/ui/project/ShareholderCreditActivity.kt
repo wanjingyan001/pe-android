@@ -137,30 +137,28 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
     var page = 1
 
     fun doRequest(companyId: Int?) {
-        if (companyId != null) {
-            SoguApi.getService(application)
-                    .showCreditList(company_id = companyId, page = page, fuzzyQuery = searchKey)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe({ payload ->
-                        Log.d(TAG, Gson().toJson(payload))
-                        if (payload.isOk) {
-                            if (page == 1)
-                                mAdapter.dataList.clear()
-                            payload.payload?.forEach {
-                                mAdapter.dataList.add(it)
-                            }
-                        } else {
-                            showCustomToast(R.drawable.icon_toast_fail, payload.message)
+        SoguApi.getService(application)
+                .showCreditList(company_id = companyId, page = page, fuzzyQuery = searchKey)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    Log.d(TAG, Gson().toJson(payload))
+                    if (payload.isOk) {
+                        if (page == 1)
+                            mAdapter.dataList.clear()
+                        payload.payload?.forEach {
+                            mAdapter.dataList.add(it)
                         }
-                    }, { e ->
-                        Trace.e(e)
-                        iv_empty.visibility = if (mAdapter.dataList.isEmpty()) View.VISIBLE else View.GONE
-                    }, {
-                        mAdapter.notifyDataSetChanged()
-                        iv_empty.visibility = if (mAdapter.dataList.isEmpty()) View.VISIBLE else View.GONE
-                    })
-        }
+                    } else {
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
+                    }
+                }, { e ->
+                    Trace.e(e)
+                    iv_empty.visibility = if (mAdapter.dataList.isEmpty()) View.VISIBLE else View.GONE
+                }, {
+                    mAdapter.notifyDataSetChanged()
+                    iv_empty.visibility = if (mAdapter.dataList.isEmpty()) View.VISIBLE else View.GONE
+                })
     }
 
     inner class ShareHolder(convertView: View) : RecyclerHolder<CreditInfo.Item>(convertView) {

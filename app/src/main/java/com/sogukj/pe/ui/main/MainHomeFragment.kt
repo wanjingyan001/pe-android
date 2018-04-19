@@ -120,7 +120,7 @@ class MainHomeFragment : BaseFragment() {
         tv_zhengxin.setOnClickListener {
             var first = XmlDb.open(context).get("FIRST", "TRUE")
             if (first.equals("FALSE")) {
-                ShareHolderStepActivity.start(context, 1)
+                ShareHolderStepActivity.start(context, 1, 0, "")
             } else if (first.equals("TRUE")) {
                 ShareHolderDescActivity.start(context, ProjectBean(), "OUTER")
                 XmlDb.open(context).set("FIRST", "FALSE")
