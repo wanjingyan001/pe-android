@@ -15,10 +15,11 @@ import kotlinx.android.synthetic.main.activity_share_holder_desc.*
 class ShareHolderDescActivity : BaseActivity() {
 
     companion object {
-        val TAG = ShareholderCreditActivity::class.java.simpleName
-        fun start(ctx: Context?, project: ProjectBean) {
+
+        fun start(ctx: Context?, project: ProjectBean, tag: String) {//INNER   OUTER
             val intent = Intent(ctx, ShareHolderDescActivity::class.java)
             intent.putExtra(Extras.DATA, project)
+            intent.putExtra(Extras.TYPE, tag)
             ctx?.startActivity(intent)
         }
     }
@@ -33,7 +34,12 @@ class ShareHolderDescActivity : BaseActivity() {
 
         start.setOnClickListener {
             var bean = intent.getSerializableExtra(Extras.DATA) as ProjectBean
-            ShareholderCreditActivity.start(this@ShareHolderDescActivity, bean)//高管征信（股东征信）
+            var type = intent.getStringExtra(Extras.TYPE)
+            if (type.equals("INNER")) {
+                ShareholderCreditActivity.start(this@ShareHolderDescActivity, bean)//高管征信（股东征信）
+            } else if (type.equals("OUTER")) {//此时bean是空的，不是null
+                ShareHolderStepActivity.start(context, 1)
+            }
         }
 
         AppBarLayout.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {

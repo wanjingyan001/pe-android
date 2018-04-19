@@ -36,12 +36,17 @@ import com.sogukj.pe.util.ColorUtil
 import com.sogukj.util.Store
 import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.NIMClient
+import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.ui.approve.EntryApproveActivity
 import com.sogukj.pe.ui.approve.LeaveBusinessApproveActivity
 import com.sogukj.pe.ui.news.MainNewsActivity
 import com.sogukj.pe.ui.partyBuild.PartyMainActivity
+import com.sogukj.pe.ui.project.ShareHolderDescActivity
+import com.sogukj.pe.ui.project.ShareHolderStepActivity
+import com.sogukj.pe.ui.project.ShareholderCreditActivity
 import com.sogukj.pe.ui.user.UserActivity
 import com.sogukj.pe.util.Utils
+import com.sogukj.util.XmlDb
 import me.leolin.shortcutbadger.ShortcutBadger
 import org.jetbrains.anko.support.v4.ctx
 import java.net.UnknownHostException
@@ -111,6 +116,15 @@ class MainHomeFragment : BaseFragment() {
         }
         party_build.setOnClickListener {
             PartyMainActivity.start(context)
+        }
+        tv_zhengxin.setOnClickListener {
+            var first = XmlDb.open(context).get("FIRST", "TRUE")
+            if (first.equals("FALSE")) {
+                ShareHolderStepActivity.start(context, 1)
+            } else if (first.equals("TRUE")) {
+                ShareHolderDescActivity.start(context, ProjectBean(), "OUTER")
+                XmlDb.open(context).set("FIRST", "FALSE")
+            }
         }
 
         loadHead()
