@@ -77,6 +77,7 @@ class AddCreditActivity : BaseActivity(), View.OnClickListener {
                     nameEdt.setSelection(name.length)
                 }
             }
+            toolbar_title.text = "编辑信息"
             toolbar_menu.visibility = View.VISIBLE
             toolbar_menu.setOnClickListener(this)
         }

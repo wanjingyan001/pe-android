@@ -140,7 +140,6 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
             ShareHolder(convertView)
         })
         lister.layoutManager = LinearLayoutManager(this)
-        lister.addItemDecoration(SpaceItemDecoration(Utils.dpToPx(context, 15)))
         lister.adapter = mAdapter
 
         refresh.setOnRefreshListener {
@@ -180,17 +179,10 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
                             showCustomToast(R.drawable.icon_toast_fail, payload.message)
                         }
                     }, { e ->
-                        Log.e(TAG, e.message)
                         Trace.e(e)
-                        //SupportEmptyView.checkEmpty(this, mAdapter)
+                        iv_empty.visibility = if (mAdapter.dataList.isEmpty()) View.VISIBLE else View.GONE
                     }, {
-                        //SupportEmptyView.checkEmpty(this, mAdapter)
-//                        refresh?.setEnableLoadmore(mAdapter.dataList.size % 20 == 0)
-//                        mAdapter.notifyDataSetChanged()
-//                        if (page == 1)
-//                            refresh?.finishRefreshing()
-//                        else
-//                            refresh?.finishLoadmore()
+                        iv_empty.visibility = if (mAdapter.dataList.isEmpty()) View.VISIBLE else View.GONE
                     })
         }
     }
@@ -223,8 +215,6 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
             }
             when (data.status) {
                 2 -> {
-//                    inquireStatus.text = "查询完成"
-//                    inquireStatus.textColor = Color.parseColor("#50d59d")
                     if (data.sum == null || data.sum == 0) {
                         number.visibility = View.GONE
                         inquireStatus.setImageResource(R.drawable.zhengxin_zhengchang)
@@ -235,8 +225,6 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
                     }
                 }
                 3 -> {
-//                    inquireStatus.text = "查询失败"
-//                    inquireStatus.textColor = Color.parseColor("#f7b62b")
                     number.visibility = View.GONE
                     inquireStatus.setImageResource(R.drawable.zhengxin_chaxunshibai)
                 }

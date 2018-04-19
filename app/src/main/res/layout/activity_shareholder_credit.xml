@@ -124,7 +124,7 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="2dp"
+                    android:layout_height="1dp"
                     android:background="@color/divider2" />
 
                 <RelativeLayout
@@ -175,7 +175,7 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="2dp"
+                    android:layout_height="1dp"
                     android:layout_marginTop="57dp"
                     android:background="@color/divider2" />
 
@@ -185,9 +185,15 @@
                     android:layout_height="match_parent"
                     android:layout_marginTop="59dp"
                     android:orientation="vertical"
-                    app:layoutManager="LinearLayoutManager" />
+                    android:padding="10dp" />
 
-                <include layout="@layout/layout_empty" />
+                <ImageView
+                    android:id="@+id/iv_empty"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/img_empty"
+                    android:visibility="gone" />
 
             </FrameLayout>
 
