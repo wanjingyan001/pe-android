@@ -143,45 +143,6 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
         lister.addItemDecoration(SpaceItemDecoration(Utils.dpToPx(context, 15)))
         lister.adapter = mAdapter
 
-        //val header = ProgressLayout(this)
-        //header.setColorSchemeColors(ContextCompat.getColor(this, R.color.color_main))
-        //refresh.setHeaderView(header)
-        //val footer = BallPulseView(this)
-        //footer.setAnimatingColor(ContextCompat.getColor(this, R.color.color_main))
-        //refresh.setBottomView(footer)
-        //refresh.setOverScrollRefreshShow(false)
-        //refresh.setEnableLoadmore(true)
-//        refresh.setOnRefreshListener(object : RefreshListenerAdapter() {
-//            override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
-//                page = 1
-//                doRequest(bean.company_id)
-//            }
-//
-//            override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
-//                ++page
-//                doRequest(bean.company_id)
-//            }
-//
-//        })
-//        refresh.setAutoLoadMore(true)
-
-
-//        SmartRefreshLayout.setDefaultRefreshHeaderCreator(object : DefaultRefreshHeaderCreator {
-//            override fun createRefreshHeader(context: Context, layout: RefreshLayout): RefreshHeader {
-//                var header = BezierRadarHeader(context).setEnableHorizontalDrag(true)
-//                layout.setRefreshHeader(header)
-//                return header
-//            }
-//        })
-//        SmartRefreshLayout.setDefaultRefreshFooterCreator(object : DefaultRefreshFooterCreator {
-//            override fun createRefreshFooter(context: Context, layout: RefreshLayout): RefreshFooter {
-//                var footer = BallPulseFooter(context).setSpinnerStyle(SpinnerStyle.Scale)
-//                layout.setRefreshFooter(footer)
-//                return footer
-//            }
-//        })
-//        refresh.setRefreshHeader(BezierRadarHeader(context).setEnableHorizontalDrag(true))
-//        refresh.setRefreshFooter(BallPulseFooter(context).setSpinnerStyle(SpinnerStyle.Scale))
         refresh.setOnRefreshListener {
             page = 1
             doRequest(bean.company_id)
