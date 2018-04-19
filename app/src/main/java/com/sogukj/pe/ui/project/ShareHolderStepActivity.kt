@@ -1,16 +1,26 @@
 package com.sogukj.pe.ui.project
 
+import android.annotation.TargetApi
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.view.Gravity
 import android.view.View
+import android.widget.EditText
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.bean.CustomSealBean
+import com.sogukj.pe.ui.approve.ListSelectorActivity
+import com.sogukj.pe.util.Utils
+import com.sogukj.pe.view.IOSPopwindow
 import kotlinx.android.synthetic.main.activity_share_holder_step.*
 import org.jetbrains.anko.backgroundResource
+import org.jetbrains.anko.find
 
-class ShareHolderStepActivity : ToolbarActivity() {
+class ShareHolderStepActivity : ToolbarActivity(), View.OnClickListener {
 
     companion object {
 
@@ -21,7 +31,10 @@ class ShareHolderStepActivity : ToolbarActivity() {
         }
     }
 
+    private var selectType = 0
+    private lateinit var popwin: IOSPopwindow
     var step = 0
+    var selectId = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +59,75 @@ class ShareHolderStepActivity : ToolbarActivity() {
             enter.text = "开始查询"
             step_layout_1.visibility = View.GONE
             step_layout_2.visibility = View.VISIBLE
+        }
+
+        popwin = IOSPopwindow(this)
+        typeSelect.setOnClickListener(this)
+        companySelect.setOnClickListener(this)
+        enter.setOnClickListener(this)
+        phoneEdt.setOnFocusChangeListener { v, hasFocus ->
+            val editText = v as EditText
+            if (!hasFocus && editText.text.isNotEmpty() && !Utils.isMobileExact(editText.text)) {
+                editText.setText("")
+                showCustomToast(R.drawable.icon_toast_common, "请输入正确的手机号")
+            }
+        }
+        IDCardEdt.setOnFocusChangeListener { v, hasFocus ->
+            val editText = v as EditText
+            if (!hasFocus && editText.text.isNotEmpty() && !Utils.isIDCard18(editText.text)) {
+                editText.setText("")
+                showCustomToast(R.drawable.icon_toast_common, "请输入正确的身份证号")
+            }
+        }
+        popwin.setOnItemClickListener { v, select ->
+            if (select == 1) {
+                typeSelectTv.text = "董监高"
+            } else {
+                typeSelectTv.text = "股东"
+            }
+            selectType = select
+        }
+    }
+
+    private fun prepare(): Boolean {
+        if (nameEdt.text.isEmpty()) {
+            showCustomToast(R.drawable.icon_toast_common, "请填写名字")
+            return false
+        }
+        if (IDCardEdt.text.toString().isEmpty()) {
+            showCustomToast(R.drawable.icon_toast_common, "请填写身份证")
+            return false
+        }
+        return true
+    }
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            R.id.enter -> {
+
+            }
+            R.id.companySelect -> {
+                var map = CustomSealBean.ValueBean()
+                map.type = 2
+                var bean = CustomSealBean()
+                bean.name = "公司名称"
+                bean.value_map = map
+                ListSelectorActivity.start(this, bean)
+            }
+            R.id.typeSelect -> {
+                Utils.closeInput(this, IDCardEdt)
+                popwin.showAtLocation(find(R.id.enter), Gravity.BOTTOM, 0, 0)
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == ListSelectorActivity.REQ_LIST_SELECTOR && resultCode === Activity.RESULT_OK) {
+            val valueBean = data!!.getSerializableExtra(Extras.DATA2) as CustomSealBean.ValueBean
+            companyName.text = valueBean.name
+            selectId = valueBean.id!!
         }
     }
 }
