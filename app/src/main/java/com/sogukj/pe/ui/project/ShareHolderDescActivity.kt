@@ -40,6 +40,7 @@ class ShareHolderDescActivity : BaseActivity() {
             } else if (type.equals("OUTER")) {//此时bean是空的，不是null
                 ShareHolderStepActivity.start(context, 1)
             }
+            finish()
         }
 
         AppBarLayout.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
