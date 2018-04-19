@@ -9,6 +9,13 @@
     android:orientation="horizontal"
     android:padding="18dp">
 
+    <ImageView
+        android:id="@+id/star"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:background="@drawable/star"
+        android:visibility="gone"/>
+
     <TextView
         android:id="@+id/tv_label"
         android:layout_width="wrap_content"
