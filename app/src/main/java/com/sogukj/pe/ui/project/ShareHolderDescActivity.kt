@@ -8,7 +8,11 @@ import com.framework.base.BaseActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.ProjectBean
+import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
+import com.sogukj.service.SoguApi
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_share_holder_desc.*
 
 //股东征信介绍
@@ -38,7 +42,31 @@ class ShareHolderDescActivity : BaseActivity() {
             if (type.equals("INNER")) {
                 ShareholderCreditActivity.start(this@ShareHolderDescActivity, bean)//高管征信（股东征信）
             } else if (type.equals("OUTER")) {//此时bean是空的，不是null
-                ShareHolderStepActivity.start(context, 1, 0, "")
+                SoguApi.getService(application)
+                        .showCreditList()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({ payload ->
+                            if (payload.isOk) {
+                                if (payload.payload == null) {
+                                    ShareHolderStepActivity.start(context, 1, 0, "")
+                                } else {
+                                    if (payload.payload!!.size == 0) {
+                                        ShareHolderStepActivity.start(context, 1, 0, "")
+                                    } else {
+                                        var project = ProjectBean()
+                                        project.name = ""
+                                        project.company_id = 0
+                                        ShareholderCreditActivity.start(context, project)
+                                    }
+                                }
+                            } else {
+                                ShareHolderStepActivity.start(context, 1, 0, "")
+                            }
+                        }, { e ->
+                            Trace.e(e)
+                            ShareHolderStepActivity.start(context, 1, 0, "")
+                        })
             }
             finish()
         }

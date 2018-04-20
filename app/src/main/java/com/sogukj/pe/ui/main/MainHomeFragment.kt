@@ -120,7 +120,31 @@ class MainHomeFragment : BaseFragment() {
         tv_zhengxin.setOnClickListener {
             var first = XmlDb.open(context).get("FIRST", "TRUE")
             if (first.equals("FALSE")) {
-                ShareHolderStepActivity.start(context, 1, 0, "")
+                SoguApi.getService(baseActivity!!.application)
+                        .showCreditList()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({ payload ->
+                            if (payload.isOk) {
+                                if (payload.payload == null) {
+                                    ShareHolderStepActivity.start(context, 1, 0, "")
+                                } else {
+                                    if (payload.payload!!.size == 0) {
+                                        ShareHolderStepActivity.start(context, 1, 0, "")
+                                    } else {
+                                        var project = ProjectBean()
+                                        project.name = ""
+                                        project.company_id = 0
+                                        ShareholderCreditActivity.start(context, project)
+                                    }
+                                }
+                            } else {
+                                ShareHolderStepActivity.start(context, 1, 0, "")
+                            }
+                        }, { e ->
+                            Trace.e(e)
+                            ShareHolderStepActivity.start(context, 1, 0, "")
+                        })
             } else if (first.equals("TRUE")) {
                 ShareHolderDescActivity.start(context, ProjectBean(), "OUTER")
                 XmlDb.open(context).set("FIRST", "FALSE")

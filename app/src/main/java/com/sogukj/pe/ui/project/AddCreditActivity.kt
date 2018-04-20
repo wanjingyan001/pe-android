@@ -80,13 +80,6 @@ class AddCreditActivity : BaseActivity(), View.OnClickListener {
                 } else {
                     nameEdt.setSelection(name.length)
                 }
-
-                if (status == 3) {
-                    reasonTxt.text = reason
-                    reasonTxt.visibility = View.VISIBLE
-                } else {
-                    reasonTxt.visibility = View.GONE
-                }
             }
             toolbar_title.text = "编辑信息"
             toolbar_menu.visibility = View.VISIBLE

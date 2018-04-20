@@ -11,6 +11,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
@@ -170,12 +171,14 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
 
         private val directorName = convertView.find<TextView>(R.id.directorName)
         private val directorPosition = convertView.find<TextView>(R.id.directorPosition)
-        private val inquireStatus = convertView.find<ImageView>(R.id.inquireStatus)
+        private val inquireStatus = convertView.find<ImageView>(R.id.inquireStatus)//失败
         private val phoneNumberTv = convertView.find<TextView>(R.id.phoneNumberTv)
         private val IDCardTv = convertView.find<TextView>(R.id.IDCardTv)
         private val companyTv = convertView.find<TextView>(R.id.companyTv)
         private val edit = convertView.find<ImageView>(R.id.edit)
-        private val number = convertView.find<TextView>(R.id.number)
+        private val number = convertView.find<TextView>(R.id.number)//失败
+        private val fail = convertView.find<FrameLayout>(R.id.fail)//失败
+        private val success = convertView.find<ImageView>(R.id.success)//成功
 
         override fun setData(view: View, data: CreditInfo.Item, position: Int) {
             directorName.text = data.name
@@ -197,6 +200,8 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
             }
             when (data.status) {
                 2 -> {
+                    success.visibility = View.GONE
+                    fail.visibility = View.VISIBLE
                     if (data.sum == null || data.sum == 0) {
                         number.visibility = View.GONE
                         inquireStatus.setImageResource(R.drawable.zhengxin_zhengchang)
@@ -207,8 +212,8 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
                     }
                 }
                 3 -> {
-                    number.visibility = View.GONE
-                    inquireStatus.setImageResource(R.drawable.zhengxin_chaxunshibai)
+                    fail.visibility = View.GONE
+                    success.setImageResource(R.drawable.zhengxin_chaxunshibai)
                 }
             }
             edit.setOnClickListener {
