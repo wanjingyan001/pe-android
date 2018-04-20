@@ -204,7 +204,9 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
                                 ProjectNewsActivity.start(context, "负面讯息", 1, project.company_id!!)
                             }
                         }
+                        neg_num.visibility = View.VISIBLE
                         yq_num.text = "${payload.payload!!.yu}条"
+                        yq_num.visibility = View.VISIBLE
                         if (payload.payload!!.yu == 0) {
                             yuqing.setOnClickListener(null)
                         } else {
@@ -673,7 +675,7 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
             7 -> ChangeRecordActivity.start(this@ProjectActivity, project)//变更记录
             6 -> InvestmentActivity.start(this@ProjectActivity, project)//对外投资
             5 -> KeyPersonalActivity.start(this@ProjectActivity, project)//主要人员
-            4 -> EquityStructureActivity.start(this@ProjectActivity, project)//股权结构
+            //4 -> EquityStructureActivity.start(this@ProjectActivity, project)//股权结构
             9 -> BranchListActivity.start(this@ProjectActivity, project)//分支机构
             10 -> CompanyInfo2Activity.start(this@ProjectActivity, project)//公司简介
 
@@ -718,6 +720,8 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
             58 -> ManageDataActivity.start(this@ProjectActivity, project)//投后管理
 
             59 -> ApproveListActivity.start(this@ProjectActivity, null, project.company_id)//审批历史
+
+            60 -> EquityListActivity.start(this@ProjectActivity, project)
 
             R.id.im -> {
                 createOrJoin()

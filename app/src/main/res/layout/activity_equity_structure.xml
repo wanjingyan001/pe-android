@@ -25,12 +25,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:visibility="gone"
                 tools:text="疑似实际控股权控制路径" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
+                android:visibility="gone"
                 android:orientation="horizontal">
 
                 <TextView
@@ -57,6 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="5dp"
+                android:visibility="gone"
                 android:orientation="horizontal">
 
                 <TextView

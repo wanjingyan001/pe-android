@@ -227,6 +227,25 @@ class FundEditActivity : ToolbarActivity() {
 
     var SELECT = 0x008
 
+    fun isZero(input: String? = null): String {
+        var retStr = ""
+        if (input == null) {
+            retStr = ""
+        } else {
+            try {
+                var inputStr = input.toDouble().toString()
+                if (inputStr == "0" || inputStr == "0.0" || inputStr == "0.00") {
+                    retStr = ""
+                } else {
+                    retStr = inputStr
+                }
+            } catch (e: Exception) {
+                retStr = ""
+            }
+        }
+        return retStr
+    }
+
     private fun getFundDetail(fundId: Int) {
         SoguApi.getService(application)
                 .getFundDetail(fundId)
@@ -238,14 +257,14 @@ class FundEditActivity : ToolbarActivity() {
                             Log.d(FundDetailActivity.TAG, Gson().toJson(this))
                             find<TextView>(R.id.administrator).setText(administrator)
                             find<TextView>(R.id.regTime).setText(regTime)
-                            find<EditText>(R.id.contributeSize).setText(contributeSize)
-                            find<EditText>(R.id.actualSize).setText(actualSize)
+                            find<EditText>(R.id.contributeSize).setText(isZero(contributeSize))
+                            find<EditText>(R.id.actualSize).setText(isZero(actualSize))
                             find<EditText>(R.id.duration).setText(duration)
                             find<EditText>(R.id.partners).setText(partners)
                             find<EditText>(R.id.mode).setText(mode)
                             find<EditText>(R.id.commission).setText(commission)
-                            find<EditText>(R.id.manageFees).setText(manageFees)
-                            find<EditText>(R.id.carry).setText(carry)
+                            find<EditText>(R.id.manageFees).setText(isZero(manageFees))
+                            find<EditText>(R.id.carry).setText(isZero(carry))
 
                             if (contributeSize.isNullOrEmpty()) {
                                 find<EditText>(R.id.contributeSize).setSelection(0)

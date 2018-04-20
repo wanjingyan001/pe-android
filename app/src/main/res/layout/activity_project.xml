@@ -298,7 +298,9 @@
                         android:layout_gravity="center"
                         android:layout_marginLeft="6dp"
                         android:background="@drawable/neg_yq_bg"
-                        android:padding="2dp"
+                        android:paddingLeft="2dp"
+                        android:paddingRight="2dp"
+                        android:visibility="invisible"
                         android:text="201条"
                         android:textColor="#ffff5858"
                         android:textSize="10sp" />
@@ -328,8 +330,10 @@
                         android:layout_gravity="center"
                         android:layout_marginLeft="6dp"
                         android:background="@drawable/neg_yq_bg"
-                        android:padding="2dp"
+                        android:paddingLeft="2dp"
+                        android:paddingRight="2dp"
                         android:text="201条"
+                        android:visibility="invisible"
                         android:textColor="#ffff5858"
                         android:textSize="10sp" />
                 </LinearLayout>

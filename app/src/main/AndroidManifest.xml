@@ -690,7 +690,8 @@
         <activity android:name=".ui.ScanResultActivity" />
         <activity android:name=".ui.project.ShareHolderStepActivity" />
         <activity android:name=".ui.approve.ApproveFillActivity" />
-        <activity android:name=".ui.approve.ApproveExamineActivity"></activity>
+        <activity android:name=".ui.approve.ApproveExamineActivity" />
+        <activity android:name=".ui.EquityListActivity"></activity>
     </application>
 
 </manifest>

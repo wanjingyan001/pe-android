@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
+import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -115,6 +116,24 @@ class FundDetailActivity : ToolbarActivity() {
         }
     }
 
+    fun isZero(input: String? = null): String {
+        var retStr = ""
+        if (input == null) {
+            retStr = ""
+        } else {
+            try {
+                var inputStr = input.toDouble().toString()
+                if (inputStr == "0" || inputStr == "0.0" || inputStr == "0.00") {
+                    retStr = ""
+                } else {
+                    retStr = inputStr
+                }
+            } catch (e: Exception) {
+                retStr = ""
+            }
+        }
+        return retStr
+    }
 
     private fun getFundDetail(fundId: Int) {
         SoguApi.getService(application)
@@ -127,18 +146,22 @@ class FundDetailActivity : ToolbarActivity() {
                             Log.d(TAG, Gson().toJson(this))
                             find<TextView>(R.id.administrator).text = administrator
                             find<TextView>(R.id.regTime).text = regTime
-                            find<TextView>(R.id.contributeSize).text = contributeSize
-                            find<TextView>(R.id.actualSize).text = actualSize
+                            find<TextView>(R.id.contributeSize).text = isZero(contributeSize)
+                            find<TextView>(R.id.actualSize).text = isZero(actualSize)
                             find<TextView>(R.id.duration).text = duration
                             find<TextView>(R.id.partners).text = partners
                             find<TextView>(R.id.mode).text = mode
                             find<TextView>(R.id.commission).text = commission
-                            find<TextView>(R.id.manageFees).text = manageFees
-                            find<TextView>(R.id.carry).text = carry
+                            find<TextView>(R.id.manageFees).text = isZero(manageFees)
+                            find<TextView>(R.id.carry).text = isZero(carry)
                             list?.let {
                                 adapter.dataList.clear()
                                 adapter.dataList.addAll(it)
                                 adapter.notifyDataSetChanged()
+                            }
+                            var lineCount = find<TextView>(R.id.commission).layout.lineCount
+                            if (lineCount > 1) {
+                                find<TextView>(R.id.commission).gravity = Gravity.LEFT
                             }
                         }
                     } else

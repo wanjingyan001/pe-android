@@ -241,14 +241,15 @@ interface SoguService {
             , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
     ): Observable<Payload<List<KeyPersonalBean>>>
 
+    //股权变动列表
     @FormUrlEncoded
-    @POST("/api/Stockinfo/equityRatio")
-    fun equityStructure(
-            @Field("company_id") company_id: Int
-            , @Field("page") page: Int = 1
-            , @Field("pageSize") pageSize: Int = 1000
-            , @Field(APPKEY_NAME) appkey: String = APPKEY_VALUE
-    ): Observable<Payload<EquityStructureBean>>
+    @POST("/api/StockInfo/equityList")
+    fun equityList(@Field("company_id") company_id: Int): Observable<Payload<ArrayList<EquityListBean>>>
+
+    //股权信息
+    @FormUrlEncoded
+    @POST("/api/StockInfo/equityInfo")
+    fun equityInfo(@Field("hid") hid: Int): Observable<Payload<StructureBean>>
 
     @FormUrlEncoded
     @POST("/api/Listinformation/Findhistoryrongzi")

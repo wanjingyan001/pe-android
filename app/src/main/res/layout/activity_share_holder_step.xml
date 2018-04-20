@@ -270,6 +270,7 @@
                 android:layout_marginTop="10dp"
                 android:background="@color/white"
                 android:padding="20dp"
+                android:scaleType="fitXY"
                 android:src="@drawable/down1" />
 
         </LinearLayout>

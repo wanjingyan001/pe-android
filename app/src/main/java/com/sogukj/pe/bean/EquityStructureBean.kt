@@ -13,10 +13,11 @@ class EquityBean : Serializable {
 }
 
 class StructureBean : Serializable {
-    var name: String? = null// 人或公司名
+    var id: Int? = null
+    var holder: String? = null
     var amount: String? = null// 认缴金额
     var percent: String? = null// 占股比例
-    var sh_type: String? = null// 股东类型 工商股东／十大股东
+    var pid: Int? = null
     var children: List<StructureBean>? = null// 子节点
 //    6	id；type； regCapital； parentName； actualHolding	Varchar	多余字段，无需考虑	这些字段是没有用的
 

@@ -358,6 +358,7 @@
                     android:layout_marginLeft="15dp"
                     android:layout_weight="1"
                     android:gravity="left"
+                    android:inputType="numberDecimal"
                     android:textColor="@color/text_1" />
 
             </LinearLayout>

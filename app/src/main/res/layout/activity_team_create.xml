@@ -61,7 +61,7 @@
                     android:layout_below="@+id/team_logo"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="15dp"
-                    android:text="项目工作组"
+                    android:text="群聊"
                     android:textColor="@color/text_1"
                     android:textSize="20sp" />
 

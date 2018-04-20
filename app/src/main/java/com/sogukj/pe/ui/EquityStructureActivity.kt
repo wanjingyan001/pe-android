@@ -11,6 +11,7 @@ import android.widget.TextView
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.bean.EquityListBean
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.bean.StructureBean
 import com.sogukj.pe.util.Trace
@@ -25,35 +26,43 @@ import java.text.SimpleDateFormat
  * Created by qinfei on 17/8/11.
  */
 class EquityStructureActivity : ToolbarActivity() {
-    lateinit var project: ProjectBean
+    lateinit var bean: EquityListBean
     val fmt = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        project = intent.getSerializableExtra(Extras.DATA) as ProjectBean
+        bean = intent.getSerializableExtra(Extras.DATA) as EquityListBean
         setContentView(R.layout.activity_equity_structure)
         setBack(true)
-        setTitle("股权结构")
+        setTitle(bean.title)
         SoguApi.getService(application)
-                .equityStructure(project.company_id!!)
+                .equityInfo(bean.hid!!)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
                         val data = payload.payload
                         data?.apply {
-                            tv_companyName.text = info?.companyName
-                            tv_controllerName.text = info?.controllerName
-                            tv_mainPercent.text = info?.percent
-
                             val llHeader = ll_node.findViewById(R.id.fl_header) as FrameLayout
                             val llChildren = ll_node.findViewById(R.id.ll_children) as LinearLayout
                             var tvName = ll_node.findViewById(R.id.tv_name) as TextView
-                            tvName.text = info?.companyName
+                            var tvPercent = ll_node.findViewById(R.id.tv_percent) as TextView
+                            var tvAmount = ll_node.findViewById(R.id.tv_amount) as TextView
+                            tvName.text = data.holder
+                            tvPercent.text = data.percent
+                            tvAmount.text = data.amount
                             val cbxHeader = ll_node.findViewById(R.id.cbx_header) as CheckBox
                             cbxHeader.setOnCheckedChangeListener { buttonView, isChecked ->
-                                llChildren.visibility = if (isChecked) View.VISIBLE else View.GONE
+                                if (isChecked) {
+                                    if (children == null || children?.size == 0) {
+                                        llChildren.visibility = View.GONE
+                                    } else {
+                                        llChildren.visibility = View.VISIBLE
+                                    }
+                                } else {
+                                    llChildren.visibility = View.GONE
+                                }
                             }
-                            structure?.apply {
+                            children?.apply {
                                 setChildren(llChildren, this, 0)
                             }
                         }
@@ -77,7 +86,15 @@ class EquityStructureActivity : ToolbarActivity() {
                 it.children?.apply {
                     val cbxHeader = node.findViewById(R.id.cbx_header) as CheckBox
                     cbxHeader.setOnCheckedChangeListener { buttonView, isChecked ->
-                        llChildren.visibility = if (isChecked) View.VISIBLE else View.GONE
+                        if (isChecked) {
+                            if (this == null || this?.size == 0) {
+                                llChildren.visibility = View.GONE
+                            } else {
+                                llChildren.visibility = View.VISIBLE
+                            }
+                        } else {
+                            llChildren.visibility = View.GONE
+                        }
                     }
                     setChildren(llChildren, this, index)
                 }
@@ -94,18 +111,15 @@ class EquityStructureActivity : ToolbarActivity() {
         var tvAmount = llHeader.findViewById(R.id.tv_amount) as TextView
 
         llContent.visibility = View.VISIBLE
-        tvName.text = data.name
+        tvName.text = data.holder
         tvPercent.text = data.percent
         tvAmount.text = data.amount
-
-
     }
 
-
     companion object {
-        fun start(ctx: Activity?, project: ProjectBean) {
+        fun start(ctx: Activity?, bean: EquityListBean) {
             val intent = Intent(ctx, EquityStructureActivity::class.java)
-            intent.putExtra(Extras.DATA, project)
+            intent.putExtra(Extras.DATA, bean)
             ctx?.startActivity(intent)
         }
     }
