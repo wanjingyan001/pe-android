@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.provider.MediaStore
 import android.text.*
 import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
@@ -204,52 +203,82 @@ class ApproveFillActivity : ToolbarActivity() {
         for ((k, v) in paramMap) {
             if (v == null) {
 
-            } else {
-                tmpMap.put(k, v)
+            } else {//先把value为null的去掉，然后去掉默认的value（有的为空，有的为0，有的为1）
+                if (k == "reasons" ||//签字事由  或者是出差请假的理由，默认为""
+                        k == "info" || //备注说明  默认为""
+                        k == "end_city" ||
+                        k == "time_range" ||
+                        k == "total_hours" ||
+                        k == "copier" ||
+                        k == "manager_opinion") {//投资经理意见  默认为""
+                    if ((v as String) != "") {
+                        tmpMap.put(k, v)
+                    }
+                } else if (k == "sealFile" || //签字文件  默认size=0
+                        k == "lawyerFile") {//律师意见文件 默认size=0
+                    if ((v as ArrayList<CustomSealBean.ValueBean>).size != 0) {
+                        tmpMap.put(k, v)
+                    }
+                } else if (k == "sms" || //是否发短信提醒审批人  默认为0
+                        k == "is_lawyer") {//是否需要律师意见  默认为0
+                    if ((v as Int) != 0) {
+                        tmpMap.put(k, v)
+                    }
+                } else if (k == "seal") {
+                    if (!judgeSealEmpty(v as ArrayList<CustomSealBean.ValueBean>)) {
+                        tmpMap.put(k, v)
+                    }
+                } else {
+                    tmpMap.put(k, v)
+                }
             }
         }
         paramMap.clear()
         paramMap.putAll(tmpMap)
 
+        if (paramMap.size == 0 || (paramMap.size == 1 && paramMap.containsKey("copier"))) {
+            super.onBackPressed()
+            return
+        }
         //签字申请
         //project_id          项目名称                2
         //reasons               签字事由                4
         //sealFile              签字文件                9
         //info                  备注说明                4
         //sms              是否发短信提醒审批人      5
-        if ((paramMap.get("reasons") == null || (paramMap.get("reasons") as String?).isNullOrEmpty()) &&
-                (paramMap.get("sealFile") == null || (paramMap.get("sealFile") as ArrayList<CustomSealBean.ValueBean>).size == 0) &&
-                (paramMap.get("info") == null || (paramMap.get("info") as String?).isNullOrEmpty()) &&
-                (paramMap.get("sms") == null || (paramMap.get("sms") as Int) == 0) &&
-                (paramMap.get("project_id") == null)) {//project_id 选填
-            super.onBackPressed()
-            return
-        }
+//        if ((paramMap.get("reasons") == null || (paramMap.get("reasons") as String?).isNullOrEmpty()) &&
+//                (paramMap.get("sealFile") == null || (paramMap.get("sealFile") as ArrayList<CustomSealBean.ValueBean>).size == 0) &&
+//                (paramMap.get("info") == null || (paramMap.get("info") as String?).isNullOrEmpty()) &&
+//                (paramMap.get("sms") == null || (paramMap.get("sms") as Int) == 0) &&
+//                (paramMap.get("project_id") == null)) {//project_id 选填
+//            super.onBackPressed()
+//            return
+//        }
         //用印申请
-        if ((paramMap.get("seal") == null || judgeSealEmpty(paramMap.get("seal") as ArrayList<CustomSealBean.ValueBean>)) &&
-                (paramMap.get("fund_id") == null) &&
-                (paramMap.get("reasons") == null || (paramMap.get("reasons") as String?).isNullOrEmpty()) &&
-                (paramMap.get("info") == null || (paramMap.get("info") as String?).isNullOrEmpty()) &&
-                (paramMap.get("manager_opinion") == null || (paramMap.get("manager_opinion") as String?).isNullOrEmpty()) &&
-                (paramMap.get("lawyerFile") == null || (paramMap.get("lawyerFile") as ArrayList<CustomSealBean.ValueBean>).size == 0) &&
-                (paramMap.get("is_lawyer") == null || (paramMap.get("is_lawyer") as Int) == 0) &&
-                (paramMap.get("sms") == null || (paramMap.get("sms") as Int) == 0) &&
-                (paramMap.get("sealFile") == null || (paramMap.get("sealFile") as ArrayList<CustomSealBean.ValueBean>).size == 0) &&
-                (paramMap.get("project_name") == null) &&
-                (paramMap.get("foreign_id") == null)) {
-            super.onBackPressed()
-            return
-        }
+//        if ((paramMap.get("seal") == null || judgeSealEmpty(paramMap.get("seal") as ArrayList<CustomSealBean.ValueBean>)) &&
+//                (paramMap.get("fund_id") == null) &&
+//                (paramMap.get("reasons") == null || (paramMap.get("reasons") as String?).isNullOrEmpty()) &&
+//                (paramMap.get("info") == null || (paramMap.get("info") as String?).isNullOrEmpty()) &&
+//                (paramMap.get("manager_opinion") == null || (paramMap.get("manager_opinion") as String?).isNullOrEmpty()) &&
+//                (paramMap.get("lawyerFile") == null || (paramMap.get("lawyerFile") as ArrayList<CustomSealBean.ValueBean>).size == 0) &&
+//                (paramMap.get("is_lawyer") == null || (paramMap.get("is_lawyer") as Int) == 0) &&
+//                (paramMap.get("sms") == null || (paramMap.get("sms") as Int) == 0) &&
+//                (paramMap.get("sealFile") == null || (paramMap.get("sealFile") as ArrayList<CustomSealBean.ValueBean>).size == 0) &&
+//                (paramMap.get("project_name") == null) &&
+//                (paramMap.get("foreign_id") == null)) {
+//            super.onBackPressed()
+//            return
+//        }
         //出差请假
-        if ((paramMap.get("end_city") == null || (paramMap.get("end_city") as String?).isNullOrEmpty()) &&
-                (paramMap.get("reasons") == null || (paramMap.get("reasons") as String?).isNullOrEmpty()) &&
-                (paramMap.get("time_range") == null || (paramMap.get("time_range") as String?).isNullOrEmpty()) &&
-                (paramMap.get("total_hours") == null || (paramMap.get("total_hours") as String?).isNullOrEmpty()) &&
-                //(paramMap.get("copier") == null || (paramMap.get("copier") as String?).isNullOrEmpty()) &&
-                (paramMap.get("leave_type") == null)) {
-            super.onBackPressed()
-            return
-        }
+//        if ((paramMap.get("end_city") == null || (paramMap.get("end_city") as String?).isNullOrEmpty()) &&
+//                (paramMap.get("reasons") == null || (paramMap.get("reasons") as String?).isNullOrEmpty()) &&
+//                (paramMap.get("time_range") == null || (paramMap.get("time_range") as String?).isNullOrEmpty()) &&
+//                (paramMap.get("total_hours") == null || (paramMap.get("total_hours") as String?).isNullOrEmpty()) &&
+        //(paramMap.get("copier") == null || (paramMap.get("copier") as String?).isNullOrEmpty()) &&//抄送人不处理
+//                (paramMap.get("leave_type") == null)) {
+//            super.onBackPressed()
+//            return
+//        }
         var mDialog = MaterialDialog.Builder(this@ApproveFillActivity)
                 .theme(Theme.LIGHT)
                 .canceledOnTouchOutside(true)
@@ -306,13 +335,14 @@ class ApproveFillActivity : ToolbarActivity() {
     private fun judgeIsLeaveBusiness(): Boolean {
         var isLeaveBusiness = false
         if (flagEdit) {
-            var paramsTitle = intent.getStringExtra(Extras.TITLE)
-            if (paramsTitle.equals("出差") || paramsTitle.equals("请假")) {
-                isLeaveBusiness = true
-            }
             if (isOneKey) {
                 var tmpId = XmlDb.open(context).get(Extras.ID, "").toInt()
                 if (tmpId == 10 || tmpId == 11) {
+                    isLeaveBusiness = true
+                }
+            } else {
+                var paramsTitle = intent.getStringExtra(Extras.TITLE)
+                if (paramsTitle.equals("出差") || paramsTitle.equals("请假")) {
                     isLeaveBusiness = true
                 }
             }
@@ -939,14 +969,15 @@ class ApproveFillActivity : ToolbarActivity() {
         convertView.setOnClickListener {
             var input_id = XmlDb.open(context).get(Extras.ID, "").toInt()
             if (flagEdit) {
-                var paramsTitle = intent.getStringExtra(Extras.TITLE)
-                if (paramsTitle.equals("出差")) {
-                    input_id = 10
-                } else if (paramsTitle.equals("请假")) {
-                    input_id = 11
-                }
                 if (isOneKey) {
                     input_id = XmlDb.open(context).get(Extras.ID, "").toInt()
+                } else {
+                    var paramsTitle = intent.getStringExtra(Extras.TITLE)
+                    if (paramsTitle.equals("出差")) {
+                        input_id = 10
+                    } else if (paramsTitle.equals("请假")) {
+                        input_id = 11
+                    }
                 }
             } else {
                 input_id = paramId!!
@@ -1143,19 +1174,20 @@ class ApproveFillActivity : ToolbarActivity() {
         if (startDate != null && endDate != null) {
             calculateTime(date_type!!)
         }
-        if (flagEdit == true) {
-            var paramsTitle = intent.getStringExtra(Extras.TITLE)
+        if (flagEdit) {
             var str = bean.value_map?.value as String?
-            if (paramsTitle.equals("出差")) {
-                etValue.text = "${str}天"
-            } else if (paramsTitle.equals("请假")) {
-                etValue.text = "${str}小时"
-            }
             if (isOneKey) {
                 var tmpId = XmlDb.open(context).get(Extras.ID, "").toInt()
                 if (tmpId == 10) {
                     etValue.text = "${str}天"
                 } else if (tmpId == 11) {
+                    etValue.text = "${str}小时"
+                }
+            } else {
+                var paramsTitle = intent.getStringExtra(Extras.TITLE)
+                if (paramsTitle.equals("出差")) {
+                    etValue.text = "${str}天"
+                } else if (paramsTitle.equals("请假")) {
                     etValue.text = "${str}小时"
                 }
             }
