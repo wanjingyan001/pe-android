@@ -39,6 +39,7 @@ import java.text.SimpleDateFormat
 /**
  * Created by qinfei on 17/10/18.
  */
+@Deprecated("被ApproveExamineActivity取代")
 class LeaveBusinessApproveActivity : ToolbarActivity() {
 
     lateinit var inflater: LayoutInflater
