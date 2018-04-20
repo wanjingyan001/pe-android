@@ -15,6 +15,7 @@ import com.ldf.calendar.view.Calendar
 import com.ldf.calendar.view.MonthPager
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.ScheduleBean
+import com.sogukj.pe.ui.approve.ApproveExamineActivity
 import com.sogukj.pe.ui.approve.SealApproveActivity
 import com.sogukj.pe.ui.approve.SignApproveActivity
 import com.sogukj.pe.ui.project.ProjectActivity
@@ -239,11 +240,13 @@ class ScheduleFragment : BaseFragment() {
                     }
                     3 -> {
                         //用印审批
-                        SealApproveActivity.start(activity, scheduleBean.data_id!!, "用印审批")
+                        //SealApproveActivity.start(activity, scheduleBean.data_id!!, "用印审批")
+                        ApproveExamineActivity.start(activity, scheduleBean.data_id!!, "用印审批")
                     }
                     4 -> {
                         //签字审批
-                        SignApproveActivity.start(activity, scheduleBean.data_id!!, "签字审批")
+                        //SignApproveActivity.start(activity, scheduleBean.data_id!!, "签字审批")
+                        ApproveExamineActivity.start(activity, scheduleBean.data_id!!, "签字审批")
                     }
                     5 -> {
                         //跟踪记录

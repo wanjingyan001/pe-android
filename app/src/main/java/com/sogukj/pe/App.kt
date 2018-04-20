@@ -25,6 +25,7 @@ import com.sogukj.pe.bean.NewsBean
 import com.sogukj.pe.ui.IM.SessionHelper
 import com.sogukj.pe.ui.IM.location.NimDemoLocationProvider
 import com.sogukj.pe.ui.LoginActivity
+import com.sogukj.pe.ui.approve.ApproveExamineActivity
 import com.sogukj.pe.ui.approve.LeaveBusinessApproveActivity
 import com.sogukj.pe.ui.approve.SealApproveActivity
 import com.sogukj.pe.ui.approve.SignApproveActivity
@@ -131,18 +132,22 @@ class App : MultiDexApplication() {
                         4 -> {
                             val approval_id = data.getInt("approval_id")
                             val is_mine = data.getInt("is_mine")
+                            var title = ""
                             if (data.has("qs") && data.getInt("qs") == 1) {
-                                SignApproveActivity.start(context, approval_id, is_mine, "签字审批")
+                                title = "签字审批"
+                                //SignApproveActivity.start(context, approval_id, is_mine, "签字审批")
                             } else if (data.has("qs") && data.getInt("qs") == 2) {
-                                var title = when (data.getInt("tid")) {
+                                title = when (data.getInt("tid")) {
                                     10 -> "出差"
                                     11 -> "请假"
                                     else -> ""
                                 }
-                                LeaveBusinessApproveActivity.start(context, approval_id, is_mine, title)
+                                //LeaveBusinessApproveActivity.start(context, approval_id, is_mine, title)
                             } else {
-                                SealApproveActivity.start(context, approval_id, is_mine, "用印审批")
+                                title = "用印审批"
+                                //SealApproveActivity.start(context, approval_id, is_mine, "用印审批")
                             }
+                            ApproveExamineActivity.start(context, approval_id, is_mine, title)
                         }
                         5 -> {
                             val weekId = data.getInt("week_id")

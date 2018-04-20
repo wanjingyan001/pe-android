@@ -19,6 +19,7 @@ import com.sogukj.pe.R
 import com.sogukj.pe.bean.ApproveFilterBean
 import com.sogukj.pe.bean.MessageBean
 import com.sogukj.pe.ui.SupportEmptyView
+import com.sogukj.pe.ui.approve.ApproveExamineActivity
 import com.sogukj.pe.ui.approve.LeaveBusinessApproveActivity
 import com.sogukj.pe.ui.approve.SealApproveActivity
 import com.sogukj.pe.ui.approve.SignApproveActivity
@@ -92,12 +93,13 @@ class MessageListActivity : ToolbarActivity() {
         adapter.onItemClick = { v, p ->
             val data = adapter.dataList.get(p)
             val is_mine = if (data.status == -1 || data.status == 4) 1 else 2
-            if (data.type == 2)
-                SealApproveActivity.start(this, data, is_mine)
-            else if (data.type == 3)
-                SignApproveActivity.start(this, data, is_mine)
-            else if (data.type == 1)
-                LeaveBusinessApproveActivity.start(this, data, is_mine)//出差  SealApproveActivity
+            ApproveExamineActivity.start(this, data, is_mine)
+//            if (data.type == 2)
+//                SealApproveActivity.start(this, data, is_mine)
+//            else if (data.type == 3)
+//                SignApproveActivity.start(this, data, is_mine)
+//            else if (data.type == 1)
+//                LeaveBusinessApproveActivity.start(this, data, is_mine)//出差  SealApproveActivity
         }
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = LinearLayoutManager.VERTICAL

@@ -165,6 +165,9 @@ class ApproveExamineActivity : ToolbarActivity() {
     fun initCS(list: ArrayList<UserBean>) {
         var adapter = MyAdapter(context, list)
         grid_chaosong_to.adapter = adapter
+        if (list.size == 0) {
+            chaosong_layout.visibility = View.GONE
+        }
     }
 
     private fun initButtons(click: Int?, state: Int?) {

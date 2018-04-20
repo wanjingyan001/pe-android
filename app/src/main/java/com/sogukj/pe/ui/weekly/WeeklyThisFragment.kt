@@ -42,6 +42,7 @@ import java.net.UnknownHostException
 import java.text.SimpleDateFormat
 import kotlin.collections.ArrayList
 import com.google.gson.JsonObject
+import com.sogukj.pe.ui.approve.ApproveExamineActivity
 import com.sogukj.pe.view.CircleImageView
 
 //import kotlinx.android.synthetic.main.layout_network_error.*
@@ -228,11 +229,13 @@ class WeeklyThisFragment : BaseFragment(), View.OnClickListener {
                         }
                         3 -> {
                             //用印审批
-                            SealApproveActivity.start(activity, weeklyData.data_id!!, "用印审批")
+                            //SealApproveActivity.start(activity, weeklyData.data_id!!, "用印审批")
+                            ApproveExamineActivity.start(activity, weeklyData.data_id!!, "用印审批")
                         }
                         4 -> {
                             //签字审批
-                            SignApproveActivity.start(activity, weeklyData.data_id!!, "签字审批")
+                            //SignApproveActivity.start(activity, weeklyData.data_id!!, "签字审批")
+                            ApproveExamineActivity.start(activity, weeklyData.data_id!!, "签字审批")
                         }
                         5 -> {
                             //跟踪记录
