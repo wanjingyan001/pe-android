@@ -40,6 +40,8 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import org.jetbrains.anko.collections.forEachWithIndex
 import org.jetbrains.anko.find
+import org.jetbrains.anko.imageResource
+import org.jetbrains.anko.textColor
 import java.io.File
 import java.io.FileOutputStream
 
@@ -117,7 +119,7 @@ class ApproveExamineActivity : ToolbarActivity() {
                         initFiles(payload.payload?.file_list)
                         initApprovers(payload.payload?.approve)
                         initSegments(payload.payload?.segment)
-                        initButtons(payload.payload?.click)
+                        initButtons(payload.payload?.click, payload.payload?.fixation?.state)
 
                         iv_state_agreed.visibility = View.GONE
                         iv_state_signed.visibility = View.GONE
@@ -137,6 +139,20 @@ class ApproveExamineActivity : ToolbarActivity() {
                                 iv_state_agreed.visibility = View.VISIBLE
                             }
                         }
+
+                        if (paramType == 1) {
+                            payload.payload?.copier?.apply {
+                                initCS(this)
+                            }
+                            part1.visibility = View.GONE
+                            part3.visibility = View.GONE
+                            if (status != null && status > 1) {
+                                iv_state_agreed.visibility = View.VISIBLE
+                                if (status == 5) {
+                                    iv_state_agreed.imageResource = R.drawable.ic_flow_state_chexiao
+                                }
+                            }
+                        }
                     } else {
                         showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }
@@ -146,7 +162,12 @@ class ApproveExamineActivity : ToolbarActivity() {
                 })
     }
 
-    private fun initButtons(click: Int?) {
+    fun initCS(list: ArrayList<UserBean>) {
+        var adapter = MyAdapter(context, list)
+        grid_chaosong_to.adapter = adapter
+    }
+
+    private fun initButtons(click: Int?, state: Int?) {
         btn_single.visibility = View.GONE
         ll_twins.visibility = View.GONE
         when (click) {
@@ -225,6 +246,60 @@ class ApproveExamineActivity : ToolbarActivity() {
                     btn_single.setOnClickListener {
                         showSignDialog()
                     }
+                } else if (paramType == 1) {
+                    ll_twins.visibility = View.VISIBLE
+                    if (leave_type == 10 || leave_type == 11) {
+                        btn_left.text = "修改"
+                        btn_right.text = "撤销"
+                    }
+                    btn_left.setOnClickListener {
+                        //LeaveBusinessActivity.start(context, true, paramId!!, paramTitle)
+                        ApproveFillActivity.start(context, true, -1, paramId!!, paramTitle)
+                    }
+                    btn_right.setOnClickListener {
+                        val inflate = LayoutInflater.from(this).inflate(R.layout.layout_input_dialog, null)
+                        val dialog = MaterialDialog.Builder(this)
+                                .customView(inflate, false)
+                                .cancelable(true)
+                                .build()
+                        dialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                        val title = inflate.find<TextView>(R.id.approval_comments_title)
+                        val commentInput = inflate.find<EditText>(R.id.approval_comments_input)
+                        val veto = inflate.find<TextView>(R.id.veto_comment)
+                        val confirm = inflate.find<TextView>(R.id.confirm_comment)
+                        commentInput.filters = Utils.getFilter(this)
+                        title.text = "请输入撤销理由（提交后会重新审核）"
+                        title.textSize = 16.toFloat()
+                        commentInput.hint = ""
+                        veto.text = "取消"
+                        confirm.text = "提交"
+                        veto.setOnClickListener {
+                            if (dialog.isShowing) {
+                                dialog.dismiss()
+                            }
+                        }
+                        confirm.setOnClickListener {
+                            if (dialog.isShowing) {
+                                dialog.dismiss()
+                            }
+                            SoguApi.getService(application)
+                                    .cancalLeave(paramId!!, commentInput.text.toString())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribeOn(Schedulers.io())
+                                    .subscribe({ payload ->
+                                        if (payload.isOk) {
+                                            showCustomToast(R.drawable.icon_toast_success, "撤销成功")
+                                            refresh()
+                                        } else {
+                                            showCustomToast(R.drawable.icon_toast_fail, payload.message)
+                                        }
+                                    }, { e ->
+                                        Trace.e(e)
+                                        showCustomToast(R.drawable.icon_toast_fail, "请求失败")
+                                    })
+                        }
+                        dialog.show()
+                    }
                 }
             }
             5 -> {
@@ -269,6 +344,44 @@ class ApproveExamineActivity : ToolbarActivity() {
                         }
                         showSignDialog(type)
                     }
+                } else if (paramType == 1) {
+                    btn_single.visibility = View.VISIBLE
+                    btn_single.text = "审批"
+                    btn_single.setOnClickListener {
+                        val inflate = LayoutInflater.from(this).inflate(R.layout.layout_input_dialog, null)
+                        val dialog = MaterialDialog.Builder(this)
+                                .customView(inflate, false)
+                                .cancelable(true)
+                                .build()
+                        dialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                        val commentInput = inflate.find<EditText>(R.id.approval_comments_input)
+                        val veto = inflate.find<TextView>(R.id.veto_comment)
+                        val confirm = inflate.find<TextView>(R.id.confirm_comment)
+                        val title = inflate.find<TextView>(R.id.approval_comments_title)
+                        commentInput.filters = Utils.getFilter(this)
+                        if (leave_type == 10 || leave_type == 11) {
+                            if (state == 2) {
+                                title.text = "是否同意撤销此${paramTitle}申请？"
+                            } else {
+                                title.text = "是否同意此${paramTitle}申请？"
+                            }
+                            veto.text = "不同意"
+                            commentInput.hint = ""
+                        }
+                        veto.setOnClickListener {
+                            if (dialog.isShowing) {
+                                dialog.dismiss()
+                            }
+                            showConfirmDialog(-1, commentInput.text.toString())
+                        }
+                        confirm.setOnClickListener {
+                            if (dialog.isShowing) {
+                                dialog.dismiss()
+                            }
+                            showConfirmDialog(1, commentInput.text.toString())
+                        }
+                        dialog.show()
+                    }
                 }
             }
             6 -> {
@@ -293,14 +406,24 @@ class ApproveExamineActivity : ToolbarActivity() {
                                 showCustomToast(R.drawable.icon_toast_fail, "请求失败")
                             })
                 }
-
-
+            }
+            7 -> {
+                btn_single.visibility = View.VISIBLE
+                btn_single.text = "修改"
+                btn_single.setOnClickListener {
+                    ApproveFillActivity.start(context, true, -1, paramId!!, paramTitle)
+                }
             }
         }
     }
 
     private fun showConfirmDialog(type: Int, text: String = "") {
-        val title = if (type == 1) "是否确认通过审批？" else "是否确认否决审批？"
+        var title = ""
+        if (leave_type == 10 || leave_type == 11) {
+            title = if (type == 1) "是否确认同意此${paramTitle}申请？" else "是否确认否决此${paramTitle}申请？"
+        } else {
+            title = if (type == 1) "是否确认通过审批？" else "是否确认否决审批？"
+        }
         val build = MaterialDialog.Builder(this)
                 .theme(Theme.LIGHT)
                 .customView(R.layout.layout_confirm_approve, false)
@@ -476,6 +599,54 @@ class ApproveExamineActivity : ToolbarActivity() {
                     }
                 }
             }
+        } else if (paramType == 1) {
+            approveList?.forEach { v ->
+                val convertView = inflater.inflate(R.layout.item_leave_business, null)
+                ll_approvers.addView(convertView)
+
+                val ivUser = convertView.findViewById(R.id.iv_user) as CircleImageView
+                val tvName = convertView.findViewById(R.id.tv_name) as TextView
+                val tvStatus = convertView.findViewById(R.id.tv_status) as TextView
+                val tvTime = convertView.findViewById(R.id.tv_time) as TextView
+                val tvContent = convertView.findViewById(R.id.tv_content) as TextView
+
+                tvName.text = v.name
+                tvTime.text = v.approval_time
+                if (null != v.approval_time || !TextUtils.isEmpty(v.approval_time)) {
+                    tvTime.visibility = View.VISIBLE
+                } else {
+                    tvTime.visibility = View.GONE
+                }
+                if (v.url.isNullOrEmpty()) {
+                    val ch = v.name?.first()
+                    ivUser.setChar(ch)
+                } else {
+                    Glide.with(context)
+                            .load(v.url)
+                            .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
+                            .into(ivUser)
+                }
+                //0待审批，1审批中，2审批通过，4审批通过，5已撤销
+                tvStatus.text = v.status_str
+                tvStatus.textColor = when (v.status) {//-1=>不通过，0=>待审批，1=>审批中，4=>审批通过
+                    -1 -> Color.parseColor("#ffff5858")
+                    0 -> Color.parseColor("#ffffa715")
+                    1 -> Color.parseColor("#ff4aaaf4")
+                    4 -> Color.parseColor("#50d59d")
+                    5 -> Color.parseColor("#d9d9d9")
+                    else -> Color.parseColor("#50d59d")
+                }
+                val buff = StringBuffer()
+                if (null != v.content) {
+                    val sval = v.content
+                    buff.append("<font color='#666666'>$sval</font><br/>")
+                }
+                tvContent.text = Html.fromHtml(buff.toString())
+                tvContent.visibility = View.GONE
+                if (null != v.content && !TextUtils.isEmpty(v.content)) {
+                    tvContent.visibility = View.VISIBLE
+                }
+            }
         }
     }
 
@@ -576,12 +747,16 @@ class ApproveExamineActivity : ToolbarActivity() {
     private fun initInfo(from: ApproveViewBean.FromBean?, relax: List<ApproveViewBean.ValueBean>?) {
         val buff = StringBuffer()
         if (null != from) {
-            if (paramType == 2) {
-                appendLine(buff, "用印类别", from.sp_type)
-            } else if (paramType == 3) {
-                appendLine(buff, "签字类别", from.sp_type)
+            if (paramType == 1) {
+                appendLine(buff, "所在部门", from.depart)
+            } else {
+                if (paramType == 2) {
+                    appendLine(buff, "用印类别", from.sp_type)
+                } else if (paramType == 3) {
+                    appendLine(buff, "签字类别", from.sp_type)
+                }
+                appendLine(buff, "提交时间", from.add_time)
             }
-            appendLine(buff, "提交时间", from.add_time)
         }
         relax?.forEach { v ->
             appendLine(buff, v.name, v.value)
