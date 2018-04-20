@@ -210,6 +210,7 @@ class ApproveFillActivity : ToolbarActivity() {
                         k == "time_range" ||
                         k == "total_hours" ||
                         k == "copier" ||
+                        k == "lawyer_opinion" ||
                         k == "manager_opinion") {//投资经理意见  默认为""
                     if ((v as String) != "") {
                         tmpMap.put(k, v)

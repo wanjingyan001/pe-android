@@ -81,7 +81,6 @@ class ApproveExamineActivity : ToolbarActivity() {
                 finish()
             }
         }
-        setContentView(R.layout.activity_seal_approve)
         setBack(true)
         title = paramTitle
 
@@ -89,7 +88,11 @@ class ApproveExamineActivity : ToolbarActivity() {
             signseal.visibility = View.VISIBLE
             leaveBusiness.visibility = View.GONE
         } else if (paramType == 1) {
-            signseal.visibility = View.GONE
+            signseal.visibility = View.VISIBLE
+            part1.visibility = View.GONE
+            part3.visibility = View.GONE
+            state_sign_confirm.visibility = View.GONE
+            appro_layout.visibility = View.GONE
             leaveBusiness.visibility = View.VISIBLE
         }
 
@@ -506,6 +509,10 @@ class ApproveExamineActivity : ToolbarActivity() {
     }
 
     private fun initApprovers(approveList: List<ApproverBean>?) {
+        if (approveList == null || approveList!!.size == 0) {
+            appro_layout.visibility = View.GONE
+            return
+        }
         ll_approvers_out.removeAllViews()
         if (null == approveList || approveList.isEmpty()) {
             part2.visibility = View.GONE
@@ -744,7 +751,9 @@ class ApproveExamineActivity : ToolbarActivity() {
         tv_name.text = fixation.name
         user_id = fixation.user_id
         tv_num.text = "审批编号:${fixation.number}"
-        leave_type = fixation.leaveType!!
+        fixation.leaveType?.apply {
+            leave_type = this
+        }
     }
 
     private fun initInfo(from: ApproveViewBean.FromBean?, relax: List<ApproveViewBean.ValueBean>?) {
