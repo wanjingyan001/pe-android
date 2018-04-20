@@ -689,7 +689,8 @@
         <activity android:name=".ui.news.MainNewsActivity" />
         <activity android:name=".ui.ScanResultActivity" />
         <activity android:name=".ui.project.ShareHolderStepActivity" />
-        <activity android:name=".ui.approve.ApproveFillActivity"></activity>
+        <activity android:name=".ui.approve.ApproveFillActivity" />
+        <activity android:name=".ui.approve.ApproveExamineActivity"></activity>
     </application>
 
 </manifest>
