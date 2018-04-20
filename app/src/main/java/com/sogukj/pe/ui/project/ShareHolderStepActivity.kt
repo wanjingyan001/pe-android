@@ -132,11 +132,13 @@ class ShareHolderStepActivity : ToolbarActivity(), View.OnClickListener {
                     if (!prepare()) {
                         return
                     }
+                    enter.isEnabled = false
                     SoguApi.getService(application)
                             .queryCreditInfo(params)
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribeOn(Schedulers.io())
                             .subscribe({ payload ->
+                                enter.isEnabled = true
                                 if (payload.isOk) {
 //                                    val intent = Intent()
 //                                    intent.putExtra(Extras.DATA, payload.payload)
@@ -150,6 +152,7 @@ class ShareHolderStepActivity : ToolbarActivity(), View.OnClickListener {
                                     showCustomToast(R.drawable.icon_toast_fail, payload.message)
                                 }
                             }, { e ->
+                                enter.isEnabled = true
                                 Trace.e(e)
                                 showCustomToast(R.drawable.icon_toast_fail, "查询失败")
                             })

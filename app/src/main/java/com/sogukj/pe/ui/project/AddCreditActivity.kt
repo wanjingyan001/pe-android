@@ -161,11 +161,13 @@ class AddCreditActivity : BaseActivity(), View.OnClickListener {
         if (!prepare()) {
             return
         }
+        save.isEnabled = false
         SoguApi.getService(application)
                 .queryCreditInfo(params)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
+                    save.isEnabled = true
                     if (payload.isOk) {
                         val intent = Intent()
                         intent.putExtra(Extras.DATA, payload.payload)
@@ -175,6 +177,7 @@ class AddCreditActivity : BaseActivity(), View.OnClickListener {
                         showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }
                 }, { e ->
+                    save.isEnabled = true
                     Trace.e(e)
                     showCustomToast(R.drawable.icon_toast_fail, "查询失败")
                 })
