@@ -37,8 +37,8 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_gravity="left"
-                    android:gravity="center"
                     android:layout_marginLeft="15dp"
+                    android:gravity="center"
                     android:src="@drawable/sogu_ic_back" />
 
                 <TextView
@@ -58,24 +58,39 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="right"
                     android:gravity="center"
-                    android:layout_marginRight="10dp"
                     android:orientation="horizontal">
 
-                    <ImageButton
+                    <FrameLayout
                         android:id="@+id/fb_add"
-                        android:layout_width="40dp"
+                        android:layout_width="45dp"
                         android:layout_height="40dp"
-                        android:padding="10dp"
-                        android:src="@drawable/tj_main"
-                        android:background="@color/transparent"/>
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp">
 
-                    <ImageButton
+                        <ImageButton
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_gravity="right"
+                            android:background="@drawable/tj_main" />
+
+                    </FrameLayout>
+
+                    <FrameLayout
                         android:id="@+id/fb_search"
-                        android:layout_width="40dp"
+                        android:layout_width="45dp"
                         android:layout_height="40dp"
-                        android:padding="10dp"
-                        android:src="@drawable/ic_search"
-                        android:background="@color/transparent"/>
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp">
+
+                        <ImageButton
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="20dp"
+                            android:background="@drawable/ic_search" />
+
+                    </FrameLayout>
                 </LinearLayout>
             </android.support.v7.widget.Toolbar>
         </LinearLayout>
