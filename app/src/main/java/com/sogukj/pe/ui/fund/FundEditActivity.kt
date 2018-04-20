@@ -56,7 +56,7 @@ class FundEditActivity : ToolbarActivity() {
             R.id.action_mark -> {
 
                 var map = HashMap<String, Any?>()
-                map.put("fund_id", data.id)
+                map.put("id", data.id)
                 //map.put("administrator", administrator.text.toString())
                 map.put("regTime", regTime.text.toString())
 
