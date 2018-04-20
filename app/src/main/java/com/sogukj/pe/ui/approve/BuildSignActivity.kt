@@ -43,9 +43,7 @@ import kotlin.collections.ArrayList
 import kotlin.collections.component1
 import kotlin.collections.component2
 
-/**
- * Created by qinfei on 17/10/18.
- */
+@Deprecated("被ApproveFillActivity取代")
 class BuildSignActivity : ToolbarActivity() {
 
     val gson = Gson()

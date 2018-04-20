@@ -42,7 +42,7 @@ import org.jetbrains.anko.find
 import java.text.SimpleDateFormat
 import kotlinx.android.synthetic.main.toolbar.*
 
-
+@Deprecated("被ApproveFillActivity取代")
 class LeaveBusinessActivity : ToolbarActivity() {
 
     lateinit var inflater: LayoutInflater

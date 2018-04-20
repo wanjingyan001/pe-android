@@ -38,9 +38,7 @@ import okhttp3.RequestBody
 import org.jetbrains.anko.find
 import java.io.File
 
-/**
- * Created by qinfei on 17/10/18.
- */
+@Deprecated("被ApproveFillActivity取代")
 class BuildSealActivity : ToolbarActivity() {
 
     val gson = Gson()
@@ -73,7 +71,7 @@ class BuildSealActivity : ToolbarActivity() {
         }
         if (paramId == -1 || paramType == -1) {
 //            showToast("参数错误")
-            showCustomToast(R.drawable.icon_toast_fail,"参数错误")
+            showCustomToast(R.drawable.icon_toast_fail, "参数错误")
             finish()
         }
         setContentView(R.layout.activity_build_seal)
@@ -135,7 +133,7 @@ class BuildSealActivity : ToolbarActivity() {
                 doConfirm()
             } else {
 //                showToast("请填写完整后再提交")
-                showCustomToast(R.drawable.icon_toast_common,"请填写完整后再提交")
+                showCustomToast(R.drawable.icon_toast_common, "请填写完整后再提交")
             }
         }
         toolbar_menu.setImageResource(R.drawable.copy)
@@ -291,17 +289,17 @@ class BuildSealActivity : ToolbarActivity() {
                     .subscribe({ payload ->
                         if (payload.isOk) {
 //                            showToast("草稿提交成功")
-                            showCustomToast(R.drawable.icon_toast_success,"草稿保存成功")
+                            showCustomToast(R.drawable.icon_toast_success, "草稿保存成功")
                             handler.postDelayed({
                                 super.onBackPressed()
-                            },2000)
+                            }, 2000)
                         } else {
                             showCustomToast(R.drawable.icon_toast_fail, payload.message)
                         }
                     }, { e ->
                         Trace.e(e)
 //                        showToast("草稿提交失败")
-                        showCustomToast(R.drawable.icon_toast_fail,"草稿保存失败")
+                        showCustomToast(R.drawable.icon_toast_fail, "草稿保存失败")
                     })
         }
     }
@@ -380,7 +378,7 @@ class BuildSealActivity : ToolbarActivity() {
     }
 
     fun doConfirm() {
-        if(isOneKey){
+        if (isOneKey) {
             flagEdit = false
             paramId = XmlDb.open(context).get(Extras.ID, "").toInt()
         }
@@ -403,20 +401,20 @@ class BuildSealActivity : ToolbarActivity() {
                     .subscribe({ payload ->
                         if (payload.isOk) {
 //                            showToast("提交成功")
-                            showCustomToast(R.drawable.icon_toast_success,"提交成功")
+                            showCustomToast(R.drawable.icon_toast_success, "提交成功")
                             handler.postDelayed({
                                 val intent = Intent()
                                 intent.putExtra(Extras.ID, payload.payload!!)
                                 setResult(Activity.RESULT_OK, intent)
                                 finish()
-                            },2000)
+                            }, 2000)
                         } else {
                             showCustomToast(R.drawable.icon_toast_fail, payload.message)
                         }
                     }, { e ->
                         Trace.e(e)
 //                        showToast("提交失败")
-                        showCustomToast(R.drawable.icon_toast_fail,"提交失败")
+                        showCustomToast(R.drawable.icon_toast_fail, "提交失败")
                     })
         } else {
             builder.add("template_id", "${paramId}")
@@ -435,17 +433,17 @@ class BuildSealActivity : ToolbarActivity() {
                     .subscribe({ payload ->
                         if (payload.isOk) {
 //                            showToast("提交成功")
-                            showCustomToast(R.drawable.icon_toast_success,"提交成功")
+                            showCustomToast(R.drawable.icon_toast_success, "提交成功")
                             handler.postDelayed({
                                 finish()
-                            },2000)
+                            }, 2000)
                         } else {
                             showCustomToast(R.drawable.icon_toast_fail, payload.message)
                         }
                     }, { e ->
                         Trace.e(e)
 //                        showToast("提交失败")
-                        showCustomToast(R.drawable.icon_toast_fail,"提交失败")
+                        showCustomToast(R.drawable.icon_toast_fail, "提交失败")
                     })
         }
     }
@@ -814,7 +812,7 @@ class BuildSealActivity : ToolbarActivity() {
                     .subscribe({ payload ->
                         if (payload.isOk && payload.payload != null) {
 //                            showToast("上传成功")
-                            showCustomToast(R.drawable.icon_toast_success,"上传成功")
+                            showCustomToast(R.drawable.icon_toast_success, "上传成功")
                             imagesBean.value_list?.add(payload.payload!!)
                             refreshImages(imagesBean, imagesView)
                         } else {
@@ -823,7 +821,7 @@ class BuildSealActivity : ToolbarActivity() {
                     }, { e ->
                         Trace.e(e)
 //                        showToast("上传失败")
-                        showCustomToast(R.drawable.icon_toast_fail,"上传失败")
+                        showCustomToast(R.drawable.icon_toast_fail, "上传失败")
                     })
         }
     }
@@ -920,7 +918,7 @@ class BuildSealActivity : ToolbarActivity() {
                     .subscribe({ payload ->
                         if (payload.isOk && payload.payload != null) {
 //                            showToast("上传成功")
-                            showCustomToast(R.drawable.icon_toast_success,"上传成功")
+                            showCustomToast(R.drawable.icon_toast_success, "上传成功")
                             filesBean?.value_list?.add(payload.payload!!)
                             refreshFiles(filesBean!!, filesView!!)
                         } else
@@ -928,7 +926,7 @@ class BuildSealActivity : ToolbarActivity() {
                     }, { e ->
                         Trace.e(e)
 //                        showToast("上传失败")
-                        showCustomToast(R.drawable.icon_toast_fail,"上传失败")
+                        showCustomToast(R.drawable.icon_toast_fail, "上传失败")
                         hideProgress()
                     }, {
                         hideProgress()
