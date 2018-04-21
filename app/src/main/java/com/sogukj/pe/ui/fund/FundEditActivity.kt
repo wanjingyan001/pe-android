@@ -266,11 +266,11 @@ class FundEditActivity : ToolbarActivity() {
                             find<EditText>(R.id.manageFees).setText(isZero(manageFees))
                             find<EditText>(R.id.carry).setText(isZero(carry))
 
-                            if (contributeSize.isNullOrEmpty()) {
-                                find<EditText>(R.id.contributeSize).setSelection(0)
-                            } else {
-                                find<EditText>(R.id.contributeSize).setSelection(contributeSize!!.length)
-                            }
+//                            if (contributeSize.isNullOrEmpty()) {
+//                                find<EditText>(R.id.contributeSize).setSelection(0)
+//                            } else {
+//                                find<EditText>(R.id.contributeSize).setSelection(contributeSize!!.length)
+//                            }
                             list?.let {
                                 adapter.dataList.addAll(it)
 
