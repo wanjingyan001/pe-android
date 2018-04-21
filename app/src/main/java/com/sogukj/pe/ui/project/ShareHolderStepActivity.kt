@@ -14,6 +14,7 @@ import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.CustomSealBean
+import com.sogukj.pe.bean.MessageEvent
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.ui.approve.ListSelectorActivity
 import com.sogukj.pe.util.Trace
@@ -23,6 +24,7 @@ import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_share_holder_step.*
+import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.backgroundResource
 import org.jetbrains.anko.find
 
@@ -141,10 +143,25 @@ class ShareHolderStepActivity : ToolbarActivity(), View.OnClickListener {
                             .subscribe({ payload ->
                                 enter.isEnabled = true
                                 if (payload.isOk) {
+                                    var item = payload.payload
+
                                     var project = ProjectBean()
                                     project.name = intent.getStringExtra(Extras.NAME)
                                     project.company_id = intent.getIntExtra(Extras.ID, 0)
-                                    ShareholderCreditActivity.start(this@ShareHolderStepActivity, project)
+                                    //ShareholderCreditActivity.start(this@ShareHolderStepActivity, project)
+                                    //finish()
+                                    //是否有ShareholderCreditActivity。有就发送，没有就删除step1，然后创建
+                                    ActivityHelper.removeStep1()
+                                    if (ActivityHelper.hasCreditListActivity()) {
+                                        //EventBus.getDefault().postSticky(MessageEvent(item))
+                                        for (activity in ActivityHelper.getActivityList()) {
+                                            if (activity is ShareholderCreditActivity) {
+                                                (activity as ShareholderCreditActivity).insert(item!!)
+                                            }
+                                        }
+                                    } else {
+                                        ShareholderCreditActivity.start(this@ShareHolderStepActivity, project)
+                                    }
                                     finish()
                                 } else {
                                     showCustomToast(R.drawable.icon_toast_fail, payload.message)

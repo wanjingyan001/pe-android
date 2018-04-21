@@ -56,7 +56,7 @@ class EquityListActivity : ToolbarActivity() {
         })
         val layoutManager = LinearLayoutManager(context)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
-        list.addItemDecoration(SpaceItemDecoration(Utils.dpToPx(context, 10)))
+        //list.addItemDecoration(SpaceItemDecoration(Utils.dpToPx(context, 10)))
         list.layoutManager = layoutManager
         list.adapter = adapter
 

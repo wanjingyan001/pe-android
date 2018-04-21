@@ -30,6 +30,9 @@ import com.sogukj.util.XmlDb
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_shareholder_credit.*
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.find
 
 class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
@@ -43,6 +46,20 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
             val intent = Intent(ctx, ShareholderCreditActivity::class.java)
             intent.putExtra(Extras.DATA, project)
             ctx?.startActivity(intent)
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this)
         }
     }
 
@@ -304,5 +321,35 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
                 mAdapter.notifyDataSetChanged()
             }
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    fun onMessageReceive(item: CreditInfo.Item) {
+        mAdapter.dataList.add(0, item)
+        mAdapter.notifyDataSetChanged()
+        iv_empty.visibility = if (mAdapter.dataList.isEmpty()) View.VISIBLE else View.GONE
+        EventBus.getDefault().removeAllStickyEvents()
+    }
+
+    @Subscribe(threadMode = ThreadMode.BACKGROUND, sticky = true)
+    fun onMessageReceive111(item: CreditInfo.Item) {
+        var a = 1
+    }
+
+    @Subscribe(threadMode = ThreadMode.POSTING, sticky = true)
+    fun onMessageReceive111111(item: CreditInfo.Item) {
+        var a = 1
+    }
+
+    @Subscribe(threadMode = ThreadMode.ASYNC, sticky = true)
+    fun onMessageReceive111222(item: CreditInfo.Item) {
+        var a = 1
+    }
+
+    //不知道为什么EventBus失效
+    public fun insert(item: CreditInfo.Item) {
+        mAdapter.dataList.add(0, item)
+        mAdapter.notifyDataSetChanged()
+        iv_empty.visibility = if (mAdapter.dataList.isEmpty()) View.VISIBLE else View.GONE
     }
 }

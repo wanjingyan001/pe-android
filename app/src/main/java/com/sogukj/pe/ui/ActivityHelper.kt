@@ -1,6 +1,7 @@
 package com.framework.base
 
 import com.sogukj.pe.ui.project.ShareHolderStepActivity
+import com.sogukj.pe.ui.project.ShareholderCreditActivity
 import java.util.*
 
 /**
@@ -39,5 +40,18 @@ object ActivityHelper {
                 activity.finish()
             }
         }
+    }
+
+    fun hasCreditListActivity(): Boolean {
+        for (activity in activities) {
+            if (activity is ShareholderCreditActivity) {
+                return true
+            }
+        }
+        return false
+    }
+
+    fun getActivityList(): ArrayList<BaseActivity> {
+        return activities
     }
 }
