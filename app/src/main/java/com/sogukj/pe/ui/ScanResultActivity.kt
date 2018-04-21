@@ -22,10 +22,11 @@ class ScanResultActivity : BaseActivity() {
 
         toolbar_back.setOnClickListener {
             finish()
+            overridePendingTransition(0,R.anim.activity_out)
         }
 
         cancel.setOnClickListener {
-            finish()
+            overridePendingTransition(0,R.anim.activity_out)
         }
     }
 }

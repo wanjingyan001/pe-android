@@ -363,6 +363,7 @@ class MainMsgFragment : BaseFragment() {
             val scanResult = bundle!!.getString("result")
             Log.e("11111111111", scanResult)
             ScanResultActivity.start(baseActivity)
+            baseActivity?.overridePendingTransition(R.anim.activity_in,0)
             add_layout.visibility = View.GONE
         } else if (requestCode == 0x789) {
             loadHead()

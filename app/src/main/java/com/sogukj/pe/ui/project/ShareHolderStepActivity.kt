@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.view.Gravity
 import android.view.View
 import android.widget.EditText
+import com.framework.base.ActivityHelper
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
@@ -127,7 +128,7 @@ class ShareHolderStepActivity : ToolbarActivity(), View.OnClickListener {
             R.id.enter -> {
                 if (step == 1) {
                     ShareHolderStepActivity.start(context, 2, selectId, companyName.text.toString())
-                    finish()
+                    //ActivityHelper已添加
                 } else if (step == 2) {
                     if (!prepare()) {
                         return
@@ -140,14 +141,15 @@ class ShareHolderStepActivity : ToolbarActivity(), View.OnClickListener {
                             .subscribe({ payload ->
                                 enter.isEnabled = true
                                 if (payload.isOk) {
-//                                    val intent = Intent()
-//                                    intent.putExtra(Extras.DATA, payload.payload)
-//                                    setResult(Extras.RESULTCODE, intent)
                                     var project = ProjectBean()
                                     project.name = intent.getStringExtra(Extras.NAME)
                                     project.company_id = intent.getIntExtra(Extras.ID, 0)
                                     ShareholderCreditActivity.start(this@ShareHolderStepActivity, project)
                                     finish()
+                                    if (ActivityHelper.curActivity is ShareHolderStepActivity) {
+                                        var activity = ActivityHelper.curActivity
+                                        activity!!.finish()
+                                    }
                                 } else {
                                     showCustomToast(R.drawable.icon_toast_fail, payload.message)
                                 }

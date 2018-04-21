@@ -52,6 +52,7 @@ class SecondaryActivity : BaseActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_secondary)
         Utils.setWindowStatusBarColor(this, R.color.white)
+        toolbar_back.visibility = View.VISIBLE
 
         type = intent.getIntExtra(Extras.TYPE, -1)
         info = intent.getSerializableExtra(Extras.DATA) as SensitiveInfo

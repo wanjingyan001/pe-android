@@ -244,6 +244,7 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
                 }
                 3 -> {
                     fail.visibility = View.GONE
+                    success.visibility = View.VISIBLE
                     success.setImageResource(R.drawable.zhengxin_chaxunshibai)
                 }
             }
@@ -277,6 +278,7 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
                 var bean = this.getSerializableExtra(Extras.DATA) as CreditInfo.Item
                 mAdapter.dataList.add(bean)
                 mAdapter.notifyDataSetChanged()
+                iv_empty.visibility = if (mAdapter.dataList.isEmpty()) View.VISIBLE else View.GONE
             }
         } else if (requestCode == 0x002) {
             data?.apply {

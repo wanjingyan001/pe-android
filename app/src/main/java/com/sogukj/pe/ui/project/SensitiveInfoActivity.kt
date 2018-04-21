@@ -104,10 +104,10 @@ class SensitiveInfoActivity : BaseActivity(), View.OnClickListener {
                                 }
                             }
                             this.court?.item?.let {
-                                setInfo(courtNoticeCount, it.fygg != 0, "${it.fygg}条记录")
-                                setInfo(courtroomtNoticeCount, it.ktgg != 0, "${it.ktgg}条记录")
-                                setInfo(refereeDocumentsCount, it.cpws != 0, "${it.cpws}条记录")
-                                setInfo(executiveBulletinCount, it.zxgg != 0, "${it.zxgg}条记录")
+                                setInfo(courtNoticeCount, it.fygg?.num != null && it.fygg?.num != 0, "${it.fygg?.num}条记录")
+                                setInfo(courtroomtNoticeCount, it.ktgg?.num != null && it.zxgg?.num != 0, "${it.ktgg?.num}条记录")
+                                setInfo(refereeDocumentsCount, it.cpws?.num != null && it.zxgg?.num != 0, "${it.cpws?.num}条记录")
+                                setInfo(executiveBulletinCount, it.zxgg?.num != null && it.zxgg?.num != 0, "${it.zxgg?.num}条记录")
                                 recordNumber2.setOnClickListener(this@SensitiveInfoActivity)
                             }
                             this.dishonest?.let { setLostList(it) }
@@ -117,6 +117,7 @@ class SensitiveInfoActivity : BaseActivity(), View.OnClickListener {
                         showCustomToast(R.drawable.icon_toast_fail, payload.message)
                     }
                 }, { e ->
+                    showCustomToast(R.drawable.icon_toast_fail, "数据加载出错")
                     Trace.e(e)
                 })
 
@@ -172,7 +173,7 @@ class SensitiveInfoActivity : BaseActivity(), View.OnClickListener {
      * 危险身份
      */
     private fun setDangerousStatus(crime: SensitiveInfo.Crime) {
-        if (crime.checkCode.isNullOrEmpty()) {
+        if (crime.checkCode.isNullOrEmpty() || crime.checkCode == "0") {
             identity_status.text = "正常"
             identity_status.background = resources.getDrawable(R.drawable.bg_shareholder_green)
             identity_status.textColor = Color.parseColor("#50D59D")
@@ -219,12 +220,12 @@ class SensitiveInfoActivity : BaseActivity(), View.OnClickListener {
                 showCustomToast(R.drawable.icon_toast_common, "重新加载数据中")
                 doRequest()
             }
-//            R.id.courtNoticeCount -> SecondaryActivity.start(this, COURTNOTICE, info, data.id)
-//            R.id.courtroomtNoticeCount -> SecondaryActivity.start(this, COURTROOMT, info, data.id)
-//            R.id.refereeDocumentsCount -> SecondaryActivity.start(this, REFEREEDOCUMENTS, info, data.id)
-//            R.id.executiveBulletinCount -> SecondaryActivity.start(this, EXECUTIVEBULLETIN, info, data.id)
-//            R.id.recordNumber2 -> SecondaryActivity.start(this, LOSSCREDIT, info, data.id)
-//            R.id.toDetail -> SecondaryActivity.start(this, CASEDETEIL, info, data.id)
+            R.id.courtNoticeCount -> SecondaryActivity.start(this, COURTNOTICE, info, data.id)
+            R.id.courtroomtNoticeCount -> SecondaryActivity.start(this, COURTROOMT, info, data.id)
+            R.id.refereeDocumentsCount -> SecondaryActivity.start(this, REFEREEDOCUMENTS, info, data.id)
+            R.id.executiveBulletinCount -> SecondaryActivity.start(this, EXECUTIVEBULLETIN, info, data.id)
+            R.id.recordNumber2 -> SecondaryActivity.start(this, LOSSCREDIT, info, data.id)
+        //R.id.toDetail -> SecondaryActivity.start(this, CASEDETEIL, info, data.id)
         }
     }
 

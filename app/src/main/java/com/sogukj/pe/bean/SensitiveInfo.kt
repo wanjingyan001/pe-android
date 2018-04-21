@@ -55,10 +55,22 @@ class SensitiveInfo : Serializable {
         var item = Item()//详情
 
         inner class Item : Serializable {
-            var cpws = 0//裁判文书
-            var zxgg = 0//执行公告
-            var ktgg = 0//开庭公告
-            var fygg = 0//法院公告
+            var cpws: SubItem? = null//裁判文书
+            var zxgg: SubItem? = null//执行公告
+            var ktgg: SubItem? = null//开庭公告
+            var fygg: SubItem? = null//法院公告
+
+            inner class SubItem : Serializable {
+                var num = 0
+                var value: ArrayList<Cell>? = null
+
+                inner class Cell : Serializable {
+                    var title: String? = null
+                    var sortTime: String? = null
+                    var caseCause: String? = null
+                    var judgeResult: String? = null
+                }
+            }
         }
     }
 
