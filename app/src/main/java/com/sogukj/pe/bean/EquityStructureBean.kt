@@ -14,7 +14,7 @@ class EquityBean : Serializable {
 
 class StructureBean : Serializable {
     var id: Int? = null
-    var holder: String? = null
+    var name: String? = null
     var amount: String? = null// 认缴金额
     var percent: String? = null// 占股比例
     var pid: Int? = null

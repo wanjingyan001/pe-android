@@ -85,6 +85,7 @@
             android:layout_margin="3dp"
             android:background="@null"
             android:button="@null"
+            android:checked="true"
             android:drawableLeft="@drawable/ic_check_expand"
             android:drawablePadding="5dp"
             android:paddingLeft="10dp"

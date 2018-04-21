@@ -20,6 +20,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_equity_structure.*
 import kotlinx.android.synthetic.main.item_equity_structure.*
+import kotlinx.android.synthetic.main.toolbar.*
 import java.text.SimpleDateFormat
 
 /**
@@ -47,20 +48,25 @@ class EquityStructureActivity : ToolbarActivity() {
                             var tvName = ll_node.findViewById(R.id.tv_name) as TextView
                             var tvPercent = ll_node.findViewById(R.id.tv_percent) as TextView
                             var tvAmount = ll_node.findViewById(R.id.tv_amount) as TextView
-                            tvName.text = data.holder
+                            tvName.text = data.name
                             tvPercent.text = data.percent
                             tvAmount.text = data.amount
-                            val cbxHeader = ll_node.findViewById(R.id.cbx_header) as CheckBox
-                            cbxHeader.setOnCheckedChangeListener { buttonView, isChecked ->
-                                if (isChecked) {
-                                    if (children == null || children?.size == 0) {
-                                        llChildren.visibility = View.GONE
-                                    } else {
-                                        llChildren.visibility = View.VISIBLE
-                                    }
-                                } else {
-                                    llChildren.visibility = View.GONE
-                                }
+//                            val cbxHeader = ll_node.findViewById(R.id.cbx_header) as CheckBox
+//                            cbxHeader.setOnCheckedChangeListener { buttonView, isChecked ->
+//                                if (isChecked) {
+//                                    if (children == null || children?.size == 0) {
+//                                        llChildren.visibility = View.GONE
+//                                    } else {
+//                                        llChildren.visibility = View.VISIBLE
+//                                    }
+//                                } else {
+//                                    llChildren.visibility = View.GONE
+//                                }
+//                            }
+                            if (children == null || children?.size == 0) {
+                                llChildren.visibility = View.GONE
+                            } else {
+                                llChildren.visibility = View.VISIBLE
                             }
                             children?.apply {
                                 setChildren(llChildren, this, 0)
@@ -70,7 +76,10 @@ class EquityStructureActivity : ToolbarActivity() {
                         showCustomToast(R.drawable.icon_toast_fail, payload.message)
                 }, { e ->
                     Trace.e(e)
+                    showCustomToast(R.drawable.icon_toast_fail, "查询失败")
                 })
+
+        toolbar_menu.visibility = View.VISIBLE
     }
 
     fun setChildren(llChildren: LinearLayout, dataList: List<StructureBean>, index: Int) {
@@ -84,17 +93,22 @@ class EquityStructureActivity : ToolbarActivity() {
             setHeader(llHeader, it, index)
             if (index <= 3)
                 it.children?.apply {
-                    val cbxHeader = node.findViewById(R.id.cbx_header) as CheckBox
-                    cbxHeader.setOnCheckedChangeListener { buttonView, isChecked ->
-                        if (isChecked) {
-                            if (this == null || this?.size == 0) {
-                                llChildren.visibility = View.GONE
-                            } else {
-                                llChildren.visibility = View.VISIBLE
-                            }
-                        } else {
-                            llChildren.visibility = View.GONE
-                        }
+                    //                    val cbxHeader = node.findViewById(R.id.cbx_header) as CheckBox
+//                    cbxHeader.setOnCheckedChangeListener { buttonView, isChecked ->
+//                        if (isChecked) {
+//                            if (this == null || this?.size == 0) {
+//                                llChildren.visibility = View.GONE
+//                            } else {
+//                                llChildren.visibility = View.VISIBLE
+//                            }
+//                        } else {
+//                            llChildren.visibility = View.GONE
+//                        }
+//                    }
+                    if (this == null || this?.size == 0) {
+                        llChildren.visibility = View.GONE
+                    } else {
+                        llChildren.visibility = View.VISIBLE
                     }
                     setChildren(llChildren, this, index)
                 }
@@ -111,7 +125,7 @@ class EquityStructureActivity : ToolbarActivity() {
         var tvAmount = llHeader.findViewById(R.id.tv_amount) as TextView
 
         llContent.visibility = View.VISIBLE
-        tvName.text = data.holder
+        tvName.text = data.name
         tvPercent.text = data.percent
         tvAmount.text = data.amount
     }
