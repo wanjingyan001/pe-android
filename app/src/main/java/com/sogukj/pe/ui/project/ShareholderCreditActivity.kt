@@ -26,6 +26,7 @@ import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.service.SoguApi
+import com.sogukj.util.XmlDb
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_shareholder_credit.*
@@ -256,10 +257,15 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
         when (v?.id) {
             R.id.back -> finish()
             R.id.inquireBtn -> {
-                var item = CreditInfo.Item()
-                item.company = bean.name
-                item.company_id = bean.company_id!!
-                AddCreditActivity.start(context, "ADD", item, 0x001)
+                var str = XmlDb.open(context).get("INNER", "TRUE")
+                if (str == "TRUE") {
+                    var item = CreditInfo.Item()
+                    item.company = bean.name
+                    item.company_id = bean.company_id!!
+                    AddCreditActivity.start(context, "ADD", item, 0x001)
+                } else if (str == "FALSE") {
+                    ShareHolderStepActivity.start(context, 1, 0, "")
+                }
             }
         }
     }

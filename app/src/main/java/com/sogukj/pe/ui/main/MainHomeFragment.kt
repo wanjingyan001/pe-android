@@ -118,6 +118,7 @@ class MainHomeFragment : BaseFragment() {
             PartyMainActivity.start(context)
         }
         tv_zhengxin.setOnClickListener {
+            XmlDb.open(context).set("INNER", "FALSE")
             var first = XmlDb.open(context).get("FIRST", "TRUE")
             if (first.equals("FALSE")) {
                 SoguApi.getService(baseActivity!!.application)

@@ -704,6 +704,7 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
             54 -> StoreProjectAddActivity.startView(this@ProjectActivity, project)//储备信息
         //51 -> ShareholderCreditActivity.start(this@ProjectActivity, project)//高管征信（股东征信）
             51 -> {
+                XmlDb.open(context).set("INNER", "TRUE")
                 var first = XmlDb.open(context).get("FIRST", "TRUE")
                 if (first.equals("FALSE")) {
                     ShareholderCreditActivity.start(this@ProjectActivity, project)
