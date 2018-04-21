@@ -272,4 +272,9 @@
         <item name="android:windowEnterAnimation">@anim/spinner_in</item>
         <item name="android:windowExitAnimation">@anim/spinner_out</item>
     </style>
+
+    <style name="collapse_style">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/text_size_17</item>
+    </style>
 </resources>

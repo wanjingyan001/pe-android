@@ -33,7 +33,6 @@ import org.jetbrains.anko.find
 
 class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
 
-    var toolbar: Toolbar? = null
     private lateinit var bean: ProjectBean
     private lateinit var mAdapter: RecyclerAdapter<CreditInfo.Item>
 
@@ -50,7 +49,6 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shareholder_credit)
         bean = intent.getSerializableExtra(Extras.DATA) as ProjectBean
-        toolbar_title.text = "高管征信"
         initAdapter()
         initSearchView()
         back.setOnClickListener(this)
@@ -60,12 +58,40 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
 
         AppBarLayout.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
             override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
-                var alpha = Math.abs(verticalOffset) * 1.0 / Utils.dpToPx(context, 60)
-                down.alpha = 1 - alpha.toFloat()
+                if (gif.height > 0) {
+                    var appBarHeight = AppBarLayout.height
+                    var toolbarHeight = toolbar.height
+                    var gifH = gif.height
+
+                    var finalGifH = Utils.dpToPx(context, 30)
+
+                    //初始距离（git.top）,终点距离0
+                    //计算移动距离Y
+                    val distanceHeadImg = gif.top * 1.0f// - (toolbarHeight - finalGifH) / 2
+                    var mHeadImgScale = distanceHeadImg / (appBarHeight - toolbarHeight) * (-Math.abs(verticalOffset))
+                    gif.setTranslationY(mHeadImgScale)
+
+                    //计算移动距离X
+                    //gif原来显示的长宽（不是ImageView的长宽）是84*56，现在45*30，需要移动(84-45)/2=20(其实是19.5)
+                    var xDis = Math.abs(verticalOffset) * 1.0f / (appBarHeight - toolbarHeight)
+                    gif.setTranslationX(xDis * Utils.dpToPx(context, 20))
+
+                    //图片默认一开始高度为56dp(gifH),最后变成30dp
+                    //放大缩小
+                    var scale = 1.0f - (gifH - finalGifH) * Math.abs(verticalOffset) * 1.0f / (appBarHeight - toolbarHeight) / gifH
+                    gif.setScaleX(scale)
+                    gif.setScaleY(scale)
+
+                    if (appBarHeight - toolbarHeight - Math.abs(verticalOffset).toFloat() < 5) {
+                        collapse.setTitle("征信查询")
+                    } else {
+                        collapse.setTitle("让不良记录无处遁形")
+                    }
+                }
             }
         })
 
-        page = 1
+        offset = 0
         doRequest(bean.company_id)
 
         mAdapter.onItemClick = { v, p ->
@@ -95,7 +121,7 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
         search_edt.setOnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 searchKey = search_edt.text.toString()
-                page = 1
+                offset = 0
                 doRequest(bean.company_id)
                 true
             } else {
@@ -113,7 +139,7 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (search_edt.text.toString().isEmpty()) {
                     searchKey = ""
-                    page = 1
+                    offset = 0
                     doRequest(bean.company_id)
                 }
             }
@@ -129,28 +155,28 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
         lister.adapter = mAdapter
 
         refresh.setOnRefreshListener {
-            page = 1
+            offset = 0
             doRequest(bean.company_id)
             refresh.finishRefresh(1000)
         }
         refresh.setOnLoadMoreListener {
-            ++page
+            offset = mAdapter.dataList.size
             doRequest(bean.company_id)
             refresh.finishLoadMore(1000)
         }
     }
 
-    var page = 1
+    var offset = 0
 
     fun doRequest(companyId: Int?) {
         SoguApi.getService(application)
-                .showCreditList(company_id = companyId, page = page, fuzzyQuery = searchKey)
+                .showCreditList(company_id = companyId, offset = offset, fuzzyQuery = searchKey)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     Log.d(TAG, Gson().toJson(payload))
                     if (payload.isOk) {
-                        if (page == 1)
+                        if (offset == 0)
                             mAdapter.dataList.clear()
                         payload.payload?.forEach {
                             mAdapter.dataList.add(it)
@@ -164,6 +190,10 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
                 }, {
                     mAdapter.notifyDataSetChanged()
                     iv_empty.visibility = if (mAdapter.dataList.isEmpty()) View.VISIBLE else View.GONE
+                    if (offset == 0)
+                        refresh?.finishRefresh()
+                    else
+                        refresh?.finishLoadMore()
                 })
     }
 
