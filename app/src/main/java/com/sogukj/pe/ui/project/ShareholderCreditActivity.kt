@@ -276,7 +276,7 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
         if (requestCode == 0x001) {
             data?.apply {
                 var bean = this.getSerializableExtra(Extras.DATA) as CreditInfo.Item
-                mAdapter.dataList.add(bean)
+                mAdapter.dataList.add(0, bean)
                 mAdapter.notifyDataSetChanged()
                 iv_empty.visibility = if (mAdapter.dataList.isEmpty()) View.VISIBLE else View.GONE
             }

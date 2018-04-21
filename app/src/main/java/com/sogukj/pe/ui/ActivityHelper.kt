@@ -1,5 +1,6 @@
 package com.framework.base
 
+import com.sogukj.pe.ui.project.ShareHolderStepActivity
 import java.util.*
 
 /**
@@ -29,6 +30,14 @@ object ActivityHelper {
     fun exit() {
         for (activity in activities) {
             activity.finish()
+        }
+    }
+
+    fun removeStep1() {
+        for (activity in activities) {
+            if (activity is ShareHolderStepActivity) {
+                activity.finish()
+            }
         }
     }
 }

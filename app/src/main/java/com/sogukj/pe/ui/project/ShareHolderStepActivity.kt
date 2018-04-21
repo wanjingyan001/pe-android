@@ -146,10 +146,6 @@ class ShareHolderStepActivity : ToolbarActivity(), View.OnClickListener {
                                     project.company_id = intent.getIntExtra(Extras.ID, 0)
                                     ShareholderCreditActivity.start(this@ShareHolderStepActivity, project)
                                     finish()
-                                    if (ActivityHelper.curActivity is ShareHolderStepActivity) {
-                                        var activity = ActivityHelper.curActivity
-                                        activity!!.finish()
-                                    }
                                 } else {
                                     showCustomToast(R.drawable.icon_toast_fail, payload.message)
                                 }
