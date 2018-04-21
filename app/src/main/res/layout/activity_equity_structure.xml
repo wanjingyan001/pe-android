@@ -13,11 +13,14 @@
         android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/nestedRoot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:orientation="vertical"
-            android:padding="10dp">
+            android:paddingLeft="20dp"
+            android:paddingRight="10dp"
+            android:paddingTop="20dp">
 
             <TextView
                 android:id="@+id/tv_companyName"
@@ -32,8 +35,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:visibility="gone"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <TextView
                     style="@style/SoguTextMedium"
@@ -59,8 +62,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="5dp"
-                android:visibility="gone"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <TextView
                     style="@style/SoguTextMedium"
@@ -81,7 +84,16 @@
 
             </LinearLayout>
 
-            <include layout="@layout/item_equity_structure" />
+            <!--<include layout="@layout/c" />-->
+
+            <TextView
+                android:id="@+id/lunci"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="轮次：C轮"
+                android:layout_marginBottom="20dp"
+                android:textColor="@color/text_1"
+                android:textSize="16sp" />
 
         </LinearLayout>
     </ScrollView>

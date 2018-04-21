@@ -249,7 +249,7 @@ interface SoguService {
     //股权信息
     @FormUrlEncoded
     @POST("/api/StockInfo/equityInfo")
-    fun equityInfo(@Field("hid") hid: Int): Observable<Payload<StructureBean>>
+    fun equityInfo(@Field("hid") hid: Int): Observable<Payload<ArrayList<StructureBean>>>
 
     @FormUrlEncoded
     @POST("/api/Listinformation/Findhistoryrongzi")
