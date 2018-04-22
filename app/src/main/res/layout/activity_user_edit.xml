@@ -15,15 +15,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:background="@color/white"
-        android:paddingLeft="20dp"
-        android:paddingRight="10dp">
+        android:background="@color/white">
 
         <LinearLayout
             android:id="@+id/tr_icon"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/divider_bottom"
+            android:background="@drawable/user_divider_bottom"
+            android:paddingLeft="20dp"
+            android:paddingRight="10dp"
             android:orientation="horizontal">
 
             <TextView
@@ -49,7 +49,9 @@
 
         <TableRow
             android:id="@+id/tr_name"
-            android:background="@drawable/divider_bottom">
+            android:paddingLeft="20dp"
+            android:paddingRight="10dp"
+            android:background="@drawable/user_divider_bottom">
 
             <TextView
                 style="@style/TableTextLabel"
@@ -67,7 +69,9 @@
 
         <TableRow
             android:id="@+id/tr_depart"
-            android:background="@drawable/divider_bottom">
+            android:paddingLeft="20dp"
+            android:paddingRight="10dp"
+            android:background="@drawable/user_divider_bottom">
 
             <TextView
                 style="@style/TableTextLabel"
@@ -85,7 +89,9 @@
 
         <TableRow
             android:id="@+id/tr_posotion"
-            android:background="@drawable/divider_bottom">
+            android:paddingLeft="20dp"
+            android:paddingRight="10dp"
+            android:background="@drawable/user_divider_bottom">
 
             <TextView
                 style="@style/TableTextLabel"
@@ -103,7 +109,9 @@
 
         <TableRow
             android:id="@+id/tr_phone"
-            android:background="@drawable/divider_bottom">
+            android:paddingLeft="20dp"
+            android:paddingRight="10dp"
+            android:background="@drawable/user_divider_bottom">
 
             <TextView
                 style="@style/TableTextLabel"
@@ -122,7 +130,9 @@
 
         <TableRow
             android:id="@+id/tr_email"
-            android:background="@drawable/divider_bottom">
+            android:paddingLeft="20dp"
+            android:paddingRight="10dp"
+            android:background="@drawable/user_divider_bottom">
 
             <TextView
                 style="@style/TableTextLabel"
@@ -142,7 +152,9 @@
 
         <TableRow
             android:id="@+id/tr_note"
-            android:background="@drawable/divider_bottom">
+            android:paddingLeft="20dp"
+            android:paddingRight="10dp"
+            android:background="@drawable/user_divider_bottom">
 
             <TextView
                 style="@style/TableTextLabel"
@@ -160,7 +172,9 @@
 
         <TableRow
             android:id="@+id/tr_resume"
-            android:background="@drawable/divider_bottom">
+            android:paddingLeft="20dp"
+            android:paddingRight="10dp"
+            android:background="@drawable/user_divider_bottom">
 
             <TextView
                 style="@style/TableTextLabel"
@@ -178,7 +192,9 @@
 
         <TableRow
             android:id="@+id/tr_rate"
-            android:background="@drawable/divider_bottom">
+            android:paddingLeft="20dp"
+            android:paddingRight="10dp"
+            android:background="@drawable/user_divider_bottom">
 
             <TextView
                 style="@style/TableTextLabel"

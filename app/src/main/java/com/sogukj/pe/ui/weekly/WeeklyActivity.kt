@@ -10,6 +10,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.R
+import com.sogukj.pe.util.StatusBarUtil
 import com.sogukj.pe.view.ArrayPagerAdapter
 import kotlinx.android.synthetic.main.activity_weekly.*
 import org.jetbrains.anko.textColor
@@ -26,7 +27,7 @@ class WeeklyActivity : ToolbarActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_weekly)
-
+        StatusBarUtil.setTranslucentForImageView(this, 0, toolbar)
         title = "工作概览"
         toolbar?.setBackgroundColor(Color.TRANSPARENT)
         setBack(true)

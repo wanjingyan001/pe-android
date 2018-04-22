@@ -84,7 +84,6 @@ class TeamSelectFragment : BaseFragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Utils.setWindowStatusBarColor(baseActivity, R.color.color_blue_0888ff)
         mine = Store.store.getUser(context)
         initSearchView()
         initResultList()

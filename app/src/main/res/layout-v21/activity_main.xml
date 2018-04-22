@@ -1,75 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clipChildren="false"
-    android:orientation="vertical">
+    android:clipChildren="false">
 
-    <!--<com.sogukj.pe.view.NoScrollViewPager-->
-    <!--android:id="@+id/viewpager"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_above="@+id/line"-->
-    <!--android:layout_weight="1" />-->
 
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/line"
-        android:layout_weight="1" />
+        android:layout_above="@+id/bottomBar" />
 
-    <View
-        android:id="@+id/line"
+    <com.ashokvarma.bottomnavigation.BottomNavigationBar
+        android:id="@+id/bottomBar"
         android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:layout_above="@+id/rg_tab_main"
-        android:background="@color/divider" />
+        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content">
 
+    </com.ashokvarma.bottomnavigation.BottomNavigationBar>
     <!--<RadioGroup-->
     <!--android:id="@+id/rg_tab_main"-->
     <!--android:layout_width="match_parent"-->
     <!--android:layout_height="50dp"-->
-    <!--android:orientation="horizontal"-->
-    <!--android:padding="5dp">-->
+    <!--android:layout_alignParentBottom="true"-->
+    <!--android:clipChildren="false"-->
+    <!--android:orientation="horizontal">-->
 
     <!--<RadioButton-->
-    <!--android:id="@+id/rb_msg"-->
+    <!--android:id="@+id/rb_chat"-->
     <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_height="match_parent"-->
     <!--android:layout_gravity="center"-->
+    <!--android:layout_marginBottom="4dp"-->
+    <!--android:layout_marginTop="4dp"-->
     <!--android:layout_weight="1"-->
     <!--android:background="@null"-->
     <!--android:button="@null"-->
     <!--android:checked="true"-->
-    <!--android:drawableTop="@drawable/ic_tab_main_msg"-->
+    <!--android:drawableTop="@drawable/bg_main_liaotian"-->
     <!--android:gravity="center"-->
-    <!--android:text="消息"-->
+    <!--android:text="聊天"-->
+    <!--android:textColor="@color/tx_checkable"-->
+    <!--android:textSize="10sp" />-->
+
+    <!--<RadioButton-->
+    <!--android:id="@+id/rb_phone"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:layout_marginBottom="4dp"-->
+    <!--android:layout_marginTop="4dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:background="@null"-->
+    <!--android:button="@null"-->
+    <!--android:drawableTop="@drawable/bg_main_phone"-->
+    <!--android:gravity="center"-->
+    <!--android:text="通讯录"-->
     <!--android:textColor="@color/tx_checkable"-->
     <!--android:textSize="10sp" />-->
 
     <!--<RadioButton-->
     <!--android:id="@+id/rb_home"-->
     <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_gravity="bottom"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:layout_marginBottom="4dp"-->
+    <!--android:layout_marginTop="4dp"-->
     <!--android:layout_weight="1"-->
     <!--android:background="@null"-->
     <!--android:button="@null"-->
-    <!--android:checked="true"-->
-    <!--android:drawableTop="@drawable/ic_tab_main_home"-->
+    <!--android:drawableTop="@drawable/bg_main_home"-->
     <!--android:gravity="center"-->
     <!--android:text="首页"-->
     <!--android:textColor="@color/tx_checkable"-->
-    <!--android:textSize="10sp" />-->
+    <!--android:textSize="10sp"/>-->
 
     <!--<RadioButton-->
     <!--android:id="@+id/rb_project"-->
     <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_height="match_parent"-->
     <!--android:layout_gravity="center"-->
+    <!--android:layout_marginBottom="4dp"-->
+    <!--android:layout_marginTop="4dp"-->
     <!--android:layout_weight="1"-->
     <!--android:background="@null"-->
     <!--android:button="@null"-->
@@ -78,96 +90,21 @@
     <!--android:text="项目"-->
     <!--android:textColor="@color/tx_checkable"-->
     <!--android:textSize="10sp" />-->
+
+    <!--<RadioButton-->
+    <!--android:id="@+id/rb_fund"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:layout_marginBottom="4dp"-->
+    <!--android:layout_marginTop="4dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:background="@null"-->
+    <!--android:button="@null"-->
+    <!--android:drawableTop="@drawable/bg_main_fund"-->
+    <!--android:gravity="center"-->
+    <!--android:text="基金"-->
+    <!--android:textColor="@color/tx_checkable"-->
+    <!--android:textSize="10sp" />-->
     <!--</RadioGroup>-->
-
-    <RadioGroup
-        android:id="@+id/rg_tab_main"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:clipChildren="false"
-        android:orientation="horizontal">
-
-        <RadioButton
-            android:id="@+id/rb_chat"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_marginBottom="4dp"
-            android:layout_marginTop="4dp"
-            android:layout_weight="1"
-            android:background="@null"
-            android:button="@null"
-            android:checked="true"
-            android:drawableTop="@drawable/bg_main_liaotian"
-            android:gravity="center"
-            android:text="聊天"
-            android:textColor="@color/tx_checkable"
-            android:textSize="10sp" />
-
-        <RadioButton
-            android:id="@+id/rb_phone"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_marginBottom="4dp"
-            android:layout_marginTop="4dp"
-            android:layout_weight="1"
-            android:background="@null"
-            android:button="@null"
-            android:drawableTop="@drawable/bg_main_phone"
-            android:gravity="center"
-            android:text="通讯录"
-            android:textColor="@color/tx_checkable"
-            android:textSize="10sp" />
-
-        <RadioButton
-            android:id="@+id/rb_home"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_marginBottom="4dp"
-            android:layout_marginTop="4dp"
-            android:layout_weight="1"
-            android:background="@null"
-            android:button="@null"
-            android:checked="true"
-            android:drawableTop="@drawable/bg_main_home"
-            android:gravity="center"
-            android:text="首页"
-            android:textColor="@color/tx_checkable"
-            android:textSize="10sp"/>
-
-        <RadioButton
-            android:id="@+id/rb_project"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_marginBottom="4dp"
-            android:layout_marginTop="4dp"
-            android:layout_weight="1"
-            android:background="@null"
-            android:button="@null"
-            android:drawableTop="@drawable/ic_tab_main_project"
-            android:gravity="center"
-            android:text="项目"
-            android:textColor="@color/tx_checkable"
-            android:textSize="10sp" />
-
-        <RadioButton
-            android:id="@+id/rb_fund"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_marginBottom="4dp"
-            android:layout_marginTop="4dp"
-            android:layout_weight="1"
-            android:background="@null"
-            android:button="@null"
-            android:drawableTop="@drawable/bg_main_fund"
-            android:gravity="center"
-            android:text="基金"
-            android:textColor="@color/tx_checkable"
-            android:textSize="10sp" />
-    </RadioGroup>
 </RelativeLayout>

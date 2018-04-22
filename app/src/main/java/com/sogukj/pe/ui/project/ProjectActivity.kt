@@ -36,6 +36,7 @@ import com.sogukj.pe.ui.approve.ApproveListActivity
 import com.sogukj.pe.ui.htdata.ProjectBookActivity
 import com.sogukj.pe.ui.news.NegativeNewsActivity
 import com.sogukj.pe.ui.news.NewsDetailActivity
+import com.sogukj.pe.util.StatusBarUtil
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.*
@@ -81,6 +82,7 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
         position = intent.getIntExtra(Extras.CODE, 0)
         type = intent.getIntExtra(Extras.TYPE, 0)
         setContentView(R.layout.activity_project)
+        StatusBarUtil.setTranslucentForCoordinatorLayout(this, 0)
         setBack(true)
         toolbar?.apply {
             this.setBackgroundColor(resources.getColor(R.color.transparent))

@@ -51,16 +51,15 @@ class AddCreditActivity : BaseActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_credit)
-        Utils.setWindowStatusBarColor(this, R.color.white)
         type = intent.getStringExtra(Extras.TYPE)
         data = intent.getSerializableExtra(Extras.DATA) as CreditInfo.Item
-        if (type.equals("ADD")) {
+        if (type == "ADD") {
             toolbar_title.text = "添加人员"
             data?.apply {
                 companyName.text = company
                 selectId = company_id
             }
-        } else if (type.equals("EDIT")) {
+        } else if (type == "EDIT") {
             data?.apply {
                 nameEdt.setText(name)
                 IDCardEdt.setText(idCard)
@@ -75,7 +74,7 @@ class AddCreditActivity : BaseActivity(), View.OnClickListener {
                         }
                 selectType = type
 
-                if (name.isNullOrEmpty()) {
+                if (name.isEmpty()) {
                     nameEdt.setSelection(0)
                 } else {
                     nameEdt.setSelection(name.length)

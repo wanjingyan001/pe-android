@@ -36,6 +36,8 @@ import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
 import com.sogukj.util.XmlDb
 import com.sogukj.pe.util.Utils
+import com.sougukj.childEdtGetFocus
+import com.sougukj.showInput
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_user_edit.*
@@ -65,43 +67,13 @@ class UserEditActivity : ToolbarActivity() {
         tr_resume.setOnClickListener {
             UserResumeActivity.start(this, Store.store.getUser(this)!!)
         }
-        tv_depart.setOnClickListener {
+        tr_depart.setOnClickListener {
             val items = ArrayList<String?>()
-//            var position = -1
             departList?.forEach {
                 items.add(it.de_name)
             }
-//            items.forEachIndexed { index, s ->
-//                if (s!! == tv_depart.text) {
-//                    position = index
-//                }
-//            }
-//
-//            MaterialDialog.Builder(this@UserEditActivity)
-//                    .theme(Theme.LIGHT)
-//                    .title("选择部门")
-//                    .items(items)
-//                    .itemsCallbackSingleChoice(position, MaterialDialog.ListCallbackSingleChoice { dialog, v, p, s ->
-//                        if (p == -1) return@ListCallbackSingleChoice false
-//                        val data = departList?.get(p)
-//                        data?.apply {
-//                            user.depart_id = depart_id
-//                            user.depart_name = de_name
-//                        }
-//                        tv_depart.text = user.depart_name
-//                        true
-//                    })
-//                    .positiveText("确定")
-//                    .negativeText("取消")
-//                    .show()
-            var position = 0
-            for (index in items.indices) {
-                if (items.get(index)!!.contains(tv_depart.text)) {
-                    position = index
-                    break
-                }
-            }
-            var pvOptions = OptionsPickerView.Builder(this, OptionsPickerView.OnOptionsSelectListener { options1, option2, options3, v ->
+            val position = items.indices.firstOrNull { items[it]!!.contains(tv_depart.text) } ?: 0
+            val pvOptions = OptionsPickerView.Builder(this, OptionsPickerView.OnOptionsSelectListener { options1, option2, options3, v ->
                 val data = departList?.get(options1)
                 data?.apply {
                     user.depart_id = depart_id
@@ -114,19 +86,10 @@ class UserEditActivity : ToolbarActivity() {
             pvOptions.show()
         }
         tr_icon.setOnClickListener {
-            //            var intent = Intent()
-//            intent.type = "image/*"
-//            intent.action = Intent.ACTION_GET_CONTENT
-//            var intent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-//            startActivityForResult(intent, 0x001)
             RxGalleryFinal
                     .with(this@UserEditActivity)
                     .image()
                     .radio()
-//                    .cropMaxBitmapSize(1024 * 1024)
-////                    .cropAspectRatioOptions(0, AspectRatio("1:1", 120f, 120f))
-//                    .cropMaxResultSize(120, 120)
-//                    .crop()
                     .imageLoader(ImageLoaderType.GLIDE)
                     .subscribe(object : RxBusResultDisposable<ImageRadioResultEvent>() {
                         override fun onEvent(event: ImageRadioResultEvent?) {
@@ -146,6 +109,8 @@ class UserEditActivity : ToolbarActivity() {
                 TemplateActivity.start(context)
             }
         }
+        tr_note.childEdtGetFocus()
+        tr_email.childEdtGetFocus()
     }
 
 //    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -233,7 +198,7 @@ class UserEditActivity : ToolbarActivity() {
 ////                        .error(R.drawable.img_logo_user)
 //                        .into(iv_user)
             if (url.isNullOrEmpty()) {
-                val ch = name?.first()
+                val ch = name.first()
                 iv_user.setChar(ch)
             } else {
                 Glide.with(context)

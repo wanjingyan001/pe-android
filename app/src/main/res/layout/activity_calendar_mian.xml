@@ -14,20 +14,31 @@
 
         <include layout="@layout/toolbar" />
 
-        <android.support.design.widget.TabLayout
+        <!--<android.support.design.widget.TabLayout-->
+            <!--android:id="@+id/tabLayout"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="40dp"-->
+            <!--android:background="?attr/colorPrimary"-->
+            <!--app:tabBackground="?attr/colorPrimary"-->
+            <!--app:tabGravity="center"-->
+            <!--app:tabIndicatorColor="@color/white"-->
+            <!--app:tabIndicatorHeight="0dp"-->
+            <!--app:tabMode="scrollable"-->
+            <!--app:tabSelectedTextColor="@color/white"-->
+            <!--app:tabTextColor="@color/calendar_text_alphe">-->
+
+        <!--</android.support.design.widget.TabLayout>-->
+        <com.sogukj.pe.view.PagerIndicator
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
+            app:pi_disableTensileSlidingBlock="true"
             android:background="?attr/colorPrimary"
-            app:tabBackground="?attr/colorPrimary"
-            app:tabGravity="center"
-            app:tabIndicatorColor="@color/white"
-            app:tabIndicatorHeight="0dp"
-            app:tabMode="scrollable"
-            app:tabSelectedTextColor="@color/white"
-            app:tabTextColor="@color/calendar_text_alphe">
+            app:pi_bottomLineHeight="4dp"
+            app:pi_allowWidthFull="true"
+            app:pi_slidingBlock="@drawable/image_sliding_block">
 
-        </android.support.design.widget.TabLayout>
+        </com.sogukj.pe.view.PagerIndicator>
 
         <android.support.v4.view.ViewPager
             android:id="@+id/contentPager"

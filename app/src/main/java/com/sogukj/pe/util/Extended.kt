@@ -2,13 +2,18 @@ package com.sougukj
 
 import android.annotation.TargetApi
 import android.app.Activity
+import android.content.Context
 import android.graphics.Color
 import android.os.Build
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import com.ashokvarma.bottomnavigation.BottomNavigationItem
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.sogukj.pe.R
 import com.sogukj.pe.util.Ex_T0_Unit
 import com.sogukj.pe.util.OnClickFastListener
 import com.sogukj.pe.util.SubscriberHelper
@@ -25,8 +30,8 @@ inline fun <reified T> Gson.fromJson(json: String): T {
     return fromJson(json, T::class.java)
 }
 
-inline fun <reified T> Gson.arrayFromJson(json: String): Collection<T> {
-    return Gson().fromJson(json, object : TypeToken<Collection<T>>() {}.type)
+inline fun <reified T> Gson.arrayFromJson(json: String): List<T> {
+    return Gson().fromJson(json, object : TypeToken<List<T>>() {}.type)
 }
 
 fun View.setOnClickFastListener(listener: OnClickFastListener.(v: View) -> Unit) {
@@ -69,7 +74,7 @@ fun <T> Observable<T>.execute(init: Ex_T0_Unit<SubscriberHelper<T>>) {
 }
 
 
-fun CharSequence?.checkEmpty():CharSequence{
+fun CharSequence?.checkEmpty(): CharSequence {
     return if (this == null || this.isEmpty() || this == "null")
         ""
     else
@@ -92,4 +97,28 @@ fun Activity.fullScreen() {
         attributes.flags = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
         window.attributes = attributes
     }
+}
+
+fun BottomNavigationItem.initNavTextColor(): BottomNavigationItem =
+        setActiveColorResource(R.color.main_bottom_bar_color)
+                .setInActiveColorResource(R.color.text_3)
+
+
+fun Context.showInput(view: View) {
+    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.showSoftInput(view, 0)
+}
+
+fun ViewGroup.childEdtGetFocus() {
+    (0 until this.childCount)
+            .map { getChildAt(it) }
+            .filterIsInstance<EditText>()
+            .forEach {
+                this.setOnClickListener {
+                    it.isFocusable = true
+                    it.isFocusableInTouchMode = true
+                    it.requestFocus()
+                    this.context.showInput(it)
+                }
+            }
 }
