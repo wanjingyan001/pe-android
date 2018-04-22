@@ -253,7 +253,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignBottom="@+id/zuijinanfashijain"
                         android:layout_alignParentRight="true"
-                        android:text="否"
+                        android:text="无"
                         android:textColor="@color/text_1" />
 
 
