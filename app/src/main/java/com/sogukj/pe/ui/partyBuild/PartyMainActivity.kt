@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
+import android.view.LayoutInflater
 import android.widget.TextView
 import com.framework.base.BaseActivity
 import com.google.gson.Gson
@@ -55,32 +56,16 @@ class PartyMainActivity : BaseActivity() {
     private fun initPager(tabs: List<PartyTabBean>) {
         adapter = PartyAdapter(supportFragmentManager, tabs)
         contentPager.adapter = adapter
-        tabLayout.setupWithViewPager(contentPager)
-        //自定义Indicator
-        for (i in 0 until tabs.size) {
-            val tab = tabLayout.getTabAt(i)
-            tab?.let {
-                it.setCustomView(R.layout.layout_party_custom_indicator)
-                if (i == 0) {
-                    it.customView!!.isSelected = true
-                }
-                it.customView!!.find<TextView>(R.id.indicatorTv).text = tabs[i].classname
+        tabLayout.setViewPager(contentPager)
+        tabLayout.setTabViewFactory { parent, _ ->
+            parent.removeAllViews()
+            for (i in 0 until tabs.size){
+                val view = LayoutInflater.from(this).inflate(R.layout.item_party_indicator, parent,false)
+                view.find<TextView>(R.id.indicatorTv).text = tabs[i].classname
+                parent.addView(view)
             }
         }
     }
-
-//    private fun customIndicator(bean: PartyTabBean) = relativeLayout {
-//        textView(bean.classname) {
-//            textSize = sp(14f).toFloat()
-//            textColor = R.drawable.color_party_tab
-//        }.lparams(width = wrapContent, height = dip(36)) { centerInParent() }
-//        view {
-//            backgroundResource = R.drawable.bg_party_tab
-//        }.lparams(width = dip(20), height = dip(2)) {
-//            alignParentBottom()
-//            centerHorizontally()
-//        }
-//    }
 
     private fun categoryList() {
         SoguApi.getService(application)

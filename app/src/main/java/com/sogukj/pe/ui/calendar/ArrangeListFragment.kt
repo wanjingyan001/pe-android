@@ -188,7 +188,6 @@ class ArrangeListFragment : BaseFragment() {
                             isUpwards = true
                         }
                     }
-
                 })
     }
 

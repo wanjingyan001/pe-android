@@ -14,7 +14,12 @@ import kotlinx.android.synthetic.main.fragment_common_documents.*
 class CommonDocumentsFragment : Fragment() {
     private var mParam1: String? = null
     private var mParam2: String? = null
-    val titles = listOf("本应用", "微信", "QQ", "钉钉","全部")
+    val titles = listOf("本应用", "微信", "QQ", "钉钉", "全部")
+    val peFragment by lazy { DocumentsFragment.newInstance(DocumentsFragment.PE_LOACL) }
+    val wxFragment by lazy { DocumentsFragment.newInstance(DocumentsFragment.WX_DOC) }
+    val qqFragment by lazy { DocumentsFragment.newInstance(DocumentsFragment.QQ_DOC) }
+    val dtFragment by lazy { DocumentsFragment.newInstance(DocumentsFragment.DING_TALK) }
+    val allFragment by lazy { DocumentsFragment.newInstance(DocumentsFragment.ALL_DOC) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,12 +36,7 @@ class CommonDocumentsFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val fragments = listOf<Fragment>(
-                DocumentsFragment.newInstance(DocumentsFragment.PE_LOACL),
-                DocumentsFragment.newInstance(DocumentsFragment.WX_DOC),
-                DocumentsFragment.newInstance(DocumentsFragment.QQ_DOC),
-                DocumentsFragment.newInstance(DocumentsFragment.DING_TALK),
-                DocumentsFragment.newInstance(DocumentsFragment.ALL_DOC))
+        val fragments = listOf<Fragment>(peFragment,wxFragment,qqFragment,dtFragment,allFragment)
         documentList.adapter = DocPageAdapter(childFragmentManager, fragments)
         tab.setupWithViewPager(documentList)
     }

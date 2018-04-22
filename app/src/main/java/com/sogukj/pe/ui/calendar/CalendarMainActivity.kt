@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
@@ -62,15 +63,13 @@ class CalendarMainActivity : ToolbarActivity(), MonthSelectListener, ViewPager.O
     private fun initPager() {
         val adapter = ContentAdapter(supportFragmentManager, fragments, titles)
         contentPager.adapter = adapter
-        tabLayout.setupWithViewPager(contentPager)
-        for (i in 0 until titles.size) {
-            val tab = tabLayout.getTabAt(i)
-            tab?.let {
-                it.setCustomView(R.layout.layout_calendar_main_tab)
-                if (i == 0) {
-                    it.customView!!.isSelected = true
-                }
-                it.customView!!.find<TextView>(R.id.indicatorTv).text = titles[i]
+        tabLayout.setViewPager(contentPager)
+        tabLayout.setTabViewFactory { parent, _ ->
+            parent.removeAllViews()
+            for (i in 0 until titles.size){
+                val view = LayoutInflater.from(this).inflate(R.layout.item_calendar_indicator, parent,false)
+                view.find<TextView>(R.id.indicatorTv).text = titles[i]
+                parent.addView(view)
             }
         }
         contentPager.addOnPageChangeListener(this)

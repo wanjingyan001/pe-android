@@ -166,15 +166,9 @@ public class Utils {
 
     @TargetApi(Build.VERSION_CODES.M)
     public static void setWindowStatusBarColor(Activity activity, int colorResId) {
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                Window window = activity.getWindow();
-                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                window.setStatusBarColor(activity.getResources().getColor(colorResId));
-                window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        StatusBarUtil.setColor(activity, activity.getResources().getColor(colorResId),0);
+        if (colorResId == R.color.white){
+            StatusBarUtil.setLightMode(activity);
         }
     }
 
@@ -732,6 +726,7 @@ public class Utils {
 
     /**
      * 验证是数字
+     *
      * @param str 验证字符
      * @return boolean
      */
@@ -741,14 +736,15 @@ public class Utils {
 
     /**
      * 验证身份证号码是否正确
+     *
      * @param IDCardNo 身份证号码
      * @return boolean
      */
     public static boolean isIDCard(String IDCardNo) {
         //记录错误信息
         String errmsg = "";
-        String[] ValCodeArr = { "1", "0", "x", "9", "8", "7", "6", "5", "4", "3", "2" };
-        String[] Wi = { "7", "9", "10", "5", "8", "4", "2", "1", "6", "3", "7","9", "10", "5", "8", "4", "2" };
+        String[] ValCodeArr = {"1", "0", "x", "9", "8", "7", "6", "5", "4", "3", "2"};
+        String[] Wi = {"7", "9", "10", "5", "8", "4", "2", "1", "6", "3", "7", "9", "10", "5", "8", "4", "2"};
         String Ai = "";
 
         //================ 身份证号码的长度 15位或18位 ================
@@ -814,7 +810,7 @@ public class Utils {
         //================ 判断最后一位的值 ================
         int TotalmulAiWi = 0;
         for (int i = 0; i < 17; i++) {
-            TotalmulAiWi = TotalmulAiWi+ Integer.parseInt(String.valueOf(Ai.charAt(i))) * Integer.parseInt(Wi[i]);
+            TotalmulAiWi = TotalmulAiWi + Integer.parseInt(String.valueOf(Ai.charAt(i))) * Integer.parseInt(Wi[i]);
         }
         int modValue = TotalmulAiWi % 11;
         String strVerifyCode = ValCodeArr[modValue];
@@ -832,12 +828,13 @@ public class Utils {
 
     /**
      * 检查日期是否有效
-     * @param year 年
+     *
+     * @param year  年
      * @param month 月
-     * @param day 日
+     * @param day   日
      * @return boolean
      */
-    public static boolean getDateIsTrue(String year, String month, String day){
+    public static boolean getDateIsTrue(String year, String month, String day) {
         try {
             String data = year + month + day;
             SimpleDateFormat simpledateformat = new SimpleDateFormat("yyyyMMdd");
@@ -853,9 +850,10 @@ public class Utils {
 
     /**
      * 获取身份证号所有区域编码设置
+     *
      * @return Hashtable
      */
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public static Hashtable getAreaCodeAll() {
         Hashtable hashtable = new Hashtable();
         hashtable.put("11", "北京");

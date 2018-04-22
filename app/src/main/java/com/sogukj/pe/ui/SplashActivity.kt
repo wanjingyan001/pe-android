@@ -5,7 +5,6 @@ import android.os.Bundle
 import com.framework.base.BaseActivity
 import com.sogukj.pe.R
 import com.sogukj.pe.ui.main.MainActivity
-import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -21,9 +20,7 @@ import android.view.View
 import android.widget.*
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
-import com.sogukj.pe.util.DownloadUtil
-import com.sogukj.pe.util.OpenFileUtil
-import com.sogukj.pe.util.Utils
+import com.sogukj.pe.util.*
 import kotlinx.android.synthetic.main.activity_splash.*
 import java.util.*
 import me.leolin.shortcutbadger.ShortcutBadger
@@ -39,6 +36,7 @@ class SplashActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
+        StatusBarUtil.setTransparent(this)
         ShortcutBadger.removeCount(this)
         when (Utils.getEnvironment()) {
             "civc" -> {

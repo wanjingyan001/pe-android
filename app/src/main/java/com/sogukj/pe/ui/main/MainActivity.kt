@@ -13,6 +13,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
+import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.content.FileProvider
 import com.framework.base.BaseActivity
@@ -22,15 +23,9 @@ import com.sogukj.pe.R
 import com.sogukj.pe.bean.NewsBean
 import com.sogukj.pe.ui.LoginActivity
 import com.sogukj.pe.ui.fund.FundMainFragment
-import com.sogukj.pe.ui.news.MainNewsFragment
 import com.sogukj.pe.ui.news.NewsDetailActivity
 import com.sogukj.pe.ui.project.MainProjectFragment
-import com.sogukj.pe.ui.user.UserFragment
 import com.sogukj.util.Store
-import kotlinx.android.synthetic.main.activity_main.*
-import android.support.v4.view.ViewCompat.getMinimumHeight
-import android.support.v4.view.ViewCompat.getMinimumWidth
-import android.support.v4.view.ViewPager
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
@@ -38,48 +33,38 @@ import android.view.View
 import android.widget.*
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
+import com.ashokvarma.bottomnavigation.BottomNavigationBar
+import com.ashokvarma.bottomnavigation.BottomNavigationItem
 import com.sogukj.pe.ui.TeamSelectFragment
 import com.sogukj.pe.util.DownloadUtil
+import com.sogukj.pe.util.StatusBarUtil
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
-import com.sogukj.pe.view.ArrayPagerAdapter
 import com.sogukj.pe.view.MyProgressBar
 import com.sogukj.service.SoguApi
 import com.sogukj.util.XmlDb
+import com.sougukj.initNavTextColor
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.item_comment_list.*
+import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.imageResource
 import java.io.File
+import java.util.*
 
 
 /**
  * Created by qinfei on 17/7/18.
  */
 class MainActivity : BaseActivity() {
+    val fragments = Stack<Fragment>()
+    private val mainMsg: MainMsgFragment by lazy { MainMsgFragment.newInstance() }
+    private val teamSelect: TeamSelectFragment by lazy { TeamSelectFragment.newInstance() }
+    private val mainHome: MainHomeFragment by lazy { MainHomeFragment.newInstance() }
+    private val project: MainProjectFragment by lazy { MainProjectFragment.newInstance() }
+    private val mainFund: FundMainFragment by lazy { FundMainFragment.newInstance() }
 
-//    val fgProj = MainProjectFragment.newInstance()
-//    //    val fgMsg = MainMsgFragment.newInstance()
-//    val fgMsg = MainNewsFragment.newInstance()
-//    val fgHome = MainHomeFragment.newInstance()
-//    val fgFund = FundMainFragment.newInstance()
-//    val fgMine = UserFragment.newInstance()
-
-    val fragments = arrayOf(
-            //MainNewsFragment.newInstance(),
-            //    val fgMsg = MainMsgFragment.newInstance()
-            //MainProjectFragment.newInstance(),
-            //MainHomeFragment.newInstance(),
-            //FundMainFragment.newInstance(),
-            MainMsgFragment.newInstance(),
-            //UserFragment.newInstance(),
-            TeamSelectFragment.newInstance(),
-            MainHomeFragment.newInstance(),
-            MainProjectFragment.newInstance(),
-            FundMainFragment.newInstance()
-    )
-
+    lateinit var manager: FragmentManager
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -88,66 +73,76 @@ class MainActivity : BaseActivity() {
             val news = intent.getSerializableExtra(Extras.DATA) as NewsBean?
             if (null != news) NewsDetailActivity.start(this@MainActivity, news)
         }
-
         verifyPermissions(this)
-        val dm = resources.displayMetrics
-        val dp = dm.density
-        val w = dm.widthPixels
-        val h = dm.heightPixels
-
-        //
-//        val fragments = arrayOf(
-//                fgMsg,
-//                fgProj,
-//                fgHome,
-//                fgFund,
-//                fgMine
-//        )
-//        var adapter = ArrayPagerAdapter(supportFragmentManager, fragments)
-//        viewpager.adapter = adapter
-//        viewpager.offscreenPageLimit = fragments.size
-//        viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-//            override fun onPageScrollStateChanged(state: Int) {
-//            }
-//
-//            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-//            }
-//
-//            override fun onPageSelected(position: Int) {
-//                viewpager.setCurrentItem(position, false)
-//                var checkId = 0
-//                when (position) {
-//                    0 -> checkId = R.id.rb_msg
-//                    1 -> checkId = R.id.rb_project
-//                    2 -> checkId = R.id.rb_home
-//                    3 -> checkId = R.id.rb_fund
-//                    4 -> checkId = R.id.rb_my
-//                }
-//                rg_tab_main.check(checkId)
-//            }
-//        })
-
-        manager = supportFragmentManager
-        manager.beginTransaction().add(R.id.container, fragments[0]).commit()
-        rg_tab_main.check(checkId)
-//        Trace.e("AndroidPE", "" + Utils.isApkInDebug(this))
+        initFragments()
+        initBottomNavBar()
+        changeFragment(0)
         updateVersion()
     }
 
-    lateinit var manager: FragmentManager
+    private fun initFragments() {
+        manager = supportFragmentManager
+        manager.beginTransaction()
+                .add(R.id.container, mainMsg)
+                .add(R.id.container, teamSelect)
+                .add(R.id.container, mainHome)
+                .add(R.id.container, project)
+                .add(R.id.container, mainFund)
+                .commit()
 
-    fun switchContent(from: Int, to: Int) {
-        if (!fragments[to].isAdded) { // 先判断是否被add过
-            manager.beginTransaction().hide(fragments[from])
-                    .add(R.id.container, fragments[to]).commit() // 隐藏当前的fragment，add下一个到Activity中
-        } else {
-            manager.beginTransaction().hide(fragments[from]).show(fragments[to]).commit() // 隐藏当前的fragment，显示下一个
-        }
+        fragments.add(mainMsg)
+        fragments.add(teamSelect)
+        fragments.add(mainHome)
+        fragments.add(project)
+        fragments.add(mainFund)
     }
+
+    private fun initBottomNavBar() {
+        bottomBar.addItem(BottomNavigationItem(R.drawable.ic_qb_sel, "聊天").setInactiveIconResource(R.drawable.ic_qb_nor).initNavTextColor())
+                .addItem(BottomNavigationItem(R.drawable.ic_qb_sel5, "通讯录").setInactiveIconResource(R.drawable.ic_qb_nor1).initNavTextColor())
+                .addItem(BottomNavigationItem(R.drawable.ic_qb_sel2, "首页").setInactiveIconResource(R.drawable.ic_qb_nor2).initNavTextColor())
+                .addItem(BottomNavigationItem(R.drawable.ic_tab_main_proj_1, "项目").setInactiveIconResource(R.drawable.ic_tab_main_proj_0).initNavTextColor())
+                .addItem(BottomNavigationItem(R.drawable.ic_main_fund2, "基金").setInactiveIconResource(R.drawable.ic_main_fund).initNavTextColor())
+                .setMode(BottomNavigationBar.MODE_FIXED)
+                .setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC)
+                .setBarBackgroundColor(R.color.white)
+                .setFirstSelectedPosition(0)
+                .initialise()
+        bottomBar.setTabSelectedListener(object : BottomNavigationBar.SimpleOnTabSelectedListener() {
+            override fun onTabSelected(position: Int) {
+                changeFragment(position)
+            }
+        })
+    }
+
+    /**
+     * 切换Tab，切换到对应的Fragment
+     */
+    private fun changeFragment(position: Int) {
+        when (position) {
+            0, 3, 4 -> {
+                StatusBarUtil.setColor(this, resources.getColor(R.color.colorPrimary), 0)
+                StatusBarUtil.setDarkMode(this)
+            }
+            1 -> {
+                StatusBarUtil.setColor(this, resources.getColor(R.color.color_blue_0888ff), 0)
+                StatusBarUtil.setDarkMode(this)
+            }
+            2 -> {
+                StatusBarUtil.setColor(this, resources.getColor(R.color.white), 0)
+                StatusBarUtil.setLightMode(this)
+            }
+        }
+        val ft = supportFragmentManager.beginTransaction()
+        fragments.forEach { ft.hide(it) }
+        ft.show(fragments[position])
+        ft.commit()
+    }
+
 
     val PERMISSIONS_STORAGE = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
-    fun verifyPermissions(activity: Activity) {
+    private fun verifyPermissions(activity: Activity) {
         // Check if we have write permission
         val permission = ActivityCompat.checkSelfPermission(activity,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -156,65 +151,14 @@ class MainActivity : BaseActivity() {
             // We don't have permission so prompt the user
             ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE,
                     1)
-
         }
-
     }
 
-    var checkId = R.id.rb_chat
-    var current = 0
-
-    fun doCheck(checkedId: Int) {
-        this.checkId = checkedId
-//        rg_tab_main.check(checkId)
-//        val fragment = when (checkId) {
-//            R.id.rb_msg -> fgMsg
-//            R.id.rb_project -> fgProj
-//            R.id.rb_fund -> fgFund
-//            R.id.rb_my -> fgMine
-//            else -> fgHome
-//        }
-//        supportFragmentManager.beginTransaction()
-//                .replace(R.id.container, fragment)
-//                .commit()
-        var currentId = 0
-        when (checkId) {
-            R.id.rb_chat -> currentId = 0
-            R.id.rb_phone -> currentId = 1
-            R.id.rb_home -> currentId = 2
-            R.id.rb_project -> currentId = 3
-            R.id.rb_fund -> currentId = 4
-        }
-        //viewpager.setCurrentItem(currentId, false)
-        if (currentId == current) {
-            return
-        }
-        switchContent(current, currentId)
-        current = currentId
-    }
 
     override fun onStart() {
         super.onStart()
         if (!Store.store.checkLogin(this)) {
             LoginActivity.start(this)
-        } else {
-            doCheck(checkId)
-
-            for (index in 0 until rg_tab_main.childCount) {
-                var radio_btn = rg_tab_main.getChildAt(index) as RadioButton
-                var draws = radio_btn.compoundDrawables
-                // top = draws[1]
-                //获取drawables
-                var r = Rect(0, 0, Utils.dpToPx(context, 25), Utils.dpToPx(context, 25))
-                //定义一个Rect边界
-                draws[1].setBounds(r)
-                //给drawable设置边界
-                radio_btn.setCompoundDrawables(null, draws[1], null, null)
-            }
-
-            rg_tab_main.setOnCheckedChangeListener { group, checkedId ->
-                doCheck(checkedId)
-            }
         }
     }
 

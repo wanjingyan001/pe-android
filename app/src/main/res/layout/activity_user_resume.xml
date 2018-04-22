@@ -25,15 +25,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:background="@color/white"
-                android:paddingLeft="20dp"
-                android:paddingRight="10dp">
+                android:background="@color/white">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="38dp"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="10dp">
 
                     <View
                         android:layout_width="5dp"
@@ -48,7 +48,10 @@
                         android:text="基本信息" />
                 </LinearLayout>
 
-                <TableRow android:background="@drawable/divider_bottom">
+                <TableRow
+                    android:background="@drawable/user_divider_bottom"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="10dp">
 
                     <TextView
                         style="@style/TableTextLabel"
@@ -62,15 +65,19 @@
 
 
                     <!--<ImageView-->
-                        <!--android:layout_width="25dp"-->
-                        <!--android:layout_height="25dp"-->
-                        <!--android:layout_gravity="center_vertical"-->
-                        <!--android:scaleType="centerInside"-->
-                        <!--android:src="@drawable/ic_arrow_r"-->
-                        <!--android:visibility="invisible" />-->
+                    <!--android:layout_width="25dp"-->
+                    <!--android:layout_height="25dp"-->
+                    <!--android:layout_gravity="center_vertical"-->
+                    <!--android:scaleType="centerInside"-->
+                    <!--android:src="@drawable/ic_arrow_r"-->
+                    <!--android:visibility="invisible" />-->
                 </TableRow>
 
-                <TableRow android:background="@drawable/divider_bottom">
+                <TableRow
+                    android:id="@+id/tr_job"
+                    android:background="@drawable/user_divider_bottom"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="10dp">
 
                     <TextView
                         style="@style/TableTextLabel"
@@ -84,14 +91,18 @@
 
 
                     <!--<ImageView-->
-                        <!--android:layout_width="25dp"-->
-                        <!--android:layout_height="25dp"-->
-                        <!--android:layout_gravity="center_vertical"-->
-                        <!--android:scaleType="centerInside"-->
-                        <!--android:src="@drawable/ic_arrow_r" />-->
+                    <!--android:layout_width="25dp"-->
+                    <!--android:layout_height="25dp"-->
+                    <!--android:layout_gravity="center_vertical"-->
+                    <!--android:scaleType="centerInside"-->
+                    <!--android:src="@drawable/ic_arrow_r" />-->
                 </TableRow>
 
-                <TableRow android:background="@drawable/divider_bottom">
+                <TableRow
+                    android:id="@+id/tr_sex"
+                    android:background="@drawable/user_divider_bottom"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="10dp">
 
                     <TextView
                         style="@style/TableTextLabel"
@@ -105,14 +116,18 @@
 
 
                     <!--<ImageView-->
-                        <!--android:layout_width="25dp"-->
-                        <!--android:layout_height="25dp"-->
-                        <!--android:layout_gravity="center_vertical"-->
-                        <!--android:scaleType="centerInside"-->
-                        <!--android:src="@drawable/ic_arrow_r" />-->
+                    <!--android:layout_width="25dp"-->
+                    <!--android:layout_height="25dp"-->
+                    <!--android:layout_gravity="center_vertical"-->
+                    <!--android:scaleType="centerInside"-->
+                    <!--android:src="@drawable/ic_arrow_r" />-->
                 </TableRow>
 
-                <TableRow android:background="@drawable/divider_bottom">
+                <TableRow
+                    android:id="@+id/tr_language"
+                    android:background="@drawable/user_divider_bottom"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="10dp">
 
                     <TextView
                         style="@style/TableTextLabel"
@@ -126,14 +141,18 @@
 
 
                     <!--<ImageView-->
-                        <!--android:layout_width="25dp"-->
-                        <!--android:layout_height="25dp"-->
-                        <!--android:layout_gravity="center_vertical"-->
-                        <!--android:scaleType="centerInside"-->
-                        <!--android:src="@drawable/ic_arrow_r" />-->
+                    <!--android:layout_width="25dp"-->
+                    <!--android:layout_height="25dp"-->
+                    <!--android:layout_gravity="center_vertical"-->
+                    <!--android:scaleType="centerInside"-->
+                    <!--android:src="@drawable/ic_arrow_r" />-->
                 </TableRow>
 
-                <TableRow android:background="@drawable/divider_bottom">
+                <TableRow
+                    android:id="@+id/tr_woek_experience"
+                    android:background="@drawable/user_divider_bottom"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="10dp">
 
                     <TextView
                         style="@style/TableTextLabel"
@@ -147,14 +166,18 @@
 
 
                     <!--<ImageView-->
-                        <!--android:layout_width="25dp"-->
-                        <!--android:layout_height="25dp"-->
-                        <!--android:layout_gravity="center_vertical"-->
-                        <!--android:scaleType="centerInside"-->
-                        <!--android:src="@drawable/ic_arrow_r" />-->
+                    <!--android:layout_width="25dp"-->
+                    <!--android:layout_height="25dp"-->
+                    <!--android:layout_gravity="center_vertical"-->
+                    <!--android:scaleType="centerInside"-->
+                    <!--android:src="@drawable/ic_arrow_r" />-->
                 </TableRow>
 
-                <TableRow android:background="@drawable/divider_bottom">
+                <TableRow
+                    android:id="@+id/tr_city"
+                    android:background="@drawable/user_divider_bottom"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="10dp">
 
                     <TextView
                         style="@style/TableTextLabel"
@@ -175,7 +198,11 @@
                         android:src="@drawable/ic_arrow_r" />
                 </TableRow>
 
-                <TableRow android:background="@drawable/divider_bottom">
+                <TableRow
+                    android:id="@+id/tr_education"
+                    android:background="@drawable/user_divider_bottom"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="10dp">
 
                     <TextView
                         style="@style/TableTextLabel"
@@ -189,14 +216,18 @@
 
 
                     <!--<ImageView-->
-                        <!--android:layout_width="25dp"-->
-                        <!--android:layout_height="25dp"-->
-                        <!--android:layout_gravity="center_vertical"-->
-                        <!--android:scaleType="centerInside"-->
-                        <!--android:src="@drawable/ic_arrow_r" />-->
+                    <!--android:layout_width="25dp"-->
+                    <!--android:layout_height="25dp"-->
+                    <!--android:layout_gravity="center_vertical"-->
+                    <!--android:scaleType="centerInside"-->
+                    <!--android:src="@drawable/ic_arrow_r" />-->
                 </TableRow>
 
-                <TableRow android:background="@drawable/divider_bottom">
+                <TableRow
+                    android:id="@+id/tr_mail"
+                    android:background="@drawable/user_divider_bottom"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="10dp">
 
                     <TextView
                         style="@style/TableTextLabel"
@@ -209,15 +240,18 @@
 
 
                     <!--<ImageView-->
-                        <!--android:layout_width="25dp"-->
-                        <!--android:layout_height="25dp"-->
-                        <!--android:layout_gravity="center_vertical"-->
-                        <!--android:scaleType="centerInside"-->
-                        <!--android:src="@drawable/ic_arrow_r"-->
-                        <!--android:visibility="invisible" />-->
+                    <!--android:layout_width="25dp"-->
+                    <!--android:layout_height="25dp"-->
+                    <!--android:layout_gravity="center_vertical"-->
+                    <!--android:scaleType="centerInside"-->
+                    <!--android:src="@drawable/ic_arrow_r"-->
+                    <!--android:visibility="invisible" />-->
                 </TableRow>
 
-                <TableRow>
+                <TableRow
+                    android:id="@+id/tr_phone"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="10dp">
 
                     <TextView
                         style="@style/TableTextLabel"
@@ -231,12 +265,12 @@
 
 
                     <!--<ImageView-->
-                        <!--android:layout_width="25dp"-->
-                        <!--android:layout_height="25dp"-->
-                        <!--android:layout_gravity="center_vertical"-->
-                        <!--android:scaleType="centerInside"-->
-                        <!--android:src="@drawable/ic_arrow_r"-->
-                        <!--android:visibility="invisible" />-->
+                    <!--android:layout_width="25dp"-->
+                    <!--android:layout_height="25dp"-->
+                    <!--android:layout_gravity="center_vertical"-->
+                    <!--android:scaleType="centerInside"-->
+                    <!--android:src="@drawable/ic_arrow_r"-->
+                    <!--android:visibility="invisible" />-->
                 </TableRow>
 
             </TableLayout>

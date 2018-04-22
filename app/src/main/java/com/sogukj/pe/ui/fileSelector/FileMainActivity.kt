@@ -34,6 +34,8 @@ class FileMainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
     val selectedFile = ArrayList<File>()
     var maxSize: Int by Delegates.notNull()
     var isReplace: Boolean = false
+    private val comDocFragment by lazy { CommonDocumentsFragment.newInstance() }
+    private val allFileFragment by lazy { AllFileFragment() }
     @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +57,7 @@ class FileMainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
                 spinner.dismiss()
             }
         }
-        val fragments = listOf(CommonDocumentsFragment.newInstance(), AllFileFragment())
+        val fragments = listOf(comDocFragment, allFileFragment)
         file_pager.adapter = FilePageAdapter(supportFragmentManager, fragments)
         file_pager.addOnPageChangeListener(this)
         send_selected_files.setOnClickListener {
