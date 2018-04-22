@@ -253,6 +253,8 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
             }
             if (data.type == 0) {
                 directorPosition.visibility = View.GONE
+            } else {
+                directorPosition.visibility = View.VISIBLE
             }
             phoneNumberTv.text = data.phone
             IDCardTv.text = data.idCard

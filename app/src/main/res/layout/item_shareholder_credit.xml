@@ -21,7 +21,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
+            android:gravity="center|left"
             android:orientation="horizontal">
 
             <TextView
@@ -52,7 +52,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:gravity="center_vertical"
                 android:singleLine="true"
                 android:text="18851656871"
                 android:textColor="@color/shareholder_text_gray"

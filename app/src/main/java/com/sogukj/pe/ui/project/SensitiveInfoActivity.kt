@@ -105,10 +105,9 @@ class SensitiveInfoActivity : BaseActivity(), View.OnClickListener {
                             }
                             this.court?.item?.let {
                                 setInfo(courtNoticeCount, it.fygg?.num != null && it.fygg?.num != 0, "${it.fygg?.num}条记录")
-                                setInfo(courtroomtNoticeCount, it.ktgg?.num != null && it.zxgg?.num != 0, "${it.ktgg?.num}条记录")
-                                setInfo(refereeDocumentsCount, it.cpws?.num != null && it.zxgg?.num != 0, "${it.cpws?.num}条记录")
+                                setInfo(courtroomtNoticeCount, it.ktgg?.num != null && it.ktgg?.num != 0, "${it.ktgg?.num}条记录")
+                                setInfo(refereeDocumentsCount, it.cpws?.num != null && it.cpws?.num != 0, "${it.cpws?.num}条记录")
                                 setInfo(executiveBulletinCount, it.zxgg?.num != null && it.zxgg?.num != 0, "${it.zxgg?.num}条记录")
-                                recordNumber2.setOnClickListener(this@SensitiveInfoActivity)
                             }
                             this.dishonest?.let { setLostList(it) }
                             this.bankRisk?.let { setBankRisk(it) }
@@ -159,6 +158,12 @@ class SensitiveInfoActivity : BaseActivity(), View.OnClickListener {
      * 法院失信名单
      */
     private fun setLostList(dishonest: SensitiveInfo.Dishonest) {
+        if (dishonest.num == null || dishonest.num == 0) {
+            recordNumber2.text = "无"
+            recordNumber2.textColor = Color.parseColor("#282828")
+            recordNumber2.setOnClickListener(null)
+            return
+        }
         recordNumber2.text = "${dishonest.num}条记录"
         if (dishonest.item.size != 0) {
             filingDate.text = dishonest.item[0].time
@@ -167,6 +172,7 @@ class SensitiveInfoActivity : BaseActivity(), View.OnClickListener {
             fulfillStateTv.text = dishonest.item[0].performance
             executionBasisTv.text = dishonest.item[0].base
         }
+        recordNumber2.setOnClickListener(this@SensitiveInfoActivity)
     }
 
     /**

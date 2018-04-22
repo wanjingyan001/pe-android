@@ -604,6 +604,7 @@
                             android:drawableTop="@drawable/selector_low_risk"
                             android:tag="low"
                             android:text="一般风险"
+                            android:enabled="false"
                             app:layout_columnWeight="1" />
 
                         <com.sogukj.pe.view.TipsView
@@ -612,6 +613,7 @@
                             android:drawableTop="@drawable/selector_medium_risk"
                             android:tag="low"
                             android:text="中风险"
+                            android:enabled="false"
                             app:layout_columnWeight="1" />
 
                         <com.sogukj.pe.view.TipsView
@@ -620,6 +622,7 @@
                             android:drawableTop="@drawable/selector_high_risk"
                             android:tag="low"
                             android:text="高风险"
+                            android:enabled="false"
                             app:layout_columnWeight="1" />
 
                         <com.sogukj.pe.view.TipsView
@@ -628,6 +631,7 @@
                             android:drawableTop="@drawable/selector_danger_credit"
                             android:tag="low"
                             android:text="资信不佳"
+                            android:enabled="false"
                             app:layout_columnWeight="1" />
 
                         <com.sogukj.pe.view.TipsView
@@ -636,6 +640,7 @@
                             android:drawableTop="@drawable/selector_refuse"
                             android:tag="low"
                             android:text="拒绝"
+                            android:enabled="false"
                             app:layout_columnWeight="1" />
                     </android.support.v7.widget.GridLayout>
 

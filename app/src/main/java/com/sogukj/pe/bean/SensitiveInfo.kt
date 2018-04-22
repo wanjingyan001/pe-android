@@ -15,11 +15,11 @@ class SensitiveInfo : Serializable {
 
     inner class BankRisk : Serializable {
         //1=>是，0=>否
-        var bank_bad = 0//低风险
-        var bank_overdue = 0//一般风险
-        var bank_lost = 0//高风险
-        var bank_fraud = 0//资信不佳
-        var bank_refuse = 0//拒绝
+        var bank_bad: Int? = null//低风险
+        var bank_overdue: Int? = null//一般风险
+        var bank_lost: Int? = null//高风险
+        var bank_fraud: Int? = null//资信不佳
+        var bank_refuse: Int? = null//拒绝
     }
 
     inner class Dishonest : Serializable {
