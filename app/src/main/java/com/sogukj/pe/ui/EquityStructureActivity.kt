@@ -34,11 +34,18 @@ import com.sogukj.pe.bean.StructureBean
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
+import com.sougukj.setOnClickFastListener
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_equity_structure.*
 import kotlinx.android.synthetic.main.toolbar.*
+import org.jetbrains.anko.ctx
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.find
+import org.jetbrains.anko.toast
 import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.HashMap
 
@@ -106,9 +113,15 @@ class EquityStructureActivity : ToolbarActivity(), PlatformActionListener {
         toolbar_menu.visibility = View.VISIBLE
         toolbar_menu.setImageResource(R.drawable.share)
         toolbar_menu.setOnClickListener {
-            share()
+            if (Utils.saveNestedScroolViewImage(mNestedScrollView, Environment.getExternalStorageDirectory().absolutePath)) {
+                share()
+            } else {
+                showCustomToast(R.drawable.icon_toast_common, "生成截图失败")
+            }
         }
     }
+
+    val PATH  = Environment.getExternalStorageDirectory().absolutePath + "/EquityStructure.png"
 
     fun setChildren(llChildren: LinearLayout, dataList: List<StructureBean>, index: Int) {
         val index = index + 1
@@ -166,132 +179,69 @@ class EquityStructureActivity : ToolbarActivity(), PlatformActionListener {
         }
     }
 
-    override fun onComplete(platform: Platform, i: Int, hashMap: HashMap<String, Any>) {
-        if (platform.name == WechatMoments.NAME) {// 判断成功的平台是不是朋友圈
-            mHandler.sendEmptyMessage(1)
-        } else if (platform.name == Wechat.NAME) {
-            mHandler.sendEmptyMessage(2)
-        } else if (platform.name == SinaWeibo.NAME) {
-            mHandler.sendEmptyMessage(3)
-        } else if (platform.name == QQ.NAME) {
-            mHandler.sendEmptyMessage(4)
-        } else if (platform.name == QZone.NAME) {
-            mHandler.sendEmptyMessage(5)
-        } else if (platform.name == ShortMessage.NAME) {
-            mHandler.sendEmptyMessage(6)
+    private fun share(){
+        val dialog = Dialog(this@EquityStructureActivity, R.style.AppTheme_Dialog)
+        dialog.setContentView(R.layout.dialog_share)
+        val lay = dialog.window.attributes
+        lay.height = WindowManager.LayoutParams.WRAP_CONTENT
+        lay.width = WindowManager.LayoutParams.MATCH_PARENT
+        lay.gravity = Gravity.BOTTOM
+        dialog.window.attributes = lay
+        dialog.show()
+        dialog.find<TextView>(R.id.tv_copy).visibility = View.GONE
+
+        dialog.find<TextView>(R.id.tv_wexin).setOnClickFastListener {
+            dialog.dismiss()
+            val sp = cn.sharesdk.framework.Platform.ShareParams()
+            sp.shareType = cn.sharesdk.framework.Platform.SHARE_IMAGE
+            //sp.title = "我的名片"
+            //sp.text = "这是${userBean.name}的名片"
+            sp.imagePath = PATH
+            val wechat = ShareSDK.getPlatform(Wechat.NAME)
+            wechat.platformActionListener = this@EquityStructureActivity
+            wechat.share(sp)
+        }
+        dialog.find<TextView>(R.id.tv_qq).setOnClickFastListener {
+            dialog.dismiss()
+            val sp = Platform.ShareParams()
+            //sp.title = "我的名片"
+            //sp.text = "这是${userBean.name}的名片"
+            sp.imagePath = PATH
+            val qq = ShareSDK.getPlatform(QQ.NAME)
+            qq.platformActionListener = this@EquityStructureActivity
+            qq.share(sp)
         }
     }
 
-    override fun onError(platform: Platform, i: Int, throwable: Throwable) {
-        throwable.printStackTrace()
-
-        if (throwable is WechatClientNotExistException) {
-            mHandler.sendEmptyMessage(8)
-        } else if (throwable is PackageManager.NameNotFoundException) {
-            mHandler.sendEmptyMessage(9)
-        } else if (throwable is QQClientNotExistException || throwable is cn.sharesdk.tencent.qq.QQClientNotExistException) {
-            mHandler.sendEmptyMessage(10)
-        } else {
-            mHandler.sendEmptyMessage(11)
-        }
-
-    }
-
-    override fun onCancel(platform: Platform, i: Int) {
-        mHandler.sendEmptyMessage(7)
-    }
-
-    var mHandler: Handler = object : Handler() {
-        override fun handleMessage(msg: Message) {
-            when (msg.what) {
-                1 -> Toast.makeText(this@EquityStructureActivity, "朋友圈分享成功", Toast.LENGTH_LONG).show()
-                2 -> Toast.makeText(this@EquityStructureActivity, "微信分享成功", Toast.LENGTH_LONG).show()
-                3 -> Toast.makeText(this@EquityStructureActivity, "新浪微博分享成功", Toast.LENGTH_LONG).show()
-                4 -> Toast.makeText(this@EquityStructureActivity, "QQ分享成功", Toast.LENGTH_LONG).show()
-                5 -> Toast.makeText(this@EquityStructureActivity, "QQ空间分享成功", Toast.LENGTH_LONG).show()
-                6 -> Toast.makeText(this@EquityStructureActivity, "短信分享成功", Toast.LENGTH_LONG).show()
-                7 -> Toast.makeText(this@EquityStructureActivity, "取消分享", Toast.LENGTH_LONG).show()
-                8 -> Toast.makeText(this@EquityStructureActivity, "请安装微信", Toast.LENGTH_LONG).show()
-                9 -> Toast.makeText(this@EquityStructureActivity, "请安装微博", Toast.LENGTH_LONG).show()
-                10 -> Toast.makeText(this@EquityStructureActivity, "请安装QQ", Toast.LENGTH_LONG).show()
-                11 -> Toast.makeText(this@EquityStructureActivity, "分享失败", Toast.LENGTH_LONG).show()
-                else -> {
+    override fun onComplete(p0: Platform?, p1: Int, p2: HashMap<String, Any>?) {
+        runOnUiThread {
+            p0?.let {
+                when(it.name){
+                    Wechat.NAME -> showCustomToast(R.drawable.icon_toast_success, "微信分享成功")
+                    QQ.NAME -> showCustomToast(R.drawable.icon_toast_success, "QQ分享成功")
                 }
             }
         }
     }
 
-    var news: NewsBean? = null
+    override fun onCancel(p0: Platform?, p1: Int) {
+        runOnUiThread {
+            showCustomToast(R.drawable.icon_toast_common, "取消分享")
+        }
+    }
 
-    fun share() {
-        if (news == null)
-            return
-        val dialog = Dialog(this, R.style.AppTheme_Dialog)
-        dialog.setContentView(R.layout.dialog_share)
-        val lay = dialog.getWindow()!!.getAttributes()
-        lay.height = WindowManager.LayoutParams.WRAP_CONTENT
-        lay.width = WindowManager.LayoutParams.MATCH_PARENT
-        lay.gravity = Gravity.BOTTOM
-        dialog.getWindow()!!.setAttributes(lay)
-        dialog.show()
-
-        val tvWexin = dialog.findViewById(R.id.tv_wexin) as TextView
-        val tvQq = dialog.findViewById(R.id.tv_qq) as TextView
-        val tvCopy = dialog.findViewById(R.id.tv_copy) as TextView
-        val shareUrl = news!!.shareUrl
-        val shareTitle = news!!.shareTitle
-        val shareSummry = news!!.title
-        //val shareImgUrl = File(Environment.getExternalStorageDirectory(), "img_logo.png").toString()
-        val shareImgUrl:String
-        when (Utils.getEnvironment()) {
-            "civc" -> {
-                shareImgUrl = File(Environment.getExternalStorageDirectory(), "ic_launcher_zd.png").toString()
-            }
-            "ht" -> {
-                shareImgUrl = File(Environment.getExternalStorageDirectory(), "ic_launcher_ht.png").toString()
-            }
-            "kk" -> {
-                shareImgUrl = File(Environment.getExternalStorageDirectory(), "ic_launcher_kk.png").toString()
-            }
-            "yge" -> {
-                shareImgUrl = File(Environment.getExternalStorageDirectory(), "ic_launcher_yge.png").toString()
-            }
-            else -> {
-                shareImgUrl = File(Environment.getExternalStorageDirectory(), "img_logo.png").toString()
+    override fun onError(p0: Platform?, p1: Int, p2: Throwable?) {
+        runOnUiThread {
+            p2?.let {
+                it.printStackTrace()
+                if (it is WechatClientNotExistException){
+                    showCustomToast(R.drawable.icon_toast_common, "请安装微信")
+                } else if (it is QQClientNotExistException || it is cn.sharesdk.tencent.qq.QQClientNotExistException){
+                    showCustomToast(R.drawable.icon_toast_common, "请安装QQ")
+                }else{
+                    showCustomToast(R.drawable.icon_toast_fail, "分享失败")
+                }
             }
         }
-        tvCopy.setOnClickListener {
-            dialog.dismiss()
-            Utils.copy(this, shareUrl)
-            showCustomToast(R.drawable.icon_toast_common, "已复制")
-        }
-        tvQq.setOnClickListener {
-            dialog.dismiss()
-            val sp = Platform.ShareParams()
-            sp.setTitle(shareTitle)
-            sp.setText(shareSummry)
-            sp.setImageUrl(shareImgUrl)//网络图片rul
-            sp.setTitleUrl(shareUrl)
-            val qq = ShareSDK.getPlatform(QQ.NAME)
-            qq.platformActionListener = this
-            qq.share(sp)
-        }
-        tvWexin.setOnClickListener {
-            dialog.dismiss()
-            val sp = cn.sharesdk.framework.Platform.ShareParams()
-            sp.setShareType(cn.sharesdk.framework.Platform.SHARE_WEBPAGE)//非常重要：一定要设置分享属性
-            sp.setTitle(shareTitle)  //分享标题
-            sp.setText(shareSummry)   //分享文本
-            if (null != news!!.imgUrl) {
-                sp.imageUrl = shareImgUrl//网络图片rul
-            } else {
-                sp.imagePath = shareImgUrl//
-            }
-            sp.setUrl(shareUrl)
-            val wechat = ShareSDK.getPlatform(Wechat.NAME)
-            wechat.platformActionListener = this
-            wechat.share(sp)
-        }
-
     }
 }

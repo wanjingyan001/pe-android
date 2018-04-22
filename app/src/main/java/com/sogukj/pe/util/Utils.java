@@ -12,6 +12,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.media.MediaScannerConnection;
 import android.net.ConnectivityManager;
@@ -23,6 +25,7 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.telephony.TelephonyManager;
 import android.text.InputFilter;
 import android.text.Spanned;
@@ -589,6 +592,53 @@ public class Utils {
             ApplicationInfo info = context.getApplicationInfo();
             return (info.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
         } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     *
+     * @param scrollView
+     * @param filePath(不带后缀名)
+     */
+    public static boolean saveNestedScroolViewImage(NestedScrollView scrollView, String filePath){
+        int h = 0;
+        Bitmap bitmap = null;
+        // 获取scrollview实际高度
+        for (int i = 0; i < scrollView.getChildCount(); i++) {
+            h += scrollView.getChildAt(i).getHeight();
+            scrollView.getChildAt(i).setBackgroundColor(
+                    Color.parseColor("#ffffff"));
+        }
+        // 创建对应大小的bitmap
+        bitmap = Bitmap.createBitmap(scrollView.getWidth(), h,
+                Bitmap.Config.RGB_565);
+        final Canvas canvas = new Canvas(bitmap);
+        scrollView.draw(canvas);
+
+        //保存bitmap
+        try {
+            File outfile = new File(filePath);
+            // 如果文件不存在，则创建一个新文件
+            if (!outfile.isDirectory()) {
+                outfile.mkdirs();
+            }
+            String fname = outfile + "/EquityStructure.png";
+            File file = new File(fname);
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            FileOutputStream fos = null;
+            fos = new FileOutputStream(fname);
+            if (null != fos) {
+                bitmap.compress(Bitmap.CompressFormat.PNG, 90, fos);
+                fos.flush();
+                fos.close();
+                return true;
+            }
+            return false;
+        } catch (IOException e) {
+            e.printStackTrace();
             return false;
         }
     }
