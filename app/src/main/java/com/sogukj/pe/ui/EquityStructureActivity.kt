@@ -81,27 +81,37 @@ class EquityStructureActivity : ToolbarActivity(), PlatformActionListener {
                             tvName.text = it.name
                             tvPercent.text = it.percent
                             tvAmount.text = it.amount
-//                            val cbxHeader = ll_node.findViewById(R.id.cbx_header) as CheckBox
-//                            cbxHeader.setOnCheckedChangeListener { buttonView, isChecked ->
-//                                if (isChecked) {
-//                                    if (children == null || children?.size == 0) {
-//                                        llChildren.visibility = View.GONE
-//                                    } else {
-//                                        llChildren.visibility = View.VISIBLE
-//                                    }
-//                                } else {
-//                                    llChildren.visibility = View.GONE
-//                                }
-//                            }
-                            if (it.children == null || it.children?.size == 0) {
-                                llChildren.visibility = View.GONE
-                            } else {
-                                llChildren.visibility = View.VISIBLE
+                            val cbxHeader = ll_node.findViewById(R.id.cbx_header) as CheckBox
+                            cbxHeader.setOnCheckedChangeListener { buttonView, isChecked ->
+                                if (isChecked) {
+                                    if (it.children == null || it.children?.size == 0) {
+                                        llChildren.visibility = View.GONE
+                                    } else {
+                                        llChildren.visibility = View.VISIBLE
+                                    }
+                                } else {
+                                    llChildren.visibility = View.GONE
+                                }
                             }
+                            cbxHeader.isChecked = true
+//                            if (it.children == null || it.children?.size == 0) {
+//                                llChildren.visibility = View.GONE
+//                            } else {
+//                                llChildren.visibility = View.VISIBLE
+//                            }
                             it.children?.apply {
                                 setChildren(llChildren, this, 0)
                             }
                             nestedRoot.addView(ll_node)
+
+                            //保存
+                            if (Utils.saveNestedScroolViewImage(mNestedScrollView, Environment.getExternalStorageDirectory().absolutePath)) {
+                                //share()
+                                canShare = true
+                            } else {
+                                canShare = false
+                                showCustomToast(R.drawable.icon_toast_common, "生成截图失败,请检查手机内存")
+                            }
                         }
                     } else
                         showCustomToast(R.drawable.icon_toast_fail, payload.message)
@@ -113,15 +123,16 @@ class EquityStructureActivity : ToolbarActivity(), PlatformActionListener {
         toolbar_menu.visibility = View.VISIBLE
         toolbar_menu.setImageResource(R.drawable.share)
         toolbar_menu.setOnClickListener {
-            if (Utils.saveNestedScroolViewImage(mNestedScrollView, Environment.getExternalStorageDirectory().absolutePath)) {
-                share()
-            } else {
-                showCustomToast(R.drawable.icon_toast_common, "生成截图失败")
+            if (!canShare) {
+                return@setOnClickListener
             }
+            share()
         }
     }
 
-    val PATH  = Environment.getExternalStorageDirectory().absolutePath + "/EquityStructure.png"
+    var canShare = false
+
+    val PATH = Environment.getExternalStorageDirectory().absolutePath + "/EquityStructure.png"
 
     fun setChildren(llChildren: LinearLayout, dataList: List<StructureBean>, index: Int) {
         val index = index + 1
@@ -134,23 +145,24 @@ class EquityStructureActivity : ToolbarActivity(), PlatformActionListener {
             setHeader(llHeader, it, index)
             if (index <= 3)
                 it.children?.apply {
-                    //                    val cbxHeader = node.findViewById(R.id.cbx_header) as CheckBox
-//                    cbxHeader.setOnCheckedChangeListener { buttonView, isChecked ->
-//                        if (isChecked) {
-//                            if (this == null || this?.size == 0) {
-//                                llChildren.visibility = View.GONE
-//                            } else {
-//                                llChildren.visibility = View.VISIBLE
-//                            }
-//                        } else {
-//                            llChildren.visibility = View.GONE
-//                        }
-//                    }
-                    if (this == null || this?.size == 0) {
-                        llChildren.visibility = View.GONE
-                    } else {
-                        llChildren.visibility = View.VISIBLE
+                    val cbxHeader = node.findViewById(R.id.cbx_header) as CheckBox
+                    cbxHeader.setOnCheckedChangeListener { buttonView, isChecked ->
+                        if (isChecked) {
+                            if (this == null || this?.size == 0) {
+                                llChildren.visibility = View.GONE
+                            } else {
+                                llChildren.visibility = View.VISIBLE
+                            }
+                        } else {
+                            llChildren.visibility = View.GONE
+                        }
                     }
+                    cbxHeader.isChecked = true
+//                    if (this == null || this?.size == 0) {
+//                        llChildren.visibility = View.GONE
+//                    } else {
+//                        llChildren.visibility = View.VISIBLE
+//                    }
                     setChildren(llChildren, this, index)
                 }
         }
@@ -179,7 +191,7 @@ class EquityStructureActivity : ToolbarActivity(), PlatformActionListener {
         }
     }
 
-    private fun share(){
+    private fun share() {
         val dialog = Dialog(this@EquityStructureActivity, R.style.AppTheme_Dialog)
         dialog.setContentView(R.layout.dialog_share)
         val lay = dialog.window.attributes
@@ -216,7 +228,7 @@ class EquityStructureActivity : ToolbarActivity(), PlatformActionListener {
     override fun onComplete(p0: Platform?, p1: Int, p2: HashMap<String, Any>?) {
         runOnUiThread {
             p0?.let {
-                when(it.name){
+                when (it.name) {
                     Wechat.NAME -> showCustomToast(R.drawable.icon_toast_success, "微信分享成功")
                     QQ.NAME -> showCustomToast(R.drawable.icon_toast_success, "QQ分享成功")
                 }
@@ -234,11 +246,11 @@ class EquityStructureActivity : ToolbarActivity(), PlatformActionListener {
         runOnUiThread {
             p2?.let {
                 it.printStackTrace()
-                if (it is WechatClientNotExistException){
+                if (it is WechatClientNotExistException) {
                     showCustomToast(R.drawable.icon_toast_common, "请安装微信")
-                } else if (it is QQClientNotExistException || it is cn.sharesdk.tencent.qq.QQClientNotExistException){
+                } else if (it is QQClientNotExistException || it is cn.sharesdk.tencent.qq.QQClientNotExistException) {
                     showCustomToast(R.drawable.icon_toast_common, "请安装QQ")
-                }else{
+                } else {
                     showCustomToast(R.drawable.icon_toast_fail, "分享失败")
                 }
             }

@@ -3,27 +3,15 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="70dp"
-    android:background="@color/white"
+    android:background="@drawable/equity_selector"
     android:gravity="center|left"
     android:orientation="horizontal">
 
-    <FrameLayout
+    <com.sogukj.pe.view.CircleImageView
+        android:id="@+id/tuxiang"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginLeft="15dp">
-
-        <com.sogukj.pe.view.CircleImageView
-            android:id="@+id/tuxiang"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <ImageView
-            android:id="@+id/point"
-            android:layout_width="12dp"
-            android:layout_height="12dp"
-            android:layout_gravity="right|top"
-            android:src="@drawable/red_point" />
-    </FrameLayout>
+        android:layout_marginLeft="15dp" />
 
     <LinearLayout
         android:layout_width="match_parent"

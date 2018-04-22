@@ -56,7 +56,7 @@ class EquityListActivity : ToolbarActivity() {
         })
         val layoutManager = LinearLayoutManager(context)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
-        //list.addItemDecoration(SpaceItemDecoration(Utils.dpToPx(context, 10)))
+        list.addItemDecoration(SpaceItemDecoration(Utils.dpToPx(context, 10)))
         list.layoutManager = layoutManager
         list.adapter = adapter
 
@@ -95,7 +95,6 @@ class EquityListActivity : ToolbarActivity() {
 
         val root: LinearLayout
         val tuxiang: CircleImageView
-        val point: ImageView
         val record_title: TextView
         val state_modify: TextView
         val state_create: TextView
@@ -104,7 +103,6 @@ class EquityListActivity : ToolbarActivity() {
         init {
             root = convertView.findViewById(R.id.root) as LinearLayout
             tuxiang = convertView.findViewById(R.id.tuxiang) as CircleImageView
-            point = convertView.findViewById(R.id.point) as ImageView
             record_title = convertView.findViewById(R.id.record_title) as TextView
             state_modify = convertView.findViewById(R.id.state_modify) as TextView
             state_create = convertView.findViewById(R.id.state_create) as TextView
@@ -113,7 +111,6 @@ class EquityListActivity : ToolbarActivity() {
 
         override fun setData(view: View, data: EquityListBean, position: Int) {
             tuxiang.setImageResource(R.drawable.xx)
-            point.visibility = View.VISIBLE
             record_title.text = data.title
             if (data.is_edit == 0) {
                 state_modify.visibility = View.GONE
@@ -122,8 +119,6 @@ class EquityListActivity : ToolbarActivity() {
             }
             record_time.text = data.time
             root.setOnClickListener {
-                point.visibility = View.INVISIBLE
-                root.setBackgroundColor(Color.parseColor("#fff5f5f5"))
                 EquityStructureActivity.start(context, data)
             }
         }
