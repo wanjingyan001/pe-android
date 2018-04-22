@@ -17,6 +17,7 @@ import com.sogukj.pe.bean.CustomSealBean
 import com.sogukj.pe.bean.MessageEvent
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.ui.approve.ListSelectorActivity
+import com.sogukj.pe.util.RxBus
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.IOSPopwindow
@@ -153,12 +154,13 @@ class ShareHolderStepActivity : ToolbarActivity(), View.OnClickListener {
                                     //是否有ShareholderCreditActivity。有就发送，没有就删除step1，然后创建
                                     ActivityHelper.removeStep1()
                                     if (ActivityHelper.hasCreditListActivity()) {
+                                        RxBus.getIntanceBus().post(MessageEvent(item))
                                         //EventBus.getDefault().postSticky(MessageEvent(item))
-                                        for (activity in ActivityHelper.getActivityList()) {
-                                            if (activity is ShareholderCreditActivity) {
-                                                (activity as ShareholderCreditActivity).insert(item!!)
-                                            }
-                                        }
+//                                        for (activity in ActivityHelper.getActivityList()) {
+//                                            if (activity is ShareholderCreditActivity) {
+//                                                (activity as ShareholderCreditActivity).insert(item!!)
+//                                            }
+//                                        }
                                     } else {
                                         ShareholderCreditActivity.start(this@ShareHolderStepActivity, project)
                                     }

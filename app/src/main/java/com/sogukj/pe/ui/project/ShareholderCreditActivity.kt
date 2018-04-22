@@ -20,7 +20,9 @@ import com.google.gson.Gson
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.CreditInfo
+import com.sogukj.pe.bean.MessageEvent
 import com.sogukj.pe.bean.ProjectBean
+import com.sogukj.pe.util.RxBus
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.RecyclerAdapter
@@ -30,10 +32,12 @@ import com.sogukj.util.XmlDb
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_shareholder_credit.*
+import kotlinx.android.synthetic.main.weekly_event.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.find
+import java.util.function.Consumer
 
 class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
 
@@ -54,6 +58,15 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this)
         }
+        var dispose = RxBus.getIntanceBus().doSubscribe(MessageEvent::class.java, { bean ->
+            mAdapter.dataList.add(0, bean.message)
+            mAdapter.notifyDataSetChanged()
+            iv_empty.visibility = if (mAdapter.dataList.isEmpty()) View.VISIBLE else View.GONE
+            Log.e("success", bean.message.toString())
+        }, { t ->
+            Log.e("success", t.message)
+        })
+        RxBus.getIntanceBus().addSubscription(this, dispose)
     }
 
     override fun onDestroy() {
@@ -61,6 +74,7 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this)
         }
+        RxBus.getIntanceBus().unSubscribe(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -120,6 +134,8 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
                 AddCreditActivity.start(context, "EDIT", cell, 0x002)
             }
         }
+
+
     }
 
     var searchKey: String? = null
