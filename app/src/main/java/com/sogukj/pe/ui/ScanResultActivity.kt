@@ -26,6 +26,7 @@ class ScanResultActivity : BaseActivity() {
         }
 
         cancel.setOnClickListener {
+            finish()
             overridePendingTransition(0,R.anim.activity_out)
         }
     }
