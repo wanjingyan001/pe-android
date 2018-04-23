@@ -105,8 +105,27 @@ class DocumentsFragment : Fragment(), View.OnClickListener {
     }
 
 
+
     private fun refreshList() {
         adapter.dataList.clear()
+        val dirFiles = getDirectoryFiles()
+        if (dirFiles.isEmpty()) {
+            documentList.setVisible(false)
+            iv_empty.setVisible(true)
+        } else {
+            documentList.setVisible(true)
+            iv_empty.setVisible(false)
+            adapter.dataList.addAll(dirFiles)
+            adapter.notifyDataSetChanged()
+        }
+        val map = FileUtil.getFilesByType(dirFiles)
+        header.find<TextView>(R.id.mPicNum).text = "(${map[FileUtil.FileType.IMAGE]?.size})"
+        header.find<TextView>(R.id.mVideoNum).text = "(${map[FileUtil.FileType.VIDEO]?.size})"
+        header.find<TextView>(R.id.mDocNum).text = "(${map[FileUtil.FileType.DOC]?.size})"
+        header.find<TextView>(R.id.mZipNum).text = "(${map[FileUtil.FileType.ZIP]?.size})"
+    }
+
+    fun getDirectoryFiles(): List<File> {
         when (type) {
             PE_LOCAL -> {
                 files = FileUtil.getFiles(FileUtil.getExternalFilesDir(fileActivity.applicationContext))
@@ -138,20 +157,32 @@ class DocumentsFragment : Fragment(), View.OnClickListener {
         Collections.sort(files) { o1, o2 ->
             o2.lastModified().compareTo(o1.lastModified())
         }
-        if (files.isEmpty()) {
-            documentList.setVisible(false)
-            iv_empty.setVisible(true)
+        return files
+    }
+
+    fun search(searchStr: String) {
+        if (searchStr.isNotEmpty()) {
+            val filter = adapter.dataList.filter { file -> file.name.contains(searchStr) }
+            adapter = RecyclerAdapter(context, { _adpater, parent, type ->
+                DocumentHolder(_adpater.getView(R.layout.item_document_list, parent))
+            })
+            adapter.dataList.addAll(filter)
+            documentList.adapter = adapter
         } else {
-            documentList.setVisible(true)
-            iv_empty.setVisible(false)
-            adapter.dataList.addAll(files)
-            adapter.notifyDataSetChanged()
+            val dirFiles = getDirectoryFiles()
+            if (dirFiles.isEmpty()) {
+                documentList.setVisible(false)
+                iv_empty.setVisible(true)
+            } else {
+                documentList.setVisible(true)
+                iv_empty.setVisible(false)
+                adapter = RecyclerAdapter(context, { _adpater, parent, type ->
+                    DocumentHolder(_adpater.getView(R.layout.item_document_list, parent))
+                })
+                adapter.dataList.addAll(dirFiles)
+                documentList.adapter = adapter
+            }
         }
-        val map = FileUtil.getFilesByType(files)
-        header.find<TextView>(R.id.mPicNum).text = "(${map[FileUtil.FileType.IMAGE]?.size})"
-        header.find<TextView>(R.id.mVideoNum).text = "(${map[FileUtil.FileType.VIDEO]?.size})"
-        header.find<TextView>(R.id.mDocNum).text = "(${map[FileUtil.FileType.DOC]?.size})"
-        header.find<TextView>(R.id.mZipNum).text = "(${map[FileUtil.FileType.ZIP]?.size})"
     }
 
 
