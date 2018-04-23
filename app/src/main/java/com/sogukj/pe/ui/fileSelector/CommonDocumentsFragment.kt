@@ -15,7 +15,7 @@ class CommonDocumentsFragment : Fragment() {
     private var mParam1: String? = null
     private var mParam2: String? = null
     val titles = listOf("本应用", "微信", "QQ", "钉钉", "全部")
-    val peFragment by lazy { DocumentsFragment.newInstance(DocumentsFragment.PE_LOACL) }
+    val peFragment by lazy { DocumentsFragment.newInstance(DocumentsFragment.PE_LOCAL) }
     val wxFragment by lazy { DocumentsFragment.newInstance(DocumentsFragment.WX_DOC) }
     val qqFragment by lazy { DocumentsFragment.newInstance(DocumentsFragment.QQ_DOC) }
     val dtFragment by lazy { DocumentsFragment.newInstance(DocumentsFragment.DING_TALK) }

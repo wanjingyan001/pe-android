@@ -5,12 +5,16 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.sogukj.pe.Extras
 
 import com.sogukj.pe.R
 import com.sogukj.pe.util.FileUtil
+import com.sogukj.pe.util.RxBus
+import kotlinx.android.synthetic.main.calendar_dingding.*
 import kotlinx.android.synthetic.main.fragment_storage_file.*
 import java.io.File
 
@@ -24,6 +28,7 @@ class StorageFileFragment : Fragment() {
     lateinit var mDirectoryAdapter: DirectoryAdapter
     private var mFileClickListener: FileClickListener? = null
     lateinit var fileActivity: FileMainActivity
+    private lateinit var files: List<File>
 
     fun setListener(listener: FileClickListener) {
         mFileClickListener = listener
@@ -53,7 +58,8 @@ class StorageFileFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mDirectoryAdapter = DirectoryAdapter(context, FileUtil.getFileListByDirPath(mPath, null),fileActivity)
+        files = FileUtil.getFileListByDirPath(mPath, null).toMutableList()
+        mDirectoryAdapter = DirectoryAdapter(context, files as MutableList<File>, fileActivity)
         mDirectoryAdapter.setOnItemClickListener(object : DirectoryAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
                 if (mFileClickListener != null) {
@@ -64,6 +70,12 @@ class StorageFileFragment : Fragment() {
         directory_recycler_view.layoutManager = LinearLayoutManager(context)
         directory_recycler_view.adapter = mDirectoryAdapter
         directory_recycler_view.setEmptyView(directory_empty_view)
+    }
+
+
+    fun changeData() {
+        files = FileUtil.getFileListByDirPath(mPath, null).toMutableList()
+        mDirectoryAdapter.changeData(files as MutableList<File>)
     }
 
     companion object {

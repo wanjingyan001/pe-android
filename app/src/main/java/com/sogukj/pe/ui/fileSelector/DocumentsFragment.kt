@@ -6,25 +6,32 @@ import android.os.Bundle
 import android.os.Environment
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.sogukj.pe.Extras
 
 import com.sogukj.pe.R
 import com.sogukj.pe.util.FileTypeUtils
 import com.sogukj.pe.util.FileUtil
+import com.sogukj.pe.util.RxBus
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
+import com.sougukj.setOnClickFastListener
 import com.sougukj.setVisible
+import kotlinx.android.synthetic.main.calendar_dingding.*
 import kotlinx.android.synthetic.main.fragment_documents.*
 import kotlinx.android.synthetic.main.layout_empty.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.imageResource
+import org.jetbrains.anko.support.v4.ctx
 import org.jetbrains.anko.toast
 import java.io.File
 import java.util.*
@@ -35,13 +42,16 @@ import java.util.*
  * Use the [DocumentsFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class DocumentsFragment : Fragment() {
+class DocumentsFragment : Fragment(), View.OnClickListener {
+
+
     private var type: Int? = null
     private var mParam2: String? = null
 
     lateinit var adapter: RecyclerAdapter<File>
     lateinit var files: List<File>
     lateinit var fileActivity: FileMainActivity
+    lateinit var header: LinearLayout
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -69,13 +79,36 @@ class DocumentsFragment : Fragment() {
         })
         documentList.layoutManager = LinearLayoutManager(context)
         documentList.adapter = adapter
+        header = layoutInflater.inflate(R.layout.layout_documents_header, documentList, false) as LinearLayout
+        header.find<LinearLayout>(R.id.mPicManage).setOnClickListener(this)
+        header.find<LinearLayout>(R.id.mVideoManage).setOnClickListener(this)
+        header.find<LinearLayout>(R.id.mDocManage).setOnClickListener(this)
+        header.find<LinearLayout>(R.id.mZipManage).setOnClickListener(this)
+        documentList.addHeaderView(header)
+    }
+
+
+    override fun onStart() {
+        super.onStart()
+        val subscribe = RxBus.getIntanceBus().doSubscribe(String::class.java, { t ->
+            if (t == Extras.REFRESH) {
+                refreshList()
+            }
+        }, {
+        })
+        RxBus.getIntanceBus().addSubscription(Extras.REFRESH, subscribe)
     }
 
     override fun onResume() {
         super.onResume()
+        refreshList()
+    }
+
+
+    private fun refreshList() {
         adapter.dataList.clear()
         when (type) {
-            PE_LOACL -> {
+            PE_LOCAL -> {
                 files = FileUtil.getFiles(FileUtil.getExternalFilesDir(fileActivity.applicationContext))
             }
             ALL_DOC -> {
@@ -114,6 +147,36 @@ class DocumentsFragment : Fragment() {
             adapter.dataList.addAll(files)
             adapter.notifyDataSetChanged()
         }
+        val map = FileUtil.getFilesByType(files)
+        header.find<TextView>(R.id.mPicNum).text = "(${map[FileUtil.FileType.IMAGE]?.size})"
+        header.find<TextView>(R.id.mVideoNum).text = "(${map[FileUtil.FileType.VIDEO]?.size})"
+        header.find<TextView>(R.id.mDocNum).text = "(${map[FileUtil.FileType.DOC]?.size})"
+        header.find<TextView>(R.id.mZipNum).text = "(${map[FileUtil.FileType.ZIP]?.size})"
+    }
+
+
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            R.id.mPicManage -> {
+                FilterFileActivity.start(fileActivity, fileActivity.maxSize,
+                        fileActivity.isReplace, fileActivity.isForResult, type!!, FileUtil.FileType.IMAGE)
+            }
+            R.id.mVideoManage -> {
+                FilterFileActivity.start(fileActivity, fileActivity.maxSize,
+                        fileActivity.isReplace, fileActivity.isForResult, type!!, FileUtil.FileType.VIDEO)
+            }
+            R.id.mDocManage -> {
+                FilterFileActivity.start(fileActivity, fileActivity.maxSize,
+                        fileActivity.isReplace, fileActivity.isForResult, type!!, FileUtil.FileType.DOC)
+            }
+            R.id.mZipManage -> {
+                FilterFileActivity.start(fileActivity, fileActivity.maxSize,
+                        fileActivity.isReplace, fileActivity.isForResult, type!!, FileUtil.FileType.ZIP)
+            }
+            else -> {
+
+            }
+        }
     }
 
     companion object {
@@ -124,7 +187,7 @@ class DocumentsFragment : Fragment() {
         val WX_DOC_PATH1 = Environment.getExternalStorageDirectory().path + "/tencent/MicroMsg/WeiXin/"
         val WX_DOC_PATH2 = Environment.getExternalStorageDirectory().path + "/tencent/MicroMsg/Download/"
         val DING_TALK_PATH = Environment.getExternalStorageDirectory().path + "/DingTalk/"
-        val PE_LOACL = 0
+        val PE_LOCAL = 0
         val ALL_DOC = 1
         val WX_DOC = 2
         val QQ_DOC = 3
