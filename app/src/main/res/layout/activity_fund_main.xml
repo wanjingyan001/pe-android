@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.sogukj.pe.view.MyNestedScrollParentFund xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/MyNestedScrollParentFund"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#f7f9fc"
     android:orientation="vertical"
     tools:context="com.sogukj.pe.ui.fund.FundMainFragment">
 
-    <LinearLayout
-        android:id="@+id/toolbarLayout"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/mAppBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:elevation="0dp">
 
         <android.support.v7.widget.Toolbar
             android:id="@id/toolbar"
@@ -24,9 +24,7 @@
             app:contentInsetLeft="0dp"
             app:contentInsetRight="0dp"
             app:contentInsetStart="0dp"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:theme="@style/AppTheme.AppBarOverlay">
+            app:layout_scrollFlags="scroll|enterAlways">
 
             <com.sogukj.pe.view.CircleImageView
                 android:id="@+id/toolbar_back"
@@ -40,145 +38,70 @@
             <TextView
                 android:id="@+id/fundTitle"
                 style="@style/SoguTextTitle"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_marginTop="2dp"
+                android:layout_marginRight="40dp"
                 android:gravity="center"
                 android:singleLine="true"
                 android:text="基金" />
 
-            <LinearLayout
-                android:id="@+id/toolbar_menu"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="right"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <ImageButton
-                    android:id="@+id/fb_add"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:background="@drawable/tj_main"
-                    android:visibility="gone" />
-
-                <FrameLayout
-                    android:id="@+id/iv_search"
-                    android:layout_width="45dp"
-                    android:layout_height="40dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp">
-
-                    <ImageButton
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="20dp"
-                        android:background="@drawable/ic_search" />
-
-                </FrameLayout>
-            </LinearLayout>
+            <ImageView
+                android:id="@+id/iv_search"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="right|center"
+                android:padding="10dp"
+                android:src="@drawable/ic_search" />
         </android.support.v7.widget.Toolbar>
-    </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/color_gray_light"
-        android:orientation="horizontal"
-        android:padding="8dp"
-        android:visibility="gone">
-
-        <LinearLayout
-            android:id="@+id/ll_order_name_1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:gravity="center">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="基金名称"
-                android:textColor="@color/text_1"
-                android:textSize="16sp" />
-
-            <ImageView
-                android:id="@+id/iv_sort_name_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_down" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ll_order_time_1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:gravity="center">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="成立时间"
-                android:textColor="@color/text_1"
-                android:textSize="16sp" />
-
-            <ImageView
-                android:id="@+id/iv_sort_time_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_up" />
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:background="@color/colorPrimary" />
-
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tabs"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/tab_bg_1"
-            app:tabGravity="fill"
-            app:tabIndicatorHeight="0dp"
-            app:tabMode="fixed"
-            app:tabSelectedTextColor="@color/text_1"
-            app:tabTextColor="@color/text_3">
+            android:background="#f7f9fc">
 
-            <android.support.design.widget.TabItem
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:icon="@drawable/cb_1_select"
-                android:text="储备" />
+                android:layout_height="30dp"
+                android:background="@color/colorPrimary" />
 
-            <android.support.design.widget.TabItem
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tabs"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:icon="@drawable/cx_1_unselect"
-                android:text="存续" />
+                android:layout_height="wrap_content"
+                android:background="@drawable/tab_bg_1"
+                app:tabGravity="fill"
+                app:tabIndicatorHeight="0dp"
+                app:tabMode="fixed"
+                app:tabSelectedTextColor="@color/text_1"
+                app:tabTextColor="@color/text_3">
 
-            <android.support.design.widget.TabItem
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:icon="@drawable/tc_1_unselect"
-                android:text="退出" />
-        </android.support.design.widget.TabLayout>
-    </FrameLayout>
+                <android.support.design.widget.TabItem
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:icon="@drawable/cb_1_select"
+                    android:text="储备" />
+
+                <android.support.design.widget.TabItem
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:icon="@drawable/cx_1_unselect"
+                    android:text="存续" />
+
+                <android.support.design.widget.TabItem
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:icon="@drawable/tc_1_unselect"
+                    android:text="退出" />
+            </android.support.design.widget.TabLayout>
+        </FrameLayout>
+
+    </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-</com.sogukj.pe.view.MyNestedScrollParentFund>
+</android.support.design.widget.CoordinatorLayout>

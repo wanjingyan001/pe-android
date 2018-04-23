@@ -3,6 +3,7 @@ package com.sogukj.pe.ui.fund
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.support.design.widget.AppBarLayout
 import android.support.design.widget.TabLayout
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
@@ -13,6 +14,7 @@ import android.text.Spanned
 import android.text.style.AbsoluteSizeSpan
 import android.util.Log
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.RadioGroup
 import android.widget.TextView
@@ -34,12 +36,14 @@ import com.sogukj.pe.ui.SupportEmptyView
 import com.sogukj.pe.ui.main.MainActivity
 import com.sogukj.pe.ui.user.UserActivity
 import com.sogukj.pe.util.Trace
+import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.*
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_fund_main.*
+import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.find
 import org.jetbrains.anko.imageResource
 
@@ -102,16 +106,10 @@ class FundMainFragment : BaseFragment(), View.OnClickListener {
         super.onViewCreated(view, savedInstanceState)
         fundTitle.text = "基金"
 
-        run {
-            ll_order_name_1.setOnClickListener(this)
-            ll_order_time_1.setOnClickListener(this)
-//            iv_user.setOnClickListener(this)
-            iv_search.setOnClickListener(this)
-        }
+        iv_search.setOnClickListener(this)
 
         loadHead()
         toolbar_back.setOnClickListener {
-            //UserActivity.start(context)
             val intent = Intent(context, UserActivity::class.java)
             startActivityForResult(intent, 0x789)
         }
@@ -120,8 +118,6 @@ class FundMainFragment : BaseFragment(), View.OnClickListener {
             var adapter = ArrayPagerAdapter(childFragmentManager, fragments)
             view_pager.adapter = adapter
             view_pager.offscreenPageLimit = fragments.size
-            var transFormer = ProjectPageTransformer()
-            //view_pager.setPageTransformer(true, transFormer)
 
             tabs?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabReselected(tab: TabLayout.Tab?) {
@@ -139,80 +135,126 @@ class FundMainFragment : BaseFragment(), View.OnClickListener {
             })
             view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
                 override fun onPageScrollStateChanged(state: Int) {
-                    //Log.e("PageScrollState", "${state}")
-                    if (state == ViewPager.SCROLL_STATE_DRAGGING) {
-                        judgeOncce = 0
-                    }
                 }
 
                 override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-                    //position永远都是两个的左边一个，viewpager往右滑，positionOffset从0到1（到达1以后position++）
-                    //Log.e("onPageScrolled", "${position} +++ ${positionOffset} +++ ${positionOffsetPixels}")
-                    if (judgeOncce == 0) {
-                        if (positionOffset > 0.5f) {
-                            transFormer.setDirection(true)
-                        } else if (positionOffset < 0.5f) {
-                            transFormer.setDirection(false)
-                        }
-                        judgeOncce = 1
-                    }
                 }
 
-                //滑到新页面才算，没滑到又返回不算
                 override fun onPageSelected(position: Int) {
-                    //Log.e("onPageSelected", "onPageSelected")
                     tabs?.getTabAt(position)?.select()
-                    changeView()
-                    setContent()
+                    if (previousState == "TOP") {
+                        tabs.setBackgroundResource(R.drawable.tab_bg_2)
+                        tabs.setTabTextColors(Color.parseColor("#ff7bb4fc"), Color.parseColor("#ffffff"))
+                        for (i in 0 until tabs.getTabCount()) {
+                            if (i == tabs.getSelectedTabPosition()) {
+                                setDrawable(i, "2", true)
+                            } else {
+                                setDrawable(i, "2", false)
+                            }
+                        }
+                    } else {
+                        tabs.setBackgroundResource(R.drawable.tab_bg_1)
+                        tabs.setTabTextColors(Color.parseColor("#a0a4aa"), Color.parseColor("#282828"))
+                        for (i in 0 until tabs.getTabCount()) {
+                            if (i == tabs.getSelectedTabPosition()) {
+                                setDrawable(i, "1", true)
+                            } else {
+                                setDrawable(i, "1", false)
+                            }
+                        }
+                    }
                 }
 
             })
         }
-    }
 
-    override fun onResume() {
-        super.onResume()
-        try {
-            setContent()
-        } catch (e: Exception) {
-        }
-    }
+        mAppBarLayout.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
+            override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
+                if (mAppBarLayout.height > 0) {
+                    var appBarHeight = mAppBarLayout.height
+                    var toolbarHeight = toolbar.height
 
-    private fun changeView() {
-        if (toolbarLayout.height == 0) {//toolbarLayout.height=0  fragment来回切换导致toolbarLayout还没有宽高就要
-            tabs.setBackgroundResource(R.drawable.tab_bg_1)
-            tabs.setTabTextColors(Color.parseColor("#a0a4aa"), Color.parseColor("#282828"))
-            for (i in 0 until tabs.getTabCount()) {
-                if (i == tabs.getSelectedTabPosition()) {
-                    setDrawable(i, "1", true)
-                } else {
-                    setDrawable(i, "1", false)
-                }
-            }
-        } else {
-            if (MyNestedScrollParentFund.scrollY < toolbarLayout.height) {//如果parent外框，还可以往下滑动
-                tabs.setBackgroundResource(R.drawable.tab_bg_1)
-                tabs.setTabTextColors(Color.parseColor("#a0a4aa"), Color.parseColor("#282828"))
-                for (i in 0 until tabs.getTabCount()) {
-                    if (i == tabs.getSelectedTabPosition()) {
-                        setDrawable(i, "1", true)
+                    Log.e("appBarHeight", "${appBarHeight}")//256
+                    Log.e("toolbarHeight", "${toolbarHeight}")//112
+                    Log.e("verticalOffset", "${verticalOffset}")//112
+
+                    var currentState = ""
+
+                    if (toolbarHeight - Math.abs(verticalOffset).toFloat() < 5) {
+                        //移动到顶端
+                        currentState = "TOP"
+                        if (currentState == previousState) {
+                            return
+                        }
+                        previousState = currentState
+                        tabs.setBackgroundResource(R.drawable.tab_bg_2)
+                        tabs.setTabTextColors(Color.parseColor("#ff7bb4fc"), Color.parseColor("#ffffff"))
+                        for (i in 0 until tabs.getTabCount()) {
+                            if (i == tabs.getSelectedTabPosition()) {
+                                setDrawable(i, "2", true)
+                            } else {
+                                setDrawable(i, "2", false)
+                            }
+                        }
                     } else {
-                        setDrawable(i, "1", false)
+                        //不是顶端
+                        currentState = "NO_TOP"
+                        if (currentState == previousState) {
+                            return
+                        }
+                        previousState = currentState
+                        tabs.setBackgroundResource(R.drawable.tab_bg_1)
+                        tabs.setTabTextColors(Color.parseColor("#a0a4aa"), Color.parseColor("#282828"))
+                        for (i in 0 until tabs.getTabCount()) {
+                            if (i == tabs.getSelectedTabPosition()) {
+                                setDrawable(i, "1", true)
+                            } else {
+                                setDrawable(i, "1", false)
+                            }
+                        }
                     }
                 }
-            } else if (MyNestedScrollParentFund.scrollY >= toolbarLayout.height) {
-                tabs.setBackgroundResource(R.drawable.tab_bg_2)
-                tabs.setTabTextColors(Color.parseColor("#ff7bb4fc"), Color.parseColor("#ffffff"))
-                for (i in 0 until tabs.getTabCount()) {
-                    if (i == tabs.getSelectedTabPosition()) {
-                        setDrawable(i, "2", true)
-                    } else {
-                        setDrawable(i, "2", false)
-                    }
-                }
             }
-        }
+        })
     }
+
+    var previousState = "TOP"// NO_TOP
+
+//    private fun changeView() {
+//        if (toolbarLayout.height == 0) {//toolbarLayout.height=0  fragment来回切换导致toolbarLayout还没有宽高就要
+//            tabs.setBackgroundResource(R.drawable.tab_bg_1)
+//            tabs.setTabTextColors(Color.parseColor("#a0a4aa"), Color.parseColor("#282828"))
+//            for (i in 0 until tabs.getTabCount()) {
+//                if (i == tabs.getSelectedTabPosition()) {
+//                    setDrawable(i, "1", true)
+//                } else {
+//                    setDrawable(i, "1", false)
+//                }
+//            }
+//        } else {
+//            if (MyNestedScrollParentFund.scrollY < toolbarLayout.height) {//如果parent外框，还可以往下滑动
+//                tabs.setBackgroundResource(R.drawable.tab_bg_1)
+//                tabs.setTabTextColors(Color.parseColor("#a0a4aa"), Color.parseColor("#282828"))
+//                for (i in 0 until tabs.getTabCount()) {
+//                    if (i == tabs.getSelectedTabPosition()) {
+//                        setDrawable(i, "1", true)
+//                    } else {
+//                        setDrawable(i, "1", false)
+//                    }
+//                }
+//            } else if (MyNestedScrollParentFund.scrollY >= toolbarLayout.height) {
+//                tabs.setBackgroundResource(R.drawable.tab_bg_2)
+//                tabs.setTabTextColors(Color.parseColor("#ff7bb4fc"), Color.parseColor("#ffffff"))
+//                for (i in 0 until tabs.getTabCount()) {
+//                    if (i == tabs.getSelectedTabPosition()) {
+//                        setDrawable(i, "2", true)
+//                    } else {
+//                        setDrawable(i, "2", false)
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     /**
      * @param index--------(tabs对应的index，分别对应dy,cb等)
@@ -236,52 +278,8 @@ class FundMainFragment : BaseFragment(), View.OnClickListener {
         tabs.getTabAt(index)!!.setIcon(id)
     }
 
-    /**
-     * 不知道为啥能成功
-     */
-    private fun setContent() {
-        var view = fragments.get(view_pager.currentItem).getRecycleView()
-        //RecycleView可能还没渲染，这样第一个setCurrentContentView失效
-        view.post(object : Runnable {
-            override fun run() {
-                if (view.height > 0) {
-                    MyNestedScrollParentFund.setCurrentContentView(view)
-                }
-            }
-        })
-    }
-
-    var judgeOncce = 0
-
     override fun onClick(p0: View?) {
         when (p0?.id) {
-//            R.id.ll_order_name_1 -> {
-//                if (currentNameOrder == FundDesc) {
-//                    currentNameOrder = FundAsc
-//                    iv_sort_name_1.imageResource = R.drawable.ic_up
-//                } else {
-//                    currentNameOrder = FundDesc
-//                    iv_sort_name_1.imageResource = R.drawable.ic_down
-//                }
-//                page = 0
-//                doRequest()
-//            }
-//            R.id.ll_order_time_1 -> {
-//                if (currentTimeOrder == RegTimeAsc) {
-//                    currentTimeOrder = RegTimeDesc
-//                    iv_sort_time_1.imageResource = R.drawable.ic_down
-//                } else {
-//                    currentTimeOrder = RegTimeAsc
-//                    iv_sort_time_1.imageResource = R.drawable.ic_up
-//                }
-//                page = 0
-//                doRequest()
-//            }
-//            R.id.iv_user -> {
-//                val activity = activity as MainActivity
-//                activity.find<RadioGroup>(R.id.rg_tab_main).check(R.id.rb_my)
-////                UserFragment.start(activity)
-//            }
             R.id.iv_search -> {
                 var type = view_pager.currentItem + 1
                 FundSearchActivity.start(activity, type)
