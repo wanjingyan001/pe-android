@@ -30,6 +30,8 @@
             android:layout_gravity="left"
             android:layout_marginLeft="15dp"
             android:gravity="center"
+            app:civ_border_width="1dp"
+            app:civ_border_color="#4dffffff"
             android:src="@drawable/sogu_ic_back" />
 
         <TextView

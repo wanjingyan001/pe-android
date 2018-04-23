@@ -88,6 +88,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignRight="@+id/name"
+                        android:drawableRight="@drawable/vip"
+                        android:drawablePadding="6dp"
                         android:layout_below="@+id/avatar"
                         android:layout_marginTop="44dp"
                         android:text="上海诗襄信息科技公司"
@@ -314,11 +316,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/personal_send_msg_bg"
             android:gravity="center"
+            android:drawableTop="@drawable/fxx"
+            android:drawablePadding="6dp"
             android:text="发消息"
             android:textColor="@color/color_blue_0888ff"
-            android:textSize="18sp" />
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/call_phone"
@@ -326,11 +329,12 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_weight="1"
-            android:background="@drawable/personal_call_phone_bg"
             android:gravity="center"
+            android:drawableTop="@drawable/ddh"
+            android:drawablePadding="6dp"
             android:text="打电话"
-            android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:textColor="@color/color_blue_0888ff"
+            android:textSize="12sp" />
 
     </LinearLayout>
 </LinearLayout>

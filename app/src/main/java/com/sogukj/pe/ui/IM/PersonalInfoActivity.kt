@@ -70,7 +70,7 @@ class PersonalInfoActivity : AppCompatActivity(), View.OnClickListener, TextWatc
 //                }
                 name.text = it.name
                 position.text = it.position
-                company.text = it.company
+                company.text = if(it.company.isNullOrEmpty()) bean!!.company else it.company
                 name_tv.text = it.name
                 phone_tv.text = it.phone
                 email_tv.text = it.email

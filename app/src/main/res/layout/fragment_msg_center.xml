@@ -26,7 +26,9 @@
             android:layout_gravity="left"
             android:layout_marginLeft="15dp"
             android:gravity="center"
-            android:src="@drawable/sogu_ic_back" />
+            android:src="@drawable/sogu_ic_back"
+            app:civ_border_width="1dp"
+            app:civ_border_color="#4dffffff"/>
 
         <TextView
             android:id="@id/toolbar_title"
