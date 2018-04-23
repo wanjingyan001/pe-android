@@ -6,34 +6,29 @@ import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Environment
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.ViewPager
 import android.view.KeyEvent
-import android.view.View
 import android.widget.AdapterView
-import android.widget.PopupWindow
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
-import com.nbsp.materialfilepicker.ui.DirectoryFragment
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.ui.partyBuild.PartyUploadActivity
 import com.sogukj.pe.util.FileUtil
+import com.sogukj.pe.util.RxBus
 import com.sogukj.pe.util.Utils
 import kotlinx.android.synthetic.main.activity_file_main.*
-import kotlinx.android.synthetic.main.fragment_weekly_wait_to_watch.*
-import org.jetbrains.anko.toast
 import java.io.File
 import kotlin.properties.Delegates
 
 class FileMainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
     val selectedFile = ArrayList<File>()
-    var maxSize: Int by Delegates.notNull()
-    var isReplace: Boolean = false
+    var maxSize: Int by Delegates.notNull()//最大选择数量
+    var isReplace: Boolean = false//文件选择替换功能(单选)
+    var isForResult: Boolean = false////是否需要返回选择的文件
     private val comDocFragment by lazy { CommonDocumentsFragment.newInstance() }
     private val allFileFragment by lazy { AllFileFragment() }
     @SuppressLint("NewApi")
@@ -43,6 +38,12 @@ class FileMainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
         Utils.setWindowStatusBarColor(this, R.color.white)
         maxSize = intent.getIntExtra(Extras.DATA, 9)
         isReplace = intent.getBooleanExtra(Extras.FLAG, false)
+        isForResult = intent.getBooleanExtra(Extras.TYPE, false)
+        if (!isForResult) {
+            help.text = "删除"
+        } else {
+            help.text = "帮助"
+        }
         back.setOnClickListener {
             finish()
         }
@@ -60,25 +61,58 @@ class FileMainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
         val fragments = listOf(comDocFragment, allFileFragment)
         file_pager.adapter = FilePageAdapter(supportFragmentManager, fragments)
         file_pager.addOnPageChangeListener(this)
-        send_selected_files.setOnClickListener {
-            val intent = Intent()
-            val paths = ArrayList<String>()
-            selectedFile.forEach {
-                paths.add(it.path)
+        if (isForResult) {
+            send_selected_files.setOnClickListener {
+                val intent = Intent()
+                val paths = ArrayList<String>()
+                selectedFile.forEach {
+                    paths.add(it.path)
+                }
+                intent.putExtra(Extras.LIST, paths)
+                setResult(Activity.RESULT_OK, intent)
+                finish()
             }
-            intent.putExtra(Extras.LIST, paths)
-            setResult(Activity.RESULT_OK, intent)
-            finish()
         }
         help.setOnClickListener {
-            MaterialDialog.Builder(this)
-                    .theme(Theme.LIGHT)
-                    .content(R.string.file_help)
-                    .positiveText("确定")
-                    .onPositive { dialog, which ->
-                        dialog.dismiss()
-                    }
-                    .show()
+            if (isForResult) {
+                MaterialDialog.Builder(this)
+                        .theme(Theme.LIGHT)
+                        .content(R.string.file_help)
+                        .positiveText("确定")
+                        .onPositive { dialog, which ->
+                            dialog.dismiss()
+                        }
+                        .show()
+            } else {
+                if (selectedFile.isNotEmpty()) {
+                    MaterialDialog.Builder(this)
+                            .theme(Theme.LIGHT)
+                            .title("警告")
+                            .content("是否确认删除选中的文件")
+                            .positiveText("确定")
+                            .negativeText("取消")
+                            .onPositive { dialog, _ ->
+                                dialog.dismiss()
+                                selectedFile.forEach {
+                                    if (it.exists()) {
+                                        it.delete()
+                                        //通知列表刷新
+                                        RxBus.getIntanceBus().post(Extras.REFRESH)
+                                        if (allFileFragment.isVisible) {
+                                            val fragment = allFileFragment.childFragmentManager.findFragmentById(R.id.contentLayout) as StorageFileFragment
+                                            fragment.changeData()
+                                        }
+                                    }
+                                }
+                                selectedFile.clear()
+                                showSelectedInfo()
+                            }
+                            .onNegative { dialog, _ ->
+                                dialog.dismiss()
+                            }
+                            .show()
+                }
+            }
         }
     }
 
@@ -134,13 +168,39 @@ class FileMainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
 
     }
 
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == Extras.REQUESTCODE &&  data != null) {
+            if (resultCode == Activity.RESULT_OK){
+                val intent = Intent()
+                val paths = data.getStringArrayListExtra(Extras.LIST)
+                intent.putExtra(Extras.LIST, paths)
+                setResult(Activity.RESULT_OK, intent)
+                finish()
+            }else{
+                val file = data.getSerializableExtra(Extras.DATA) as File
+                sendChangeFile(file)
+            }
+        }
+    }
+
     companion object {
         fun start(context: Activity, maxSize: Int? = 9, isReplace: Boolean? = false, requestCode: Int) {
             val intent = Intent(context, FileMainActivity::class.java)
             intent.putExtra(Extras.DATA, maxSize)
             intent.putExtra(Extras.FLAG, isReplace)
             intent.putExtra(Extras.ID, requestCode)
+            intent.putExtra(Extras.TYPE, true)
             context.startActivityForResult(intent, requestCode)
+        }
+
+        fun start(context: Context) {
+            val intent = Intent(context, FileMainActivity::class.java)
+            intent.putExtra(Extras.DATA, 9)
+            intent.putExtra(Extras.FLAG, false)
+            intent.putExtra(Extras.TYPE, false)
+            context.startActivity(intent)
         }
     }
 }

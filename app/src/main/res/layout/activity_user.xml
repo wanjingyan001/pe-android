@@ -368,22 +368,20 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/structure"
+                android:id="@+id/documentManagement"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/gszzjg"
+                android:drawableLeft="@mipmap/icon_file_manage"
                 android:drawablePadding="10dp"
                 android:drawableRight="@drawable/ic_right"
                 android:gravity="start|center_vertical"
                 android:padding="18dp"
-                android:text="公司组织架构"
-                android:visibility="gone"/>
+                android:text="文件管理" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:background="@color/divider2"
-                android:visibility="gone"/>
+                android:background="@color/divider2" />
 
             <TextView
                 android:id="@+id/setting"

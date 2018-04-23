@@ -23,7 +23,7 @@ import java.io.File
 /**
  * Created by admin on 2018/2/27.
  */
-class DirectoryAdapter(val context: Context, val files: List<File>,val activity: FileMainActivity) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class DirectoryAdapter(val context: Context, val files: MutableList<File>,val activity: FileMainActivity) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface OnItemClickListener {
         fun onItemClick(view: View, position: Int)
@@ -62,6 +62,12 @@ class DirectoryAdapter(val context: Context, val files: List<File>,val activity:
 
     fun getModel(index: Int): File {
         return files[index]
+    }
+
+    fun changeData(newFiles: MutableList<File>){
+        files.clear()
+        files.addAll(newFiles)
+        notifyDataSetChanged()
     }
 
     inner class DirectoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

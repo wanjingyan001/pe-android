@@ -1,6 +1,8 @@
 package com.sogukj.pe.util;
 
 import android.content.Context;
+import android.support.annotation.IntRange;
+import android.webkit.MimeTypeMap;
 
 import com.nbsp.materialfilepicker.utils.FileComparator;
 import com.netease.nim.uikit.api.NimUIKit;
@@ -22,6 +24,8 @@ import java.io.InputStream;
 import java.io.LineNumberReader;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,10 +33,59 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Vector;
+
+import static com.sogukj.pe.util.FileTypeUtils.FileType.IMAGE;
 
 public class FileUtil {
     private static final String TAG = FileUtil.class.getSimpleName();
+
+    public enum FileType {
+        IMAGE("jpg", "jpeg", "gif", "png", "bmp", "Webp"),
+        VIDEO("rm", "rmvb", "mp4", "mov", "mtv", "wmv", "avi", "3gp", "flv"),
+        DOC("pdf", "doc", "docx", "ppt", "pptx", "xls", "xlsx", "txt"),
+        ZIP("rar", "zip", "7z", "iso", "gz"),
+        OTHER("pages", "keynote", "numbers");
+        private String[] extensions;
+
+        FileType(String... extensions) {
+            this.extensions = extensions;
+        }
+
+        public String[] getExtensions() {
+            return extensions;
+        }
+
+    }
+
+    private static Map<String, FileType> fileTypeExtensions = new HashMap<>();
+
+    static {
+        for (FileType fileType : FileType.values()) {
+            for (String extension : fileType.getExtensions()) {
+                fileTypeExtensions.put(extension, fileType);
+            }
+        }
+    }
+
+    public static FileType getFileType(File file) {
+        FileType fileType = fileTypeExtensions.get(getExtension(file.getName()));
+        if (fileType != null) {
+            return fileType;
+        }
+        return FileType.OTHER;
+    }
+
+    public static String getExtension(String fileName) {
+        String encoded;
+        try {
+            encoded = URLEncoder.encode(fileName, "UTF-8").replace("+", "%20");
+        } catch (UnsupportedEncodingException e) {
+            encoded = fileName;
+        }
+        return MimeTypeMap.getFileExtensionFromUrl(encoded).toLowerCase();
+    }
 
     /**
      * 获取项目目录
@@ -636,6 +689,7 @@ public class FileUtil {
 
     /**
      * 获取文件大小
+     *
      * @param size
      * @param unit
      * @return
@@ -690,15 +744,16 @@ public class FileUtil {
 
     /**
      * 获取指定目录下的文件列表
+     *
      * @param fileAbsolutePath
      * @return
      */
     public static List<File> getFiles(String fileAbsolutePath) {
         List<File> vecFile = new ArrayList<>();
         File file = new File(fileAbsolutePath);
-        if (file.exists()){
+        if (file.exists()) {
             File[] subFile = file.listFiles();
-            if (subFile!=null&&subFile.length>0){
+            if (subFile != null && subFile.length > 0) {
                 for (File aSubFile : subFile) {
                     // 判断是否为文件夹
                     if (!aSubFile.isDirectory()) {
@@ -709,6 +764,7 @@ public class FileUtil {
         }
         return vecFile;
     }
+
     public static List<File> getFileListByDirPath(String path, FileFilter filter) {
         File directory = new File(path);
         File[] files = directory.listFiles(filter);
@@ -741,5 +797,41 @@ public class FileUtil {
         final String[] units = new String[]{"B", "KB", "MB", "GB", "TB"};
         int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
         return new DecimalFormat("#").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
+    }
+
+
+    public static Map<FileType, List<File>> getFilesByType(List<File> files) {
+        Map<FileType, List<File>> fileMap = new HashMap<>();
+        List<File> images = new ArrayList<>();
+        List<File> videos = new ArrayList<>();
+        List<File> docs = new ArrayList<>();
+        List<File> zips = new ArrayList<>();
+        List<File> others = new ArrayList<>();
+        for (File file : files) {
+            FileType type = getFileType(file);
+            switch (type) {
+                case IMAGE:
+                    images.add(file);
+                    break;
+                case VIDEO:
+                    videos.add(file);
+                    break;
+                case DOC:
+                    docs.add(file);
+                    break;
+                case ZIP:
+                    zips.add(file);
+                    break;
+                default:
+                    others.add(file);
+                    break;
+            }
+        }
+        fileMap.put(FileType.IMAGE, images);
+        fileMap.put(FileType.VIDEO, videos);
+        fileMap.put(FileType.DOC, docs);
+        fileMap.put(FileType.ZIP, zips);
+        fileMap.put(FileType.OTHER, others);
+        return fileMap;
     }
 }

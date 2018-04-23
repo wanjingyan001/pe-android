@@ -83,7 +83,7 @@ class AllFileFragment : Fragment(), StorageFileFragment.FileClickListener {
         val fragment = StorageFileFragment.newInstance(startPath)
         fragment.setListener(this)
         childFragmentManager.beginTransaction()
-                .replace(R.id.contentLayout, fragment)
+                .replace(R.id.contentLayout, fragment,"All")
                 .addToBackStack(null)
                 .commit()
     }

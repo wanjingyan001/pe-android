@@ -59,4 +59,6 @@ object Extras {
     val CAN_REMOVE_MEMBER = "ext.Remove.Member"
 
     val DEFAULT = "ext.default"
+    val REFRESH = "ext.refresh"
+    val REFRESH1 = 9999
 }

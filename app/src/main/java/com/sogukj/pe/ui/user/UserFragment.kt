@@ -19,16 +19,19 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.signature.ObjectKey
 import com.framework.base.ToolbarFragment
+import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.DepartmentBean
 import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.ui.IM.TeamSelectActivity
+import com.sogukj.pe.ui.fileSelector.FileMainActivity
 import com.sogukj.pe.ui.project.ProjectFocusActivity
 import com.sogukj.pe.ui.project.ProjectListFragment
 import com.sogukj.pe.util.HeaderImgKey
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
+import com.sougukj.setOnClickFastListener
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_user.*
@@ -64,17 +67,16 @@ class UserFragment : ToolbarFragment(), View.OnClickListener {
                     ToastError(e)
                 })
 
-        ll_user.setOnClickListener {
+        ll_user.setOnClickFastListener {
             UserEditActivity.start(activity, departList)
         }
-        structure.setOnClickListener {
-            //            OrganizationActivity.start(activity, departList)
-            TeamSelectActivity.startForResult(activity)
+        documentManagement.setOnClickFastListener {
+            FileMainActivity.start(activity)
         }
-        setting.setOnClickListener {
+        setting.setOnClickFastListener {
             SettingActivity.start(context)
         }
-        focus_layout.setOnClickListener {
+        focus_layout.setOnClickFastListener {
             ProjectFocusActivity.start(activity, ProjectListFragment.TYPE_GZ)
         }
         tv_1.setOnClickListener(this)
