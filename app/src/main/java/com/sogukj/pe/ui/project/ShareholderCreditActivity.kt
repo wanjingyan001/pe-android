@@ -267,6 +267,11 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
                 companyTv.text = data.company
             }
             when (data.status) {
+                1 -> {
+                    fail.visibility = View.GONE
+                    success.visibility = View.VISIBLE
+                    success.setImageResource(R.drawable.zhengxin_chaxunzhong)
+                }
                 2 -> {
                     success.visibility = View.GONE
                     fail.visibility = View.VISIBLE
