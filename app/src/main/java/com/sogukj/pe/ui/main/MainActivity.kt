@@ -98,7 +98,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initBottomNavBar() {
-        bottomBar.addItem(BottomNavigationItem(R.drawable.ic_qb_sel, "聊天").setInactiveIconResource(R.drawable.ic_qb_nor).initNavTextColor())
+        bottomBar.addItem(BottomNavigationItem(R.drawable.ic_qb_sel, "消息").setInactiveIconResource(R.drawable.ic_qb_nor).initNavTextColor())
                 .addItem(BottomNavigationItem(R.drawable.ic_qb_sel5, "通讯录").setInactiveIconResource(R.drawable.ic_qb_nor1).initNavTextColor())
                 .addItem(BottomNavigationItem(R.drawable.ic_qb_sel2, "首页").setInactiveIconResource(R.drawable.ic_qb_nor2).initNavTextColor())
                 .addItem(BottomNavigationItem(R.drawable.ic_tab_main_proj_1, "项目").setInactiveIconResource(R.drawable.ic_tab_main_proj_0).initNavTextColor())

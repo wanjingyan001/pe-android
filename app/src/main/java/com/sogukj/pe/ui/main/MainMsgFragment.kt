@@ -193,6 +193,9 @@ class MainMsgFragment : BaseFragment() {
                 add_layout.visibility = View.GONE
             } else {
                 add_layout.visibility = View.VISIBLE
+                add_layout.setOnClickListener {
+                    add_layout.visibility = View.GONE
+                }
             }
         }
         start_chat.setOnClickListener {
