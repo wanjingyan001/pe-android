@@ -136,12 +136,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#19000000"
-            android:gravity="right|top"
-            android:visibility="gone">
+            android:gravity="right|top">
 
             <LinearLayout
-                android:layout_width="115dp"
-                android:layout_height="85dp"
+                android:layout_width="150dp"
+                android:layout_height="114dp"
                 android:background="@drawable/add_bg"
                 android:orientation="vertical"
                 android:paddingBottom="4dp"
@@ -153,14 +152,15 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:drawableLeft="@drawable/qunliao1"
-                    android:gravity="center"
+                    android:drawablePadding="15dp"
+                    android:gravity="left|center"
                     android:letterSpacing="0.04"
                     android:lineSpacingExtra="0sp"
-                    android:paddingLeft="15dp"
+                    android:paddingLeft="20dp"
                     android:paddingRight="15dp"
                     android:text="发起群聊"
                     android:textColor="#282828"
-                    android:textSize="12sp" />
+                    android:textSize="16sp" />
 
                 <View
                     android:layout_width="match_parent"
@@ -173,14 +173,15 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:drawableLeft="@drawable/saoyisao"
-                    android:gravity="center"
+                    android:drawablePadding="15dp"
+                    android:gravity="left|center"
                     android:letterSpacing="0.04"
                     android:lineSpacingExtra="0sp"
-                    android:paddingLeft="15dp"
+                    android:paddingLeft="20dp"
                     android:paddingRight="15dp"
                     android:text="扫一扫"
                     android:textColor="#ff282828"
-                    android:textSize="12sp" />
+                    android:textSize="16sp" />
 
             </LinearLayout>
 
