@@ -77,11 +77,12 @@ class ApproveSearchActivity : ToolbarActivity() {
         })
         adapter.onItemClick = { v, p ->
             val data = adapter.dataList.get(p)
-            ApproveExamineActivity.start(this, data, if (mType == 3) 1 else 2)
-//            if (data.type == 2)
-//                SealApproveActivity.start(this, data, if (mType == 3) 1 else 2)
-//            else if (data.type == 3)
-//                SignApproveActivity.start(this, data, if (mType == 3) 1 else 2)
+            if (data.type == 2)
+                SealApproveActivity.start(this, data, if (mType == 3) 1 else 2)
+            else if (data.type == 3)
+                SignApproveActivity.start(this, data, if (mType == 3) 1 else 2)
+            else if (data.type == 1)
+                LeaveBusinessApproveActivity.start(this, data, if (mType == 3) 1 else 2)
         }
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = LinearLayoutManager.VERTICAL

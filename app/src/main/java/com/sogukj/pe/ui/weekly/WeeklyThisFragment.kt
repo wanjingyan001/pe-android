@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.framework.base.BaseFragment
 import com.google.gson.Gson
-import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
@@ -38,11 +36,8 @@ import kotlinx.android.synthetic.main.buchong_empty.*
 import kotlinx.android.synthetic.main.buchong_full.*
 import kotlinx.android.synthetic.main.fragment_weekly_this.*
 import kotlinx.android.synthetic.main.send.*
-import java.net.UnknownHostException
 import java.text.SimpleDateFormat
 import kotlin.collections.ArrayList
-import com.google.gson.JsonObject
-import com.sogukj.pe.ui.approve.ApproveExamineActivity
 import com.sogukj.pe.view.CircleImageView
 
 //import kotlinx.android.synthetic.main.layout_network_error.*
@@ -229,13 +224,11 @@ class WeeklyThisFragment : BaseFragment(), View.OnClickListener {
                         }
                         3 -> {
                             //用印审批
-                            //SealApproveActivity.start(activity, weeklyData.data_id!!, "用印审批")
-                            ApproveExamineActivity.start(activity, weeklyData.data_id!!, "用印审批")
+                            SealApproveActivity.start(activity, weeklyData.data_id!!, "用印审批")
                         }
                         4 -> {
                             //签字审批
-                            //SignApproveActivity.start(activity, weeklyData.data_id!!, "签字审批")
-                            ApproveExamineActivity.start(activity, weeklyData.data_id!!, "签字审批")
+                            SignApproveActivity.start(activity, weeklyData.data_id!!, "签字审批")
                         }
                         5 -> {
                             //跟踪记录

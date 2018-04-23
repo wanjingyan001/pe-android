@@ -9,7 +9,6 @@ import android.view.View
 import com.framework.base.BaseFragment
 import com.google.gson.Gson
 import com.sogukj.pe.R
-import com.sogukj.pe.ui.approve.ApproveExamineActivity
 import com.sogukj.pe.ui.approve.SealApproveActivity
 import com.sogukj.pe.ui.approve.SignApproveActivity
 import com.sogukj.pe.ui.project.ProjectActivity
@@ -115,13 +114,11 @@ class TodoFragment : BaseFragment(), ScheduleItemClickListener {
             }
             3 -> {
                 //用印审批
-                //SealApproveActivity.start(activity, bean.data_id!!, "用印审批")
-                ApproveExamineActivity.start(activity, bean.data_id!!, "用印审批")
+                SealApproveActivity.start(activity, bean.data_id!!, "用印审批")
             }
             4 -> {
                 //签字审批
-                //SignApproveActivity.start(activity, bean.data_id!!, "签字审批")
-                ApproveExamineActivity.start(activity, bean.data_id!!, "签字审批")
+                SignApproveActivity.start(activity, bean.data_id!!, "签字审批")
             }
             5 -> {
                 //跟踪记录

@@ -1,12 +1,9 @@
 package com.sogukj.pe
 
-import android.annotation.TargetApi
 import android.app.Notification
-import android.app.Notification.VISIBILITY_PUBLIC
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
-import android.os.Build
 import android.support.multidex.MultiDexApplication
 import android.util.Log
 import android.widget.RemoteViews
@@ -20,20 +17,16 @@ import com.netease.nimlib.sdk.auth.AuthService
 import com.netease.nimlib.sdk.auth.AuthServiceObserver
 import com.netease.nimlib.sdk.auth.LoginInfo
 import com.netease.nimlib.sdk.util.NIMUtil
-import com.sogukj.pe.R
 import com.sogukj.pe.bean.NewsBean
 import com.sogukj.pe.ui.IM.SessionHelper
 import com.sogukj.pe.ui.IM.location.NimDemoLocationProvider
 import com.sogukj.pe.ui.LoginActivity
-import com.sogukj.pe.ui.approve.ApproveExamineActivity
 import com.sogukj.pe.ui.approve.LeaveBusinessApproveActivity
 import com.sogukj.pe.ui.approve.SealApproveActivity
 import com.sogukj.pe.ui.approve.SignApproveActivity
 import com.sogukj.pe.ui.calendar.ModifyTaskActivity
 import com.sogukj.pe.ui.calendar.TaskDetailActivity
 import com.sogukj.pe.ui.news.NewsDetailActivity
-import com.sogukj.pe.ui.project.ProjectActivity
-import com.sogukj.pe.ui.project.RecordTraceActivity
 import com.sogukj.pe.ui.weekly.PersonalWeeklyActivity
 import com.sogukj.pe.util.NimSDKOptionConfig
 import com.sogukj.pe.util.Trace
@@ -49,7 +42,6 @@ import com.umeng.message.entity.UMessage
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import me.leolin.shortcutbadger.ShortcutBadger
-import org.jetbrains.anko.toast
 import org.json.JSONObject
 
 
@@ -135,19 +127,18 @@ class App : MultiDexApplication() {
                             var title = ""
                             if (data.has("qs") && data.getInt("qs") == 1) {
                                 title = "签字审批"
-                                //SignApproveActivity.start(context, approval_id, is_mine, "签字审批")
+                                SignApproveActivity.start(context, approval_id, is_mine, "签字审批")
                             } else if (data.has("qs") && data.getInt("qs") == 2) {
                                 title = when (data.getInt("tid")) {
                                     10 -> "出差"
                                     11 -> "请假"
                                     else -> ""
                                 }
-                                //LeaveBusinessApproveActivity.start(context, approval_id, is_mine, title)
+                                LeaveBusinessApproveActivity.start(context, approval_id, is_mine, title)
                             } else {
                                 title = "用印审批"
-                                //SealApproveActivity.start(context, approval_id, is_mine, "用印审批")
+                                SealApproveActivity.start(context, approval_id, is_mine, "用印审批")
                             }
-                            ApproveExamineActivity.start(context, approval_id, is_mine, title)
                         }
                         5 -> {
                             val weekId = data.getInt("week_id")

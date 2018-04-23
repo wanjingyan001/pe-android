@@ -5,12 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import com.framework.base.ToolbarActivity
-import com.google.gson.Gson
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import com.lcodecore.tkrefreshlayout.footer.BallPulseView
@@ -19,7 +17,6 @@ import com.sogukj.pe.R
 import com.sogukj.pe.bean.ApproveFilterBean
 import com.sogukj.pe.bean.MessageBean
 import com.sogukj.pe.ui.SupportEmptyView
-import com.sogukj.pe.ui.approve.ApproveExamineActivity
 import com.sogukj.pe.ui.approve.LeaveBusinessApproveActivity
 import com.sogukj.pe.ui.approve.SealApproveActivity
 import com.sogukj.pe.ui.approve.SignApproveActivity
@@ -93,13 +90,12 @@ class MessageListActivity : ToolbarActivity() {
         adapter.onItemClick = { v, p ->
             val data = adapter.dataList.get(p)
             val is_mine = if (data.status == -1 || data.status == 4) 1 else 2
-            ApproveExamineActivity.start(this, data, is_mine)
-//            if (data.type == 2)
-//                SealApproveActivity.start(this, data, is_mine)
-//            else if (data.type == 3)
-//                SignApproveActivity.start(this, data, is_mine)
-//            else if (data.type == 1)
-//                LeaveBusinessApproveActivity.start(this, data, is_mine)//出差  SealApproveActivity
+            if (data.type == 2)
+                SealApproveActivity.start(this, data, is_mine)
+            else if (data.type == 3)
+                SignApproveActivity.start(this, data, is_mine)
+            else if (data.type == 1)
+                LeaveBusinessApproveActivity.start(this, data, is_mine)//出差  SealApproveActivity
         }
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
