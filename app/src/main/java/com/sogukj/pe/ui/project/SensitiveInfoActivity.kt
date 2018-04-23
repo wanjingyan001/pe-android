@@ -88,20 +88,32 @@ class SensitiveInfoActivity : BaseActivity(), View.OnClickListener {
                             info = this
                             this.crime?.let {
                                 setDangerousStatus(it)
-                                var number = 0
-                                try {
-                                    number = it.num!!.toInt()
-                                } catch (e: Exception) {
-                                    number = 0
-                                }
-                                if (number == 0) {
-                                    status.text = "正常"
-                                    dangerImage.imageResource = R.drawable.ic_sensitive_green
+//                                var number = 0
+//                                try {
+//                                    number = it.num!!.toInt()
+//                                } catch (e: Exception) {
+//                                    number = 0
+//                                }
+//                                if (number == 0) {
+//                                    status.text = "正常"
+//                                    dangerImage.imageResource = R.drawable.ic_sensitive_green
+//                                } else {
+//                                    status.text = "风险人物"
+//                                    dangerImage.imageResource = R.drawable.ic_sensitive_red
+//                                    infoNumber.text = "${it.num}条"
+//                                }
+                            }
+                            this.court?.let {
+                                var flag = it.num != null && it.num != 0
+                                if (flag) {
+                                    recordNumber.text = "${it.num}条记录"
+                                    recordNumber.textColor = resources.getColor(R.color.fund_deep_red)
                                 } else {
-                                    status.text = "风险人物"
-                                    dangerImage.imageResource = R.drawable.ic_sensitive_red
-                                    infoNumber.text = "${it.num}条"
+                                    recordNumber.text = "无"
+                                    recordNumber.textColor = resources.getColor(R.color.text_1)
                                 }
+                                recordNumber.setCompoundDrawables(null, null, null, null)
+                                recordNumber.setOnClickListener(null)
                             }
                             this.court?.item?.let {
                                 setInfo(courtNoticeCount, it.fygg?.num != null && it.fygg?.num != 0, "${it.fygg?.num}条记录")
@@ -162,6 +174,7 @@ class SensitiveInfoActivity : BaseActivity(), View.OnClickListener {
             recordNumber2.text = "无"
             recordNumber2.textColor = Color.parseColor("#282828")
             recordNumber2.setOnClickListener(null)
+            recordNumber2.setCompoundDrawables(null, null, null, null)
             return
         }
         recordNumber2.text = "${dishonest.num}条记录"
