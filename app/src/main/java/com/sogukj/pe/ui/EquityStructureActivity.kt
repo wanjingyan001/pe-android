@@ -103,22 +103,37 @@ class EquityStructureActivity : ToolbarActivity(), PlatformActionListener {
                                 setChildren(llChildren, this, 0)
                             }
                             nestedRoot.addView(ll_node)
-
-                            //保存
-                            if (Utils.saveNestedScroolViewImage(mNestedScrollView, Environment.getExternalStorageDirectory().absolutePath)) {
-                                //share()
-                                canShare = true
-                            } else {
-                                canShare = false
-                                showCustomToast(R.drawable.icon_toast_common, "生成截图失败,请检查手机内存")
-                            }
                         }
+                        loaded = true
                     } else
                         showCustomToast(R.drawable.icon_toast_fail, payload.message)
                 }, { e ->
                     Trace.e(e)
                     showCustomToast(R.drawable.icon_toast_fail, "查询失败")
                 })
+
+        Thread(Runnable {
+
+            try {
+                Thread.sleep(3000)
+            } catch (e: Exception) {
+            }
+
+            if (!loaded) {
+                return@Runnable
+            }
+
+            runOnUiThread {
+                if (Utils.saveNestedScroolViewImage(mNestedScrollView, Environment.getExternalStorageDirectory().absolutePath)) {
+                    //share()
+                    canShare = true
+                } else {
+                    canShare = false
+                    showCustomToast(R.drawable.icon_toast_common, "生成截图失败,请检查手机内存")
+                }
+            }
+
+        }).start()
 
         toolbar_menu.visibility = View.VISIBLE
         toolbar_menu.setImageResource(R.drawable.share)
@@ -131,6 +146,7 @@ class EquityStructureActivity : ToolbarActivity(), PlatformActionListener {
     }
 
     var canShare = false
+    var loaded = false
 
     val PATH = Environment.getExternalStorageDirectory().absolutePath + "/EquityStructure.png"
 
