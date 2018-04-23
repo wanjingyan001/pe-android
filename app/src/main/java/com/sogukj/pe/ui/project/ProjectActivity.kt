@@ -330,6 +330,12 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
             override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
                 var alpha = Math.abs(verticalOffset) * 1.0 / Utils.dpToPx(context, 60)
                 down.alpha = 1 - alpha.toFloat()
+
+                if (down.alpha < 0.05) {
+                    toolbar_title.text = if (project.shortName.isNullOrEmpty()) project.name else project.shortName
+                } else {
+                    toolbar_title.text = ""
+                }
             }
         })
     }
@@ -677,7 +683,7 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
             7 -> ChangeRecordActivity.start(this@ProjectActivity, project)//变更记录
             6 -> InvestmentActivity.start(this@ProjectActivity, project)//对外投资
             5 -> KeyPersonalActivity.start(this@ProjectActivity, project)//主要人员
-            //4 -> EquityStructureActivity.start(this@ProjectActivity, project)//股权结构
+        //4 -> EquityStructureActivity.start(this@ProjectActivity, project)//股权结构
             9 -> BranchListActivity.start(this@ProjectActivity, project)//分支机构
             10 -> CompanyInfo2Activity.start(this@ProjectActivity, project)//公司简介
 
