@@ -7,17 +7,17 @@
     android:background="#fff7f9fc"
     android:fitsSystemWindows="true">
 
-    <com.sogukj.pe.view.MyNestedScrollParent2
-        android:id="@+id/MyNestedScrollParent2"
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/toolbarLayout"
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/mAppBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            app:elevation="0dp">
 
             <android.support.v7.widget.Toolbar
                 android:id="@id/toolbar"
@@ -28,9 +28,7 @@
                 app:contentInsetLeft="0dp"
                 app:contentInsetRight="0dp"
                 app:contentInsetStart="0dp"
-                app:layout_scrollFlags="scroll|enterAlways"
-                app:popupTheme="@style/AppTheme.PopupOverlay"
-                app:theme="@style/AppTheme.AppBarOverlay">
+                app:layout_scrollFlags="scroll|enterAlways">
 
                 <com.sogukj.pe.view.CircleImageView
                     android:id="@+id/headerIcon"
@@ -94,80 +92,67 @@
                 </LinearLayout>
             </android.support.v7.widget.Toolbar>
 
-            <!--<View-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="30dp"-->
-            <!--android:background="@color/colorPrimary" />-->
-        </LinearLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:background="@color/colorPrimary" />
-
-            <android.support.design.widget.TabLayout
-                android:id="@+id/tabs"
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/tab_bg_1"
-                app:tabGravity="fill"
-                app:tabIndicatorHeight="0dp"
-                app:tabMode="fixed"
-                app:tabSelectedTextColor="@color/text_1"
-                app:tabTextColor="@color/text_3">
+                android:background="#f7f9fc">
 
-                <android.support.design.widget.TabItem
+                <View
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:icon="@drawable/dy_1_select"
-                    android:text="调研" />
+                    android:layout_height="30dp"
+                    android:background="@color/colorPrimary" />
 
-                <android.support.design.widget.TabItem
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/tabs"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:icon="@drawable/cb_1_unselect"
-                    android:text="储备" />
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/tab_bg_1"
+                    app:tabGravity="fill"
+                    app:tabIndicatorHeight="0dp"
+                    app:tabMode="fixed"
+                    app:tabSelectedTextColor="@color/text_1"
+                    app:tabTextColor="@color/text_3">
 
-                <android.support.design.widget.TabItem
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:icon="@drawable/lx_1_unselect"
-                    android:text="立项" />
+                    <android.support.design.widget.TabItem
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:icon="@drawable/dy_1_select"
+                        android:text="调研" />
 
-                <android.support.design.widget.TabItem
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:icon="@drawable/yt_1_unselect"
-                    android:text="已投" />
+                    <android.support.design.widget.TabItem
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:icon="@drawable/cb_1_unselect"
+                        android:text="储备" />
 
-                <android.support.design.widget.TabItem
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:icon="@drawable/tc_1_unselect"
-                    android:text="退出" />
-            </android.support.design.widget.TabLayout>
-        </FrameLayout>
+                    <android.support.design.widget.TabItem
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:icon="@drawable/lx_1_unselect"
+                        android:text="立项" />
+
+                    <android.support.design.widget.TabItem
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:icon="@drawable/yt_1_unselect"
+                        android:text="已投" />
+
+                    <android.support.design.widget.TabItem
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:icon="@drawable/tc_1_unselect"
+                        android:text="退出" />
+                </android.support.design.widget.TabLayout>
+            </FrameLayout>
+
+        </android.support.design.widget.AppBarLayout>
 
         <android.support.v4.view.ViewPager
             android:id="@+id/view_pager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <!--<com.sogukj.pe.view.MyNestedScrollChild-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:orientation="vertical">-->
-
-        <!--<android.support.v4.view.ViewPager-->
-        <!--android:id="@+id/view_pager"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent" />-->
-        <!--</com.sogukj.pe.view.MyNestedScrollChild>-->
-    </com.sogukj.pe.view.MyNestedScrollParent2>
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+    </android.support.design.widget.CoordinatorLayout>
 
     <RelativeLayout
         android:id="@+id/ll_search"

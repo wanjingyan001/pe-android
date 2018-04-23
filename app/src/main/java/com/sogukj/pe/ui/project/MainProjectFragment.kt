@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.support.design.widget.AppBarLayout
 import android.support.design.widget.TabLayout
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
@@ -323,8 +324,6 @@ class MainProjectFragment : BaseFragment() {
         var adapter = ArrayPagerAdapter(childFragmentManager, fragments)
         view_pager.adapter = adapter
         view_pager.offscreenPageLimit = fragments.size
-        var transFormer = ProjectPageTransformer()
-        //view_pager.setPageTransformer(true, transFormer)
 
         tabs?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab?) {
@@ -342,34 +341,39 @@ class MainProjectFragment : BaseFragment() {
         })
         view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
-                //Log.e("PageScrollState", "${state}")
-                if (state == ViewPager.SCROLL_STATE_DRAGGING) {
-                    judgeOncce = 0
-                }
             }
 
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-                //position永远都是两个的左边一个，viewpager往右滑，positionOffset从0到1（到达1以后position++）
-                //Log.e("onPageScrolled", "${position} +++ ${positionOffset} +++ ${positionOffsetPixels}")
-                if (judgeOncce == 0) {
-                    if (positionOffset > 0.5f) {
-                        transFormer.setDirection(true)
-                    } else if (positionOffset < 0.5f) {
-                        transFormer.setDirection(false)
-                    }
-                    judgeOncce = 1
-                }
             }
 
             //滑到新页面才算，没滑到又返回不算
             override fun onPageSelected(position: Int) {
                 //Log.e("onPageSelected", "onPageSelected")
                 tabs?.getTabAt(position)?.select()
-                changeView()
                 fb_add.visibility = if (position == 0 || position == 1) View.VISIBLE else View.GONE
 //                iv_search?.visibility = if (position == 2) View.VISIBLE else View.GONE
 //                iv_add?.visibility = if (position == 1 && user?.is_admin == 1) View.VISIBLE else View.GONE
-                setContent()
+                if (previousState == "TOP") {
+                    tabs.setBackgroundResource(R.drawable.tab_bg_2)
+                    tabs.setTabTextColors(Color.parseColor("#ff7bb4fc"), Color.parseColor("#ffffff"))
+                    for (i in 0 until tabs.getTabCount()) {
+                        if (i == tabs.getSelectedTabPosition()) {
+                            setDrawable(i, "2", true)
+                        } else {
+                            setDrawable(i, "2", false)
+                        }
+                    }
+                } else {
+                    tabs.setBackgroundResource(R.drawable.tab_bg_1)
+                    tabs.setTabTextColors(Color.parseColor("#a0a4aa"), Color.parseColor("#282828"))
+                    for (i in 0 until tabs.getTabCount()) {
+                        if (i == tabs.getSelectedTabPosition()) {
+                            setDrawable(i, "1", true)
+                        } else {
+                            setDrawable(i, "1", false)
+                        }
+                    }
+                }
             }
 
         })
@@ -399,6 +403,54 @@ class MainProjectFragment : BaseFragment() {
         })
         refresh.setAutoLoadMore(true)
 
+        mAppBarLayout.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
+            override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
+                if (mAppBarLayout.height > 0) {
+                    var appBarHeight = mAppBarLayout.height
+                    var toolbarHeight = toolbar.height
+
+                    Log.e("appBarHeight", "${appBarHeight}")//256
+                    Log.e("toolbarHeight", "${toolbarHeight}")//112
+                    Log.e("verticalOffset", "${verticalOffset}")//112
+
+                    var currentState = ""
+
+                    if (toolbarHeight - Math.abs(verticalOffset).toFloat() < 5) {
+                        //移动到顶端
+                        currentState = "TOP"
+                        if (currentState == previousState) {
+                            return
+                        }
+                        previousState = currentState
+                        tabs.setBackgroundResource(R.drawable.tab_bg_2)
+                        tabs.setTabTextColors(Color.parseColor("#ff7bb4fc"), Color.parseColor("#ffffff"))
+                        for (i in 0 until tabs.getTabCount()) {
+                            if (i == tabs.getSelectedTabPosition()) {
+                                setDrawable(i, "2", true)
+                            } else {
+                                setDrawable(i, "2", false)
+                            }
+                        }
+                    } else {
+                        //不是顶端
+                        currentState = "NO_TOP"
+                        if (currentState == previousState) {
+                            return
+                        }
+                        previousState = currentState
+                        tabs.setBackgroundResource(R.drawable.tab_bg_1)
+                        tabs.setTabTextColors(Color.parseColor("#a0a4aa"), Color.parseColor("#282828"))
+                        for (i in 0 until tabs.getTabCount()) {
+                            if (i == tabs.getSelectedTabPosition()) {
+                                setDrawable(i, "1", true)
+                            } else {
+                                setDrawable(i, "1", false)
+                            }
+                        }
+                    }
+                }
+            }
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -410,41 +462,7 @@ class MainProjectFragment : BaseFragment() {
         }
     }
 
-    private fun changeView() {
-        if (toolbarLayout.height == 0) {//toolbarLayout.height=0  fragment来回切换导致toolbarLayout还没有宽高就要
-            tabs.setBackgroundResource(R.drawable.tab_bg_1)
-            tabs.setTabTextColors(Color.parseColor("#a0a4aa"), Color.parseColor("#282828"))
-            for (i in 0 until tabs.getTabCount()) {
-                if (i == tabs.getSelectedTabPosition()) {
-                    setDrawable(i, "1", true)
-                } else {
-                    setDrawable(i, "1", false)
-                }
-            }
-        } else {
-            if (MyNestedScrollParent2.scrollY < toolbarLayout.height) {
-                tabs.setBackgroundResource(R.drawable.tab_bg_1)
-                tabs.setTabTextColors(Color.parseColor("#a0a4aa"), Color.parseColor("#282828"))
-                for (i in 0 until tabs.getTabCount()) {
-                    if (i == tabs.getSelectedTabPosition()) {
-                        setDrawable(i, "1", true)
-                    } else {
-                        setDrawable(i, "1", false)
-                    }
-                }
-            } else if (MyNestedScrollParent2.scrollY >= toolbarLayout.height) {
-                tabs.setBackgroundResource(R.drawable.tab_bg_2)
-                tabs.setTabTextColors(Color.parseColor("#ff7bb4fc"), Color.parseColor("#ffffff"))
-                for (i in 0 until tabs.getTabCount()) {
-                    if (i == tabs.getSelectedTabPosition()) {
-                        setDrawable(i, "2", true)
-                    } else {
-                        setDrawable(i, "2", false)
-                    }
-                }
-            }
-        }
-    }
+    var previousState = "TOP"// NO_TOP
 
     /**
      * @param index--------(tabs对应的index，分别对应dy,cb等)
@@ -469,31 +487,6 @@ class MainProjectFragment : BaseFragment() {
         val id = resources.getIdentifier(name, "drawable", context.packageName)
         tabs.getTabAt(index)!!.setIcon(id)
     }
-
-    /**
-     * 不知道为啥能成功
-     */
-    private fun setContent() {
-        var view = fragments.get(view_pager.currentItem).getRecycleView()
-        //RecycleView可能还没渲染，这样第一个setCurrentContentView失效
-        view.post(object : Runnable {
-            override fun run() {
-                if (view.height > 0) {
-                    MyNestedScrollParent2.setCurrentContentView(view)
-                }
-            }
-        })
-    }
-
-    override fun onResume() {
-        super.onResume()
-        try {
-            setContent()
-        } catch (e: Exception) {
-        }
-    }
-
-    var judgeOncce = 0
 
     val searchTask = Runnable {
         doSearch(search_view.search)
