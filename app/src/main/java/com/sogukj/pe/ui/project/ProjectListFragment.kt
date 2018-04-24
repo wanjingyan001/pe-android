@@ -51,7 +51,6 @@ import com.sougukj.checkEmpty
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_list_project.*
-import kotlinx.android.synthetic.main.layout_loading.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.textColor
 import java.text.SimpleDateFormat
@@ -132,26 +131,38 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
         recycler_view.layoutManager = layoutManager
         recycler_view.adapter = adapter
 
-        val header = ProgressLayout(baseActivity)
-        header.setColorSchemeColors(ContextCompat.getColor(baseActivity, R.color.color_main))
-        refresh.setHeaderView(header)
-        val footer = BallPulseView(baseActivity)
-        footer.setAnimatingColor(ContextCompat.getColor(baseActivity, R.color.color_main))
-        refresh.setBottomView(footer)
-        refresh.setOverScrollRefreshShow(false)
-        refresh.setOnRefreshListener(object : RefreshListenerAdapter() {
-            override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
-                offset = 0
-                doRequest()
-            }
+//        val header = ProgressLayout(baseActivity)
+//        header.setColorSchemeColors(ContextCompat.getColor(baseActivity, R.color.color_main))
+//        refresh.setHeaderView(header)
+//        val footer = BallPulseView(baseActivity)
+//        footer.setAnimatingColor(ContextCompat.getColor(baseActivity, R.color.color_main))
+//        refresh.setBottomView(footer)
+//        refresh.setOverScrollRefreshShow(false)
+//        refresh.setOnRefreshListener(object : RefreshListenerAdapter() {
+//            override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
+//                offset = 0
+//                doRequest()
+//            }
+//
+//            override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
+//                offset = adapter.dataList.size
+//                doRequest()
+//            }
+//
+//        })
+//        refresh.setAutoLoadMore(true)
 
-            override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
-                offset = adapter.dataList.size
-                doRequest()
-            }
+        refresh.setOnRefreshListener {
+            offset = 0
+            doRequest()
+            refresh.finishRefresh(1000)
+        }
+        refresh.setOnLoadMoreListener {
+            offset = adapter.dataList.size
+            doRequest()
+            refresh.finishLoadMore(1000)
+        }
 
-        })
-        refresh.setAutoLoadMore(true)
         ll_order_name_1.setOnClickListener { v ->
             asc *= if (orderBy == 1) -1 else 1;
             orderBy = 1
@@ -284,19 +295,21 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                 }, { e ->
                     Trace.e(e)
                     iv_loading?.visibility = View.GONE
-                    SupportEmptyView.checkEmpty(this, adapter)
+                    iv_empty.visibility = if (adapter.dataList.isEmpty()) View.VISIBLE else View.GONE
+                    //SupportEmptyView.checkEmpty(this, adapter)
                 }, {
-                    SupportEmptyView.checkEmpty(this, adapter)
-                    val b = adapter.dataList.size >= offset + 20
-                    refresh?.setEnableLoadmore(b)
+//                    SupportEmptyView.checkEmpty(this, adapter)
+//                    val b = adapter.dataList.size >= offset + 20
+//                    refresh?.setEnableLoadmore(b)
 //                    if (!b) {
 //                        refresh?.setBottomView(LoadMoreView(baseActivity))
 //                    }
+                    iv_empty.visibility = if (adapter.dataList.isEmpty()) View.VISIBLE else View.GONE
                     adapter.notifyDataSetChanged()
                     if (offset == 0)
-                        refresh?.finishRefreshing()
+                        refresh?.finishRefresh()
                     else
-                        refresh?.finishLoadmore()
+                        refresh?.finishLoadMore()
                 })
     }
 

@@ -3,6 +3,7 @@ package com.sogukj.pe.ui.fund
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.support.v4.app.Fragment
@@ -42,7 +43,6 @@ import com.sogukj.util.XmlDb
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_fund_list.*
-import kotlinx.android.synthetic.main.layout_loading.*
 import org.jetbrains.anko.find
 import java.text.DecimalFormat
 
@@ -189,6 +189,11 @@ class FundListFragment : BaseFragment() {
             doRequest()
             refresh.finishLoadMore(1000)
         }
+
+        Glide.with(baseActivity)
+                .load(Uri.parse("file:///android_asset/img_loading.gif"))
+                .into(iv_loading)
+        iv_loading?.visibility = View.VISIBLE
     }
 
     class FundCountDownColor(var millisInFuture: Long, var countDownInterval: Long, var view: View, var data: Int) : CountDownTimer(millisInFuture, countDownInterval) {
@@ -314,11 +319,11 @@ class FundListFragment : BaseFragment() {
                         }
                     } else
                         showCustomToast(R.drawable.icon_toast_fail, payload.message)
-                    //iv_loading?.visibility = View.GONE
+                    iv_loading?.visibility = View.GONE
                 }, { e ->
                     Trace.e(e)
                     //showToast("暂无可用数据")
-                    //iv_loading?.visibility = View.GONE
+                    iv_loading?.visibility = View.GONE
                     //SupportEmptyView.checkEmpty(this, adapter)
                     iv_empty.visibility = if (adapter.dataList.isEmpty()) View.VISIBLE else View.GONE
                 }, {
