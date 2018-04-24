@@ -17,6 +17,7 @@ import android.view.View
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.framework.base.BaseActivity
 import com.google.gson.Gson
 import com.netease.nim.uikit.api.NimUIKit
 import com.sogukj.pe.Extras
@@ -31,7 +32,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_personal_info.*
 import org.jetbrains.anko.toast
 
-class PersonalInfoActivity : AppCompatActivity(), View.OnClickListener, TextWatcher, View.OnLongClickListener {
+class PersonalInfoActivity : BaseActivity(), View.OnClickListener, TextWatcher, View.OnLongClickListener {
 
     private var pathByUri: String? = null
     lateinit var db: XmlDb
@@ -106,9 +107,9 @@ class PersonalInfoActivity : AppCompatActivity(), View.OnClickListener, TextWatc
                         payload.payload?.let {
                             user = it
                             val bean = Store.store.getUser(this)
-                            if (it.accid == bean!!.accid) {
-                                communicationLayout.visibility = View.INVISIBLE
-                            }
+//                            if (it.accid == bean!!.accid) {
+//                                communicationLayout.visibility = View.INVISIBLE
+//                            }
                             name.text = it.name
                             position.text = it.position
                             name_tv.text = it.name
