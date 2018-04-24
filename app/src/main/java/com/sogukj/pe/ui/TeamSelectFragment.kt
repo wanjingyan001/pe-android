@@ -28,6 +28,7 @@ import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.ui.IM.PersonalInfoActivity
 import com.sogukj.pe.ui.IM.TeamBean
 import com.sogukj.pe.ui.IM.TeamCreateActivity
+import com.sogukj.pe.ui.IM.TeamSelectActivity
 import com.sogukj.pe.ui.user.UserActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
@@ -183,9 +184,10 @@ class TeamSelectFragment : BaseFragment() {
 
         toolbar_menu.setOnClickListener {
             search_edt.clearFocus()
-            isSelectUser = !isSelectUser
-
-            loadByIsSelectUser()
+            TeamSelectActivity.start(context, isSelectUser = true, isCreateTeam = true)
+//            isSelectUser = !isSelectUser
+//
+//            loadByIsSelectUser()
         }
     }
 
