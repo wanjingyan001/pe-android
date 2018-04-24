@@ -62,49 +62,57 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <LinearLayout
+                <android.support.design.widget.CoordinatorLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:background="@color/colorPrimary"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                    android:layout_height="match_parent">
 
-                    <android.support.design.widget.TabLayout
-                        android:id="@+id/tabs"
+                    <android.support.design.widget.AppBarLayout
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_centerInParent="true"
-                        android:layout_gravity="center"
-                        android:background="@color/colorPrimary"
-                        android:gravity="left"
-                        app:tabGravity="fill"
-                        app:tabIndicatorColor="@color/white"
-                        app:tabIndicatorHeight="2dp"
-                        app:tabMode="fixed"
-                        app:tabPaddingEnd="0dp"
-                        app:tabPaddingStart="0dp"
-                        app:tabSelectedTextColor="@color/white"
-                        app:tabTextAppearance="@style/TabLayoutTextStyle"
-                        app:tabTextColor="#afd3ff">
+                        android:layout_height="wrap_content">
 
-                        <android.support.design.widget.TabItem
+                        <android.support.v7.widget.Toolbar
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="全部" />
+                            android:layout_height="wrap_content"
+                            app:contentInsetStart="0dp"
+                            app:layout_scrollFlags="scroll|enterAlways">
 
-                        <android.support.design.widget.TabItem
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="关注" />
-                    </android.support.design.widget.TabLayout>
+                            <android.support.design.widget.TabLayout
+                                android:id="@+id/tabs"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:background="@color/colorPrimary"
+                                android:gravity="left"
+                                app:tabGravity="fill"
+                                app:tabIndicatorColor="@color/white"
+                                app:tabIndicatorHeight="2dp"
+                                app:tabMode="fixed"
+                                app:tabPaddingEnd="0dp"
+                                app:tabPaddingStart="0dp"
+                                app:tabSelectedTextColor="@color/white"
+                                app:tabTextAppearance="@style/TabLayoutTextStyle"
+                                app:tabTextColor="#afd3ff">
 
-                </LinearLayout>
+                                <android.support.design.widget.TabItem
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:text="全部" />
 
-                <android.support.v4.view.ViewPager
-                    android:id="@+id/view_pager"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="50dp" />
+                                <android.support.design.widget.TabItem
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:text="关注" />
+                            </android.support.design.widget.TabLayout>
+                        </android.support.v7.widget.Toolbar>
+
+                    </android.support.design.widget.AppBarLayout>
+
+                    <android.support.v4.view.ViewPager
+                        android:id="@+id/view_pager"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+                </android.support.design.widget.CoordinatorLayout>
 
                 <FrameLayout
                     android:id="@+id/fl_filter"
