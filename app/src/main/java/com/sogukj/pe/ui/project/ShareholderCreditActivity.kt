@@ -209,13 +209,15 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        if (payload.payload == null || payload.payload!!.size == 0) {
-                            showCustomToast(R.drawable.icon_toast_common, "已加载全部")
-                        }
                         if (offset == 0)
                             mAdapter.dataList.clear()
                         payload.payload?.forEach {
                             mAdapter.dataList.add(it)
+                        }
+                        if (offset != 0) {
+                            if (payload.payload == null || payload.payload!!.size == 0) {
+                                showCustomToast(R.drawable.icon_toast_common, "已加载全部")
+                            }
                         }
                     } else {
                         showCustomToast(R.drawable.icon_toast_fail, payload.message)

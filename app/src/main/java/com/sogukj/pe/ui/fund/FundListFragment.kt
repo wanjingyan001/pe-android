@@ -78,7 +78,7 @@ class FundListFragment : BaseFragment() {
     }
 
     lateinit var adapter: RecyclerAdapter<FundSmallBean>
-    private var page = 0
+    private var offset = 0
     private var currentNameOrder = FundSmallBean.FundDesc
     private var currentTimeOrder = FundSmallBean.RegTimeAsc
 
@@ -158,26 +158,37 @@ class FundListFragment : BaseFragment() {
         recycler_view.layoutManager = LinearLayoutManager(context)
         //recycler_view.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         recycler_view.adapter = adapter
-        val header = ProgressLayout(context)
-        header.setColorSchemeColors(ContextCompat.getColor(context, R.color.color_main))
-        refresh.setHeaderView(header)
-        val footer = BallPulseView(context)
-        footer.setAnimatingColor(ContextCompat.getColor(context, R.color.color_main))
-        refresh.setBottomView(footer)
-        refresh.setOverScrollRefreshShow(false)
-        refresh.setEnableLoadmore(true)
-        refresh.setOnRefreshListener(object : RefreshListenerAdapter() {
-            override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
-                page = 0
-                doRequest()
-            }
+//        val header = ProgressLayout(context)
+//        header.setColorSchemeColors(ContextCompat.getColor(context, R.color.color_main))
+//        refresh.setHeaderView(header)
+//        val footer = BallPulseView(context)
+//        footer.setAnimatingColor(ContextCompat.getColor(context, R.color.color_main))
+//        refresh.setBottomView(footer)
+//        refresh.setOverScrollRefreshShow(false)
+//        refresh.setEnableLoadmore(true)
+//        refresh.setOnRefreshListener(object : RefreshListenerAdapter() {
+//            override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
+//                page = 0
+//                doRequest()
+//            }
+//
+//            override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
+//                ++page
+//                doRequest()
+//            }
+//
+//        })
 
-            override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
-                ++page
-                doRequest()
-            }
-
-        })
+        refresh.setOnRefreshListener {
+            offset = 0
+            doRequest()
+            refresh.finishRefresh(1000)
+        }
+        refresh.setOnLoadMoreListener {
+            offset = adapter.dataList.size
+            doRequest()
+            refresh.finishLoadMore(1000)
+        }
     }
 
     class FundCountDownColor(var millisInFuture: Long, var countDownInterval: Long, var view: View, var data: Int) : CountDownTimer(millisInFuture, countDownInterval) {
@@ -284,35 +295,46 @@ class FundListFragment : BaseFragment() {
             type = 3
         }
         SoguApi.getService(activity.application)
-                .getAllFunds(page = page, sort = (currentNameOrder + currentTimeOrder), type = type)
+                .getAllFunds(offset = offset, sort = (currentNameOrder + currentTimeOrder), type = type)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        if (page == 0) {
+                        if (offset == 0) {
                             adapter.dataList.clear()
                         }
                         payload.payload?.apply {
                             Log.d(FundMainFragment.TAG, Gson().toJson(this))
                             adapter.dataList.addAll(this)
                         }
+                        if (offset != 0) {
+                            if (payload.payload == null || payload.payload!!.size == 0) {
+                                showCustomToast(R.drawable.icon_toast_common, "已加载全部")
+                            }
+                        }
                     } else
                         showCustomToast(R.drawable.icon_toast_fail, payload.message)
-                    iv_loading?.visibility = View.GONE
+                    //iv_loading?.visibility = View.GONE
                 }, { e ->
                     Trace.e(e)
                     //showToast("暂无可用数据")
-                    iv_loading?.visibility = View.GONE
-                    SupportEmptyView.checkEmpty(this, adapter)
+                    //iv_loading?.visibility = View.GONE
+                    //SupportEmptyView.checkEmpty(this, adapter)
+                    iv_empty.visibility = if (adapter.dataList.isEmpty()) View.VISIBLE else View.GONE
                 }, {
-                    SupportEmptyView.checkEmpty(this, adapter)
-                    refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
+                    //SupportEmptyView.checkEmpty(this, adapter)
+                    //refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
+                    iv_empty.visibility = if (adapter.dataList.isEmpty()) View.VISIBLE else View.GONE
                     adapter.notifyDataSetChanged()
-                    if (page == 0) {
-                        refresh?.finishRefreshing()
-                    } else {
-                        refresh?.finishLoadmore()
-                    }
+//                    if (page == 0) {
+//                        refresh?.finishRefreshing()
+//                    } else {
+//                        refresh?.finishLoadmore()
+//                    }
+                    if (offset == 0)
+                        refresh?.finishRefresh()
+                    else
+                        refresh?.finishLoadMore()
                 })
     }
 

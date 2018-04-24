@@ -687,7 +687,7 @@ interface SoguService {
      */
     @FormUrlEncoded
     @POST("/api/Foundation/fundList")
-    fun getAllFunds(@Field("page") page: Int = 1,
+    fun getAllFunds(@Field("offset") offset: Int = 0,
                     @Field("pageSize") pageSize: Int = 20,
                     @Field("sort") sort: Int,
                     @Field("fuzzyQuery") fuzzyQuery: String = "",

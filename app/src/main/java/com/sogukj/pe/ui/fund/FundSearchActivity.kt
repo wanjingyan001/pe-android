@@ -46,7 +46,7 @@ class FundSearchActivity : ToolbarActivity(), View.OnClickListener {
 
     lateinit var historyAdapter: RecyclerAdapter<String>
     lateinit var adapter: RecyclerAdapter<FundSmallBean>
-    private var page = 0
+    private var offset = 0
     private var currentNameOrder = FundSmallBean.FundDesc
     private var currentTimeOrder = FundSmallBean.RegTimeAsc
     private var searchStr: String = ""
@@ -71,7 +71,7 @@ class FundSearchActivity : ToolbarActivity(), View.OnClickListener {
                 ll_history.visibility = View.VISIBLE
             } else {
                 searchStr = search_view.search
-                page = 0
+                offset = 0
                 handler.postDelayed({ doSearch(searchStr) }, 500)
             }
         }
@@ -153,12 +153,12 @@ class FundSearchActivity : ToolbarActivity(), View.OnClickListener {
         refresh.setEnableLoadmore(true)
         refresh.setOnRefreshListener(object : RefreshListenerAdapter() {
             override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
-                page = 0
+                offset = 0
                 doSearch(searchStr)
             }
 
             override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
-                ++page
+                offset = adapter.dataList.size
                 doSearch(searchStr)
             }
 
@@ -192,7 +192,7 @@ class FundSearchActivity : ToolbarActivity(), View.OnClickListener {
         tmplist.add(searchStr)
         Store.store.saveFundSearch(this, tmplist)
         SoguApi.getService(application)
-                .getAllFunds(page = page, sort = (currentNameOrder + currentTimeOrder), fuzzyQuery = searchStr, type = intent.getIntExtra(Extras.TYPE, 0))
+                .getAllFunds(offset = offset, sort = (currentNameOrder + currentTimeOrder), fuzzyQuery = searchStr, type = intent.getIntExtra(Extras.TYPE, 0))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -201,7 +201,7 @@ class FundSearchActivity : ToolbarActivity(), View.OnClickListener {
                             //tv_result_title.text = Html.fromHtml(getString(R.string.tv_title_result_news, (total as Double).toInt()))
                             tv_result_title.text = Html.fromHtml(getString(R.string.tv_title_result_news, payload.payload?.size))
                         }
-                        if (page == 0) {
+                        if (offset == 0) {
                             adapter.dataList.clear()
                         }
                         payload.payload?.apply {
@@ -217,7 +217,7 @@ class FundSearchActivity : ToolbarActivity(), View.OnClickListener {
                     SupportEmptyView.checkEmpty(this, adapter)
                     refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
                     adapter.notifyDataSetChanged()
-                    if (page == 0) {
+                    if (offset == 0) {
                         refresh?.finishRefreshing()
                     } else {
                         refresh?.finishLoadmore()
@@ -236,7 +236,7 @@ class FundSearchActivity : ToolbarActivity(), View.OnClickListener {
                     currentNameOrder = FundSmallBean.FundDesc
                     iv_sort_name_1.imageResource = R.drawable.ic_down
                 }
-                page = 0
+                offset = 0
                 doSearch(searchStr)
             }
             R.id.ll_order_time_1 -> {
@@ -247,7 +247,7 @@ class FundSearchActivity : ToolbarActivity(), View.OnClickListener {
                     currentTimeOrder = FundSmallBean.RegTimeAsc
                     iv_sort_time_1.imageResource = R.drawable.ic_up
                 }
-                page = 0
+                offset = 0
                 doSearch(searchStr)
             }
             R.id.tv_cancel -> {
