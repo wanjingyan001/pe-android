@@ -100,7 +100,7 @@ class CircleImageView : android.support.v7.widget.AppCompatImageView {
             var color = COLORS[0]
             if (!TextUtils.isEmpty(str)) {
 //                color = COLORS[(Math.random() * (COLORS.size - 1)).toInt()]
-                color = Color.parseColor("#1787FB")
+                color = Color.parseColor("#FEB25F")
             }
             textPaint.color = color
             val fontSize = Math.min(width, height) / 2
