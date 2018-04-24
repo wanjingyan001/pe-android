@@ -30,6 +30,7 @@ import com.sogukj.pe.ui.news.NewsDetailActivity
 import com.sogukj.pe.ui.weekly.PersonalWeeklyActivity
 import com.sogukj.pe.util.NimSDKOptionConfig
 import com.sogukj.pe.util.Trace
+import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
 import com.sogukj.util.XmlDb
@@ -81,7 +82,7 @@ class App : MultiDexApplication() {
                 myNotificationView.setImageViewBitmap(R.id.notification_large_icon1, getLargeIcon(this@App, p1))
                 myNotificationView.setImageViewResource(R.id.notification_large_icon1, getSmallIconId(this@App, p1))
                 builder.setContent(myNotificationView)
-                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setSmallIcon(Utils.defaultIc())
                         .setTicker(p1?.ticker)
                         .setAutoCancel(true)
                 val notification = builder.notification

@@ -675,6 +675,28 @@ public class Utils {
         return headImg;
     }
 
+    public static int defaultIc(){
+        int icLauncher;
+        switch (getEnvironment()) {
+            case "civc":
+                icLauncher = R.mipmap.ic_launcher_zd;
+                break;
+            case "ht":
+                icLauncher = R.mipmap.ic_launcher;
+                break;
+            case "kk":
+                icLauncher = R.mipmap.ic_launcher_kk;
+                break;
+            case "yge":
+                icLauncher = R.mipmap.ic_launcher_yge;
+                break;
+            default:
+                icLauncher = R.mipmap.ic_launcher_pe;
+                break;
+        }
+        return icLauncher;
+    }
+
     public static String getFileAbsolutePathByUri(Activity context, Uri fileUri) {
         if (context == null || fileUri == null) {
             return null;
