@@ -12,9 +12,12 @@ import android.text.Html
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
+import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
+import android.widget.Toolbar
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
@@ -184,6 +187,9 @@ class MainMsgFragment : BaseFragment() {
         initSearchView()
         toolbar_back.setOnClickListener {
             //UserActivity.start(context)
+            if (add_layout.visibility == View.VISIBLE) {
+                add_layout.visibility = View.GONE
+            }
             val intent = Intent(context, UserActivity::class.java)
             startActivityForResult(intent, 0x789)
         }
@@ -198,6 +204,14 @@ class MainMsgFragment : BaseFragment() {
                 }
             }
         }
+        toolbar.setOnTouchListener(object :View.OnTouchListener{
+            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                if (add_layout.visibility == View.VISIBLE) {
+                    add_layout.visibility = View.GONE
+                }
+                return true
+            }
+        })
         start_chat.setOnClickListener {
             TeamSelectActivity.start(context, isSelectUser = true, isCreateTeam = true)
         }
@@ -366,7 +380,7 @@ class MainMsgFragment : BaseFragment() {
             val scanResult = bundle!!.getString("result")
             Log.e("11111111111", scanResult)
             ScanResultActivity.start(baseActivity)
-            baseActivity?.overridePendingTransition(R.anim.activity_in,0)
+            baseActivity?.overridePendingTransition(R.anim.activity_in, 0)
             add_layout.visibility = View.GONE
         } else if (requestCode == 0x789) {
             loadHead()
