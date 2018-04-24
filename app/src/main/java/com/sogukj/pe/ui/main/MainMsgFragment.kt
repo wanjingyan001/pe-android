@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.support.design.widget.AppBarLayout
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
@@ -196,7 +197,7 @@ class MainMsgFragment : BaseFragment() {
                 }
             }
         }
-        toolbar.setOnTouchListener(object :View.OnTouchListener{
+        toolbar.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
                 if (add_layout.visibility == View.VISIBLE) {
                     add_layout.visibility = View.GONE
@@ -363,6 +364,16 @@ class MainMsgFragment : BaseFragment() {
         refresh.setAutoLoadMore(true)
 
         registerObservers(true)
+
+        mAppBarLayout.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
+            override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
+                if (mAppBarLayout.height > 0) {
+                    if (Math.abs(verticalOffset) > mAppBarLayout.height - 10) {
+                        Utils.closeInput(context, search_edt)
+                    }
+                }
+            }
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
