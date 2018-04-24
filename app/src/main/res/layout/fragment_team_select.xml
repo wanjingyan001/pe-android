@@ -55,51 +55,6 @@
             android:src="@drawable/menu_create_imteam" />
     </android.support.v7.widget.Toolbar>
 
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="55dp"
-        android:layout_marginBottom="10dp"
-        android:background="@color/white"
-        android:padding="10dp">
-
-        <EditText
-            android:id="@+id/search_edt"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/team_bg_search2"
-            android:cursorVisible="true"
-            android:gravity="center_vertical"
-            android:imeOptions="actionSearch"
-            android:inputType="text"
-            android:paddingLeft="30dp"
-            android:paddingRight="8dp"
-            android:singleLine="true"
-            android:textColor="@color/black" />
-
-        <TextView
-            android:id="@+id/search_hint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:drawableLeft="@drawable/ss_small"
-            android:drawablePadding="8dp"
-            android:gravity="center"
-            android:text="搜索"
-            android:textColor="@color/gray7"
-            android:textSize="14sp" />
-
-        <ImageView
-            android:id="@+id/search_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:src="@drawable/ss_small"
-            android:visibility="gone" />
-
-    </RelativeLayout>
-
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/listContent"
         android:layout_width="match_parent"
@@ -112,6 +67,50 @@
             android:layout_height="wrap_content"
             android:descendantFocusability="blocksDescendants"
             android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="55dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/white"
+                android:padding="10dp">
+
+                <EditText
+                    android:id="@+id/search_edt"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/team_bg_search2"
+                    android:cursorVisible="true"
+                    android:gravity="center_vertical"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    android:paddingLeft="30dp"
+                    android:paddingRight="8dp"
+                    android:singleLine="true"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/search_hint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:drawableLeft="@drawable/ss_small"
+                    android:drawablePadding="8dp"
+                    android:gravity="center"
+                    android:text="搜索"
+                    android:textColor="@color/gray7"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/search_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/ss_small"
+                    android:visibility="gone" />
+
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
