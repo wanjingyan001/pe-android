@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#f7f9fc"
     android:focusable="true"
-    android:focusableInTouchMode="true"
-    android:orientation="vertical">
+    android:focusableInTouchMode="true">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/team_toolbar"
@@ -29,9 +28,9 @@
             android:layout_gravity="left"
             android:layout_marginLeft="15dp"
             android:gravity="center"
-            app:civ_border_width="1dp"
+            android:src="@drawable/sogu_ic_back"
             app:civ_border_color="#4dffffff"
-            android:src="@drawable/sogu_ic_back" />
+            app:civ_border_width="1dp" />
 
         <TextView
             android:id="@+id/team_toolbar_title"
@@ -58,8 +57,8 @@
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/listContent"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:layout_marginTop="56dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -68,9 +67,9 @@
             android:orientation="vertical">
 
             <RelativeLayout
+                android:id="@+id/et_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="55dp"
-                android:layout_marginBottom="10dp"
                 android:background="@color/white"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
@@ -88,7 +87,9 @@
                     android:paddingLeft="30dp"
                     android:paddingRight="8dp"
                     android:singleLine="true"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/text_1"
+                    android:textColorHint="@color/text_3"
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/search_hint"
@@ -114,152 +115,155 @@
             </RelativeLayout>
 
             <LinearLayout
+                android:id="@+id/section"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
-                <com.sogukj.pe.view.CircleImageView
-                    android:id="@+id/company_icon"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="8dp" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp" />
 
-                <TextView
-                    android:id="@+id/companyName"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="15sp"
-                    android:layout_weight="1"
-                    android:text="海通创新"
-                    android:textColor="@color/text_1"
-                    android:textSize="14sp" />
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/num"
-                    android:layout_width="wrap_content"
+                    <com.sogukj.pe.view.CircleImageView
+                        android:id="@+id/company_icon"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="8dp" />
+
+                    <TextView
+                        android:id="@+id/companyName"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15sp"
+                        android:layout_weight="1"
+                        android:text="海通创新"
+                        android:textColor="@color/text_1"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="15dp"
+                        android:textColor="#B4B4B4"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/groupDiscuss1"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginLeft="15dp"
+                        android:background="@drawable/qunliao" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="群组"
+                        android:textColor="#ff282828"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <com.netease.nim.uikit.business.team.activity.CustomExpandableListView
+                    android:id="@+id/groupDiscuss"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="15dp"
-                    android:textColor="#B4B4B4"
-                    android:textSize="14sp" />
+                    android:background="@color/white"
+                    android:divider="@null"
+                    android:groupIndicator="@null" />
 
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/contactLayout1"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginLeft="15dp"
+                        android:background="@drawable/contact" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="最近联系人"
+                        android:textColor="#ff282828"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/contactLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white" />
+
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginLeft="15dp"
+                        android:background="@drawable/zuzhijiagou" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="组织架构"
+                        android:textColor="#ff282828"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <com.netease.nim.uikit.business.team.activity.CustomExpandableListView
+                    android:id="@+id/organizationList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:divider="@null"
+                    android:groupIndicator="@null" />
             </LinearLayout>
-
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/groupDiscuss1"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_marginTop="10dp"
-                android:background="@color/white"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_marginLeft="15dp"
-                    android:background="@drawable/qunliao" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:text="群组"
-                    android:textColor="#ff282828"
-                    android:textSize="16sp" />
-
-            </LinearLayout>
-
-            <com.netease.nim.uikit.business.team.activity.CustomExpandableListView
-                android:id="@+id/groupDiscuss"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:divider="@null"
-                android:groupIndicator="@null" />
-
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/contactLayout1"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_marginTop="10dp"
-                android:background="@color/white"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_marginLeft="15dp"
-                    android:background="@drawable/contact" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:text="最近联系人"
-                    android:textColor="#ff282828"
-                    android:textSize="16sp" />
-
-            </LinearLayout>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/contactLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white" />
-
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_marginTop="10dp"
-                android:background="@color/white"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_marginLeft="15dp"
-                    android:background="@drawable/zuzhijiagou" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:text="组织架构"
-                    android:textColor="#ff282828"
-                    android:textSize="16sp" />
-
-            </LinearLayout>
-
-            <com.netease.nim.uikit.business.team.activity.CustomExpandableListView
-                android:id="@+id/organizationList"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:divider="@null"
-                android:groupIndicator="@null" />
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/resultList"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:visibility="gone">
-
-    </android.support.v7.widget.RecyclerView>
 
     <RelativeLayout
         android:id="@+id/confirmSelectLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:layout_gravity="bottom"
         android:background="@color/white"
         android:orientation="horizontal">
 
@@ -293,4 +297,14 @@
 
     </RelativeLayout>
 
-</LinearLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/resultList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="111dp"
+        android:background="@color/white"
+        android:visibility="gone">
+
+    </android.support.v7.widget.RecyclerView>
+
+</FrameLayout>

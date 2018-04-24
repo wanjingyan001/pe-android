@@ -210,7 +210,6 @@ class TeamSelectFragment : BaseFragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (search_edt.text.toString().isEmpty()) {
                     searchKey = ""
-                    listContent.visibility = View.VISIBLE
                     resultList.visibility = View.GONE
                 }
             }
@@ -340,7 +339,6 @@ class TeamSelectFragment : BaseFragment() {
                 }
             }
         }
-        listContent.visibility = View.GONE
         resultList.visibility = View.VISIBLE
         resultData.clear()
         resultData.addAll(result)
