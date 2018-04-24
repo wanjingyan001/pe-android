@@ -144,6 +144,7 @@ class TeamSelectFragment : BaseFragment() {
             if (et_layout.height > 0) {
                 if (scrollY >= et_layout.height) {
                     Utils.closeInput(context, search_edt)
+                    search_edt.clearFocus()
                 }
             }
         }
