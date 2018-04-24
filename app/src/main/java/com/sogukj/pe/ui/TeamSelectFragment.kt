@@ -3,11 +3,13 @@ package com.sogukj.pe.ui
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.widget.NestedScrollView
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.Html
 import android.text.TextWatcher
+import android.util.Log
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.*
@@ -135,6 +137,14 @@ class TeamSelectFragment : BaseFragment() {
                     }
                 }
                 loadByIsSelectUser()
+            }
+        }
+
+        listContent.setOnScrollChangeListener { v: NestedScrollView?, scrollX: Int, scrollY: Int, oldScrollX: Int, oldScrollY: Int ->
+            if (et_layout.height > 0) {
+                if (scrollY >= et_layout.height) {
+                    Utils.closeInput(context, search_edt)
+                }
             }
         }
     }
