@@ -57,33 +57,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.scwang.smartrefresh.layout.SmartRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/refresh"
+        <android.support.design.widget.CoordinatorLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:srlEnablePreviewInEditMode="true">
+            android:layout_height="wrap_content">
 
-            <com.scwang.smartrefresh.layout.header.ClassicsHeader
+            <android.support.design.widget.AppBarLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:background="@color/divider2" />
+                android:layout_height="wrap_content"
+                app:elevation="0dp">
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="55dp"
                     android:background="@color/white"
                     android:focusable="true"
-                    android:layout_marginTop="2dp"
                     android:focusableInTouchMode="true"
                     android:padding="10dp"
                     app:layout_scrollFlags="scroll|enterAlways">
@@ -100,9 +87,9 @@
                         android:paddingLeft="30dp"
                         android:paddingRight="8dp"
                         android:singleLine="true"
+                        android:textColor="@color/text_1"
                         android:textColorHint="@color/text_3"
-                        android:textSize="14sp"
-                        android:textColor="@color/text_1" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/search_hint"
@@ -129,12 +116,18 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_marginTop="57dp"
+                    android:layout_height="1dp"
                     android:background="@color/divider2" />
 
-                <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:tools="http://schemas.android.com/tools"
+            </android.support.design.widget.AppBarLayout>
+
+            <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
+                android:id="@+id/refresh"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <android.support.v7.widget.RecyclerView xmlns:tools="http://schemas.android.com/tools"
                     android:id="@+id/recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -142,7 +135,6 @@
                     android:orientation="vertical"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:layout_marginTop="59dp"
                     app:layoutManager="LinearLayoutManager"
                     tools:listitem="@layout/item_msg_index" />
 
@@ -151,17 +143,22 @@
                     android:id="@+id/iv_empty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="59dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="70dp"
                     android:src="@drawable/img_empty"
                     android:visibility="gone" />
 
-            </FrameLayout>
+                <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/iv_loading"
+                    android:layout_width="80dp"
+                    android:layout_height="120dp"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:visibility="gone" />
+            </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
 
-            <com.scwang.smartrefresh.layout.footer.BallPulseFooter
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+        </android.support.design.widget.CoordinatorLayout>
 
         <RelativeLayout
             android:id="@+id/add_layout"

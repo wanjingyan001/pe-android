@@ -349,37 +349,41 @@ class MainMsgFragment : BaseFragment() {
         recycler_view.layoutManager = layoutManager
         recycler_view.adapter = adapter
 
-//        val header = ProgressLayout(baseActivity)
-//        header.setColorSchemeColors(ContextCompat.getColor(baseActivity, R.color.color_main))
-//        refresh.setHeaderView(header)
-//        val footer = BallPulseView(baseActivity)
-//        footer.setAnimatingColor(ContextCompat.getColor(baseActivity, R.color.color_main))
-//        refresh.setBottomView(footer)
-//        refresh.setOverScrollRefreshShow(false)
-//        refresh.setOnRefreshListener(object : RefreshListenerAdapter() {
-//            override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
-//                page = 1
-//                doRequest()
-//            }
-//
-//            override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
-//                page++
-//                doRequest()
-//            }
-//
-//        })
-//        refresh.setAutoLoadMore(true)
+        val header = ProgressLayout(baseActivity)
+        header.setColorSchemeColors(ContextCompat.getColor(baseActivity, R.color.color_main))
+        refresh.setHeaderView(header)
+        val footer = BallPulseView(baseActivity)
+        footer.setAnimatingColor(ContextCompat.getColor(baseActivity, R.color.color_main))
+        refresh.setBottomView(footer)
+        refresh.setOverScrollRefreshShow(false)
+        refresh.setOnRefreshListener(object : RefreshListenerAdapter() {
+            override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
+                //page = 1
+                doRequest()
+                Thread.sleep(1000)
+                refresh.finishRefreshing()
+            }
 
-        refresh.setOnRefreshListener {
-            //page = 1
-            doRequest()
-            refresh.finishRefresh(1000)
-        }
-        refresh.setOnLoadMoreListener {
-            //page++
-            doRequest()
-            refresh.finishLoadMore(1000)
-        }
+            override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
+                //page++
+                doRequest()
+                Thread.sleep(1000)
+                refresh.finishLoadmore()
+            }
+
+        })
+        refresh.setAutoLoadMore(true)
+
+//        refresh.setOnRefreshListener {
+//            //page = 1
+//            doRequest()
+//            refresh.finishRefresh(1000)
+//        }
+//        refresh.setOnLoadMoreListener {
+//            //page++
+//            doRequest()
+//            refresh.finishLoadMore(1000)
+//        }
 
         registerObservers(true)
     }
@@ -463,11 +467,11 @@ class MainMsgFragment : BaseFragment() {
                 adapter.notifyDataSetChanged()
                 iv_empty?.visibility = if (adapter.dataList.isEmpty()) View.VISIBLE else View.GONE
                 //SupportEmptyView.checkEmpty(this@MainMsgFragment, adapter)
-                //refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
-                //if (page == 1)
-                    //refresh?.finishRefresh()
-                //else
-                    //refresh?.finishLoadMore()
+                refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
+//                if (page == 1)
+//                    refresh?.finishRefresh()
+//                else
+//                    refresh?.finishLoadMore()
             }
 
             override fun onException(p0: Throwable?) {
