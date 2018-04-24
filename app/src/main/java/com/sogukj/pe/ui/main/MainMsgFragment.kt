@@ -90,11 +90,6 @@ class MainMsgFragment : BaseFragment() {
 
     fun loadHead() {
         val user = Store.store.getUser(baseActivity!!)
-//        if (user?.url.isNullOrEmpty()) {
-//            toolbar_back.setChar(user?.name?.first())
-//        } else {
-//            Glide.with(context).load(user?.url).into(toolbar_back)
-//        }
         if (user?.url.isNullOrEmpty()) {
             val ch = user?.name?.first()
             toolbar_back.setChar(ch)
@@ -138,8 +133,6 @@ class MainMsgFragment : BaseFragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (search_edt.text.toString().isEmpty()) {
                     searchKey = ""
-//                    listContent.visibility = View.VISIBLE
-//                    resultList.visibility = View.GONE
                     adapter.dataList.clear()
                     adapter.dataList.add(zhushou)
                     adapter.dataList.addAll(recentList)
@@ -186,7 +179,6 @@ class MainMsgFragment : BaseFragment() {
         loadHead()
         initSearchView()
         toolbar_back.setOnClickListener {
-            //UserActivity.start(context)
             if (add_layout.visibility == View.VISIBLE) {
                 add_layout.visibility = View.GONE
             }
@@ -278,7 +270,6 @@ class MainMsgFragment : BaseFragment() {
                             msgIcon.imageResource = R.drawable.im_team_default
                         }
                         try {
-//                            tvDate.text = Utils.getTimeDate(data.time)
                             val time = Utils.getTime(data.time, "yyyy-MM-dd HH:mm:ss")
                             tvDate.text = Utils.formatDate(time)
                         } catch (e: Exception) {
@@ -345,7 +336,6 @@ class MainMsgFragment : BaseFragment() {
         }
         val layoutManager = LinearLayoutManager(baseActivity)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
-//        recycler_view.addItemDecoration(DividerItemDecoration(baseActivity, DividerItemDecoration.VERTICAL))
         recycler_view.layoutManager = layoutManager
         recycler_view.adapter = adapter
 
@@ -358,14 +348,12 @@ class MainMsgFragment : BaseFragment() {
         refresh.setOverScrollRefreshShow(false)
         refresh.setOnRefreshListener(object : RefreshListenerAdapter() {
             override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
-                //page = 1
                 doRequest()
                 Thread.sleep(1000)
                 refresh.finishRefreshing()
             }
 
             override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
-                //page++
                 doRequest()
                 Thread.sleep(1000)
                 refresh.finishLoadmore()
@@ -373,17 +361,6 @@ class MainMsgFragment : BaseFragment() {
 
         })
         refresh.setAutoLoadMore(true)
-
-//        refresh.setOnRefreshListener {
-//            //page = 1
-//            doRequest()
-//            refresh.finishRefresh(1000)
-//        }
-//        refresh.setOnLoadMoreListener {
-//            //page++
-//            doRequest()
-//            refresh.finishLoadMore(1000)
-//        }
 
         registerObservers(true)
     }
@@ -402,7 +379,6 @@ class MainMsgFragment : BaseFragment() {
         }
     }
 
-    //var page = 1
     override fun onResume() {
         super.onResume()
         doRequest()
@@ -415,7 +391,6 @@ class MainMsgFragment : BaseFragment() {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-//                        if (page == 1)
                         adapter.dataList.clear()
                         payload.payload?.apply {
                             adapter.dataList.add(this)
@@ -466,12 +441,7 @@ class MainMsgFragment : BaseFragment() {
                 adapter.dataList.addAll(recentList)
                 adapter.notifyDataSetChanged()
                 iv_empty?.visibility = if (adapter.dataList.isEmpty()) View.VISIBLE else View.GONE
-                //SupportEmptyView.checkEmpty(this@MainMsgFragment, adapter)
                 refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
-//                if (page == 1)
-//                    refresh?.finishRefresh()
-//                else
-//                    refresh?.finishLoadMore()
             }
 
             override fun onException(p0: Throwable?) {
