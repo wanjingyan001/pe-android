@@ -506,6 +506,7 @@
                     android:id="@+id/gl_shangshi"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:numColumns="4"
                     android:padding="10dp" />
             </LinearLayout>

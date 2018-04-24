@@ -546,8 +546,9 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
             } else {
                 if (count != null && count.toInt() > 0) {
                     holder.seq!!.setText(count)
-                    holder.seq!!.textColor = color
-                    holder.icon!!.clearColorFilter()
+                    holder.seq!!.textColor = Color.parseColor("#608cf8")
+                    //holder.icon!!.clearColorFilter()
+                    holder.icon!!.setColorFilter(Color.parseColor("#608cf8"), PorterDuff.Mode.SRC_ATOP)
                     view.setOnClickListener(this@ProjectActivity)
                 } else {
                     holder.seq!!.visibility = View.GONE
