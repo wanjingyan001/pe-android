@@ -68,41 +68,36 @@
 
                     <android.support.design.widget.AppBarLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        app:elevation="0dp">
 
-                        <android.support.v7.widget.Toolbar
+                        <android.support.design.widget.TabLayout
+                            android:id="@+id/tabs"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:contentInsetStart="0dp"
-                            app:layout_scrollFlags="scroll|enterAlways">
+                            android:layout_height="50dp"
+                            android:background="@color/colorPrimary"
+                            android:gravity="left"
+                            app:layout_scrollFlags="scroll|enterAlways"
+                            app:tabGravity="fill"
+                            app:tabIndicatorColor="@color/white"
+                            app:tabIndicatorHeight="2dp"
+                            app:tabMode="fixed"
+                            app:tabPaddingEnd="0dp"
+                            app:tabPaddingStart="0dp"
+                            app:tabSelectedTextColor="@color/white"
+                            app:tabTextAppearance="@style/TabLayoutTextStyle"
+                            app:tabTextColor="#afd3ff">
 
-                            <android.support.design.widget.TabLayout
-                                android:id="@+id/tabs"
+                            <android.support.design.widget.TabItem
                                 android:layout_width="match_parent"
-                                android:layout_height="50dp"
-                                android:background="@color/colorPrimary"
-                                android:gravity="left"
-                                app:tabGravity="fill"
-                                app:tabIndicatorColor="@color/white"
-                                app:tabIndicatorHeight="2dp"
-                                app:tabMode="fixed"
-                                app:tabPaddingEnd="0dp"
-                                app:tabPaddingStart="0dp"
-                                app:tabSelectedTextColor="@color/white"
-                                app:tabTextAppearance="@style/TabLayoutTextStyle"
-                                app:tabTextColor="#afd3ff">
+                                android:layout_height="match_parent"
+                                android:text="全部" />
 
-                                <android.support.design.widget.TabItem
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:text="全部" />
-
-                                <android.support.design.widget.TabItem
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:text="关注" />
-                            </android.support.design.widget.TabLayout>
-                        </android.support.v7.widget.Toolbar>
+                            <android.support.design.widget.TabItem
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:text="关注" />
+                        </android.support.design.widget.TabLayout>
 
                     </android.support.design.widget.AppBarLayout>
 
