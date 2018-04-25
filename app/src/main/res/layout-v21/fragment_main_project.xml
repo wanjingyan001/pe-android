@@ -30,16 +30,21 @@
                 app:contentInsetStart="0dp"
                 app:layout_scrollFlags="scroll|enterAlways">
 
-                <com.sogukj.pe.view.CircleImageView
+                <FrameLayout
                     android:id="@+id/headerIcon"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_gravity="left"
-                    android:layout_marginLeft="15dp"
-                    android:gravity="center"
-                    app:civ_border_width="1dp"
-                    app:civ_border_color="#4dffffff"
-                    android:src="@drawable/sogu_ic_back" />
+                    android:layout_width="55dp"
+                    android:layout_height="55dp">
+
+                    <com.sogukj.pe.view.CircleImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        app:civ_border_width="1dp"
+                        app:civ_border_color="#4dffffff"
+                        android:src="@drawable/sogu_ic_back" />
+
+                </FrameLayout>
 
                 <TextView
                     android:id="@id/toolbar_title"

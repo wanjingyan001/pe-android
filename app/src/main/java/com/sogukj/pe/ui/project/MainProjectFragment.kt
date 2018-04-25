@@ -33,10 +33,7 @@ import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.ui.user.UserActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
-import com.sogukj.pe.view.ArrayPagerAdapter
-import com.sogukj.pe.view.ProjectPageTransformer
-import com.sogukj.pe.view.RecyclerAdapter
-import com.sogukj.pe.view.RecyclerHolder
+import com.sogukj.pe.view.*
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -78,14 +75,15 @@ class MainProjectFragment : BaseFragment() {
 //        } else {
 //            Glide.with(context).load(user?.url).into(headerIcon)
 //        }
+        var header = headerIcon.getChildAt(0) as CircleImageView
         if (user?.url.isNullOrEmpty()) {
             val ch = user?.name?.first()
-            headerIcon.setChar(ch)
+            header.setChar(ch)
         } else {
             Glide.with(context)
                     .load(user?.url)
                     .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
-                    .into(headerIcon)
+                    .into(header)
         }
     }
 

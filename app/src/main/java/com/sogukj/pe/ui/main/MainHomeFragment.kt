@@ -46,6 +46,7 @@ import com.sogukj.pe.ui.project.ShareHolderStepActivity
 import com.sogukj.pe.ui.project.ShareholderCreditActivity
 import com.sogukj.pe.ui.user.UserActivity
 import com.sogukj.pe.util.Utils
+import com.sogukj.pe.view.CircleImageView
 import com.sogukj.util.XmlDb
 import me.leolin.shortcutbadger.ShortcutBadger
 import org.jetbrains.anko.support.v4.ctx
@@ -153,7 +154,7 @@ class MainHomeFragment : BaseFragment() {
         }
 
         loadHead()
-        header.setOnClickListener {
+        (toolbar_back.getChildAt(0) as CircleImageView).setOnClickListener {
             //UserActivity.start(context)
             val intent = Intent(context, UserActivity::class.java)
             startActivityForResult(intent, 0x789)
@@ -209,6 +210,7 @@ class MainHomeFragment : BaseFragment() {
 //        } else {
 //            Glide.with(context).load(user?.url).into(header)
 //        }
+        var header = toolbar_back.getChildAt(0) as CircleImageView
         if (user?.url.isNullOrEmpty()) {
             val ch = user?.name?.first()
             header.setChar(ch)

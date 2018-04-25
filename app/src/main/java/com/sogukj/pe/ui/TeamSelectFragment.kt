@@ -67,15 +67,16 @@ class TeamSelectFragment : BaseFragment() {
     }
 
     fun loadHead() {
+        var header = toolbar_back.getChildAt(0) as CircleImageView
         val user = Store.store.getUser(baseActivity!!)
         if (user?.url.isNullOrEmpty()) {
             val ch = user?.name?.first()
-            toolbar_back.setChar(ch)
+            header.setChar(ch)
         } else {
             Glide.with(context)
                     .load(user?.url)
                     .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
-                    .into(toolbar_back)
+                    .into(header)
         }
     }
 
