@@ -398,19 +398,21 @@ class ApproveFillActivity : ToolbarActivity() {
                         }
                     }
 
-                    if (judgeIsLeaveBusiness()) {
-                        head_approver.visibility = View.GONE
-                        requestLeaveInfo()
-                    }
+                    head_approver.visibility = View.GONE
+                    requestLeaveInfo()
+//                    if (judgeIsLeaveBusiness()) {
+//                        head_approver.visibility = View.GONE
+//                        requestLeaveInfo()
+//                    }
                 }, { e ->
                     Trace.e(e)
                     showCustomToast(R.drawable.icon_toast_common, "暂无可用数据")
                 })
 
-        if (!judgeIsLeaveBusiness()) {
-            head_approver.visibility = View.VISIBLE
-            requestApprove()
-        }
+//        if (!judgeIsLeaveBusiness()) {
+//            head_approver.visibility = View.VISIBLE
+//            requestApprove()
+//        }
     }
 
     private fun requestLeaveInfo() {
