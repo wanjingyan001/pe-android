@@ -1,5 +1,6 @@
 package com.framework.base
 
+import com.sogukj.pe.ui.IM.TeamSelectActivity
 import com.sogukj.pe.ui.project.ShareHolderStepActivity
 import com.sogukj.pe.ui.project.ShareholderCreditActivity
 import java.util.*
@@ -53,5 +54,13 @@ object ActivityHelper {
 
     fun getActivityList(): ArrayList<BaseActivity> {
         return activities
+    }
+
+    fun removeTeamSelectActivity() {
+        for (activity in activities) {
+            if (activity is TeamSelectActivity) {
+                activity.finish()
+            }
+        }
     }
 }

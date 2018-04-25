@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import com.framework.base.ActivityHelper
 import com.netease.nim.uikit.api.NimUIKit
 import com.netease.nim.uikit.business.team.helper.TeamHelper
 import com.netease.nim.uikit.common.ui.dialog.DialogMaker
@@ -108,6 +109,8 @@ class TeamCreateActivity : AppCompatActivity() {
                             }
                             NimUIKit.startTeamSession(this@TeamCreateActivity, it.team.id)
                             finish()
+                            //去掉中间的activity(TeamSelectActivity)
+                            ActivityHelper.removeTeamSelectActivity()
                         }
 
                     }

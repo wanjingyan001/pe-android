@@ -44,6 +44,7 @@ import com.netease.nimlib.sdk.msg.model.RecentContact
 import com.sogukj.pe.Manifest
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.MessageIndexBean
+import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.ui.IM.TeamSearchActivity
 import com.sogukj.pe.ui.IM.TeamSelectActivity
 import com.sogukj.pe.ui.ScanResultActivity
@@ -222,7 +223,9 @@ class MainMsgFragment : BaseFragment() {
         })
         start_chat.setOnClickListener {
             add_layout.visibility = View.GONE
-            TeamSelectActivity.start(context, isSelectUser = true, isCreateTeam = true)
+            var alreadySelect = ArrayList<UserBean>()
+            alreadySelect.add(Store.store.getUser(context)!!)
+            TeamSelectActivity.startForResult(context, isSelectUser = true, alreadySelect = alreadySelect, isCreateTeam = true)
         }
         scan.setOnClickListener {
             var per = "android.permission.CAMERA"
