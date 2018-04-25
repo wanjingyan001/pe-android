@@ -114,7 +114,7 @@ class PersonalInfoActivity : BaseActivity(), View.OnClickListener, TextWatcher, 
                             position.text = it.position
                             name_tv.text = it.name
                             phone_tv.text = it.phone
-                            company.text = it.company
+                            company.text = if(it.company.isNullOrEmpty()) bean!!.company else it.company
                             email_tv.text = it.email
                             department_tv.text = it.depart_name
                             position_tv.text = it.position
