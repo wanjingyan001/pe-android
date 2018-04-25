@@ -131,6 +131,7 @@ class PersonalInfoActivity : BaseActivity(), View.OnClickListener, TextWatcher, 
 
                         }
                     }
+                }, { e ->
                 })
     }
 
