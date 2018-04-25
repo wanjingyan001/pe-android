@@ -154,7 +154,7 @@ class MainHomeFragment : BaseFragment() {
         }
 
         loadHead()
-        (toolbar_back.getChildAt(0) as CircleImageView).setOnClickListener {
+        toolbar_back.setOnClickListener {
             //UserActivity.start(context)
             val intent = Intent(context, UserActivity::class.java)
             startActivityForResult(intent, 0x789)
