@@ -64,24 +64,30 @@ class PersonalInfoActivity : BaseActivity(), View.OnClickListener, TextWatcher, 
         user = intent.getSerializableExtra(Extras.DATA) as UserBean?
         pathByUri = intent.getStringExtra(Extras.DATA2)
         val bean = Store.store.getUser(this)
+//        if (user != null) {
+//            user?.let {
+////                if (it.accid == bean!!.accid) {
+////                    communicationLayout.visibility = View.INVISIBLE
+////                }
+//                name.text = it.name
+//                position.text = it.position
+//                company.text = if(it.company.isNullOrEmpty()) bean!!.company else it.company
+//                name_tv.text = it.name
+//                phone_tv.text = it.phone
+//                email_tv.text = it.email
+//                department_tv.text = bean!!.depart_name//从通讯录中的组拿过来的
+//                position_tv.text = it.position
+//                Glide.with(this)
+//                        .load(it.headImage())
+//                        .apply(RequestOptions().error(R.drawable.ewm))
+//                        .into(avatar)
+//            }
+//        } else {
+//            val uid = intent.getIntExtra(Extras.ID, -1)
+//            queryUserInfo(uid)
+//        }
         if (user != null) {
-            user?.let {
-//                if (it.accid == bean!!.accid) {
-//                    communicationLayout.visibility = View.INVISIBLE
-//                }
-                name.text = it.name
-                position.text = it.position
-                company.text = if(it.company.isNullOrEmpty()) bean!!.company else it.company
-                name_tv.text = it.name
-                phone_tv.text = it.phone
-                email_tv.text = it.email
-                department_tv.text = bean!!.depart_name//从通讯录中的组拿过来的
-                position_tv.text = it.position
-                Glide.with(this)
-                        .load(it.headImage())
-                        .apply(RequestOptions().error(R.drawable.ewm))
-                        .into(avatar)
-            }
+            queryUserInfo(user!!.uid!!)
         } else {
             val uid = intent.getIntExtra(Extras.ID, -1)
             queryUserInfo(uid)
