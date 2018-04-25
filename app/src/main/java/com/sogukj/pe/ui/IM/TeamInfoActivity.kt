@@ -89,7 +89,7 @@ class TeamInfoActivity : AppCompatActivity(), View.OnClickListener, SwitchButton
 
         adapter!!.onItemClick = { v, p ->
             if (p == teamMembers.size) {
-                TeamSelectActivity.startForResult(this, true, teamMembers, false, canRemoveMember = false)
+                TeamSelectActivity.startForResult(this, true, teamMembers, false, false, canRemoveMember = false)
             }
         }
     }
