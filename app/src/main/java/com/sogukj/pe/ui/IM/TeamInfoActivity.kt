@@ -159,6 +159,7 @@ class TeamInfoActivity : AppCompatActivity(), View.OnClickListener, SwitchButton
                 val uid = info.extensionMap["uid"].toString().toInt()
                 val user = UserBean()
                 user.uid = uid
+                user.name = info.name
                 user.user_id = uid
                 user.url = info.avatar
                 user.accid = info.account
