@@ -175,7 +175,7 @@ public class TeamHistoryFileActivity extends AppCompatActivity implements TeamMe
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (type != 5) {
+        if (type != 5 && type != 2) {
             getMenuInflater().inflate(R.menu.team_filter, menu);
         }
         return true;
