@@ -369,13 +369,11 @@ class MainMsgFragment : BaseFragment() {
         refresh.setOnRefreshListener(object : RefreshListenerAdapter() {
             override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
                 doRequest()
-                Thread.sleep(1000)
                 refresh.finishRefreshing()
             }
 
             override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
                 doRequest()
-                Thread.sleep(1000)
                 refresh.finishLoadmore()
             }
 
