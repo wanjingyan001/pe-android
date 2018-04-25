@@ -206,6 +206,7 @@ class MainMsgFragment : BaseFragment() {
             }
         })
         start_chat.setOnClickListener {
+            add_layout.visibility = View.GONE
             TeamSelectActivity.start(context, isSelectUser = true, isCreateTeam = true)
         }
         scan.setOnClickListener {

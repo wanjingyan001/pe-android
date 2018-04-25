@@ -22,6 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="开庭时间"
+            android:layout_gravity="top"
             android:textColor="@color/shareholder_text_gray" />
 
         <TextView
@@ -50,6 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="原告"
+            android:layout_gravity="top"
             android:textColor="@color/shareholder_text_gray" />
 
         <TextView
@@ -78,6 +80,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="法院名称"
+            android:layout_gravity="top"
             android:textColor="@color/shareholder_text_gray" />
 
         <TextView
@@ -106,6 +109,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="内容概要"
+            android:layout_gravity="top"
             android:textColor="@color/shareholder_text_gray" />
 
         <TextView

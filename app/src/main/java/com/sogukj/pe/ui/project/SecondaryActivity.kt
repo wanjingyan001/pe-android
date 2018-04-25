@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.view.menu.ActionMenuItemView
 import android.support.v7.widget.LinearLayoutManager
+import android.view.Gravity
 import android.view.View
 import android.widget.TextView
 import com.framework.base.BaseActivity
@@ -155,6 +156,26 @@ class SecondaryActivity : BaseActivity(), View.OnClickListener {
                     NoticeContent.text = data.body
                 }
             }
+            releaseTime.viewTreeObserver.addOnGlobalLayoutListener {
+                if (releaseTime.layout.lineCount > 1) {
+                    releaseTime.gravity = Gravity.LEFT
+                }
+            }
+            CourtName.viewTreeObserver.addOnGlobalLayoutListener {
+                if (CourtName.layout.lineCount > 1) {
+                    CourtName.gravity = Gravity.LEFT
+                }
+            }
+            NoticeType.viewTreeObserver.addOnGlobalLayoutListener {
+                if (NoticeType.layout.lineCount > 1) {
+                    NoticeType.gravity = Gravity.LEFT
+                }
+            }
+            NoticeContent.viewTreeObserver.addOnGlobalLayoutListener {
+                if (NoticeContent.layout.lineCount > 1) {
+                    NoticeContent.gravity = Gravity.LEFT
+                }
+            }
         }
     }
 
@@ -218,6 +239,26 @@ class SecondaryActivity : BaseActivity(), View.OnClickListener {
                         }
                 }
             }
+            courtTime.viewTreeObserver.addOnGlobalLayoutListener {
+                if (courtTime.layout.lineCount > 1) {
+                    courtTime.gravity = Gravity.LEFT
+                }
+            }
+            plaintiff.viewTreeObserver.addOnGlobalLayoutListener {
+                if (plaintiff.layout.lineCount > 1) {
+                    plaintiff.gravity = Gravity.LEFT
+                }
+            }
+            courtName.viewTreeObserver.addOnGlobalLayoutListener {
+                if (courtName.layout.lineCount > 1) {
+                    courtName.gravity = Gravity.LEFT
+                }
+            }
+            abstractTv.viewTreeObserver.addOnGlobalLayoutListener {
+                if (abstractTv.layout.lineCount > 1) {
+                    abstractTv.gravity = Gravity.LEFT
+                }
+            }
         }
     }
 
@@ -234,6 +275,31 @@ class SecondaryActivity : BaseActivity(), View.OnClickListener {
                 executionCourt.text = data.court
                 fulfillState.text = data.performance
                 executionText.text = data.base
+            }
+            filingTime.viewTreeObserver.addOnGlobalLayoutListener {
+                if (filingTime.layout.lineCount > 1) {
+                    filingTime.gravity = Gravity.LEFT
+                }
+            }
+            caseNumber.viewTreeObserver.addOnGlobalLayoutListener {
+                if (caseNumber.layout.lineCount > 1) {
+                    caseNumber.gravity = Gravity.LEFT
+                }
+            }
+            executionCourt.viewTreeObserver.addOnGlobalLayoutListener {
+                if (executionCourt.layout.lineCount > 1) {
+                    executionCourt.gravity = Gravity.LEFT
+                }
+            }
+            fulfillState.viewTreeObserver.addOnGlobalLayoutListener {
+                if (fulfillState.layout.lineCount > 1) {
+                    fulfillState.gravity = Gravity.LEFT
+                }
+            }
+            executionText.viewTreeObserver.addOnGlobalLayoutListener {
+                if (executionText.layout.lineCount > 1) {
+                    executionText.gravity = Gravity.LEFT
+                }
             }
         }
     }
