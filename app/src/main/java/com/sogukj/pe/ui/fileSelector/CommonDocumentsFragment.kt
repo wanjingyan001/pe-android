@@ -61,7 +61,7 @@ class CommonDocumentsFragment : Fragment() {
 
     private fun doSearch() {
         search_edt.setOnFocusChangeListener { v, hasFocus ->
-            if (hasFocus) {
+            if (hasFocus || search_edt.textStr.isNotEmpty()) {
                 search_hint.setVisible(false)
             } else {
                 search_hint.setVisible(true)

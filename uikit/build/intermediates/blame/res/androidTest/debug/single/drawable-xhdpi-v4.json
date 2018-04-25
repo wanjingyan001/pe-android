@@ -76,12 +76,12 @@
         "source": "/Users/admin/dev/proj/pe3.1/pe-android/uikit/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/nim_message_input_keyboard.png"
     },
     {
-        "merged": "/Users/admin/dev/proj/pe3.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/nim_ic_menu_normal.png",
-        "source": "/Users/admin/dev/proj/pe3.1/pe-android/uikit/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/nim_ic_menu_normal.png"
-    },
-    {
         "merged": "/Users/admin/dev/proj/pe3.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/im_file.png",
         "source": "/Users/admin/dev/proj/pe3.1/pe-android/uikit/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/im_file.png"
+    },
+    {
+        "merged": "/Users/admin/dev/proj/pe3.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/nim_ic_menu_normal.png",
+        "source": "/Users/admin/dev/proj/pe3.1/pe-android/uikit/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/nim_ic_menu_normal.png"
     },
     {
         "merged": "/Users/admin/dev/proj/pe3.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/abc_switch_track_mtrl_alpha.9.png",

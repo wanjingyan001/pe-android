@@ -4,10 +4,12 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.IntRange
+import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.BottomSheetDialog
 import android.support.design.widget.CoordinatorLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.Gravity
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -100,40 +102,7 @@ class FilterFileActivity : BaseActivity() {
             finish()
         }
         operating.setOnClickFastListener {
-            if (!isForResult){
-                //删除
-                MaterialDialog.Builder(ctx)
-                        .theme(Theme.LIGHT)
-                        .title("警告")
-                        .content("是否确认删除选中的文件")
-                        .positiveText("确定")
-                        .negativeText("取消")
-                        .onPositive { dialog, _ ->
-                            dialog.dismiss()
-                            selectedFile.forEach {
-                                if (it.exists()) {
-                                    it.delete()
-                                    //通知列表刷新
-                                }
-                            }
-                            selectedFile.clear()
-                            initData()
-                        }
-                        .onNegative { dialog, _ ->
-                            dialog.dismiss()
-                        }
-                        .show()
-            }else{
-                //发送
-                val intent = Intent()
-                val paths = ArrayList<String>()
-                selectedFile.forEach {
-                    paths.add(it.path)
-                }
-                intent.putExtra(Extras.LIST, paths)
-                setResult(Activity.RESULT_OK, intent)
-                finish()
-            }
+            doOperating()
         }
     }
 
@@ -145,6 +114,46 @@ class FilterFileActivity : BaseActivity() {
         selected_files_size.text = "已选择 : ${FileUtil.formatFileSize(size, FileUtil.SizeUnit.Auto)}"
         send_selected_files.isEnabled = selectedFile.size > 0
         send_selected_files.text = "选择(${selectedFile.size}/$maxSize)"
+        send_selected_files.setOnClickFastListener {
+            doOperating()
+        }
+    }
+
+    private fun doOperating(){
+        if (!isForResult){
+            //删除
+            MaterialDialog.Builder(ctx)
+                    .theme(Theme.LIGHT)
+                    .title("警告")
+                    .content("是否确认删除选中的文件")
+                    .positiveText("确定")
+                    .negativeText("取消")
+                    .onPositive { dialog, _ ->
+                        dialog.dismiss()
+                        selectedFile.forEach {
+                            if (it.exists()) {
+                                it.delete()
+                                //通知列表刷新
+                            }
+                        }
+                        selectedFile.clear()
+                        initData()
+                    }
+                    .onNegative { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .show()
+        }else{
+            //发送
+            val intent = Intent()
+            val paths = ArrayList<String>()
+            selectedFile.forEach {
+                paths.add(it.path)
+            }
+            intent.putExtra(Extras.LIST, paths)
+            setResult(Activity.RESULT_OK, intent)
+            finish()
+        }
     }
 
     private fun initData() {
@@ -254,9 +263,13 @@ class FilterFileActivity : BaseActivity() {
         dialog.setContentView(view)
         dialog.window.findViewById(R.id.design_bottom_sheet)?.setBackgroundResource(android.R.color.transparent)
         val parent = view.parent as View
+        view.measure(0, 0)
+        val behavior = BottomSheetBehavior.from(parent)
+        behavior.peekHeight = view.measuredHeight
         val params = parent.layoutParams as CoordinatorLayout.LayoutParams
         params.leftMargin = Utils.dpToPx(this, 10)
         params.rightMargin = Utils.dpToPx(this, 10)
+        params.gravity= Gravity.TOP or Gravity.CENTER_HORIZONTAL
         parent.layoutParams = params
         return dialog
     }

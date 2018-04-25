@@ -72,7 +72,7 @@ android {
             resValue "bool", "isrRank", 'true'
             buildConfigField "String", "ENVIRONMENT", '"pe"'
             manifestPlaceholders = [appId               : "com.sogukj.pe",
-                                    app_icon            : "@mipmap/ic_launcher",
+                                    app_icon            : "@mipmap/ic_launcher_pe",
                                     AMAP_KEY            : "9204f7dcdd8c2beba10c94dbe96bd062",
                                     IM_KEY              : "a0af02d86ecfb1ee160dde8369a5035e",
                                     Umeng_KEY           : "59b781c607fe652e44000165",

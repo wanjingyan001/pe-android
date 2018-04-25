@@ -8,12 +8,12 @@
         "source": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/bundles/debug/res/layout/nim_message_fragment.xml"
     },
     {
-        "merged": "/Users/admin/dev/proj/pe3.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/layout/nim_contact_select_area_item.xml",
-        "source": "/Users/admin/dev/proj/pe3.1/pe-android/uikit/build/intermediates/bundles/debug/res/layout/nim_contact_select_area_item.xml"
-    },
-    {
         "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/layout/nim_contacts_abc_item.xml",
         "source": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/bundles/debug/res/layout/nim_contacts_abc_item.xml"
+    },
+    {
+        "merged": "/Users/admin/dev/proj/pe3.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/layout/nim_contact_select_area_item.xml",
+        "source": "/Users/admin/dev/proj/pe3.1/pe-android/uikit/build/intermediates/bundles/debug/res/layout/nim_contact_select_area_item.xml"
     },
     {
         "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/layout/design_layout_tab_icon.xml",
@@ -92,20 +92,20 @@
         "source": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/bundles/debug/res/layout/nim_message_item_text.xml"
     },
     {
-        "merged": "/Users/admin/dev/proj/pe3.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/layout/nim_voice_trans_layout.xml",
-        "source": "/Users/admin/dev/proj/pe3.1/pe-android/uikit/build/intermediates/bundles/debug/res/layout/nim_voice_trans_layout.xml"
-    },
-    {
         "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/layout/nim_media_item_normal.xml",
         "source": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/bundles/debug/res/layout/nim_media_item_normal.xml"
     },
     {
-        "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/layout/design_navigation_item.xml",
-        "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/design-25.3.1.aar/559cb88a6085c8f50d91eb5fbb23ca53/res/layout/design_navigation_item.xml"
+        "merged": "/Users/admin/dev/proj/pe3.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/layout/nim_voice_trans_layout.xml",
+        "source": "/Users/admin/dev/proj/pe3.1/pe-android/uikit/build/intermediates/bundles/debug/res/layout/nim_voice_trans_layout.xml"
     },
     {
         "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/layout/nim_capture_video_activity.xml",
         "source": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/bundles/debug/res/layout/nim_capture_video_activity.xml"
+    },
+    {
+        "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/layout/design_navigation_item.xml",
+        "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/design-25.3.1.aar/559cb88a6085c8f50d91eb5fbb23ca53/res/layout/design_navigation_item.xml"
     },
     {
         "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/layout/nim_advanced_team_info_activity.xml",
