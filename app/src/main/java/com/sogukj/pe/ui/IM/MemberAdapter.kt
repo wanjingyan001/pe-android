@@ -16,6 +16,7 @@ import com.sogukj.pe.view.CircleImageView
  */
 class MemberAdapter(val ctx: Context, private val members: ArrayList<UserBean>) : RecyclerView.Adapter<MemberAdapter.MemberHolder>() {
 
+    var onItemClick: ((v: View, position: Int) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MemberHolder {
         val inflate = LayoutInflater.from(ctx).inflate(R.layout.item_team_member, parent, false)
@@ -37,8 +38,11 @@ class MemberAdapter(val ctx: Context, private val members: ArrayList<UserBean>) 
                         .into(holder.headImg)
             }
         }
-        holder.headImg.setOnClickListener {
-            TeamSelectActivity.startForResult(ctx, true, members, false)
+        holder.headImg.setOnClickListener { v ->
+            if (null != onItemClick) {
+                onItemClick!!(v, position)
+            }
+            //TeamSelectActivity.startForResult(ctx, true, members, false)
         }
     }
 

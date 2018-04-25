@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -85,6 +86,12 @@ class TeamInfoActivity : AppCompatActivity(), View.OnClickListener, SwitchButton
         exit_team.setOnClickListener(this)
         profileToggle.setOnChangedListener(this)
         doRequest()
+
+        adapter!!.onItemClick = { v, p ->
+            if (p == teamMembers.size) {
+                TeamSelectActivity.startForResult(this, true, teamMembers, false, canRemoveMember = false)
+            }
+        }
     }
 
 
@@ -183,9 +190,9 @@ class TeamInfoActivity : AppCompatActivity(), View.OnClickListener, SwitchButton
                 intent.putExtra("sessionId", getIntent().getStringExtra("sessionId"))
                 startActivity(intent)
             }
-            R.id.team_layout -> {
-                TeamSelectActivity.startForResult(this, true, teamMembers, false,canRemoveMember = false)
-            }
+//            R.id.team_layout -> {
+//                TeamSelectActivity.startForResult(this, true, teamMembers, false, canRemoveMember = false)
+//            }
             R.id.exit_team -> {
                 MaterialDialog.Builder(this)
                         .theme(Theme.LIGHT)
@@ -247,14 +254,14 @@ class TeamInfoActivity : AppCompatActivity(), View.OnClickListener, SwitchButton
 
     override fun onResume() {
         super.onResume()
-        NIMClient.getService(TeamServiceObserver::class.java).observeTeamUpdate(teamUpdateObserver,true)
+        NIMClient.getService(TeamServiceObserver::class.java).observeTeamUpdate(teamUpdateObserver, true)
     }
 
     override fun onPause() {
         super.onPause()
-        NIMClient.getService(TeamServiceObserver::class.java).observeTeamUpdate(teamUpdateObserver,false)
+        NIMClient.getService(TeamServiceObserver::class.java).observeTeamUpdate(teamUpdateObserver, false)
         val name = team_name.text.trim().toString()
-        if (name.isNotEmpty()&& team_title.text!=name) {
+        if (name.isNotEmpty() && team_title.text != name) {
             NIMClient.getService(TeamService::class.java).updateName(sessionId, name).setCallback(object : RequestCallbackWrapper<Void>() {
                 override fun onResult(code: Int, result: Void?, exception: Throwable?) {
                     Log.d("WJY", "$code+${result.toString()}")
