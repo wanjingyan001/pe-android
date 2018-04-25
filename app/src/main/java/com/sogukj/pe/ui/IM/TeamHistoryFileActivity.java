@@ -3,6 +3,7 @@ package com.sogukj.pe.ui.IM;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.LinearGradient;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.sogukj.pe.Extras;
 import com.sogukj.pe.R;
@@ -46,7 +48,7 @@ public class TeamHistoryFileActivity extends AppCompatActivity implements TeamMe
     private int tid;
     private HistoryFileAdapter adapter;
     private List<ChatFileBean> files = new ArrayList<>();
-    private ImageView iv_empty;
+    private ImageView iv_empty, iv_loading;
 
     public static void start(Context context, int tid) {
         Intent intent = new Intent(context, TeamHistoryFileActivity.class);
@@ -88,7 +90,7 @@ public class TeamHistoryFileActivity extends AppCompatActivity implements TeamMe
         });
         tid = getIntent().getIntExtra(Extras.INSTANCE.getID(), 0);
         type = getIntent().getIntExtra(Extras.INSTANCE.getTYPE(), 8);
-        if (type == 2){
+        if (type == 2) {
             title.setText("视频");
         }
         historyList = (RecyclerView) findViewById(R.id.history_file_list);
@@ -106,6 +108,13 @@ public class TeamHistoryFileActivity extends AppCompatActivity implements TeamMe
         };
         historyList.addItemDecoration(decoration);
         historyList.setAdapter(adapter);
+
+        iv_loading = (ImageView) findViewById(R.id.iv_loading);
+        Glide.with(this)
+                .load(Uri.parse("file:///android_asset/img_loading.gif"))
+                .into(iv_loading);
+        iv_loading.setVisibility(View.VISIBLE);
+
         requestChatFile();
         //暂时去掉,以后还要加回来
 //        adapter.setListener(new onItemClickListener() {
@@ -149,6 +158,7 @@ public class TeamHistoryFileActivity extends AppCompatActivity implements TeamMe
 
                     @Override
                     public void onNext(Payload<List<ChatFileBean>> listPayload) {
+                        iv_loading.setVisibility(View.GONE);
                         Log.d("WJY", new Gson().toJson(listPayload));
                         if (listPayload.getPayload() != null && !listPayload.getPayload().isEmpty()) {
                             files.clear();
@@ -159,15 +169,25 @@ public class TeamHistoryFileActivity extends AppCompatActivity implements TeamMe
 
                     @Override
                     public void onError(Throwable e) {
-
+                        iv_loading.setVisibility(View.GONE);
+                        if (adapter.getItemCount() == 0) {
+                            iv_empty.setVisibility(View.VISIBLE);
+                            historyList.setVisibility(View.GONE);
+                        } else {
+                            iv_empty.setVisibility(View.GONE);
+                            historyList.setVisibility(View.VISIBLE);
+                        }
                     }
 
                     @Override
                     public void onComplete() {
+                        iv_loading.setVisibility(View.GONE);
                         if (adapter.getItemCount() == 0) {
                             iv_empty.setVisibility(View.VISIBLE);
-                        }else {
+                            historyList.setVisibility(View.GONE);
+                        } else {
                             iv_empty.setVisibility(View.GONE);
+                            historyList.setVisibility(View.VISIBLE);
                         }
                     }
                 });

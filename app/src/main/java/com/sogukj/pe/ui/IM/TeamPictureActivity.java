@@ -2,6 +2,7 @@ package com.sogukj.pe.ui.IM;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -36,7 +37,7 @@ public class TeamPictureActivity extends AppCompatActivity {
     private RecyclerView pictureList;
     private ArrayList<ChatFileBean> teamPics;
     private PictureAdapter adapter;
-    private ImageView iv_empty;
+    private ImageView iv_empty, iv_loading;
     private int tid;
 
     public static void start(Context context, int tid){
@@ -75,6 +76,13 @@ public class TeamPictureActivity extends AppCompatActivity {
         pictureList.addItemDecoration(gridDecoration);
         pictureList.setLayoutManager(new GridLayoutManager(this,3));
         pictureList.setAdapter(adapter);
+
+        iv_loading = (ImageView) findViewById(R.id.iv_loading);
+        Glide.with(this)
+                .load(Uri.parse("file:///android_asset/img_loading.gif"))
+                .into(iv_loading);
+        iv_loading.setVisibility(View.VISIBLE);
+
         requestChatFile();
     }
 
@@ -92,6 +100,7 @@ public class TeamPictureActivity extends AppCompatActivity {
 
                     @Override
                     public void onNext(Payload<List<ChatFileBean>> listPayload) {
+                        iv_loading.setVisibility(View.GONE);
                         Log.d("WJY", new Gson().toJson(listPayload));
                         if (listPayload.getPayload() != null && !listPayload.getPayload().isEmpty()) {
                             teamPics.clear();
@@ -102,15 +111,25 @@ public class TeamPictureActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(Throwable e) {
-
+                        iv_loading.setVisibility(View.GONE);
+                        if (adapter.getItemCount() == 0) {
+                            iv_empty.setVisibility(View.VISIBLE);
+                            pictureList.setVisibility(View.GONE);
+                        }else {
+                            iv_empty.setVisibility(View.GONE);
+                            pictureList.setVisibility(View.VISIBLE);
+                        }
                     }
 
                     @Override
                     public void onComplete() {
+                        iv_loading.setVisibility(View.GONE);
                         if (adapter.getItemCount() == 0) {
                             iv_empty.setVisibility(View.VISIBLE);
+                            pictureList.setVisibility(View.GONE);
                         }else {
                             iv_empty.setVisibility(View.GONE);
+                            pictureList.setVisibility(View.VISIBLE);
                         }
                     }
                 });

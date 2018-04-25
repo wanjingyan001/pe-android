@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.v4.content.ContextCompat
@@ -389,6 +390,11 @@ class MainMsgFragment : BaseFragment() {
                 }
             }
         })
+
+        Glide.with(baseActivity)
+                .load(Uri.parse("file:///android_asset/img_loading.gif"))
+                .into(iv_loading)
+        iv_loading?.visibility = View.VISIBLE
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -422,13 +428,15 @@ class MainMsgFragment : BaseFragment() {
                             adapter.dataList.add(this)
                             zhushou = this
                         }
-                    } else
+                        getIMRecentContact()
+                    } else {
                         showCustomToast(R.drawable.icon_toast_fail, payload.message)
+                        getIMRecentContact()
+                    }
                 }, { e ->
                     Trace.e(e)
-                    showCustomToast(R.drawable.icon_toast_common, "暂无可用数据")
-                }, {
                     getIMRecentContact()
+                    //showCustomToast(R.drawable.icon_toast_common, "暂无可用数据")
                 })
     }
 
@@ -466,6 +474,7 @@ class MainMsgFragment : BaseFragment() {
                 }
                 adapter.dataList.addAll(recentList)
                 adapter.notifyDataSetChanged()
+                iv_loading.visibility = View.GONE
                 //iv_empty?.visibility = if (adapter.dataList.isEmpty()) View.VISIBLE else View.GONE
                 refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
                 if (adapter.dataList.size == 0) {
@@ -478,9 +487,11 @@ class MainMsgFragment : BaseFragment() {
             }
 
             override fun onException(p0: Throwable?) {
+                iv_loading.visibility = View.GONE
             }
 
             override fun onFailed(p0: Int) {
+                iv_loading.visibility = View.GONE
             }
 
         })
