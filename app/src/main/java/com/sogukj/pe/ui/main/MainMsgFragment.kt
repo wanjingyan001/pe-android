@@ -138,6 +138,13 @@ class MainMsgFragment : BaseFragment() {
                     adapter.dataList.add(zhushou)
                     adapter.dataList.addAll(recentList)
                     adapter.notifyDataSetChanged()
+                    if (adapter.dataList.size == 0) {
+                        recycler_view.visibility = View.GONE
+                        iv_empty.visibility = View.VISIBLE
+                    } else {
+                        recycler_view.visibility = View.VISIBLE
+                        iv_empty.visibility = View.GONE
+                    }
                 }
             }
         })
@@ -153,6 +160,13 @@ class MainMsgFragment : BaseFragment() {
         adapter.dataList.clear()
         adapter.dataList.addAll(result)
         adapter.notifyDataSetChanged()
+        if (adapter.dataList.size == 0) {
+            recycler_view.visibility = View.GONE
+            iv_empty.visibility = View.VISIBLE
+        } else {
+            recycler_view.visibility = View.VISIBLE
+            iv_empty.visibility = View.GONE
+        }
     }
 
     lateinit var searchKey: String
@@ -452,8 +466,15 @@ class MainMsgFragment : BaseFragment() {
                 }
                 adapter.dataList.addAll(recentList)
                 adapter.notifyDataSetChanged()
-                iv_empty?.visibility = if (adapter.dataList.isEmpty()) View.VISIBLE else View.GONE
+                //iv_empty?.visibility = if (adapter.dataList.isEmpty()) View.VISIBLE else View.GONE
                 refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
+                if (adapter.dataList.size == 0) {
+                    recycler_view.visibility = View.GONE
+                    iv_empty.visibility = View.VISIBLE
+                } else {
+                    recycler_view.visibility = View.VISIBLE
+                    iv_empty.visibility = View.GONE
+                }
             }
 
             override fun onException(p0: Throwable?) {

@@ -62,6 +62,7 @@ class TeamSelectFragment : BaseFragment() {
 
         } else {  // 在最前端显示 相当于调用了onResume();
             loadHead()
+            doRequest()
         }
     }
 
@@ -223,7 +224,7 @@ class TeamSelectFragment : BaseFragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (search_edt.text.toString().isEmpty()) {
                     searchKey = ""
-                    resultList.visibility = View.GONE
+                    result_layout.visibility = View.GONE
                 }
             }
         })
@@ -352,10 +353,17 @@ class TeamSelectFragment : BaseFragment() {
                 }
             }
         }
-        resultList.visibility = View.VISIBLE
+        result_layout.visibility = View.VISIBLE
         resultData.clear()
         resultData.addAll(result)
         resultAdapter.notifyDataSetChanged()
+        if (resultData.size == 0) {
+            resultList.visibility = View.GONE
+            iv_empty.visibility = View.VISIBLE
+        } else {
+            resultList.visibility = View.VISIBLE
+            iv_empty.visibility = View.GONE
+        }
     }
 
     internal inner class DiscussAdapter(val parents: ArrayList<String>, val childs: ArrayList<ArrayList<Team>>) : BaseExpandableListAdapter() {
