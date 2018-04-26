@@ -57,6 +57,23 @@ class TeamCreateActivity : AppCompatActivity() {
         exit_team.setOnClickListener {
             createTeam()
         }
+
+        //自动生成群名字
+        var nameList = ArrayList<UserBean>(teamMember)
+        if (teamMember.size > 4) {
+            nameList.clear()
+            for (index in 0 until 4) {
+                nameList.add(teamMember.get(index))
+            }
+        }
+        var nameStr = ""
+        for (item in nameList) {
+            nameStr = "${nameStr}、${item.name}"
+        }
+        if (nameList.size > 0) {
+            nameStr = nameStr.removePrefix("、")
+        }
+        team_name.setText(nameStr)
     }
 
     /**
@@ -91,9 +108,9 @@ class TeamCreateActivity : AppCompatActivity() {
                 .setCallback(object : RequestCallback<CreateTeamResult> {
                     override fun onFailed(p0: Int) {
                         DialogMaker.dismissProgressDialog()
-                        if (p0 == 802){
+                        if (p0 == 802) {
                             toast("邀请失败，成员人数上限为200人")
-                        }else{
+                        } else {
                             toast("创建失败")
                         }
                     }
