@@ -1509,7 +1509,7 @@ class ApproveFillActivity : ToolbarActivity() {
 
                 var params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
                 if (index == 0) {
-                    params.leftMargin = Utils.dpToPx(context, 15)
+                    //params.leftMargin = Utils.dpToPx(context, 15)
                 } else {
                     if (datalist[index - 1].name.equals("")) {
                         params.leftMargin = Utils.dpToPx(context, 0)
