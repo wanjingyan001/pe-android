@@ -182,6 +182,13 @@ class MainHomeFragment : BaseFragment() {
         Glide.with(context).asGif().load(R.drawable.loading).into(pb)
         pb.visibility = View.VISIBLE
         doRequest()
+
+        refresh.setOnRefreshListener {
+            page = 1
+            doRequest()
+            refresh.finishRefresh(1000)
+        }
+        refresh.setEnableAutoLoadMore(false)
     }
 
     lateinit var adapter: ViewPagerAdapter
@@ -205,11 +212,6 @@ class MainHomeFragment : BaseFragment() {
 
     fun loadHead() {
         val user = Store.store.getUser(baseActivity!!)
-//        if (user?.url.isNullOrEmpty()) {
-//            header.setChar(user?.name?.first())
-//        } else {
-//            Glide.with(context).load(user?.url).into(header)
-//        }
         var header = toolbar_back.getChildAt(0) as CircleImageView
         if (user?.url.isNullOrEmpty()) {
             val ch = user?.name?.first()
@@ -498,19 +500,29 @@ class MainHomeFragment : BaseFragment() {
             this.mViewCache = LinkedList()
         }
 
+        private var mChildCount = 0
+
+        override fun notifyDataSetChanged() {
+            mChildCount = datas.size
+            super.notifyDataSetChanged()
+        }
+
         override fun getCount(): Int {
-            Log.e("test", "getCount ")
             return this.datas!!.size
         }
 
         override fun getItemPosition(`object`: Any): Int {
-            return super.getItemPosition(`object`)
+//            if (mChildCount > 0) {
+//                --mChildCount
+//                return POSITION_NONE
+//            }
+//            return super.getItemPosition(`object`)
+            return POSITION_NONE
         }
 
         override fun instantiateItem(container: ViewGroup, position: Int): Any {
             var holder: ViewHolder? = null
             var convertView: View? = null
-            Log.e("size", mViewCache!!.size.toString() + "")
             if (mViewCache!!.size == 0) {
                 convertView = mLayoutInflater!!.inflate(R.layout.item_msg_content_main, null, false)
                 holder = ViewHolder()
