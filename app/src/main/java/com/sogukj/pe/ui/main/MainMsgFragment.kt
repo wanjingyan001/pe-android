@@ -74,7 +74,7 @@ import kotlin.collections.HashMap
  * Created by qinfei on 17/10/11.
  */
 class MainMsgFragment : BaseFragment() {
-    lateinit var recentList: ArrayList<RecentContact>
+    var recentList = ArrayList<RecentContact>()
     override val containerViewId: Int
         get() = R.layout.fragment_msg_center
 
@@ -463,7 +463,8 @@ class MainMsgFragment : BaseFragment() {
     lateinit var zhushou: MessageIndexBean
 
     private fun getIMRecentContact() {
-        recentList = ArrayList()
+        //recentList = ArrayList()
+        recentList.clear()
         NIMClient.getService(MsgService::class.java).queryRecentContacts().setCallback(object : RequestCallback<MutableList<RecentContact>> {
             override fun onSuccess(p0: MutableList<RecentContact>?) {
                 p0?.forEach { recentContact ->
