@@ -237,6 +237,7 @@ class MainMsgFragment : BaseFragment() {
             TeamSelectActivity.startForResult(context, isSelectUser = true, alreadySelect = alreadySelect, isCreateTeam = true)
         }
         scan.setOnClickListener {
+            add_layout.visibility = View.GONE
             var per = "android.permission.CAMERA"
             if (ContextCompat.checkSelfPermission(context, per) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(arrayOf(per), 200)
