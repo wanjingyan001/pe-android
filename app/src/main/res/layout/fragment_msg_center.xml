@@ -141,42 +141,55 @@
 
             </android.support.design.widget.AppBarLayout>
 
-            <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
+            <com.scwang.smartrefresh.layout.SmartRefreshLayout
                 android:id="@+id/refresh"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                app:srlEnablePreviewInEditMode="true"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-                <android.support.v7.widget.RecyclerView xmlns:tools="http://schemas.android.com/tools"
-                    android:id="@+id/recycler_view"
+                <com.scwang.smartrefresh.layout.header.ClassicsHeader
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/white"
-                    android:orientation="vertical"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    app:layoutManager="LinearLayoutManager"
-                    tools:listitem="@layout/item_msg_index" />
+                    android:layout_height="wrap_content" />
 
-                <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/iv_empty"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="70dp"
-                    android:src="@drawable/img_empty"
-                    android:visibility="gone" />
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-                <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/iv_loading"
-                    android:layout_width="80dp"
-                    android:layout_height="120dp"
-                    android:layout_centerInParent="true"
-                    android:layout_gravity="center"
-                    android:visibility="gone" />
-            </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
+                    <android.support.v7.widget.RecyclerView xmlns:tools="http://schemas.android.com/tools"
+                        android:id="@+id/recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white"
+                        android:orientation="vertical"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:overScrollMode="never"
+                        app:layoutManager="LinearLayoutManager"
+                        tools:listitem="@layout/item_msg_index" />
+
+                    <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/iv_empty"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/img_empty"
+                        android:visibility="gone" />
+
+                    <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/iv_loading"
+                        android:layout_width="80dp"
+                        android:layout_height="120dp"
+                        android:layout_gravity="center"
+                        android:visibility="gone" />
+                </FrameLayout>
+
+                <com.scwang.smartrefresh.layout.footer.BallPulseFooter
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
         </android.support.design.widget.CoordinatorLayout>
 

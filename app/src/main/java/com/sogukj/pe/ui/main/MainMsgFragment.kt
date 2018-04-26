@@ -368,26 +368,35 @@ class MainMsgFragment : BaseFragment() {
         recycler_view.layoutManager = layoutManager
         recycler_view.adapter = adapter
 
-        val header = ProgressLayout(baseActivity)
-        header.setColorSchemeColors(ContextCompat.getColor(baseActivity, R.color.color_main))
-        refresh.setHeaderView(header)
-        val footer = BallPulseView(baseActivity)
-        footer.setAnimatingColor(ContextCompat.getColor(baseActivity, R.color.color_main))
-        refresh.setBottomView(footer)
-        refresh.setOverScrollRefreshShow(false)
-        refresh.setOnRefreshListener(object : RefreshListenerAdapter() {
-            override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
-                doRequest()
-                refresh.finishRefreshing()
-            }
+//        val header = ProgressLayout(baseActivity)
+//        header.setColorSchemeColors(ContextCompat.getColor(baseActivity, R.color.color_main))
+//        refresh.setHeaderView(header)
+//        val footer = BallPulseView(baseActivity)
+//        footer.setAnimatingColor(ContextCompat.getColor(baseActivity, R.color.color_main))
+//        refresh.setBottomView(footer)
+//        refresh.setOverScrollRefreshShow(false)
+//        refresh.setOnRefreshListener(object : RefreshListenerAdapter() {
+//            override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
+//                doRequest()
+//                refresh.finishRefreshing()
+//            }
+//
+//            override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
+//                doRequest()
+//                refresh.finishLoadmore()
+//            }
+//
+//        })
+//        refresh.setAutoLoadMore(true)
 
-            override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
-                doRequest()
-                refresh.finishLoadmore()
-            }
-
-        })
-        refresh.setAutoLoadMore(true)
+        refresh.setOnRefreshListener {
+            doRequest()
+            refresh.finishRefresh(1000)
+        }
+        refresh.setOnLoadMoreListener {
+            doRequest()
+            refresh.finishLoadMore(1000)
+        }
 
         registerObservers(true)
 
@@ -486,7 +495,7 @@ class MainMsgFragment : BaseFragment() {
                 adapter.notifyDataSetChanged()
                 iv_loading.visibility = View.GONE
                 //iv_empty?.visibility = if (adapter.dataList.isEmpty()) View.VISIBLE else View.GONE
-                refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
+                //refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
                 if (adapter.dataList.size == 0) {
                     recycler_view.visibility = View.GONE
                     iv_empty.visibility = View.VISIBLE
