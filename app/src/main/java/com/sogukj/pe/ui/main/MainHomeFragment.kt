@@ -261,7 +261,10 @@ class MainHomeFragment : BaseFragment() {
                     if (payload.isOk) {
                         payload.payload?.apply {
                             if (page == 1) {
-                                adapter.datas.clear()
+                                //adapter.datas.clear()
+                                //重新设置adapter
+                                adapter = ViewPagerAdapter(ArrayList<MessageBean>(), context)
+                                noleftviewpager.adapter = adapter
                             }
                             adapter.datas.addAll(this)
                             adapter.notifyDataSetChanged()
@@ -500,10 +503,7 @@ class MainHomeFragment : BaseFragment() {
             this.mViewCache = LinkedList()
         }
 
-        private var mChildCount = 0
-
         override fun notifyDataSetChanged() {
-            mChildCount = datas.size
             super.notifyDataSetChanged()
         }
 
@@ -512,12 +512,7 @@ class MainHomeFragment : BaseFragment() {
         }
 
         override fun getItemPosition(`object`: Any): Int {
-//            if (mChildCount > 0) {
-//                --mChildCount
-//                return POSITION_NONE
-//            }
-//            return super.getItemPosition(`object`)
-            return POSITION_NONE
+            return super.getItemPosition(`object`)
         }
 
         override fun instantiateItem(container: ViewGroup, position: Int): Any {
