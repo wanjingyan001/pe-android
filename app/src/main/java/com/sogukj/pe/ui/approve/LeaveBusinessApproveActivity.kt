@@ -70,6 +70,7 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
                 paramType = paramObj.type
             } else {
                 finish()
+                return
             }
         }
         setContentView(R.layout.activity_leave_business_approve)
@@ -131,6 +132,9 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
     fun initCS(list: ArrayList<UserBean>) {
         var adapter = MyAdapter(context, list)
         grid_chaosong_to.adapter = adapter
+        if(list.size == 0){
+            cs_layout.visibility = View.GONE
+        }
     }
 
     fun initButtons(click: Int?, state: Int?) {
@@ -177,7 +181,7 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
                 }
                 btn_left.setOnClickListener {
                     //LeaveBusinessActivity.start(context, true, paramId!!, paramTitle)
-                    ApproveFillActivity.start(context, true, -1, paramId!!, paramTitle)
+                    ApproveFillActivity.start(context, true, paramType!!, paramId!!, paramTitle)
                 }
                 btn_right.setOnClickListener {
                     val inflate = LayoutInflater.from(this).inflate(R.layout.layout_input_dialog, null)
@@ -298,7 +302,7 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
                 btn_single.text = "修改"
                 btn_single.setOnClickListener {
                     //LeaveBusinessActivity.start(context, true, paramId!!, paramTitle)
-                    ApproveFillActivity.start(context, true, -1, paramId!!, paramTitle)
+                    ApproveFillActivity.start(context, true, paramType!!, paramId!!, paramTitle)
                 }
             }
         }

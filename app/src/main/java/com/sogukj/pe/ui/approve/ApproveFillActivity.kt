@@ -78,7 +78,7 @@ class ApproveFillActivity : ToolbarActivity() {
         }
 
         fun start(ctx: Activity, edit: Boolean, paramType: Int, id: Int, title: String) {
-            var intent = Intent(ctx, LeaveBusinessActivity::class.java)
+            var intent = Intent(ctx, ApproveFillActivity::class.java)
             intent.putExtra(Extras.FLAG, edit)
             intent.putExtra(Extras.ID, id)
             intent.putExtra(Extras.TYPE, paramType)
@@ -113,6 +113,7 @@ class ApproveFillActivity : ToolbarActivity() {
         if (paramId == -1 || paramType == -1) {
             showCustomToast(R.drawable.icon_toast_fail, "参数错误")
             finish()
+            return
         }
         setBack(true)
 

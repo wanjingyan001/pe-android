@@ -69,11 +69,19 @@ class SealApproveActivity : ToolbarActivity() {
                 paramType = paramObj.type
             } else {
                 finish()
+                return
             }
         }
         setContentView(R.layout.activity_seal_approve)
         setBack(true)
         title = paramTitle
+
+        toolbar_menu.text = ""
+        toolbar_menu.setOnClickListener {
+            if (!toolbar_menu.text.isNullOrEmpty()) {
+                ApproveFillActivity.start(context, true, paramType!!, paramId!!, paramTitle)
+            }
+        }
 
         refresh()
     }
@@ -117,6 +125,44 @@ class SealApproveActivity : ToolbarActivity() {
                 btn_single.visibility = View.GONE
             }
             1 -> {
+                ll_twins.visibility = View.VISIBLE
+                btn_left.text = "申请加急"
+                btn_left.setOnClickListener {
+                    SoguApi.getService(application)
+                            .approveUrgent(paramId!!)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(Schedulers.io())
+                            .subscribe({ payload ->
+                                if (payload.isOk) {
+                                    showCustomToast(R.drawable.icon_toast_success, "提交成功")
+                                } else {
+                                    showCustomToast(R.drawable.icon_toast_fail, payload.message)
+                                }
+                            }, { e ->
+                                Trace.e(e)
+                                showCustomToast(R.drawable.icon_toast_fail, "请求失败")
+                            })
+                }
+                btn_right.text = "撤销"
+                btn_right.setOnClickListener {
+                    SoguApi.getService(application)
+                            .cancelApprove(paramId!!)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(Schedulers.io())
+                            .subscribe({ payload ->
+                                if (payload.isOk) {
+                                    showCustomToast(R.drawable.icon_toast_success, "撤销成功")
+                                } else {
+                                    showCustomToast(R.drawable.icon_toast_fail, payload.message)
+                                }
+                            }, { e ->
+                                Trace.e(e)
+                                showCustomToast(R.drawable.icon_toast_fail, "撤销失败")
+                            })
+                }
+                toolbar_menu.text = "修改"
+            }
+            2 -> {
                 btn_single.visibility = View.VISIBLE
                 btn_single.text = "申请加急"
                 btn_single.setOnClickListener {
@@ -126,17 +172,16 @@ class SealApproveActivity : ToolbarActivity() {
                             .subscribeOn(Schedulers.io())
                             .subscribe({ payload ->
                                 if (payload.isOk) {
-//                                    showToast("提交成功")
-                                    showCustomToast(R.drawable.icon_toast_success,"提交成功")
+                                    showCustomToast(R.drawable.icon_toast_success, "提交成功")
                                 } else {
                                     showCustomToast(R.drawable.icon_toast_fail, payload.message)
                                 }
                             }, { e ->
                                 Trace.e(e)
-//                                showToast("请求失败")
-                                showCustomToast(R.drawable.icon_toast_fail,"请求失败")
+                                showCustomToast(R.drawable.icon_toast_fail, "请求失败")
                             })
                 }
+                toolbar_menu.text = "修改"
             }
             3 -> {
                 btn_single.visibility = View.VISIBLE
@@ -146,6 +191,7 @@ class SealApproveActivity : ToolbarActivity() {
                     ApproveFillActivity.start(context, true, paramType!!, paramId!!, paramTitle!!)
                     finish()
                 }
+                toolbar_menu.text = "修改"
             }
             4 -> {
                 ll_twins.visibility = View.VISIBLE
@@ -158,12 +204,12 @@ class SealApproveActivity : ToolbarActivity() {
                                 if (payload.isOk) {
                                     val bean = payload.payload
                                     bean?.let {
-//                                        if (!TextUtils.isEmpty(it.url)) {
+                                        //                                        if (!TextUtils.isEmpty(it.url)) {
 //                                            val intent = Intent(Intent.ACTION_VIEW)
 //                                            intent.data = Uri.parse(it.url)
 //                                            startActivity(intent)
 //                                        }
-                                        PdfUtil.loadPdf(this, it.url,it.name)
+                                        PdfUtil.loadPdf(this, it.url, it.name)
                                     }
                                 } else {
                                     showCustomToast(R.drawable.icon_toast_fail, payload.message)
@@ -171,7 +217,7 @@ class SealApproveActivity : ToolbarActivity() {
                             }, { e ->
                                 Trace.e(e)
 //                                showToast("请求失败")
-                                showCustomToast(R.drawable.icon_toast_fail,"请求失败")
+                                showCustomToast(R.drawable.icon_toast_fail, "请求失败")
                             })
                 }
                 btn_right.setOnClickListener {
@@ -188,7 +234,7 @@ class SealApproveActivity : ToolbarActivity() {
                             }, { e ->
                                 Trace.e(e)
 //                                showToast("请求失败")
-                                showCustomToast(R.drawable.icon_toast_fail,"请求失败")
+                                showCustomToast(R.drawable.icon_toast_fail, "请求失败")
                             })
                 }
             }
@@ -238,7 +284,7 @@ class SealApproveActivity : ToolbarActivity() {
 //                                        startActivity(intent)
 //                                    }
                                     bean?.let {
-                                        PdfUtil.loadPdf(this, it.url,it.name)
+                                        PdfUtil.loadPdf(this, it.url, it.name)
                                     }
                                 } else {
                                     showCustomToast(R.drawable.icon_toast_fail, payload.message)
@@ -246,7 +292,7 @@ class SealApproveActivity : ToolbarActivity() {
                             }, { e ->
                                 Trace.e(e)
 //                                showToast("请求失败")
-                                showCustomToast(R.drawable.icon_toast_fail,"请求失败")
+                                showCustomToast(R.drawable.icon_toast_fail, "请求失败")
                             })
                 }
 
@@ -289,7 +335,7 @@ class SealApproveActivity : ToolbarActivity() {
                 .subscribe({ payload ->
                     if (payload.isOk) {
 //                        showToast("提交成功")
-                        showCustomToast(R.drawable.icon_toast_success,"提交成功")
+                        showCustomToast(R.drawable.icon_toast_success, "提交成功")
                         refresh()
                     } else {
                         showCustomToast(R.drawable.icon_toast_fail, payload.message)
@@ -297,7 +343,7 @@ class SealApproveActivity : ToolbarActivity() {
                 }, { e ->
                     Trace.e(e)
 //                    showToast("提交失败")
-                    showCustomToast(R.drawable.icon_toast_fail,"提交失败")
+                    showCustomToast(R.drawable.icon_toast_fail, "提交失败")
                 })
     }
 
@@ -426,13 +472,13 @@ class SealApproveActivity : ToolbarActivity() {
         veto.text = resources.getString(R.string.cancel)
         confirm.text = resources.getString(R.string.confirm)
         veto.setOnClickListener {
-            Utils.closeInput(this,commentInput)
+            Utils.closeInput(this, commentInput)
             if (dialog.isShowing) {
                 dialog.dismiss()
             }
         }
         confirm.setOnClickListener {
-            Utils.closeInput(this,commentInput)
+            Utils.closeInput(this, commentInput)
             if (dialog.isShowing) {
                 dialog.dismiss()
             }
@@ -445,7 +491,7 @@ class SealApproveActivity : ToolbarActivity() {
                         .subscribe({ payload ->
                             if (payload.isOk) {
 //                                showToast("提交成功")
-                                showCustomToast(R.drawable.icon_toast_success,"提交成功")
+                                showCustomToast(R.drawable.icon_toast_success, "提交成功")
                                 refresh()
                             } else {
                                 showCustomToast(R.drawable.icon_toast_fail, payload.message)
@@ -453,7 +499,7 @@ class SealApproveActivity : ToolbarActivity() {
                         }, { e ->
                             Trace.e(e)
 //                            showToast("提交失败")
-                            showCustomToast(R.drawable.icon_toast_fail,"提交失败")
+                            showCustomToast(R.drawable.icon_toast_fail, "提交失败")
                         })
         }
         dialog.show()
@@ -500,10 +546,10 @@ class SealApproveActivity : ToolbarActivity() {
             ll_files.addView(view)
             if (!TextUtils.isEmpty(v.url))
                 view.setOnClickListener {
-//                    val intent = Intent(Intent.ACTION_VIEW)
+                    //                    val intent = Intent(Intent.ACTION_VIEW)
 //                    intent.data = Uri.parse(v.url)
 //                    startActivity(intent)
-                    PdfUtil.loadPdf(this,v.url,v.file_name)
+                    PdfUtil.loadPdf(this, v.url, v.file_name)
                 }
         }
     }

@@ -646,6 +646,11 @@ interface SoguService {
     @POST("/api/Approve/applyUrgent")
     fun approveUrgent(@Field("approval_id") approval_id: Int): Observable<Payload<Object>>
 
+    //撤销
+    @FormUrlEncoded
+    @POST("/api/Approve/cancelApprove")
+    fun cancelApprove(@Field("approval_id") approval_id: Int): Observable<Payload<Object>>
+
     @FormUrlEncoded
     @POST("/api/Approve/finishApprove")
     fun finishApprove(@Field("approval_id") approval_id: Int): Observable<Payload<Object>>

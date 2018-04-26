@@ -156,31 +156,38 @@
                     android:orientation="vertical"
                     android:paddingBottom="15dp"></LinearLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="10dp"
-                    android:background="#f3f5f7" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginLeft="20dp"
-                    android:gravity="center|left"
-                    android:text="抄送人"
-                    android:textColor="#ff282828"
-                    android:textSize="14sp" />
-
-                <com.sogukj.pe.view.MyGridView
-                    android:id="@+id/grid_chaosong_to"
+                <LinearLayout
+                    android:id="@+id/cs_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginTop="10dp"
-                    android:horizontalSpacing="15dp"
-                    android:numColumns="6"
-                    android:verticalSpacing="12dp" />
+                    android:orientation="vertical">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp"
+                        android:background="#f3f5f7" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="20dp"
+                        android:gravity="center|left"
+                        android:text="抄送人"
+                        android:textColor="#ff282828"
+                        android:textSize="14sp" />
+
+                    <com.sogukj.pe.view.MyGridView
+                        android:id="@+id/grid_chaosong_to"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginTop="10dp"
+                        android:horizontalSpacing="15dp"
+                        android:numColumns="6"
+                        android:verticalSpacing="12dp" />
+                </LinearLayout>
 
                 <!--<include-->
                 <!--android:id="@+id/part3"-->

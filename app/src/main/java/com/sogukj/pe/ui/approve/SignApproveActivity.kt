@@ -71,11 +71,19 @@ class SignApproveActivity : ToolbarActivity() {
                 paramType = paramObj.type
             } else {
                 finish()
+                return
             }
         }
         setContentView(R.layout.activity_sign_approve)
         setBack(true)
         title = paramTitle
+
+        toolbar_menu.text = ""
+        toolbar_menu.setOnClickListener {
+            if (!toolbar_menu.text.isNullOrEmpty()) {
+                ApproveFillActivity.start(context, true, paramType!!, paramId!!, paramTitle)
+            }
+        }
 
         refresh()
     }
@@ -175,6 +183,48 @@ class SignApproveActivity : ToolbarActivity() {
                 btn_single.visibility = View.GONE
             }
             1 -> {
+                ll_twins.visibility = View.VISIBLE
+                btn_left.text = "申请加急"
+                btn_left.setOnClickListener {
+                    SoguApi.getService(application)
+                            .approveUrgent(paramId!!)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(Schedulers.io())
+                            .subscribe({ payload ->
+                                if (payload.isOk) {
+//                                    showToast("提交成功")
+                                    showCustomToast(R.drawable.icon_toast_success,"提交成功")
+                                } else {
+                                    showCustomToast(R.drawable.icon_toast_fail,payload.message)
+                                }
+                            }, { e ->
+                                Trace.e(e)
+//                                showToast("请求失败")
+                                showCustomToast(R.drawable.icon_toast_fail,"请求失败")
+                            })
+                }
+                btn_right.text = "撤销"
+                btn_right.setOnClickListener {
+                    SoguApi.getService(application)
+                            .cancelApprove(paramId!!)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(Schedulers.io())
+                            .subscribe({ payload ->
+                                if (payload.isOk) {
+//                                    showToast("提交成功")
+                                    showCustomToast(R.drawable.icon_toast_success,"撤销成功")
+                                } else {
+                                    showCustomToast(R.drawable.icon_toast_fail,payload.message)
+                                }
+                            }, { e ->
+                                Trace.e(e)
+//                                showToast("请求失败")
+                                showCustomToast(R.drawable.icon_toast_fail,"撤销失败")
+                            })
+                }
+                toolbar_menu.text = "修改"
+            }
+            2 -> {
                 btn_single.visibility = View.VISIBLE
                 btn_single.text = "申请加急"
                 btn_single.setOnClickListener {
@@ -195,6 +245,7 @@ class SignApproveActivity : ToolbarActivity() {
                                 showCustomToast(R.drawable.icon_toast_fail,"请求失败")
                             })
                 }
+                toolbar_menu.text = "修改"
             }
             4 -> {
                 btn_single.visibility = View.VISIBLE
