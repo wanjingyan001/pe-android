@@ -3,9 +3,11 @@ package com.netease.nim.uikit.business.session.fragment;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -82,9 +84,23 @@ public class MessageFragment extends TFragment implements ModuleProxy {
         parseIntent();
     }
 
+    private RecyclerView mMsgList;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.nim_message_fragment, container, false);
+
+        mMsgList = (RecyclerView)rootView.findViewById(R.id.messageListView);
+        mMsgList.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(inputPanel != null){
+                    inputPanel.collapse(false);
+                }
+                return false;
+            }
+        });
+
         return rootView;
     }
 
