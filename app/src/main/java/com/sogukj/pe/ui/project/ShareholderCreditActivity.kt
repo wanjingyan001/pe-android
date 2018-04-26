@@ -176,6 +176,14 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
                     offset = 0
                     doRequest(bean.company_id)
                 }
+                if (!search_edt.text.isNullOrEmpty()) {
+                    delete1.visibility = View.VISIBLE
+                    delete1.setOnClickListener {
+                        search_edt.setText("")
+                    }
+                }else{
+                    delete1.visibility = View.GONE
+                }
             }
         })
     }
