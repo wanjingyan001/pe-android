@@ -299,21 +299,21 @@ class TeamSelectFragment : BaseFragment() {
         contactLayout.layoutManager = LinearLayoutManager(context)
         contactAdapter = ContactAdapter(contactList)
         contactLayout.adapter = contactAdapter
-        SoguApi.getService(baseActivity!!.application)
-                .recentContacts()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ payload ->
-                    if (payload.isOk) {
-                        contactList.clear()
-                        contactList.addAll(payload.payload!!)
-                        contactAdapter.notifyDataSetChanged()
-                    } else
-                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
-                }, { e ->
-                    Trace.e(e)
-                    showCustomToast(R.drawable.icon_toast_fail, "数据获取失败")
-                })
+//        SoguApi.getService(baseActivity!!.application)
+//                .recentContacts()
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribeOn(Schedulers.io())
+//                .subscribe({ payload ->
+//                    if (payload.isOk) {
+//                        contactList.clear()
+//                        contactList.addAll(payload.payload!!)
+//                        contactAdapter.notifyDataSetChanged()
+//                    } else
+//                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
+//                }, { e ->
+//                    Trace.e(e)
+//                    showCustomToast(R.drawable.icon_toast_fail, "数据获取失败")
+//                })
     }
 
     private fun initResultList() {
@@ -347,7 +347,23 @@ class TeamSelectFragment : BaseFragment() {
                         showCustomToast(R.drawable.icon_toast_fail, payload.message)
                 }, { e ->
                     Trace.e(e)
-                    showCustomToast(R.drawable.icon_toast_fail, "数据获取失败")
+                    showCustomToast(R.drawable.icon_toast_fail, "公司组织架构人员获取失败")
+                })
+
+        SoguApi.getService(baseActivity!!.application)
+                .recentContacts()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        contactList.clear()
+                        contactList.addAll(payload.payload!!)
+                        contactAdapter.notifyDataSetChanged()
+                    } else
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    showCustomToast(R.drawable.icon_toast_fail, "最近联系人数据获取失败")
                 })
     }
 
