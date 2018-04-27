@@ -380,7 +380,7 @@ class TeamSelectFragment : BaseFragment() {
         departList.forEach {
             it.data?.let {
                 it.forEach {
-                    if (it.name.contains(searchKey) && it.user_id != mine?.uid) {
+                    if (it.name.contains(searchKey)) {//&& it.user_id != mine?.uid
                         result.add(it)
                     }
                 }
