@@ -734,7 +734,30 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
             60 -> EquityListActivity.start(this@ProjectActivity, project)
 
             R.id.im -> {
-                createOrJoin()
+                val inflate = LayoutInflater.from(this).inflate(R.layout.layout_input_dialog1, null)
+                val dialog = MaterialDialog.Builder(this)
+                        .customView(inflate, false)
+                        .cancelable(true)
+                        .build()
+                dialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                val veto = inflate.find<TextView>(R.id.veto_comment)
+                val confirm = inflate.find<TextView>(R.id.confirm_comment)
+                val title = inflate.find<TextView>(R.id.approval_comments_title)
+                title.text = "是否加入该项目讨论组?"
+                veto.text = "否"
+                confirm.text = "是"
+                veto.setOnClickListener {
+                    if (dialog.isShowing) {
+                        dialog.dismiss()
+                    }
+                }
+                confirm.setOnClickListener {
+                    if (dialog.isShowing) {
+                        dialog.dismiss()
+                    }
+                    createOrJoin()
+                }
+                dialog.show()
             }
         }
     }
