@@ -16,6 +16,7 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.ui.IM.TeamSelectActivity
+import com.sogukj.pe.ui.main.ContactsActivity
 import com.sogukj.pe.view.CircleImageView
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
@@ -61,9 +62,10 @@ class ArrangePersonActivity : ToolbarActivity() {
         resultList.adapter = adapter
 
         toContacts.setOnClickListener {
-            TeamSelectActivity.startForResult(this,
-                    true, alreadyList, false,
-                    false, true, Extras.REQUESTCODE)
+//            TeamSelectActivity.startForResult(this,
+//                    true, alreadyList, false,
+//                    false, true, Extras.REQUESTCODE)
+            ContactsActivity.start(this,alreadyList,true,false,Extras.REQUESTCODE)
         }
         selectAllLayout.setOnClickListener {
             selectAll.isSelected = !selectAll.isSelected

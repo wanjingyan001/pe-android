@@ -28,6 +28,7 @@ import com.sogukj.pe.R
 import com.sogukj.pe.bean.*
 import com.sogukj.pe.ui.IM.TeamSelectActivity
 import com.sogukj.pe.ui.fileSelector.FileMainActivity
+import com.sogukj.pe.ui.main.ContactsActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.CalendarDingDing
@@ -1543,7 +1544,8 @@ class ApproveFillActivity : ToolbarActivity() {
                 for (index in 0 until adapter.list.size - 1) {//不包含
                     list.add(adapter.list[index])
                 }
-                TeamSelectActivity.startForResult(this, true, list, false, false, true, SEND, default)
+//                TeamSelectActivity.startForResult(this, true, list, false, false, true, SEND, default)
+                ContactsActivity.startWithDefault(this,list,true,false,default,SEND)
             } else {
                 adapter.list.removeAt(position)
                 adapter.notifyDataSetChanged()

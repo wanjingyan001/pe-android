@@ -17,6 +17,7 @@ import com.sogukj.pe.R
 import com.sogukj.pe.bean.CustomSealBean
 import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.ui.IM.TeamSelectActivity
+import com.sogukj.pe.ui.main.ContactsActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.CalendarDingDing
@@ -344,7 +345,7 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
 //                timePicker.show()
                 startDD.show(2, selectedDate, object : CalendarDingDing.onTimeClick {
                     override fun onClick(date: Date?) {
-                        if(date != null){
+                        if (date != null) {
                             start = date
                             startTime.text = Utils.getTime(date, "MM月dd日 E HH:mm")
                         }
@@ -373,7 +374,7 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
 //                timePicker.show()
                 deadDD.show(2, selectedDate, object : CalendarDingDing.onTimeClick {
                     override fun onClick(date: Date?) {
-                        if(date != null){
+                        if (date != null) {
                             endTime = date
                             deadline.text = Utils.getTime(date, "MM月dd日 E HH:mm")
                         }
@@ -507,10 +508,12 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
     override fun addPerson(tag: String) {
         when (tag) {
             "CcPersonAdapter" -> {
-                TeamSelectActivity.startForResult(this, true, selectUser.selectUsers, false, false, requestCode = 1005)
+//                TeamSelectActivity.startForResult(this, true, selectUser.selectUsers, false, false, requestCode = 1005)
+                ContactsActivity.start(this, selectUser.selectUsers, true, false, requestCode = 1005)
             }
             "ExecutiveAdapter" -> {
-                TeamSelectActivity.startForResult(this, true, selectUser2.selectUsers, false, false, requestCode = 1006)
+//                TeamSelectActivity.startForResult(this, true, selectUser2.selectUsers, false, false, requestCode = 1006)
+                ContactsActivity.start(this, selectUser2.selectUsers, true, false, requestCode = 1006)
             }
         }
     }

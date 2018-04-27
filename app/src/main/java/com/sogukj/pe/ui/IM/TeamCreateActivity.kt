@@ -21,6 +21,7 @@ import com.sogukj.pe.R
 import com.sogukj.pe.bean.CustomSealBean
 import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.ui.calendar.CompanySelectActivity
+import com.sogukj.pe.ui.main.ContactsActivity
 import com.sogukj.pe.util.Utils
 import kotlinx.android.synthetic.main.activity_team_create.*
 import org.jetbrains.anko.toast
@@ -44,6 +45,10 @@ class TeamCreateActivity : AppCompatActivity() {
             ArrayList()
         }
         adapter = MemberAdapter(this, teamMember)
+        adapter.onItemClick = { v, position ->
+            ContactsActivity.start(this, teamMember, true, true, Extras.REQUESTCODE)
+            finish()
+        }
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = LinearLayoutManager.HORIZONTAL
         team_member.layoutManager = layoutManager
@@ -104,7 +109,7 @@ class TeamCreateActivity : AppCompatActivity() {
             teamBean.project_name = it.name.toString()
             map.put(TeamFieldEnum.Extension, teamBean.toString())
         }
-        NIMClient.getService(TeamService::class.java).createTeam(map, TeamTypeEnum.Normal, "", memberAccounts)
+        NIMClient.getService(TeamService::class.java).createTeam(map, TeamTypeEnum.Advanced, "", memberAccounts)
                 .setCallback(object : RequestCallback<CreateTeamResult> {
                     override fun onFailed(p0: Int) {
                         DialogMaker.dismissProgressDialog()

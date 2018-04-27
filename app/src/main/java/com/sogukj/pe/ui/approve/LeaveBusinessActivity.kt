@@ -35,6 +35,7 @@ import okhttp3.FormBody
 import java.util.*
 import kotlin.collections.ArrayList
 import com.google.gson.internal.LinkedTreeMap
+import com.sogukj.pe.ui.main.ContactsActivity
 import com.sogukj.pe.view.CalendarDingDing
 import com.sogukj.pe.view.CircleImageView
 import com.sogukj.util.XmlDb
@@ -1084,7 +1085,8 @@ class LeaveBusinessActivity : ToolbarActivity() {
                 for (index in 0 until adapter.list.size - 1) {//不包含
                     list.add(adapter.list[index])
                 }
-                TeamSelectActivity.startForResult(this, true, list, false, false, true, SEND, default)
+//                TeamSelectActivity.startForResult(this, true, list, false, false, true, SEND, default)
+                ContactsActivity.startWithDefault(this,list,true,false,default,SEND)
             } else {
                 adapter.list.removeAt(position)
                 adapter.notifyDataSetChanged()

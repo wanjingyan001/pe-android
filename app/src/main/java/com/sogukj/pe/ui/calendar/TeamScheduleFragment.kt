@@ -22,6 +22,7 @@ import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.ui.IM.TeamSelectActivity
 import com.sogukj.pe.ui.approve.SealApproveActivity
 import com.sogukj.pe.ui.approve.SignApproveActivity
+import com.sogukj.pe.ui.main.ContactsActivity
 import com.sogukj.pe.ui.project.ProjectActivity
 import com.sogukj.pe.ui.project.RecordTraceActivity
 import com.sogukj.pe.util.Trace
@@ -30,6 +31,7 @@ import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_team_schedule.*
+import org.jetbrains.anko.support.v4.ctx
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -241,7 +243,8 @@ class TeamScheduleFragment : BaseFragment(), ScheduleItemClickListener {
     override fun onItemClick(view: View, position: Int) {
         when (view.id) {
             R.id.selectTv -> {
-                TeamSelectActivity.startForResult(this,true, selectUser,false,false)
+//                TeamSelectActivity.startForResult(this,true, selectUser,false,false)
+                ContactsActivity.startFromFragment(this,selectUser,true,false)
             }
             R.id.teamItemLayout -> {
                 val scheduleBean = data[position]
