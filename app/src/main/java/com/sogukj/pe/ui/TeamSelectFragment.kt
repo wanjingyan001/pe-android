@@ -249,8 +249,16 @@ class TeamSelectFragment : BaseFragment() {
                 company_icon.imageResource = R.mipmap.ic_launcher_ht
                 companyName.text = "海通创新"
             }
+            "kk" ->{
+                company_icon.imageResource = R.mipmap.ic_launcher_kk
+                companyName.text = "夸克"
+            }
+            "yge" ->{
+                company_icon.imageResource = R.mipmap.ic_launcher_yge
+                companyName.text = "雅戈尔"
+            }
             else -> {
-                company_icon.imageResource = R.mipmap.ic_launcher
+                company_icon.imageResource = R.mipmap.ic_launcher_pe
                 companyName.text = "海通创新"
             }
         }

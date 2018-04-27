@@ -21,7 +21,7 @@ import org.jetbrains.anko.support.v4.onPageChangeListener
 class CommonDocumentsFragment : Fragment() {
     private var mParam1: String? = null
     private var mParam2: String? = null
-    private lateinit var pagerAdapter: DocPageAdapter
+    lateinit var pagerAdapter: DocPageAdapter
     val titles = listOf("本应用", "微信", "QQ", "钉钉", "全部")
     val peFragment by lazy { DocumentsFragment.newInstance(DocumentsFragment.PE_LOCAL) }
     val wxFragment by lazy { DocumentsFragment.newInstance(DocumentsFragment.WX_DOC) }

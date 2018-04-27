@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.os.Environment
 import android.support.v4.app.Fragment
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.LayoutInflater
@@ -22,6 +23,7 @@ import com.sogukj.pe.util.FileTypeUtils
 import com.sogukj.pe.util.FileUtil
 import com.sogukj.pe.util.RxBus
 import com.sogukj.pe.util.Utils
+import com.sogukj.pe.view.HeaderViewAdapter
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sougukj.setOnClickFastListener
@@ -29,10 +31,9 @@ import com.sougukj.setVisible
 import kotlinx.android.synthetic.main.calendar_dingding.*
 import kotlinx.android.synthetic.main.fragment_documents.*
 import kotlinx.android.synthetic.main.layout_empty.*
-import org.jetbrains.anko.find
-import org.jetbrains.anko.imageResource
+import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.ctx
-import org.jetbrains.anko.toast
+import org.jetbrains.anko.support.v4.find
 import java.io.File
 import java.util.*
 
@@ -43,13 +44,11 @@ import java.util.*
  * create an instance of this fragment.
  */
 class DocumentsFragment : Fragment(), View.OnClickListener {
-
-
     private var type: Int? = null
     private var mParam2: String? = null
 
     lateinit var adapter: RecyclerAdapter<File>
-    lateinit var files: List<File>
+    lateinit var files: MutableList<File>
     lateinit var fileActivity: FileMainActivity
     lateinit var header: LinearLayout
 
@@ -79,25 +78,13 @@ class DocumentsFragment : Fragment(), View.OnClickListener {
         })
         documentList.layoutManager = LinearLayoutManager(context)
         documentList.adapter = adapter
-        header = layoutInflater.inflate(R.layout.layout_documents_header, documentList, false) as LinearLayout
+        header = find(R.id.documents_header)
         header.find<LinearLayout>(R.id.mPicManage).setOnClickListener(this)
         header.find<LinearLayout>(R.id.mVideoManage).setOnClickListener(this)
         header.find<LinearLayout>(R.id.mDocManage).setOnClickListener(this)
         header.find<LinearLayout>(R.id.mZipManage).setOnClickListener(this)
-        documentList.addHeaderView(header)
     }
 
-
-    override fun onStart() {
-        super.onStart()
-        val subscribe = RxBus.getIntanceBus().doSubscribe(String::class.java, { t ->
-            if (t == Extras.REFRESH) {
-                refreshList()
-            }
-        }, {
-        })
-        RxBus.getIntanceBus().addSubscription(Extras.REFRESH, subscribe)
-    }
 
     override fun onResume() {
         super.onResume()
@@ -105,18 +92,21 @@ class DocumentsFragment : Fragment(), View.OnClickListener {
     }
 
 
-
-    private fun refreshList() {
-        adapter.dataList.clear()
+    fun refreshList() {
+        AnkoLogger("FileManage").info { type }
         val dirFiles = getDirectoryFiles()
+        val result = DiffUtil.calculateDiff(DiffCallBack(adapter.dataList, dirFiles))
+        result.dispatchUpdatesTo(adapter)
         if (dirFiles.isEmpty()) {
+            header.setVisible(false)
             documentList.setVisible(false)
             iv_empty.setVisible(true)
         } else {
+            header.setVisible(true)
             documentList.setVisible(true)
             iv_empty.setVisible(false)
+            adapter.dataList.clear()
             adapter.dataList.addAll(dirFiles)
-            adapter.notifyDataSetChanged()
         }
         val map = FileUtil.getFilesByType(dirFiles)
         header.find<TextView>(R.id.mPicNum).text = "(${map[FileUtil.FileType.IMAGE]?.size})"
@@ -125,10 +115,10 @@ class DocumentsFragment : Fragment(), View.OnClickListener {
         header.find<TextView>(R.id.mZipNum).text = "(${map[FileUtil.FileType.ZIP]?.size})"
     }
 
-    fun getDirectoryFiles(): List<File> {
+    private fun getDirectoryFiles(): List<File> {
         when (type) {
             PE_LOCAL -> {
-                files = FileUtil.getFiles(FileUtil.getExternalFilesDir(fileActivity.applicationContext))
+                files = FileUtil.getFiles(FileUtil.getExternalFilesDir(fileActivity.applicationContext)).toMutableList()
             }
             ALL_DOC -> {
                 val list = FileUtil.getFiles(WX_DOC_PATH1)
@@ -137,21 +127,21 @@ class DocumentsFragment : Fragment(), View.OnClickListener {
                 val list4 = FileUtil.getFiles(QQ_DOC_PATH1)
                 val list5 = FileUtil.getFiles(DING_TALK_PATH)
                 val list3 = FileUtil.getFiles(FileUtil.getExternalFilesDir(fileActivity.applicationContext))
-                files = list.plus(list1).plus(list2).plus(list3).plus(list4).plus(list5)
+                files = list.plus(list1).plus(list2).plus(list3).plus(list4).plus(list5).toMutableList()
             }
             WX_DOC -> {
                 val list = FileUtil.getFiles(WX_DOC_PATH1)
                 val list1 = FileUtil.getFiles(WX_DOC_PATH2)
-                files = list.plus(list1)
+                files = list.plus(list1).toMutableList()
             }
             QQ_DOC -> {
                 val list = FileUtil.getFiles(QQ_DOC_PATH)
                 val list1 = FileUtil.getFiles(QQ_DOC_PATH1)
-                files = list.plus(list1)
+                files = list.plus(list1).toMutableList()
             }
             DING_TALK -> {
                 val list = FileUtil.getFiles(DING_TALK_PATH)
-                files = list
+                files = list.toMutableList()
             }
         }
         Collections.sort(files) { o1, o2 ->
@@ -163,24 +153,24 @@ class DocumentsFragment : Fragment(), View.OnClickListener {
     fun search(searchStr: String) {
         if (searchStr.isNotEmpty()) {
             val filter = adapter.dataList.filter { file -> file.name.contains(searchStr) }
-            adapter = RecyclerAdapter(context, { _adpater, parent, type ->
-                DocumentHolder(_adpater.getView(R.layout.item_document_list, parent))
-            })
+            val result = DiffUtil.calculateDiff(DiffCallBack(adapter.dataList, filter))
+            result.dispatchUpdatesTo(adapter)
+            adapter.dataList.clear()
             adapter.dataList.addAll(filter)
-            documentList.adapter = adapter
         } else {
             val dirFiles = getDirectoryFiles()
             if (dirFiles.isEmpty()) {
+                header.setVisible(false)
                 documentList.setVisible(false)
                 iv_empty.setVisible(true)
             } else {
+                header.setVisible(true)
                 documentList.setVisible(true)
                 iv_empty.setVisible(false)
-                adapter = RecyclerAdapter(context, { _adpater, parent, type ->
-                    DocumentHolder(_adpater.getView(R.layout.item_document_list, parent))
-                })
+                val result = DiffUtil.calculateDiff(DiffCallBack(adapter.dataList, dirFiles))
+                result.dispatchUpdatesTo(adapter)
+                adapter.dataList.clear()
                 adapter.dataList.addAll(dirFiles)
-                documentList.adapter = adapter
             }
         }
     }

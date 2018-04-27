@@ -95,9 +95,15 @@ class FileMainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
                                 dialog.dismiss()
                                 selectedFile.forEach {
                                     if (it.exists()) {
-                                        it.delete()
                                         //通知列表刷新
-                                        RxBus.getIntanceBus().post(Extras.REFRESH)
+                                        it.delete()
+                                        if (comDocFragment.isVisible) {
+                                            val item = comDocFragment.pagerAdapter.getCurrentItem()
+                                            if (item.files.contains(it)) {
+                                                item.files.remove(it)
+                                            }
+                                            item.refreshList()
+                                        }
                                         if (allFileFragment.isVisible) {
                                             val fragment = allFileFragment.childFragmentManager.findFragmentById(R.id.contentLayout) as StorageFileFragment
                                             fragment.changeData()
@@ -171,14 +177,14 @@ class FileMainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == Extras.REQUESTCODE &&  data != null) {
-            if (resultCode == Activity.RESULT_OK){
+        if (requestCode == Extras.REQUESTCODE && data != null) {
+            if (resultCode == Activity.RESULT_OK) {
                 val intent = Intent()
                 val paths = data.getStringArrayListExtra(Extras.LIST)
                 intent.putExtra(Extras.LIST, paths)
                 setResult(Activity.RESULT_OK, intent)
                 finish()
-            }else{
+            } else {
                 val file = data.getSerializableExtra(Extras.DATA) as File
                 sendChangeFile(file)
             }
