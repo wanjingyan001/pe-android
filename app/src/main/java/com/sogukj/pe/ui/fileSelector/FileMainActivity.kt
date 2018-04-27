@@ -61,8 +61,9 @@ class FileMainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
         val fragments = listOf(comDocFragment, allFileFragment)
         file_pager.adapter = FilePageAdapter(supportFragmentManager, fragments)
         file_pager.addOnPageChangeListener(this)
-        if (isForResult) {
-            send_selected_files.setOnClickListener {
+
+        send_selected_files.setOnClickListener {
+            if (isForResult) {
                 val intent = Intent()
                 val paths = ArrayList<String>()
                 selectedFile.forEach {
@@ -71,6 +72,8 @@ class FileMainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
                 intent.putExtra(Extras.LIST, paths)
                 setResult(Activity.RESULT_OK, intent)
                 finish()
+            } else {
+                deleteFiles()
             }
         }
         help.setOnClickListener {
@@ -84,40 +87,7 @@ class FileMainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
                         }
                         .show()
             } else {
-                if (selectedFile.isNotEmpty()) {
-                    MaterialDialog.Builder(this)
-                            .theme(Theme.LIGHT)
-                            .title("警告")
-                            .content("是否确认删除选中的文件")
-                            .positiveText("确定")
-                            .negativeText("取消")
-                            .onPositive { dialog, _ ->
-                                dialog.dismiss()
-                                selectedFile.forEach {
-                                    if (it.exists()) {
-                                        //通知列表刷新
-                                        it.delete()
-                                        if (comDocFragment.isVisible) {
-                                            val item = comDocFragment.pagerAdapter.getCurrentItem()
-                                            if (item.files.contains(it)) {
-                                                item.files.remove(it)
-                                            }
-                                            item.refreshList()
-                                        }
-                                        if (allFileFragment.isVisible) {
-                                            val fragment = allFileFragment.childFragmentManager.findFragmentById(R.id.contentLayout) as StorageFileFragment
-                                            fragment.changeData()
-                                        }
-                                    }
-                                }
-                                selectedFile.clear()
-                                showSelectedInfo()
-                            }
-                            .onNegative { dialog, _ ->
-                                dialog.dismiss()
-                            }
-                            .show()
-                }
+                deleteFiles()
             }
         }
     }
@@ -142,6 +112,43 @@ class FileMainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
         }
         setResult(Activity.RESULT_OK, intent)
         finish()
+    }
+
+    private fun deleteFiles() {
+        if (selectedFile.isNotEmpty()) {
+            MaterialDialog.Builder(this)
+                    .theme(Theme.LIGHT)
+                    .title("警告")
+                    .content("是否确认删除选中的文件")
+                    .positiveText("确定")
+                    .negativeText("取消")
+                    .onPositive { dialog, _ ->
+                        dialog.dismiss()
+                        selectedFile.forEach {
+                            if (it.exists()) {
+                                //通知列表刷新
+                                it.delete()
+                                if (comDocFragment.isVisible) {
+                                    val item = comDocFragment.pagerAdapter.getCurrentItem()
+                                    if (item.files.contains(it)) {
+                                        item.files.remove(it)
+                                    }
+                                    item.refreshList()
+                                }
+                                if (allFileFragment.isVisible) {
+                                    val fragment = allFileFragment.childFragmentManager.findFragmentById(R.id.contentLayout) as StorageFileFragment
+                                    fragment.changeData()
+                                }
+                            }
+                        }
+                        selectedFile.clear()
+                        showSelectedInfo()
+                    }
+                    .onNegative { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .show()
+        }
     }
 
     @SuppressLint("RestrictedApi")

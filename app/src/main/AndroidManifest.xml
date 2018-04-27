@@ -637,14 +637,6 @@
         <activity android:name=".ui.IM.TeamSearchActivity" />
         <activity android:name=".ui.IM.TeamPictureActivity" />
         <activity android:name=".ui.IM.TeamSelectActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.SEND" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="image/*" />
-                <data android:mimeType="application/*" />
-            </intent-filter>
         </activity>
         <activity android:name=".ui.IM.PersonalInfoActivity" />
         <activity android:name=".ui.IM.TeamCreateActivity" />
@@ -694,7 +686,17 @@
         <activity android:name=".ui.approve.ApproveFillActivity" />
         <activity android:name=".ui.approve.ApproveExamineActivity" />
         <activity android:name=".ui.EquityListActivity" />
-        <activity android:name=".ui.fileSelector.FilterFileActivity"></activity>
+        <activity android:name=".ui.fileSelector.FilterFileActivity" />
+        <activity android:name=".ui.main.ContactsActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="image/*" />
+                <data android:mimeType="application/*" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

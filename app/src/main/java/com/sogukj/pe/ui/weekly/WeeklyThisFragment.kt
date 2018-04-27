@@ -22,6 +22,7 @@ import com.sogukj.pe.ui.approve.SealApproveActivity
 import com.sogukj.pe.ui.approve.SignApproveActivity
 import com.sogukj.pe.ui.calendar.ModifyTaskActivity
 import com.sogukj.pe.ui.calendar.TaskDetailActivity
+import com.sogukj.pe.ui.main.ContactsActivity
 import com.sogukj.pe.ui.project.ProjectActivity
 import com.sogukj.pe.ui.project.RecordTraceActivity
 import com.sogukj.pe.util.Trace
@@ -39,6 +40,7 @@ import kotlinx.android.synthetic.main.send.*
 import java.text.SimpleDateFormat
 import kotlin.collections.ArrayList
 import com.sogukj.pe.view.CircleImageView
+import org.jetbrains.anko.support.v4.ctx
 
 //import kotlinx.android.synthetic.main.layout_network_error.*
 
@@ -314,7 +316,8 @@ class WeeklyThisFragment : BaseFragment(), View.OnClickListener {
 
         grid_send_to.setOnItemClickListener { parent, view, position, id ->
             if (position == list.size) {
-                TeamSelectActivity.startForResult(this, true, send_adapter.getData(), false, false, SEND)
+//                TeamSelectActivity.startForResult(this, true, send_adapter.getData(), false, false, SEND)
+                ContactsActivity.startFromFragment(this,send_adapter.getData(),true,false,requestCode = SEND)
             } else {
                 list.removeAt(position)
                 send_adapter.notifyDataSetChanged()
@@ -324,7 +327,8 @@ class WeeklyThisFragment : BaseFragment(), View.OnClickListener {
 
         grid_chaosong_to.setOnItemClickListener { parent, view, position, id ->
             if (position == list1.size) {
-                TeamSelectActivity.startForResult(this, true, chaosong_adapter.getData(), false, false, CHAO_SONG)
+//                TeamSelectActivity.startForResult(this, true, chaosong_adapter.getData(), false, false, CHAO_SONG)
+                ContactsActivity.startFromFragment(this,chaosong_adapter.getData(),true,false,requestCode = CHAO_SONG)
             } else {
                 list1.removeAt(position)
                 chaosong_adapter.notifyDataSetChanged()

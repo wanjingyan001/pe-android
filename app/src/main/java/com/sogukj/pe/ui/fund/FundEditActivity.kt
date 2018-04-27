@@ -21,6 +21,7 @@ import com.sogukj.pe.bean.FundSmallBean
 import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.bean.WeeklyThisBean
 import com.sogukj.pe.ui.IM.TeamSelectActivity
+import com.sogukj.pe.ui.main.ContactsActivity
 import com.sogukj.pe.ui.weekly.WeeklyThisFragment
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.CalendarDingDing
@@ -175,8 +176,9 @@ class FundEditActivity : ToolbarActivity() {
             if (bean.uid == null) {
                 var list = ArrayList<UserBean>(adapter.dataList)
                 list.removeAt(adapter.dataList.size - 1)
-                TeamSelectActivity.startForResult(context = this@FundEditActivity, isSelectUser = true, alreadySelect = list,
-                        isCreateTeam = false, fromTeam = false, canRemoveMember = true, requestCode = SELECT)
+//                TeamSelectActivity.startForResult(context = this@FundEditActivity, isSelectUser = true, alreadySelect = list,
+//                        isCreateTeam = false, fromTeam = false, canRemoveMember = true, requestCode = SELECT)
+                ContactsActivity.start(this, list, true, false, SELECT)
             } else {
                 adapter.dataList.remove(bean)
                 adapter.notifyDataSetChanged()

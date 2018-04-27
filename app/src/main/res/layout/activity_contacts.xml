@@ -1,41 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#f7f9fc"
     android:focusable="true"
-    android:focusableInTouchMode="true">
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/team_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/toolbar_height"
-        android:background="@color/color_blue_0888ff"
-        app:contentInsetEnd="0dp"
-        app:contentInsetLeft="0dp"
-        app:contentInsetRight="0dp"
-        app:contentInsetStart="0dp"
-        app:layout_scrollFlags="scroll|enterAlways"
-        app:popupTheme="@style/AppTheme.PopupOverlay"
-        app:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_height="@dimen/action_bar_height"
+        android:background="@color/color_blue_0888ff">
 
-        <FrameLayout
-            android:id="@+id/toolbar_back"
-            android:layout_width="55dp"
-            android:layout_height="55dp">
-
-            <com.sogukj.pe.view.CircleImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:src="@drawable/sogu_ic_back"
-                app:civ_border_color="#4dffffff"
-                app:civ_border_width="1dp" />
-
-        </FrameLayout>
 
         <TextView
             android:id="@+id/team_toolbar_title"
@@ -43,31 +22,20 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="通讯录"
+            android:text="选择联系人"
             android:textColor="@color/white"
-            android:textSize="17sp"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
-        <ImageView
-            android:id="@+id/toolbar_menu"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="right"
-            android:gravity="center"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:src="@drawable/menu_create_imteam" />
     </android.support.v7.widget.Toolbar>
+
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/listContent"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="56dp"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:orientation="vertical">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -179,8 +147,6 @@
                         android:textSize="14sp" />
 
                 </LinearLayout>
-
-
                 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:id="@+id/contactLayout1"
                     android:layout_width="match_parent"
@@ -207,7 +173,7 @@
                 </LinearLayout>
 
                 <android.support.v7.widget.RecyclerView
-                    android:id="@+id/contactLayout"
+                    android:id="@+id/contactList"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white" />
@@ -246,6 +212,7 @@
                     android:groupIndicator="@null" />
 
 
+
                 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
@@ -280,13 +247,24 @@
             </LinearLayout>
         </LinearLayout>
 
+
+
     </android.support.v4.widget.NestedScrollView>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/resultList"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="0dp">
+
+    </android.support.v7.widget.RecyclerView>
+
 
     <RelativeLayout
         android:id="@+id/confirmSelectLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_gravity="bottom"
         android:background="@color/white"
         android:orientation="horizontal">
 
@@ -320,31 +298,4 @@
 
     </RelativeLayout>
 
-    <FrameLayout
-        android:id="@+id/result_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="111dp"
-        android:background="@color/white"
-        android:visibility="gone">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/resultList"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/white">
-
-        </android.support.v7.widget.RecyclerView>
-
-        <ImageView
-            android:id="@+id/iv_empty"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center"
-            android:src="@drawable/img_empty"
-            android:visibility="gone" />
-
-    </FrameLayout>
-
-</FrameLayout>
+</LinearLayout>

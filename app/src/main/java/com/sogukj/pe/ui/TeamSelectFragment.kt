@@ -29,16 +29,19 @@ import com.sogukj.pe.ui.IM.PersonalInfoActivity
 import com.sogukj.pe.ui.IM.TeamBean
 import com.sogukj.pe.ui.IM.TeamCreateActivity
 import com.sogukj.pe.ui.IM.TeamSelectActivity
+import com.sogukj.pe.ui.main.ContactsActivity
 import com.sogukj.pe.ui.user.UserActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.CircleImageView
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
+import com.sougukj.textStr
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_team_select.*
 import org.jetbrains.anko.*
+import org.jetbrains.anko.support.v4.ctx
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -186,7 +189,10 @@ class TeamSelectFragment : BaseFragment() {
 
         toolbar_menu.setOnClickListener {
             search_edt.clearFocus()
-            TeamSelectActivity.start(context, isSelectUser = true, isCreateTeam = true)
+//            TeamSelectActivity.start(context, isSelectUser = true, isCreateTeam = true)
+            val alreadySelect = ArrayList<UserBean>()
+            alreadySelect.add(Store.store.getUser(context)!!)
+            ContactsActivity.start(ctx,alreadySelect,true,true)
 //            isSelectUser = !isSelectUser
 //
 //            loadByIsSelectUser()
@@ -196,12 +202,14 @@ class TeamSelectFragment : BaseFragment() {
     private fun initSearchView() {
         search_edt.filters = Utils.getFilter(context)
         search_edt.setOnFocusChangeListener { v, hasFocus ->
-            if (hasFocus) {
+            if (hasFocus || search_edt.textStr.isNotEmpty()) {
                 search_hint.visibility = View.GONE
                 search_icon.visibility = View.VISIBLE
+                delete1.visibility = View.VISIBLE
             } else {
                 search_hint.visibility = View.VISIBLE
                 search_icon.visibility = View.GONE
+                delete1.visibility = View.GONE
                 search_edt.clearFocus()
             }
         }
@@ -231,6 +239,7 @@ class TeamSelectFragment : BaseFragment() {
                     delete1.visibility = View.VISIBLE
                     delete1.setOnClickListener {
                         search_edt.setText("")
+                        search_edt.clearFocus()
                     }
                 }else{
                     delete1.visibility = View.GONE

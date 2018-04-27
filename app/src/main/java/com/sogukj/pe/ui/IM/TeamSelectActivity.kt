@@ -39,6 +39,7 @@ import kotlinx.android.synthetic.main.activity_team_select.*
 import kotlinx.android.synthetic.main.item_fund_account_list.view.*
 import org.jetbrains.anko.*
 
+@Deprecated("被ContactsActivity取代")
 class TeamSelectActivity : BaseActivity() {
     private val departList = ArrayList<DepartmentBean>() //组织架构
     private val contactList = ArrayList<UserBean>()//最近联系人
@@ -208,11 +209,11 @@ class TeamSelectActivity : BaseActivity() {
                 icon.imageResource = R.mipmap.ic_launcher_ht
                 name.text = "海通创新"
             }
-            "kk" ->{
+            "kk" -> {
                 icon.imageResource = R.mipmap.ic_launcher_kk
                 name.text = "夸克"
             }
-            "yge" ->{
+            "yge" -> {
                 icon.imageResource = R.mipmap.ic_launcher_yge
                 name.text = "雅戈尔"
             }

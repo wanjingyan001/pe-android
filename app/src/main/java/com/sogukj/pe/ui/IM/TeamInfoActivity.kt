@@ -36,6 +36,7 @@ import com.netease.nimlib.sdk.uinfo.model.NimUserInfo
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.UserBean
+import com.sogukj.pe.ui.main.ContactsActivity
 import com.sogukj.pe.util.Utils
 import com.sogukj.util.Store
 import kotlinx.android.synthetic.main.activity_team_info.*
@@ -89,7 +90,8 @@ class TeamInfoActivity : AppCompatActivity(), View.OnClickListener, SwitchButton
 
         adapter!!.onItemClick = { v, p ->
             if (p == teamMembers.size) {
-                TeamSelectActivity.startForResult(this, true, teamMembers, false, false, canRemoveMember = false)
+//                TeamSelectActivity.startForResult(this, true, teamMembers, false, false, canRemoveMember = false)
+                ContactsActivity.start(this,teamMembers,false,false)
             }
         }
     }

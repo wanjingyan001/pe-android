@@ -59,6 +59,7 @@ import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
+import com.sougukj.textStr
 import com.xuexuan.zxing.android.activity.CaptureActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -108,12 +109,14 @@ class MainMsgFragment : BaseFragment() {
     private fun initSearchView() {
         search_edt.filters = Utils.getFilter(context)
         search_edt.setOnFocusChangeListener { v, hasFocus ->
-            if (hasFocus) {
+            if (hasFocus || search_edt.textStr.isNotEmpty()) {
                 search_hint.visibility = View.GONE
                 search_icon.visibility = View.VISIBLE
+                delete1.visibility = View.VISIBLE
             } else {
                 search_hint.visibility = View.VISIBLE
                 search_icon.visibility = View.GONE
+                delete1.visibility = View.GONE
                 search_edt.clearFocus()
             }
         }
@@ -153,6 +156,7 @@ class MainMsgFragment : BaseFragment() {
                     delete1.visibility = View.VISIBLE
                     delete1.setOnClickListener {
                         search_edt.setText("")
+                        search_edt.clearFocus()
                     }
                 }else{
                     delete1.visibility = View.GONE
@@ -234,7 +238,8 @@ class MainMsgFragment : BaseFragment() {
             add_layout.visibility = View.GONE
             var alreadySelect = ArrayList<UserBean>()
             alreadySelect.add(Store.store.getUser(context)!!)
-            TeamSelectActivity.startForResult(context, isSelectUser = true, alreadySelect = alreadySelect, isCreateTeam = true)
+//            TeamSelectActivity.startForResult(context, isSelectUser = true, alreadySelect = alreadySelect, isCreateTeam = true)
+            ContactsActivity.start(ctx,alreadySelect,true,true)
         }
         scan.setOnClickListener {
             add_layout.visibility = View.GONE
@@ -324,6 +329,9 @@ class MainMsgFragment : BaseFragment() {
             }
         })
         adapter.onItemClick = { v, p ->
+            if (search_edt.textStr.isEmpty()) {
+                search_edt.clearFocus()
+            }
             val data = adapter.dataList[p]
             if (data is MessageIndexBean) {
                 MessageListActivity.start(baseActivity)
