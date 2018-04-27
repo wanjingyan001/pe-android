@@ -563,7 +563,9 @@ interface SoguService {
 
     @FormUrlEncoded
     @POST("/api/Approve/leaveInfo")
-    fun leaveInfo(@Field("template_id") template_id: Int? = null
+    fun leaveInfo(@Field("template_id") template_id: Int? = null,
+                  @Field("project_id") project_id: Int? = null,
+                  @Field("fund_id") fund_id: Int? = null
                     , @Field("sid") sid: Int? = null): Observable<Payload<LeaveBean>>
 
     @FormUrlEncoded

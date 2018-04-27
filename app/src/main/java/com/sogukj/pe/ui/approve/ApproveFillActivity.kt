@@ -1428,7 +1428,36 @@ class ApproveFillActivity : ToolbarActivity() {
 //            }
             if(bean.is_fresh == 1) {
                 ll_approver.removeAllViews()
-                requestLeaveInfo()
+
+                var pro_id = if(bean.fields == "project_id") data.id else null
+                var fund_id = if(bean.fields == "fund_id") data.id else null
+
+                SoguApi.getService(application)
+                        .leaveInfo(template_id = if (flagEdit) null else paramId!!,
+                                project_id = pro_id, fund_id = fund_id,
+                                sid = if (!flagEdit) null else paramId!!)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({ payload ->
+                            if (!payload.isOk) {
+                                showCustomToast(R.drawable.icon_toast_fail, payload.message)
+                                return@subscribe
+                            }
+                            payload.payload?.apply {
+                                addSP(sp!!)
+
+                                default.clear()
+                                for (user in cs!!) {
+                                    default.add(user.uid!!)
+                                }
+
+                                cs!!.add(UserBean())
+                                addCS(cs!!)
+                            }
+                        }, { e ->
+                            Trace.e(e)
+                            showCustomToast(R.drawable.icon_toast_common, "暂无可用数据")
+                        })
             }
             refreshListSelector(bean, data)
         } else if (requestCode == SEND && resultCode == Extras.RESULTCODE) {
