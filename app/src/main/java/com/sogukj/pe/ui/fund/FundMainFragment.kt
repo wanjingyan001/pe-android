@@ -184,6 +184,9 @@ class FundMainFragment : BaseFragment(), View.OnClickListener {
                     if (toolbarHeight - Math.abs(verticalOffset).toFloat() < 5) {
                         //移动到顶端
                         currentState = "TOP"
+
+                        tabs.alpha = 1.0f
+
                         if (currentState == previousState) {
                             return
                         }
@@ -200,6 +203,10 @@ class FundMainFragment : BaseFragment(), View.OnClickListener {
                     } else {
                         //不是顶端
                         currentState = "NO_TOP"
+
+                        var mAlpha = 1.0f - Math.abs(verticalOffset).toFloat() / toolbarHeight
+                        tabs.alpha = mAlpha
+
                         if (currentState == previousState) {
                             return
                         }
