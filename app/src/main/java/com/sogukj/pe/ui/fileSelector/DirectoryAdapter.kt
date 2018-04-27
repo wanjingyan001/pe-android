@@ -67,7 +67,6 @@ class DirectoryAdapter(val context: Context, val files: MutableList<File>,val ac
     fun changeData(newFiles: MutableList<File>){
         files.clear()
         files.addAll(newFiles)
-        notifyDataSetChanged()
     }
 
     inner class DirectoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

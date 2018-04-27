@@ -4,6 +4,7 @@ package com.sogukj.pe.ui.fileSelector
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.LayoutInflater
@@ -75,7 +76,10 @@ class StorageFileFragment : Fragment() {
 
     fun changeData() {
         files = FileUtil.getFileListByDirPath(mPath, null).toMutableList()
-        mDirectoryAdapter.changeData(files as MutableList<File>)
+        val result = DiffUtil.calculateDiff(DiffCallBack(mDirectoryAdapter.files, files))
+        result.dispatchUpdatesTo(mDirectoryAdapter)
+        mDirectoryAdapter.changeData(files.toMutableList())
+//        mDirectoryAdapter.changeData(files as MutableList<File>)
     }
 
     companion object {

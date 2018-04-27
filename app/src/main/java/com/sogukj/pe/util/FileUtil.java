@@ -1,6 +1,8 @@
 package com.sogukj.pe.util;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.IntRange;
 import android.webkit.MimeTypeMap;
 
@@ -40,7 +42,6 @@ import static com.sogukj.pe.util.FileTypeUtils.FileType.IMAGE;
 
 public class FileUtil {
     private static final String TAG = FileUtil.class.getSimpleName();
-
     public enum FileType {
         IMAGE("jpg", "jpeg", "gif", "png", "bmp", "Webp"),
         VIDEO("rm", "rmvb", "mp4", "mov", "mtv", "wmv", "avi", "3gp", "flv"),
@@ -834,4 +835,5 @@ public class FileUtil {
         fileMap.put(FileType.OTHER, others);
         return fileMap;
     }
+
 }

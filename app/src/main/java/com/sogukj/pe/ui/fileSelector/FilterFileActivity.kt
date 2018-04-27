@@ -7,6 +7,7 @@ import android.support.annotation.IntRange
 import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.BottomSheetDialog
 import android.support.design.widget.CoordinatorLayout
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.Gravity
@@ -49,7 +50,7 @@ import kotlin.properties.Delegates
 
 class FilterFileActivity : BaseActivity() {
     val selectedFile = ArrayList<File>()
-    lateinit var files: List<File>
+    lateinit var files: MutableList<File>
     var maxSize: Int by Delegates.notNull()//最大选择数量
     var isReplace: Boolean = false//文件选择替换功能(单选)
     var isForResult: Boolean = false////是否需要返回选择的文件
@@ -119,8 +120,8 @@ class FilterFileActivity : BaseActivity() {
         }
     }
 
-    private fun doOperating(){
-        if (!isForResult){
+    private fun doOperating() {
+        if (!isForResult) {
             //删除
             MaterialDialog.Builder(ctx)
                     .theme(Theme.LIGHT)
@@ -132,18 +133,21 @@ class FilterFileActivity : BaseActivity() {
                         dialog.dismiss()
                         selectedFile.forEach {
                             if (it.exists()) {
+                                if (files.contains(it)) {
+                                    files.remove(it)
+                                }
                                 it.delete()
                                 //通知列表刷新
                             }
                         }
                         selectedFile.clear()
-                        initData()
+                        refreshList(selectType)
                     }
                     .onNegative { dialog, _ ->
                         dialog.dismiss()
                     }
                     .show()
-        }else{
+        } else {
             //发送
             val intent = Intent()
             val paths = ArrayList<String>()
@@ -159,7 +163,7 @@ class FilterFileActivity : BaseActivity() {
     private fun initData() {
         when (type) {
             PE_LOCAL -> {
-                files = FileUtil.getFiles(FileUtil.getExternalFilesDir(applicationContext))
+                files = FileUtil.getFiles(FileUtil.getExternalFilesDir(applicationContext)).toMutableList()
                 directory1.text = "本应用"
             }
             ALL_DOC -> {
@@ -169,24 +173,24 @@ class FilterFileActivity : BaseActivity() {
                 val list4 = FileUtil.getFiles(QQ_DOC_PATH1)
                 val list5 = FileUtil.getFiles(DING_TALK_PATH)
                 val list3 = FileUtil.getFiles(FileUtil.getExternalFilesDir(applicationContext))
-                files = list.plus(list1).plus(list2).plus(list3).plus(list4).plus(list5)
+                files = list.plus(list1).plus(list2).plus(list3).plus(list4).plus(list5).toMutableList()
                 directory1.text = "全部"
             }
             WX_DOC -> {
                 val list = FileUtil.getFiles(WX_DOC_PATH1)
                 val list1 = FileUtil.getFiles(WX_DOC_PATH2)
-                files = list.plus(list1)
+                files = list.plus(list1).toMutableList()
                 directory1.text = "微信"
             }
             QQ_DOC -> {
                 val list = FileUtil.getFiles(QQ_DOC_PATH)
                 val list1 = FileUtil.getFiles(QQ_DOC_PATH1)
-                files = list.plus(list1)
+                files = list.plus(list1).toMutableList()
                 directory1.text = "QQ"
             }
             DING_TALK -> {
                 val list = FileUtil.getFiles(DING_TALK_PATH)
-                files = list
+                files = list.toMutableList()
                 directory1.text = "钉钉"
             }
         }
@@ -269,7 +273,7 @@ class FilterFileActivity : BaseActivity() {
         val params = parent.layoutParams as CoordinatorLayout.LayoutParams
         params.leftMargin = Utils.dpToPx(this, 10)
         params.rightMargin = Utils.dpToPx(this, 10)
-        params.gravity= Gravity.TOP or Gravity.CENTER_HORIZONTAL
+        params.gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
         parent.layoutParams = params
         return dialog
     }
@@ -286,9 +290,10 @@ class FilterFileActivity : BaseActivity() {
                     file != null
                 }
             }
+            val result = DiffUtil.calculateDiff(DiffCallBack(mAdapter.dataList, filter))
+            result.dispatchUpdatesTo(mAdapter)
             mAdapter.dataList.clear()
             mAdapter.dataList.addAll(filter)
-            mAdapter.notifyDataSetChanged()
         }
     }
 
@@ -335,9 +340,9 @@ class FilterFileActivity : BaseActivity() {
                         }
                     }
                     showSelectedInfo()
-                }else{
+                } else {
                     val intent = Intent()
-                    intent.putExtra(Extras.DATA,data)
+                    intent.putExtra(Extras.DATA, data)
                     setResult(Extras.RESULTCODE, intent)
                     finish()
                 }

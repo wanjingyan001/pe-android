@@ -208,8 +208,16 @@ class TeamSelectActivity : BaseActivity() {
                 icon.imageResource = R.mipmap.ic_launcher_ht
                 name.text = "海通创新"
             }
+            "kk" ->{
+                icon.imageResource = R.mipmap.ic_launcher_kk
+                name.text = "夸克"
+            }
+            "yge" ->{
+                icon.imageResource = R.mipmap.ic_launcher_yge
+                name.text = "雅戈尔"
+            }
             else -> {
-                icon.imageResource = R.mipmap.ic_launcher
+                icon.imageResource = R.mipmap.ic_launcher_pe
                 name.text = "海通创新"
             }
         }

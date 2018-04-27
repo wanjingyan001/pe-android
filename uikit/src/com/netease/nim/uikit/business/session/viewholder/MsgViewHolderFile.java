@@ -1,9 +1,15 @@
 package com.netease.nim.uikit.business.session.viewholder;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -26,6 +32,7 @@ import com.netease.nimlib.sdk.msg.constant.AttachStatusEnum;
 import com.netease.nimlib.sdk.msg.model.AttachmentProgress;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 
+import java.io.File;
 import java.util.Locale;
 
 /**
@@ -42,6 +49,73 @@ public class MsgViewHolderFile extends MsgViewHolderBase implements View.OnClick
     private AbortableFuture<Void> future;
     private ConstraintLayout fileLayout;
     private View line;
+    //建立一个文件类型与文件后缀名的匹配表
+    private static final String[][] MATCH_ARRAY = {
+            //{后缀名，    文件类型}
+            {".3gp", "video/3gpp"},
+            {".apk", "application/vnd.android.package-archive"},
+            {".asf", "video/x-ms-asf"},
+            {".avi", "video/x-msvideo"},
+            {".bin", "application/octet-stream"},
+            {".bmp", "image/bmp"},
+            {".c", "text/plain"},
+            {".class", "application/octet-stream"},
+            {".conf", "text/plain"},
+            {".cpp", "text/plain"},
+            {".doc", "application/msword"},
+            {".exe", "application/octet-stream"},
+            {".gif", "image/gif"},
+            {".gtar", "application/x-gtar"},
+            {".gz", "application/x-gzip"},
+            {".h", "text/plain"},
+            {".htm", "text/html"},
+            {".html", "text/html"},
+            {".jar", "application/java-archive"},
+            {".java", "text/plain"},
+            {".jpeg", "image/jpeg"},
+            {".jpg", "image/jpeg"},
+            {".js", "application/x-javascript"},
+            {".log", "text/plain"},
+            {".m3u", "audio/x-mpegurl"},
+            {".m4a", "audio/mp4a-latm"},
+            {".m4b", "audio/mp4a-latm"},
+            {".m4p", "audio/mp4a-latm"},
+            {".m4u", "video/vnd.mpegurl"},
+            {".m4v", "video/x-m4v"},
+            {".mov", "video/quicktime"},
+            {".mp2", "audio/x-mpeg"},
+            {".mp3", "audio/x-mpeg"},
+            {".mp4", "video/mp4"},
+            {".mpc", "application/vnd.mpohun.certificate"},
+            {".mpe", "video/mpeg"},
+            {".mpeg", "video/mpeg"},
+            {".mpg", "video/mpeg"},
+            {".mpg4", "video/mp4"},
+            {".mpga", "audio/mpeg"},
+            {".msg", "application/vnd.ms-outlook"},
+            {".ogg", "audio/ogg"},
+            {".pdf", "application/pdf"},
+            {".png", "image/png"},
+            {".pps", "application/vnd.ms-powerpoint"},
+            {".ppt", "application/vnd.ms-powerpoint"},
+            {".prop", "text/plain"},
+            {".rar", "application/x-rar-compressed"},
+            {".rc", "text/plain"},
+            {".rmvb", "audio/x-pn-realaudio"},
+            {".rtf", "application/rtf"},
+            {".sh", "text/plain"},
+            {".tar", "application/x-tar"},
+            {".tgz", "application/x-compressed"},
+            {".txt", "text/plain"},
+            {".wav", "audio/x-wav"},
+            {".wma", "audio/x-ms-wma"},
+            {".wmv", "audio/x-ms-wmv"},
+            {".wps", "application/vnd.ms-works"},
+            {".xml", "text/plain"},
+            {".z", "application/x-compress"},
+            {".zip", "application/zip"},
+            {"", "*/*"}
+    };
 
     public MsgViewHolderFile(BaseMultiItemFetchLoadAdapter adapter) {
         super(adapter);
@@ -72,8 +146,8 @@ public class MsgViewHolderFile extends MsgViewHolderBase implements View.OnClick
         if (!TextUtils.isEmpty(path)) {
             fileSize.setText(formatFileSize(msgAttachment.getSize(), SizeUnit.Auto));
             download.setCompoundDrawables(null, null, null, null);
-            download.setText("已下载");
-            download.setEnabled(false);
+            download.setText("打开");
+//            download.setEnabled(false);
         } else {
             AttachStatusEnum status = message.getAttachStatus();
             switch (status) {
@@ -110,8 +184,8 @@ public class MsgViewHolderFile extends MsgViewHolderBase implements View.OnClick
         String savePath = msgAttachment.getPathForSave() + "." + msgAttachment.getExtension();
         if (AttachmentStore.isFileExist(savePath)) {
             download.setCompoundDrawables(null, null, null, null);
-            download.setText("已下载");
-            download.setEnabled(false);
+            download.setText("打开");
+//            download.setEnabled(false);
         } else {
             download.setText("下载");
             download.setEnabled(true);
@@ -178,9 +252,9 @@ public class MsgViewHolderFile extends MsgViewHolderBase implements View.OnClick
                 if (dialog != null && dialog.isShowing()) {
                     dialog.dismiss();
                 }
-                download.setText("已下载");
+                download.setText("打开");
                 download.setCompoundDrawables(null, null, null, null);
-                download.setEnabled(false);
+//                download.setEnabled(false);
                 registerObservers(false);
             } else if (msg.getAttachStatus() == AttachStatusEnum.fail) {
                 if (dialog != null && dialog.isShowing()) {
@@ -217,6 +291,8 @@ public class MsgViewHolderFile extends MsgViewHolderBase implements View.OnClick
     @Override
     public void onClick(View v) {
         if (isOriginDataHasDownloaded(message)) {
+            FileAttachment fileAttachment = (FileAttachment) message.getAttachment();
+            openFileByPath(context, fileAttachment.getPathForSave(), fileAttachment.getExtension());
             return;
         }
         dialog = ProgressDialog.show(context, "", "正在下载", false, true, this);
@@ -237,5 +313,48 @@ public class MsgViewHolderFile extends MsgViewHolderBase implements View.OnClick
         GB,
         TB,
         Auto,
+    }
+
+
+    /**
+     * 根据路径打开文件
+     *
+     * @param context 上下文
+     * @param path    文件路径
+     */
+    public void openFileByPath(Context context, String path, String extension) {
+        if (context == null || path == null) {
+            return;
+        }
+        Intent intent = new Intent();
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        //设置intent的Action属性
+        intent.setAction(Intent.ACTION_VIEW);
+        //文件的类型
+        String type = "";
+        for (String[] amatchArray : MATCH_ARRAY) {
+            //判断文件的格式
+            if (amatchArray[0].contains(extension)) {
+                type = amatchArray[1];
+                break;
+            }
+        }
+        try {
+            Uri data;
+            File file = new File(path);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                data = FileProvider.getUriForFile(context, "com.sogukj.pe.fileProvider", file);
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            } else {
+                //设置intent的data和Type属性
+                data = Uri.fromFile(file);
+            }
+            intent.setDataAndType(data, type);
+            //跳转
+            context.startActivity(intent);
+        } catch (Exception e) { //当系统没有携带文件打开软件，提示
+            Toast.makeText(context, "没有可以打开该文件的软件", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
     }
 }
