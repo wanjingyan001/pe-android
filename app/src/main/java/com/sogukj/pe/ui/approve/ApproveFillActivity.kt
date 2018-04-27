@@ -492,18 +492,13 @@ class ApproveFillActivity : ToolbarActivity() {
                     builder.add(k, gson.toJson(v))
             }
             SoguApi.getService(application)
-                    .updateApprove(builder.build())
+                    .editLeave(builder.build())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe({ payload ->
                         if (payload.isOk) {
                             showCustomToast(R.drawable.icon_toast_success, "提交成功")
-                            handler.postDelayed({
-                                val intent = Intent()
-                                intent.putExtra(Extras.ID, payload.payload!!)
-                                setResult(Activity.RESULT_OK, intent)
-                                finish()
-                            }, 2000)
+                            finish()
                         } else {
                             showCustomToast(R.drawable.icon_toast_fail, payload.message)
                         }

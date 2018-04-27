@@ -216,6 +216,7 @@ class MessageListActivity : ToolbarActivity() {
         }
         btn_ok.setOnClickListener {
             fl_filter.visibility = View.GONE
+            page = 1
             doRequest()
         }
     }
@@ -265,6 +266,7 @@ class MessageListActivity : ToolbarActivity() {
                 paramStates.clear()
                 paramTemplates.clear()
                 fl_filter.visibility = View.GONE
+                page = 1
                 doRequest()
             }
         }
@@ -279,6 +281,7 @@ class MessageListActivity : ToolbarActivity() {
                 paramStates.clear()
                 paramTemplates.clear()
                 fl_filter.visibility = View.GONE
+                page = 1
                 doRequest()
             }
         }
@@ -316,6 +319,7 @@ class MessageListActivity : ToolbarActivity() {
 
     override fun onResume() {
         super.onResume()
+        page = 1
         doRequest()
     }
 
