@@ -482,15 +482,11 @@ class BuildSealActivity : ToolbarActivity() {
         val etValue = convertView.findViewById(R.id.et_value) as TextView
         tvLabel.text = if (bean.is_must == 1) bean.name + "(必填)" else bean.name
 
-        val iv_alert = convertView.findViewById(R.id.iv_alert)
-        iv_alert.visibility = View.GONE
         checkList.add {
             val str = etValue.text?.toString()
             if (bean.is_must == 1 && str.isNullOrEmpty()) {
-                iv_alert.visibility = View.VISIBLE
                 false
             } else {
-                iv_alert.visibility = View.GONE
                 true
             }
         }
@@ -546,18 +542,14 @@ class BuildSealActivity : ToolbarActivity() {
         tvLabel.text = if (bean.is_must == 1) bean.name + "(必填)" else bean.name
         etValue.text = bean.value_map?.name
         viewMap.put(bean.fields, etValue)
-        val iv_alert = convertView.findViewById(R.id.iv_alert)
-        iv_alert.visibility = View.GONE
         paramMap.put(bean.fields, bean.value_map?.id)// TODO
         checkList.add {
             val str = etValue.text?.toString()
             if (flagEdit)
                 paramMap.put(bean.fields, bean.value_map?.id)
             if (bean.is_must == 1 && str.isNullOrEmpty()) {
-                iv_alert.visibility = View.VISIBLE
                 false
             } else {
-                iv_alert.visibility = View.GONE
                 true
             }
         }
@@ -577,16 +569,12 @@ class BuildSealActivity : ToolbarActivity() {
         etValue.setText(bean.value)
         etValue.filters = Utils.getFilter(this)
 
-        val iv_alert = convertView.findViewById(R.id.iv_alert)
-        iv_alert.visibility = View.GONE
         checkList.add {
             val str = etValue.text?.toString()
             paramMap.put(bean.fields, str)
             if (bean.is_must == 1 && str.isNullOrEmpty()) {
-                iv_alert.visibility = View.VISIBLE
                 false
             } else {
-                iv_alert.visibility = View.GONE
                 true
             }
         }
@@ -603,17 +591,13 @@ class BuildSealActivity : ToolbarActivity() {
         tvLabel.text = if (bean.is_must == 1) bean.name + "(必填)" else bean.name
         etValue.setText(bean.value)
         etValue.filters = Utils.getFilter(this)
-        val iv_alert = convertView.findViewById(R.id.iv_alert)
-        iv_alert.visibility = View.GONE
         paramMap.put(bean.fields, bean.value)// TODO
         checkList.add {
             val str = etValue.text?.toString()
             paramMap.put(bean.fields, str)
             if (bean.is_must == 1 && str.isNullOrEmpty()) {
-                iv_alert.visibility = View.VISIBLE
                 false
             } else {
-                iv_alert.visibility = View.GONE
                 true
             }
         }
@@ -637,7 +621,6 @@ class BuildSealActivity : ToolbarActivity() {
         fieldMap.put(bean.fields, convertView)
 
         val tvLabel = convertView.findViewById(R.id.tv_label) as TextView
-        val ivAlert = convertView.findViewById(R.id.iv_alert) as ImageView
         val rgCheck = convertView.findViewById(R.id.rg_check) as RadioGroup
         val rbYes = convertView.findViewById(R.id.rb_yes) as RadioButton
         val rbNo = convertView.findViewById(R.id.rb_no) as RadioButton
@@ -763,8 +746,6 @@ class BuildSealActivity : ToolbarActivity() {
             }
         }
 
-        val iv_alert = convertView.findViewById(R.id.iv_alert)
-        iv_alert.visibility = View.GONE
         checkList.add {
             paramMap.put(bean.fields, bean.value_list)
             var flag = false
@@ -776,10 +757,8 @@ class BuildSealActivity : ToolbarActivity() {
                 flag = true
             }
             if (!flag) {
-                iv_alert.visibility = View.VISIBLE
                 false
             } else {
-                iv_alert.visibility = View.GONE
                 true
             }
         }

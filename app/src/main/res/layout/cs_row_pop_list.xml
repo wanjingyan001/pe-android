@@ -25,14 +25,6 @@
         android:textColor="@color/text_2"
         tools:text="基金名称" />
 
-    <ImageView
-        android:id="@+id/iv_alert"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
-        android:layout_gravity="center"
-        android:visibility="gone"
-        android:background="@drawable/ic_check_warn" />
-
     <TextView
         android:id="@+id/et_value"
         android:layout_width="wrap_content"

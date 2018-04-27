@@ -658,16 +658,12 @@ class ApproveFillActivity : ToolbarActivity() {
         }
         etValue.text = bean.value_map?.name
         viewMap.put(bean.fields, etValue)
-        val iv_alert = convertView.findViewById(R.id.iv_alert)
-        iv_alert.visibility = View.GONE
         paramMap.put(bean.fields, bean.value_map?.id)
         checkList.add {
             val str = etValue.text?.toString()
             if (bean.is_must == 1 && str.isNullOrEmpty()) {
-                iv_alert.visibility = View.VISIBLE
                 false
             } else {
-                iv_alert.visibility = View.GONE
                 true
             }
         }
@@ -692,16 +688,12 @@ class ApproveFillActivity : ToolbarActivity() {
         }
         etValue.filters = Utils.getFilter(this)
 
-        val iv_alert = convertView.findViewById(R.id.iv_alert)
-        iv_alert.visibility = View.GONE
         checkList.add {
             val str = etValue.text?.toString()
             paramMap.put(bean.fields, str)
             if (bean.is_must == 1 && str.isNullOrEmpty()) {
-                iv_alert.visibility = View.VISIBLE
                 false
             } else {
-                iv_alert.visibility = View.GONE
                 true
             }
         }
@@ -757,8 +749,6 @@ class ApproveFillActivity : ToolbarActivity() {
         } else {
             iv_star.visibility = View.INVISIBLE
         }
-        val iv_alert = convertView.findViewById(R.id.iv_alert)
-        iv_alert.visibility = View.GONE
         paramMap.put(bean.fields, bean.value_map?.is_select)
         if (bean.value_map?.is_select == 1) {
             rbNo.isChecked = false
@@ -868,8 +858,6 @@ class ApproveFillActivity : ToolbarActivity() {
             }
         }
 
-        val iv_alert = convertView.findViewById(R.id.iv_alert)
-        iv_alert.visibility = View.GONE
         checkList.add {
             paramMap.put(bean.fields, bean.value_list)
             var flag = false
@@ -881,10 +869,8 @@ class ApproveFillActivity : ToolbarActivity() {
                 flag = true
             }
             if (!flag) {
-                iv_alert.visibility = View.VISIBLE
                 false
             } else {
-                iv_alert.visibility = View.GONE
                 true
             }
         }

@@ -33,14 +33,6 @@
             android:textColor="@color/text_2"
             tools:text="项目名称（必填）" />
 
-        <ImageView
-            android:id="@+id/iv_alert"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_gravity="center"
-            android:background="@drawable/ic_check_warn"
-            android:visibility="gone" />
-
         <TextView
             android:id="@+id/tv_file"
             android:layout_width="wrap_content"

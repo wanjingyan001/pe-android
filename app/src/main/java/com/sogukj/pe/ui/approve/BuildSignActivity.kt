@@ -353,15 +353,11 @@ class BuildSignActivity : ToolbarActivity() {
         val etValue = convertView.findViewById(R.id.et_value) as TextView
         tvLabel.text = if (bean.is_must == 1) bean.name + "(必填)" else bean.name
 
-        val iv_alert = convertView.findViewById(R.id.iv_alert)
-        iv_alert.visibility = View.GONE
         checkList.add {
             val str = etValue.text?.toString()
             if (bean.is_must == 1 && str.isNullOrEmpty()) {
-                iv_alert.visibility = View.VISIBLE
                 false
             } else {
-                iv_alert.visibility = View.GONE
                 true
             }
         }
@@ -417,16 +413,12 @@ class BuildSignActivity : ToolbarActivity() {
         tvLabel.text = if (bean.is_must == 1) bean.name + "(必填)" else bean.name
         etValue.text = bean.value_map?.name
         viewMap.put(bean.fields, etValue)
-        val iv_alert = convertView.findViewById(R.id.iv_alert)
-        iv_alert.visibility = View.GONE
         paramMap.put(bean.fields, bean.value_map?.id)// TODO
         checkList.add {
             val str = etValue.text?.toString()
             if (bean.is_must == 1 && str.isNullOrEmpty()) {
-                iv_alert.visibility = View.VISIBLE
                 false
             } else {
-                iv_alert.visibility = View.GONE
                 true
             }
         }
@@ -444,16 +436,12 @@ class BuildSignActivity : ToolbarActivity() {
         tvLabel.text = if (bean.is_must == 1) bean.name + "(必填)" else bean.name
         etValue.filters = Utils.getFilter(this)
 
-        val iv_alert = convertView.findViewById(R.id.iv_alert)
-        iv_alert.visibility = View.GONE
         checkList.add {
             val str = etValue.text?.toString()
             paramMap.put(bean.fields, str)
             if (bean.is_must == 1 && str.isNullOrEmpty()) {
-                iv_alert.visibility = View.VISIBLE
                 false
             } else {
-                iv_alert.visibility = View.GONE
                 true
             }
         }
@@ -470,17 +458,13 @@ class BuildSignActivity : ToolbarActivity() {
         etValue.setText(bean.value)
         etValue.filters = Utils.getFilter(this)
 
-        val iv_alert = convertView.findViewById(R.id.iv_alert)
-        iv_alert.visibility = View.GONE
         paramMap.put(bean.fields, bean.value)// TODO
         checkList.add {
             val str = etValue.text?.toString()
             paramMap.put(bean.fields, str)
             if (bean.is_must == 1 && str.isNullOrEmpty()) {
-                iv_alert.visibility = View.VISIBLE
                 false
             } else {
-                iv_alert.visibility = View.GONE
                 true
             }
         }
@@ -511,9 +495,6 @@ class BuildSignActivity : ToolbarActivity() {
                 paramMap.put(bean.fields, 0)
             }
         }
-
-        val iv_alert = convertView.findViewById(R.id.iv_alert)
-        iv_alert.visibility = View.GONE
     }
 
     private fun add6(bean: CustomSealBean, inflater: LayoutInflater) {
@@ -581,8 +562,6 @@ class BuildSignActivity : ToolbarActivity() {
             }
         }
 
-        val iv_alert = convertView.findViewById(R.id.iv_alert)
-        iv_alert.visibility = View.GONE
         checkList.add {
             paramMap.put(bean.fields, bean.value_list)
             var flag = false
@@ -594,10 +573,8 @@ class BuildSignActivity : ToolbarActivity() {
                 flag = true
             }
             if (!flag) {
-                iv_alert.visibility = View.VISIBLE
                 false
             } else {
-                iv_alert.visibility = View.GONE
                 true
             }
         }
