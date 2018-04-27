@@ -359,7 +359,7 @@ class ApproveFillActivity : ToolbarActivity() {
     private fun load() {
         checkList.clear()
         ll_up.removeAllViews()
-        ll_approver.removeAllViews()
+        //ll_approver.removeAllViews()
         SoguApi.getService(application)
                 .approveInfo(template_id = if (flagEdit) null else paramId!!,
                         sid = if (!flagEdit) null else paramId!!)
@@ -399,7 +399,8 @@ class ApproveFillActivity : ToolbarActivity() {
                         }
                     }
 
-                    head_approver.visibility = View.GONE
+                    //head_approver.visibility = View.GONE
+                    ll_approver.removeAllViews()
                     requestLeaveInfo()
 //                    if (judgeIsLeaveBusiness()) {
 //                        head_approver.visibility = View.GONE
@@ -444,35 +445,35 @@ class ApproveFillActivity : ToolbarActivity() {
                 })
     }
 
-    private fun requestApprove(fund_id: Int? = null) {
-        SoguApi.getService(application)
-                .approver(template_id = paramId!!
-                        , type = paramType, fund_id = fund_id)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ payload ->
-                    if (!payload.isOk) {
-                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
-                        return@subscribe
-                    }
-                    payload.payload?.forEach { bean ->
-                        addApprover(bean)
-                    }
-                }, { e ->
-                    Trace.e(e)
-                    //showToast("暂无可用数据")
-                    showCustomToast(R.drawable.icon_toast_common, "暂无可用数据")
-                })
-    }
+//    private fun requestApprove(fund_id: Int? = null) {
+//        SoguApi.getService(application)
+//                .approver(template_id = paramId!!
+//                        , type = paramType, fund_id = fund_id)
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribeOn(Schedulers.io())
+//                .subscribe({ payload ->
+//                    if (!payload.isOk) {
+//                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
+//                        return@subscribe
+//                    }
+//                    payload.payload?.forEach { bean ->
+//                        addApprover(bean)
+//                    }
+//                }, { e ->
+//                    Trace.e(e)
+//                    //showToast("暂无可用数据")
+//                    showCustomToast(R.drawable.icon_toast_common, "暂无可用数据")
+//                })
+//    }
 
-    private fun addApprover(bean: ApproverBean) {
-        val convertView = inflater.inflate(R.layout.cs_row_approver, null) as LinearLayout
-        ll_approver.addView(convertView)
-        val tvLabel = convertView.findViewById(R.id.tv_label) as TextView
-        val etValue = convertView.findViewById(R.id.et_value) as TextView
-        tvLabel.text = bean.position
-        etValue.text = bean.approver
-    }
+//    private fun addApprover(bean: ApproverBean) {
+//        val convertView = inflater.inflate(R.layout.cs_row_approver, null) as LinearLayout
+//        ll_approver.addView(convertView)
+//        val tvLabel = convertView.findViewById(R.id.tv_label) as TextView
+//        val etValue = convertView.findViewById(R.id.et_value) as TextView
+//        tvLabel.text = bean.position
+//        etValue.text = bean.approver
+//    }
 
     private fun doConfirm() {
         if (isOneKey) {
@@ -1435,13 +1436,17 @@ class ApproveFillActivity : ToolbarActivity() {
             val bean = data?.getSerializableExtra(Extras.DATA) as CustomSealBean
             val data = data?.getSerializableExtra(Extras.DATA2) as CustomSealBean.ValueBean
             paramMap.put(bean.fields, data.id)
-            if (paramTitle == "基金用印") {
+//            if (paramTitle == "基金用印") {
+//                ll_approver.removeAllViews()
+//                requestApprove(data.id)
+//            }
+            if(bean.is_fresh == 1) {
                 ll_approver.removeAllViews()
-                requestApprove(data.id)
+                requestLeaveInfo()
             }
             refreshListSelector(bean, data)
         } else if (requestCode == SEND && resultCode == Extras.RESULTCODE) {
-            var grid_to = ll_up.findViewWithTag("CS") as GridView
+            var grid_to = ll_approver.findViewWithTag("CS") as GridView
             if (grid_to != null) {
                 var adapter = grid_to.adapter as MyCSAdapter
                 adapter.list.clear()
@@ -1466,7 +1471,7 @@ class ApproveFillActivity : ToolbarActivity() {
         datalist.removeAt(0)
 
         val convertView = inflater.inflate(R.layout.cs_row_sendto, null) as LinearLayout
-        ll_up.addView(convertView)
+        ll_approver.addView(convertView)
         var grid_to = convertView.findViewById(R.id.grid_chaosong_to) as GridView
         var adapter = MySPAdapter(context, datalist)
         //grid_to.adapter = adapter
@@ -1526,7 +1531,7 @@ class ApproveFillActivity : ToolbarActivity() {
 
     fun addCS(list: ArrayList<UserBean>) {
         val convertView = inflater.inflate(R.layout.cs_row_sendto, null) as LinearLayout
-        ll_up.addView(convertView)
+        ll_approver.addView(convertView)
         var grid_to = convertView.findViewById(R.id.grid_chaosong_to) as GridView
         var adapter = MyCSAdapter(context, list)
         grid_to.adapter = adapter

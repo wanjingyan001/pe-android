@@ -41,6 +41,8 @@
         android:background="@color/white"
         android:textColor="@color/text_1"
         android:textSize="14sp"
+        android:drawablePadding="10dp"
+        android:ellipsize="end"
         android:drawableRight="@drawable/ic_arrow_r"
         android:gravity="center|right"
         android:hint=""
