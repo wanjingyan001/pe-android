@@ -98,11 +98,11 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initBottomNavBar() {
-        bottomBar.addItem(BottomNavigationItem(R.drawable.ic_qb_sel, "消息").setInactiveIconResource(R.drawable.ic_qb_nor).initNavTextColor())
-                .addItem(BottomNavigationItem(R.drawable.ic_qb_sel5, "通讯录").setInactiveIconResource(R.drawable.ic_qb_nor1).initNavTextColor())
-                .addItem(BottomNavigationItem(R.drawable.ic_qb_sel2, "首页").setInactiveIconResource(R.drawable.ic_qb_nor2).initNavTextColor())
-                .addItem(BottomNavigationItem(R.drawable.ic_tab_main_proj_1, "项目").setInactiveIconResource(R.drawable.ic_tab_main_proj_0).initNavTextColor())
-                .addItem(BottomNavigationItem(R.drawable.ic_main_fund2, "基金").setInactiveIconResource(R.drawable.ic_main_fund).initNavTextColor())
+        bottomBar.addItem(BottomNavigationItem(R.drawable.ic_qb_sel11, "消息").setInactiveIconResource(R.drawable.ic_qb_nor).initNavTextColor())
+                .addItem(BottomNavigationItem(R.drawable.ic_qb_sel15, "通讯录").setInactiveIconResource(R.drawable.ic_qb_nor1).initNavTextColor())
+                .addItem(BottomNavigationItem(R.drawable.ic_qb_sel12, "首页").setInactiveIconResource(R.drawable.ic_qb_nor2).initNavTextColor())
+                .addItem(BottomNavigationItem(R.drawable.ic_tab_main_proj_11, "项目").setInactiveIconResource(R.drawable.ic_tab_main_proj_0).initNavTextColor())
+                .addItem(BottomNavigationItem(R.drawable.ic_main_fund22, "基金").setInactiveIconResource(R.drawable.ic_main_fund).initNavTextColor())
                 .setMode(BottomNavigationBar.MODE_FIXED)
                 .setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC)
                 .setBarBackgroundColor(R.color.white)
