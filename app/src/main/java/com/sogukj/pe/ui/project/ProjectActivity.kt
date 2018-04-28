@@ -646,13 +646,14 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
             58 -> R.drawable.ic_proj_thglsj//投后管理数据
             59 -> R.drawable.ic_proj_spls//审批历史
             60 -> R.drawable.qqxx//股权信息
+            61 -> R.drawable.cwbb
             else -> 0
         }
     }
 
     val colorGray = Color.parseColor("#D9D9D9")
     override fun onClick(view: View) {
-        if (view.id >= 1 && view.id <= 60) {
+        if (view.id >= 1 && view.id <= 61) {
             SoguApi.getService(application)
                     .saveClick(view.id)
                     .observeOn(AndroidSchedulers.mainThread())
@@ -732,6 +733,8 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
             59 -> ApproveListActivity.start(this@ProjectActivity, null, project.company_id)//审批历史
 
             60 -> EquityListActivity.start(this@ProjectActivity, project)
+
+            61 -> FinanceListActivity.start(this@ProjectActivity, project)
 
             R.id.im -> {
                 val inflate = LayoutInflater.from(this).inflate(R.layout.layout_input_dialog1, null)

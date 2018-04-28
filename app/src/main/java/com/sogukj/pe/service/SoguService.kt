@@ -251,6 +251,16 @@ interface SoguService {
     @POST("/api/StockInfo/equityInfo")
     fun equityInfo(@Field("hid") hid: Int): Observable<Payload<ArrayList<StructureBean>>>
 
+    //财务列表
+    @FormUrlEncoded
+    @POST("/api/StockInfo/financialList")
+    fun financialList(@Field("company_id") company_id: Int): Observable<Payload<ArrayList<FinanceListBean>>>
+
+    //财务信息详情
+    @FormUrlEncoded
+    @POST("/api/StockInfo/financialInfo")
+    fun financialInfo(@Field("fin_id") fin_id: Int): Observable<Payload<ArrayList<FinanceDetailBean>>>
+
     @FormUrlEncoded
     @POST("/api/Listinformation/Findhistoryrongzi")
     fun listFinanceHistory(

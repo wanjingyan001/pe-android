@@ -636,8 +636,7 @@
         <activity android:name=".ui.IM.TeamHistoryFileActivity" />
         <activity android:name=".ui.IM.TeamSearchActivity" />
         <activity android:name=".ui.IM.TeamPictureActivity" />
-        <activity android:name=".ui.IM.TeamSelectActivity">
-        </activity>
+        <activity android:name=".ui.IM.TeamSelectActivity" />
         <activity android:name=".ui.IM.PersonalInfoActivity" />
         <activity android:name=".ui.IM.TeamCreateActivity" />
         <activity android:name=".ui.IM.DisplayMessageActivity" />
@@ -684,7 +683,7 @@
         <activity android:name=".ui.ScanResultActivity" />
         <activity android:name=".ui.project.ShareHolderStepActivity" />
         <activity android:name=".ui.approve.ApproveFillActivity" />
-        <activity android:name=".ui.approve.ApproveExamineActivity" />
+        <!-- <activity android:name=".ui.approve.ApproveExamineActivity" /> -->
         <activity android:name=".ui.EquityListActivity" />
         <activity android:name=".ui.fileSelector.FilterFileActivity" />
         <activity android:name=".ui.main.ContactsActivity">
@@ -697,6 +696,8 @@
                 <data android:mimeType="application/*" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.project.FinanceListActivity" />
+        <activity android:name=".ui.project.FinanceDetailActivity"></activity>
     </application>
 
 </manifest>
