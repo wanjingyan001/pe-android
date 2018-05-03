@@ -23,12 +23,13 @@
 
         <TextView
             android:id="@+id/subtitle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:letterSpacing="0.04"
             android:lineSpacingExtra="0sp"
+            android:gravity="left"
             android:text="2月份财务报表"
-            android:maxLength="12"
+            android:singleLine="true"
             android:ellipsize="end"
             android:textColor="@color/text_1"
             android:textSize="20sp" />

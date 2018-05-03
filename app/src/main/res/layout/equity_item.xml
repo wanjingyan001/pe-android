@@ -22,10 +22,11 @@
 
         <TextView
             android:id="@+id/record_title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="2016-05-04 股权变更记录"
-            android:maxLength="12"
+            android:gravity="left"
+            android:singleLine="true"
             android:ellipsize="end"
             android:textColor="#ff3a3635"
             android:textSize="@dimen/text_size_normal" />
