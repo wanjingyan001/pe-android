@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
@@ -23,7 +24,11 @@ import android.widget.Toolbar
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import com.framework.base.BaseFragment
 import com.framework.base.ToolbarFragment
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
@@ -158,7 +163,7 @@ class MainMsgFragment : BaseFragment() {
                         search_edt.setText("")
                         search_edt.clearFocus()
                     }
-                }else{
+                } else {
                     delete1.visibility = View.GONE
                 }
             }
@@ -239,7 +244,7 @@ class MainMsgFragment : BaseFragment() {
             var alreadySelect = ArrayList<UserBean>()
             alreadySelect.add(Store.store.getUser(context)!!)
 //            TeamSelectActivity.startForResult(context, isSelectUser = true, alreadySelect = alreadySelect, isCreateTeam = true)
-            ContactsActivity.start(ctx,alreadySelect,true,true)
+            ContactsActivity.start(ctx, alreadySelect, true, true)
         }
         scan.setOnClickListener {
             add_layout.visibility = View.GONE
@@ -291,7 +296,18 @@ class MainMsgFragment : BaseFragment() {
                             userInfo?.let {
                                 Glide.with(this@MainMsgFragment)
                                         .load(it.avatar)
-                                        .apply(RequestOptions().error(R.drawable.ewm))
+                                        .listener(object : RequestListener<Drawable> {
+                                            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                                                val ch = userInfo.name.first()
+                                                msgIcon.setChar(ch)
+                                                return false
+                                            }
+
+                                            override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                                                return false
+                                            }
+
+                                        })
                                         .into(msgIcon)
                             }
                         } else if (data.sessionType == SessionTypeEnum.Team) {
@@ -302,7 +318,13 @@ class MainMsgFragment : BaseFragment() {
                                 4 -> tvTitleMsg.text = Html.fromHtml("<font color='#1787fb'>[未读]</font>$fromNick${data.content}")
                                 else -> tvTitleMsg.text = "$fromNick${data.content}"
                             }
-                            msgIcon.imageResource = R.drawable.im_team_default
+                            val team = NimUIKit.getTeamProvider().getTeamById(data.contactId)
+                            team?.let {
+                                Glide.with(this@MainMsgFragment)
+                                        .load(it.icon)
+                                        .apply(RequestOptions().error(R.drawable.im_team_default))
+                                        .into(msgIcon)
+                            }
                         }
                         try {
                             val time = Utils.getTime(data.time, "yyyy-MM-dd HH:mm:ss")

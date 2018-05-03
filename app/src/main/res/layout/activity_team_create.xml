@@ -81,6 +81,7 @@
             </RelativeLayout>
 
             <LinearLayout
+                android:id="@+id/teamNameLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
@@ -92,22 +93,64 @@
                 android:paddingTop="15dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="群名称"
                     android:textColor="@color/text_1"
                     android:textSize="14sp" />
 
                 <EditText
                     android:id="@+id/team_name"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
                     android:background="@null"
                     android:drawablePadding="10dp"
                     android:gravity="right"
                     android:hint="请输入"
                     android:textColor="@color/text_1"
+                    android:textColorHint="#a0a4aa"
+                    android:textSize="14sp" />
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp" />
+
+            <LinearLayout
+                android:id="@+id/teamIntroductionLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:paddingBottom="15dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="15dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="群简介"
+                    android:textColor="@color/text_1"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/teamIntroduction"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:drawablePadding="10dp"
+                    android:gravity="right"
+                    android:hint="暂无介绍"
+                    android:textColor="@color/text_1"
+                    android:singleLine="true"
+                    android:inputType="text"
                     android:textColorHint="#a0a4aa"
                     android:textSize="14sp" />
 
@@ -132,7 +175,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentTop="true"
                     android:text="群成员"
-                    android:textColor="@color/text_1"  />
+                    android:textColor="@color/text_1" />
 
                 <TextView
                     android:id="@+id/team_number"
@@ -165,17 +208,17 @@
                 android:layout_marginTop="15dp"
                 android:background="@color/white"
                 android:orientation="horizontal"
-                android:visibility="gone"
                 android:paddingBottom="15dp"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
-                android:paddingTop="15dp">
+                android:paddingTop="15dp"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="关联项目"
-                    android:textColor="@color/text_1"  />
+                    android:textColor="@color/text_1" />
 
                 <TextView
                     android:id="@+id/related_items"
@@ -187,7 +230,6 @@
                     android:gravity="right"
                     android:text="请选择"
                     android:textColor="#a0a4aa" />
-
 
 
             </LinearLayout>

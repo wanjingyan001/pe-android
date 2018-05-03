@@ -185,6 +185,7 @@
                     android:layout_marginTop="10dp"
                     android:background="@color/white"
                     android:gravity="center_vertical"
+                    android:visibility="gone"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -209,6 +210,7 @@
                     android:layout_height="wrap_content"
                     android:background="@color/white"
                     android:divider="@null"
+                    android:visibility="gone"
                     android:groupIndicator="@null" />
 
 
