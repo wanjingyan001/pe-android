@@ -96,7 +96,7 @@ class TeamSelectFragment : BaseFragment() {
         initSearchView()
         initResultList()
         initHeader()
-        //initGroupDiscuss()
+        initGroupDiscuss()
         initOrganizationList()
         //initContactList()
         doRequest()
