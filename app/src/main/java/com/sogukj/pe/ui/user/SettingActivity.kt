@@ -10,6 +10,7 @@ import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.framework.base.BaseActivity
+import com.netease.nim.uikit.api.NimUIKit
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.auth.AuthService
 import com.sogukj.pe.App
@@ -82,6 +83,7 @@ class SettingActivity : BaseActivity() {
         val xmlDb = XmlDb.open(this)
         xmlDb.set(Extras.NIMACCOUNT, "")
         xmlDb.set(Extras.NIMTOKEN, "")
+        NimUIKit.logout()
         NIMClient.getService(AuthService::class.java).logout()
     }
 }

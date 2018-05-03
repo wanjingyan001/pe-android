@@ -6,6 +6,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.text.TextUtils
+import cn.finalteam.rxgalleryfinal.RxGalleryFinal
+import cn.finalteam.rxgalleryfinal.imageloader.ImageLoaderType
+import cn.finalteam.rxgalleryfinal.rxbus.RxBusResultDisposable
+import cn.finalteam.rxgalleryfinal.rxbus.event.ImageRadioResultEvent
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.framework.base.ActivityHelper
 import com.netease.nim.uikit.api.NimUIKit
 import com.netease.nim.uikit.business.team.helper.TeamHelper
@@ -13,9 +20,9 @@ import com.netease.nim.uikit.common.ui.dialog.DialogMaker
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.RequestCallback
 import com.netease.nimlib.sdk.team.TeamService
-import com.netease.nimlib.sdk.team.constant.TeamFieldEnum
-import com.netease.nimlib.sdk.team.constant.TeamTypeEnum
+import com.netease.nimlib.sdk.team.constant.*
 import com.netease.nimlib.sdk.team.model.CreateTeamResult
+import com.netease.nimlib.sdk.team.model.Team
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.CustomSealBean
@@ -23,6 +30,8 @@ import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.ui.calendar.CompanySelectActivity
 import com.sogukj.pe.ui.main.ContactsActivity
 import com.sogukj.pe.util.Utils
+import com.sougukj.clickWithTrigger
+import com.sougukj.textStr
 import kotlinx.android.synthetic.main.activity_team_create.*
 import org.jetbrains.anko.toast
 import java.io.Serializable
@@ -30,6 +39,7 @@ import java.io.Serializable
 class TeamCreateActivity : AppCompatActivity() {
     lateinit var teamMember: ArrayList<UserBean>
     lateinit var adapter: MemberAdapter
+    private var path: String? = null
     var bean: CustomSealBean.ValueBean? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,17 +69,46 @@ class TeamCreateActivity : AppCompatActivity() {
         related_items_layout.setOnClickListener {
             CompanySelectActivity.start(this)
         }
-        exit_team.setOnClickListener {
+        exit_team.clickWithTrigger {
             createTeam()
         }
+        team_logo.clickWithTrigger {
+            RxGalleryFinal.with(this)
+                    .image()
+                    .radio()
+                    .imageLoader(ImageLoaderType.GLIDE)
+                    .subscribe(object : RxBusResultDisposable<ImageRadioResultEvent>() {
+                        override fun onEvent(t: ImageRadioResultEvent?) {
+                            path = t?.result?.originalPath
+                            if (!path.isNullOrEmpty()) {
+                                Glide.with(this@TeamCreateActivity)
+                                        .load(path)
+                                        .apply(RequestOptions().error(R.drawable.invalid_name2))
+                                        .into(team_logo)
+                            }
+                        }
+                    })
+                    .openGallery()
+        }
+        teamNameLayout.clickWithTrigger {
+            team_name.isFocusable = true
+            team_name.isFocusableInTouchMode = true
+            team_name.requestFocus()
+            Utils.toggleSoftInput(this, team_name)
+        }
+        teamIntroductionLayout.clickWithTrigger {
+            teamIntroduction.isFocusable = true
+            teamIntroduction.isFocusableInTouchMode = true
+            teamIntroduction.requestFocus()
+            Utils.toggleSoftInput(this, teamIntroduction)
+        }
+
 
         //自动生成群名字
-        var nameList = ArrayList<UserBean>(teamMember)
+        val nameList = ArrayList<UserBean>(teamMember)
         if (teamMember.size > 4) {
             nameList.clear()
-            for (index in 0 until 4) {
-                nameList.add(teamMember.get(index))
-            }
+            (0 until 4).mapTo(nameList) { teamMember[it] }
         }
         var nameStr = ""
         for (item in nameList) {
@@ -79,6 +118,16 @@ class TeamCreateActivity : AppCompatActivity() {
             nameStr = nameStr.removePrefix("、")
         }
         team_name.setText(nameStr)
+        team_name.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus && team_name.textStr.isNotEmpty()) {
+                team_name.setSelection(team_name.textStr.length)
+            }
+        }
+        teamIntroduction.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus && teamIntroduction.textStr.isNotEmpty()) {
+                teamIntroduction.setSelection(teamIntroduction.textStr.length)
+            }
+        }
     }
 
     /**
@@ -90,26 +139,31 @@ class TeamCreateActivity : AppCompatActivity() {
             toast("请输入群名称")
             return
         }
-        val memberAccounts = ArrayList<String>()
         if (teamMember.size == 1) {
             toast("请选择群成员")
             return
         }
         DialogMaker.showProgressDialog(this, "", true)
-        teamMember.forEach {
-            it.accid?.let {
-                memberAccounts.add(it)
-            }
-        }
+        val memberAccounts = teamMember.map { it.accid }.filter { !it.isNullOrEmpty() }
         val map = HashMap<TeamFieldEnum, Serializable>()
         map.put(TeamFieldEnum.Name, teamName)
+        if (path != null && !TextUtils.isEmpty(path)) {
+            map.put(TeamFieldEnum.ICON, path!!)
+        }
+        if (teamIntroduction.textStr.isNotEmpty()) {
+            map.put(TeamFieldEnum.Introduce, teamIntroduction.textStr)
+        }
+        map.put(TeamFieldEnum.InviteMode, TeamInviteModeEnum.All)
+        map.put(TeamFieldEnum.BeInviteMode, TeamBeInviteModeEnum.NoAuth)
+        map.put(TeamFieldEnum.VerifyType, VerifyTypeEnum.Free)
+        map.put(TeamFieldEnum.TeamUpdateMode, TeamUpdateModeEnum.All)
         bean?.let {
             val teamBean = TeamBean()
             teamBean.project_id = it.id.toString()
             teamBean.project_name = it.name.toString()
             map.put(TeamFieldEnum.Extension, teamBean.toString())
         }
-        NIMClient.getService(TeamService::class.java).createTeam(map, TeamTypeEnum.Advanced, "", memberAccounts)
+        NIMClient.getService(TeamService::class.java).createTeam(map, TeamTypeEnum.Advanced, "邀请你加入群组", memberAccounts)
                 .setCallback(object : RequestCallback<CreateTeamResult> {
                     override fun onFailed(p0: Int) {
                         DialogMaker.dismissProgressDialog()

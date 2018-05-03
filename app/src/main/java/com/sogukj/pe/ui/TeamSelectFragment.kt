@@ -96,7 +96,7 @@ class TeamSelectFragment : BaseFragment() {
         initSearchView()
         initResultList()
         initHeader()
-        //initGroupDiscuss()
+        initGroupDiscuss()
         initOrganizationList()
         //initContactList()
         doRequest()
@@ -440,7 +440,7 @@ class TeamSelectFragment : BaseFragment() {
                 holder = convertView.tag as ParentHolder
             }
             val title = parents[groupPosition]
-            holder.departmentName.text = "${title} (${childs[groupPosition].size})"
+            holder.departmentName.text = "$title (${childs[groupPosition].size})"
             holder.indicator.isSelected = isExpanded
             return convertView
         }
@@ -455,6 +455,10 @@ class TeamSelectFragment : BaseFragment() {
                 val team = it[childPosition]
                 holder.userName.text = team.name
                 holder.selectIcon.visibility = View.GONE
+                Glide.with(context)
+                        .load(team.icon)
+                        .apply(RequestOptions().error(R.drawable.im_team_default))
+                        .into(holder.userImg)
                 holder.itemView.setOnClickListener {
                     search_edt.clearFocus()
                     NimUIKit.startTeamSession(context, team.id)

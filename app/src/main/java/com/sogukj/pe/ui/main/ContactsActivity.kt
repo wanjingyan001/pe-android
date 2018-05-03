@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
+import android.text.Html
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
@@ -116,20 +117,20 @@ class ContactsActivity : BaseActivity() {
         fun startFromFragment(context: Fragment, alreadyList: ArrayList<UserBean>?,
                               canModify: Boolean? = false,
                               isCreateTeam: Boolean? = false,
-                              requestCode: Int? = null){
+                              requestCode: Int? = null) {
             val intent = Intent(context.activity, ContactsActivity::class.java)
             intent.putExtra(Extras.LIST, alreadyList)
             intent.putExtra(Extras.FLAG, canModify)
             intent.putExtra(Extras.CREATE_TEAM, isCreateTeam)
             val code = requestCode ?: Extras.REQUESTCODE
-            context.startActivityForResult(intent,code)
+            context.startActivityForResult(intent, code)
         }
 
         fun startWithDefault(context: Context, alreadyList: ArrayList<UserBean>?,
-                  canModify: Boolean? = false,
-                  isCreateTeam: Boolean? = false,
-                  noModification: ArrayList<Int>? = null,
-                  requestCode: Int? = null) {
+                             canModify: Boolean? = false,
+                             isCreateTeam: Boolean? = false,
+                             noModification: ArrayList<Int>? = null,
+                             requestCode: Int? = null) {
             val intent = Intent(context, ContactsActivity::class.java)
             intent.putExtra(Extras.LIST, alreadyList)
             intent.putExtra(Extras.FLAG, canModify)
@@ -154,6 +155,7 @@ class ContactsActivity : BaseActivity() {
         initContactsAdapter()
         initTissueAdapter()
         getTissueData()
+        getGroup()
         confirmTv.setOnClickFastListener {
             val list = ArrayList<UserBean>()
             list.addAll(alreadySelected)
@@ -341,6 +343,18 @@ class ContactsActivity : BaseActivity() {
     }
 
 
+    private fun getGroup() {
+        val allTeams = NimUIKit.getTeamProvider().allTeams
+        val group = ArrayList<List<Team>>()
+        val myTeam = allTeams.filter { it.isMyTeam }
+        val chatTeam = myTeam.filterNot { it.extension.isNotEmpty() }
+        val projectTeam = myTeam.filter { it.extension.isNotEmpty() }
+        group.add(chatTeam)
+        group.add(projectTeam)
+        groupsAdapter = GroupAdapter(this, group)
+        groupDiscuss.setAdapter(groupsAdapter)
+    }
+
     /**
      * 群组Adapter
      */
@@ -365,7 +379,11 @@ class ContactsActivity : BaseActivity() {
                 holder = convertView.tag as ParentHolder
             }
             val team = groups[groupPosition]
-            holder.departmentName.text = "群聊 (${team.size})"
+            if (groupPosition == 0) {
+                holder.departmentName.text = "群聊 (${team.size})"
+            } else {
+                holder.departmentName.text = "项目组 (${team.size})"
+            }
             holder.indicator.isSelected = isExpanded
             return convertView
         }
@@ -375,6 +393,12 @@ class ContactsActivity : BaseActivity() {
             val holder: ChildHolder
             convertView = LayoutInflater.from(context).inflate(R.layout.item_team_organization_chlid, null)
             holder = ChildHolder(convertView)
+            val team = groups[groupPosition][childPosition]
+            holder.userName.text = team.name
+            Glide.with(context)
+                    .load(team.icon)
+                    .apply(RequestOptions().error(R.drawable.im_team_default))
+                    .into(holder.userImg)
             return convertView
         }
 
@@ -515,9 +539,55 @@ class ContactsActivity : BaseActivity() {
         val userImg = view.find<CircleImageView>(R.id.userHeadImg)
         val userName = view.find<TextView>(R.id.userName)
         val userPosition = view.find<TextView>(R.id.userPosition)
-        override fun setData(view: View, data: UserBean, position: Int) {
-
+        override fun setData(view: View, userBean: UserBean, position: Int) {
+            val find = alreadySelected.find { it.uid == userBean.uid }
+            if (find != null) {
+                if (!selectedCanModify) {
+                    selectIcon.imageResource = R.drawable.cannot_select
+                } else {
+                    selectIcon.isSelected = true
+                }
+            }
+            //创建群聊且是自己时,灰色勾选
+            if (userBean.uid == mine?.uid && isCreateTeam) {
+                selectIcon.isSelected = false
+                selectIcon.imageResource = R.drawable.cannot_select
+            }
+            Glide.with(this@ContactsActivity)
+                    .load(userBean.headImage())
+                    .apply(RequestOptions().error(R.drawable.nim_avatar_default).placeholder(R.drawable.nim_avatar_default))
+                    .into(userImg)
+            var name = userBean.name
+            if (searchKey.isNotEmpty()) {
+                name = name.replaceFirst(searchKey, "<font color='#1787fb'>$searchKey</font>")
+            }
+            userName.text = Html.fromHtml(name)
+            userPosition.text = userBean.position
+            view.setOnClickFastListener {
+                search_edt.clearFocus()
+                if (pathByUri == null) {
+                    //点击的item是本人并且是创建群聊时不响应点击事件
+                    if (userBean.uid == mine?.uid && isCreateTeam) {
+                        return@setOnClickFastListener
+                    }
+                    //已选中而且不能编辑的情况下不响应点击事件
+                    if (!selectedCanModify && find != null) {
+                        return@setOnClickFastListener
+                    } else {
+                        if (alreadySelected.contains(userBean)) {
+                            alreadySelected.remove(userBean)
+                            selectIcon.isSelected = false
+                        } else {
+                            alreadySelected.add(userBean)
+                            selectIcon.isSelected = true
+                        }
+                    }
+                    selectNumber.text = "已选择: ${alreadySelected.size} 人"
+                } else {
+                    //发送文件消息
+                    NimUIKit.startP2PSession(this@ContactsActivity, userBean.accid, pathByUri)
+                }
+            }
         }
     }
-
 }
