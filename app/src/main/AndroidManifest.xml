@@ -701,8 +701,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.project.FinanceListActivity" />
-        <activity android:name=".ui.project.FinanceDetailActivity"></activity>
-        <activity android:name=".ui.IM.MemberEditActivity"></activity>
+        <activity android:name=".ui.project.FinanceDetailActivity" />
+        <activity android:name=".ui.IM.MemberEditActivity" />
+        <activity android:name=".ui.user.FormActivity"></activity>
     </application>
 
 </manifest>

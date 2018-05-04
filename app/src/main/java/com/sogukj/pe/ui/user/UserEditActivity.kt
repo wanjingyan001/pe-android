@@ -72,6 +72,9 @@ class UserEditActivity : ToolbarActivity() {
             departList?.forEach {
                 items.add(it.de_name)
             }
+            if (items.size == 0) {
+                return@setOnClickListener
+            }
             val position = items.indices.firstOrNull { items[it]!!.contains(tv_depart.text) } ?: 0
             val pvOptions = OptionsPickerView.Builder(this, OptionsPickerView.OnOptionsSelectListener { options1, option2, options3, v ->
                 val data = departList?.get(options1)
@@ -111,6 +114,35 @@ class UserEditActivity : ToolbarActivity() {
         }
         tr_note.childEdtGetFocus()
         tr_email.childEdtGetFocus()
+
+        setUserInfo()
+
+        tv_posotion.setOnClickListener {
+            FormActivity.start(context, "职位", tv_posotion.text.toString(), POSITION)
+        }
+        tv_email.setOnClickListener {
+            FormActivity.start(context, "邮箱", tv_email.text.toString(), E_MAIL)
+        }
+        tv_note.setOnClickListener {
+            FormActivity.start(context, "备注", tv_note.text.toString(), NOTE)
+        }
+    }
+
+    var POSITION = 0x555
+    var E_MAIL = 0x556
+    var NOTE = 0x557
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (data != null) {
+            if (requestCode == POSITION) {
+                tv_posotion.text = data.getStringExtra(Extras.DATA)
+            } else if (requestCode == E_MAIL) {
+                tv_email.text = data.getStringExtra(Extras.DATA)
+            } else if (requestCode == NOTE) {
+                tv_note.text = data.getStringExtra(Extras.DATA)
+            }
+        }
     }
 
 //    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -214,7 +246,7 @@ class UserEditActivity : ToolbarActivity() {
 
     override fun onResume() {
         super.onResume()
-        setUserInfo()
+        //setUserInfo()
         mHandler.removeMessages(0x001)
         tv_rate.text = ""
         SoguApi.getService(application)
