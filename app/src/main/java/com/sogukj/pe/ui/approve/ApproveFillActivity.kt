@@ -29,6 +29,7 @@ import com.sogukj.pe.bean.*
 import com.sogukj.pe.ui.IM.TeamSelectActivity
 import com.sogukj.pe.ui.fileSelector.FileMainActivity
 import com.sogukj.pe.ui.main.ContactsActivity
+import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.CalendarDingDing
@@ -1218,7 +1219,7 @@ class ApproveFillActivity : ToolbarActivity() {
                 val ivAdd = convertView.findViewById(R.id.iv_add) as ImageView
                 ivAdd.visibility = View.GONE
                 Glide.with(this)
-                        .load(v.url)
+                        .load(MyGlideUrl(v.url))
                         .into(img)
                 img.setOnClickListener {
                     bean.value_list?.remove(v)
@@ -1517,7 +1518,7 @@ class ApproveFillActivity : ToolbarActivity() {
                     icon.setChar(ch)
                 } else {
                     Glide.with(context)
-                            .load(item.url)
+                            .load(MyGlideUrl(item.url))
                             .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
                             .into(icon)
                 }
@@ -1594,7 +1595,7 @@ class ApproveFillActivity : ToolbarActivity() {
                     icon.setChar(ch)
                 } else {
                     Glide.with(context)
-                            .load(list[position].url)
+                            .load(MyGlideUrl(list[position].url))
                             .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
                             .into(icon)
                 }
@@ -1653,7 +1654,7 @@ class ApproveFillActivity : ToolbarActivity() {
                     viewHolder.icon?.setChar(list[position].name.first())
                 } else {
                     Glide.with(context)
-                            .load(list[position].url)
+                            .load(MyGlideUrl(list[position].url))
                             .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
                             .into(viewHolder.icon)
                 }

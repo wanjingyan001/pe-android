@@ -22,7 +22,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.fashare.stack_layout.StackLayout
 import com.sogukj.pe.Extras
-import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -31,8 +30,6 @@ import com.sogukj.pe.ui.approve.SealApproveActivity
 import com.sogukj.pe.ui.approve.SignApproveActivity
 import com.sogukj.pe.ui.msg.MessageListActivity
 import com.sogukj.pe.ui.news.NewsListActivity
-import com.sogukj.pe.util.CacheUtils
-import com.sogukj.pe.util.ColorUtil
 import com.sogukj.util.Store
 import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.NIMClient
@@ -45,7 +42,7 @@ import com.sogukj.pe.ui.project.ShareHolderDescActivity
 import com.sogukj.pe.ui.project.ShareHolderStepActivity
 import com.sogukj.pe.ui.project.ShareholderCreditActivity
 import com.sogukj.pe.ui.user.UserActivity
-import com.sogukj.pe.util.Utils
+import com.sogukj.pe.util.*
 import com.sogukj.pe.view.CircleImageView
 import com.sogukj.util.XmlDb
 import me.leolin.shortcutbadger.ShortcutBadger
@@ -218,7 +215,7 @@ class MainHomeFragment : BaseFragment() {
             header.setChar(ch)
         } else {
             Glide.with(context)
-                    .load(user?.url)
+                    .load(MyGlideUrl(user?.url))
                     .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
                     .into(header)
         }

@@ -17,6 +17,7 @@ import com.google.gson.JsonSyntaxException
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.ScoreBean
+import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.CircleImageView
@@ -81,7 +82,7 @@ class ScoreListActivity : ToolbarActivity() {
 
                 override fun setData(view: View, data: ScoreBean, position: Int) {
                     tvSeq.text = "${position + 4}"
-                    Glide.with(context).load(data.url).into(Head)
+                    Glide.with(context).load(MyGlideUrl(data.url)).into(Head)
                     tvName.text = data.name
                     final_score.text = "最终得分：${data.total_grade}"
                     finishing_task.text = "岗位胜任力评价：${data.resumption}"
@@ -176,7 +177,7 @@ class ScoreListActivity : ToolbarActivity() {
     fun set(bean: ScoreBean, index: Int) {
         var id = resources.getIdentifier("head_" + (index + 1), "id", context.packageName)
         var headIcon = findViewById(id) as CircleImageView
-        Glide.with(context).load(bean.url).into(headIcon)
+        Glide.with(context).load(MyGlideUrl(bean.url)).into(headIcon)
 
         var id_dengji = resources.getIdentifier("dengji_" + (index + 1), "id", context.packageName)
         var dengji = findViewById(id_dengji) as TextView

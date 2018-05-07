@@ -34,6 +34,7 @@ import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.search.model.MsgIndexRecord;
 import com.netease.nimlib.sdk.uinfo.model.UserInfo;
 import com.sogukj.pe.R;
+import com.sogukj.pe.util.MyGlideUrl;
 import com.sogukj.pe.util.Utils;
 import com.sogukj.pe.view.CircleImageView;
 
@@ -213,7 +214,7 @@ public class TeamSearchActivity extends AppCompatActivity implements View.OnClic
             options.error(R.drawable.nim_avatar_default)
                     .fallback(R.drawable.nim_avatar_default);
             Glide.with(TeamSearchActivity.this)
-                    .load(userInfo.getAvatar())
+                    .load(new MyGlideUrl(userInfo.getAvatar()))
                     .apply(options)
                     .into(holder.resultAvatar);
             String format = new SimpleDateFormat("yyyy/MM/dd").format(new Date(record.getTime()));

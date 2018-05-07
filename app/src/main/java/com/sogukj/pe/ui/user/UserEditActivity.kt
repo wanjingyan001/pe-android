@@ -31,6 +31,7 @@ import com.sogukj.pe.R
 import com.sogukj.pe.bean.DepartmentBean
 import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.ui.score.*
+import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
@@ -234,7 +235,7 @@ class UserEditActivity : ToolbarActivity() {
                 iv_user.setChar(ch)
             } else {
                 Glide.with(context)
-                        .load(url)
+                        .load(MyGlideUrl(url))
                         .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
                         .into(iv_user)
             }
@@ -468,7 +469,7 @@ class UserEditActivity : ToolbarActivity() {
     private fun doUpload(url: String) {
         user.url = url
         Glide.with(this@UserEditActivity)
-                .load(url)
+                .load(MyGlideUrl(url))
                 .apply(RequestOptions().error(Utils.defaultHeadImg()))
                 .into(iv_user)
         val imgPath = compressImage(url, 160, 160, 1024 * 1024)

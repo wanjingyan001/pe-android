@@ -24,6 +24,7 @@ import com.netease.nimlib.sdk.team.model.Team
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.UserBean
+import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.view.CircleImageView
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
@@ -75,7 +76,7 @@ class MemberEditActivity : ToolbarActivity() {
                         deleteIcon.setVisible(false)
                     }
                     Glide.with(this@MemberEditActivity)
-                            .load(data.headImage())
+                            .load(MyGlideUrl(data.headImage()))
                             .apply(RequestOptions().error(R.drawable.nim_avatar_default).placeholder(R.drawable.nim_avatar_default))
                             .into(userHeadImg)
                     userName.text = data.name

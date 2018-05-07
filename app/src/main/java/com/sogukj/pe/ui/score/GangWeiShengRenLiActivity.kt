@@ -23,6 +23,7 @@ import com.sogukj.pe.bean.GradeCheckBean
 import com.sogukj.pe.bean.JobPageBean
 import com.sogukj.pe.bean.PFBZ
 import com.sogukj.pe.bean.TouZiUpload
+import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
@@ -65,7 +66,7 @@ class GangWeiShengRenLiActivity : ToolbarActivity() {
         var person = intent.getSerializableExtra(Extras.DATA) as GradeCheckBean.ScoreItem
         id = person.user_id!!
         person?.let {
-            Glide.with(context).load(it.url).into(icon)
+            Glide.with(context).load(MyGlideUrl(it.url)).into(icon)
             name.text = it.name
             depart.text = it.department
             position.text = it.position

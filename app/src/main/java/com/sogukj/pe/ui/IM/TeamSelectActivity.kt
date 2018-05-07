@@ -28,6 +28,7 @@ import com.sogukj.pe.R
 import com.sogukj.pe.R.layout.header
 import com.sogukj.pe.bean.DepartmentBean
 import com.sogukj.pe.bean.UserBean
+import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.CircleImageView
@@ -470,7 +471,7 @@ class TeamSelectActivity : BaseActivity() {
                     holder.selectIcon.imageResource = R.drawable.cannot_select
                 }
                 Glide.with(this@TeamSelectActivity)
-                        .load(userBean.headImage())
+                        .load(MyGlideUrl(userBean.headImage()))
                         .apply(RequestOptions().error(R.drawable.nim_avatar_default).placeholder(R.drawable.nim_avatar_default))
                         .into(holder.userImg)
                 holder.userName.text = userBean.name
@@ -557,7 +558,7 @@ class TeamSelectActivity : BaseActivity() {
         override fun onBindViewHolder(holder: ContactHolder, position: Int) {
             val userBean = datas[position]
             Glide.with(this@TeamSelectActivity)
-                    .load(userBean.headImage())
+                    .load(MyGlideUrl(userBean.headImage()))
                     .apply(RequestOptions().error(R.drawable.nim_avatar_default).placeholder(R.drawable.nim_avatar_default))
                     .into(holder.userImg)
             var name = userBean.name

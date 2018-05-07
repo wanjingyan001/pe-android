@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.sogukj.pe.R;
 import com.sogukj.pe.bean.UserBean;
+import com.sogukj.pe.util.MyGlideUrl;
 import com.sogukj.pe.view.CircleImageView;
 
 import java.util.ArrayList;
@@ -61,7 +62,7 @@ public class CcPersonAdapter extends RecyclerView.Adapter<CcPersonAdapter.CCHold
                 holder.userHeader.setChar(ch);
             } else {
                 Glide.with(context)
-                        .load(userBean.getUrl())
+                        .load(new MyGlideUrl(userBean.getUrl()))
                         .apply(new RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
                         .into(holder.userHeader);
             }

@@ -20,6 +20,7 @@ import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.*
+import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.util.PdfUtil
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
@@ -418,7 +419,7 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
                 ivUser.setChar(ch)
             } else {
                 Glide.with(context)
-                        .load(v.url)
+                        .load(MyGlideUrl(v.url))
                         .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
                         .into(ivUser)
             }
@@ -513,7 +514,7 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
         val ch = data.name?.first()
         ivUser.setChar(ch)
         Glide.with(this)
-                .load(data.url)
+                .load(MyGlideUrl(data.url))
                 .into(ivUser)
 
         convertView.setOnClickListener {
@@ -561,7 +562,7 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
         val ch = fixation.name?.first()
         iv_user.setChar(ch)
         Glide.with(this)
-                .load(fixation.url)
+                .load(MyGlideUrl(fixation.url))
                 .into(iv_user)
         tv_name.text = fixation.name
         user_id = fixation.user_id
@@ -638,7 +639,7 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
                 viewHolder.icon?.setChar(list[position].name.first())
             } else {
                 Glide.with(context)
-                        .load(list[position].url)
+                        .load(MyGlideUrl(list[position].url))
                         .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
                         .into(viewHolder.icon)
             }

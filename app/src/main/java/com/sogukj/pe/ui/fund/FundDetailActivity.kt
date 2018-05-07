@@ -21,6 +21,7 @@ import com.sogukj.pe.R
 import com.sogukj.pe.bean.FundDetail
 import com.sogukj.pe.bean.FundSmallBean
 import com.sogukj.pe.bean.UserBean
+import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.CircleImageView
 import com.sogukj.pe.view.RecyclerAdapter
@@ -86,7 +87,7 @@ class FundDetailActivity : ToolbarActivity() {
                             headImg.setChar(ch)
                         } else {
                             Glide.with(context)
-                                    .load(data.url)
+                                    .load(MyGlideUrl(data.url))
                                     .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
                                     .into(headImg)
                         }

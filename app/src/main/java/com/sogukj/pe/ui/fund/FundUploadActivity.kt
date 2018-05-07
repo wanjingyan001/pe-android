@@ -32,6 +32,7 @@ import com.sogukj.pe.ui.fileSelector.FileMainActivity
 import com.sogukj.pe.ui.fund.FundListFragment.Companion.TYPE_CB
 import com.sogukj.pe.ui.fund.FundListFragment.Companion.TYPE_CX
 import com.sogukj.pe.ui.fund.FundListFragment.Companion.TYPE_TC
+import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.RecyclerAdapter
@@ -84,7 +85,7 @@ class FundUploadActivity : ToolbarActivity() {
         val user = Store.store.getUser(this)
         tv_user.text = user?.name
         Glide.with(this)
-                .load(user?.headImage())
+                .load(MyGlideUrl(user?.headImage()))
                 .apply(RequestOptions().error(Utils.defaultHeadImg()))
                 .into(iv_user)
         uploadAdapter = UploadAdapter(this, uploadList)

@@ -31,6 +31,7 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.ui.user.UserActivity
+import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.*
@@ -81,7 +82,7 @@ class MainProjectFragment : BaseFragment() {
             header.setChar(ch)
         } else {
             Glide.with(context)
-                    .load(user?.url)
+                    .load(MyGlideUrl(user?.url))
                     .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
                     .into(header)
         }

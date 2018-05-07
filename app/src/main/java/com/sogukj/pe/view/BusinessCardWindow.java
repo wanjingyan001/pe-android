@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.sogukj.pe.R;
 import com.sogukj.pe.bean.UserBean;
+import com.sogukj.pe.util.MyGlideUrl;
 
 /**
  * Created by admin on 2017/12/1.
@@ -71,7 +72,7 @@ public class BusinessCardWindow extends PopupWindow {
             headerImg.setChar(ch);
         } else {
             Glide.with(context)
-                    .load(bean.headImage())
+                    .load(new MyGlideUrl(bean.headImage()))
                     .apply(new RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
                     .into(headerImg);
         }

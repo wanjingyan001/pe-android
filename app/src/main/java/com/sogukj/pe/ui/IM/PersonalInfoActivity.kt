@@ -23,6 +23,7 @@ import com.netease.nim.uikit.api.NimUIKit
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.UserBean
+import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
@@ -125,7 +126,7 @@ class PersonalInfoActivity : BaseActivity(), View.OnClickListener, TextWatcher, 
                             department_tv.text = it.depart_name
                             position_tv.text = it.position
                             Glide.with(this)
-                                    .load(it.headImage())
+                                    .load(MyGlideUrl(it.headImage()))
                                     .apply(RequestOptions().error(R.drawable.ewm))
                                     .into(avatar)
 

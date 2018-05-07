@@ -25,6 +25,7 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.GradeCheckBean.TouZiItem
 import com.sogukj.pe.bean.TouZiUpload
+import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.RecyclerAdapter
@@ -61,7 +62,7 @@ class InvestManageActivity : ToolbarActivity() {
 
         var bean = Store.store.getUser(context)
         bean?.let {
-            Glide.with(context).load(it.url).into(icon)
+            Glide.with(context).load(MyGlideUrl(it.url)).into(icon)
             name.text = it.name
             depart.text = it.depart_name
             position.text = it.position

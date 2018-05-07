@@ -20,6 +20,7 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.ProductBean
 import com.sogukj.pe.bean.ProjectBean
+import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
@@ -64,7 +65,7 @@ class ProductInfoActivity : ToolbarActivity() {
                     tvDate.text = "${getString(R.string.tv_proj_product_create_date)}${data.date}"
                     tvCompany.text = Html.fromHtml(getString(R.string.tv_proj_product_company, data.companyName))
                     Glide.with(this@ProductInfoActivity)
-                            .load(data.icon)
+                            .load(MyGlideUrl(data.icon))
                             .apply(RequestOptions().error(Utils.defaultHeadImg()))
                             .into(ivUser)
                     tvRound.visibility = View.GONE

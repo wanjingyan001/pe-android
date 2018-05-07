@@ -20,6 +20,7 @@ import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.pe.bean.KeyPersonalBean
 import com.sogukj.pe.bean.ProjectBean
+import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.CircleImageView
 import com.sogukj.service.SoguApi
@@ -59,7 +60,7 @@ class KeyPersonalActivity : ToolbarActivity() {
                         ivUser.setChar(ch)
                     }
                     Glide.with(this@KeyPersonalActivity)
-                            .load(data.logo)
+                            .load(MyGlideUrl(data.logo))
 //                            .error(R.drawable.img_user_default)
                             .into(ivUser)
                 }

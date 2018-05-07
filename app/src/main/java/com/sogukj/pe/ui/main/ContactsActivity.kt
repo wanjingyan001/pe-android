@@ -19,6 +19,7 @@ import android.widget.BaseExpandableListAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.request.RequestOptions
 import com.framework.base.BaseActivity
 import com.google.gson.Gson
@@ -29,6 +30,7 @@ import com.sogukj.pe.R
 import com.sogukj.pe.bean.DepartmentBean
 import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.ui.IM.TeamCreateActivity
+import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.CircleImageView
@@ -396,7 +398,7 @@ class ContactsActivity : BaseActivity() {
             val team = groups[groupPosition][childPosition]
             holder.userName.text = team.name
             Glide.with(context)
-                    .load(team.icon)
+                    .load(MyGlideUrl(team.icon))
                     .apply(RequestOptions().error(R.drawable.im_team_default))
                     .into(holder.userImg)
             return convertView
@@ -472,7 +474,7 @@ class ContactsActivity : BaseActivity() {
                     holder.selectIcon.imageResource = R.drawable.cannot_select
                 }
                 Glide.with(context)
-                        .load(userBean.headImage())
+                        .load(MyGlideUrl(userBean.headImage()))
                         .apply(RequestOptions().error(R.drawable.nim_avatar_default).placeholder(R.drawable.nim_avatar_default))
                         .into(holder.userImg)
                 holder.userName.text = userBean.name
@@ -554,7 +556,7 @@ class ContactsActivity : BaseActivity() {
                 selectIcon.imageResource = R.drawable.cannot_select
             }
             Glide.with(this@ContactsActivity)
-                    .load(userBean.headImage())
+                    .load(MyGlideUrl(userBean.headImage()))
                     .apply(RequestOptions().error(R.drawable.nim_avatar_default).placeholder(R.drawable.nim_avatar_default))
                     .into(userImg)
             var name = userBean.name

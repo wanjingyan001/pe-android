@@ -28,6 +28,7 @@ import com.sogukj.pe.ui.fileSelector.FileMainActivity
 import com.sogukj.pe.ui.project.ProjectFocusActivity
 import com.sogukj.pe.ui.project.ProjectListFragment
 import com.sogukj.pe.util.HeaderImgKey
+import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
@@ -188,7 +189,7 @@ class UserFragment : ToolbarFragment(), View.OnClickListener {
 //            tv_job?.text = user.position
         if (user.url != null && !TextUtils.isEmpty(user.url)) {
             Glide.with(this@UserFragment)
-                    .load(user.headImage())
+                    .load(MyGlideUrl(user.headImage()))
                     .apply(RequestOptions().signature(HeaderImgKey(user.url)))
                     .transition(GenericTransitionOptions())
                     .listener(object : RequestListener<Drawable> {

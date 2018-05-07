@@ -56,6 +56,7 @@ import com.sogukj.pe.ui.ScanResultActivity
 import com.sogukj.pe.ui.SupportEmptyView
 import com.sogukj.pe.ui.msg.MessageListActivity
 import com.sogukj.pe.ui.user.UserActivity
+import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.util.PermissionUtils
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
@@ -105,7 +106,7 @@ class MainMsgFragment : BaseFragment() {
             header.setChar(ch)
         } else {
             Glide.with(context)
-                    .load(user?.url)
+                    .load(MyGlideUrl(user?.url))
                     .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
                     .into(header)
         }
@@ -295,7 +296,7 @@ class MainMsgFragment : BaseFragment() {
                             val userInfo = NimUIKit.getUserInfoProvider().getUserInfo(data.contactId)
                             userInfo?.let {
                                 Glide.with(this@MainMsgFragment)
-                                        .load(it.avatar)
+                                        .load(MyGlideUrl(it.avatar))
                                         .listener(object : RequestListener<Drawable> {
                                             override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
                                                 val ch = userInfo.name.first()
@@ -321,7 +322,7 @@ class MainMsgFragment : BaseFragment() {
                             val team = NimUIKit.getTeamProvider().getTeamById(data.contactId)
                             team?.let {
                                 Glide.with(this@MainMsgFragment)
-                                        .load(it.icon)
+                                        .load(MyGlideUrl(it.icon))
                                         .apply(RequestOptions().error(R.drawable.im_team_default))
                                         .into(msgIcon)
                             }

@@ -11,6 +11,7 @@ import com.google.gson.JsonSyntaxException
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.WeeklyWatchBean
+import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
@@ -45,7 +46,7 @@ class PersonalWeeklyActivity : BaseActivity() {
                     week_id = it
                 }
                 name.text = bean.name
-                Glide.with(context).load(bean.url).into(icon)
+                Glide.with(context).load(MyGlideUrl(bean.url)).into(icon)
             }
             "My" -> {
                 week_id = intent.getIntExtra(Extras.ID, -1)
@@ -53,7 +54,7 @@ class PersonalWeeklyActivity : BaseActivity() {
                 endTime = intent.getStringExtra(Extras.TIME2)
                 val user = Store.store.getUser(context)
                 name.text = user?.name
-                Glide.with(context).load(user?.headImage()).into(icon)
+                Glide.with(context).load(MyGlideUrl(user?.headImage())).into(icon)
             }
             "Push" -> {
                 week_id = intent.getIntExtra(Extras.ID, -1)

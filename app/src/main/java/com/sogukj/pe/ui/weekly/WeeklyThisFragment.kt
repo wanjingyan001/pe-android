@@ -25,6 +25,7 @@ import com.sogukj.pe.ui.calendar.TaskDetailActivity
 import com.sogukj.pe.ui.main.ContactsActivity
 import com.sogukj.pe.ui.project.ProjectActivity
 import com.sogukj.pe.ui.project.RecordTraceActivity
+import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.MyListView
@@ -513,7 +514,7 @@ class WeeklyThisFragment : BaseFragment(), View.OnClickListener {
             } else {
 //                viewHolder.icon?.setChar(list[position].name.first())
                 Glide.with(context)
-                        .load(list[position].headImage())
+                        .load(MyGlideUrl(list[position].headImage()))
                         .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
                         .into(viewHolder.icon)
                 viewHolder.name?.text = list[position].name

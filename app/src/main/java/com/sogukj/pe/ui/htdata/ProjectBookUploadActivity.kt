@@ -32,6 +32,7 @@ import com.sogukj.pe.ui.fund.FundUploadActivity
 import com.sogukj.pe.ui.fund.FundUploadActivity.Companion.REQ_CHANGE_FILE
 import com.sogukj.pe.ui.fund.FundUploadActivity.Companion.REQ_SELECT_FILE
 import com.sogukj.pe.ui.project.ProjectListFragment
+import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
@@ -86,7 +87,7 @@ class ProjectBookUploadActivity : ToolbarActivity() {
         tv_step.text = tmpStr
 
         Glide.with(this)
-                .load(user?.headImage())
+                .load(MyGlideUrl(user?.headImage()))
                 .apply(RequestOptions().error(Utils.defaultHeadImg()))
                 .into(iv_user)
         tv_title.text = project.name

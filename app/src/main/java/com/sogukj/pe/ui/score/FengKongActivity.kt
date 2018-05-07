@@ -31,6 +31,7 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.bean.GradeCheckBean
 import com.sogukj.pe.bean.JinDiaoItem
 import com.sogukj.pe.bean.TouHouManageItem
+import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.*
@@ -67,7 +68,7 @@ class FengKongActivity : ToolbarActivity() {
                 icon.setChar(ch)
             } else {
                 Glide.with(context)
-                        .load(it.url)
+                        .load(MyGlideUrl(it.url))
                         .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
                         .into(icon)
             }

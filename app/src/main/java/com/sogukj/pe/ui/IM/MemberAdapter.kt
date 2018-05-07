@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.UserBean
+import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.view.CircleImageView
 
 /**
@@ -33,7 +34,7 @@ class MemberAdapter(val ctx: Context, private val members: ArrayList<UserBean>) 
                 holder.headImg.setChar(ch)
             } else {
                 Glide.with(ctx)
-                        .load(userBean.headImage())
+                        .load(MyGlideUrl(userBean.headImage()))
                         .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
                         .into(holder.headImg)
             }

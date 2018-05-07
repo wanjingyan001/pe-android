@@ -36,6 +36,7 @@ import com.sogukj.pe.ui.approve.ApproveListActivity
 import com.sogukj.pe.ui.htdata.ProjectBookActivity
 import com.sogukj.pe.ui.news.NegativeNewsActivity
 import com.sogukj.pe.ui.news.NewsDetailActivity
+import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.util.StatusBarUtil
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
@@ -90,7 +91,7 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
         if (project.logo.isNullOrEmpty()) {
             imgIcon.setImageResource(R.drawable.default_icon)
         } else {
-            Glide.with(context).load(project.logo).into(imgIcon)
+            Glide.with(context).load(MyGlideUrl(project.logo)).into(imgIcon)
         }
         companyTitle.text = project.name
         //const val TYPE_CB = 4

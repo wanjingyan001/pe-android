@@ -21,6 +21,7 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.TemplateBean
 import com.sogukj.pe.bean.TouZiUpload
+import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.CircleImageView
@@ -59,7 +60,7 @@ class TemplateActivity : ToolbarActivity() {
                 icon.setChar(ch)
             } else {
                 Glide.with(context)
-                        .load(it.url)
+                        .load(MyGlideUrl(it.url))
                         .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
                         .into(icon)
             }

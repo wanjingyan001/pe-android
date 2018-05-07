@@ -20,6 +20,7 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.*
 import com.sogukj.pe.util.FileUtil
+import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.util.PdfUtil
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.CircleImageView
@@ -329,11 +330,11 @@ class SignApproveActivity : ToolbarActivity() {
             val ch = v.name?.first()
             ivUser.setChar(ch)
             Glide.with(this)
-                    .load(v.url)
+                    .load(MyGlideUrl(v.url))
                     .into(ivUser)
 
             Glide.with(this)
-                    .load(v.sign_img)
+                    .load(MyGlideUrl(v.sign_img))
                     .into(ivSign)
         }
 
@@ -367,11 +368,11 @@ class SignApproveActivity : ToolbarActivity() {
             val ch = v.name?.first()
             ivUser.setChar(ch)
             Glide.with(this)
-                    .load(v.url)
+                    .load(MyGlideUrl(v.url))
                     .into(ivUser)
 
             Glide.with(this)
-                    .load(v.sign_img)
+                    .load(MyGlideUrl(v.sign_img))
                     .into(ivSign)
         }
     }
@@ -415,7 +416,7 @@ class SignApproveActivity : ToolbarActivity() {
         val ch = fixation.name?.first()
         iv_user.setChar(ch)
         Glide.with(this)
-                .load(fixation.url)
+                .load(MyGlideUrl(fixation.url))
                 .into(iv_user)
         tv_name.text = fixation.name
         tv_num.text = "审批编号:${fixation.number}"

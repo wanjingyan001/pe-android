@@ -17,6 +17,7 @@ import com.sogukj.pe.R
 import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.ui.IM.TeamSelectActivity
 import com.sogukj.pe.ui.main.ContactsActivity
+import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.view.CircleImageView
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
@@ -134,7 +135,7 @@ class ArrangePersonActivity : ToolbarActivity() {
                 userImg.setChar(ch)
             } else {
                 Glide.with(context)
-                        .load(data.url)
+                        .load(MyGlideUrl(data.url))
                         .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
                         .into(userImg)
             }

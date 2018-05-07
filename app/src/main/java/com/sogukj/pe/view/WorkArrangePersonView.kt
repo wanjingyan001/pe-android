@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.UserBean
+import com.sogukj.pe.util.MyGlideUrl
 import org.jetbrains.anko.find
 import org.jetbrains.anko.layoutInflater
 
@@ -55,7 +56,7 @@ class WorkArrangePersonView(context: Context?) : ViewGroup(context) {
             if (index < data.size) {
                 imageView.visibility = View.VISIBLE
                 Glide.with(context)
-                        .load(data[index].url)
+                        .load(MyGlideUrl(data[index].url))
                         .apply(RequestOptions().placeholder(R.drawable.default_head))
                         .into(imageView)
             }else{

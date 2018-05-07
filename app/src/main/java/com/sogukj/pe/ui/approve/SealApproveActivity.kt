@@ -20,6 +20,7 @@ import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.*
+import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.util.PdfUtil
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
@@ -377,7 +378,7 @@ class SealApproveActivity : ToolbarActivity() {
             val ch = v.name?.first()
             ivUser.setChar(ch)
             Glide.with(this)
-                    .load(v.url)
+                    .load(MyGlideUrl(v.url))
                     .into(ivUser)
 
         }
@@ -427,7 +428,7 @@ class SealApproveActivity : ToolbarActivity() {
             val ch = v.name?.first()
             ivUser.setChar(ch)
             Glide.with(this)
-                    .load(v.url)
+                    .load(MyGlideUrl(v.url))
                     .into(ivUser)
             tvStatus.text = v.status_str
             val buff = StringBuffer()
@@ -524,7 +525,7 @@ class SealApproveActivity : ToolbarActivity() {
         val ch = data.name?.first()
         ivUser.setChar(ch)
         Glide.with(this)
-                .load(data.url)
+                .load(MyGlideUrl(data.url))
                 .into(ivUser)
 
         convertView.setOnClickListener {
@@ -571,7 +572,7 @@ class SealApproveActivity : ToolbarActivity() {
         val ch = fixation.name?.first()
         iv_user.setChar(ch)
         Glide.with(this)
-                .load(fixation.url)
+                .load(MyGlideUrl(fixation.url))
                 .into(iv_user)
         tv_name.text = fixation.name
         tv_num.text = "审批编号:${fixation.number}"

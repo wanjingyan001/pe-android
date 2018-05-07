@@ -21,6 +21,7 @@ import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.ScheduleBean
+import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.CircleImageView
 import com.sogukj.pe.view.CommentWindow
@@ -98,7 +99,7 @@ class TaskDetailActivity : ToolbarActivity(), CommentListener, View.OnClickListe
                         val type = convertView.find<TextView>(R.id.type)
                         override fun setData(view: View, data: TaskDetailBean.Record, position: Int) {
                             Glide.with(this@TaskDetailActivity)
-                                    .load(data.url)
+                                    .load(MyGlideUrl(data.url))
                                     .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
                                     .into(headerImage)
                             commentName.text = data.name

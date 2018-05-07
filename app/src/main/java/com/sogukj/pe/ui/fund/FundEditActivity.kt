@@ -23,6 +23,7 @@ import com.sogukj.pe.bean.WeeklyThisBean
 import com.sogukj.pe.ui.IM.TeamSelectActivity
 import com.sogukj.pe.ui.main.ContactsActivity
 import com.sogukj.pe.ui.weekly.WeeklyThisFragment
+import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.CalendarDingDing
 import com.sogukj.pe.view.CircleImageView
@@ -157,7 +158,7 @@ class FundEditActivity : ToolbarActivity() {
                                 headImg.setChar(ch)
                             } else {
                                 Glide.with(context)
-                                        .load(data.url)
+                                        .load(MyGlideUrl(data.url))
                                         .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
                                         .into(headImg)
                             }

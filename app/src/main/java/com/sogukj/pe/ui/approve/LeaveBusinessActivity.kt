@@ -36,6 +36,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import com.google.gson.internal.LinkedTreeMap
 import com.sogukj.pe.ui.main.ContactsActivity
+import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.view.CalendarDingDing
 import com.sogukj.pe.view.CircleImageView
 import com.sogukj.util.XmlDb
@@ -1041,7 +1042,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
                     icon.setChar(ch)
                 } else {
                     Glide.with(context)
-                            .load(item.url)
+                            .load(MyGlideUrl(item.url))
                             .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
                             .into(icon)
                 }
@@ -1199,7 +1200,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
                     icon.setChar(ch)
                 } else {
                     Glide.with(context)
-                            .load(list[position].url)
+                            .load(MyGlideUrl(list[position].url))
                             .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
                             .into(icon)
                 }
@@ -1260,7 +1261,7 @@ class LeaveBusinessActivity : ToolbarActivity() {
                     viewHolder.icon?.setChar(list[position].name.first())
                 } else {
                     Glide.with(context)
-                            .load(list[position].url)
+                            .load(MyGlideUrl(list[position].url))
                             .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
                             .into(viewHolder.icon)
                 }

@@ -22,6 +22,7 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.*
 import com.sogukj.pe.ui.fileSelector.FileMainActivity
+import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.FlowLayout
@@ -820,7 +821,7 @@ class BuildSealActivity : ToolbarActivity() {
                 val ivAdd = convertView.findViewById(R.id.iv_add) as ImageView
                 ivAdd.visibility = View.GONE
                 Glide.with(this)
-                        .load(v.url)
+                        .load(MyGlideUrl(v.url))
                         .into(img)
                 img.setOnClickListener {
                     bean.value_list?.remove(v)

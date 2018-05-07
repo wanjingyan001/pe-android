@@ -35,6 +35,7 @@ import com.sogukj.pe.bean.FundSmallBean.Companion.RegTimeDesc
 import com.sogukj.pe.ui.SupportEmptyView
 import com.sogukj.pe.ui.main.MainActivity
 import com.sogukj.pe.ui.user.UserActivity
+import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.*
@@ -90,7 +91,7 @@ class FundMainFragment : BaseFragment(), View.OnClickListener {
             header.setChar(ch)
         } else {
             Glide.with(context)
-                    .load(user?.url)
+                    .load(MyGlideUrl(user?.url))
                     .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
                     .into(header)
         }

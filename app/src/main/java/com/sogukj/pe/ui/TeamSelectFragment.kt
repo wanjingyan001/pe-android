@@ -31,6 +31,7 @@ import com.sogukj.pe.ui.IM.TeamCreateActivity
 import com.sogukj.pe.ui.IM.TeamSelectActivity
 import com.sogukj.pe.ui.main.ContactsActivity
 import com.sogukj.pe.ui.user.UserActivity
+import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.CircleImageView
@@ -77,7 +78,7 @@ class TeamSelectFragment : BaseFragment() {
             header.setChar(ch)
         } else {
             Glide.with(context)
-                    .load(user?.url)
+                    .load(MyGlideUrl(user?.url))
                     .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
                     .into(header)
         }
@@ -553,7 +554,7 @@ class TeamSelectFragment : BaseFragment() {
                     holder.selectIcon.imageResource = R.drawable.cannot_select
                 }
                 Glide.with(context)
-                        .load(userBean.headImage())
+                        .load(MyGlideUrl(userBean.headImage()))
                         .apply(RequestOptions().error(R.drawable.nim_avatar_default).placeholder(R.drawable.nim_avatar_default))
                         .into(holder.userImg)
                 holder.userName.text = userBean.name
@@ -627,7 +628,7 @@ class TeamSelectFragment : BaseFragment() {
         override fun onBindViewHolder(holder: ContactHolder, position: Int) {
             val userBean = datas[position]
             Glide.with(context)
-                    .load(userBean.headImage())
+                    .load(MyGlideUrl(userBean.headImage()))
                     .apply(RequestOptions().error(R.drawable.nim_avatar_default).placeholder(R.drawable.nim_avatar_default))
                     .into(holder.userImg)
             var name = userBean.name

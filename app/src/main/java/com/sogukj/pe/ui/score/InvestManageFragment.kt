@@ -22,6 +22,7 @@ import com.sogukj.pe.bean.GradeCheckBean
 import com.sogukj.pe.bean.InvestManageItem
 import com.sogukj.pe.bean.PFBZ
 import com.sogukj.pe.bean.TouZiUpload
+import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.RecyclerAdapter
@@ -77,7 +78,7 @@ class InvestManageFragment : BaseFragment() {
 
         person = arguments.getSerializable(Extras.DATA) as GradeCheckBean.ScoreItem
         person?.let {
-            Glide.with(context).load(it.url).into(icon)
+            Glide.with(context).load(MyGlideUrl(it.url)).into(icon)
             name.text = it.name
             depart.text = it.department
             position.text = it.position

@@ -21,6 +21,7 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.*
 import com.sogukj.pe.ui.LoginActivity
+import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.*
@@ -77,7 +78,7 @@ class FengKongFragment : BaseFragment() {
 
         person = arguments.getSerializable(Extras.DATA) as GradeCheckBean.ScoreItem
         person?.let {
-            Glide.with(context).load(it.url).into(icon)
+            Glide.with(context).load(MyGlideUrl(it.url)).into(icon)
             name.text = it.name
             depart.text = it.department
             position.text = it.position

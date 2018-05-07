@@ -23,6 +23,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.UserBean
+import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.util.Utils
 import com.sougukj.setOnClickFastListener
 import kotlinx.android.synthetic.main.layout_card_window.*
@@ -137,7 +138,7 @@ class CardActivity : Activity(), PlatformActionListener {
             headerImage.setChar(ch)
         } else {
             Glide.with(this)
-                    .load(bean.headImage())
+                    .load(MyGlideUrl(bean.headImage()))
                     .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
                     .into(headerImage)
         }
