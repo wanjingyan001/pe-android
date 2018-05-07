@@ -490,7 +490,7 @@ class MainMsgFragment : BaseFragment() {
                 })
     }
 
-    lateinit var zhushou: MessageIndexBean
+    var zhushou = MessageIndexBean()
 
     private fun getIMRecentContact() {
         //recentList = ArrayList()
