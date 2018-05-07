@@ -13,10 +13,10 @@ import java.security.MessageDigest;
  * Created by huangjun on 2017/4/11.
  */
 
-class RotateTransformation extends BitmapTransformation {
+public class RotateTransformation extends BitmapTransformation {
     private String path;
 
-    RotateTransformation(Context context, String path) {
+   public RotateTransformation(Context context, String path) {
         super(context);
         this.path = path;
     }

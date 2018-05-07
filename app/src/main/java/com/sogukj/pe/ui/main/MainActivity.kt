@@ -1,6 +1,8 @@
 package com.sogukj.pe.ui.main
 
 import android.Manifest
+import android.animation.ObjectAnimator
+import android.animation.PropertyValuesHolder
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -16,6 +18,7 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.content.FileProvider
+import android.support.v4.view.ViewCompat
 import com.framework.base.BaseActivity
 import com.sogukj.pe.App
 import com.sogukj.pe.Extras
@@ -30,25 +33,26 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.view.View
+import android.view.animation.DecelerateInterpolator
 import android.widget.*
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.ashokvarma.bottomnavigation.BottomNavigationBar
 import com.ashokvarma.bottomnavigation.BottomNavigationItem
 import com.sogukj.pe.ui.TeamSelectFragment
-import com.sogukj.pe.util.DownloadUtil
-import com.sogukj.pe.util.StatusBarUtil
-import com.sogukj.pe.util.Trace
-import com.sogukj.pe.util.Utils
+import com.sogukj.pe.util.*
 import com.sogukj.pe.view.MyProgressBar
 import com.sogukj.service.SoguApi
 import com.sogukj.util.XmlDb
 import com.sougukj.initNavTextColor
+import com.sougukj.initNavTextColor1
+import com.sougukj.setVisible
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.imageResource
+import org.jetbrains.anko.info
 import java.io.File
 import java.util.*
 
@@ -78,6 +82,8 @@ class MainActivity : BaseActivity() {
         initBottomNavBar()
         changeFragment(0)
         updateVersion()
+        mainLogo.imageResource = Utils.defaultIc()
+        ViewCompat.setElevation(mainLogo,50f)
     }
 
     private fun initFragments() {
@@ -98,9 +104,10 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initBottomNavBar() {
+//        .addItem(BottomNavigationItem(R.drawable.ic_qb_sel12, "首页").setInactiveIconResource(R.drawable.ic_qb_nor2).initNavTextColor1())
         bottomBar.addItem(BottomNavigationItem(R.drawable.ic_qb_sel11, "消息").setInactiveIconResource(R.drawable.ic_qb_nor).initNavTextColor())
                 .addItem(BottomNavigationItem(R.drawable.ic_qb_sel15, "通讯录").setInactiveIconResource(R.drawable.ic_qb_nor1).initNavTextColor())
-                .addItem(BottomNavigationItem(R.drawable.ic_qb_sel12, "首页").setInactiveIconResource(R.drawable.ic_qb_nor2).initNavTextColor())
+                .addItem(BottomNavigationItem(R.drawable.ic_qb_selnull, "首页").setInactiveIconResource(R.drawable.ic_qb_nor2).initNavTextColor1())
                 .addItem(BottomNavigationItem(R.drawable.ic_tab_main_proj_11, "项目").setInactiveIconResource(R.drawable.ic_tab_main_proj_0).initNavTextColor())
                 .addItem(BottomNavigationItem(R.drawable.ic_main_fund22, "基金").setInactiveIconResource(R.drawable.ic_main_fund).initNavTextColor())
                 .setMode(BottomNavigationBar.MODE_FIXED)
@@ -110,6 +117,16 @@ class MainActivity : BaseActivity() {
                 .initialise()
         bottomBar.setTabSelectedListener(object : BottomNavigationBar.SimpleOnTabSelectedListener() {
             override fun onTabSelected(position: Int) {
+                if (position == 2) {
+                    mainLogo.setVisible(true)
+                    val scalex = PropertyValuesHolder.ofFloat("scaleX", 0.7f,1f)
+                    val scaley = PropertyValuesHolder.ofFloat("scaleY", 0.7f,1f)
+                    val animator = ObjectAnimator.ofPropertyValuesHolder(mainLogo, scalex, scaley).setDuration(300)
+                    animator.interpolator = DecelerateInterpolator()
+                    animator.start()
+                }else{
+                    mainLogo.setVisible(false)
+                }
                 changeFragment(position)
             }
         })
@@ -335,7 +352,7 @@ class MainActivity : BaseActivity() {
         val uri: Uri
         // 判断版本大于等于7.0
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            uri = FileProvider.getUriForFile(context, "com.sogukj.pe.fileProvider", File(param))
+            uri = FileProvider.getUriForFile(context, FileUtil.getFileProvider(this), File(param))
             //uri = MyFileProvider.getUriForFile(new File(param));
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
         } else {

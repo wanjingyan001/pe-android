@@ -22,7 +22,6 @@ import com.netease.nimlib.sdk.RequestCallback
 import com.netease.nimlib.sdk.team.TeamService
 import com.netease.nimlib.sdk.team.constant.*
 import com.netease.nimlib.sdk.team.model.CreateTeamResult
-import com.netease.nimlib.sdk.team.model.Team
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.CustomSealBean
@@ -103,7 +102,19 @@ class TeamCreateActivity : AppCompatActivity() {
             Utils.toggleSoftInput(this, teamIntroduction)
         }
 
+        team_name.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus && team_name.textStr.isNotEmpty()) {
+                team_name.setSelection(team_name.textStr.length)
+            }
+        }
+        teamIntroduction.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus && teamIntroduction.textStr.isNotEmpty()) {
+                teamIntroduction.setSelection(teamIntroduction.textStr.length)
+            }
+        }
+    }
 
+    private fun getDefaultName(): String {
         //自动生成群名字
         val nameList = ArrayList<UserBean>(teamMember)
         if (teamMember.size > 4) {
@@ -117,27 +128,16 @@ class TeamCreateActivity : AppCompatActivity() {
         if (nameList.size > 0) {
             nameStr = nameStr.removePrefix("、")
         }
-        team_name.setText(nameStr)
-        team_name.setOnFocusChangeListener { v, hasFocus ->
-            if (hasFocus && team_name.textStr.isNotEmpty()) {
-                team_name.setSelection(team_name.textStr.length)
-            }
-        }
-        teamIntroduction.setOnFocusChangeListener { v, hasFocus ->
-            if (hasFocus && teamIntroduction.textStr.isNotEmpty()) {
-                teamIntroduction.setSelection(teamIntroduction.textStr.length)
-            }
-        }
+        return nameStr
     }
 
     /**
      * 创建群组
      */
     private fun createTeam() {
-        val teamName = team_name.text.toString().trim()
+        var teamName = team_name.text.toString().trim()
         if (teamName.isEmpty()) {
-            toast("请输入群名称")
-            return
+            teamName = getDefaultName()
         }
         if (teamMember.size == 1) {
             toast("请选择群成员")

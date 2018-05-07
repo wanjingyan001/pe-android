@@ -386,6 +386,8 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
     private void toggleActionPanelLayout() {
         if (actionPanelBottomLayout == null || actionPanelBottomLayout.getVisibility() == View.GONE) {
             showActionPanelLayout();
+            //todo 获取图库中的最新图片,并进行时间校验(有效期5分钟)
+
         } else {
             hideActionPanelLayout();
         }

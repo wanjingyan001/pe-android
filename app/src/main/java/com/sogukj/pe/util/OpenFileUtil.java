@@ -190,8 +190,7 @@ public class OpenFileUtil {
         Uri uri;
         // 判断版本大于等于7.0
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            uri = FileProvider.getUriForFile(context, "com.sogukj.pe.fileProvider", new File(param));
-            //uri = MyFileProvider.getUriForFile(new File(param));
+            uri = FileProvider.getUriForFile(context,  FileUtil.getFileProvider(context), new File(param));
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         } else {
             uri = Uri.fromFile(new File(param));

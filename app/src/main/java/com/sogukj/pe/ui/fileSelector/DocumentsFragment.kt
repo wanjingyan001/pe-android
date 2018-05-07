@@ -2,6 +2,7 @@ package com.sogukj.pe.ui.fileSelector
 
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.Environment
 import android.support.v4.app.Fragment
@@ -16,6 +17,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.netease.nim.uikit.api.NimUIKit
+import com.netease.nim.uikit.common.media.picker.loader.RotateTransformation
 import com.sogukj.pe.Extras
 
 import com.sogukj.pe.R
@@ -34,6 +37,7 @@ import kotlinx.android.synthetic.main.layout_empty.*
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.ctx
 import org.jetbrains.anko.support.v4.find
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.util.*
 
@@ -239,10 +243,14 @@ class DocumentsFragment : Fragment(), View.OnClickListener {
                 point.visibility = View.GONE
             }
             slector.isSelected = fileActivity.selectedFile.contains(data)
-            if (FileUtil.getFileType(data.absolutePath) != null) {
+            if (FileUtil.getFileType(data.absolutePath) != null ) {
                 Glide.with(context)
-                        .load(data.absoluteFile)
-                        .apply(RequestOptions().error(R.drawable.icon_pic))
+                        .load(data.absolutePath)
+                        .thumbnail(0.1f)
+                        .apply(RequestOptions()
+                                .centerCrop()
+                                .error(R.drawable.icon_pic)
+                                .transform(RotateTransformation(ctx, data.absolutePath)))
                         .into(icon)
             } else {
                 icon.imageResource = FileTypeUtils.getFileType(data).icon

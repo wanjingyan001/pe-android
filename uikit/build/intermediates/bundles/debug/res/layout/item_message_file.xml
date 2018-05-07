@@ -24,7 +24,6 @@
         android:layout_marginLeft="12dp"
         android:layout_marginRight="13dp"
         android:maxLines="2"
-        android:text="海通创新关于这个文件我只想瞎写凑两行.apk"
         android:textColor="#282828"
         app:layout_constraintLeft_toRightOf="@+id/message_item_file_icon_image"
         app:layout_constraintTop_toTopOf="parent" />

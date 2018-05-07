@@ -186,7 +186,7 @@ class SplashActivity : BaseActivity() {
         val uri: Uri
         // 判断版本大于等于7.0
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            uri = FileProvider.getUriForFile(context, "com.sogukj.pe.fileProvider", File(param))
+            uri = FileProvider.getUriForFile(context, FileUtil.getFileProvider(this), File(param))
             //uri = MyFileProvider.getUriForFile(new File(param));
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
         } else {

@@ -656,7 +656,8 @@
             android:name=".ui.fileSelector.FileMainActivity"
             android:launchMode="singleTop" />
         <activity android:name=".ui.approve.LeaveBusinessActivity" />
-        <activity android:name=".ui.calendar.ArrangeEditActivity" />
+        <activity android:name=".ui.calendar.ArrangeEditActivity"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".ui.calendar.ArrangePersonActivity" />
         <activity android:name=".ui.approve.MyHolidayActivity" />
         <activity android:name=".ui.approve.BusinessTripDetailActivity" />
