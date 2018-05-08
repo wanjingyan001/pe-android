@@ -25,8 +25,8 @@
 
         <ImageView
             android:id="@+id/message_item_audio_playing_animation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="15dp"
+            android:layout_height="20dp"
 
             android:layout_gravity="center_vertical|left"
             android:background="@drawable/nim_audio_animation_list_left"
