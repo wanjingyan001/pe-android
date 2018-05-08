@@ -157,7 +157,6 @@ class ContactsActivity : BaseActivity() {
         initContactsAdapter()
         initTissueAdapter()
         getTissueData()
-        //getGroup()
         confirmTv.setOnClickFastListener {
             val list = ArrayList<UserBean>()
             list.addAll(alreadySelected)

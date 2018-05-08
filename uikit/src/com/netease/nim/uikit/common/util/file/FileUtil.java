@@ -1,17 +1,29 @@
 package com.netease.nim.uikit.common.util.file;
 
+import android.app.Activity;
+import android.app.Application;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.pm.ActivityInfo;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
+import com.nbsp.materialfilepicker.utils.FileTypeUtils;
 import com.netease.nim.uikit.R;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.common.util.string.StringUtil;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class FileUtil {
     private static final String TAG = "FileUtil";
@@ -194,5 +206,63 @@ public class FileUtil {
             default:
                 return size + "B";
         }
+    }
+
+    public enum FileType {
+        DOCUMENT(R.drawable.default_text),
+        CERTIFICATE(R.drawable.default_text, "cer", "der", "pfx", "p12", "arm", "pem"),
+        DRAWING(R.drawable.default_text,  "ai", "cdr", "dfx", "eps", "svg", "stl", "wmf", "emf", "art", "xar"),
+        EXCEL(R.drawable.icon_exl, "xls", "xlk", "xlsb", "xlsm", "xlsx", "xlr", "xltm", "xlw", "numbers", "ods", "ots"),
+        IMAGE(R.drawable.icon_pic,  "bmp", "gif", "ico", "jpeg", "jpg", "pcx", "png", "psd", "tga", "tiff", "tif", "xcf"),
+        MUSIC(R.drawable.icon_music,  "aiff", "aif", "wav", "flac", "m4a", "wma", "amr", "mp2", "mp3", "wma", "aac", "mid", "m3u"),
+        VIDEO(R.drawable.icon_video, "avi", "mov", "wmv", "mkv", "3gp", "f4v", "flv", "mp4", "mpeg", "webm"),
+        PDF(R.drawable.icon_pdf,  "pdf"),
+        POWER_POINT(R.drawable.icon_ppt,  "pptx", "keynote", "ppt", "pps", "pot", "odp", "otp"),
+        WORD(R.drawable.icon_doc,  "doc", "docm", "docx", "dot", "mcw", "rtf", "pages", "odt", "ott","txt"),
+        ARCHIVE(R.drawable.icon_zip, "cab", "7z", "alz", "arj", "bzip2", "bz2", "dmg", "gzip", "gz", "jar", "lz", "lzip", "lzma", "zip", "rar", "tar", "tgz"),
+        APK(R.drawable.file_default,  "apk");
+
+        private int icon;
+        private String[] extensions;
+
+        FileType(int icon,  String... extensions) {
+            this.icon = icon;
+            this.extensions = extensions;
+        }
+
+        public String[] getExtensions() {
+            return extensions;
+        }
+
+        public int getIcon() {
+            return icon;
+        }
+
+    }
+
+    private static Map<String, FileType> fileTypeExtensions = new HashMap<>();
+    static {
+        for (FileType fileType : FileType.values()) {
+            for (String extension : fileType.getExtensions()) {
+                fileTypeExtensions.put(extension, fileType);
+            }
+        }
+    }
+    public static FileType getFileTypeByPath(String fileName) {
+        FileType fileType = fileTypeExtensions.get(getExtension(fileName));
+        if (fileType != null) {
+            return fileType;
+        }
+        return FileType.DOCUMENT;
+    }
+
+    public static String getExtension(String fileName) {
+        String encoded;
+        try {
+            encoded = URLEncoder.encode(fileName, "UTF-8").replace("+", "%20");
+        } catch (UnsupportedEncodingException e) {
+            encoded = fileName;
+        }
+        return MimeTypeMap.getFileExtensionFromUrl(encoded).toLowerCase();
     }
 }

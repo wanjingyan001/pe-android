@@ -29,6 +29,8 @@ import com.netease.nimlib.sdk.msg.model.IMMessage;
 public class MsgViewHolderAudio extends MsgViewHolderBase {
 
 
+    private View content;
+
     public MsgViewHolderAudio(BaseMultiItemFetchLoadAdapter adapter) {
         super(adapter);
     }
@@ -50,6 +52,7 @@ public class MsgViewHolderAudio extends MsgViewHolderBase {
 
     @Override
     protected void inflateContentView() {
+        content = findViewById(R.id.audio_content_layout);
         durationLabel = findViewById(R.id.message_item_audio_duration);
         durationLabel1 = findViewById(R.id.message_item_audio_duration1);
         containerView = findViewById(R.id.message_item_audio_container);
@@ -91,8 +94,8 @@ public class MsgViewHolderAudio extends MsgViewHolderBase {
     private void layoutByDirection() {
         if (isReceivedMessage()) {
             setGravity(animationView, Gravity.LEFT | Gravity.CENTER_VERTICAL);
-            containerView.setBackgroundResource(NimUIKitImpl.getOptions().messageLeftBackground);
-            containerView.setPadding(ScreenUtil.dip2px(15), ScreenUtil.dip2px(8), ScreenUtil.dip2px(10), ScreenUtil.dip2px(8));
+            content.setBackgroundResource(NimUIKitImpl.getOptions().messageLeftBackground);
+            content.setPadding(ScreenUtil.dip2px(15), ScreenUtil.dip2px(8), ScreenUtil.dip2px(10), ScreenUtil.dip2px(8));
             animationView.setBackgroundResource(R.drawable.nim_audio_animation_list_left);
             durationLabel.setVisibility(View.GONE);
             durationLabel1.setVisibility(View.VISIBLE);
@@ -101,8 +104,8 @@ public class MsgViewHolderAudio extends MsgViewHolderBase {
         } else {
             setGravity(animationView, Gravity.RIGHT | Gravity.CENTER_VERTICAL);
             unreadIndicator.setVisibility(View.GONE);
-            containerView.setBackgroundResource(NimUIKitImpl.getOptions().messageRightBackground);
-            containerView.setPadding(ScreenUtil.dip2px(10), ScreenUtil.dip2px(8), ScreenUtil.dip2px(15), ScreenUtil.dip2px(8));
+            content.setBackgroundResource(NimUIKitImpl.getOptions().messageRightBackground);
+            content.setPadding(ScreenUtil.dip2px(10), ScreenUtil.dip2px(8), ScreenUtil.dip2px(15), ScreenUtil.dip2px(8));
             animationView.setBackgroundResource(R.drawable.nim_audio_animation_list_right);
             durationLabel1.setVisibility(View.GONE);
             durationLabel.setVisibility(View.VISIBLE);
@@ -206,15 +209,17 @@ public class MsgViewHolderAudio extends MsgViewHolderBase {
 
     private void updateTime(long milliseconds) {
         long seconds = TimeUtil.getSecondsByMilliseconds(milliseconds);
-
+        String minute = TimeUtil.change(seconds);
         if (seconds >= 0) {
-            durationLabel.setText(seconds + "\"");
-            durationLabel1.setText(seconds + "\"");
+            durationLabel.setText(minute + " ");
+            durationLabel1.setText(minute + " ");
         } else {
             durationLabel.setText("");
             durationLabel1.setText("");
         }
     }
+
+
 
     protected boolean isMessagePlaying(MessageAudioControl audioControl, IMMessage message) {
         if (audioControl.getPlayingAudio() != null && audioControl.getPlayingAudio().isTheSame(message)) {

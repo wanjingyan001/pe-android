@@ -34,6 +34,7 @@ import com.sogukj.pe.view.ArrangeHeaderView
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.service.SoguApi
+import com.sougukj.isNullOrEmpty
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_arrange_list.*
@@ -254,9 +255,8 @@ class ArrangeListFragment : BaseFragment() {
             val contentLayout = itemView.find<ConstraintLayout>(R.id.contentLayout)
             fun setData(view: View, data: WeeklyArrangeBean, position: Int) {
                 weekly.text = data.weekday
-
                 dayOfMonth.text = data.date?.substring(5, data.date?.length!!)
-                if (data.reasons == null || data.reasons!!.isEmpty()) {
+                if (data.reasons.isNullOrEmpty() && data.place.isNullOrEmpty() && data.attendee.isNullOrEmpty() && data.participant.isNullOrEmpty()) {
                     emptyLayout.visibility = View.VISIBLE
                     contentLayout.visibility = View.GONE
                 } else {

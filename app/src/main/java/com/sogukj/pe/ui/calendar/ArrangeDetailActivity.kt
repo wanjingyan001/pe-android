@@ -15,6 +15,7 @@ import com.sogukj.pe.R
 import com.sogukj.pe.bean.WeeklyArrangeBean
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
+import com.sougukj.isNullOrEmpty
 import kotlinx.android.synthetic.main.activity_arrange_detail.*
 import org.jetbrains.anko.find
 import org.jetbrains.anko.imageResource
@@ -108,6 +109,12 @@ class ArrangeDetailActivity : ToolbarActivity() {
         if (requestCode == Extras.REQUESTCODE && resultCode == Extras.RESULTCODE && data != null) {
             val list = data.getSerializableExtra(Extras.DATA) as ArrayList<WeeklyArrangeBean>
             this.data = list[0]
+            this.data.apply {
+                if (attendee.isNullOrEmpty() && participant.isNullOrEmpty() && reasons.isNullOrEmpty() && place.isNullOrEmpty()){
+                    finish()
+                    return
+                }
+            }
             setContentData(this.data)
         }
     }

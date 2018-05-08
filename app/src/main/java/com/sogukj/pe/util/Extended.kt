@@ -57,6 +57,9 @@ fun EditText.isNullOrEmpty(): Boolean =
 val EditText.textStr: String
     get() = text.trim().toString()
 
+val EditText.noSpace: String
+    get() = text.trimStart().trimEnd().toString()
+
 /**
  * 扩展View是否可见，VISIBLE 与 GONE。
  */
@@ -103,6 +106,10 @@ fun BottomNavigationItem.initNavTextColor(): BottomNavigationItem =
         setActiveColorResource(R.color.main_bottom_bar_color)
                 .setInActiveColorResource(R.color.text_3)
 
+fun BottomNavigationItem.initNavTextColor1():BottomNavigationItem =
+        setActiveColorResource(R.color.white)
+                .setInActiveColorResource(R.color.text_3)
+
 
 fun Context.showInput(view: View) {
     val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -122,8 +129,6 @@ fun ViewGroup.childEdtGetFocus() {
                 }
             }
 }
-
-
 
 
 /***
@@ -154,7 +159,7 @@ fun <T : View> T.click(block: (T) -> Unit) = setOnClickListener {
  * @param block: (T) -> Unit 函数
  * @return Unit
  */
-fun <T : View> T.clickWithTrigger(time: Long = 600, block: (T) -> Unit){
+fun <T : View> T.clickWithTrigger(time: Long = 600, block: (T) -> Unit) {
     triggerDelay = time
     setOnClickListener {
         if (clickEnable()) {

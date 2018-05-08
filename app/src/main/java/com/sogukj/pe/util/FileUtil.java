@@ -1,8 +1,18 @@
 package com.sogukj.pe.util;
 
+import android.app.Activity;
+import android.app.Application;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.IntRange;
 import android.webkit.MimeTypeMap;
 
@@ -42,6 +52,7 @@ import static com.sogukj.pe.util.FileTypeUtils.FileType.IMAGE;
 
 public class FileUtil {
     private static final String TAG = FileUtil.class.getSimpleName();
+
     public enum FileType {
         IMAGE("jpg", "jpeg", "gif", "png", "bmp", "Webp"),
         VIDEO("rm", "rmvb", "mp4", "mov", "mtv", "wmv", "avi", "3gp", "flv"),
@@ -836,4 +847,51 @@ public class FileUtil {
         return fileMap;
     }
 
+    public static String getFileProvider(Context context) {
+        return context.getApplicationInfo().packageName + ".fileProvider";
+    }
+
+
+    /**
+     * 根据图片的路径得到该图片在表中的ID
+     * @param context
+     * @param fileName
+     * @return
+     */
+    public static String getImageIdFromPath(Context context, String fileName) {
+        String whereClause = MediaStore.Images.Media.DATA + " = '" + fileName + "'";
+        Cursor cursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new String[]{MediaStore.Images.Media._ID}, whereClause, null, null);
+        if (cursor == null || cursor.getCount() == 0) {
+            if (cursor != null) {
+                cursor.close();
+            }
+            return null;
+        }
+        cursor.moveToFirst();
+        String imageId = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media._ID));
+        cursor.close();
+        if (imageId == null) {
+            return null;
+        }
+        return imageId;
+    }
+
+    /**
+     * 根据图片的ID得到缩略图
+     * @param context
+     * @param imageId
+     * @return
+     */
+    public static Bitmap getThumbnailsFromImageId(Context context, String imageId) {
+        if (imageId == null || "".equals(imageId)) {
+            return null;
+        }
+        Bitmap bitmap;
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inDither = false;
+        options.inPreferredConfig = Bitmap.Config.ARGB_4444;
+        long imageIdLong = Long.parseLong(imageId);
+        bitmap = MediaStore.Images.Thumbnails.getThumbnail(context.getContentResolver(), imageIdLong, MediaStore.Images.Thumbnails.MINI_KIND, options);
+        return bitmap;
+    }
 }

@@ -21,6 +21,7 @@ import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.common.ui.dialog.DialogMaker;
 import com.netease.nim.uikit.common.ui.recyclerview.adapter.BaseMultiItemFetchLoadAdapter;
 import com.netease.nim.uikit.common.util.file.AttachmentStore;
+import com.netease.nim.uikit.common.util.file.FileUtil;
 import com.netease.nim.uikit.common.util.sys.ScreenUtil;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.NIMClient;
@@ -141,13 +142,16 @@ public class MsgViewHolderFile extends MsgViewHolderBase implements View.OnClick
     @Override
     protected void bindContentView() {
         msgAttachment = (FileAttachment) message.getAttachment();
+        String extension = msgAttachment.getExtension();
+        if (extension != null) {
+            fileIcon.setImageResource(FileUtil.getFileTypeByPath(msgAttachment.getDisplayName()).getIcon());
+        }
         fileNameLabel.setText(msgAttachment.getDisplayName());
         String path = msgAttachment.getPath();
         if (!TextUtils.isEmpty(path)) {
             fileSize.setText(formatFileSize(msgAttachment.getSize(), SizeUnit.Auto));
             download.setCompoundDrawables(null, null, null, null);
             download.setText("打开");
-//            download.setEnabled(false);
         } else {
             AttachStatusEnum status = message.getAttachStatus();
             switch (status) {
@@ -292,7 +296,12 @@ public class MsgViewHolderFile extends MsgViewHolderBase implements View.OnClick
     public void onClick(View v) {
         if (isOriginDataHasDownloaded(message)) {
             FileAttachment fileAttachment = (FileAttachment) message.getAttachment();
-            openFileByPath(context, fileAttachment.getPathForSave(), fileAttachment.getExtension());
+            String extension = fileAttachment.getExtension();
+            if (extension != null) {
+                openFileByPath(context, fileAttachment.getPathForSave(), extension);
+            } else {
+                Toast.makeText(context, "文件格式不正确,无法打开", Toast.LENGTH_SHORT).show();
+            }
             return;
         }
         dialog = ProgressDialog.show(context, "", "正在下载", false, true, this);
@@ -323,7 +332,7 @@ public class MsgViewHolderFile extends MsgViewHolderBase implements View.OnClick
      * @param path    文件路径
      */
     public void openFileByPath(Context context, String path, String extension) {
-        if (context == null || path == null) {
+        if (context == null || path == null || extension == null) {
             return;
         }
         Intent intent = new Intent();
@@ -343,7 +352,7 @@ public class MsgViewHolderFile extends MsgViewHolderBase implements View.OnClick
             Uri data;
             File file = new File(path);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                data = FileProvider.getUriForFile(context, "com.sogukj.pe.fileProvider", file);
+                data = FileProvider.getUriForFile(context, context.getApplicationInfo().packageName + ".generic.file.provider", file);
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             } else {
                 //设置intent的data和Type属性

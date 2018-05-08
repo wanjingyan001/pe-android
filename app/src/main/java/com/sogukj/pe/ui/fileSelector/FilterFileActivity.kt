@@ -19,6 +19,7 @@ import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.framework.base.BaseActivity
+import com.netease.nim.uikit.common.media.picker.loader.RotateTransformation
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.ui.fileSelector.DocumentsFragment.Companion.ALL_DOC
@@ -44,6 +45,7 @@ import kotlinx.android.synthetic.main.layout_empty.*
 import org.jetbrains.anko.ctx
 import org.jetbrains.anko.find
 import org.jetbrains.anko.imageResource
+import org.jetbrains.anko.support.v4.ctx
 import java.io.File
 import java.util.*
 import kotlin.properties.Delegates
@@ -308,7 +310,11 @@ class FilterFileActivity : BaseActivity() {
             if (FileUtil.getFileType(data.absolutePath) != null) {
                 Glide.with(context)
                         .load(data.absoluteFile)
-                        .apply(RequestOptions().error(R.drawable.icon_pic))
+                        .thumbnail(0.1f)
+                        .apply(RequestOptions()
+                                .centerCrop()
+                                .error(R.drawable.icon_pic)
+                                .transform(RotateTransformation(context, data.absolutePath)))
                         .into(icon)
             } else {
                 icon.imageResource = FileTypeUtils.getFileType(data).icon

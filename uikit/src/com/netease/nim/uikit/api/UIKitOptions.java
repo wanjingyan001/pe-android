@@ -91,12 +91,12 @@ public class UIKitOptions {
     /**
      * IM 接收到的消息时，内容区域背景的drawable id
      */
-    public int messageLeftBackground = R.drawable.nim_message_left_white_bg;
+    public int messageLeftBackground = R.drawable.nim_message_left_bg;
 
     /**
      * IM 发送出去的消息时，内容区域背景的drawable id
      */
-    public int messageRightBackground = R.drawable.nim_message_right_white_bg;
+    public int messageRightBackground = R.drawable.nim_message_right_bg;
 
     /**
      * chat room 接收到的消息时，内容区域背景的drawable id
