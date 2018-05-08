@@ -294,6 +294,13 @@ class MainActivity : BaseActivity() {
         return false
     }
 
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        if(manager != null){
+            bottomBar.selectTab(0)
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         App.INSTANCE.resetPush(true)

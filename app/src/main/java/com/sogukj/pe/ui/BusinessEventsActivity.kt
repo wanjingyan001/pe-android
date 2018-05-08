@@ -21,7 +21,6 @@ import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.pe.bean.ProductBean
 import com.sogukj.pe.bean.ProjectBean
-import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import com.sogukj.pe.util.Utils
@@ -60,7 +59,7 @@ class BusinessEventsActivity : ToolbarActivity(),SupportEmptyView {
                     tvYewu.text = "${getString(R.string.tv_proj_product_biz)}${data.yewu}"
                     tvDesc.text = "${getString(R.string.tv_proj_product_type)}${data.hangye}"
                     Glide.with(this@BusinessEventsActivity)
-                            .load(MyGlideUrl(data.logo))
+                            .load(data.logo)
                             .apply(RequestOptions().error(Utils.defaultHeadImg()))
                             .into(ivUser)
 

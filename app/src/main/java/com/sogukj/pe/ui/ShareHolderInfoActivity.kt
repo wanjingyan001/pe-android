@@ -19,7 +19,6 @@ import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.bean.ShareHolderBean
-import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -61,7 +60,7 @@ class ShareHolderInfoActivity : ToolbarActivity() {
                         ivUser.setChar(ch)
                     }
                     Glide.with(this@ShareHolderInfoActivity)
-                            .load(MyGlideUrl(data.logo))
+                            .load(data.logo)
 //                            .error(R.drawable.img_user_default)
                             .into(ivUser)
                 }

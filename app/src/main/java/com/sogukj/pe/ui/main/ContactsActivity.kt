@@ -423,7 +423,7 @@ class ContactsActivity : ToolbarActivity() {
                 holder.userImg.setImageResource(R.drawable.im_team_default)
             } else {
                 Glide.with(context)
-                        .load(MyGlideUrl(team.icon))
+                        .load(team.icon)
                         .apply(RequestOptions().error(R.drawable.im_team_default))
                         .into(holder.userImg)
             }

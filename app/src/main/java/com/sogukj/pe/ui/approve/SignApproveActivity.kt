@@ -416,7 +416,7 @@ class SignApproveActivity : ToolbarActivity() {
         val ch = fixation.name?.first()
         iv_user.setChar(ch)
         Glide.with(this)
-                .load(MyGlideUrl(fixation.url))
+                .load(fixation.url)
                 .into(iv_user)
         tv_name.text = fixation.name
         tv_num.text = "审批编号:${fixation.number}"

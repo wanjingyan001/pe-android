@@ -6,6 +6,7 @@ import android.os.Environment
 import com.netease.nimlib.sdk.SDKOptions
 import com.netease.nimlib.sdk.StatusBarNotificationConfig
 import com.sogukj.pe.R
+import com.sogukj.pe.ui.main.MainActivity
 import com.sogukj.pe.ui.news.NewsListActivity
 import java.io.IOException
 
@@ -47,7 +48,7 @@ class NimSDKOptionConfig {
 
         private fun loadStatusBarNotificationConfig(): StatusBarNotificationConfig {
             val config = StatusBarNotificationConfig()
-            config.notificationEntrance = NewsListActivity::class.java
+            config.notificationEntrance = MainActivity::class.java
             config.notificationSmallIconId = R.mipmap.ic_launcher
             config.notificationColor = Color.parseColor("#5785f3")
             config.notificationFolded = true

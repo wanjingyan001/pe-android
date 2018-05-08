@@ -24,7 +24,6 @@ import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.pe.bean.AppBean
 import com.sogukj.pe.bean.ProjectBean
-import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import com.sogukj.pe.util.Utils
@@ -58,7 +57,7 @@ class AppListActivity : ToolbarActivity() ,SupportEmptyView{
                 val tvBrief = convertView.findViewById(R.id.tv_brief) as TextView
                 override fun setData(view: View, data: AppBean, position: Int) {
                     Glide.with(this@AppListActivity)
-                            .load(MyGlideUrl(data.icon))
+                            .load(data.icon)
                             .apply(RequestOptions().error(Utils.defaultHeadImg()))
                             .into(ivLogo)
                     tvBrief.text = getString(R.string.tv_proj_app_brif, Html.fromHtml(data.brief))

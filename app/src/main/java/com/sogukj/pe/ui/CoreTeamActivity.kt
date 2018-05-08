@@ -21,7 +21,6 @@ import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.bean.TeamMemberBean
-import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import com.sogukj.pe.util.Utils
@@ -59,7 +58,7 @@ class CoreTeamActivity : ToolbarActivity() ,SupportEmptyView{
                     tvTitle.text = data.title
                     tvDesc.text = data.desc
                     Glide.with(this@CoreTeamActivity)
-                            .load(MyGlideUrl(data.icon))
+                            .load(data.icon)
                             .apply(RequestOptions().error(Utils.defaultHeadImg()))
                             .into(ivUser)
 

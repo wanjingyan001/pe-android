@@ -22,7 +22,6 @@ import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.pe.bean.BrandBean
 import com.sogukj.pe.bean.ProjectBean
-import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import com.sogukj.pe.util.Utils
@@ -64,7 +63,7 @@ class BrandListActivity : ToolbarActivity(),SupportEmptyView {
                     tvStatus.text = "申请状态:${data.status}"
                     tvIntCls.text = "类别:${data.intCls}"
                     Glide.with(this@BrandListActivity)
-                            .load(MyGlideUrl(data.tmPic))
+                            .load(data.tmPic)
                             .apply(RequestOptions().error(Utils.defaultHeadImg()))
                             .into(ivLogo)
                 }
