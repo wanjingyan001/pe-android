@@ -12,15 +12,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.amap.api.maps2d.AMap;
-import com.amap.api.maps2d.AMap.OnCameraChangeListener;
-import com.amap.api.maps2d.AMapUtils;
-import com.amap.api.maps2d.CameraUpdate;
-import com.amap.api.maps2d.CameraUpdateFactory;
-import com.amap.api.maps2d.MapView;
-import com.amap.api.maps2d.UiSettings;
-import com.amap.api.maps2d.model.CameraPosition;
-import com.amap.api.maps2d.model.LatLng;
+import com.amap.api.maps.AMap;
+import com.amap.api.maps.AMapUtils;
+import com.amap.api.maps.CameraUpdate;
+import com.amap.api.maps.CameraUpdateFactory;
+import com.amap.api.maps.MapView;
+import com.amap.api.maps.UiSettings;
+import com.amap.api.maps.model.CameraPosition;
+import com.amap.api.maps.model.LatLng;
 import com.netease.nim.uikit.api.model.location.LocationProvider;
 import com.netease.nim.uikit.api.wrapper.NimToolBarOptions;
 import com.netease.nim.uikit.common.activity.ToolBarOptions;
@@ -30,7 +29,7 @@ import com.sogukj.pe.ui.IM.location.helper.NimGeocoder;
 import com.sogukj.pe.ui.IM.location.helper.NimLocationManager;
 import com.sogukj.pe.ui.IM.location.model.NimLocation;
 
-public class LocationAmapActivity extends UI implements OnCameraChangeListener, OnClickListener
+public class LocationAmapActivity extends UI implements AMap.OnCameraChangeListener, OnClickListener
         , NimLocationManager.NimLocationListener {
 
 //	private static final String TAG = "LocationAmapActivity";

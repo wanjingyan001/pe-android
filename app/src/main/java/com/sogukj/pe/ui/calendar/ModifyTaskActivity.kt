@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.support.v7.widget.GridLayoutManager
 import android.util.Log
 import android.view.MenuItem
@@ -13,8 +14,10 @@ import com.afollestad.materialdialogs.Theme
 import com.framework.base.ToolbarActivity
 import com.google.gson.Gson
 import com.sogukj.pe.Extras
+import com.sogukj.pe.Extras.SCHEDULE_DRAFT
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.CustomSealBean
+import com.sogukj.pe.bean.TaskDraft
 import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.ui.IM.TeamSelectActivity
 import com.sogukj.pe.ui.main.ContactsActivity
@@ -22,11 +25,16 @@ import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.CalendarDingDing
 import com.sogukj.service.SoguApi
+import com.sogukj.util.Store
+import com.sogukj.util.XmlDb
+import com.sougukj.fromJson
 import com.sougukj.noSpace
 import com.sougukj.textStr
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_modify_task.*
+import org.jetbrains.anko.ctx
+import org.jetbrains.anko.info
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -41,9 +49,9 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
     var selectT: Int by Delegates.notNull()
     var data_id: Int? = null
     var companyId: Int? = null
-    var time: Long? = null
-    lateinit var adapter: CcPersonAdapter
-    lateinit var exAdapter: ExecutiveAdapter
+    lateinit var adapter: CcPersonAdapter//抄送人
+    lateinit var exAdapter: ExecutiveAdapter//执行人
+    private lateinit var xmlDb: XmlDb
     val data = ArrayList<UserBean>()
     val data2 = ArrayList<UserBean>()
     override val menuId: Int
@@ -70,6 +78,7 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
             ctx?.startActivity(intent)
         }
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -151,9 +160,10 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
         startTime.setOnClickListener(this)
         deadline.setOnClickListener(this)
         remind.setOnClickListener(this)
-
+        xmlDb = XmlDb.open(application)
         startDD = CalendarDingDing(context)
         deadDD = CalendarDingDing(context)
+        draftRecurrent()
     }
 
     var seconds: Int? = null
@@ -228,21 +238,46 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
             showCustomToast(R.drawable.icon_toast_common, "开始时间不能大于结束时间")
             return
         }
+        SoguApi.getService(application)
+                .aeCalendarInfo(getReqBean())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        Utils.closeInput(this, missionDetails)
+                        xmlDb.set("${Store.store.getUser(this)?.uid}_${SCHEDULE_DRAFT}_$name", "{}")
+                        showCustomToast(R.drawable.icon_toast_success, "提交成功")
+                        finish()
+                    } else {
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
+                    }
+                }, { e ->
+                    Trace.e(e)
+                    hideProgress()
+                }, {
+                    hideProgress()
+                }, {
+                    showProgress("正在提交")
+                })
+
+    }
+
+    /**
+     * 获取要提交的数据对象
+     */
+    private fun getReqBean(): TaskModifyBean {
         val reqBean = TaskModifyBean()
         val bean = reqBean.ae
         reqBean.data_id = data_id
         reqBean.type = selectT
         bean.info = missionDetails.noSpace
-        if (companyBean != null && companyBean?.id != null) {
+        if (companyBean != null) {
             bean.company_id = companyBean?.id
         } else {
             bean.company_id = companyId
         }
         bean.start_time = Utils.getTime(start, "yyyy-MM-dd HH:mm:ss")
         bean.end_time = Utils.getTime(endTime, "yyyy-MM-dd HH:mm:ss")
-        time?.let {
-            bean.clock = (it / 1000).toInt()
-        }
         bean.clock = seconds
         val exusers = StringBuilder()
         if (data2.isNotEmpty()) {
@@ -267,28 +302,7 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
             bean.watcher = watchusers.toString().substring(0, watchusers.length - 1)
         }
         Log.d("WJY", Gson().toJson(reqBean))
-        SoguApi.getService(application)
-                .aeCalendarInfo(reqBean)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ payload ->
-                    if (payload.isOk) {
-                        Utils.closeInput(this, missionDetails)
-                        //showToast("提交成功")
-                        showCustomToast(R.drawable.icon_toast_success, "提交成功")
-                        finish()
-                    } else {
-                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
-                    }
-                }, { e ->
-                    Trace.e(e)
-                    hideProgress()
-                }, {
-                    hideProgress()
-                }, {
-                    showProgress("正在提交")
-                })
-
+        return reqBean
     }
 
     lateinit var startDD: CalendarDingDing
@@ -373,8 +387,8 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
     }
 
     var companyBean: CustomSealBean.ValueBean? = null
-    var selectUser: Users = Users()
-    var selectUser2: Users = Users()
+    var selectUser: Users = Users()//抄送人
+    var selectUser2: Users = Users()//执行人
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (data != null) {
@@ -425,11 +439,9 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
     override fun addPerson(tag: String) {
         when (tag) {
             "CcPersonAdapter" -> {
-//                TeamSelectActivity.startForResult(this, true, selectUser.selectUsers, false, false, requestCode = 1005)
                 ContactsActivity.start(this, selectUser.selectUsers, true, false, requestCode = 1005)
             }
             "ExecutiveAdapter" -> {
-//                TeamSelectActivity.startForResult(this, true, selectUser2.selectUsers, false, false, requestCode = 1006)
                 ContactsActivity.start(this, selectUser2.selectUsers, true, false, requestCode = 1006)
             }
         }
@@ -445,4 +457,66 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
             }
         }
     }
+
+    /**
+     *  草稿复现
+     */
+    private fun draftRecurrent() {
+        if (type == CREATE) {
+            val draftJson = xmlDb.get("${Store.store.getUser(this)?.uid}_${SCHEDULE_DRAFT}_$name", "")
+            if (draftJson.isNotEmpty()) {
+                val draft = Gson().fromJson(draftJson, TaskDraft::class.java)
+                draft?.let {
+                    it.taskReqBean?.ae?.apply {
+                        missionDetails.setText(info)
+                        start = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(start_time)
+                        endTime = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(end_time)
+                        startTime.text = Utils.getTime(start, "MM月dd日 E HH:mm")
+                        deadline.text = Utils.getTime(endTime, "MM月dd日 E HH:mm")
+                        if (clock == null) {
+                            remind.text = "不提醒"
+                        } else {
+                            seconds = clock
+                            remind.text = when (clock!!.div(60)) {
+                                0 -> "不提醒"
+                                5 -> "提前5分钟"
+                                15 -> "提前15分钟"
+                                30 -> "提前30分钟"
+                                60 -> "提前1小时"
+                                60 * 24 -> "提前1天"
+                                else -> "提前${clock!!.div(60)}分钟"
+                            }
+                        }
+                    }
+                    it.company?.let {
+                        companyBean = it
+                        relatedProject.text = it.name
+                    }
+                    it.executorList?.let {
+                        selectUser2.selectUsers = it
+                        exAdapter.addAllData(selectUser2.selectUsers)
+                    }
+                    it.watcherList?.let {
+                        selectUser.selectUsers = it
+                        adapter.addAllData(selectUser.selectUsers)
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        //创建时保存草稿
+        if (type == CREATE) {
+            val reqBean = getReqBean()
+            val draft = TaskDraft()
+            draft.taskReqBean = reqBean
+            draft.company = companyBean
+            draft.executorList = selectUser2.selectUsers
+            draft.watcherList = selectUser.selectUsers
+            xmlDb.set("${Store.store.getUser(this)?.uid}_${SCHEDULE_DRAFT}_$name", Gson().toJson(draft))
+        }
+    }
+
 }
