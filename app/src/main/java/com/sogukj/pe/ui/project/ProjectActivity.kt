@@ -71,8 +71,14 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 0x001 && resultCode == Activity.RESULT_OK) {
-            setResult(Activity.RESULT_OK)
-            finish()
+            var step = data?.getIntExtra(Extras.TYPE, 0)
+            if (step == 1) {
+
+            } else if (step == 2) {
+                //全部退出才会到下一个
+                setResult(Activity.RESULT_OK)
+                finish()
+            }
         }
     }
 

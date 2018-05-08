@@ -133,7 +133,7 @@ class ProjectTCActivity : ToolbarActivity() {
 //                        .setCancelColor(resources.getColor(R.color.shareholder_text_gray))
 //                        .build()
 //                timePicker.show()
-                startDD.show(2, Date(), object : CalendarDingDing.onTimeClick {
+                startDD.show(1, Date(), object : CalendarDingDing.onTimeClick {
                     override fun onClick(date: Date?) {
                         if(date != null){
                             et_tzsj.text = Utils.getYMD(date)
@@ -159,7 +159,7 @@ class ProjectTCActivity : ToolbarActivity() {
 //                        .setCancelColor(resources.getColor(R.color.shareholder_text_gray))
 //                        .build()
 //                timePicker.show()
-                deadDD.show(2, Date(), object : CalendarDingDing.onTimeClick {
+                deadDD.show(1, Date(), object : CalendarDingDing.onTimeClick {
                     override fun onClick(date: Date?) {
                         if(date != null){
                             et_tcsj.text = Utils.getYMD(date)
@@ -309,7 +309,9 @@ class ProjectTCActivity : ToolbarActivity() {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        setResult(Activity.RESULT_OK)
+                        var intent = Intent()
+                        intent.putExtra(Extras.TYPE, mType)
+                        setResult(Activity.RESULT_OK, intent)
                         finish()
                     } else
                         showCustomToast(R.drawable.icon_toast_fail, payload.message)

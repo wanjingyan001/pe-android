@@ -88,6 +88,10 @@ class MainProjectFragment : BaseFragment() {
         }
     }
 
+    fun getViewPager(): ViewPager {
+        return view_pager
+    }
+
     lateinit var hisAdapter: RecyclerAdapter<String>
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -236,6 +236,12 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
 //                adapter.notifyDataSetChanged()
 //            }
             doRequest()
+            if (resultCode == Activity.RESULT_OK) {
+                var mPFragment = parentFragment as MainProjectFragment
+                var viewpager = mPFragment.getViewPager()
+                ++viewpager.currentItem
+                mPFragment.fragments.get(viewpager.currentItem).request()
+            }
         }
     }
 
@@ -298,7 +304,7 @@ class ProjectListFragment : BaseFragment(), SupportEmptyView {
                     iv_empty.visibility = if (adapter.dataList.isEmpty()) View.VISIBLE else View.GONE
                     //SupportEmptyView.checkEmpty(this, adapter)
                 }, {
-//                    SupportEmptyView.checkEmpty(this, adapter)
+                    //                    SupportEmptyView.checkEmpty(this, adapter)
 //                    val b = adapter.dataList.size >= offset + 20
 //                    refresh?.setEnableLoadmore(b)
 //                    if (!b) {
