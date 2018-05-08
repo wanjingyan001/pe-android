@@ -9,26 +9,27 @@
     android:focusableInTouchMode="true"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/team_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/action_bar_height"
-        android:background="@color/color_blue_0888ff">
+    <!--<android.support.v7.widget.Toolbar-->
+        <!--android:id="@+id/team_toolbar"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="@dimen/action_bar_height"-->
+        <!--android:background="@color/color_blue_0888ff">-->
 
 
-        <TextView
-            android:id="@+id/team_toolbar_title"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="选择联系人"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+        <!--<TextView-->
+            <!--android:id="@+id/team_toolbar_title"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:gravity="center"-->
+            <!--android:text="选择联系人"-->
+            <!--android:textColor="@color/white"-->
+            <!--android:textSize="18sp"-->
+            <!--android:textStyle="bold" />-->
 
-    </android.support.v7.widget.Toolbar>
+    <!--</android.support.v7.widget.Toolbar>-->
 
+    <include layout="@layout/toolbar"/>
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/listContent"

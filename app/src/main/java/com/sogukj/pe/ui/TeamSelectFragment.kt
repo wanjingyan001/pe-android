@@ -51,7 +51,7 @@ class TeamSelectFragment : BaseFragment() {
     private val contactList = ArrayList<UserBean>()//最近联系人
     private val resultData = ArrayList<UserBean>()//搜索结果
     var mine: UserBean? = null//自己
-    lateinit var searchKey: String
+    var searchKey = ""
     private lateinit var orgAdapter: OrganizationAdapter
     private lateinit var contactAdapter: ContactAdapter
     private lateinit var resultAdapter: ContactAdapter
@@ -176,8 +176,8 @@ class TeamSelectFragment : BaseFragment() {
             team_toolbar_title.text = "通讯录"
             groupDiscuss1.visibility = View.VISIBLE
             groupDiscuss.visibility = View.VISIBLE
-            contactLayout1.visibility = View.GONE
-            contactLayout.visibility = View.GONE
+            contactLayout1.visibility = View.VISIBLE
+            contactLayout.visibility = View.VISIBLE
             initContactList()
             confirmSelectLayout.visibility = View.GONE
         }
@@ -193,7 +193,7 @@ class TeamSelectFragment : BaseFragment() {
 //            TeamSelectActivity.start(context, isSelectUser = true, isCreateTeam = true)
             val alreadySelect = ArrayList<UserBean>()
             alreadySelect.add(Store.store.getUser(context)!!)
-            ContactsActivity.start(ctx,alreadySelect,true,true)
+            ContactsActivity.start(ctx, alreadySelect, true, true)
 //            isSelectUser = !isSelectUser
 //
 //            loadByIsSelectUser()
@@ -242,7 +242,7 @@ class TeamSelectFragment : BaseFragment() {
                         search_edt.setText("")
                         search_edt.clearFocus()
                     }
-                }else{
+                } else {
                     delete1.visibility = View.GONE
                 }
             }
@@ -259,11 +259,11 @@ class TeamSelectFragment : BaseFragment() {
                 company_icon.imageResource = R.mipmap.ic_launcher_ht
                 companyName.text = "海通创新"
             }
-            "kk" ->{
+            "kk" -> {
                 company_icon.imageResource = R.mipmap.ic_launcher_kk
                 companyName.text = "夸克"
             }
-            "yge" ->{
+            "yge" -> {
                 company_icon.imageResource = R.mipmap.ic_launcher_yge
                 companyName.text = "雅戈尔"
             }
@@ -368,8 +368,9 @@ class TeamSelectFragment : BaseFragment() {
                     showCustomToast(R.drawable.icon_toast_fail, "公司组织架构人员获取失败")
                 })
 
+        var user = Store.store.getUser(context)
         SoguApi.getService(baseActivity!!.application)
-                .recentContacts()
+                .recentContacts(user!!.accid!!)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -627,10 +628,15 @@ class TeamSelectFragment : BaseFragment() {
 
         override fun onBindViewHolder(holder: ContactHolder, position: Int) {
             val userBean = datas[position]
-            Glide.with(context)
-                    .load(MyGlideUrl(userBean.headImage()))
-                    .apply(RequestOptions().error(R.drawable.nim_avatar_default).placeholder(R.drawable.nim_avatar_default))
-                    .into(holder.userImg)
+            if (userBean.headImage().isNullOrEmpty()) {
+                val ch = userBean.name.first()
+                holder.userImg.setChar(ch)
+            } else {
+                Glide.with(context)
+                        .load(MyGlideUrl(userBean.headImage()))
+                        .apply(RequestOptions().error(R.drawable.nim_avatar_default).placeholder(R.drawable.nim_avatar_default))
+                        .into(holder.userImg)
+            }
             var name = userBean.name
             if (searchKey.isNotEmpty()) {
                 name = name.replaceFirst(searchKey, "<font color='#1787fb'>$searchKey</font>")

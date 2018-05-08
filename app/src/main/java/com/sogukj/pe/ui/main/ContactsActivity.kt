@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.request.RequestOptions
 import com.framework.base.BaseActivity
+import com.framework.base.ToolbarActivity
 import com.google.gson.Gson
 import com.netease.nim.uikit.api.NimUIKit
 import com.netease.nimlib.sdk.team.model.Team
@@ -41,6 +42,8 @@ import com.sogukj.util.Store
 import com.sougukj.execute
 import com.sougukj.setOnClickFastListener
 import com.sougukj.setVisible
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_contacts.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.find
@@ -50,7 +53,7 @@ import org.jetbrains.anko.info
 /**
 通讯录Activity(所有选择人员的都跳转到这里)
  */
-class ContactsActivity : BaseActivity() {
+class ContactsActivity : ToolbarActivity() {
     /**
      * 已选中人员
      */
@@ -94,7 +97,7 @@ class ContactsActivity : BaseActivity() {
      * 无法修改的抄送人名单
      */
     var default: ArrayList<Int>? = null
-    lateinit var searchKey: String
+    var searchKey = ""
     private val mine = Store.store.getUser(this)
 
 
@@ -151,6 +154,10 @@ class ContactsActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_contacts)
         Utils.setWindowStatusBarColor(this, R.color.color_blue_0888ff)
+
+        title = "选择联系人"
+        setBack(true)
+
         getDataFromIntent()
         initHeader()
         initSearchView()
@@ -283,6 +290,22 @@ class ContactsActivity : BaseActivity() {
             adapter = searchAdapter
         }
 
+        var user = Store.store.getUser(context)
+        SoguApi.getService(application)
+                .recentContacts(user!!.accid!!)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        contactsAdapter.dataList.clear()
+                        contactsAdapter.dataList.addAll(payload.payload!!)
+                        contactsAdapter.notifyDataSetChanged()
+                    } else
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
+                }, { e ->
+                    Trace.e(e)
+                    showCustomToast(R.drawable.icon_toast_fail, "最近联系人数据获取失败")
+                })
     }
 
     private fun initTissueAdapter() {
@@ -396,10 +419,14 @@ class ContactsActivity : BaseActivity() {
             holder = ChildHolder(convertView)
             val team = groups[groupPosition][childPosition]
             holder.userName.text = team.name
-            Glide.with(context)
-                    .load(MyGlideUrl(team.icon))
-                    .apply(RequestOptions().error(R.drawable.im_team_default))
-                    .into(holder.userImg)
+            if (team.icon.isNullOrEmpty()) {
+                holder.userImg.setImageResource(R.drawable.im_team_default)
+            } else {
+                Glide.with(context)
+                        .load(MyGlideUrl(team.icon))
+                        .apply(RequestOptions().error(R.drawable.im_team_default))
+                        .into(holder.userImg)
+            }
             return convertView
         }
 
@@ -472,10 +499,15 @@ class ContactsActivity : BaseActivity() {
                     holder.selectIcon.isSelected = false
                     holder.selectIcon.imageResource = R.drawable.cannot_select
                 }
-                Glide.with(context)
-                        .load(MyGlideUrl(userBean.headImage()))
-                        .apply(RequestOptions().error(R.drawable.nim_avatar_default).placeholder(R.drawable.nim_avatar_default))
-                        .into(holder.userImg)
+                if (userBean.headImage().isNullOrEmpty()) {
+                    val ch = userBean.name.first()
+                    holder.userImg.setChar(ch)
+                } else {
+                    Glide.with(context)
+                            .load(MyGlideUrl(userBean.headImage()))
+                            .apply(RequestOptions().error(R.drawable.nim_avatar_default).placeholder(R.drawable.nim_avatar_default))
+                            .into(holder.userImg)
+                }
                 holder.userName.text = userBean.name
                 holder.userPosition.text = userBean.position
 
@@ -554,10 +586,15 @@ class ContactsActivity : BaseActivity() {
                 selectIcon.isSelected = false
                 selectIcon.imageResource = R.drawable.cannot_select
             }
-            Glide.with(this@ContactsActivity)
-                    .load(MyGlideUrl(userBean.headImage()))
-                    .apply(RequestOptions().error(R.drawable.nim_avatar_default).placeholder(R.drawable.nim_avatar_default))
-                    .into(userImg)
+            if (userBean.headImage().isNullOrEmpty()) {
+                val ch = userBean.name.first()
+                userImg.setChar(ch)
+            } else {
+                Glide.with(this@ContactsActivity)
+                        .load(MyGlideUrl(userBean.headImage()))
+                        .apply(RequestOptions().error(R.drawable.nim_avatar_default).placeholder(R.drawable.nim_avatar_default))
+                        .into(userImg)
+            }
             var name = userBean.name
             if (searchKey.isNotEmpty()) {
                 name = name.replaceFirst(searchKey, "<font color='#1787fb'>$searchKey</font>")

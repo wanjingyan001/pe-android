@@ -53,7 +53,7 @@ class TeamSelectActivity : BaseActivity() {
     var canRemove: Boolean = true
     var fromTeam: Boolean = true
     var flag: String? = ""
-    lateinit var searchKey: String
+    var searchKey = ""
     private lateinit var orgAdapter: OrganizationAdapter
     private lateinit var contactAdapter: ContactAdapter
     private lateinit var resultAdapter: ContactAdapter
@@ -274,8 +274,9 @@ class TeamSelectActivity : BaseActivity() {
         layout.addView(contact)
         layout.id = R.id.contactLayout
 
+        var user = Store.store.getUser(context)
         SoguApi.getService(application)
-                .recentContacts()
+                .recentContacts(user!!.accid!!)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -557,10 +558,15 @@ class TeamSelectActivity : BaseActivity() {
 
         override fun onBindViewHolder(holder: ContactHolder, position: Int) {
             val userBean = datas[position]
-            Glide.with(this@TeamSelectActivity)
-                    .load(MyGlideUrl(userBean.headImage()))
-                    .apply(RequestOptions().error(R.drawable.nim_avatar_default).placeholder(R.drawable.nim_avatar_default))
-                    .into(holder.userImg)
+            if (userBean.headImage().isNullOrEmpty()) {
+                val ch = userBean.name.first()
+                holder.userImg.setChar(ch)
+            } else {
+                Glide.with(this@TeamSelectActivity)
+                        .load(MyGlideUrl(userBean.headImage()))
+                        .apply(RequestOptions().error(R.drawable.nim_avatar_default).placeholder(R.drawable.nim_avatar_default))
+                        .into(holder.userImg)
+            }
             var name = userBean.name
             if (searchKey.isNotEmpty()) {
                 name = name.replaceFirst(searchKey, "<font color='#1787fb'>$searchKey</font>")

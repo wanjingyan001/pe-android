@@ -1282,8 +1282,9 @@ interface SoguService {
             , @Field("pageSize") pageSize: Int = 20
             , @Field("template_id") template_id: String? = null): Observable<Payload<List<ApprovalBean>>>
 
+    @FormUrlEncoded
     @POST("/api/Message/recentContacts")
-    fun recentContacts(): Observable<Payload<ArrayList<UserBean>>>
+    fun recentContacts(@Field("from") from: String): Observable<Payload<ArrayList<UserBean>>>
 
 
     @POST("/api/Foundation/editFundInfo")
