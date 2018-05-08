@@ -21,6 +21,8 @@ import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -77,7 +79,7 @@ public class CacheUtils {
         ArrayList<MessageBean> retData = new ArrayList<MessageBean>();
         try {
             //若snapshot为空，表明该key对应的文件不在缓存中
-            DiskLruCache.Snapshot snapshot = mDiskLruCache.get(key);
+            DiskLruCache.Snapshot snapshot = mDiskLruCache.get(hashKeyForDisk(key));
             if (snapshot != null) {
                 FileInputStream fileInputStream = (FileInputStream) snapshot
                         .getInputStream(DISK_CACHE_INDEX);
@@ -105,7 +107,7 @@ public class CacheUtils {
 
     public void addToDiskCache(String key, ArrayList<MessageBean> data) {
         try {
-            DiskLruCache.Editor editor = mDiskLruCache.edit(key);
+            DiskLruCache.Editor editor = mDiskLruCache.edit(hashKeyForDisk(key));
             if (editor != null) {
                 OutputStream outputStream = editor
                         .newOutputStream(DISK_CACHE_INDEX);
@@ -119,7 +121,7 @@ public class CacheUtils {
 
     public void addToCityCache(String key, ArrayList<CityArea> data) {
         try {
-            DiskLruCache.Editor editor = mDiskLruCache.edit(key);
+            DiskLruCache.Editor editor = mDiskLruCache.edit(hashKeyForDisk(key));
             if (editor != null) {
                 OutputStream outputStream = editor
                         .newOutputStream(DISK_CACHE_INDEX);
@@ -135,7 +137,7 @@ public class CacheUtils {
         ArrayList<CityArea> retData = new ArrayList<CityArea>();
         try {
             //若snapshot为空，表明该key对应的文件不在缓存中
-            DiskLruCache.Snapshot snapshot = mDiskLruCache.get(key);
+            DiskLruCache.Snapshot snapshot = mDiskLruCache.get(hashKeyForDisk(key));
             if (snapshot != null) {
                 FileInputStream fileInputStream = (FileInputStream) snapshot
                         .getInputStream(DISK_CACHE_INDEX);
@@ -191,5 +193,69 @@ public class CacheUtils {
         }
         StatFs statFs = new StatFs(path.getPath());
         return statFs.getBlockSizeLong() * statFs.getAvailableBlocksLong();
+    }
+
+    public String hashKeyForDisk(String key) {
+        String cacheKey;
+        try {
+            final MessageDigest mDigest = MessageDigest.getInstance("MD5");
+            mDigest.update(key.getBytes());
+            cacheKey = bytesToHexString(mDigest.digest());
+        } catch (NoSuchAlgorithmException e) {
+            cacheKey = String.valueOf(key.hashCode());
+        }
+        return cacheKey;
+    }
+
+    private String bytesToHexString(byte[] bytes) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < bytes.length; i++) {
+            String hex = Integer.toHexString(0xFF & bytes[i]);
+            if (hex.length() == 1) {
+                sb.append('0');
+            }
+            sb.append(hex);
+        }
+        return sb.toString();
+    }
+
+
+    public String getScript(String key) {
+        try {
+            //若snapshot为空，表明该key对应的文件不在缓存中
+            DiskLruCache.Snapshot snapshot = mDiskLruCache.get(hashKeyForDisk(key));
+            if (snapshot != null) {
+                FileInputStream fileInputStream = (FileInputStream) snapshot
+                        .getInputStream(DISK_CACHE_INDEX);
+                byte[] buffer = new byte[1024];//尽可能大
+                int len = 0;
+                ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+                while ((len = fileInputStream.read(buffer)) != -1) {
+                    outStream.write(buffer, 0, len);
+                }
+                String data = new String(outStream.toByteArray(), "UTF-8");
+                outStream.close();
+                snapshot.close();
+                return data;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return "";
+    }
+
+    public void saveScript(String key, String script) {
+        try {
+            DiskLruCache.Editor editor = mDiskLruCache.edit(hashKeyForDisk(key));
+            if (editor != null) {
+                OutputStream outputStream = editor
+                        .newOutputStream(DISK_CACHE_INDEX);
+                outputStream.write(script.getBytes("UTF-8"));
+                editor.commit();
+                mDiskLruCache.flush();
+            }
+        } catch (IOException e) {
+        }
     }
 }

@@ -5,19 +5,27 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
+import android.widget.TextView
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.Theme
 import com.framework.base.BaseActivity
 import com.google.gson.JsonSyntaxException
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.WeeklyThisBean
+import com.sogukj.pe.util.CacheUtils
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.CalendarDingDing
 import com.sogukj.service.SoguApi
+import com.sogukj.util.Store
+import com.sogukj.util.XmlDb
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_weekly_record.*
 import kotlinx.android.synthetic.main.layout_shareholder_toolbar.*
+import org.jetbrains.anko.find
 import java.net.UnknownHostException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -28,14 +36,23 @@ class WeeklyRecordActivity : BaseActivity() {
 
     lateinit var week: WeeklyThisBean.Week
 
+    lateinit var cache: CacheUtils
+    var tag = ""
+
+    override fun onDestroy() {
+        super.onDestroy()
+        cache.close()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_weekly_record)
         Utils.setWindowStatusBarColor(this, R.color.white)
 
         var calendar = Calendar.getInstance()
+        cache = CacheUtils(context)
 
-        var tag = intent.getStringExtra(Extras.FLAG)
+        tag = intent.getStringExtra(Extras.FLAG)
         if (tag == "ADD") {
             toolbar_title.text = "补充工作日程"
 
@@ -47,8 +64,10 @@ class WeeklyRecordActivity : BaseActivity() {
             tv_start_time.text = week.start_time
             tv_end_time.text = week.end_time
 
+            loadScript()
+
         } else if (tag == "EDIT") {
-            toolbar_title.text  = "修改工作日程"
+            toolbar_title.text = "修改工作日程"
             week = intent.getSerializableExtra(Extras.DATA) as WeeklyThisBean.Week
 
             tv_start_time.text = week.start_time
@@ -57,7 +76,15 @@ class WeeklyRecordActivity : BaseActivity() {
             et_des.setSelection(week.info!!.length)
         }
         addTv.visibility = View.GONE
-        back.setOnClickListener { finish() }
+        //back.setOnClickListener { finish() }
+        back.setOnClickListener {
+            if (tag == "EDIT") {
+                finish()
+            } else {
+                saveScript()
+            }
+        }
+
         var startDD = CalendarDingDing(context)
         tr_start_time.setOnClickListener {
             if (tag == "EDIT" || tag == "ADD") {
@@ -78,7 +105,7 @@ class WeeklyRecordActivity : BaseActivity() {
 //            timePicker.show()
             startDD.show(2, calendar, object : CalendarDingDing.onTimeClick {
                 override fun onClick(date: Date?) {
-                    if(date != null){
+                    if (date != null) {
                         tv_start_time.text = format.format(date)
                     }
                 }
@@ -104,7 +131,7 @@ class WeeklyRecordActivity : BaseActivity() {
 //            timePicker.show()
             deadDD.show(2, calendar, object : CalendarDingDing.onTimeClick {
                 override fun onClick(date: Date?) {
-                    if(date != null){
+                    if (date != null) {
                         tv_end_time.text = format.format(date)
                     }
                 }
@@ -136,6 +163,7 @@ class WeeklyRecordActivity : BaseActivity() {
                     .subscribeOn(Schedulers.io())
                     .subscribe({ payload ->
                         if (payload.isOk) {
+                            clearScript()
                             payload.payload?.apply {
                                 var df = SimpleDateFormat("HH:mm")
                                 if (tag == "EDIT") {
@@ -167,5 +195,55 @@ class WeeklyRecordActivity : BaseActivity() {
                         ToastError(e)
                     })
         }
+    }
+
+    override fun onBackPressed() {
+        if (tag == "EDIT") {
+            super.onBackPressed()
+        } else {
+            saveScript()
+        }
+    }
+
+    fun loadScript() {
+        var key = "${Store.store.getUser(context)?.uid}+$tag+${week.start_time}+${week.end_time}"
+        var script = cache.getScript(key)
+        if (script.isNullOrEmpty()) {
+            return
+        }
+        et_des.setText(script)
+        et_des.setSelection(script.length)
+    }
+
+    fun saveScript() {
+        var key = "${Store.store.getUser(context)?.uid}+$tag+${week.start_time}+${week.end_time}"
+        var script = et_des.text.toString().trim()
+        if (script == "") {
+            return
+        }
+        var mDialog = MaterialDialog.Builder(this@WeeklyRecordActivity)
+                .theme(Theme.LIGHT)
+                .canceledOnTouchOutside(true)
+                .customView(R.layout.dialog_yongyin, false).build()
+        mDialog.show()
+        val content = mDialog.find<TextView>(R.id.content)
+        val cancel = mDialog.find<Button>(R.id.cancel)
+        val yes = mDialog.find<Button>(R.id.yes)
+        content.text = "是否需要保存草稿"
+        cancel.text = "否"
+        yes.text = "是"
+        cancel.setOnClickListener {
+            super.onBackPressed()
+        }
+        yes.setOnClickListener {
+            showCustomToast(R.drawable.icon_toast_success, "草稿保存成功")
+            cache.saveScript(key, script)
+            super.onBackPressed()
+        }
+    }
+
+    fun clearScript() {
+        var key = "${Store.store.getUser(context)?.uid}+$tag+${week.start_time}+${week.end_time}"
+        cache.saveScript(key, "")
     }
 }
