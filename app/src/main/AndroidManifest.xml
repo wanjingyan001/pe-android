@@ -14,6 +14,7 @@
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE" />
     <uses-permission android:name="com.huawei.android.launcher.permission.READ_SETTINGS" />
     <uses-permission android:name="com.huawei.android.launcher.permission.WRITE_SETTINGS" />
@@ -84,6 +85,8 @@
         <!-- 正式版 -->
         <!-- 5d8ada31fe2ba9cb419b5f63a95e8756 -->
         <!-- 云信后台服务，请使用独立进程。 -->
+        <!--每个app自己单独的定位service-->
+        <service android:name="com.amap.api.location.APSService" />
         <service
             android:name="com.netease.nimlib.service.NimService"
             android:process=":core" />
@@ -656,8 +659,9 @@
             android:name=".ui.fileSelector.FileMainActivity"
             android:launchMode="singleTop" />
         <activity android:name=".ui.approve.LeaveBusinessActivity" />
-        <activity android:name=".ui.calendar.ArrangeEditActivity"
-            android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name=".ui.calendar.ArrangeEditActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".ui.calendar.ArrangePersonActivity" />
         <activity android:name=".ui.approve.MyHolidayActivity" />
         <activity android:name=".ui.approve.BusinessTripDetailActivity" />
@@ -705,6 +709,7 @@
         <activity android:name=".ui.project.FinanceDetailActivity" />
         <activity android:name=".ui.IM.MemberEditActivity" />
         <activity android:name=".ui.user.FormActivity"></activity>
+        <activity android:name=".ui.IM.newlocation.activity.IMLocationActivity"></activity>
     </application>
 
 </manifest>

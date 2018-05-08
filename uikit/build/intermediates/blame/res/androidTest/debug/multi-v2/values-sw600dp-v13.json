@@ -1,10 +1,27 @@
 {
     "logs": [
         {
+<<<<<<< HEAD
             "outputFile": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/values-sw600dp-v13/values-sw600dp-v13.xml",
             "map": [
                 {
                     "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/design-25.3.1.aar/559cb88a6085c8f50d91eb5fbb23ca53/res/values-sw600dp-v13/values-sw600dp-v13.xml",
+=======
+            "outputFile": "/Users/admin/dev/proj/pe3.1/pe-android/uikit/build/intermediates/incremental/mergeDebugAndroidTestResources/merged.dir/values-sw600dp-v13/values-sw600dp-v13.xml",
+            "map": [
+                {
+                    "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/f6d2a503db6dbeac8bcee150d656c30d/res/values-sw600dp-v13/values-sw600dp-v13.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,124,193,263,337,413,472,543",
+                        "endColumns": "68,68,69,73,75,58,70,67",
+                        "endOffsets": "119,188,258,332,408,467,538,606"
+                    }
+                },
+                {
+                    "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/design-25.3.1.aar/87909884eaa1c455dd83c1116c1283b8/res/values-sw600dp-v13/values-sw600dp-v13.xml",
+>>>>>>> 2f6d90c9cc2329cf4b6ef3312d4716c6e720f201
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4",
@@ -21,9 +38,20 @@
                         "endColumns": "59,69,70,71,57,57,105,63,62,12",
                         "endOffsets": "666,736,807,879,937,995,1101,1165,1228,1410"
                     }
+<<<<<<< HEAD
                 },
                 {
                     "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/b9f40973249904c072c5dc9eefbb25fa/res/values-sw600dp-v13/values-sw600dp-v13.xml",
+=======
+                }
+            ]
+        },
+        {
+            "outputFile": "/Users/admin/dev/proj/pe3.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/values-sw600dp-v13/values-sw600dp-v13.xml",
+            "map": [
+                {
+                    "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/f6d2a503db6dbeac8bcee150d656c30d/res/values-sw600dp-v13/values-sw600dp-v13.xml",
+>>>>>>> 2f6d90c9cc2329cf4b6ef3312d4716c6e720f201
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9",
                         "startColumns": "4,4,4,4,4,4,4,4",
@@ -31,6 +59,7 @@
                         "endColumns": "68,68,69,73,75,58,70,67",
                         "endOffsets": "119,188,258,332,408,467,538,606"
                     }
+<<<<<<< HEAD
                 }
             ]
         },
@@ -39,6 +68,11 @@
             "map": [
                 {
                     "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/design-25.3.1.aar/559cb88a6085c8f50d91eb5fbb23ca53/res/values-sw600dp-v13/values-sw600dp-v13.xml",
+=======
+                },
+                {
+                    "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/design-25.3.1.aar/87909884eaa1c455dd83c1116c1283b8/res/values-sw600dp-v13/values-sw600dp-v13.xml",
+>>>>>>> 2f6d90c9cc2329cf4b6ef3312d4716c6e720f201
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4",
@@ -55,6 +89,7 @@
                         "endColumns": "59,69,70,71,57,57,105,63,62,12",
                         "endOffsets": "666,736,807,879,937,995,1101,1165,1228,1410"
                     }
+<<<<<<< HEAD
                 },
                 {
                     "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/b9f40973249904c072c5dc9eefbb25fa/res/values-sw600dp-v13/values-sw600dp-v13.xml",
@@ -65,6 +100,8 @@
                         "endColumns": "68,68,69,73,75,58,70,67",
                         "endOffsets": "119,188,258,332,408,467,538,606"
                     }
+=======
+>>>>>>> 2f6d90c9cc2329cf4b6ef3312d4716c6e720f201
                 }
             ]
         }

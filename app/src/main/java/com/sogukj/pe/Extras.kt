@@ -61,4 +61,6 @@ object Extras {
     val DEFAULT = "ext.default"
     val REFRESH = "ext.refresh"
     val REFRESH1 = 9999
+
+    val SCHEDULE_DRAFT = "ext.schedule.draft"//用于保存日程和任务的草稿
 }

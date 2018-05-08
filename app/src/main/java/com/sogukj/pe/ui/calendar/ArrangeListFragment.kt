@@ -17,7 +17,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.amap.api.col.fa
 import com.framework.base.BaseFragment
 import com.google.gson.Gson
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter

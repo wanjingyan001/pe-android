@@ -11,6 +11,7 @@ import com.sogukj.pe.ui.IM.location.activity.LocationAmapActivity;
 import com.sogukj.pe.ui.IM.location.activity.LocationExtras;
 import com.sogukj.pe.ui.IM.location.activity.NavigationAmapActivity;
 import com.sogukj.pe.ui.IM.location.helper.NimLocationManager;
+import com.sogukj.pe.ui.IM.newlocation.activity.IMLocationActivity;
 
 /**
  * Created by admin on 2018/2/6.
@@ -49,6 +50,7 @@ public class NimDemoLocationProvider implements LocationProvider {
             return;
         }
         LocationAmapActivity.start(context, callback);
+//        IMLocationActivity.Companion.start(context,callback);
     }
 
     @Override

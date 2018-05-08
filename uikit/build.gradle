@@ -54,5 +54,11 @@ dependencies {
     api("com.netease.nimlib:lucene:$nimlib_version")
     api("com.netease.nimlib:avchat:$nimlib_version")
     api("com.netease.nimlib:chatroom:$nimlib_version")
+    //3D地图so及jar
+    compile 'com.amap.api:3dmap:6.1.0'
+    //定位功能
+    compile 'com.amap.api:location:3.8.0'
+    //搜索功能
+    compile 'com.amap.api:search:6.1.0'
     //api 'jp.co.cyberagent.android.gpuimage:gpuimage-library:1.4.1' // if you want to use the Glide GPU Filters
 }
