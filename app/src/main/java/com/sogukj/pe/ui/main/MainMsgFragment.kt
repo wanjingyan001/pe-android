@@ -322,7 +322,7 @@ class MainMsgFragment : BaseFragment() {
                             val team = NimUIKit.getTeamProvider().getTeamById(data.contactId)
                             team?.let {
                                 Glide.with(this@MainMsgFragment)
-                                        .load(MyGlideUrl(it.icon))
+                                        .load(it.icon)
                                         .apply(RequestOptions().error(R.drawable.im_team_default))
                                         .into(msgIcon)
                             }
