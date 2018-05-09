@@ -531,6 +531,8 @@ class ContactsActivity : ToolbarActivity() {
                             }
                         }
                         selectNumber.text = "已选择: ${alreadySelected.size} 人"
+
+                        contactsAdapter.notifyDataSetChanged()
                     } else {
                         //发送文件消息
                         NimUIKit.startP2PSession(this@ContactsActivity, userBean.accid, pathByUri)
@@ -574,6 +576,7 @@ class ContactsActivity : ToolbarActivity() {
         val userPosition = view.find<TextView>(R.id.userPosition)
         override fun setData(view: View, userBean: UserBean, position: Int) {
             val find = alreadySelected.find { it.uid == userBean.uid }
+            selectIcon.visibility = View.VISIBLE
             if (find != null) {
                 if (!selectedCanModify) {
                     selectIcon.imageResource = R.drawable.cannot_select
@@ -621,6 +624,8 @@ class ContactsActivity : ToolbarActivity() {
                         }
                     }
                     selectNumber.text = "已选择: ${alreadySelected.size} 人"
+
+                    tissueAdapter.notifyDataSetChanged()
                 } else {
                     //发送文件消息
                     NimUIKit.startP2PSession(this@ContactsActivity, userBean.accid, pathByUri)
