@@ -37,6 +37,7 @@ import com.sogukj.pe.view.CircleImageView
 import com.sogukj.pe.view.FlowLayout
 import com.sogukj.service.SoguApi
 import com.sogukj.util.XmlDb
+import com.sougukj.setOnClickFastListener
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_approve_fill.*
@@ -911,8 +912,8 @@ class ApproveFillActivity : ToolbarActivity() {
         filesView = ll_files
         refreshFiles(filesBean!!, filesView!!)
 
-        tvFile.setOnClickListener {
-            FileMainActivity.start(this, requestCode = REQ_SELECT_FILE)
+        tvFile.setOnClickFastListener {
+            FileMainActivity.start(context, requestCode = REQ_SELECT_FILE)
         }
     }
 
