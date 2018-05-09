@@ -489,7 +489,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
      * @param rawResult The contents of the barcode.
      */
     public void handleDecode(Result rawResult) {
-        if(!rawResult.getText().toString().equals("/api/qrlogin/notify")){
+        if(!rawResult.getText().toString().contains("/api/qrlogin/notify")){
             handler.sendEmptyMessage(R.id.restart_preview);
             return;
         }
