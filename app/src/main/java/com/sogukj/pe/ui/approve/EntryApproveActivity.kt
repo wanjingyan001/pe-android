@@ -15,7 +15,6 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.SpGroupBean
 import com.sogukj.pe.bean.SpGroupItemBean
-import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -135,7 +134,7 @@ class EntryApproveActivity : ToolbarActivity(), View.OnClickListener {
         val iv_icon = itemView.findViewById(R.id.iv_icon) as ImageView
         val tv_label = itemView.findViewById(R.id.tv_label) as TextView
         Glide.with(this)
-                .load(MyGlideUrl(itemBean?.icon))
+                .load(itemBean?.icon)
                 .into(iv_icon)
         tv_label.text = itemBean?.name
         itemView.tag = "${itemBean.id}"
