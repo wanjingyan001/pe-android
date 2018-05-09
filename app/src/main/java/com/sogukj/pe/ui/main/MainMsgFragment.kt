@@ -452,11 +452,25 @@ class MainMsgFragment : BaseFragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             val bundle = data!!.extras
-            val scanResult = bundle!!.getString("result")
-            Log.e("11111111111", scanResult)
-            ScanResultActivity.start(baseActivity)
-            baseActivity?.overridePendingTransition(R.anim.activity_in, 0)
-            add_layout.visibility = View.GONE
+            val scanResult = bundle!!.getString("result")//       /api/qrlogin/notify
+            if (scanResult.contains("/api/qrlogin/notify")) {
+
+                SoguApi.getService(baseActivity!!.application)
+                        .qrNotify(1)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({ payload ->
+                            if (payload.isOk) {
+                                ScanResultActivity.start(baseActivity)
+                                baseActivity?.overridePendingTransition(R.anim.activity_in, 0)
+                                add_layout.visibility = View.GONE
+                            } else {
+                                //showCustomToast(R.drawable.icon_toast_fail, payload.message)
+                            }
+                        }, { e ->
+                            //showCustomToast(R.drawable.icon_toast_fail, "删除失败")
+                        })
+            }
         } else if (requestCode == 0x789) {
             loadHead()
         }

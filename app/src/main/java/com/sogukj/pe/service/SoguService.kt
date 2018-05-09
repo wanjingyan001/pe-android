@@ -1300,4 +1300,8 @@ interface SoguService {
     @FormUrlEncoded
     @POST("/api/Credit/deleteCredit")
     fun deleteCredit(@Field("id") id: Int): Observable<Payload<Object>>
+
+    @FormUrlEncoded
+    @POST("/api/qrlogin/notify")
+    fun qrNotify(@Field("status") status: Int): Observable<Payload<Object>>
 }
