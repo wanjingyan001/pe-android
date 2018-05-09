@@ -210,7 +210,7 @@ class MainMsgFragment : BaseFragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbar_title.text = "消息首页"
+        toolbar_title.text = "消息"
 
         loadHead()
         initSearchView()
