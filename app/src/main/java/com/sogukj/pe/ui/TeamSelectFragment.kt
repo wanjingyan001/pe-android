@@ -555,7 +555,7 @@ class TeamSelectFragment : BaseFragment() {
                     holder.selectIcon.imageResource = R.drawable.cannot_select
                 }
                 Glide.with(context)
-                        .load(MyGlideUrl(userBean.headImage()))
+                        .load(userBean.headImage())
                         .apply(RequestOptions().error(R.drawable.nim_avatar_default).placeholder(R.drawable.nim_avatar_default))
                         .into(holder.userImg)
                 holder.userName.text = userBean.name
@@ -633,7 +633,7 @@ class TeamSelectFragment : BaseFragment() {
                 holder.userImg.setChar(ch)
             } else {
                 Glide.with(context)
-                        .load(MyGlideUrl(userBean.headImage()))
+                        .load(userBean.headImage())
                         .apply(RequestOptions().error(R.drawable.nim_avatar_default).placeholder(R.drawable.nim_avatar_default))
                         .into(holder.userImg)
             }
