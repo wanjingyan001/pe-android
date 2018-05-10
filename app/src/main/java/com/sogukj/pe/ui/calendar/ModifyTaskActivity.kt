@@ -9,6 +9,8 @@ import android.support.v7.widget.GridLayoutManager
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.Button
+import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.framework.base.ToolbarActivity
@@ -34,6 +36,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_modify_task.*
 import org.jetbrains.anko.ctx
+import org.jetbrains.anko.find
 import org.jetbrains.anko.info
 import java.text.SimpleDateFormat
 import java.util.*
@@ -76,6 +79,43 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
             intent.putExtra(Extras.NAME, name)
             intent.putExtra(Extras.DATA, data_id)
             ctx?.startActivity(intent)
+        }
+    }
+
+    override fun onBackPressed() {
+        //创建时保存草稿
+        val reqBean = getReqBean()
+        if (type == CREATE) {
+            if (!isNeedSave) {
+                super.onBackPressed()
+            } else {
+                var mDialog = MaterialDialog.Builder(this@ModifyTaskActivity)
+                        .theme(Theme.LIGHT)
+                        .canceledOnTouchOutside(true)
+                        .customView(R.layout.dialog_yongyin, false).build()
+                mDialog.show()
+                val content = mDialog.find<TextView>(R.id.content)
+                val cancel = mDialog.find<Button>(R.id.cancel)
+                val yes = mDialog.find<Button>(R.id.yes)
+                content.text = "是否需要保存草稿"
+                cancel.text = "否"
+                yes.text = "是"
+                cancel.setOnClickListener {
+                    super.onBackPressed()
+                }
+                yes.setOnClickListener {
+                    showCustomToast(R.drawable.icon_toast_success, "草稿保存成功")
+                    val draft = TaskDraft()
+                    draft.taskReqBean = reqBean
+                    draft.company = companyBean
+                    draft.executorList = selectUser2.selectUsers
+                    draft.watcherList = selectUser.selectUsers
+                    xmlDb.set("${Store.store.getUser(this)?.uid}_${SCHEDULE_DRAFT}_$name", Gson().toJson(draft))
+                    super.onBackPressed()
+                }
+            }
+        } else {
+            super.onBackPressed()
         }
     }
 
@@ -179,8 +219,8 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                                 companyId = it.company_id
                                 relatedProject.text = it.cName
                                 missionDetails.setText(it.info)
-                                start = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(it.start_time)
-                                endTime = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(it.end_time)
+                                start = SimpleDateFormat("yyyy-MM-dd HH:mm").parse(it.start_time)
+                                endTime = SimpleDateFormat("yyyy-MM-dd HH:mm").parse(it.end_time)
                                 startTime.text = Utils.getTime(start, "MM月dd日 E HH:mm")
                                 deadline.text = Utils.getTime(endTime, "MM月dd日 E HH:mm")
                                 if (it.clock == null) {
@@ -262,6 +302,8 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
 
     }
 
+    var isNeedSave = false
+
     /**
      * 获取要提交的数据对象
      */
@@ -276,8 +318,8 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
         } else {
             bean.company_id = companyId
         }
-        bean.start_time = Utils.getTime(start, "yyyy-MM-dd HH:mm:ss")
-        bean.end_time = Utils.getTime(endTime, "yyyy-MM-dd HH:mm:ss")
+        bean.start_time = Utils.getTime(start, "yyyy-MM-dd HH:mm")
+        bean.end_time = Utils.getTime(endTime, "yyyy-MM-dd HH:mm")
         bean.clock = seconds
         val exusers = StringBuilder()
         if (data2.isNotEmpty()) {
@@ -302,6 +344,20 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
             bean.watcher = watchusers.toString().substring(0, watchusers.length - 1)
         }
         Log.d("WJY", Gson().toJson(reqBean))
+
+        if (!bean.info.isNullOrEmpty()) {
+            isNeedSave = true
+        }
+        if (bean.company_id != null) {
+            isNeedSave = true
+        }
+        if (!bean.executor.isNullOrEmpty()) {
+            isNeedSave = true
+        }
+        if (!bean.watcher.isNullOrEmpty()) {
+            isNeedSave = true
+        }
+
         return reqBean
     }
 
@@ -469,8 +525,8 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                 draft?.let {
                     it.taskReqBean?.ae?.apply {
                         missionDetails.setText(info)
-                        start = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(start_time)
-                        endTime = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(end_time)
+                        start = SimpleDateFormat("yyyy-MM-dd HH:mm").parse(start_time)
+                        endTime = SimpleDateFormat("yyyy-MM-dd HH:mm").parse(end_time)
                         startTime.text = Utils.getTime(start, "MM月dd日 E HH:mm")
                         deadline.text = Utils.getTime(endTime, "MM月dd日 E HH:mm")
                         if (clock == null) {
@@ -505,18 +561,18 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
         }
     }
 
-    override fun onStop() {
-        super.onStop()
-        //创建时保存草稿
-        if (type == CREATE) {
-            val reqBean = getReqBean()
-            val draft = TaskDraft()
-            draft.taskReqBean = reqBean
-            draft.company = companyBean
-            draft.executorList = selectUser2.selectUsers
-            draft.watcherList = selectUser.selectUsers
-            xmlDb.set("${Store.store.getUser(this)?.uid}_${SCHEDULE_DRAFT}_$name", Gson().toJson(draft))
-        }
-    }
+//    override fun onStop() {
+//        super.onStop()
+//        //创建时保存草稿
+//        if (type == CREATE) {
+//            val reqBean = getReqBean()
+//            val draft = TaskDraft()
+//            draft.taskReqBean = reqBean
+//            draft.company = companyBean
+//            draft.executorList = selectUser2.selectUsers
+//            draft.watcherList = selectUser.selectUsers
+//            xmlDb.set("${Store.store.getUser(this)?.uid}_${SCHEDULE_DRAFT}_$name", Gson().toJson(draft))
+//        }
+//    }
 
 }
