@@ -18,7 +18,7 @@ class CreditInfo : Serializable {
         var phone: String? = null//手机号码
         var idCard: String? = null//身份证号码
         var type = 0//人物级别 1=>董监高  2=>股东
-        var status = -1//查询状态 2=>查询完成，3=>查询失败：
+        var status = -1//查询状态 1=>正在查询  2=>查询完成，3=>查询失败：
         var error_info: String? = null//错误信息
         var sum: Int? = null//负面信息总数(第一次进入不返回此字段)
         //var piece: Piece? = null//负面信息分布(进入详情时带入（第一次进入不返回此字段）)
