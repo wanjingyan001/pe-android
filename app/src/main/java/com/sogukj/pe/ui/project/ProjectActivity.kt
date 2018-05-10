@@ -155,7 +155,7 @@ class ProjectActivity : ToolbarActivity(), View.OnClickListener {
 
         divide2.visibility = View.VISIBLE
 
-        shangshi_layout.visibility = if (project.is_volatility == 0) View.GONE else View.VISIBLE
+        //shangshi_layout.visibility = if (project.is_volatility == 0) View.GONE else View.VISIBLE
 
         val user = Store.store.getUser(this)
         SoguApi.getService(application)

@@ -105,7 +105,7 @@
                         android:drawableRight="@drawable/ic_right"
                         android:gravity="right|center_vertical"
                         android:text="请选择"
-                        android:textColor="@color/text_3" />
+                        android:textColor="@color/text_1" />
 
                 </LinearLayout>
 
