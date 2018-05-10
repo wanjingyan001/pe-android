@@ -6,10 +6,7 @@ import com.sogukj.pe.ui.IM.ChatFileBean
 import com.sogukj.pe.ui.calendar.*
 import io.reactivex.Observable
 import okhttp3.RequestBody
-import retrofit2.http.Body
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.POST
+import retrofit2.http.*
 
 /**
  * Created by qinfei on 17/6/2.
@@ -1302,6 +1299,6 @@ interface SoguService {
     fun deleteCredit(@Field("id") id: Int): Observable<Payload<Object>>
 
     @FormUrlEncoded
-    @POST("/api/qrlogin/notify")
-    fun qrNotify(@Field("status") status: Int): Observable<Payload<Object>>
+    @POST
+    fun qrNotify(@Url url:String, @Field("status") status: Int): Observable<Payload<Object>>
 }

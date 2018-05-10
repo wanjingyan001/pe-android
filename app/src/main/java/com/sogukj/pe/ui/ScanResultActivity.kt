@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import com.framework.base.BaseActivity
+import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -13,8 +14,9 @@ import kotlinx.android.synthetic.main.activity_scan_result.*
 class ScanResultActivity : BaseActivity() {
 
     companion object {
-        fun start(ctx: Activity?) {
+        fun start(ctx: Activity?, result: String) {
             val intent = Intent(ctx, ScanResultActivity::class.java)
+            intent.putExtra(Extras.DATA, result)
             ctx?.startActivity(intent)
         }
     }
@@ -34,8 +36,12 @@ class ScanResultActivity : BaseActivity() {
         }
 
         login.setOnClickListener {
+            var scanResult = intent.getStringExtra(Extras.DATA)
+
+            var index = scanResult.indexOf("/api/")
+
             SoguApi.getService(application)
-                    .qrNotify(2)
+                    .qrNotify(scanResult.substring(index), 2)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe({ payload ->

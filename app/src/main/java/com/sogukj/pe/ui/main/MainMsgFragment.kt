@@ -70,6 +70,7 @@ import com.xuexuan.zxing.android.activity.CaptureActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_msg_center.*
+import okhttp3.FormBody
 import org.jetbrains.anko.backgroundResource
 import org.jetbrains.anko.imageResource
 import org.jetbrains.anko.support.v4.ctx
@@ -455,20 +456,23 @@ class MainMsgFragment : BaseFragment() {
             val scanResult = bundle!!.getString("result")//       /api/qrlogin/notify
             if (scanResult.contains("/api/qrlogin/notify")) {
 
+                //   http://pre.pe.stockalert.cn/api/qrlogin/notify?uuid=0D381CE1-70AE-C02E-98AB-84DC7B55EC0D&fd=1
+                var index = scanResult.indexOf("/api/")
+
                 SoguApi.getService(baseActivity!!.application)
-                        .qrNotify(1)
+                        .qrNotify(scanResult.substring(index), 1)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeOn(Schedulers.io())
                         .subscribe({ payload ->
                             if (payload.isOk) {
-                                ScanResultActivity.start(baseActivity)
+                                ScanResultActivity.start(baseActivity, scanResult)
                                 baseActivity?.overridePendingTransition(R.anim.activity_in, 0)
                                 add_layout.visibility = View.GONE
                             } else {
-                                //showCustomToast(R.drawable.icon_toast_fail, payload.message)
+                                showCustomToast(R.drawable.icon_toast_fail, payload.message)
                             }
                         }, { e ->
-                            //showCustomToast(R.drawable.icon_toast_fail, "删除失败")
+                            //showCustomToast(R.drawable.icon_toast_fail, "二维码错误")
                         })
             }
         } else if (requestCode == 0x789) {
