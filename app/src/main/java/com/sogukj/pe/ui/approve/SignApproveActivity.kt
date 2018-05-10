@@ -36,6 +36,7 @@ import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import org.jetbrains.anko.collections.forEachWithIndex
+import org.jetbrains.anko.imageResource
 import java.io.File
 import java.io.FileOutputStream
 
@@ -111,6 +112,9 @@ class SignApproveActivity : ToolbarActivity() {
                             iv_state_signed.visibility = View.VISIBLE
                         } else if (status != null && status >= 3) {
                             iv_state_agreed.visibility = View.VISIBLE
+                        }
+                        if (status == 5) {
+                            iv_state_agreed.imageResource = R.drawable.ic_flow_state_chexiao
                         }
                     } else {
                         showCustomToast(R.drawable.icon_toast_fail,payload.message)
@@ -214,6 +218,7 @@ class SignApproveActivity : ToolbarActivity() {
                                 if (payload.isOk) {
 //                                    showToast("提交成功")
                                     showCustomToast(R.drawable.icon_toast_success,"撤销成功")
+                                    refresh()
                                 } else {
                                     showCustomToast(R.drawable.icon_toast_fail,payload.message)
                                 }

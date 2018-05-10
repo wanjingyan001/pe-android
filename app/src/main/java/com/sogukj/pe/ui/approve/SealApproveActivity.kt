@@ -34,6 +34,7 @@ import kotlinx.android.synthetic.main.seal_approve_part2.*
 import kotlinx.android.synthetic.main.seal_approve_part3.*
 import org.jetbrains.anko.collections.forEachWithIndex
 import org.jetbrains.anko.find
+import org.jetbrains.anko.imageResource
 import java.text.SimpleDateFormat
 
 /**
@@ -107,6 +108,9 @@ class SealApproveActivity : ToolbarActivity() {
                         val status = payload?.payload?.mainStatus
                         if (status != null && status > 1) {
                             iv_state_agreed.visibility = View.VISIBLE
+                            if (status == 5) {
+                                iv_state_agreed.imageResource = R.drawable.ic_flow_state_chexiao
+                            }
                         }
 
                     } else {
@@ -153,6 +157,7 @@ class SealApproveActivity : ToolbarActivity() {
                             .subscribe({ payload ->
                                 if (payload.isOk) {
                                     showCustomToast(R.drawable.icon_toast_success, "撤销成功")
+                                    refresh()
                                 } else {
                                     showCustomToast(R.drawable.icon_toast_fail, payload.message)
                                 }
