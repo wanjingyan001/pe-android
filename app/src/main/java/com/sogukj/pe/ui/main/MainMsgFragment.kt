@@ -296,7 +296,7 @@ class MainMsgFragment : BaseFragment() {
                             val userInfo = NimUIKit.getUserInfoProvider().getUserInfo(data.contactId)
                             userInfo?.let {
                                 Glide.with(this@MainMsgFragment)
-                                        .load(MyGlideUrl(it.avatar))
+                                        .load(it.avatar)
                                         .listener(object : RequestListener<Drawable> {
                                             override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
                                                 val ch = userInfo.name.first()
@@ -322,7 +322,7 @@ class MainMsgFragment : BaseFragment() {
                             val team = NimUIKit.getTeamProvider().getTeamById(data.contactId)
                             team?.let {
                                 Glide.with(this@MainMsgFragment)
-                                        .load(MyGlideUrl(it.icon))
+                                        .load(it.icon)
                                         .apply(RequestOptions().error(R.drawable.im_team_default))
                                         .into(msgIcon)
                             }

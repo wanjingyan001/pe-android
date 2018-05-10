@@ -97,7 +97,8 @@ class UserEditActivity : ToolbarActivity() {
                     .imageLoader(ImageLoaderType.GLIDE)
                     .subscribe(object : RxBusResultDisposable<ImageRadioResultEvent>() {
                         override fun onEvent(event: ImageRadioResultEvent?) {
-                            val path = event?.result?.originalPath
+//                            val path = event?.result?.originalPath
+                            val path = event?.result?.thumbnailSmallPath
                             if (!TextUtils.isEmpty(path))
                                 doUpload(path!!)
                         }
@@ -469,7 +470,7 @@ class UserEditActivity : ToolbarActivity() {
     private fun doUpload(url: String) {
         user.url = url
         Glide.with(this@UserEditActivity)
-                .load(MyGlideUrl(url))
+                .load(url)
                 .apply(RequestOptions().error(Utils.defaultHeadImg()))
                 .into(iv_user)
         val imgPath = compressImage(url, 160, 160, 1024 * 1024)

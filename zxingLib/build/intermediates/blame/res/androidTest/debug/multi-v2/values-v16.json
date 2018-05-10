@@ -1,17 +1,10 @@
 {
     "logs": [
         {
-<<<<<<< HEAD
-            "outputFile": "/Users/sogubaby/pe-v2/pe-android/zxingLib/build/intermediates/incremental/mergeDebugAndroidTestResources/merged.dir/values-v16/values-v16.xml",
-            "map": [
-                {
-                    "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/b9f40973249904c072c5dc9eefbb25fa/res/values-v16/values-v16.xml",
-=======
             "outputFile": "/Users/admin/dev/proj/pe3.1/pe-android/zxingLib/build/intermediates/incremental/mergeDebugAndroidTestResources/merged.dir/values-v16/values-v16.xml",
             "map": [
                 {
                     "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/f6d2a503db6dbeac8bcee150d656c30d/res/values-v16/values-v16.xml",
->>>>>>> 2f6d90c9cc2329cf4b6ef3312d4716c6e720f201
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -23,17 +16,10 @@
             ]
         },
         {
-<<<<<<< HEAD
-            "outputFile": "/Users/sogubaby/pe-v2/pe-android/zxingLib/build/intermediates/res/merged/androidTest/debug/values-v16/values-v16.xml",
-            "map": [
-                {
-                    "source": "/Users/sogubaby/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/b9f40973249904c072c5dc9eefbb25fa/res/values-v16/values-v16.xml",
-=======
             "outputFile": "/Users/admin/dev/proj/pe3.1/pe-android/zxingLib/build/intermediates/res/merged/androidTest/debug/values-v16/values-v16.xml",
             "map": [
                 {
                     "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/f6d2a503db6dbeac8bcee150d656c30d/res/values-v16/values-v16.xml",
->>>>>>> 2f6d90c9cc2329cf4b6ef3312d4716c6e720f201
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

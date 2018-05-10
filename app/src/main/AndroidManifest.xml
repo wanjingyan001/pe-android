@@ -85,7 +85,7 @@
         <!-- 正式版 -->
         <!-- 5d8ada31fe2ba9cb419b5f63a95e8756 -->
         <!-- 云信后台服务，请使用独立进程。 -->
-        <!--每个app自己单独的定位service-->
+        <!-- 每个app自己单独的定位service -->
         <service android:name="com.amap.api.location.APSService" />
         <service
             android:name="com.netease.nimlib.service.NimService"
@@ -708,8 +708,10 @@
         <activity android:name=".ui.project.FinanceListActivity" />
         <activity android:name=".ui.project.FinanceDetailActivity" />
         <activity android:name=".ui.IM.MemberEditActivity" />
-        <activity android:name=".ui.user.FormActivity"></activity>
-        <activity android:name=".ui.IM.newlocation.activity.IMLocationActivity"></activity>
+        <activity android:name=".ui.user.FormActivity" />
+        <activity android:name=".ui.IM.newlocation.activity.IMLocationActivity" />
+        <activity android:name=".ui.IM.newlocation.activity.AddressSearchActivity" />
+        <activity android:name=".ui.IM.newlocation.activity.LocationMessageActivity"></activity>
     </application>
 
 </manifest>
