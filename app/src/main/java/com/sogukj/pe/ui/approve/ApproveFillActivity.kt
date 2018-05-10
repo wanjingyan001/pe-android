@@ -1424,11 +1424,11 @@ class ApproveFillActivity : ToolbarActivity() {
 //                ll_approver.removeAllViews()
 //                requestApprove(data.id)
 //            }
-            if(bean.is_fresh == 1) {
+            if (bean.is_fresh == 1) {
                 ll_approver.removeAllViews()
 
-                var pro_id = if(bean.fields == "project_id") data.id else null
-                var fund_id = if(bean.fields == "fund_id") data.id else null
+                var pro_id = if (bean.fields == "project_id") data.id else null
+                var fund_id = if (bean.fields == "fund_id") data.id else null
 
                 SoguApi.getService(application)
                         .leaveInfo(template_id = if (flagEdit) null else paramId!!,
@@ -1546,7 +1546,7 @@ class ApproveFillActivity : ToolbarActivity() {
         val convertView = inflater.inflate(R.layout.cs_row_sendto, null) as LinearLayout
         ll_approver.addView(convertView)
         var grid_to = convertView.findViewById(R.id.grid_chaosong_to) as GridView
-        var adapter = MyCSAdapter(context, list)
+        var adapter = MyCSAdapter(context, list, default)
         grid_to.adapter = adapter
 
         val tvLabel = convertView.findViewById(R.id.tv_label) as TextView
@@ -1562,10 +1562,15 @@ class ApproveFillActivity : ToolbarActivity() {
                     list.add(adapter.list[index])
                 }
 //                TeamSelectActivity.startForResult(this, true, list, false, false, true, SEND, default)
-                ContactsActivity.startWithDefault(this,list,true,false,default,SEND)
+                ContactsActivity.startWithDefault(this, list, true, false, default, SEND)
             } else {
-                adapter.list.removeAt(position)
-                adapter.notifyDataSetChanged()
+                var item = adapter.list.get(position)
+                if (default.contains(item.uid)) {
+
+                } else {
+                    adapter.list.removeAt(position)
+                    adapter.notifyDataSetChanged()
+                }
             }
         }
         checkList.add {
@@ -1630,7 +1635,7 @@ class ApproveFillActivity : ToolbarActivity() {
         }
     }
 
-    class MyCSAdapter(var context: Context, val list: ArrayList<UserBean>) : BaseAdapter() {
+    class MyCSAdapter(var context: Context, val list: ArrayList<UserBean>, val default: ArrayList<Int>) : BaseAdapter() {
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             var viewHolder: ViewHolder
@@ -1639,7 +1644,8 @@ class ApproveFillActivity : ToolbarActivity() {
                 viewHolder = ViewHolder()
                 conView = LayoutInflater.from(context).inflate(R.layout.send_item, null) as LinearLayout
                 viewHolder.icon = conView.findViewById(R.id.icon) as CircleImageView
-                viewHolder.name = conView.findViewById(R.id.name) as TextView
+                viewHolder.cs_add = conView.findViewById(R.id.cs_add) as ImageView
+                viewHolder.cs_default = conView.findViewById(R.id.cs_default) as ImageView
                 conView.setTag(viewHolder)
             } else {
                 viewHolder = conView.tag as ViewHolder
@@ -1650,6 +1656,8 @@ class ApproveFillActivity : ToolbarActivity() {
                         .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
                         .into(viewHolder.icon)
                 viewHolder.name?.text = "添加"
+                viewHolder.cs_add?.visibility = View.GONE
+                viewHolder.cs_default?.visibility = View.GONE
             } else {
                 if (list[position].url.isNullOrEmpty()) {
                     viewHolder.icon?.setChar(list[position].name.first())
@@ -1660,6 +1668,13 @@ class ApproveFillActivity : ToolbarActivity() {
                             .into(viewHolder.icon)
                 }
                 viewHolder.name?.text = list[position].name
+                if (default.contains(list[position].uid)) {
+                    viewHolder.cs_default?.visibility = View.VISIBLE
+                    viewHolder.cs_add?.visibility = View.GONE
+                } else {
+                    viewHolder.cs_default?.visibility = View.GONE
+                    viewHolder.cs_add?.visibility = View.VISIBLE
+                }
             }
             return conView
         }
@@ -1679,6 +1694,8 @@ class ApproveFillActivity : ToolbarActivity() {
         class ViewHolder {
             var icon: CircleImageView? = null
             var name: TextView? = null
+            var cs_add: ImageView? = null
+            var cs_default: ImageView? = null
         }
     }
 }

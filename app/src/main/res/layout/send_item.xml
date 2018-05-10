@@ -6,12 +6,33 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <com.sogukj.pe.view.CircleImageView
-        android:id="@+id/icon"
+    <FrameLayout
         android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@null"
-        android:src="@drawable/send_add" />
+        android:layout_height="40dp">
+
+        <com.sogukj.pe.view.CircleImageView
+            android:id="@+id/icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@null"
+            android:src="@drawable/send_add" />
+
+        <ImageView
+            android:id="@+id/cs_default"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_gravity="right|bottom"
+            android:src="@drawable/cs_default"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/cs_add"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_gravity="right|top"
+            android:src="@drawable/cs_add"
+            android:visibility="gone" />
+    </FrameLayout>
 
     <TextView
         android:id="@+id/name"
