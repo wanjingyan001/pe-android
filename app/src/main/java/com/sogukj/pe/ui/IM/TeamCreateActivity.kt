@@ -78,7 +78,8 @@ class TeamCreateActivity : AppCompatActivity() {
                     .imageLoader(ImageLoaderType.GLIDE)
                     .subscribe(object : RxBusResultDisposable<ImageRadioResultEvent>() {
                         override fun onEvent(t: ImageRadioResultEvent?) {
-                            path = t?.result?.originalPath
+//                            path = t?.result?.originalPath
+                            path = t?.result?.thumbnailSmallPath
                             if (!path.isNullOrEmpty()) {
                                 Glide.with(this@TeamCreateActivity)
                                         .load(path)

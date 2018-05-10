@@ -49,8 +49,8 @@ public class NimDemoLocationProvider implements LocationProvider {
             alertDialog.show();
             return;
         }
-        LocationAmapActivity.start(context, callback);
-//        IMLocationActivity.Companion.start(context,callback);
+//        LocationAmapActivity.start(context, callback);
+        IMLocationActivity.Companion.start(context,callback);
     }
 
     @Override

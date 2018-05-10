@@ -66,7 +66,7 @@ class WorkArrangePerson : LinearLayout {
                 if (index < data.size) {
                     imageView.visibility = View.VISIBLE
                     Glide.with(context)
-                            .load(MyGlideUrl(data[index].url))
+                            .load(data[index].url)
                             .apply(RequestOptions().placeholder(R.drawable.default_head))
                             .into(imageView)
                 } else {
