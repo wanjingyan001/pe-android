@@ -10,12 +10,15 @@ import android.text.Html
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.widget.BaseAdapter
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
@@ -100,6 +103,9 @@ class SealApproveActivity : ToolbarActivity() {
                         initFiles(payload.payload?.file_list)
                         initApprovers(payload.payload?.approve)
                         initSegments(payload.payload?.segment)
+                        payload.payload?.copier?.apply {
+                            initCS(this)
+                        }
                         initButtons(payload.payload?.click)
 
                         iv_state_agreed.visibility = View.GONE
@@ -120,6 +126,14 @@ class SealApproveActivity : ToolbarActivity() {
                     Trace.e(e)
                     showCustomToast(R.drawable.icon_toast_common, "暂无可用数据")
                 })
+    }
+
+    fun initCS(list: ArrayList<UserBean>) {
+        var adapter = MyAdapter(context, list)
+        grid_chaosong_to.adapter = adapter
+        if(list.size == 0){
+            cs_layout.visibility = View.GONE
+        }
     }
 
     fun initButtons(click: Int?) {
@@ -640,6 +654,50 @@ class SealApproveActivity : ToolbarActivity() {
             intent.putExtra(Extras.TYPE, type)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             ctx.startActivity(intent)
+        }
+    }
+
+    class MyAdapter(var context: Context, val list: ArrayList<UserBean>) : BaseAdapter() {
+
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+            var viewHolder: ViewHolder
+            var conView = convertView
+            if (conView == null) {
+                viewHolder = ViewHolder()
+                conView = LayoutInflater.from(context).inflate(R.layout.send_item, null) as LinearLayout
+                viewHolder.icon = conView.findViewById(R.id.icon) as CircleImageView
+                viewHolder.name = conView.findViewById(R.id.name) as TextView
+                conView.setTag(viewHolder)
+            } else {
+                viewHolder = conView.tag as ViewHolder
+            }
+            if (list[position].url.isNullOrEmpty()) {
+                viewHolder.icon?.setChar(list[position].name.first())
+            } else {
+                Glide.with(context)
+                        .load(MyGlideUrl(list[position].url))
+                        .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
+                        .into(viewHolder.icon)
+            }
+            viewHolder.name?.text = list[position].name
+            return conView
+        }
+
+        override fun getItem(position: Int): Any {
+            return list.get(position)
+        }
+
+        override fun getItemId(position: Int): Long {
+            return position.toLong()
+        }
+
+        override fun getCount(): Int {
+            return list.size
+        }
+
+        class ViewHolder {
+            var icon: CircleImageView? = null
+            var name: TextView? = null
         }
     }
 }

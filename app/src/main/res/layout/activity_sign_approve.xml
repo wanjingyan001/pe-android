@@ -147,6 +147,52 @@
                     layout="@layout/state_sign_confim"
                     android:visibility="gone" />
 
+                <LinearLayout
+                    android:id="@+id/cs_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:paddingBottom="15dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="11dp"
+                        android:layout_marginTop="11dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <View
+                            android:layout_width="5dp"
+                            android:layout_height="10dp"
+                            android:layout_marginRight="5dp"
+                            android:background="@color/color_main" />
+
+                        <TextView
+                            style="@style/SoguTextNormal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="抄送人" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/divider" />
+
+                    <com.sogukj.pe.view.MyGridView
+                        android:id="@+id/grid_chaosong_to"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="10dp"
+                        android:horizontalSpacing="10dp"
+                        android:numColumns="6"
+                        android:verticalSpacing="12dp" />
+                </LinearLayout>
+
                 <Button
                     android:id="@+id/btn_single"
                     android:layout_width="match_parent"
