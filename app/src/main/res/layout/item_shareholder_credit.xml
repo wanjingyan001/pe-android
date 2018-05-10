@@ -132,7 +132,7 @@
             android:layout_height="50dp"
             android:layout_gravity="bottom|center"
             android:gravity="center"
-            android:padding="15dp"
+            android:padding="18dp"
             android:src="@drawable/zhengxin_edit" />
 
     </FrameLayout>

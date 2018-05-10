@@ -115,9 +115,11 @@ class ShareholderCreditActivity : BaseActivity(), View.OnClickListener {
                     gif.setScaleY(scale)
 
                     if (appBarHeight - toolbarHeight - Math.abs(verticalOffset).toFloat() < 5) {
-                        collapse.setTitle("征信查询")
+                        collapse.setTitle("")
+                        toolbar_title.visibility = View.VISIBLE
                     } else {
                         collapse.setTitle("让不良记录无处遁形")
+                        toolbar_title.visibility = View.GONE
                     }
                 }
             }
