@@ -289,7 +289,7 @@ class SealApproveActivity : ToolbarActivity() {
             }
             6 -> {
                 btn_single.visibility = View.VISIBLE
-                btn_single.text = "导出审批单"
+                btn_single.text = "导出用印单"
                 btn_single.setOnClickListener {
                     SoguApi.getService(application)
                             .exportPdf(paramId!!)
