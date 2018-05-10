@@ -125,11 +125,15 @@ class PersonalInfoActivity : BaseActivity(), View.OnClickListener, TextWatcher, 
                             email_tv.text = it.email
                             department_tv.text = it.depart_name
                             position_tv.text = it.position
-                            Glide.with(this)
-                                    .load(MyGlideUrl(it.headImage()))
-                                    .apply(RequestOptions().error(R.drawable.ewm))
-                                    .into(avatar)
-
+                            if (it.headImage().isNullOrEmpty()) {
+                                val ch = user?.name?.first()
+                                avatar.setChar(ch)
+                            } else {
+                                Glide.with(this)
+                                        .load(MyGlideUrl(it.headImage()))
+                                        .apply(RequestOptions().error(R.drawable.ewm))
+                                        .into(avatar)
+                            }
                         }
                     }
                 }, { e ->

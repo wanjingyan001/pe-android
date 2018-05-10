@@ -46,7 +46,12 @@ class PersonalWeeklyActivity : BaseActivity() {
                     week_id = it
                 }
                 name.text = bean.name
-                Glide.with(context).load(MyGlideUrl(bean.url)).into(icon)
+                if (bean.url.isNullOrEmpty()) {
+                    val ch = bean.name?.first()
+                    icon.setChar(ch)
+                } else {
+                    Glide.with(context).load(MyGlideUrl(bean.url)).into(icon)
+                }
             }
             "My" -> {
                 week_id = intent.getIntExtra(Extras.ID, -1)
@@ -54,7 +59,12 @@ class PersonalWeeklyActivity : BaseActivity() {
                 endTime = intent.getStringExtra(Extras.TIME2)
                 val user = Store.store.getUser(context)
                 name.text = user?.name
-                Glide.with(context).load(MyGlideUrl(user?.headImage())).into(icon)
+                if (user?.headImage().isNullOrEmpty()) {
+                    val ch = user?.name?.first()
+                    icon.setChar(ch)
+                } else {
+                    Glide.with(context).load(MyGlideUrl(user?.headImage())).into(icon)
+                }
             }
             "Push" -> {
                 week_id = intent.getIntExtra(Extras.ID, -1)

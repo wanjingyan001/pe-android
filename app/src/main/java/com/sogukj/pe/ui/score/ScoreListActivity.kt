@@ -82,7 +82,11 @@ class ScoreListActivity : ToolbarActivity() {
 
                 override fun setData(view: View, data: ScoreBean, position: Int) {
                     tvSeq.text = "${position + 4}"
-                    Glide.with(context).load(MyGlideUrl(data.url)).into(Head)
+                    if(data.url.isNullOrEmpty()){
+                        Head.setChar(data.name?.first())
+                    } else {
+                        Glide.with(context).load(MyGlideUrl(data.url)).into(Head)
+                    }
                     tvName.text = data.name
                     final_score.text = "最终得分：${data.total_grade}"
                     finishing_task.text = "岗位胜任力评价：${data.resumption}"
@@ -177,7 +181,11 @@ class ScoreListActivity : ToolbarActivity() {
     fun set(bean: ScoreBean, index: Int) {
         var id = resources.getIdentifier("head_" + (index + 1), "id", context.packageName)
         var headIcon = findViewById(id) as CircleImageView
-        Glide.with(context).load(MyGlideUrl(bean.url)).into(headIcon)
+        if(bean.url.isNullOrEmpty()){
+            headIcon.setChar(bean.name?.first())
+        } else {
+            Glide.with(context).load(MyGlideUrl(bean.url)).into(headIcon)
+        }
 
         var id_dengji = resources.getIdentifier("dengji_" + (index + 1), "id", context.packageName)
         var dengji = findViewById(id_dengji) as TextView

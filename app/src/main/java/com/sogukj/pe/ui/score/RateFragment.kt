@@ -88,7 +88,11 @@ class RateFragment : BaseFragment() {
 
         person = arguments.getSerializable(Extras.DATA) as GradeCheckBean.ScoreItem
         person?.let {
-            Glide.with(context).load(MyGlideUrl(it.url)).into(icon)
+            if(it.url.isNullOrEmpty()){
+                icon.setChar(it.name?.first())
+            } else {
+                Glide.with(context).load(MyGlideUrl(it.url)).into(icon)
+            }
             name.text = it.name
             depart.text = it.department
             position.text = it.position

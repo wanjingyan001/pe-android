@@ -213,10 +213,14 @@ public class TeamSearchActivity extends AppCompatActivity implements View.OnClic
             RequestOptions options = new RequestOptions();
             options.error(R.drawable.nim_avatar_default)
                     .fallback(R.drawable.nim_avatar_default);
-            Glide.with(TeamSearchActivity.this)
-                    .load(new MyGlideUrl(userInfo.getAvatar()))
-                    .apply(options)
-                    .into(holder.resultAvatar);
+            if(userInfo.getAvatar() == null || userInfo.getAvatar().equals("")){
+                holder.resultAvatar.setChar(userInfo.getName().charAt(0));
+            } else {
+                Glide.with(TeamSearchActivity.this)
+                        .load(new MyGlideUrl(userInfo.getAvatar()))
+                        .apply(options)
+                        .into(holder.resultAvatar);
+            }
             String format = new SimpleDateFormat("yyyy/MM/dd").format(new Date(record.getTime()));
             holder.resultTime.setText(format);
 

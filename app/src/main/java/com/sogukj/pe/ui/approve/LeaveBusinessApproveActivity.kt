@@ -511,11 +511,14 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
             buff.append("回复<font color='#608cf8'>${data.reply}</font>")
         buff.append(data.content)
         tvComment.text = Html.fromHtml(buff.toString())
-        val ch = data.name?.first()
-        ivUser.setChar(ch)
-        Glide.with(this)
-                .load(MyGlideUrl(data.url))
-                .into(ivUser)
+        if(data.url.isNullOrEmpty()){
+            val ch = data.name?.first()
+            ivUser.setChar(ch)
+        } else {
+            Glide.with(this)
+                    .load(MyGlideUrl(data.url))
+                    .into(ivUser)
+        }
 
         convertView.setOnClickListener {
             doComment(llComments, hid, data.comment_id!!)

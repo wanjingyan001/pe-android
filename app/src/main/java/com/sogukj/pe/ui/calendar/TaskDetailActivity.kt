@@ -98,10 +98,16 @@ class TaskDetailActivity : ToolbarActivity(), CommentListener, View.OnClickListe
                         val time = convertView.find<TextView>(R.id.time)
                         val type = convertView.find<TextView>(R.id.type)
                         override fun setData(view: View, data: TaskDetailBean.Record, position: Int) {
-                            Glide.with(this@TaskDetailActivity)
-                                    .load(MyGlideUrl(data.url))
-                                    .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
-                                    .into(headerImage)
+
+                            if(data.url.isNullOrEmpty()){
+                                headerImage.setChar(data.name?.first())
+                            } else {
+                                Glide.with(this@TaskDetailActivity)
+                                        .load(MyGlideUrl(data.url))
+                                        .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
+                                        .into(headerImage)
+                            }
+
                             commentName.text = data.name
                             when (data.type) {
                                 "1" -> {

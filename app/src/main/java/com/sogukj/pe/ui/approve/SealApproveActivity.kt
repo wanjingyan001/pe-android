@@ -375,12 +375,14 @@ class SealApproveActivity : ToolbarActivity() {
             } else {
                 tvTime.visibility = View.GONE
             }
-            val ch = v.name?.first()
-            ivUser.setChar(ch)
-            Glide.with(this)
-                    .load(MyGlideUrl(v.url))
-                    .into(ivUser)
-
+            if(v.url.isNullOrEmpty()){
+                val ch = v.name?.first()
+                ivUser.setChar(ch)
+            } else {
+                Glide.with(this)
+                        .load(MyGlideUrl(v.url))
+                        .into(ivUser)
+            }
         }
 
     }
@@ -425,11 +427,15 @@ class SealApproveActivity : ToolbarActivity() {
             } else {
                 tvTime.visibility = View.GONE
             }
-            val ch = v.name?.first()
-            ivUser.setChar(ch)
-            Glide.with(this)
-                    .load(MyGlideUrl(v.url))
-                    .into(ivUser)
+            if(v.url.isNullOrEmpty()){
+                val ch = v.name?.first()
+                ivUser.setChar(ch)
+            } else {
+                Glide.with(this)
+                        .load(MyGlideUrl(v.url))
+                        .into(ivUser)
+            }
+
             tvStatus.text = v.status_str
             val buff = StringBuffer()
             if (null != v.content) {
@@ -522,11 +528,14 @@ class SealApproveActivity : ToolbarActivity() {
             buff.append("回复<font color='#608cf8'>${data.reply}</font>")
         buff.append(data.content)
         tvComment.text = Html.fromHtml(buff.toString())
-        val ch = data.name?.first()
-        ivUser.setChar(ch)
-        Glide.with(this)
-                .load(MyGlideUrl(data.url))
-                .into(ivUser)
+        if(data.url.isNullOrEmpty()){
+            val ch = data.name?.first()
+            ivUser.setChar(ch)
+        } else {
+            Glide.with(this)
+                    .load(MyGlideUrl(data.url))
+                    .into(ivUser)
+        }
 
         convertView.setOnClickListener {
             doComment(llComments, hid, data.comment_id!!)

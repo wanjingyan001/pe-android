@@ -62,7 +62,12 @@ class InvestManageActivity : ToolbarActivity() {
 
         var bean = Store.store.getUser(context)
         bean?.let {
-            Glide.with(context).load(MyGlideUrl(it.url)).into(icon)
+            if(it.url.isNullOrEmpty()){
+                val ch = it.name?.first()
+                icon.setChar(ch)
+            } else {
+                Glide.with(context).load(MyGlideUrl(it.url)).into(icon)
+            }
             name.text = it.name
             depart.text = it.depart_name
             position.text = it.position

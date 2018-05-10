@@ -327,14 +327,18 @@ class SignApproveActivity : ToolbarActivity() {
             } else {
                 tvTime.visibility = View.GONE
             }
-            val ch = v.name?.first()
-            ivUser.setChar(ch)
-            Glide.with(this)
-                    .load(MyGlideUrl(v.url))
-                    .into(ivUser)
+
+            if(v.url.isNullOrEmpty()){
+                val ch = v.name?.first()
+                ivUser.setChar(ch)
+            } else {
+                Glide.with(this)
+                        .load(MyGlideUrl(v.url))
+                        .into(ivUser)
+            }
 
             Glide.with(this)
-                    .load(MyGlideUrl(v.sign_img))
+                    .load(v.sign_img)
                     .into(ivSign)
         }
 
@@ -365,14 +369,17 @@ class SignApproveActivity : ToolbarActivity() {
             } else {
                 tvTime.visibility = View.GONE
             }
-            val ch = v.name?.first()
-            ivUser.setChar(ch)
-            Glide.with(this)
-                    .load(MyGlideUrl(v.url))
-                    .into(ivUser)
+            if(v.url.isNullOrEmpty()){
+                val ch = v.name?.first()
+                ivUser.setChar(ch)
+            } else {
+                Glide.with(this)
+                        .load(MyGlideUrl(v.url))
+                        .into(ivUser)
+            }
 
             Glide.with(this)
-                    .load(MyGlideUrl(v.sign_img))
+                    .load(v.sign_img)
                     .into(ivSign)
         }
     }

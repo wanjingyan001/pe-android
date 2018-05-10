@@ -67,7 +67,7 @@ public class BusinessCardWindow extends PopupWindow {
 //                    .load(bean.headImage())
 //                    .into(headerImg);
 //        }
-        if (!TextUtils.isEmpty(bean.getUrl())) {
+        if (TextUtils.isEmpty(bean.getUrl())) {
             char ch = bean.getName().charAt(0);
             headerImg.setChar(ch);
         } else {

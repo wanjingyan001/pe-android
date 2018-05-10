@@ -86,10 +86,16 @@ class ProjectBookUploadActivity : ToolbarActivity() {
         }
         tv_step.text = tmpStr
 
-        Glide.with(this)
-                .load(MyGlideUrl(user?.headImage()))
-                .apply(RequestOptions().error(Utils.defaultHeadImg()))
-                .into(iv_user)
+        if (user?.headImage().isNullOrEmpty()) {
+            val ch = user?.name?.first()
+            iv_user.setChar(ch)
+        } else {
+            Glide.with(this)
+                    .load(MyGlideUrl(user?.headImage()))
+                    .apply(RequestOptions().error(Utils.defaultHeadImg()))
+                    .into(iv_user)
+        }
+
         tv_title.text = project.name
         uploadAdapter = UploadAdapter(this, uploadList)
         project_upload_list.layoutManager = LinearLayoutManager(this)

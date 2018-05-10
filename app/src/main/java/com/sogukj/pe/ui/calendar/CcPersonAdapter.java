@@ -57,7 +57,7 @@ public class CcPersonAdapter extends RecyclerView.Adapter<CcPersonAdapter.CCHold
 //                    .load(userBean.getUrl())
 //                    .apply(new RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
 //                    .into(holder.userHeader);
-            if (!TextUtils.isEmpty(userBean.getUrl())) {
+            if (TextUtils.isEmpty(userBean.getUrl())) {
                 char ch = userBean.getName().charAt(0);
                 holder.userHeader.setChar(ch);
             } else {

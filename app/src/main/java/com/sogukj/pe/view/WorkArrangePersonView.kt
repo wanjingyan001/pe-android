@@ -21,7 +21,7 @@ import org.jetbrains.anko.layoutInflater
 class WorkArrangePersonView(context: Context?) : ViewGroup(context) {
     lateinit var inflate: View
     lateinit var personNumTv: TextView
-    private val personViews = ArrayList<ImageView>()
+    private val personViews = ArrayList<CircleImageView>()
 
     init {
         init()
@@ -55,10 +55,14 @@ class WorkArrangePersonView(context: Context?) : ViewGroup(context) {
         personViews.forEachIndexed { index, imageView ->
             if (index < data.size) {
                 imageView.visibility = View.VISIBLE
-                Glide.with(context)
-                        .load(MyGlideUrl(data[index].url))
-                        .apply(RequestOptions().placeholder(R.drawable.default_head))
-                        .into(imageView)
+                if(data[index].url.isNullOrEmpty()){
+                    imageView.setChar(data[index].name.first())
+                } else {
+                    Glide.with(context)
+                            .load(MyGlideUrl(data[index].url))
+                            .apply(RequestOptions().placeholder(R.drawable.default_head))
+                            .into(imageView)
+                }
             }else{
                 imageView.visibility = View.GONE
             }

@@ -78,7 +78,11 @@ class FengKongFragment : BaseFragment() {
 
         person = arguments.getSerializable(Extras.DATA) as GradeCheckBean.ScoreItem
         person?.let {
-            Glide.with(context).load(MyGlideUrl(it.url)).into(icon)
+            if(it.url.isNullOrEmpty()){
+
+            } else {
+                Glide.with(context).load(MyGlideUrl(it.url)).into(icon)
+            }
             name.text = it.name
             depart.text = it.department
             position.text = it.position

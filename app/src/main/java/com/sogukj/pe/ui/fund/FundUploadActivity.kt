@@ -84,10 +84,15 @@ class FundUploadActivity : ToolbarActivity() {
 
         val user = Store.store.getUser(this)
         tv_user.text = user?.name
-        Glide.with(this)
-                .load(MyGlideUrl(user?.headImage()))
-                .apply(RequestOptions().error(Utils.defaultHeadImg()))
-                .into(iv_user)
+        if(user?.headImage().isNullOrEmpty()){
+            val ch = user?.name?.first()
+            iv_user.setChar(ch)
+        } else {
+            Glide.with(this)
+                    .load(MyGlideUrl(user?.headImage()))
+                    .apply(RequestOptions().error(Utils.defaultHeadImg()))
+                    .into(iv_user)
+        }
         uploadAdapter = UploadAdapter(this, uploadList)
         upload_file_list.layoutManager = LinearLayoutManager(this)
         upload_file_list.adapter = uploadAdapter
