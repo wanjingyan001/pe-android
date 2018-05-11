@@ -1562,7 +1562,7 @@ class ApproveFillActivity : ToolbarActivity() {
                     list.add(adapter.list[index])
                 }
 //                TeamSelectActivity.startForResult(this, true, list, false, false, true, SEND, default)
-                ContactsActivity.startWithDefault(this, list, true, false, default, SEND)
+                ContactsActivity.startWithDefault(this, list, false, false, default, SEND)
             } else {
                 var item = adapter.list.get(position)
                 if (default.contains(item.uid)) {
@@ -1644,13 +1644,14 @@ class ApproveFillActivity : ToolbarActivity() {
                 viewHolder = ViewHolder()
                 conView = LayoutInflater.from(context).inflate(R.layout.send_item, null) as LinearLayout
                 viewHolder.icon = conView.findViewById(R.id.icon) as CircleImageView
+                viewHolder.name = conView.findViewById(R.id.name) as TextView
                 viewHolder.cs_add = conView.findViewById(R.id.cs_add) as ImageView
                 viewHolder.cs_default = conView.findViewById(R.id.cs_default) as ImageView
                 conView.setTag(viewHolder)
             } else {
                 viewHolder = conView.tag as ViewHolder
             }
-            if (position == list.size - 1) {
+            if (list[position].uid == null) {
                 Glide.with(context)
                         .load("android.resource://" + context.packageName + "/drawable/" + R.drawable.send_add)
                         .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
