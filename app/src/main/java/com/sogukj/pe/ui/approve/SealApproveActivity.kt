@@ -164,21 +164,48 @@ class SealApproveActivity : ToolbarActivity() {
                 }
                 btn_right.text = "撤销"
                 btn_right.setOnClickListener {
-                    SoguApi.getService(application)
-                            .cancelApprove(paramId!!)
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribeOn(Schedulers.io())
-                            .subscribe({ payload ->
-                                if (payload.isOk) {
-                                    showCustomToast(R.drawable.icon_toast_success, "提交成功")
-                                    refresh()
-                                } else {
-                                    showCustomToast(R.drawable.icon_toast_fail, payload.message)
-                                }
-                            }, { e ->
-                                Trace.e(e)
-                                showCustomToast(R.drawable.icon_toast_fail, "撤销失败")
-                            })
+                    val inflate = LayoutInflater.from(this).inflate(R.layout.layout_input_dialog, null)
+                    val dialog = MaterialDialog.Builder(this)
+                            .customView(inflate, false)
+                            .cancelable(true)
+                            .build()
+                    dialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                    val title = inflate.find<TextView>(R.id.approval_comments_title)
+                    val commentInput = inflate.find<EditText>(R.id.approval_comments_input)
+                    val veto = inflate.find<TextView>(R.id.veto_comment)
+                    val confirm = inflate.find<TextView>(R.id.confirm_comment)
+                    commentInput.filters = Utils.getFilter(this)
+                    title.text = "请输入撤销理由（提交后会重新审核）"
+                    title.textSize = 16.toFloat()
+                    commentInput.hint = ""
+                    veto.text = "取消"
+                    confirm.text = "提交"
+                    veto.setOnClickListener {
+                        if (dialog.isShowing) {
+                            dialog.dismiss()
+                        }
+                    }
+                    confirm.setOnClickListener {
+                        if (dialog.isShowing) {
+                            dialog.dismiss()
+                        }
+                        SoguApi.getService(application)
+                                .cancelApprove(paramId!!)
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribeOn(Schedulers.io())
+                                .subscribe({ payload ->
+                                    if (payload.isOk) {
+                                        showCustomToast(R.drawable.icon_toast_success, "提交成功")
+                                        refresh()
+                                    } else {
+                                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
+                                    }
+                                }, { e ->
+                                    Trace.e(e)
+                                    showCustomToast(R.drawable.icon_toast_fail, "撤销失败")
+                                })
+                    }
+                    dialog.show()
                 }
                 toolbar_menu.text = "修改"
             }
@@ -289,7 +316,7 @@ class SealApproveActivity : ToolbarActivity() {
             }
             6 -> {
                 btn_single.visibility = View.VISIBLE
-                btn_single.text = "导出用印单"
+                btn_single.text = "导出审批单"
                 btn_single.setOnClickListener {
                     SoguApi.getService(application)
                             .exportPdf(paramId!!)

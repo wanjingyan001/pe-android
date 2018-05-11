@@ -86,7 +86,7 @@ class ApproveFillActivity : ToolbarActivity() {
             intent.putExtra(Extras.ID, id)
             intent.putExtra(Extras.TYPE, paramType)
             intent.putExtra(Extras.TITLE, title)
-            if(restart == null) {
+            if (restart == null) {
                 intent.putExtra(Extras.RESTART, 0)
             } else {
                 intent.putExtra(Extras.RESTART, 1)
@@ -439,9 +439,11 @@ class ApproveFillActivity : ToolbarActivity() {
                     payload.payload?.apply {
                         addSP(sp!!)
 
-                        default.clear()
-                        for (user in cs!!) {
-                            default.add(user.uid!!)
+                        mDefaultID.clear()
+                        if (!default.isNullOrEmpty()) {
+                            default!!.split(",").forEach {
+                                mDefaultID.add(it.toInt())
+                            }
                         }
 
                         cs!!.add(UserBean())
@@ -500,7 +502,7 @@ class ApproveFillActivity : ToolbarActivity() {
                     builder.add(k, gson.toJson(v))
             }
             var restart = intent.getIntExtra(Extras.RESTART, 0)
-            if(restart == 1){
+            if (restart == 1) {
                 SoguApi.getService(application)
                         .updateApprove(builder.build())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -1476,9 +1478,11 @@ class ApproveFillActivity : ToolbarActivity() {
                             payload.payload?.apply {
                                 addSP(sp!!)
 
-                                default.clear()
-                                for (user in cs!!) {
-                                    default.add(user.uid!!)
+                                mDefaultID.clear()
+                                if (!default.isNullOrEmpty()) {
+                                    default!!.split(",").forEach {
+                                        mDefaultID.add(it.toInt())
+                                    }
                                 }
 
                                 cs!!.add(UserBean())
@@ -1505,7 +1509,7 @@ class ApproveFillActivity : ToolbarActivity() {
         }
     }
 
-    var default = ArrayList<Int>()
+    var mDefaultID = ArrayList<Int>()
 
     fun addSP(list: ArrayList<ArrayList<UserBean>>) {
         var datalist = ArrayList<UserBean>()
@@ -1578,7 +1582,7 @@ class ApproveFillActivity : ToolbarActivity() {
         val convertView = inflater.inflate(R.layout.cs_row_sendto, null) as LinearLayout
         ll_approver.addView(convertView)
         var grid_to = convertView.findViewById(R.id.grid_chaosong_to) as GridView
-        var adapter = MyCSAdapter(context, list, default)
+        var adapter = MyCSAdapter(context, list, mDefaultID)
         grid_to.adapter = adapter
 
         val tvLabel = convertView.findViewById(R.id.tv_label) as TextView
@@ -1594,10 +1598,10 @@ class ApproveFillActivity : ToolbarActivity() {
                     list.add(adapter.list[index])
                 }
 //                TeamSelectActivity.startForResult(this, true, list, false, false, true, SEND, default)
-                ContactsActivity.startWithDefault(this, list, false, false, default, SEND)
+                ContactsActivity.startWithDefault(this, list, false, false, mDefaultID, SEND)
             } else {
                 var item = adapter.list.get(position)
-                if (default.contains(item.uid)) {
+                if (mDefaultID.contains(item.uid)) {
 
                 } else {
                     adapter.list.removeAt(position)

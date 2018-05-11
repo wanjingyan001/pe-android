@@ -4,16 +4,15 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Html
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
@@ -23,10 +22,7 @@ import com.github.gcacace.signaturepad.views.SignaturePad
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.*
-import com.sogukj.pe.util.FileUtil
-import com.sogukj.pe.util.MyGlideUrl
-import com.sogukj.pe.util.PdfUtil
-import com.sogukj.pe.util.Trace
+import com.sogukj.pe.util.*
 import com.sogukj.pe.view.CircleImageView
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -40,6 +36,7 @@ import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import org.jetbrains.anko.collections.forEachWithIndex
+import org.jetbrains.anko.find
 import org.jetbrains.anko.imageResource
 import java.io.File
 import java.io.FileOutputStream
@@ -115,13 +112,11 @@ class SignApproveActivity : ToolbarActivity() {
                         iv_state_signed.visibility = View.GONE
                         val status = payload?.payload?.mainStatus
 
-                        if (status != null && status >= 4) {
+                        if (status != null && status > 1) {
                             iv_state_signed.visibility = View.VISIBLE
-                        } else if (status != null && status >= 3) {
-                            iv_state_agreed.visibility = View.VISIBLE
-                        }
-                        if (status == 5) {
-                            iv_state_agreed.imageResource = R.drawable.ic_flow_state_chexiao
+                            if (status == 5) {
+                                iv_state_signed.imageResource = R.drawable.ic_flow_state_chexiao
+                            }
                         }
                     } else {
                         showCustomToast(R.drawable.icon_toast_fail,payload.message)
@@ -225,25 +220,50 @@ class SignApproveActivity : ToolbarActivity() {
                 }
                 btn_right.text = "撤销"
                 btn_right.setOnClickListener {
-                    SoguApi.getService(application)
-                            .cancelApprove(paramId!!)
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribeOn(Schedulers.io())
-                            .subscribe({ payload ->
-                                if (payload.isOk) {
-//                                    showToast("提交成功")
-                                    showCustomToast(R.drawable.icon_toast_success,"提交成功")
-                                    refresh()
-                                } else {
-                                    showCustomToast(R.drawable.icon_toast_fail,payload.message)
-                                }
-                            }, { e ->
-                                Trace.e(e)
-//                                showToast("请求失败")
-                                showCustomToast(R.drawable.icon_toast_fail,"撤销失败")
-                            })
+                    val inflate = LayoutInflater.from(this).inflate(R.layout.layout_input_dialog, null)
+                    val dialog = MaterialDialog.Builder(this)
+                            .customView(inflate, false)
+                            .cancelable(true)
+                            .build()
+                    dialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                    val title = inflate.find<TextView>(R.id.approval_comments_title)
+                    val commentInput = inflate.find<EditText>(R.id.approval_comments_input)
+                    val veto = inflate.find<TextView>(R.id.veto_comment)
+                    val confirm = inflate.find<TextView>(R.id.confirm_comment)
+                    commentInput.filters = Utils.getFilter(this)
+                    title.text = "请输入撤销理由（提交后会重新审核）"
+                    title.textSize = 16.toFloat()
+                    commentInput.hint = ""
+                    veto.text = "取消"
+                    confirm.text = "提交"
+                    veto.setOnClickListener {
+                        if (dialog.isShowing) {
+                            dialog.dismiss()
+                        }
+                    }
+                    confirm.setOnClickListener {
+                        if (dialog.isShowing) {
+                            dialog.dismiss()
+                        }
+                        SoguApi.getService(application)
+                                .cancelApprove(paramId!!)
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribeOn(Schedulers.io())
+                                .subscribe({ payload ->
+                                    if (payload.isOk) {
+                                        showCustomToast(R.drawable.icon_toast_success,"提交成功")
+                                        refresh()
+                                    } else {
+                                        showCustomToast(R.drawable.icon_toast_fail,payload.message)
+                                    }
+                                }, { e ->
+                                    Trace.e(e)
+                                    showCustomToast(R.drawable.icon_toast_fail,"撤销失败")
+                                })
+                    }
+                    dialog.show()
                 }
-                toolbar_menu.text = "修改"
+                toolbar_menu.text = ""
             }
             2 -> {
                 btn_single.visibility = View.VISIBLE
@@ -266,7 +286,7 @@ class SignApproveActivity : ToolbarActivity() {
                                 showCustomToast(R.drawable.icon_toast_fail,"请求失败")
                             })
                 }
-                toolbar_menu.text = "修改"
+                toolbar_menu.text = ""
             }
             4 -> {
                 btn_single.visibility = View.VISIBLE
@@ -291,7 +311,7 @@ class SignApproveActivity : ToolbarActivity() {
             }
             6 -> {
                 btn_single.visibility = View.VISIBLE
-                btn_single.text = "导出pdf"
+                btn_single.text = "导出审批单"
                 btn_single.setOnClickListener {
                     SoguApi.getService(application)
                             .exportPdf(paramId!!)

@@ -321,10 +321,10 @@ class LeaveBusinessActivity : ToolbarActivity() {
                                 payload.payload?.apply {
                                     addSP(sp!!)
 
-                                    default.clear()
-                                    for (user in cs!!) {
-                                        default.add(user.uid!!)
-                                    }
+//                                    default.clear()
+//                                    for (user in cs!!) {
+//                                        default.add(user.uid!!)
+//                                    }
 
                                     cs!!.add(UserBean())
                                     addCS(cs!!)

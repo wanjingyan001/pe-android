@@ -6,4 +6,5 @@ package com.sogukj.pe.bean
 class LeaveBean {
     var sp: ArrayList<ArrayList<UserBean>>? = null//审批人
     var cs: ArrayList<UserBean>? = null//抄送人
+    var default: String? = null
 }
