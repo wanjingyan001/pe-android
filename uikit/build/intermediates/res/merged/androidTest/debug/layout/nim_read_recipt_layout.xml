@@ -4,8 +4,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
-    android:layout_marginBottom="3dip"
     android:background="@color/transparent"
     android:text="@string/readed"
     android:textColor="#666666"
-    android:textSize="12sp"/>
+    android:textSize="10sp"/>

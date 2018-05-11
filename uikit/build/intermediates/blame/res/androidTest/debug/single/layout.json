@@ -632,6 +632,10 @@
         "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/appcompat-v7-25.3.1.aar/f6d2a503db6dbeac8bcee150d656c30d/res/layout/abc_action_menu_item_layout.xml"
     },
     {
+        "merged": "/Users/admin/dev/proj/pe3.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/layout/layout_latestpic_popwindow.xml",
+        "source": "/Users/admin/dev/proj/pe3.1/pe-android/uikit/build/intermediates/bundles/debug/res/layout/layout_latestpic_popwindow.xml"
+    },
+    {
         "merged": "/Users/admin/dev/proj/pe3.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/layout/message_bottom_layout.xml",
         "source": "/Users/admin/dev/proj/pe3.1/pe-android/uikit/build/intermediates/bundles/debug/res/layout/message_bottom_layout.xml"
     },
