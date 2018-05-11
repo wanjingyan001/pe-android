@@ -22,6 +22,7 @@ import com.netease.nim.uikit.common.media.picker.loader.PickerImageLoader;
 import com.netease.nim.uikit.common.media.picker.model.AlbumInfo;
 import com.netease.nim.uikit.common.media.picker.model.PhotoInfo;
 import com.netease.nim.uikit.common.media.picker.model.PickerContract;
+import com.netease.nim.uikit.common.media.picker.util.PickerUtil;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -58,6 +59,7 @@ public class PickerAlbumActivity extends UI implements OnAlbumItemClickListener,
     private int mutiSelectLimitSize;
 
     private boolean isAlbumPage;
+    private TextView originSelect;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -105,6 +107,11 @@ public class PickerAlbumActivity extends UI implements OnAlbumItemClickListener,
         switchContent(photoFolderFragment);
 
         isAlbumPage = true;
+
+        originSelect = (TextView) findViewById(R.id.originSelect);
+        originSelect.setSelected(true);
+        originSelect.setOnClickListener(this);
+        isSendOriginalImage = originSelect.isSelected();
     }
 
     @Override
@@ -224,10 +231,12 @@ public class PickerAlbumActivity extends UI implements OnAlbumItemClickListener,
             pickerSend.setEnabled(true);
             pickerSend.setText(String.format(this.getResources().getString(
                     R.string.picker_image_send_select), selectSize));
+            originSelect.setText(String.format("原图（%s）", PickerUtil.getFileSizeString(getTotalSize())));
         } else {
             pickerPreview.setEnabled(false);
             pickerSend.setEnabled(false);
             pickerSend.setText(R.string.picker_image_send);
+            originSelect.setText("原图");
         }
     }
 
@@ -239,6 +248,14 @@ public class PickerAlbumActivity extends UI implements OnAlbumItemClickListener,
         } else if (v.getId() == R.id.picker_bottombar_select) {
             setResult(RESULT_OK, PickerContract.makeDataIntent(hasSelectList, isSendOriginalImage));
             finish();
+        }else if(v.getId() == R.id.originSelect){
+            originSelect.setSelected(!originSelect.isSelected());
+            isSendOriginalImage = originSelect.isSelected();
+            if (originSelect.isSelected()){
+                originSelect.setText(String.format("原图（%s）", PickerUtil.getFileSizeString(getTotalSize())));
+            }else {
+                originSelect.setText("原图");
+            }
         }
     }
 
@@ -296,5 +313,14 @@ public class PickerAlbumActivity extends UI implements OnAlbumItemClickListener,
     protected void onDestroy() {
         super.onDestroy();
         PickerImageLoader.clearCache();
+    }
+
+    private long getTotalSize(){
+        long totalSize = 0;
+        for (int i = 0; i < hasSelectList.size(); i++) {
+            PhotoInfo pi = hasSelectList.get(i);
+            totalSize += pi.getSize();
+        }
+        return totalSize;
     }
 }

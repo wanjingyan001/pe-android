@@ -169,8 +169,8 @@
     <dimen name="mask_bubble_music_width">110dip</dimen>
     <dimen name="mask_bubble_width">120dip</dimen>
     <dimen name="mask_sticker_bubble_width">120dip</dimen>
-    <dimen name="max_bubble_width">240dip</dimen>
-    <dimen name="max_text_bubble_width">222dip</dimen>
+    <dimen name="max_bubble_width">260dip</dimen>
+    <dimen name="max_text_bubble_width">260dip</dimen>
     <dimen name="message_bottom_function_viewpager_height">120dp</dimen>
     <dimen name="message_bubble_basic_margin">5dip</dimen>
     <dimen name="message_list_panel_jump_offset_y">30dip</dimen>

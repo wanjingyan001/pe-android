@@ -12,7 +12,9 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,7 +50,7 @@ public class MsgViewHolderFile extends MsgViewHolderBase implements View.OnClick
     private FileAttachment msgAttachment;
     private ProgressDialog dialog;
     private AbortableFuture<Void> future;
-    private ConstraintLayout fileLayout;
+    private LinearLayout fileLayout;
     private View line;
     //建立一个文件类型与文件后缀名的匹配表
     private static final String[][] MATCH_ARRAY = {
@@ -129,7 +131,7 @@ public class MsgViewHolderFile extends MsgViewHolderBase implements View.OnClick
 
     @Override
     protected void inflateContentView() {
-        fileLayout = ((ConstraintLayout) view.findViewById(R.id.file_item_layout));
+        fileLayout = ((LinearLayout) view.findViewById(R.id.file_item_layout));
         fileIcon = (ImageView) view.findViewById(R.id.message_item_file_icon_image);
         fileNameLabel = (TextView) view.findViewById(R.id.message_item_file_name_label);
         fileSize = (TextView) view.findViewById(R.id.message_item_file_size);
@@ -178,6 +180,12 @@ public class MsgViewHolderFile extends MsgViewHolderBase implements View.OnClick
             setGravity(fileLayout, Gravity.RIGHT);
             contentContainer.setBackgroundResource(R.drawable.nim_message_right_white_bg2);
         }
+        double width = 0.6 * ScreenUtil.screenMin;
+        double height = 0.6 * 0.45 * ScreenUtil.screenMin;
+        ViewGroup.LayoutParams layoutParams = fileLayout.getLayoutParams();
+        layoutParams.width = (int) width;
+        layoutParams.height = (int) height;
+        fileLayout.setLayoutParams(layoutParams);
     }
 
 

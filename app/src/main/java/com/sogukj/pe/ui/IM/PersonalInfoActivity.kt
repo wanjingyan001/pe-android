@@ -5,6 +5,9 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.LinearGradient
+import android.graphics.Shader
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
@@ -16,7 +19,11 @@ import android.util.Log
 import android.view.View
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import com.framework.base.BaseActivity
 import com.google.gson.Gson
 import com.netease.nim.uikit.api.NimUIKit
@@ -102,6 +109,7 @@ class PersonalInfoActivity : BaseActivity(), View.OnClickListener, TextWatcher, 
         email_tv.setOnLongClickListener(this)
         department_tv.setOnLongClickListener(this)
         position_tv.setOnLongClickListener(this)
+
     }
 
     private fun queryUserInfo(uid: Int) {
@@ -126,8 +134,18 @@ class PersonalInfoActivity : BaseActivity(), View.OnClickListener, TextWatcher, 
                             department_tv.text = it.depart_name
                             position_tv.text = it.position
                             Glide.with(this)
-                                    .load(MyGlideUrl(it.headImage()))
-                                    .apply(RequestOptions().error(R.drawable.ewm))
+                                    .load(it.headImage())
+                                    .listener(object : RequestListener<Drawable> {
+                                        override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                                            return false
+                                        }
+
+                                        override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                                            avatar.setChar(it.name.first())
+                                            return false
+                                        }
+
+                                    })
                                     .into(avatar)
 
                         }

@@ -168,11 +168,11 @@ public class MsgViewHolderAudio extends MsgViewHolderBase {
     }
 
     public static int getAudioMaxEdge() {
-        return (int) (0.6 * ScreenUtil.screenMin);
+        return (int) (0.72 * ScreenUtil.screenMin);
     }
 
     public static int getAudioMinEdge() {
-        return (int) (0.1875 * ScreenUtil.screenMin);
+        return (int) (0.13 * ScreenUtil.screenMin);
     }
 
     private void setAudioBubbleWidth(long milliseconds) {

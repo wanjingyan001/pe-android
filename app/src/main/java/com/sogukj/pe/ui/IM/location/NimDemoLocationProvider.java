@@ -12,6 +12,7 @@ import com.sogukj.pe.ui.IM.location.activity.LocationExtras;
 import com.sogukj.pe.ui.IM.location.activity.NavigationAmapActivity;
 import com.sogukj.pe.ui.IM.location.helper.NimLocationManager;
 import com.sogukj.pe.ui.IM.newlocation.activity.IMLocationActivity;
+import com.sogukj.pe.ui.IM.newlocation.activity.LocationMessageActivity;
 
 /**
  * Created by admin on 2018/2/6.
@@ -55,10 +56,11 @@ public class NimDemoLocationProvider implements LocationProvider {
 
     @Override
     public void openMap(Context context, double longitude, double latitude, String address) {
-        Intent intent = new Intent(context, NavigationAmapActivity.class);
-        intent.putExtra(LocationExtras.LONGITUDE, longitude);
-        intent.putExtra(LocationExtras.LATITUDE, latitude);
-        intent.putExtra(LocationExtras.ADDRESS, address);
-        context.startActivity(intent);
+//        Intent intent = new Intent(context, NavigationAmapActivity.class);
+//        intent.putExtra(LocationExtras.LONGITUDE, longitude);
+//        intent.putExtra(LocationExtras.LATITUDE, latitude);
+//        intent.putExtra(LocationExtras.ADDRESS, address);
+//        context.startActivity(intent);
+        LocationMessageActivity.Companion.start(context, latitude, longitude, address);
     }
 }
