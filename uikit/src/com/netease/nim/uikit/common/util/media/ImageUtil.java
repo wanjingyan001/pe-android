@@ -1,7 +1,9 @@
 package com.netease.nim.uikit.common.util.media;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.Bitmap.Config;
@@ -9,7 +11,12 @@ import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
+import android.os.Environment;
+import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Pair;
+import android.view.View;
 
 import com.netease.nim.uikit.R;
 import com.netease.nim.uikit.api.NimUIKit;
@@ -446,5 +453,126 @@ public class ImageUtil {
 
     public static boolean isGif(String extension) {
         return !TextUtils.isEmpty(extension) && extension.toLowerCase().equals("gif");
+    }
+
+    public static Pair<Long, String> getLatestPhoto(Context context) {
+        //拍摄照片的地址
+        String cameraImageBucketName = Environment.getExternalStorageDirectory().toString() + "/DCIM/Camera";
+        //截屏照片的地址
+        String screenshotsImageBucketName = getScreenshotsPath();
+        //拍摄照片的地址ID
+        String cameraImageBucketId = getBucketId(cameraImageBucketName);
+        //截屏照片的地址ID
+        String screenshotsImageBucketId = getBucketId(screenshotsImageBucketName);
+        //查询路径和修改时间
+        String[] projection = {MediaStore.Images.Media.DATA,
+                MediaStore.Images.Media.DATE_MODIFIED};
+        //
+        String selection = MediaStore.Images.Media.BUCKET_ID + " = ?";
+        //
+        String[] selectionArgs = {cameraImageBucketId};
+        String[] selectionArgsForScreenshots = {screenshotsImageBucketId};
+
+        //检查camera文件夹，查询并排序
+        Pair<Long, String> cameraPair = null;
+        Cursor cursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                projection,
+                selection,
+                selectionArgs,
+                MediaStore.Files.FileColumns.DATE_MODIFIED + " DESC");
+        if (cursor == null) {
+            return null;
+        }
+        if (cursor.moveToFirst()) {
+            cameraPair = new Pair<>(cursor.getLong(cursor.getColumnIndex(MediaStore.Images.Media.DATE_MODIFIED)),
+                    cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA)));
+        }
+        //检查Screenshots文件夹
+        Pair<Long, String> screenshotsPair = null;
+        //查询并排序
+        cursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                projection,
+                selection,
+                selectionArgsForScreenshots,
+                MediaStore.Files.FileColumns.DATE_MODIFIED + " DESC");
+
+        if (cursor.moveToFirst()) {
+            screenshotsPair = new Pair<>(cursor.getLong(cursor.getColumnIndex(MediaStore.Images.Media.DATE_MODIFIED)),
+                    cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA)));
+        }
+        if (!cursor.isClosed()) {
+            cursor.close();
+        }
+        //对比
+        if (cameraPair != null && screenshotsPair != null) {
+            if (cameraPair.first > screenshotsPair.first) {
+                if (isMeetsCondition(cameraPair.first, context)) {
+                    screenshotsPair = null;
+                    return cameraPair;
+                } else {
+                    return null;
+                }
+            } else {
+                if (isMeetsCondition(screenshotsPair.first, context)) {
+                    cameraPair = null;
+                    return screenshotsPair;
+                } else {
+                    return null;
+                }
+            }
+        } else if (cameraPair != null && screenshotsPair == null) {
+            return cameraPair;
+
+        } else if (cameraPair == null && screenshotsPair != null) {
+            return screenshotsPair;
+        }
+        return null;
+    }
+
+    private static String getBucketId(String path) {
+        return String.valueOf(path.toLowerCase().hashCode());
+    }
+
+    /**
+     * 获取截图路径
+     *
+     * @return
+     */
+    public static String getScreenshotsPath() {
+        String path = Environment.getExternalStorageDirectory().toString() + "/DCIM/Screenshots";
+        File file = new File(path);
+        if (!file.exists()) {
+            path = Environment.getExternalStorageDirectory().toString() + "/Pictures/Screenshots";
+        }
+        file = null;
+        return path;
+    }
+
+    private static boolean isMeetsCondition(long picSeconds, Context context) {
+        return (System.currentTimeMillis() / 1000 - picSeconds) < 300 && getLatestPicId(context) != picSeconds;
+    }
+
+    /**
+     * 获取屏幕高度(px)
+     */
+    public static int getScreenHeight(Context context) {
+        return context.getResources().getDisplayMetrics().heightPixels;
+    }
+
+    /**
+     * 获取屏幕宽度(px)
+     */
+    public static int getScreenWidth(Context context) {
+        return context.getResources().getDisplayMetrics().widthPixels;
+    }
+
+    public static void saveLatestPicId(Context context, long id) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        preferences.edit().putLong("Latest", id).apply();
+    }
+
+    public static long getLatestPicId(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return preferences.getLong("Latest", 0);
     }
 }

@@ -524,6 +524,10 @@
         "source": "/Users/admin/.gradle/caches/transforms-1/files-1.1/library-1.8.aar/8fc44c7508e7d819ec4ef8c9832adca1/res/drawable-hdpi-v4/ic_word_box.png"
     },
     {
+        "merged": "/Users/admin/dev/proj/pe3.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4/bg_latest_pic.png",
+        "source": "/Users/admin/dev/proj/pe3.1/pe-android/uikit/build/intermediates/bundles/debug/res/drawable-hdpi-v4/bg_latest_pic.png"
+    },
+    {
         "merged": "/Users/admin/dev/proj/pe3.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4/nim_message_left_white_bg.9.png",
         "source": "/Users/admin/dev/proj/pe3.1/pe-android/uikit/build/intermediates/bundles/debug/res/drawable-hdpi-v4/nim_message_left_white_bg.9.png"
     },

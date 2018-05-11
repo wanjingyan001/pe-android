@@ -302,11 +302,7 @@ class TeamInfoActivity : BaseActivity(), View.OnClickListener, SwitchButton.OnCh
                     }
 
                     override fun onSuccess(param: Void?) {
-                        if (!checkState) {
-                            toast("开启消息提醒成功")
-                        } else {
-                            toast("关闭消息提醒成功")
-                        }
+
                     }
 
                     override fun onException(exception: Throwable?) {

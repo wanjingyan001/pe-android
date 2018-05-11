@@ -1,12 +1,17 @@
 package com.sogukj.pe.ui.IM
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.util.MyGlideUrl
@@ -34,8 +39,18 @@ class MemberAdapter(val ctx: Context, private val members: ArrayList<UserBean>) 
                 holder.headImg.setChar(ch)
             } else {
                 Glide.with(ctx)
-                        .load(MyGlideUrl(userBean.headImage()))
-                        .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
+                        .load(userBean.headImage())
+                        .listener(object :RequestListener<Drawable>{
+                            override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                                return false
+                            }
+
+                            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                                holder.headImg.setChar(userBean.name.first())
+                                return false
+                            }
+
+                        })
                         .into(holder.headImg)
             }
         }

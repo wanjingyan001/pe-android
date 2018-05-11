@@ -83,6 +83,7 @@ class IMLocationActivity : BaseActivity(), AMap.OnCameraChangeListener, AMapLoca
         locationBtn.setOnClickListener(this)
         search.setOnClickListener(this)
         confirm.setOnClickListener(this)
+        back.setOnClickListener(this)
         confirm.isEnabled = false
     }
 
@@ -227,6 +228,9 @@ class IMLocationActivity : BaseActivity(), AMap.OnCameraChangeListener, AMapLoca
                 currentCity?.let {
                     AddressSearchActivity.start(this, it)
                 }
+            }
+            R.id.back->{
+                finish()
             }
         }
     }

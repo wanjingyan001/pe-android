@@ -1,9 +1,12 @@
 package com.netease.nim.uikit.business.session.viewholder;
 
 import android.graphics.Color;
+import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ImageSpan;
+import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.netease.nim.uikit.R;
@@ -46,6 +49,7 @@ public class MsgViewHolderText extends MsgViewHolderBase {
         MoonUtil.identifyFaceExpression(NimUIKit.getContext(), bodyTextView, getDisplayText(), ImageSpan.ALIGN_BOTTOM);
         bodyTextView.setMovementMethod(LinkMovementMethod.getInstance());
         bodyTextView.setOnLongClickListener(longClickListener);
+        setMaxWidth();
     }
 
     private void layoutDirection() {
@@ -58,6 +62,23 @@ public class MsgViewHolderText extends MsgViewHolderBase {
             bodyTextView.setTextColor(Color.parseColor("#282828"));
             bodyTextView.setPadding(ScreenUtil.dip2px(10), ScreenUtil.dip2px(8), ScreenUtil.dip2px(15), ScreenUtil.dip2px(8));
         }
+
+    }
+
+    private void setMaxWidth() {
+        TextPaint paint = bodyTextView.getPaint();
+        float textStr = paint.measureText(getDisplayText());
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) bodyTextView.getLayoutParams();
+        if (textStr > getMaxEdge()) {
+            params.width = getMaxEdge();
+        }else {
+            params.width = LinearLayout.LayoutParams.WRAP_CONTENT;
+        }
+        bodyTextView.setLayoutParams(params);
+    }
+
+    public static int getMaxEdge() {
+        return (int) (0.72 * ScreenUtil.screenMin);
     }
 
     @Override
@@ -71,6 +92,6 @@ public class MsgViewHolderText extends MsgViewHolderBase {
     }
 
     protected String getDisplayText() {
-        return message.getContent();
+        return message.getContent().trim();
     }
 }

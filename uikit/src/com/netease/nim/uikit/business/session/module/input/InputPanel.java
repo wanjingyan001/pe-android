@@ -3,17 +3,27 @@ package com.netease.nim.uikit.business.session.module.input;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.format.DateUtils;
 import android.util.Log;
+import android.util.Pair;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -22,10 +32,18 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.DrawableImageViewTarget;
+import com.bumptech.glide.request.target.Target;
 import com.netease.nim.uikit.R;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.api.UIKitOptions;
@@ -36,10 +54,13 @@ import com.netease.nim.uikit.business.session.emoji.EmoticonPickerView;
 import com.netease.nim.uikit.business.session.emoji.IEmoticonSelectedListener;
 import com.netease.nim.uikit.business.session.emoji.MoonUtil;
 import com.netease.nim.uikit.business.session.module.Container;
+import com.netease.nim.uikit.common.media.picker.loader.RotateTransformation;
 import com.netease.nim.uikit.common.ui.dialog.EasyAlertDialogHelper;
 import com.netease.nim.uikit.common.util.log.LogUtil;
+import com.netease.nim.uikit.common.util.media.ImageUtil;
 import com.netease.nim.uikit.common.util.string.StringUtil;
 import com.netease.nim.uikit.impl.NimUIKitImpl;
+import com.netease.nim.uikit.impl.customization.LatestPic;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.media.record.AudioRecorder;
 import com.netease.nimlib.sdk.media.record.IAudioRecordCallback;
@@ -187,7 +208,6 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
         emojiButtonInInputBar = view.findViewById(R.id.emoji_button);
         sendMessageButtonInInputBar = view.findViewById(R.id.buttonSendMessage);
         messageEditText = (EditText) view.findViewById(R.id.editTextMessage);
-
         // 语音
         audioRecordBtn = (Button) view.findViewById(R.id.audioRecord);
         audioAnimLayout = view.findViewById(R.id.layoutPlayAudio);
@@ -386,8 +406,6 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
     private void toggleActionPanelLayout() {
         if (actionPanelBottomLayout == null || actionPanelBottomLayout.getVisibility() == View.GONE) {
             showActionPanelLayout();
-            //todo 获取图库中的最新图片,并进行时间校验(有效期5分钟)
-
         } else {
             hideActionPanelLayout();
         }
@@ -504,6 +522,29 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
         @Override
         public void run() {
             actionPanelBottomLayout.setVisibility(View.VISIBLE);
+            //todo 获取图库中的最新图片,并进行时间校验(有效期5分钟)
+            final Pair<Long, String> pair = ImageUtil.getLatestPhoto(container.activity);
+            if (pair != null) {
+                final File file = new File(pair.second);
+                final LatestPic pic = new LatestPic(container.activity, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        IMMessage imageMessage = MessageBuilder.createImageMessage(container.account, container.sessionType, file);
+                        container.proxy.sendMessage(imageMessage);
+                    }
+                });
+                actionPanelBottomLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        if (!pic.isShowing()) {
+                            pic.showAsDropDown(moreFuntionButtonInInputBar, -dpToPx(45), -(actionPanelBottomLayout.getHeight() + dpToPx(25)));
+                            pic.showImg(file.getAbsolutePath());
+                            ImageUtil.saveLatestPicId(container.activity,pair.first);
+                        }
+                        actionPanelBottomLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    }
+                });
+            }
         }
     };
 
@@ -687,7 +728,8 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
 
         audioMessageHelper.completeRecord(cancel);
         audioRecordBtn.setText(R.string.record_audio);
-        audioRecordBtn.setBackgroundResource(R.drawable.nim_message_input_edittext_box);
+//        audioRecordBtn.setBackgroundResource(R.drawable.nim_message_input_edittext_box);
+        audioRecordBtn.setBackgroundResource(R.drawable.team_input_bg);
         stopAudioRecordAnim();
     }
 
@@ -764,7 +806,8 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
         }
 
         audioRecordBtn.setText(R.string.record_audio_end);
-        audioRecordBtn.setBackgroundResource(R.drawable.nim_message_input_edittext_box_pressed);
+//        audioRecordBtn.setBackgroundResource(R.drawable.nim_message_input_edittext_box_pressed);
+        audioRecordBtn.setBackgroundResource(R.drawable.bg_im_audio);
 
         updateTimerTip(false); // 初始化语音动画状态
         playAudioRecordAnim();
@@ -839,5 +882,9 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
             moreFuntionButtonInInputBar.setVisibility(View.VISIBLE);
         }
 
+    }
+
+    public int dpToPx(int dp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, container.activity.getResources().getDisplayMetrics());
     }
 }

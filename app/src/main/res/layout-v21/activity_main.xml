@@ -24,13 +24,14 @@
 
     <com.netease.nim.uikit.common.ui.imageview.CircleImageView
         android:id="@+id/mainLogo"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_alignBottom="@+id/bottomBar"
         android:layout_alignTop="@+id/bottomBar"
         android:layout_centerHorizontal="true"
         android:visibility="gone"
-        android:src="@drawable/ic_launcher" />
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_launcher"  />
 
     <!--<RadioGroup-->
     <!--android:id="@+id/rg_tab_main"-->

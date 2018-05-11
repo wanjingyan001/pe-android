@@ -149,8 +149,7 @@
                     android:gravity="right"
                     android:hint="暂无介绍"
                     android:textColor="@color/text_1"
-                    android:singleLine="true"
-                    android:inputType="text"
+                    android:inputType="textMultiLine"
                     android:textColorHint="#a0a4aa"
                     android:textSize="14sp" />
 

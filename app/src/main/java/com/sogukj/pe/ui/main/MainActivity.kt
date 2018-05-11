@@ -7,9 +7,11 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.drawable.ColorDrawable
+import android.media.ThumbnailUtils
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
@@ -39,6 +41,8 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.ashokvarma.bottomnavigation.BottomNavigationBar
 import com.ashokvarma.bottomnavigation.BottomNavigationItem
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.sogukj.pe.ui.TeamSelectFragment
 import com.sogukj.pe.util.*
 import com.sogukj.pe.view.MyProgressBar
@@ -50,6 +54,7 @@ import com.sougukj.setVisible
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.dip
 import org.jetbrains.anko.find
 import org.jetbrains.anko.imageResource
 import org.jetbrains.anko.info
@@ -82,7 +87,10 @@ class MainActivity : BaseActivity() {
         initBottomNavBar()
         changeFragment(0)
         updateVersion()
-        mainLogo.imageResource = Utils.defaultIc()
+        Glide.with(this)
+                .load(Utils.defaultIc())
+                .apply(RequestOptions().centerInside())
+                .into(mainLogo)
         ViewCompat.setElevation(mainLogo,50f)
     }
 

@@ -95,7 +95,7 @@ public abstract class MsgViewHolderThumbBase extends MsgViewHolderBase {
         setImageSize(path);
         if (path != null) {
             //thumbnail.loadAsPath(thumbPath, getImageMaxEdge(), getImageMaxEdge(), maskBg());
-            thumbnail.loadAsPath(path, getImageMaxEdge(), getImageMaxEdge(), maskBg(), ext);
+            thumbnail.loadAsPath(path, getImageMaxEdge(),getImageMaxHeight(), maskBg(), ext);
         } else {
             thumbnail.loadAsResource(R.drawable.nim_image_default, maskBg());
         }
@@ -127,11 +127,19 @@ public abstract class MsgViewHolderThumbBase extends MsgViewHolderBase {
     }
 
     public static int getImageMaxEdge() {
-        return (int) (165.0 / 320.0 * ScreenUtil.screenWidth);
+        return (int) (0.65 * ScreenUtil.screenWidth);
     }
 
     public static int getImageMinEdge() {
         return (int) (76.0 / 320.0 * ScreenUtil.screenWidth);
+    }
+
+    public static int getImageMaxHeight() {
+        return (int) (0.36 * ScreenUtil.screenHeight);
+    }
+
+    public static int getImageMinHeight(){
+        return (int) (0.17 * ScreenUtil.screenHeight);
     }
 
     protected abstract String thumbFromSourceFile(String path);

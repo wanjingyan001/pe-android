@@ -15,6 +15,7 @@
  */
 package com.netease.nim.uikit.common.ui.imageview;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -35,9 +36,10 @@ import android.widget.ImageView;
 
 import com.netease.nim.uikit.R;
 
+@SuppressLint("AppCompatCustomView")
 public class CircleImageView extends ImageView {
 
-    private static final ScaleType SCALE_TYPE = ScaleType.CENTER_CROP;
+    private static  ScaleType SCALE_TYPE = ScaleType.CENTER_CROP;
 
     private static final Bitmap.Config BITMAP_CONFIG = Bitmap.Config.ARGB_8888;
     private static final int COLORDRAWABLE_DIMENSION = 2;
@@ -92,7 +94,6 @@ public class CircleImageView extends ImageView {
         mBorderColor = a.getColor(R.styleable.CircleImageView_civ_border_color, DEFAULT_BORDER_COLOR);
         mBorderOverlay = a.getBoolean(R.styleable.CircleImageView_civ_border_overlay, DEFAULT_BORDER_OVERLAY);
         mFillColor = a.getColor(R.styleable.CircleImageView_civ_fill_color, DEFAULT_FILL_COLOR);
-
         a.recycle();
 
         init();
@@ -115,9 +116,10 @@ public class CircleImageView extends ImageView {
 
     @Override
     public void setScaleType(ScaleType scaleType) {
-        if (scaleType != SCALE_TYPE) {
-            throw new IllegalArgumentException(String.format("ScaleType %s not supported.", scaleType));
-        }
+//        if (scaleType != SCALE_TYPE) {
+//            throw new IllegalArgumentException(String.format("ScaleType %s not supported.", scaleType));
+//        }
+        SCALE_TYPE = scaleType;
     }
 
     @Override

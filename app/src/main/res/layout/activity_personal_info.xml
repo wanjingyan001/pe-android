@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f7f9fc"
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:orientation="vertical">
@@ -31,6 +30,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:background="#f7f9fc"
         android:layout_weight="1">
 
         <LinearLayout
@@ -159,13 +159,6 @@
                         <!--android:textSize="14sp" />-->
 
                 <!--</LinearLayout>-->
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:background="#f1f1f1" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -303,10 +296,10 @@
     <LinearLayout
         android:id="@+id/communicationLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:layout_height="90dp"
         android:orientation="horizontal"
         android:paddingBottom="10dp"
+        android:background="@color/transparent"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:paddingTop="10dp">

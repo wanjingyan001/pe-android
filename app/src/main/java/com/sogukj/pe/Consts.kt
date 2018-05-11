@@ -21,8 +21,8 @@ class Consts {
                 "http://yager.stockalert.cn/"
             }
             else -> {
-                //"http://dev.ht.stockalert.cn"
-                "http://pre.pe.stockalert.cn"
+                "http://dev.ht.stockalert.cn"
+//                "http://pre.pe.stockalert.cn"
             }
         }
 
