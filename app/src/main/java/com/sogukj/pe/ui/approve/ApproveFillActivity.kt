@@ -80,12 +80,17 @@ class ApproveFillActivity : ToolbarActivity() {
             ctx?.startActivity(intent)
         }
 
-        fun start(ctx: Activity, edit: Boolean, paramType: Int, id: Int, title: String) {
+        fun start(ctx: Activity, edit: Boolean, paramType: Int, id: Int, title: String, restart: Int? = null) {
             var intent = Intent(ctx, ApproveFillActivity::class.java)
             intent.putExtra(Extras.FLAG, edit)
             intent.putExtra(Extras.ID, id)
             intent.putExtra(Extras.TYPE, paramType)
             intent.putExtra(Extras.TITLE, title)
+            if(restart == null) {
+                intent.putExtra(Extras.RESTART, 0)
+            } else {
+                intent.putExtra(Extras.RESTART, 1)
+            }
             ctx.startActivity(intent)
         }
     }
@@ -494,21 +499,40 @@ class ApproveFillActivity : ToolbarActivity() {
                 } else
                     builder.add(k, gson.toJson(v))
             }
-            SoguApi.getService(application)
-                    .editLeave(builder.build())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe({ payload ->
-                        if (payload.isOk) {
-                            showCustomToast(R.drawable.icon_toast_success, "提交成功")
-                            finish()
-                        } else {
-                            showCustomToast(R.drawable.icon_toast_fail, payload.message)
-                        }
-                    }, { e ->
-                        Trace.e(e)
-                        showCustomToast(R.drawable.icon_toast_fail, "提交失败")
-                    })
+            var restart = intent.getIntExtra(Extras.RESTART, 0)
+            if(restart == 1){
+                SoguApi.getService(application)
+                        .updateApprove(builder.build())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({ payload ->
+                            if (payload.isOk) {
+                                showCustomToast(R.drawable.icon_toast_success, "提交成功")
+                                finish()
+                            } else {
+                                showCustomToast(R.drawable.icon_toast_fail, payload.message)
+                            }
+                        }, { e ->
+                            Trace.e(e)
+                            showCustomToast(R.drawable.icon_toast_fail, "提交失败")
+                        })
+            } else {
+                SoguApi.getService(application)
+                        .editLeave(builder.build())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({ payload ->
+                            if (payload.isOk) {
+                                showCustomToast(R.drawable.icon_toast_success, "提交成功")
+                                finish()
+                            } else {
+                                showCustomToast(R.drawable.icon_toast_fail, payload.message)
+                            }
+                        }, { e ->
+                            Trace.e(e)
+                            showCustomToast(R.drawable.icon_toast_fail, "提交失败")
+                        })
+            }
         } else {
             builder.add("template_id", "${paramId}")
             for ((k, v) in paramMap) {
@@ -617,6 +641,10 @@ class ApproveFillActivity : ToolbarActivity() {
                 items.add(v.name)
                 map.put(v.name!!, v)
             }
+            if (v.is_select == 1) {
+                etValue.text = v.name
+                paramMap.put(bean.fields, v.id)
+            }
         }
         if (map.isNotEmpty()) {
             convertView.setOnClickListener {
@@ -718,7 +746,11 @@ class ApproveFillActivity : ToolbarActivity() {
             iv_star.visibility = View.INVISIBLE
         }
         etValue.setText(bean.value)
-        etValue.filters = Utils.getFilter(this)
+        if (bean.value.isNullOrEmpty()) {
+            etValue.setSelection(0)
+        } else {
+            etValue.setSelection(bean.value!!.length)
+        }
 
         paramMap.put(bean.fields, bean.value)// TODO
         checkList.add {

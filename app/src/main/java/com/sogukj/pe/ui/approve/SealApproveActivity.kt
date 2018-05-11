@@ -170,7 +170,7 @@ class SealApproveActivity : ToolbarActivity() {
                             .subscribeOn(Schedulers.io())
                             .subscribe({ payload ->
                                 if (payload.isOk) {
-                                    showCustomToast(R.drawable.icon_toast_success, "撤销成功")
+                                    showCustomToast(R.drawable.icon_toast_success, "提交成功")
                                     refresh()
                                 } else {
                                     showCustomToast(R.drawable.icon_toast_fail, payload.message)
@@ -208,7 +208,7 @@ class SealApproveActivity : ToolbarActivity() {
                 btn_single.text = "重新发起审批"
                 btn_single.setOnClickListener {
                     //BuildSealActivity.start(this, paramId!!, paramType, paramTitle, true)
-                    ApproveFillActivity.start(context, true, paramType!!, paramId!!, paramTitle!!)
+                    ApproveFillActivity.start(context, true, paramType!!, paramId!!, paramTitle!!, 1)
                     finish()
                 }
                 toolbar_menu.text = "修改"

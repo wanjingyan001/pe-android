@@ -232,7 +232,7 @@ class SignApproveActivity : ToolbarActivity() {
                             .subscribe({ payload ->
                                 if (payload.isOk) {
 //                                    showToast("提交成功")
-                                    showCustomToast(R.drawable.icon_toast_success,"撤销成功")
+                                    showCustomToast(R.drawable.icon_toast_success,"提交成功")
                                     refresh()
                                 } else {
                                     showCustomToast(R.drawable.icon_toast_fail,payload.message)

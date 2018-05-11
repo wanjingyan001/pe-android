@@ -691,7 +691,10 @@
         <activity android:name=".ui.news.MainNewsActivity" />
         <activity android:name=".ui.ScanResultActivity" />
         <activity android:name=".ui.project.ShareHolderStepActivity" />
-        <activity android:name=".ui.approve.ApproveFillActivity" />
+        <activity android:name=".ui.approve.ApproveFillActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
         <!-- <activity android:name=".ui.approve.ApproveExamineActivity" /> -->
         <activity android:name=".ui.EquityListActivity" />
         <activity android:name=".ui.fileSelector.FilterFileActivity" />
