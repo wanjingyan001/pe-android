@@ -29,8 +29,6 @@
             android:lineSpacingExtra="0sp"
             android:gravity="left"
             android:text="2月份财务报表"
-            android:singleLine="true"
-            android:ellipsize="end"
             android:textColor="@color/text_1"
             android:textSize="20sp" />
 

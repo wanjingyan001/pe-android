@@ -10,6 +10,7 @@ import com.sogukj.pe.R
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.FlowLayout
 import org.jetbrains.anko.find
+import org.jetbrains.anko.withAlpha
 import java.io.Serializable
 
 
@@ -40,21 +41,22 @@ class NewsBean : Serializable, NewsType {
                         tvTag.text = str
                         tags.addView(itemTag)
 
-                        val radius = Utils.dpToPx(baseActivity, 9)
-                        val drawable = GradientDrawable()
-                        drawable.cornerRadius = radius.toFloat()
+                        //val radius = Utils.dpToPx(baseActivity, 9)
+                        //val drawable = GradientDrawable()
+                        //drawable.cornerRadius = radius.toFloat()
                         var color = Color.parseColor("#4e7eef")
                         try {
                             color = Color.parseColor(map[str!!])
                         } catch (e: Exception) {
 
                         }
-                        drawable.setStroke(2, color)
-                        tvTag.setBackgroundDrawable(drawable)
+                        //drawable.setStroke(2, color)
+                        //tvTag.setBackgroundDrawable(drawable)
                         tvTag.setTextColor(color)
+                        var bgColor = color.withAlpha(0x1A)
+                        tvTag.setBackgroundColor(bgColor)
                     }
                 }
-
     }
 
     val map = mapOf(
