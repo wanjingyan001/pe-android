@@ -204,6 +204,10 @@ class ApproveFillActivity : ToolbarActivity() {
     }
 
     override fun onBackPressed() {
+        if (flagEdit && !isOneKey) {
+            super.onBackPressed()
+            return
+        }
         for (list in checkList) {
             list()
         }
