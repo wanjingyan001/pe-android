@@ -1181,7 +1181,7 @@ class ApproveFillActivity : ToolbarActivity() {
         tvLabel.text = bean.name
         etValue.text = bean.value_map?.value as String?
         convertView.setOnClickListener {
-            if (paramId == 11 || (flagEdit && intent.getStringExtra(Extras.TITLE).equals("请假")) || isOneKey) {
+            if (paramId == 11 || (flagEdit && paramTitle.equals("请假")) || isOneKey) {
                 MyHolidayActivity.start(context)
             }
         }
