@@ -1430,9 +1430,14 @@ class ApproveFillActivity : ToolbarActivity() {
                         }
                     }, { e ->
                         Trace.e(e)
-                        showCustomToast(R.drawable.icon_toast_fail, "上传失败")
+                        handler.postDelayed({
+                            hideProgress()
+                            showCustomToast(R.drawable.icon_toast_fail, "上传失败")
+                        }, 500)
                     }, {
-                        hideProgress()
+                        handler.postDelayed({
+                            hideProgress()
+                        }, 500)
                     }, {
                         showProgress("正在上传")
                     })

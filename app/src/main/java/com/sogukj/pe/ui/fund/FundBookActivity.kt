@@ -1,7 +1,9 @@
 package com.sogukj.pe.ui.fund
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -12,8 +14,8 @@ import android.text.InputType
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.TextView
-import android.widget.Toast
+import android.view.ViewGroup
+import android.widget.*
 import com.framework.base.ToolbarActivity
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
@@ -21,6 +23,8 @@ import com.lcodecore.tkrefreshlayout.footer.BallPulseView
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.bean.DirBean
+import com.sogukj.pe.bean.FileListBean
 import com.sogukj.pe.bean.FundSmallBean
 import com.sogukj.pe.bean.ProjectBookBean
 import com.sogukj.pe.service.DownLoadService
@@ -29,10 +33,8 @@ import com.sogukj.pe.util.DownloadUtil
 import com.sogukj.pe.util.FileUtil
 import com.sogukj.pe.util.OpenFileUtil
 import com.sogukj.pe.util.Trace
+import com.sogukj.pe.view.*
 import com.sogukj.pe.view.ListAdapter
-import com.sogukj.pe.view.ListHolder
-import com.sogukj.pe.view.RecyclerAdapter
-import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -537,6 +539,159 @@ class FundBookActivity : ToolbarActivity(), SupportEmptyView {
             val intent = Intent(ctx, FundBookActivity::class.java)
             intent.putExtra(Extras.DATA, bean)
             ctx?.startActivity(intent)
+        }
+    }
+
+    class MyExpListAdapter(val context: Context, val group: ArrayList<DirBean>,
+                       val childs: ArrayList<ArrayList<FileListBean>>) : BaseExpandableListAdapter() {
+
+        override fun getGroup(groupPosition: Int): Any {
+            return group[groupPosition]
+        }
+
+        override fun isChildSelectable(groupPosition: Int, childPosition: Int): Boolean {
+            return true
+        }
+
+        override fun hasStableIds(): Boolean {
+            return true
+        }
+
+        override fun getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup?): View {
+            var view = convertView
+            var holder: GroupHolder? = null
+            if (view == null) {
+                view = LayoutInflater.from(context).inflate(R.layout.file_header, null)
+                holder = GroupHolder()
+                holder.title = view.findViewById(R.id.head_title) as TextView
+                view.setTag(holder)
+            } else {
+                holder = view.getTag() as GroupHolder
+            }
+
+            holder.title?.text = group[groupPosition].dirname
+            if (isExpanded) {
+                //holder.direction?.setBackgroundResource(R.drawable.up)
+            } else {
+                //holder.direction?.setBackgroundResource(R.drawable.down)
+            }
+
+            return view!!
+        }
+
+        class GroupHolder {
+            var title: TextView? = null
+        }
+
+        override fun getChildrenCount(groupPosition: Int): Int {
+            //return childs[groupPosition].size
+            return 1
+        }
+
+        override fun getChild(groupPosition: Int, childPosition: Int): Any {
+            return childs[groupPosition][childPosition]
+        }
+
+        override fun getGroupId(groupPosition: Int): Long {
+            return groupPosition.toLong()
+        }
+
+        override fun getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean, convertView: View?, parent: ViewGroup?): View {
+            var view = convertView
+            var holder: FatherHolder? = null
+            if (view == null) {
+                view = LayoutInflater.from(context).inflate(R.layout.item_child, null)
+                holder = FatherHolder()
+                holder.seq = view.findViewById(R.id.seq) as TextView
+                holder.depart = view.findViewById(R.id.depart) as TextView
+                holder.name = view.findViewById(R.id.name) as TextView
+                holder.score = view.findViewById(R.id.score) as TextView
+                holder.list = view.findViewById(R.id.listview) as MyListView
+                view.setTag(holder)
+            } else {
+                holder = view.getTag() as FatherHolder
+            }
+
+            holder.seq?.setBackgroundColor(Color.TRANSPARENT)
+            holder.depart?.setBackgroundColor(Color.TRANSPARENT)
+            holder.name?.setBackgroundColor(Color.TRANSPARENT)
+            holder.score?.setBackgroundColor(Color.TRANSPARENT)
+            //holder.list?.adapter = MyListAdapter(context, childs.get(groupPosition), type)
+
+            return view!!
+        }
+
+        class FatherHolder {
+            var seq: TextView? = null
+            var depart: TextView? = null
+            var name: TextView? = null
+            var score: TextView? = null
+            var list: MyListView? = null
+        }
+
+        override fun getChildId(groupPosition: Int, childPosition: Int): Long {
+            return childPosition.toLong()
+        }
+
+        override fun getGroupCount(): Int {
+            return group.size
+        }
+
+        class MyListAdapter(val context: Context, val datalist: ArrayList<FileListBean>, val type: Int) : BaseAdapter() {
+            override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+                var view = convertView
+                var holder: ChildHolder? = null
+                if (view == null) {
+                    view = LayoutInflater.from(context).inflate(R.layout.item_child, null)
+                    holder = ChildHolder()
+                    holder.seq = view.findViewById(R.id.seq) as TextView
+                    holder.depart = view.findViewById(R.id.depart) as TextView
+                    holder.name = view.findViewById(R.id.name) as TextView
+                    holder.score = view.findViewById(R.id.score) as TextView
+                    view.setTag(holder)
+                } else {
+                    holder = view.getTag() as ChildHolder
+                }
+
+//                holder.seq?.text = "${datalist[position].sort}"
+//                holder.depart?.text = datalist[position].department
+//                holder.name?.text = datalist[position].name
+//                holder.score?.text = datalist[position].grade_case
+
+                holder.seq?.setBackgroundColor(Color.WHITE)
+                holder.depart?.setBackgroundColor(Color.WHITE)
+                holder.name?.setBackgroundColor(Color.WHITE)
+                holder.score?.setBackgroundColor(Color.WHITE)
+
+                if (type == Extras.TYPE_INTERACT) {
+                    holder.seq?.visibility = View.VISIBLE
+                    holder.depart?.visibility = View.VISIBLE
+                } else if (type == Extras.TYPE_LISTITEM) {
+                    holder.seq?.visibility = View.GONE
+                    holder.depart?.visibility = View.GONE
+                }
+
+                return view!!
+            }
+
+            override fun getItem(position: Int): Any {
+                return datalist.get(position)
+            }
+
+            override fun getItemId(position: Int): Long {
+                return position.toLong()
+            }
+
+            override fun getCount(): Int {
+                return datalist.size
+            }
+
+            class ChildHolder {
+                var seq: TextView? = null
+                var depart: TextView? = null
+                var name: TextView? = null
+                var score: TextView? = null
+            }
         }
     }
 }

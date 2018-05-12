@@ -1301,4 +1301,45 @@ interface SoguService {
     @FormUrlEncoded
     @POST
     fun qrNotify(@Url url:String, @Field("status") status: Int): Observable<Payload<Object>>
+
+    //项目文书|基金档案文件 目录
+    //type	number	1	文件类型	非空（1=>项目，2=>基金）
+    //fc_id	number	 	项目或者基金id	非空
+    @FormUrlEncoded
+    @POST("/api/Listinformation/showCatalog")
+    fun showCatalog(@Field("type") type: Int = 1, @Field("fc_id") fc_id: Int): Observable<Payload<ArrayList<DirBean>>>
+
+    //项目文书|基金档案列表
+    // fc_id	int	 	公司ID	非空
+    //type	int	 	文件所属项目类型	非空（1=>项目，2=>基金）
+    //dir_id	int	 	所属目录	可空
+    //page	int	1	页数	可空
+    //pageSize	number	20	每页显示大小	可空
+    //fileClass	number	 	分类筛选	可空(当type=1时选项有效，值为首次进入此页面返回的filter=>id)多选以逗号隔开类似 => 1,2
+    //query	string	 	搜索关键字	可空
+    //mark_id	int	 	文件格式	(可空)1=>文档类文件,2=>表格类文件,3=>演示类文件，4=>pdf类文件,5=>图片类文件，6=>其他
+    @FormUrlEncoded
+    @POST("/api/Listinformation/fileList")
+    fun fileList(@Field("fc_id") fc_id: Int,
+                 @Field("type") type: Int,
+                 @Field("dir_id") dir_id: Int,
+                 @Field("page") page: Int? = 1,
+                 @Field("pageSize") pageSize: Int = 20,
+                 @Field("fileClass") fileClass: String? = null,
+                 @Field("query") query: String? = null,
+                 @Field("mark_id") mark_id: Int? = null): Observable<Payload<ArrayList<FileListBean>>>
+
+    //项目文书|基金档案上传
+    // company_id	number	 	公司ID	非空
+    // type	number	1	档案类型	非空（1=>项目文书，2=>基金档案）
+    // dir_id	number	 	文件所属目录	非空
+    // fileClass	int	 	文件小类	可空(当type=1时可空,值为首次进入此页面返回的filter=>id,)
+    // file	file	 	文件key值	非空
+    @FormUrlEncoded
+    @POST("/api/Listinformation/uploadArchives")
+    fun uploadArchives(@Field("company_id") company_id: Int,
+                       @Field("type") type: Int = 1,
+                       @Field("dir_id") dir_id: Int,
+                       @Field("fileClass") fileClass: String? = null,
+                       @Field("file") file: String? = null): Observable<Payload<UploadFileBean>>
 }

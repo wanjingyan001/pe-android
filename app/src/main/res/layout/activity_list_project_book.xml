@@ -39,7 +39,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ExpandableListView
+            android:id="@+id/fileList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:childDivider="@color/transparent"
+            android:divider="@color/transparent" />
+
         <ScrollView
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
