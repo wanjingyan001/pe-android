@@ -242,6 +242,7 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                                     bean.uid = it.id
                                     bean.name = it.name
                                     bean.url = it.url
+                                    selectUser2.selectUsers.add(bean)
                                     exAdapter.addData(bean)
                                 }
                                 it.watcher?.forEach {
@@ -249,6 +250,7 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                                     bean.uid = it.id
                                     bean.name = it.name
                                     bean.url = it.url
+                                    selectUser.selectUsers.add(bean)
                                     adapter.addData(bean)
                                 }
                             }
@@ -324,8 +326,8 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
         val exusers = StringBuilder()
         if (data2.isNotEmpty()) {
             data2.forEach {
-                if (it.user_id != null) {
-                    exusers.append(it.user_id.toString() + ",")
+                if (it.uid != null) {
+                    exusers.append(it.uid.toString() + ",")
                 }
             }
         }
@@ -335,8 +337,8 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
         val watchusers = StringBuilder()
         if (data.isNotEmpty()) {
             data.forEach {
-                if (it.user_id != null) {
-                    watchusers.append(it.user_id.toString() + ",")
+                if (it.uid != null) {
+                    watchusers.append(it.uid.toString() + ",")
                 }
             }
         }
@@ -453,10 +455,14 @@ class ModifyTaskActivity : ToolbarActivity(), View.OnClickListener, AddPersonLis
                     1005 -> {
                         selectUser.selectUsers = data.getSerializableExtra(Extras.DATA) as ArrayList<UserBean>
                         adapter.addAllData(selectUser.selectUsers)
+                        this.data.clear()
+                        this.data.addAll(selectUser.selectUsers)
                     }
                     1006 -> {
                         selectUser2.selectUsers = data.getSerializableExtra(Extras.DATA) as ArrayList<UserBean>
                         exAdapter.addAllData(selectUser2.selectUsers)
+                        this.data2.clear()
+                        this.data2.addAll(selectUser2.selectUsers)
                     }
                     Extras.REQUESTCODE -> {
                         val str = data.getStringExtra(Extras.DATA)

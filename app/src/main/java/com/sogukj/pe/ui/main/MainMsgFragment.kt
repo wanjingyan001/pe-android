@@ -543,6 +543,7 @@ class MainMsgFragment : BaseFragment() {
                     }
                 }
                 adapter.dataList.addAll(recentList)
+                adapter.dataList.distinct()
                 adapter.notifyDataSetChanged()
                 iv_loading.visibility = View.GONE
                 //iv_empty?.visibility = if (adapter.dataList.isEmpty()) View.VISIBLE else View.GONE
