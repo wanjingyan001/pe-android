@@ -249,6 +249,9 @@ public class MessageListPanelEx {
         } else {
             // 只下来加载old数据
             adapter.setOnFetchMoreListener(loader);
+            if (anchor != null) {
+                adapter.setOnLoadMoreListener(loader);
+            }
         }
     }
 
@@ -527,15 +530,23 @@ public class MessageListPanelEx {
         public MessageLoader(IMMessage anchor, boolean remote) {
             this.anchor = anchor;
             this.remote = remote;
-            Log.d("WJY", "anchor:" + (anchor == null) + "==>remote:" + remote);
-            if (remote) {
-                loadFromRemote();
-            } else {
-                if (anchor == null) {
-                    loadFromLocal(QueryDirectionEnum.QUERY_OLD);
+//            if (remote) {
+//                loadFromRemote();
+//            } else {
+//                if (anchor == null) {
+//                    loadFromLocal(QueryDirectionEnum.QUERY_OLD);
+//                } else {
+//                    loadAnchorContext(); // 加载指定anchor的上下文
+//                }
+//            }
+            if (anchor == null) {
+                if (remote) {
+                    loadFromRemote();
                 } else {
-                    loadAnchorContext(); // 加载指定anchor的上下文
+                    loadFromLocal(QueryDirectionEnum.QUERY_OLD);
                 }
+            } else {
+                loadAnchorContext(); // 加载指定anchor的上下文
             }
         }
 
@@ -554,9 +565,6 @@ public class MessageListPanelEx {
 
                 if (messages != null) {
                     onMessageLoaded(messages);
-                    for (IMMessage message : messages) {
-                        Log.d("WJY", "消息:" + JSON.toJSONString(message));
-                    }
                 }
             }
         };
@@ -606,7 +614,7 @@ public class MessageListPanelEx {
 
             boolean noMoreMessage = messages.size() < loadMsgCount;
 
-            if (remote) {
+            if (remote && anchor == null) {
                 Collections.reverse(messages);
             }
 
@@ -672,7 +680,7 @@ public class MessageListPanelEx {
                 return;
             }
 
-            if (remote) {
+            if (remote && anchor == null) {
                 Collections.reverse(messages);
             }
 
@@ -708,7 +716,7 @@ public class MessageListPanelEx {
         @Override
         public void onLoadMoreRequested() {
             // 底部加载新数据
-            if (!remote) {
+            if (!remote || anchor != null) {
                 loadFromLocal(QueryDirectionEnum.QUERY_NEW);
             }
         }

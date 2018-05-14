@@ -296,6 +296,7 @@ class ProjectBookUploadActivity : ToolbarActivity() {
                 }
                 llgroup.setOnClickListener {
                     if (data.file.isNullOrEmpty()) {
+                        showCustomToast(R.drawable.icon_toast_common, "请先选择文件")
                         return@setOnClickListener
                     }
                     if (data.isSuccess) {
@@ -331,6 +332,7 @@ class ProjectBookUploadActivity : ToolbarActivity() {
                 }
                 tag_layout.setOnClickListener {
                     if (data.file.isNullOrEmpty()) {
+                        showCustomToast(R.drawable.icon_toast_common, "请先选择文件")
                         return@setOnClickListener
                     }
                     if (data.isSuccess) {

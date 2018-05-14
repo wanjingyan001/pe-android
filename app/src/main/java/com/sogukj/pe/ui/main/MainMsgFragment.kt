@@ -23,6 +23,7 @@ import android.widget.TextView
 import android.widget.Toolbar
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
+import com.amap.api.mapcore.util.it
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -31,6 +32,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.framework.base.BaseFragment
 import com.framework.base.ToolbarFragment
+import com.google.gson.Gson
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import com.lcodecore.tkrefreshlayout.footer.BallPulseView
@@ -41,15 +43,18 @@ import com.netease.nim.uikit.business.uinfo.UserInfoHelper
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.Observer
 import com.netease.nimlib.sdk.RequestCallback
+import com.netease.nimlib.sdk.lucene.LuceneService
 import com.netease.nimlib.sdk.msg.MsgService
 import com.netease.nimlib.sdk.msg.MsgServiceObserve
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum
 import com.netease.nimlib.sdk.msg.model.IMMessage
 import com.netease.nimlib.sdk.msg.model.RecentContact
+import com.netease.nimlib.sdk.search.model.MsgIndexRecord
 import com.sogukj.pe.Manifest
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.MessageIndexBean
 import com.sogukj.pe.bean.UserBean
+import com.sogukj.pe.ui.IM.DisplayMessageActivity
 import com.sogukj.pe.ui.IM.TeamSearchActivity
 import com.sogukj.pe.ui.IM.TeamSelectActivity
 import com.sogukj.pe.ui.ScanResultActivity
@@ -65,14 +70,15 @@ import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
+import com.sougukj.setVisible
 import com.sougukj.textStr
 import com.xuexuan.zxing.android.activity.CaptureActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_msg_center.*
+import kotlinx.android.synthetic.main.item_shareholder_credit.*
 import okhttp3.FormBody
-import org.jetbrains.anko.backgroundResource
-import org.jetbrains.anko.imageResource
+import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.ctx
 import java.util.*
 import kotlin.collections.ArrayList
@@ -87,6 +93,7 @@ class MainMsgFragment : BaseFragment() {
         get() = R.layout.fragment_msg_center
 
     lateinit var adapter: RecyclerAdapter<Any>
+    lateinit var searchResult: RecyclerAdapter<MsgIndexRecord>
     val extMap = HashMap<String, Any>()
 
     override fun onHiddenChanged(hidden: Boolean) {
@@ -129,8 +136,10 @@ class MainMsgFragment : BaseFragment() {
         }
         search_edt.setOnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                searchKey = search_edt.text.toString()
-                searchWithName()
+                if (search_edt.textStr.isNotEmpty()){
+                    searchKey = search_edt.text.toString()
+                    searchWithName()
+                }
                 true
             } else {
                 false
@@ -140,6 +149,8 @@ class MainMsgFragment : BaseFragment() {
             Utils.toggleSoftInput(context, search_edt)
             search_edt.setText("")
             search_edt.clearFocus()
+            recycler_view.adapter = adapter
+            doRequest()
         }
         search_edt.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -155,6 +166,7 @@ class MainMsgFragment : BaseFragment() {
                     adapter.dataList.clear()
                     adapter.dataList.add(zhushou)
                     adapter.dataList.addAll(recentList)
+                    recycler_view.adapter = adapter
                     adapter.notifyDataSetChanged()
                     if (adapter.dataList.size == 0) {
                         recycler_view.visibility = View.GONE
@@ -174,22 +186,51 @@ class MainMsgFragment : BaseFragment() {
     }
 
     private fun searchWithName() {
-        val result = ArrayList<RecentContact>()
-        recentList.forEach {
-            if (it.fromNick.contains(searchKey)) {
-                result.add(it)
-            }
-        }
-        adapter.dataList.clear()
-        adapter.dataList.addAll(result)
-        adapter.notifyDataSetChanged()
-        if (adapter.dataList.size == 0) {
-            recycler_view.visibility = View.GONE
-            iv_empty.visibility = View.VISIBLE
-        } else {
-            recycler_view.visibility = View.VISIBLE
-            iv_empty.visibility = View.GONE
-        }
+//        val result = ArrayList<RecentContact>()
+//        recentList.forEach {
+//            if (it.fromNick.contains(searchKey)) {
+//                result.add(it)
+//            }
+//        }
+//        adapter.dataList.clear()
+//        adapter.dataList.addAll(result)
+//        adapter.dataList.distinct()
+//        adapter.notifyDataSetChanged()
+//        if (adapter.dataList.size == 0) {
+//            recycler_view.visibility = View.GONE
+//            iv_empty.visibility = View.VISIBLE
+//        } else {
+//            recycler_view.visibility = View.VISIBLE
+//            iv_empty.visibility = View.GONE
+//        }
+//        TODO("全文消息检索")
+        NIMClient.getService(LuceneService::class.java).searchAllSession(searchKey, 20)
+                .setCallback(object : RequestCallback<List<MsgIndexRecord>> {
+                    override fun onSuccess(param: List<MsgIndexRecord>?) {
+                        searchResult.dataList.clear()
+                        param?.let {
+                            searchResult.dataList.addAll(it)
+                            recycler_view.adapter = searchResult
+                        }
+                        if (searchResult.dataList.isEmpty()) {
+                            recycler_view.visibility = View.GONE
+                            iv_empty.visibility = View.VISIBLE
+                        } else {
+                            recycler_view.visibility = View.VISIBLE
+                            iv_empty.visibility = View.GONE
+                        }
+                    }
+
+                    override fun onException(exception: Throwable?) {
+                        recycler_view.visibility = View.VISIBLE
+                        iv_empty.visibility = View.GONE
+                    }
+
+                    override fun onFailed(code: Int) {
+                        recycler_view.visibility = View.VISIBLE
+                        iv_empty.visibility = View.GONE
+                    }
+                })
     }
 
     lateinit var searchKey: String
@@ -315,7 +356,7 @@ class MainMsgFragment : BaseFragment() {
                             }
                         } else if (data.sessionType == SessionTypeEnum.Team) {
                             val value = data.msgStatus.value
-                            val fromNick = if (data.fromNick.isEmpty()) "" else "${data.fromNick}:"
+                            val fromNick = if (data.fromNick.isNullOrEmpty()) "" else "${data.fromNick}:"
                             when (value) {
                                 3 -> tvTitleMsg.text = Html.fromHtml("<font color='#a0a4aa'>[已读]</font>$fromNick${data.content}")
                                 4 -> tvTitleMsg.text = Html.fromHtml("<font color='#1787fb'>[未读]</font>$fromNick${data.content}")
@@ -422,6 +463,23 @@ class MainMsgFragment : BaseFragment() {
 //
 //        })
 //        refresh.setAutoLoadMore(true)
+        searchResult = RecyclerAdapter(ctx) { _adapter, parent, _ ->
+            SearchResultHolder(_adapter.getView(R.layout.item_msg_index, parent))
+        }
+        searchResult.onItemClick = {v, position ->
+            search_edt.setText("")
+            search_edt.clearFocus()
+            val record = searchResult.dataList[position]
+            when(record.sessionType){
+                SessionTypeEnum.P2P->{
+                    NimUIKit.startP2PSession(ctx,record.sessionId,record.message)
+                }
+                SessionTypeEnum.Team->{
+                    NimUIKit.startTeamSession(ctx,record.sessionId,record.message)
+                }
+            }
+//            DisplayMessageActivity.start(ctx, record.message)
+        }
 
         refresh.setOnRefreshListener {
             doRequest()
@@ -621,6 +679,7 @@ class MainMsgFragment : BaseFragment() {
             return@sort if (time == 0L) 0 else if (time > 0) -1 else 1
         }
         adapter.dataList.addAll(recentList)
+        adapter.dataList.distinct()
         adapter.notifyDataSetChanged()
 
     }
@@ -650,6 +709,57 @@ class MainMsgFragment : BaseFragment() {
             val intent = Bundle()
             fragment.arguments = intent
             return fragment
+        }
+    }
+
+    inner class SearchResultHolder(itemView: View) : RecyclerHolder<MsgIndexRecord>(itemView) {
+        val msgIcon = convertView.findViewById(R.id.msg_icon) as CircleImageView
+        val tvTitle = convertView.findViewById(R.id.tv_title) as TextView
+        val tvDate = convertView.findViewById(R.id.tv_date) as TextView
+        val tvTitleMsg = convertView.findViewById(R.id.tv_title_msg) as TextView
+        val tvNum = convertView.findViewById(R.id.tv_num) as TextView
+        @SuppressLint("SetTextI18n")
+        override fun setData(view: View, data: MsgIndexRecord, position: Int) {
+            tvNum.setVisible(false)
+            val titleName = UserInfoHelper.getUserTitleName(data.sessionId, data.sessionType)
+            tvTitle.text = titleName
+            val content = data.message.content
+            if (data.sessionType == SessionTypeEnum.P2P) {
+                tvTitleMsg.text = Html.fromHtml(content.replace(searchKey, "<font color='#1787fb'>$searchKey</font>"))
+                val userInfo = NimUIKit.getUserInfoProvider().getUserInfo(data.sessionId)
+                userInfo?.let {
+                    Glide.with(this@MainMsgFragment)
+                            .load(it.avatar)
+                            .listener(object : RequestListener<Drawable> {
+                                override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                                    val ch = userInfo.name.first()
+                                    msgIcon.setChar(ch)
+                                    return false
+                                }
+
+                                override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                                    return false
+                                }
+
+                            })
+                            .into(msgIcon)
+                }
+            } else if (data.sessionType == SessionTypeEnum.Team) {
+                val fromNick = if (data.message.fromNick.isEmpty()) "" else "${data.message.fromNick}:"
+                tvTitleMsg.text = Html.fromHtml("$fromNick${content.replace(searchKey, "<font color='#1787fb'>$searchKey</font>")}")
+                val team = NimUIKit.getTeamProvider().getTeamById(data.sessionId)
+                team?.let {
+                    Glide.with(this@MainMsgFragment)
+                            .load(it.icon)
+                            .apply(RequestOptions().error(R.drawable.im_team_default))
+                            .into(msgIcon)
+                }
+            }
+            try {
+                val time = Utils.getTime(data.time, "yyyy-MM-dd HH:mm:ss")
+                tvDate.text = Utils.formatDate(time)
+            } catch (e: Exception) {
+            }
         }
     }
 }

@@ -20,18 +20,18 @@ import kotlinx.android.synthetic.main.activity_display_message.*
 class DisplayMessageActivity : UI(), ModuleProxy {
 
 
-    lateinit var toolbar:Toolbar
+    lateinit var toolbar: Toolbar
     lateinit var sessionType: SessionTypeEnum
-    lateinit var account:String
-    lateinit var anchor:IMMessage
+    lateinit var account: String
+    lateinit var anchor: IMMessage
     lateinit var messageListPanel: MessageListPanelEx
 
     companion object {
-        fun start(context:Context,anchor:IMMessage){
-            val intent = Intent(context,DisplayMessageActivity::class.java)
+        fun start(context: Context, anchor: IMMessage) {
+            val intent = Intent(context, DisplayMessageActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            intent.putExtra("anchor",anchor)
+            intent.putExtra("anchor", anchor)
             context.startActivity(intent)
         }
     }
@@ -49,7 +49,7 @@ class DisplayMessageActivity : UI(), ModuleProxy {
         sessionType = anchor.sessionType
         team_tool.text = UserInfoHelper.getUserTitleName(account, sessionType)
         val container = Container(this, account, sessionType, this)
-        messageListPanel = MessageListPanelEx(container,inflate,anchor, true, false)
+        messageListPanel = MessageListPanelEx(container, inflate, anchor, true, false)
 
     }
 

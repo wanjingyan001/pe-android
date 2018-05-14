@@ -31,10 +31,7 @@ import com.sogukj.pe.bean.FundSmallBean
 import com.sogukj.pe.bean.ProjectBookBean
 import com.sogukj.pe.service.DownLoadService
 import com.sogukj.pe.ui.SupportEmptyView
-import com.sogukj.pe.util.DownloadUtil
-import com.sogukj.pe.util.FileUtil
-import com.sogukj.pe.util.OpenFileUtil
-import com.sogukj.pe.util.Trace
+import com.sogukj.pe.util.*
 import com.sogukj.pe.view.*
 import com.sogukj.pe.view.ListAdapter
 import com.sogukj.service.SoguApi
@@ -733,7 +730,7 @@ class FundBookActivity : ToolbarActivity(), SupportEmptyView {
 
                 var data = datalist.get(position)
                 holder.tvSummary?.text = data?.doc_title
-                val strTime = data?.add_time
+                val strTime = DateUtils.timedate(data.add_time)
                 holder.tvTime?.visibility = View.GONE
                 if (!TextUtils.isEmpty(strTime)) {
                     val strs = strTime!!.trim().split(" ")

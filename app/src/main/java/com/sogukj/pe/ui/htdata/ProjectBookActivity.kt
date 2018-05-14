@@ -26,6 +26,7 @@ import com.sogukj.pe.bean.FileListBean
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.bean.ProjectBookBean
 import com.sogukj.pe.ui.SupportEmptyView
+import com.sogukj.pe.util.DateUtils
 import com.sogukj.pe.util.DownloadUtil
 import com.sogukj.pe.util.OpenFileUtil
 import com.sogukj.pe.util.Trace
@@ -727,7 +728,7 @@ class ProjectBookActivity : ToolbarActivity(), SupportEmptyView {
 
                 var data = datalist.get(position)
                 holder.tvSummary?.text = data?.doc_title
-                val strTime = data?.add_time
+                val strTime = DateUtils.timedate(data.add_time)
                 holder.tvTime?.visibility = View.GONE
                 if (!TextUtils.isEmpty(strTime)) {
                     val strs = strTime!!.trim().split(" ")

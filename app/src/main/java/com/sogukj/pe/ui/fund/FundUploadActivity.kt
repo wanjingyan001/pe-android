@@ -136,7 +136,7 @@ class FundUploadActivity : ToolbarActivity() {
                 .addFormDataPart("file", file.name, RequestBody.create(MediaType.parse("*/*"), file))
                 .addFormDataPart("company_id", project.id.toString())
                 .addFormDataPart("dir_id", bean.group.toString())
-                .addFormDataPart("fileClass", bean.type.toString())
+                //.addFormDataPart("fileClass", bean.type.toString())
                 .build()
 
         showProgress("正在上传")
@@ -252,6 +252,7 @@ class FundUploadActivity : ToolbarActivity() {
             val btn_upload = itemView.find<Button>(R.id.btn_upload)
 
             fun setData(data: UploadBean, position: Int) {
+                tag_layout.visibility = View.GONE
                 if (data.file.isNullOrEmpty()) {
                     ll_upload_empty.visibility = View.VISIBLE
                     ll_upload_full.visibility = View.GONE
@@ -285,6 +286,7 @@ class FundUploadActivity : ToolbarActivity() {
                 }
                 llgroup.setOnClickListener {
                     if (data.file.isNullOrEmpty()) {
+                        showCustomToast(R.drawable.icon_toast_common, "请先选择文件")
                         return@setOnClickListener
                     }
                     if (data.isSuccess) {
@@ -320,6 +322,7 @@ class FundUploadActivity : ToolbarActivity() {
                 }
                 tag_layout.setOnClickListener {
                     if (data.file.isNullOrEmpty()) {
+                        showCustomToast(R.drawable.icon_toast_common, "请先选择文件")
                         return@setOnClickListener
                     }
                     if (data.isSuccess) {
