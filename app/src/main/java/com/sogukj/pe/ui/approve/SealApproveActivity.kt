@@ -207,7 +207,7 @@ class SealApproveActivity : ToolbarActivity() {
                     }
                     dialog.show()
                 }
-                toolbar_menu.text = "修改"
+                toolbar_menu.text = ""
             }
             2 -> {
                 btn_single.visibility = View.VISIBLE
@@ -228,7 +228,7 @@ class SealApproveActivity : ToolbarActivity() {
                                 showCustomToast(R.drawable.icon_toast_fail, "请求失败")
                             })
                 }
-                toolbar_menu.text = "修改"
+                toolbar_menu.text = ""
             }
             3 -> {
                 btn_single.visibility = View.VISIBLE
@@ -238,7 +238,7 @@ class SealApproveActivity : ToolbarActivity() {
                     ApproveFillActivity.start(context, true, paramType!!, paramId!!, paramTitle!!, 1)
                     finish()
                 }
-                toolbar_menu.text = "修改"
+                toolbar_menu.text = ""
             }
             4 -> {
                 ll_twins.visibility = View.VISIBLE

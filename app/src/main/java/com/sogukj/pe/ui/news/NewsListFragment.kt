@@ -220,6 +220,9 @@ class NewsListFragment : BaseFragment(), SupportEmptyView {
 //                tv_date.text = strTime
             }
             tv_from.text = data.source
+            if(data.source.isNullOrEmpty()){
+                tv_from.visibility = View.GONE
+            }
             data.setTags(baseActivity!!, tags)
             var isRead = isRead(data)
             if (isRead) {

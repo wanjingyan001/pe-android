@@ -25,6 +25,7 @@ import com.nbsp.materialfilepicker.MaterialFilePicker
 import com.nbsp.materialfilepicker.ui.FilePickerActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.bean.DirBean
 import com.sogukj.pe.bean.FundSmallBean
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.service.Payload
@@ -62,7 +63,6 @@ class FundUploadActivity : ToolbarActivity() {
     lateinit var map: HashMap<Int, String>
     lateinit var uploadAdapter: UploadAdapter
     val uploadList = ArrayList<UploadBean>()
-    val upBean = UploadBean()
     var currentPosition = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,7 +84,7 @@ class FundUploadActivity : ToolbarActivity() {
 
         val user = Store.store.getUser(this)
         tv_user.text = user?.name
-        if(user?.headImage().isNullOrEmpty()){
+        if (user?.headImage().isNullOrEmpty()) {
             val ch = user?.name?.first()
             iv_user.setChar(ch)
         } else {
@@ -93,16 +93,18 @@ class FundUploadActivity : ToolbarActivity() {
                     .apply(RequestOptions().error(Utils.defaultHeadImg()))
                     .into(iv_user)
         }
+        uploadList.add(UploadBean())
         uploadAdapter = UploadAdapter(this, uploadList)
         upload_file_list.layoutManager = LinearLayoutManager(this)
         upload_file_list.adapter = uploadAdapter
 
+        loadDir()
     }
 
     class UploadBean {
         var file: String? = null
-        var group: String? = null
-        var type: String? = null
+        var group: Int? = null//分类
+        var type: Int? = null//标签,基金不需要
         var date: Long? = null
         var isSuccess: Boolean = false
     }
@@ -119,7 +121,6 @@ class FundUploadActivity : ToolbarActivity() {
         return true
     }
 
-    var index = 0
     private fun doSave(bean: UploadBean, btn_upload: Button) {
         if (!doCheck(bean)) {
             return
@@ -130,43 +131,60 @@ class FundUploadActivity : ToolbarActivity() {
         btn_upload.isEnabled = false
         btn_upload.backgroundColor = Color.GRAY
         val file = File(bean.file)
-        //type	number	1	档案类型	非空（1=>项目文书，2=>基金档案）
+        var body = MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart("type", "2")
+                .addFormDataPart("file", file.name, RequestBody.create(MediaType.parse("*/*"), file))
+                .addFormDataPart("company_id", project.id.toString())
+                .addFormDataPart("dir_id", bean.group.toString())
+                .addFormDataPart("fileClass", bean.type.toString())
+                .build()
+
+        showProgress("正在上传")
         SoguApi.getService(application)
-                .uploadBook(MultipartBody.Builder().setType(MultipartBody.FORM)
-                        .addFormDataPart("type", "2")
-                        .addFormDataPart("file", file.name, RequestBody.create(MediaType.parse("*/*"), file))
-                        .addFormDataPart("company_id", project.id.toString())
-                        .addFormDataPart("status", bean.group)
-                        //.addFormDataPart("fileClass", uploadBean.type)//非空(当type=1时值为首次进入此页面返回的filter=>id,当type=2时无需传此字段)
-                        .build())
+                .uploadArchives(body)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(
-                        { payload ->
-                            if (payload.isOk) {
-                                index++
-                                bean.isSuccess = true
-                            } else
-                                showCustomToast(R.drawable.icon_toast_fail, payload.message)
-                        }, { e ->
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        bean.isSuccess = true
+                        showCustomToast(R.drawable.icon_toast_success, "上传成功")
+                        hideProgress()
+                        uploadAdapter.notifyDataSetChanged()
+                    } else {
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
+                        hideProgress()
+                        btn_upload.isEnabled = true
+                        btn_upload.backgroundResource = R.drawable.bg_btn_blue
+                    }
+                }, { e ->
                     Trace.e(e)
                     hideProgress()
                     showCustomToast(R.drawable.icon_toast_fail, "上传失败")
                     btn_upload.isEnabled = true
                     btn_upload.backgroundResource = R.drawable.bg_btn_blue
-                }, {
-                    if (index == uploadList.size) {
-                        showCustomToast(R.drawable.icon_toast_success, "上传成功")
-                        hideProgress()
-                        finish()
-                    }
-                }, {
-                    showProgress("正在上传")
                 })
     }
 
+    var dirList = ArrayList<DirBean>()
 
-
+    fun loadDir() {
+        SoguApi.getService(application)
+                .showCatalog(2, project.id!!)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        payload?.payload?.forEach {
+                            dirList.add(it)
+                        }
+                        for (dir in dirList) {
+                            uploadAdapter.items.add(dir.dirname)
+                        }
+                    } else {
+                    }
+                }, { e ->
+                })
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (data != null && resultCode === Activity.RESULT_OK) {
@@ -177,7 +195,7 @@ class FundUploadActivity : ToolbarActivity() {
                         val bean = UploadBean()
                         bean.file = it
                         bean.date = System.currentTimeMillis()
-                        uploadList.add(bean)
+                        uploadList.add(uploadList.size - 1, bean)
                     }
                     uploadAdapter.notifyDataSetChanged()
                 }
@@ -204,111 +222,78 @@ class FundUploadActivity : ToolbarActivity() {
         }
     }
 
-    inner class UploadAdapter(val context: Context, val uploadList: List<UploadBean>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    inner class UploadAdapter(val context: Context, val uploadList: List<UploadBean>) : RecyclerView.Adapter<UploadAdapter.FileHolder>() {
         val items = ArrayList<String?>()
 
-        init {
-            items.add("储备期档案")
-            items.add("存续期档案")
-            items.add("退出期档案")
+        override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): UploadAdapter.FileHolder {
+            return FileHolder(LayoutInflater.from(context).inflate(R.layout.item_fund_upload_new, parent, false))
         }
 
-        override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
-            return when (viewType) {
-                0 -> {
-                    FileHolder(LayoutInflater.from(context).inflate(R.layout.item_fund_upload, parent, false))
-                }
-                else -> {
-                    EmptyHolder(LayoutInflater.from(context).inflate(R.layout.item_empty_upload, parent, false))
-                }
-            }
+        override fun onBindViewHolder(holder: UploadAdapter.FileHolder, position: Int) {
+            holder.setData(uploadList[position], position)
         }
 
-        override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
-            if (holder is FileHolder) {
-                holder.setData(uploadList[position], position)
-            } else if (holder is EmptyHolder) {
-                holder.setData()
-            }
-        }
-
-        override fun getItemCount(): Int = uploadList.size + 1
+        override fun getItemCount(): Int = uploadList.size
 
         override fun getItemViewType(position: Int): Int {
-            return if (position == uploadList.size) 1 else 0
+            return if (uploadList.get(position).isSuccess) 0 else 1
         }
 
         inner class FileHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            val ll_upload_full = itemView.find<LinearLayout>(R.id.ll_upload_full)
+
+            val ll_upload_full = itemView.find<LinearLayout>(R.id.ll_upload_full)//已选择（可能是上传完毕的，也可能是准备换文件的）
             val tv_file = itemView.find<TextView>(R.id.tv_file)
             val tv_time = itemView.find<TextView>(R.id.tv_time)
-            val llgroup = itemView.find<LinearLayout>(R.id.llgroup)
+            val ll_upload_empty = itemView.find<LinearLayout>(R.id.ll_upload_empty)//未选择图片
+            val llgroup = itemView.find<LinearLayout>(R.id.llgroup)//分类
             val tv_group = itemView.find<TextView>(R.id.tv_group)
-            val tv_class = itemView.find<TextView>(R.id.tv_class)
-            fun setData(data: UploadBean, position: Int) {
-                val file = File(data.file)
-                tv_file.text = file.name
-                tv_time.text = Utils.getTime(data.date!!, "yyyy-MM-dd HH:mm")
-                if (upBean.group != null) {
-                    tv_group.tag = upBean.group
-                    tv_group.text = items[upBean.group?.toInt()!! - 1]
-                }
-                //分类点击
-                llgroup.setOnClickListener {
-                    //1=>储备期档案,2=>  存续期档案,3=> 退出期档案
-                    MaterialDialog.Builder(this@FundUploadActivity)
-                            .theme(Theme.LIGHT)
-                            .items(items)
-                            .canceledOnTouchOutside(true)
-                            .itemsCallbackSingleChoice(-1, MaterialDialog.ListCallbackSingleChoice { dialog, v, p, s ->
-                                if (p == -1) return@ListCallbackSingleChoice false
-                                tv_group.text = items[p]
-                                tv_group.tag = "${p + 1}"
-                                data.group = "${p + 1}"
-                                dialog?.dismiss()
-                                true
-                            })
-                            .show()
-                }
-                //标签点击
-                val rMap = HashMap<String, String>()
-                map.entries.forEach { e -> rMap.put(e.value, "${e.key}") }
-                tv_class.setOnClickListener {
-                    val items = ArrayList<String?>()
-                    items.addAll(map.values)
-                    MaterialDialog.Builder(this@FundUploadActivity)
-                            .theme(Theme.LIGHT)
-                            .items(items)
-                            .canceledOnTouchOutside(true)
-                            .itemsCallbackSingleChoice(-1, MaterialDialog.ListCallbackSingleChoice { dialog, v, p, s ->
-                                if (p == -1) return@ListCallbackSingleChoice false
-                                tv_class.text = items[p]
-                                tv_class.tag = rMap[items[p]]
-                                data.type = "${rMap[items[p]]}"
-                                dialog?.dismiss()
-                                true
-                            })
-                            .show()
-                }
-                //替换文件
-                ll_upload_full.setOnClickListener {
-                    currentPosition = position
-                    FileMainActivity.start(this@FundUploadActivity, 1, true, REQ_CHANGE_FILE)
-                }
-
-            }
-        }
-
-        inner class EmptyHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            val ll_upload_empty = itemView.find<LinearLayout>(R.id.ll_upload_empty)
-            val llgroup = itemView.find<LinearLayout>(R.id.llgroup)
-            val tv_group = itemView.find<TextView>(R.id.tv_group)
+            val tag_layout = itemView.find<LinearLayout>(R.id.tag_layout)//标签
             val tv_class = itemView.find<TextView>(R.id.tv_class)
             val btn_upload = itemView.find<Button>(R.id.btn_upload)
-            fun setData() {
+
+            fun setData(data: UploadBean, position: Int) {
+                if (data.file.isNullOrEmpty()) {
+                    ll_upload_empty.visibility = View.VISIBLE
+                    ll_upload_full.visibility = View.GONE
+                    //选择文件
+                    ll_upload_empty.setOnClickListener {
+                        FileMainActivity.start(this@FundUploadActivity, maxSize = 1, requestCode = REQ_SELECT_FILE)
+                    }
+                } else {
+                    ll_upload_empty.visibility = View.GONE
+                    ll_upload_full.visibility = View.VISIBLE
+                    var file = File(data.file)
+                    tv_file.text = file.name
+                    tv_time.text = Utils.getTime(data.date!!, "yyyy-MM-dd HH:mm")
+                    //替换文件
+                    ll_upload_full.setOnClickListener {
+                        if (data.isSuccess) {
+                            return@setOnClickListener
+                        }
+                        currentPosition = position
+                        FileMainActivity.start(this@FundUploadActivity, 1, true, REQ_CHANGE_FILE)
+                    }
+                }
                 //分类点击
+                tv_group.text = ""
+                if (data.group != null) {
+                    for (dir in dirList) {
+                        if (dir.dir_id == data.group) {
+                            tv_group.text = dir.dirname
+                        }
+                    }
+                }
                 llgroup.setOnClickListener {
-                    //1=>储备期档案,2=>  存续期档案,3=> 退出期档案
+                    if (data.file.isNullOrEmpty()) {
+                        return@setOnClickListener
+                    }
+                    if (data.isSuccess) {
+                        return@setOnClickListener
+                    }
+                    if (items.size == 0) {
+                        showCustomToast(R.drawable.icon_toast_common, "分类信息未加载，请检查网络")
+                        return@setOnClickListener
+                    }
                     MaterialDialog.Builder(this@FundUploadActivity)
                             .theme(Theme.LIGHT)
                             .items(items)
@@ -316,17 +301,30 @@ class FundUploadActivity : ToolbarActivity() {
                             .itemsCallbackSingleChoice(-1, MaterialDialog.ListCallbackSingleChoice { dialog, v, p, s ->
                                 if (p == -1) return@ListCallbackSingleChoice false
                                 tv_group.text = items[p]
-                                tv_group.tag = "${p + 1}"
-                                upBean.group = "${p + 1}"
+                                data.group = dirList[p].dir_id
                                 dialog?.dismiss()
                                 true
                             })
                             .show()
                 }
                 //标签点击
-                val rMap = HashMap<String, String>()
-                map.entries.forEach { e -> rMap.put(e.value, "${e.key}") }
-                tv_class.setOnClickListener {
+                tv_class.text = ""
+                val rMap = HashMap<String, Int>()
+                map.entries.forEach { e -> rMap.put(e.value, e.key) }
+                if (data.type != null) {
+                    for ((k, v) in rMap) {
+                        if (v == data.type) {
+                            tv_class.text = k
+                        }
+                    }
+                }
+                tag_layout.setOnClickListener {
+                    if (data.file.isNullOrEmpty()) {
+                        return@setOnClickListener
+                    }
+                    if (data.isSuccess) {
+                        return@setOnClickListener
+                    }
                     val items = ArrayList<String?>()
                     items.addAll(map.values)
                     MaterialDialog.Builder(this@FundUploadActivity)
@@ -336,29 +334,24 @@ class FundUploadActivity : ToolbarActivity() {
                             .itemsCallbackSingleChoice(-1, MaterialDialog.ListCallbackSingleChoice { dialog, v, p, s ->
                                 if (p == -1) return@ListCallbackSingleChoice false
                                 tv_class.text = items[p]
-                                tv_class.tag = rMap[items[p]]
-                                upBean.type = "${rMap[items[p]]}"
+                                data.type = rMap[items[p]]
                                 dialog?.dismiss()
                                 true
                             })
                             .show()
                 }
-                //选择文件
-                ll_upload_empty.setOnClickListener {
-                    FileMainActivity.start(this@FundUploadActivity, requestCode = REQ_SELECT_FILE)
-                }
-
-                //上传
-                btn_upload.setOnClickListener {
-                    if (uploadList.size == 0) {
-                        showCustomToast(R.drawable.icon_toast_common, "未选择文件")
-                        return@setOnClickListener
-                    }
-                    handler.postDelayed({
-                        uploadList.forEach {
-                            doSave(it, btn_upload)
+                // button
+                if (data.isSuccess) {
+                    btn_upload.visibility = View.GONE
+                } else {
+                    btn_upload.visibility = View.VISIBLE
+                    btn_upload.setOnClickListener {
+                        if (doCheck(data)) {
+                            handler.postDelayed({
+                                doSave(data, btn_upload)
+                            }, 100)
                         }
-                    }, 10)
+                    }
                 }
             }
         }

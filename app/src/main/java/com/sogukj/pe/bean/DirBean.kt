@@ -10,4 +10,6 @@ class DirBean {
     var dir_id: Int? = null
     var dirname: String? = null
     var amend: Int? = null
+
+    var click = false
 }

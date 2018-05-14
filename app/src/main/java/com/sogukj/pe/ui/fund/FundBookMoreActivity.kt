@@ -17,6 +17,7 @@ import com.lcodecore.tkrefreshlayout.footer.BallPulseView
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.bean.FileListBean
 import com.sogukj.pe.bean.FundSmallBean
 import com.sogukj.pe.bean.ProjectBookBean
 import com.sogukj.pe.ui.SupportEmptyView
@@ -34,7 +35,7 @@ import java.text.SimpleDateFormat
 class FundBookMoreActivity : ToolbarActivity() {
 
 
-    lateinit var adapter: RecyclerAdapter<ProjectBookBean>
+    lateinit var adapter: RecyclerAdapter<FileListBean>
     lateinit var project: FundSmallBean
     var type = 1
     val df = SimpleDateFormat("yyyy-MM-dd")
@@ -45,15 +46,16 @@ class FundBookMoreActivity : ToolbarActivity() {
         setContentView(R.layout.activity_list_common)
         title = "基金文书"
         setBack(true)
-        adapter = RecyclerAdapter<ProjectBookBean>(this, { _adapter, parent, type ->
+        iv_filter.visibility = View.INVISIBLE
+        adapter = RecyclerAdapter<FileListBean>(this, { _adapter, parent, type ->
             val convertView = _adapter.getView(R.layout.item_project_book, parent) as View
-            object : RecyclerHolder<ProjectBookBean>(convertView) {
+            object : RecyclerHolder<FileListBean>(convertView) {
                 val tvSummary = convertView.findViewById(R.id.tv_summary) as TextView
                 val tvDate = convertView.findViewById(R.id.tv_date) as TextView
                 val tvTime = convertView.findViewById(R.id.tv_time) as TextView
                 val tvType = convertView.findViewById(R.id.tv_type) as TextView
                 val tvName = convertView.findViewById(R.id.tv_name) as TextView
-                override fun setData(view: View, data: ProjectBookBean, position: Int) {
+                override fun setData(view: View, data: FileListBean, position: Int) {
                     tvSummary.text = data?.doc_title
                     val strTime = data?.add_time
                     tvTime.visibility = View.GONE
@@ -142,8 +144,34 @@ class FundBookMoreActivity : ToolbarActivity() {
 
     var page = 1
     fun doRequest() {
+//        SoguApi.getService(application)
+//                .projectBookSearch(project.id!!, page = page, type = 2, status = type)
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribeOn(Schedulers.io())
+//                .subscribe({ payload ->
+//                    if (payload.isOk) {
+//                        if (page == 1)
+//                            adapter.dataList.clear()
+//                        payload.payload?.forEach {
+//                            adapter.dataList.add(it)
+//                        }
+//                    } else
+//                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
+//                }, { e ->
+//                    Trace.e(e)
+//                    showCustomToast(R.drawable.icon_toast_common, "暂无可用数据")
+//                }, {
+//                    SupportEmptyView.checkEmpty(this, adapter)
+//                    refresh?.setEnableLoadmore(adapter.dataList.size % 20 == 0)
+//                    adapter.notifyDataSetChanged()
+//                    if (page == 1)
+//                        refresh?.finishRefreshing()
+//                    else
+//                        refresh?.finishLoadmore()
+//                })
+
         SoguApi.getService(application)
-                .projectBookSearch(project.id!!, page = page, type = 2, status = type)
+                .fileList(project.id!!, 2, dir_id = type, page = page)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->

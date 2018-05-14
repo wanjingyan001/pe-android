@@ -7,6 +7,8 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.os.Handler
+import android.os.Message
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Html
@@ -42,6 +44,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_fund_book.*
 import kotlinx.android.synthetic.main.search_view.*
 import okhttp3.ResponseBody
+import org.jetbrains.anko.backgroundResource
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -232,9 +235,11 @@ class FundBookActivity : ToolbarActivity(), SupportEmptyView {
 
         })
         refresh.setAutoLoadMore(true)
-        handler.postDelayed({
-            doRequest()
-        }, 100)
+//        handler.postDelayed({
+//            doRequest()
+//        }, 100)
+
+        loadDir()
     }
 
     fun download(url: String, fileName: String) {
@@ -542,7 +547,65 @@ class FundBookActivity : ToolbarActivity(), SupportEmptyView {
         }
     }
 
-    class MyExpListAdapter(val context: Context, val group: ArrayList<DirBean>,
+    fun loadDir() {
+        SoguApi.getService(application)
+                .showCatalog(2, bean.id)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        var group = ArrayList<DirBean>()
+                        var child = ArrayList<ArrayList<FileListBean>>()
+                        payload?.payload?.forEach {
+                            group.add(it)
+                            child.add(ArrayList<FileListBean>())
+                        }
+                        fileAdapter = MyExpListAdapter(context, group, child)
+                        fileList.setAdapter(fileAdapter)
+                    } else {
+                        //showCustomToast(R.drawable.icon_toast_fail, payload.message)
+                    }
+                }, { e ->
+                    //showCustomToast(R.drawable.icon_toast_fail, "加载失败")
+                })
+
+        fileList.setOnGroupClickListener { parent, v, groupPosition, id ->
+            var group = fileAdapter.group[groupPosition]
+            if(group.click){
+                fileList.collapseGroup(groupPosition)
+                group.click = false
+            } else {
+                loadFileList(group.dir_id, groupPosition)
+                group.click = true
+            }
+            true
+        }
+    }
+
+    lateinit var fileAdapter:MyExpListAdapter
+
+    fun loadFileList(dirId:Int?=null, position:Int) {
+        SoguApi.getService(application)
+                .fileList(bean.id, 2, dirId, page = 1)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        fileAdapter.childs[position].clear()
+                        payload.payload?.forEach {
+                            fileAdapter.childs[position].add(it)
+                        }
+                        fileList.collapseGroup(position)
+                        fileList.expandGroup(position)
+                    } else {
+                        //showCustomToast(R.drawable.icon_toast_fail, payload.message)
+                    }
+                }, { e ->
+                    //showCustomToast(R.drawable.icon_toast_fail, "加载失败")
+                })
+    }
+
+    inner class MyExpListAdapter(val context: Context, val group: ArrayList<DirBean>,
                        val childs: ArrayList<ArrayList<FileListBean>>) : BaseExpandableListAdapter() {
 
         override fun getGroup(groupPosition: Int): Any {
@@ -564,6 +627,7 @@ class FundBookActivity : ToolbarActivity(), SupportEmptyView {
                 view = LayoutInflater.from(context).inflate(R.layout.file_header, null)
                 holder = GroupHolder()
                 holder.title = view.findViewById(R.id.head_title) as TextView
+                holder.direction = view.findViewById(R.id.direction) as ImageView
                 view.setTag(holder)
             } else {
                 holder = view.getTag() as GroupHolder
@@ -571,20 +635,20 @@ class FundBookActivity : ToolbarActivity(), SupportEmptyView {
 
             holder.title?.text = group[groupPosition].dirname
             if (isExpanded) {
-                //holder.direction?.setBackgroundResource(R.drawable.up)
+                holder.direction?.setBackgroundResource(R.drawable.up)
             } else {
-                //holder.direction?.setBackgroundResource(R.drawable.down)
+                holder.direction?.setBackgroundResource(R.drawable.down)
             }
 
             return view!!
         }
 
-        class GroupHolder {
+        inner class GroupHolder {
             var title: TextView? = null
+            var direction: ImageView? = null
         }
 
         override fun getChildrenCount(groupPosition: Int): Int {
-            //return childs[groupPosition].size
             return 1
         }
 
@@ -600,33 +664,45 @@ class FundBookActivity : ToolbarActivity(), SupportEmptyView {
             var view = convertView
             var holder: FatherHolder? = null
             if (view == null) {
-                view = LayoutInflater.from(context).inflate(R.layout.item_child, null)
+                view = LayoutInflater.from(context).inflate(R.layout.file_child, null)
                 holder = FatherHolder()
-                holder.seq = view.findViewById(R.id.seq) as TextView
-                holder.depart = view.findViewById(R.id.depart) as TextView
-                holder.name = view.findViewById(R.id.name) as TextView
-                holder.score = view.findViewById(R.id.score) as TextView
-                holder.list = view.findViewById(R.id.listview) as MyListView
+                holder.list = view.findViewById(R.id.list1) as ListViewCompat
+                holder.tv_more = view.findViewById(R.id.tv_more1) as TextView
                 view.setTag(holder)
             } else {
                 holder = view.getTag() as FatherHolder
             }
 
-            holder.seq?.setBackgroundColor(Color.TRANSPARENT)
-            holder.depart?.setBackgroundColor(Color.TRANSPARENT)
-            holder.name?.setBackgroundColor(Color.TRANSPARENT)
-            holder.score?.setBackgroundColor(Color.TRANSPARENT)
-            //holder.list?.adapter = MyListAdapter(context, childs.get(groupPosition), type)
+            var dataList = childs.get(groupPosition)
+            if (dataList!!.size <= 3) {
+                holder.tv_more?.visibility = View.GONE
+            } else {
+                holder.tv_more?.visibility = View.VISIBLE
+            }
+
+            var adapter = MyListAdapter(context, ArrayList<FileListBean>())
+            holder.list?.adapter = adapter
+
+            if (dataList!!.size <= 3) {
+                adapter.datalist.addAll(dataList)
+                adapter.notifyDataSetChanged()
+            } else {
+                for (i in 0..2) {
+                    adapter.datalist.add(dataList.get(i))
+                }
+                adapter.notifyDataSetChanged()
+            }
+
+            holder.tv_more?.setOnClickListener {
+                FundBookMoreActivity.start(this@FundBookActivity, bean, group[groupPosition].dir_id!!)
+            }
 
             return view!!
         }
 
-        class FatherHolder {
-            var seq: TextView? = null
-            var depart: TextView? = null
-            var name: TextView? = null
-            var score: TextView? = null
-            var list: MyListView? = null
+        inner class FatherHolder {
+            var list: ListViewCompat? = null
+            var tv_more: TextView? = null
         }
 
         override fun getChildId(groupPosition: Int, childPosition: Int): Long {
@@ -637,38 +713,46 @@ class FundBookActivity : ToolbarActivity(), SupportEmptyView {
             return group.size
         }
 
-        class MyListAdapter(val context: Context, val datalist: ArrayList<FileListBean>, val type: Int) : BaseAdapter() {
+        inner class MyListAdapter(val context: Context, val datalist: ArrayList<FileListBean>) : BaseAdapter() {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
                 var view = convertView
                 var holder: ChildHolder? = null
                 if (view == null) {
-                    view = LayoutInflater.from(context).inflate(R.layout.item_child, null)
+                    view = LayoutInflater.from(context).inflate(R.layout.item_project_book, null)
                     holder = ChildHolder()
-                    holder.seq = view.findViewById(R.id.seq) as TextView
-                    holder.depart = view.findViewById(R.id.depart) as TextView
-                    holder.name = view.findViewById(R.id.name) as TextView
-                    holder.score = view.findViewById(R.id.score) as TextView
+                    holder.root = view.findViewById(R.id.root) as LinearLayout
+                    holder.tvSummary = view.findViewById(R.id.tv_summary) as TextView
+                    holder.tvDate = view.findViewById(R.id.tv_date) as TextView
+                    holder.tvTime = view.findViewById(R.id.tv_time) as TextView
+                    holder.tvType = view.findViewById(R.id.tv_type) as TextView
+                    holder.tvName = view.findViewById(R.id.tv_name) as TextView
                     view.setTag(holder)
                 } else {
                     holder = view.getTag() as ChildHolder
                 }
 
-//                holder.seq?.text = "${datalist[position].sort}"
-//                holder.depart?.text = datalist[position].department
-//                holder.name?.text = datalist[position].name
-//                holder.score?.text = datalist[position].grade_case
+                var data = datalist.get(position)
+                holder.tvSummary?.text = data?.doc_title
+                val strTime = data?.add_time
+                holder.tvTime?.visibility = View.GONE
+                if (!TextUtils.isEmpty(strTime)) {
+                    val strs = strTime!!.trim().split(" ")
+                    if (!TextUtils.isEmpty(strs.getOrNull(1))) {
+                        holder.tvTime?.visibility = View.VISIBLE
+                    }
+                    holder.tvDate?.text = strs.getOrNull(0)
+                    holder.tvTime?.text = strs.getOrNull(1)
+                }
+                holder.tvType?.visibility = View.INVISIBLE
+                holder.tvType?.text = data?.name
+                holder.tvName?.text = data?.submitter
 
-                holder.seq?.setBackgroundColor(Color.WHITE)
-                holder.depart?.setBackgroundColor(Color.WHITE)
-                holder.name?.setBackgroundColor(Color.WHITE)
-                holder.score?.setBackgroundColor(Color.WHITE)
-
-                if (type == Extras.TYPE_INTERACT) {
-                    holder.seq?.visibility = View.VISIBLE
-                    holder.depart?.visibility = View.VISIBLE
-                } else if (type == Extras.TYPE_LISTITEM) {
-                    holder.seq?.visibility = View.GONE
-                    holder.depart?.visibility = View.GONE
+                holder.root?.setOnClickListener {
+                    if (!TextUtils.isEmpty(data?.url)) {
+                        val intent = Intent(Intent.ACTION_VIEW)
+                        intent.data = Uri.parse(data!!.url)
+                        startActivity(intent)
+                    }
                 }
 
                 return view!!
@@ -686,11 +770,13 @@ class FundBookActivity : ToolbarActivity(), SupportEmptyView {
                 return datalist.size
             }
 
-            class ChildHolder {
-                var seq: TextView? = null
-                var depart: TextView? = null
-                var name: TextView? = null
-                var score: TextView? = null
+            inner class ChildHolder {
+                var root: LinearLayout? = null
+                var tvSummary: TextView? = null
+                var tvDate: TextView? = null
+                var tvTime: TextView? = null
+                var tvType: TextView? = null
+                var tvName: TextView? = null
             }
         }
     }

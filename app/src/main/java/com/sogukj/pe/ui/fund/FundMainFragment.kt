@@ -225,6 +225,9 @@ class FundMainFragment : BaseFragment(), View.OnClickListener {
                 }
             }
         })
+
+        tabs.getTabAt(1)?.select()
+        view_pager?.currentItem = 1
     }
 
     var previousState = "TOP"// NO_TOP

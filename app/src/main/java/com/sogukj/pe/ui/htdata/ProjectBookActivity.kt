@@ -1,6 +1,7 @@
 package com.sogukj.pe.ui.htdata
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -11,7 +12,8 @@ import android.text.InputType
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.TextView
+import android.view.ViewGroup
+import android.widget.*
 import com.framework.base.ToolbarActivity
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
@@ -19,16 +21,16 @@ import com.lcodecore.tkrefreshlayout.footer.BallPulseView
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.bean.DirBean
+import com.sogukj.pe.bean.FileListBean
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.bean.ProjectBookBean
 import com.sogukj.pe.ui.SupportEmptyView
 import com.sogukj.pe.util.DownloadUtil
 import com.sogukj.pe.util.OpenFileUtil
 import com.sogukj.pe.util.Trace
+import com.sogukj.pe.view.*
 import com.sogukj.pe.view.ListAdapter
-import com.sogukj.pe.view.ListHolder
-import com.sogukj.pe.view.RecyclerAdapter
-import com.sogukj.pe.view.RecyclerHolder
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -223,9 +225,11 @@ class ProjectBookActivity : ToolbarActivity(), SupportEmptyView {
 
         })
         refresh.setAutoLoadMore(true)
-        handler.postDelayed({
-            doRequest()
-        }, 100)
+//        handler.postDelayed({
+//            doRequest()
+//        }, 100)
+
+        loadDir()
     }
 
     fun download(url: String, fileName: String) {
@@ -475,6 +479,9 @@ class ProjectBookActivity : ToolbarActivity(), SupportEmptyView {
                 tvTag.setTextColor(textColor0)
                 tvTag.setBackgroundResource(bgColor0)
             }
+            stateDefault()
+            this.key = ""
+            search_view.search = ""
         }
         btn_ok.setOnClickListener {
             fl_filter.visibility = View.GONE
@@ -531,6 +538,240 @@ class ProjectBookActivity : ToolbarActivity(), SupportEmptyView {
             val intent = Intent(ctx, ProjectBookActivity::class.java)
             intent.putExtra(Extras.DATA, project)
             ctx?.startActivity(intent)
+        }
+    }
+
+    fun loadDir() {
+        SoguApi.getService(application)
+                .showCatalog(1, project.company_id!!)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        var group = ArrayList<DirBean>()
+                        var child = ArrayList<ArrayList<FileListBean>>()
+                        payload?.payload?.forEach {
+                            group.add(it)
+                            child.add(ArrayList<FileListBean>())
+                        }
+                        fileAdapter = MyExpListAdapter(context, group, child)
+                        fileList.setAdapter(fileAdapter)
+                    } else {
+                        //showCustomToast(R.drawable.icon_toast_fail, payload.message)
+                    }
+                }, { e ->
+                    //showCustomToast(R.drawable.icon_toast_fail, "加载失败")
+                })
+
+        fileList.setOnGroupClickListener { parent, v, groupPosition, id ->
+            var group = fileAdapter.group[groupPosition]
+            if(group.click){
+                fileList.collapseGroup(groupPosition)
+                group.click = false
+            } else {
+                loadFileList(group.dir_id, groupPosition)
+                group.click = true
+            }
+            true
+        }
+    }
+
+    lateinit var fileAdapter:MyExpListAdapter
+
+    fun loadFileList(dirId:Int?=null, position:Int) {
+        SoguApi.getService(application)
+                .fileList(project.company_id!!, 1, dirId, page = 1)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        fileAdapter.childs[position].clear()
+                        payload.payload?.forEach {
+                            fileAdapter.childs[position].add(it)
+                        }
+                        fileList.collapseGroup(position)
+                        fileList.expandGroup(position)
+                    } else {
+                        //showCustomToast(R.drawable.icon_toast_fail, payload.message)
+                    }
+                }, { e ->
+                    //showCustomToast(R.drawable.icon_toast_fail, "加载失败")
+                })
+    }
+
+    inner class MyExpListAdapter(val context: Context, val group: ArrayList<DirBean>,
+                                 val childs: ArrayList<ArrayList<FileListBean>>) : BaseExpandableListAdapter() {
+
+        override fun getGroup(groupPosition: Int): Any {
+            return group[groupPosition]
+        }
+
+        override fun isChildSelectable(groupPosition: Int, childPosition: Int): Boolean {
+            return true
+        }
+
+        override fun hasStableIds(): Boolean {
+            return true
+        }
+
+        override fun getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup?): View {
+            var view = convertView
+            var holder: GroupHolder? = null
+            if (view == null) {
+                view = LayoutInflater.from(context).inflate(R.layout.file_header, null)
+                holder = GroupHolder()
+                holder.title = view.findViewById(R.id.head_title) as TextView
+                holder.direction = view.findViewById(R.id.direction) as ImageView
+                view.setTag(holder)
+            } else {
+                holder = view.getTag() as GroupHolder
+            }
+
+            holder.title?.text = group[groupPosition].dirname
+            if (isExpanded) {
+                holder.direction?.setBackgroundResource(R.drawable.up)
+            } else {
+                holder.direction?.setBackgroundResource(R.drawable.down)
+            }
+
+            return view!!
+        }
+
+        inner class GroupHolder {
+            var title: TextView? = null
+            var direction: ImageView? = null
+        }
+
+        override fun getChildrenCount(groupPosition: Int): Int {
+            return 1
+        }
+
+        override fun getChild(groupPosition: Int, childPosition: Int): Any {
+            return childs[groupPosition][childPosition]
+        }
+
+        override fun getGroupId(groupPosition: Int): Long {
+            return groupPosition.toLong()
+        }
+
+        override fun getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean, convertView: View?, parent: ViewGroup?): View {
+            var view = convertView
+            var holder: FatherHolder? = null
+            if (view == null) {
+                view = LayoutInflater.from(context).inflate(R.layout.file_child, null)
+                holder = FatherHolder()
+                holder.list = view.findViewById(R.id.list1) as ListViewCompat
+                holder.tv_more = view.findViewById(R.id.tv_more1) as TextView
+                view.setTag(holder)
+            } else {
+                holder = view.getTag() as FatherHolder
+            }
+
+            var dataList = childs.get(groupPosition)
+            if (dataList!!.size <= 3) {
+                holder.tv_more?.visibility = View.GONE
+            } else {
+                holder.tv_more?.visibility = View.VISIBLE
+            }
+
+            var adapter = MyListAdapter(context, ArrayList<FileListBean>())
+            holder.list?.adapter = adapter
+
+            if (dataList!!.size <= 3) {
+                adapter.datalist.addAll(dataList)
+                adapter.notifyDataSetChanged()
+            } else {
+                for (i in 0..2) {
+                    adapter.datalist.add(dataList.get(i))
+                }
+                adapter.notifyDataSetChanged()
+            }
+
+            holder.tv_more?.setOnClickListener {
+                ProjectBookMoreActivity.start(this@ProjectBookActivity, project, group[groupPosition].dir_id!!)
+            }
+
+            return view!!
+        }
+
+        inner class FatherHolder {
+            var list: ListViewCompat? = null
+            var tv_more: TextView? = null
+        }
+
+        override fun getChildId(groupPosition: Int, childPosition: Int): Long {
+            return childPosition.toLong()
+        }
+
+        override fun getGroupCount(): Int {
+            return group.size
+        }
+
+        inner class MyListAdapter(val context: Context, val datalist: ArrayList<FileListBean>) : BaseAdapter() {
+            override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+                var view = convertView
+                var holder: ChildHolder? = null
+                if (view == null) {
+                    view = LayoutInflater.from(context).inflate(R.layout.item_project_book, null)
+                    holder = ChildHolder()
+                    holder.root = view.findViewById(R.id.root) as LinearLayout
+                    holder.tvSummary = view.findViewById(R.id.tv_summary) as TextView
+                    holder.tvDate = view.findViewById(R.id.tv_date) as TextView
+                    holder.tvTime = view.findViewById(R.id.tv_time) as TextView
+                    holder.tvType = view.findViewById(R.id.tv_type) as TextView
+                    holder.tvName = view.findViewById(R.id.tv_name) as TextView
+                    view.setTag(holder)
+                } else {
+                    holder = view.getTag() as ChildHolder
+                }
+
+                var data = datalist.get(position)
+                holder.tvSummary?.text = data?.doc_title
+                val strTime = data?.add_time
+                holder.tvTime?.visibility = View.GONE
+                if (!TextUtils.isEmpty(strTime)) {
+                    val strs = strTime!!.trim().split(" ")
+                    if (!TextUtils.isEmpty(strs.getOrNull(1))) {
+                        holder.tvTime?.visibility = View.VISIBLE
+                    }
+                    holder.tvDate?.text = strs.getOrNull(0)
+                    holder.tvTime?.text = strs.getOrNull(1)
+                }
+                holder.tvType?.visibility = View.INVISIBLE
+                holder.tvType?.text = data?.name
+                holder.tvName?.text = data?.submitter
+
+                holder.root?.setOnClickListener {
+                    if (!TextUtils.isEmpty(data?.url)) {
+                        val intent = Intent(Intent.ACTION_VIEW)
+                        intent.data = Uri.parse(data!!.url)
+                        startActivity(intent)
+                    }
+                }
+
+                return view!!
+            }
+
+            override fun getItem(position: Int): Any {
+                return datalist.get(position)
+            }
+
+            override fun getItemId(position: Int): Long {
+                return position.toLong()
+            }
+
+            override fun getCount(): Int {
+                return datalist.size
+            }
+
+            inner class ChildHolder {
+                var root: LinearLayout? = null
+                var tvSummary: TextView? = null
+                var tvDate: TextView? = null
+                var tvTime: TextView? = null
+                var tvType: TextView? = null
+                var tvName: TextView? = null
+            }
         }
     }
 }

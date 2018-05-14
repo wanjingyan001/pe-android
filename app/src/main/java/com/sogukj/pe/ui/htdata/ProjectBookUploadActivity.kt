@@ -24,6 +24,8 @@ import com.nbsp.materialfilepicker.MaterialFilePicker
 import com.nbsp.materialfilepicker.ui.FilePickerActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.bean.DirBean
+import com.sogukj.pe.bean.FileListBean
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.service.Payload
 import com.sogukj.pe.ui.fileSelector.FileMainActivity
@@ -62,8 +64,8 @@ class ProjectBookUploadActivity : ToolbarActivity() {
     lateinit var map: HashMap<Int, String>
     lateinit var uploadAdapter: UploadAdapter
     val uploadList = ArrayList<UploadBean>()
-    val upBean = UploadBean()
     var currentPosition = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         project = intent.getSerializableExtra(Extras.DATA) as ProjectBean
@@ -97,15 +99,18 @@ class ProjectBookUploadActivity : ToolbarActivity() {
         }
 
         tv_title.text = project.name
+        uploadList.add(UploadBean())
         uploadAdapter = UploadAdapter(this, uploadList)
         project_upload_list.layoutManager = LinearLayoutManager(this)
         project_upload_list.adapter = uploadAdapter
+
+        loadDir()
     }
 
     class UploadBean {
         var file: String? = null
-        var group: String? = null
-        var type: String? = null
+        var group: Int? = null//分类
+        var type: Int? = null//标签
         var date: Long? = null
         var isSuccess: Boolean = false
     }
@@ -126,7 +131,6 @@ class ProjectBookUploadActivity : ToolbarActivity() {
         return true
     }
 
-    var index = 0
     private fun doSave(uploadBean: UploadBean, btn_upload: Button) {
         if (!doCheck(uploadBean)) {
             return
@@ -137,23 +141,30 @@ class ProjectBookUploadActivity : ToolbarActivity() {
         btn_upload.isEnabled = false
         btn_upload.backgroundColor = Color.GRAY
         val file = File(uploadBean.file)
-        //type	number	1	档案类型	非空（1=>项目文书，2=>基金档案）
+        var body = MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart("type", "1")
+                .addFormDataPart("file", file.name, RequestBody.create(MediaType.parse("*/*"), file))
+                .addFormDataPart("company_id", project.company_id.toString())
+                .addFormDataPart("dir_id", uploadBean.group.toString())
+                .addFormDataPart("fileClass", uploadBean.type.toString())
+                .build()
+
+        showProgress("正在上传")
         SoguApi.getService(application)
-                .uploadBook(MultipartBody.Builder().setType(MultipartBody.FORM)
-                        .addFormDataPart("type", "1")
-                        .addFormDataPart("file", file.name, RequestBody.create(MediaType.parse("*/*"), file))
-                        .addFormDataPart("company_id", project.company_id?.toString())
-                        .addFormDataPart("status", uploadBean.group)
-                        .addFormDataPart("fileClass", uploadBean.type)
-                        .build())
+                .uploadArchives(body)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        index++
                         uploadBean.isSuccess = true
+                        showCustomToast(R.drawable.icon_toast_success, "上传成功")
+                        hideProgress()
+                        uploadAdapter.notifyDataSetChanged()
                     } else {
                         showCustomToast(R.drawable.icon_toast_fail, payload.message)
+                        hideProgress()
+                        btn_upload.isEnabled = true
+                        btn_upload.backgroundResource = R.drawable.bg_btn_blue
                     }
                 }, { e ->
                     Trace.e(e)
@@ -161,16 +172,28 @@ class ProjectBookUploadActivity : ToolbarActivity() {
                     showCustomToast(R.drawable.icon_toast_fail, "上传失败")
                     btn_upload.isEnabled = true
                     btn_upload.backgroundResource = R.drawable.bg_btn_blue
-                }, {
-                    if (index == uploadList.size) {
-                        showCustomToast(R.drawable.icon_toast_success, "上传成功")
-                        hideProgress()
-                        finish()
-                    }
-                }, {
-                    showProgress("正在上传")
                 })
+    }
 
+    var dirList = ArrayList<DirBean>()
+
+    fun loadDir() {
+        SoguApi.getService(application)
+                .showCatalog(1, project.company_id!!)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (payload.isOk) {
+                        payload?.payload?.forEach {
+                            dirList.add(it)
+                        }
+                        for (dir in dirList) {
+                            uploadAdapter.items.add(dir.dirname)
+                        }
+                    } else {
+                    }
+                }, { e ->
+                })
     }
 
 
@@ -183,7 +206,7 @@ class ProjectBookUploadActivity : ToolbarActivity() {
                         val bean = UploadBean()
                         bean.file = it
                         bean.date = System.currentTimeMillis()
-                        uploadList.add(bean)
+                        uploadList.add(uploadList.size - 1, bean)
                     }
                     uploadAdapter.notifyDataSetChanged()
                 }
@@ -210,116 +233,78 @@ class ProjectBookUploadActivity : ToolbarActivity() {
         }
     }
 
-    inner class UploadAdapter(val context: Context, val uploadList: List<UploadBean>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    inner class UploadAdapter(val context: Context, val uploadList: List<UploadBean>) : RecyclerView.Adapter<UploadAdapter.FileHolder>() {
+
         val items = ArrayList<String?>()
 
-        init {
-            items.add("项目投资档案")
-            items.add("投资后项目跟踪管理档案")
-            items.add("项目退出档案")
+        override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): UploadAdapter.FileHolder {
+            return FileHolder(LayoutInflater.from(context).inflate(R.layout.item_fund_upload_new, parent, false))
         }
 
-        override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
-            return when (viewType) {
-                0 -> {
-                    FileHolder(LayoutInflater.from(context).inflate(R.layout.item_fund_upload, parent, false))
-                }
-                else -> {
-                    EmptyHolder(LayoutInflater.from(context).inflate(R.layout.item_empty_upload, parent, false))
-                }
-            }
+        override fun onBindViewHolder(holder: UploadAdapter.FileHolder, position: Int) {
+            holder.setData(uploadList[position], position)
         }
 
-        override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
-            if (holder is FileHolder) {
-                holder.setData(uploadList[position], position)
-            } else if (holder is EmptyHolder) {
-                holder.setData()
-            }
-        }
-
-        override fun getItemCount(): Int = uploadList.size + 1
+        override fun getItemCount(): Int = uploadList.size
 
         override fun getItemViewType(position: Int): Int {
-            return if (position == uploadList.size) 1 else 0
+            return if (uploadList.get(position).isSuccess) 0 else 1
         }
 
         inner class FileHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            val ll_upload_full = itemView.find<LinearLayout>(R.id.ll_upload_full)
+            val ll_upload_full = itemView.find<LinearLayout>(R.id.ll_upload_full)//已选择（可能是上传完毕的，也可能是准备换文件的）
             val tv_file = itemView.find<TextView>(R.id.tv_file)
             val tv_time = itemView.find<TextView>(R.id.tv_time)
-            val llgroup = itemView.find<LinearLayout>(R.id.llgroup)
+            val ll_upload_empty = itemView.find<LinearLayout>(R.id.ll_upload_empty)//未选择图片
+            val llgroup = itemView.find<LinearLayout>(R.id.llgroup)//分类
             val tv_group = itemView.find<TextView>(R.id.tv_group)
-            val tv_class = itemView.find<TextView>(R.id.tv_class)
-            val tag_layout = itemView.find<LinearLayout>(R.id.tag_layout)
-            fun setData(data: UploadBean, position: Int) {
-                tag_layout.visibility = View.VISIBLE
-                val file = File(data.file)
-                tv_file.text = file.name
-                tv_time.text = Utils.getTime(data.date!!, "yyyy-MM-dd HH:mm")
-                if (upBean.group != null) {
-                    tv_group.tag = upBean.group
-                    tv_group.text = items[upBean.group?.toInt()!! - 1]
-                }
-                if (upBean.type != null) {
-                    tv_class.text = map[upBean.type?.toInt()]
-                }
-                //分类点击
-                llgroup.setOnClickListener {
-                    MaterialDialog.Builder(this@ProjectBookUploadActivity)
-                            .theme(Theme.LIGHT)
-                            .items(items)
-                            .canceledOnTouchOutside(true)
-                            .itemsCallbackSingleChoice(-1, MaterialDialog.ListCallbackSingleChoice { dialog, v, p, s ->
-                                if (p == -1) return@ListCallbackSingleChoice false
-                                tv_group.text = items[p]
-                                tv_group.tag = "${p + 1}"
-                                data.group = "${p + 1}"
-                                dialog?.dismiss()
-                                true
-                            })
-                            .show()
-                }
-                //标签点击
-                val rMap = HashMap<String, String>()
-                map.entries.forEach { e -> rMap.put(e.value, "${e.key}") }
-                tv_class.setOnClickListener {
-                    val items = ArrayList<String?>()
-                    items.addAll(map.values)
-                    MaterialDialog.Builder(this@ProjectBookUploadActivity)
-                            .theme(Theme.LIGHT)
-                            .items(items)
-                            .canceledOnTouchOutside(true)
-                            .itemsCallbackSingleChoice(-1, MaterialDialog.ListCallbackSingleChoice { dialog, v, p, s ->
-                                if (p == -1) return@ListCallbackSingleChoice false
-                                tv_class.text = items[p]
-                                tv_class.tag = rMap[items[p]]
-                                data.type = "${rMap[items[p]]}"
-                                dialog?.dismiss()
-                                true
-                            })
-                            .show()
-                }
-                //替换文件
-                ll_upload_full.setOnClickListener {
-                    currentPosition = position
-                    FileMainActivity.start(this@ProjectBookUploadActivity, 1, true, REQ_CHANGE_FILE)
-                }
-
-            }
-        }
-
-        inner class EmptyHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            val ll_upload_empty = itemView.find<LinearLayout>(R.id.ll_upload_empty)
-            val llgroup = itemView.find<LinearLayout>(R.id.llgroup)
-            val tv_group = itemView.find<TextView>(R.id.tv_group)
+            val tag_layout = itemView.find<LinearLayout>(R.id.tag_layout)//标签
             val tv_class = itemView.find<TextView>(R.id.tv_class)
             val btn_upload = itemView.find<Button>(R.id.btn_upload)
-            val tag_layout = itemView.find<LinearLayout>(R.id.tag_layout)
-            fun setData() {
-                tag_layout.visibility = View.VISIBLE
+
+            fun setData(data: UploadBean, position: Int) {
+                if (data.file.isNullOrEmpty()) {
+                    ll_upload_empty.visibility = View.VISIBLE
+                    ll_upload_full.visibility = View.GONE
+                    //选择文件
+                    ll_upload_empty.setOnClickListener {
+                        FileMainActivity.start(this@ProjectBookUploadActivity, maxSize = 1, requestCode = REQ_SELECT_FILE)
+                    }
+                } else {
+                    ll_upload_empty.visibility = View.GONE
+                    ll_upload_full.visibility = View.VISIBLE
+                    var file = File(data.file)
+                    tv_file.text = file.name
+                    tv_time.text = Utils.getTime(data.date!!, "yyyy-MM-dd HH:mm")
+                    //替换文件
+                    ll_upload_full.setOnClickListener {
+                        if (data.isSuccess) {
+                            return@setOnClickListener
+                        }
+                        currentPosition = position
+                        FileMainActivity.start(this@ProjectBookUploadActivity, 1, true, REQ_CHANGE_FILE)
+                    }
+                }
                 //分类点击
+                tv_group.text = ""
+                if (data.group != null) {
+                    for (dir in dirList) {
+                        if (dir.dir_id == data.group) {
+                            tv_group.text = dir.dirname
+                        }
+                    }
+                }
                 llgroup.setOnClickListener {
+                    if (data.file.isNullOrEmpty()) {
+                        return@setOnClickListener
+                    }
+                    if (data.isSuccess) {
+                        return@setOnClickListener
+                    }
+                    if (items.size == 0) {
+                        showCustomToast(R.drawable.icon_toast_common, "分类信息未加载，请检查网络")
+                        return@setOnClickListener
+                    }
                     MaterialDialog.Builder(this@ProjectBookUploadActivity)
                             .theme(Theme.LIGHT)
                             .items(items)
@@ -327,17 +312,30 @@ class ProjectBookUploadActivity : ToolbarActivity() {
                             .itemsCallbackSingleChoice(-1, MaterialDialog.ListCallbackSingleChoice { dialog, v, p, s ->
                                 if (p == -1) return@ListCallbackSingleChoice false
                                 tv_group.text = items[p]
-                                tv_group.tag = "${p + 1}"
-                                upBean.group = "${p + 1}"
+                                data.group = dirList[p].dir_id
                                 dialog?.dismiss()
                                 true
                             })
                             .show()
                 }
                 //标签点击
-                val rMap = HashMap<String, String>()
-                map.entries.forEach { e -> rMap.put(e.value, "${e.key}") }
-                tv_class.setOnClickListener {
+                tv_class.text = ""
+                val rMap = HashMap<String, Int>()
+                map.entries.forEach { e -> rMap.put(e.value, e.key) }
+                if (data.type != null) {
+                    for ((k, v) in rMap) {
+                        if (v == data.type) {
+                            tv_class.text = k
+                        }
+                    }
+                }
+                tag_layout.setOnClickListener {
+                    if (data.file.isNullOrEmpty()) {
+                        return@setOnClickListener
+                    }
+                    if (data.isSuccess) {
+                        return@setOnClickListener
+                    }
                     val items = ArrayList<String?>()
                     items.addAll(map.values)
                     MaterialDialog.Builder(this@ProjectBookUploadActivity)
@@ -347,29 +345,24 @@ class ProjectBookUploadActivity : ToolbarActivity() {
                             .itemsCallbackSingleChoice(-1, MaterialDialog.ListCallbackSingleChoice { dialog, v, p, s ->
                                 if (p == -1) return@ListCallbackSingleChoice false
                                 tv_class.text = items[p]
-                                tv_class.tag = rMap[items[p]]
-                                upBean.type = "${rMap[items[p]]}"
+                                data.type = rMap[items[p]]
                                 dialog?.dismiss()
                                 true
                             })
                             .show()
                 }
-                //选择文件
-                ll_upload_empty.setOnClickListener {
-                    FileMainActivity.start(this@ProjectBookUploadActivity, requestCode = REQ_SELECT_FILE)
-                }
-
-                //上传
-                btn_upload.setOnClickListener {
-                    if (uploadList.size == 0) {
-                        showCustomToast(R.drawable.icon_toast_common, "未选择文件")
-                        return@setOnClickListener
-                    }
-                    handler.postDelayed({
-                        uploadList.forEach {
-                            doSave(it, btn_upload)
+                // button
+                if (data.isSuccess) {
+                    btn_upload.visibility = View.GONE
+                } else {
+                    btn_upload.visibility = View.VISIBLE
+                    btn_upload.setOnClickListener {
+                        if (doCheck(data)) {
+                            handler.postDelayed({
+                                doSave(data, btn_upload)
+                            }, 100)
                         }
-                    }, 10)
+                    }
                 }
             }
         }

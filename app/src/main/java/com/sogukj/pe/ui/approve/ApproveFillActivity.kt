@@ -702,6 +702,47 @@ class ApproveFillActivity : ToolbarActivity() {
         etValue.setOnClickListener {
             ListSelectorActivity.start(this, bean)
         }
+        if (flagEdit) {
+            if (isOneKey) {
+            } else {
+            }
+            if(bean.is_fresh == 1) {
+                ll_approver.removeAllViews()
+
+                var pro_id = if (bean.fields == "project_id") bean.value_map?.id else null
+                var fund_id = if (bean.fields == "fund_id") bean.value_map?.id else null
+
+                SoguApi.getService(application)
+                        .leaveInfo(template_id = if (flagEdit) null else paramId!!,
+                                project_id = pro_id, fund_id = fund_id,
+                                sid = if (!flagEdit) null else paramId!!)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({ payload ->
+                            if (!payload.isOk) {
+                                showCustomToast(R.drawable.icon_toast_fail, payload.message)
+                                return@subscribe
+                            }
+                            payload.payload?.apply {
+                                addSP(sp!!)
+
+                                mDefaultID.clear()
+                                if (!default.isNullOrEmpty()) {
+                                    default!!.split(",").forEach {
+                                        mDefaultID.add(it.toInt())
+                                    }
+                                }
+
+                                cs!!.add(UserBean())
+                                addCS(cs!!)
+                            }
+                        }, { e ->
+                            Trace.e(e)
+                            showCustomToast(R.drawable.icon_toast_common, "暂无可用数据")
+                        })
+            }
+        } else {
+        }
     }
 
     private fun add3(bean: CustomSealBean) {
@@ -1585,6 +1626,17 @@ class ApproveFillActivity : ToolbarActivity() {
                 content.addView(view)
             }
         }
+//        checkList.add {
+////            var sp = ""
+////            for (inner in list) {
+////                for(item in inner){
+////                    sp = "${sp}${item.uid},"
+////                }
+////            }
+////            sp = sp.removeSuffix(",")
+//            paramMap.put("sp", gson.toJson(list))
+//            true
+//        }
     }
 
     fun addCS(list: ArrayList<UserBean>) {
@@ -1618,16 +1670,30 @@ class ApproveFillActivity : ToolbarActivity() {
                 }
             }
         }
-        checkList.add {
-            var copyid = ""
-            var list = adapter.list
-            for (index in 0 until (list.size - 1)) {
-                copyid = "${copyid}${list[index].uid},"
+        if (flagEdit) {
+
+        } else {
+            checkList.add {
+                var copier = ""
+                for (index in 0 until list.size) {
+                    copier = "${copier}${list[index].uid},"
+                }
+                copier = copier.removeSuffix(",")
+                paramMap.put("copier", copier)
+                true
             }
-            copyid = copyid.removeSuffix(",")
-            paramMap.put("copier", copyid)
-            true
         }
+//        checkList.add {
+//            paramMap.put("copier", gson.toJson(list))
+//
+//            var defaultStr = ""
+//            for (index in 0 until mDefaultID.size) {
+//                defaultStr = "${defaultStr}${mDefaultID[index]},"
+//            }
+//            defaultStr = defaultStr.removeSuffix(",")
+//            paramMap.put("default", defaultStr)
+//            true
+//        }
     }
 
     class MySPAdapter(var context: Context, val list: ArrayList<UserBean>) : BaseAdapter() {

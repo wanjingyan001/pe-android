@@ -5,8 +5,10 @@ import com.sogukj.pe.service.Payload
 import com.sogukj.pe.ui.IM.ChatFileBean
 import com.sogukj.pe.ui.calendar.*
 import io.reactivex.Observable
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.*
+import java.io.File
 
 /**
  * Created by qinfei on 17/6/2.
@@ -1322,7 +1324,7 @@ interface SoguService {
     @POST("/api/Listinformation/fileList")
     fun fileList(@Field("fc_id") fc_id: Int,
                  @Field("type") type: Int,
-                 @Field("dir_id") dir_id: Int,
+                 @Field("dir_id") dir_id: Int? = null,
                  @Field("page") page: Int? = 1,
                  @Field("pageSize") pageSize: Int = 20,
                  @Field("fileClass") fileClass: String? = null,
@@ -1335,11 +1337,13 @@ interface SoguService {
     // dir_id	number	 	文件所属目录	非空
     // fileClass	int	 	文件小类	可空(当type=1时可空,值为首次进入此页面返回的filter=>id,)
     // file	file	 	文件key值	非空
-    @FormUrlEncoded
+//    @POST("/api/Listinformation/uploadArchives")
+//    fun uploadArchives(@Field("company_id") company_id: Int,
+//                       @Field("type") type: Int = 1,
+//                       @Field("dir_id") dir_id: Int,
+//                       @Field("fileClass") fileClass: Int? = null,
+//                       @Part file: MultipartBody.Part? = null): Observable<Payload<UploadFileBean>>
+
     @POST("/api/Listinformation/uploadArchives")
-    fun uploadArchives(@Field("company_id") company_id: Int,
-                       @Field("type") type: Int = 1,
-                       @Field("dir_id") dir_id: Int,
-                       @Field("fileClass") fileClass: String? = null,
-                       @Field("file") file: String? = null): Observable<Payload<UploadFileBean>>
+    fun uploadArchives(@Body body: RequestBody): Observable<Payload<UploadFileBean>>
 }

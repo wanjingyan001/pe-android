@@ -43,6 +43,7 @@
             android:id="@+id/fileList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:groupIndicator="@null"
             android:childDivider="@color/transparent"
             android:divider="@color/transparent" />
 
