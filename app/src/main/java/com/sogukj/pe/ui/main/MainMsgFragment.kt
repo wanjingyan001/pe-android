@@ -136,6 +136,11 @@ class MainMsgFragment : BaseFragment() {
                 false
             }
         }
+        delete1.setOnClickListener {
+            Utils.toggleSoftInput(context, search_edt)
+            search_edt.setText("")
+            search_edt.clearFocus()
+        }
         search_edt.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
 
@@ -161,10 +166,6 @@ class MainMsgFragment : BaseFragment() {
                 }
                 if (!search_edt.text.isNullOrEmpty()) {
                     delete1.visibility = View.VISIBLE
-                    delete1.setOnClickListener {
-                        search_edt.setText("")
-                        search_edt.clearFocus()
-                    }
                 } else {
                     delete1.visibility = View.GONE
                 }

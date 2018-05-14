@@ -28,6 +28,7 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.NewsBean
 import com.sogukj.pe.ui.SupportEmptyView
+import com.sogukj.pe.util.DateUtils
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.FlowLayout
@@ -213,7 +214,7 @@ class NewsListFragment : BaseFragment(), SupportEmptyView {
 //                tv_time.text = strs
 //                        .getOrNull(1)
                 try {
-                    tv_date.text = Utils.formatDate(strTime)
+                    tv_date.text = DateUtils.getTimeFormatText(strTime)
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }

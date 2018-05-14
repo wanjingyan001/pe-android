@@ -48,6 +48,7 @@
                 android:paddingRight="2dp"
                 android:paddingTop="1dp"
                 android:text="修改"
+                android:textSize="10sp"
                 android:textColor="@color/white" />
 
             <TextView
@@ -60,6 +61,7 @@
                 android:paddingRight="2dp"
                 android:paddingTop="1dp"
                 android:text="创建"
+                android:textSize="10sp"
                 android:textColor="#ff4390f0" />
 
             <TextView

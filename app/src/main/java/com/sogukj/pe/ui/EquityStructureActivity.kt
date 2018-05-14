@@ -31,6 +31,7 @@ import com.sogukj.pe.bean.EquityListBean
 import com.sogukj.pe.bean.NewsBean
 import com.sogukj.pe.bean.ProjectBean
 import com.sogukj.pe.bean.StructureBean
+import com.sogukj.pe.util.DateUtils
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.service.SoguApi
@@ -61,7 +62,9 @@ class EquityStructureActivity : ToolbarActivity(), PlatformActionListener {
         bean = intent.getSerializableExtra(Extras.DATA) as EquityListBean
         setContentView(R.layout.activity_equity_structure)
         setBack(true)
-        setTitle(bean.title)
+        var data = SimpleDateFormat("yyyy年MM月dd日").parse(bean.time)
+        var tim = SimpleDateFormat("yyyy-MM-dd").format(data)
+        setTitle("${tim} ${bean.title}")
         lunci.text = "轮次：${bean.lunci}"
         inflater = LayoutInflater.from(context)
         SoguApi.getService(application)
@@ -115,7 +118,7 @@ class EquityStructureActivity : ToolbarActivity(), PlatformActionListener {
         Thread(Runnable {
 
             try {
-                Thread.sleep(3000)
+                Thread.sleep(1000)
             } catch (e: Exception) {
             }
 
@@ -139,6 +142,7 @@ class EquityStructureActivity : ToolbarActivity(), PlatformActionListener {
         toolbar_menu.setImageResource(R.drawable.share)
         toolbar_menu.setOnClickListener {
             if (!canShare) {
+                showCustomToast(R.drawable.icon_toast_common, "请等待截图生成再分享")
                 return@setOnClickListener
             }
             share()

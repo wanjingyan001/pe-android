@@ -10,6 +10,60 @@ import java.util.Locale;
  */
 
 public class DateUtils {
+    private static long minute = 60 * 1000;// 1分钟
+    private static long hour = 60 * minute;// 1小时
+    private static long day = 24 * hour;// 1天
+    private static long month = 31 * day;// 月
+    private static long year = 12 * month;// 年
+
+    public static String getTimeFormatText(String date) throws Exception {
+        Date date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(date);
+        return getTimeFormatText(date1);
+    }
+
+    /**
+     * 返回文字描述的日期
+     *
+     * @param date
+     * @return
+     */
+    public static String getTimeFormatText(Date date) throws Exception {
+        if (date == null) {
+            return null;
+        }
+        long diff = new Date().getTime() - date.getTime();
+        long r;
+        if (diff > year) {
+            r = diff / year;
+            if (r > 1) {
+                return Utils.getTime(date, "yyyy-MM-dd HH:ss");
+            } else {
+                return Utils.getTime(date, "yyyy");
+            }
+        }
+        if (diff > month) {
+            return Utils.getTime(date, "MM-dd HH:ss");
+        }
+        if (diff > day) {
+            if(Utils.IsToday(Utils.getTime(date, "yyyy-MM-dd HH:ss"))){
+                return "今天";
+            } else if(Utils.IsYesterday(Utils.getTime(date, "yyyy-MM-dd HH:ss"))){
+                return "昨天";
+            } else {
+                return Utils.getTime(date, "MM-dd HH:ss");
+            }
+        }
+        if (diff > hour) {
+            r = diff / hour;
+            return r + "个小时前";
+        }
+        if (diff > minute) {
+            r = diff / minute;
+            return r + "分钟前";
+        }
+        return "刚刚";
+    }
+
     public static String getTodayDateTime() {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",
                 Locale.getDefault());
@@ -140,7 +194,7 @@ public class DateUtils {
     }
 
     /**
-     * @param time斜杠分开
+     * @param //time斜杠分开
      * @return
      */
     public static String timeslash(String time) {
@@ -154,7 +208,7 @@ public class DateUtils {
     }
 
     /**
-     * @param time斜杠分开
+     * @param //time斜杠分开
      * @return
      */
     public static String timeslashData(String time) {
@@ -168,7 +222,7 @@ public class DateUtils {
     }
 
     /**
-     * @param time斜杠分开
+     * @param //time斜杠分开
      * @return
      */
     public static String timeMinute(String time) {

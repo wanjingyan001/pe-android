@@ -33,6 +33,7 @@ import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.FundSmallBean
 import com.sogukj.pe.ui.SupportEmptyView
+import com.sogukj.pe.util.SortUtil
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.ProgressView
@@ -194,6 +195,8 @@ class FundListFragment : BaseFragment() {
                 .load(Uri.parse("file:///android_asset/img_loading.gif"))
                 .into(iv_loading)
         iv_loading?.visibility = View.VISIBLE
+
+        doRequest()
     }
 
     class FundCountDownColor(var millisInFuture: Long, var countDownInterval: Long, var view: View, var data: Int) : CountDownTimer(millisInFuture, countDownInterval) {
@@ -281,11 +284,6 @@ class FundListFragment : BaseFragment() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        doRequest()
-    }
-
     /**
      * 获取基金公司列表
      */
@@ -300,7 +298,7 @@ class FundListFragment : BaseFragment() {
             type = 3
         }
         SoguApi.getService(activity.application)
-                .getAllFunds(offset = offset, sort = (currentNameOrder + currentTimeOrder), type = type)
+                .getAllFunds(offset = offset, pageSize = 100, sort = (currentNameOrder + currentTimeOrder), type = type)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
@@ -308,10 +306,13 @@ class FundListFragment : BaseFragment() {
                         if (offset == 0) {
                             adapter.dataList.clear()
                         }
+                        var list = ArrayList<FundSmallBean>()
                         payload.payload?.apply {
                             Log.d(FundMainFragment.TAG, Gson().toJson(this))
-                            adapter.dataList.addAll(this)
+                            list.addAll(this)
                         }
+                        //SortUtil.sortByName(list)
+                        adapter.dataList.addAll(list)
                         if (offset != 0) {
                             if (payload.payload == null || payload.payload!!.size == 0) {
                                 showCustomToast(R.drawable.icon_toast_common, "已加载全部")

@@ -28,6 +28,7 @@ import com.sogukj.pe.R
 import com.sogukj.pe.bean.NewsBean
 import com.sogukj.pe.ui.SupportEmptyView
 import com.sogukj.pe.ui.news.NewsDetailActivity
+import com.sogukj.pe.util.DateUtils
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.FlowLayout
@@ -141,18 +142,22 @@ class ProjectNewsActivity : ToolbarActivity() {
             val strTime = data?.time
             tv_time.visibility = View.GONE
             if (!TextUtils.isEmpty(strTime)) {
-                val strs = strTime!!.trim().split(" ")
-                if (!TextUtils.isEmpty(strs.getOrNull(1))) {
-                    tv_time.visibility = View.VISIBLE
-                }
-                try {
-                    tv_date.text = Utils.formatDate2(strTime)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-                tv_time.text = strs.getOrNull(1)
+//                val strs = strTime!!.trim().split(" ")
+//                if (!TextUtils.isEmpty(strs.getOrNull(1))) {
+//                    tv_time.visibility = View.VISIBLE
+//                }
+//                try {
+//                    tv_date.text = Utils.formatDate2(strTime)
+//                } catch (e: Exception) {
+//                    e.printStackTrace()
+//                }
+//                tv_time.text = strs.getOrNull(1)
+                tv_date.text = DateUtils.getTimeFormatText(strTime)
             }
             tv_from.text = data?.source
+            if(data.source.isNullOrEmpty()){
+                tv_from.visibility = View.GONE
+            }
             tags.removeAllViews()
             data?.tag?.split("#")
                     ?.forEach { str ->

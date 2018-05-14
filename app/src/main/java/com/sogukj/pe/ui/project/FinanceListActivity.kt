@@ -23,6 +23,7 @@ import com.sogukj.pe.R
 import com.sogukj.pe.bean.EquityListBean
 import com.sogukj.pe.bean.FinanceListBean
 import com.sogukj.pe.bean.ProjectBean
+import com.sogukj.pe.util.SortUtil
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.*
@@ -31,6 +32,7 @@ import com.sougukj.setOnClickFastListener
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_equity_list.*
+import java.util.ArrayList
 
 class FinanceListActivity : ToolbarActivity() {
 
@@ -67,9 +69,13 @@ class FinanceListActivity : ToolbarActivity() {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
+                        var datas = ArrayList<FinanceListBean>()
                         payload.payload?.forEach {
-                            adapter.dataList.add(it)
+                            datas.add(it)
                         }
+                        //2018年04月26日 19:54
+                        SortUtil.sort(datas)
+                        adapter.dataList.addAll(datas)
                         adapter.notifyDataSetChanged()
                         if (adapter.dataList.size == 0) {
                             list.visibility = View.GONE
