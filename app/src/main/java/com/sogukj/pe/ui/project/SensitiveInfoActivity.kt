@@ -230,6 +230,12 @@ class SensitiveInfoActivity : BaseActivity(), View.OnClickListener {
         }
         caseNumber2.text = crime.caseSource
         time.text = crime.caseTime
+        if(time.text != "无"){
+            time.textColor = resources.getColor(R.color.fund_deep_red)
+        }
+        if(caseNumber2.text != "无"){
+            caseNumber2.textColor = resources.getColor(R.color.fund_deep_red)
+        }
     }
 
     override fun onClick(v: View?) {

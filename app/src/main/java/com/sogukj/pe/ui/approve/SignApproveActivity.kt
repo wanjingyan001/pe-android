@@ -231,7 +231,7 @@ class SignApproveActivity : ToolbarActivity() {
                     val veto = inflate.find<TextView>(R.id.veto_comment)
                     val confirm = inflate.find<TextView>(R.id.confirm_comment)
                     commentInput.filters = Utils.getFilter(this)
-                    title.text = "请输入撤销理由（提交后会重新审核）"
+                    title.text = "请输入撤销理由"
                     title.textSize = 16.toFloat()
                     commentInput.hint = ""
                     veto.text = "取消"

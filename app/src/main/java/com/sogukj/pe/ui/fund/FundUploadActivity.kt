@@ -345,6 +345,8 @@ class FundUploadActivity : ToolbarActivity() {
                     btn_upload.visibility = View.GONE
                 } else {
                     btn_upload.visibility = View.VISIBLE
+                    btn_upload.isEnabled = true
+                    btn_upload.backgroundResource = R.drawable.bg_btn_blue
                     btn_upload.setOnClickListener {
                         if (doCheck(data)) {
                             handler.postDelayed({
