@@ -81,7 +81,7 @@ class ArrangeEditActivity : ToolbarActivity() {
         arrangeEditList.layoutManager = LinearLayoutManager(this)
         arrangeEditList.adapter = editAdapter
         saveBtn.clickWithTrigger {
-            submitWeeklyWork()
+            submitWeeklyWork(true)
         }
 
         if (offset != null) {
@@ -124,7 +124,7 @@ class ArrangeEditActivity : ToolbarActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.save_edit -> {
-                submitWeeklyWork()
+                submitWeeklyWork(true)
             }
             R.id.arrange_delete -> {
                 MaterialDialog.Builder(this)
@@ -139,9 +139,9 @@ class ArrangeEditActivity : ToolbarActivity() {
                                 reasons = ""
                                 place = ""
                                 attendee = ArrayList()
-                                participant =  ArrayList()
+                                participant = ArrayList()
                             }
-                            submitWeeklyWork()
+                            submitWeeklyWork(false)
                         }
                         .onNegative { dialog, which ->
                             dialog.dismiss()
@@ -182,7 +182,7 @@ class ArrangeEditActivity : ToolbarActivity() {
         }
     }
 
-    private fun submitWeeklyWork() {
+    private fun submitWeeklyWork(isSave: Boolean) {
 //        val newList = data.filter { !it.reasons.isNullOrEmpty() && it.reasons != "" }
 //        val findBean = data.find { (!it.place.isNullOrEmpty() || !it.attendee.isNullOrEmpty() || !it.participant.isNullOrEmpty()) && it.reasons.isNullOrEmpty() }
 //        findBean?.let {
@@ -199,7 +199,11 @@ class ArrangeEditActivity : ToolbarActivity() {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ payload ->
                     if (payload.isOk) {
-                        toast("保存成功")
+                        if (isSave){
+                            toast("保存成功")
+                        }else{
+                            toast("删除成功")
+                        }
                         val intent = Intent()
                         intent.putExtra(Extras.DATA, data)
                         setResult(Extras.RESULTCODE, intent)
