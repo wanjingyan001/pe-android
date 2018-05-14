@@ -1,5 +1,6 @@
 package com.sogukj.pe.ui.IM
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
@@ -26,6 +27,7 @@ import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.RequestCallback
 import com.netease.nimlib.sdk.team.TeamService
 import com.netease.nimlib.sdk.team.model.Team
+import com.netease.nimlib.sdk.team.model.TeamMember
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.UserBean
@@ -43,6 +45,7 @@ class MemberEditActivity : ToolbarActivity() {
     private lateinit var memberAdapter: RecyclerAdapter<UserBean>
     private lateinit var teamMembers: ArrayList<UserBean>
     private lateinit var team: Team
+    private var isTransfer = false
     private var isEdit = false
     private val mine by lazy { Store.store.getUser(this) }
     override val menuId: Int
@@ -55,6 +58,14 @@ class MemberEditActivity : ToolbarActivity() {
             intent.putExtra(Extras.DATA, team)
             context.startActivity(intent)
         }
+
+        fun start(context: Activity, teamMembers: ArrayList<UserBean>, team: Team, isTransfer: Boolean) {
+            val intent = Intent(context, MemberEditActivity::class.java)
+            intent.putExtra(Extras.LIST, teamMembers)
+            intent.putExtra(Extras.DATA, team)
+            intent.putExtra(Extras.FLAG, isTransfer)
+            context.startActivityForResult(intent, Extras.REQUESTCODE)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,6 +73,7 @@ class MemberEditActivity : ToolbarActivity() {
         setContentView(R.layout.activity_member_edit)
         teamMembers = intent.getSerializableExtra(Extras.LIST) as ArrayList<UserBean>
         team = intent.getSerializableExtra(Extras.DATA) as Team
+        isTransfer = intent.getBooleanExtra(Extras.FLAG, false)
         setBack(true)
         title = "群成员"
         supportInvalidateOptionsMenu()
@@ -136,8 +148,39 @@ class MemberEditActivity : ToolbarActivity() {
             }
         }
         memberAdapter.onItemClick = { v, position ->
-            if (!isEdit) {
-                PersonalInfoActivity.start(this, memberAdapter.dataList[position].uid!!)
+            val userBean = memberAdapter.dataList[position]
+            if (!isEdit && !isTransfer) {
+                PersonalInfoActivity.start(this, userBean.uid!!)
+            } else if (!isEdit && isTransfer && mine?.accid != userBean.accid) {
+                MaterialDialog.Builder(this)
+                        .theme(Theme.LIGHT)
+                        .title("确定转让群组?")
+                        .content("是否将群组转让给${userBean.name}")
+                        .positiveText("确认")
+                        .negativeText("取消")
+                        .onPositive { dialog, which ->
+                            dialog.dismiss()
+                            NIMClient.getService(TeamService::class.java).transferTeam(team.id,userBean.accid,false)
+                                    .setCallback(object :RequestCallback<List<TeamMember>>{
+                                        override fun onSuccess(param: List<TeamMember>?) {
+                                            showCustomToast(R.drawable.icon_toast_success,"转让成功")
+                                            finish()
+                                        }
+
+                                        override fun onFailed(code: Int) {
+                                            showCustomToast(R.drawable.icon_toast_fail,"转让失败")
+                                        }
+
+                                        override fun onException(exception: Throwable?) {
+                                            showCustomToast(R.drawable.icon_toast_fail,"转让失败")
+                                        }
+
+                                    })
+                        }
+                        .onNegative { dialog, which ->
+                            dialog.dismiss()
+                        }
+                        .show()
             }
         }
         memberAdapter.dataList.addAll(teamMembers)
@@ -160,6 +203,9 @@ class MemberEditActivity : ToolbarActivity() {
             menuInflater.inflate(R.menu.menu_confirm, menu)
         } else {
             menuInflater.inflate(R.menu.menu_edit, menu)
+        }
+        if (isTransfer) {
+            menu.findItem(R.id.edit).isVisible = false
         }
         if (mine?.accid != team.creator) {
 //            menu.findItem(R.id.action_confirm).isVisible = false

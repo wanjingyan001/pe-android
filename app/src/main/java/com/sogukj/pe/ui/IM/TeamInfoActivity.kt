@@ -47,6 +47,7 @@ import com.sogukj.pe.util.Utils
 import com.sogukj.util.Store
 import com.sougukj.textStr
 import kotlinx.android.synthetic.main.activity_team_info.*
+import org.jetbrains.anko.info
 import org.jetbrains.anko.toast
 import java.io.Serializable
 
@@ -60,6 +61,8 @@ class TeamInfoActivity : BaseActivity(), View.OnClickListener, SwitchButton.OnCh
     var teamMembers = ArrayList<UserBean>()
     var adapter: MemberAdapter? = null
     lateinit var team: Team
+    private val mine by lazy { Store.store.getUser(this) }
+    private var isMyTeam = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -106,7 +109,6 @@ class TeamInfoActivity : BaseActivity(), View.OnClickListener, SwitchButton.OnCh
         }
         adapter!!.onItemClick = { v, p ->
             if (p == teamMembers.size) {
-//                TeamSelectActivity.startForResult(this, true, teamMembers, false, false, canRemoveMember = false)
                 ContactsActivity.start(this, teamMembers, false, false)
             }
         }
@@ -146,6 +148,12 @@ class TeamInfoActivity : BaseActivity(), View.OnClickListener, SwitchButton.OnCh
             teamIntroduction.setText(it.introduce)
         }else{
             teamIntroduction.hint = "暂无介绍"
+        }
+        isMyTeam = it.creator == mine?.accid
+        if (isMyTeam) {
+            exit_team.text = "转让群组"
+        }else{
+            exit_team.text = "退出群组"
         }
         getTeamMember(team.id)
     }
@@ -246,32 +254,11 @@ class TeamInfoActivity : BaseActivity(), View.OnClickListener, SwitchButton.OnCh
                 MemberEditActivity.start(this, teamMembers, team)
             }
             R.id.exit_team -> {
-                MaterialDialog.Builder(this)
-                        .theme(Theme.LIGHT)
-                        .title("确定退出?")
-                        .content("是否退出${team_title.text}")
-                        .positiveText("确认")
-                        .negativeText("取消")
-                        .onPositive { dialog, which ->
-                            NIMClient.getService(TeamService::class.java).quitTeam(sessionId).setCallback(object : RequestCallback<Void> {
-                                override fun onFailed(p0: Int) {
-
-                                }
-
-                                override fun onException(p0: Throwable?) {
-                                }
-
-                                override fun onSuccess(p0: Void?) {
-                                    toast("您已退出该群")
-                                    finish()
-                                }
-
-                            })
-                        }
-                        .onNegative { dialog, which ->
-                            dialog.dismiss()
-                        }
-                        .show()
+                if (isMyTeam){
+                    MemberEditActivity.start(this, teamMembers, team,true)
+                }else{
+                    exitTeam()
+                }
             }
             R.id.teamNameLayout -> {
                 team_name.isFocusable = true
@@ -287,6 +274,37 @@ class TeamInfoActivity : BaseActivity(), View.OnClickListener, SwitchButton.OnCh
             }
         }
     }
+
+    private fun exitTeam(){
+        MaterialDialog.Builder(this)
+                .theme(Theme.LIGHT)
+                .title("确定退出?")
+                .content("是否退出${team_title.text}")
+                .positiveText("确认")
+                .negativeText("取消")
+                .onPositive { dialog, which ->
+                    NIMClient.getService(TeamService::class.java).quitTeam(sessionId).setCallback(object : RequestCallback<Void> {
+                        override fun onFailed(p0: Int) {
+                            info { "错误码$p0" }
+                        }
+
+                        override fun onException(p0: Throwable?) {
+                            info { "错误码${p0?.printStackTrace()}" }
+                        }
+
+                        override fun onSuccess(p0: Void?) {
+                            toast("您已退出该群")
+                            finish()
+                        }
+
+                    })
+                }
+                .onNegative { dialog, which ->
+                    dialog.dismiss()
+                }
+                .show()
+    }
+
 
     override fun OnChanged(v: View?, checkState: Boolean) {
         val typeEnum = if (checkState) TeamMessageNotifyTypeEnum.Mute else TeamMessageNotifyTypeEnum.All
