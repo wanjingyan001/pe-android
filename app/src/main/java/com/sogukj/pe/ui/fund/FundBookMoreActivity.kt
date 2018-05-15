@@ -21,6 +21,7 @@ import com.sogukj.pe.bean.FileListBean
 import com.sogukj.pe.bean.FundSmallBean
 import com.sogukj.pe.bean.ProjectBookBean
 import com.sogukj.pe.ui.SupportEmptyView
+import com.sogukj.pe.util.DateUtils
 import com.sogukj.pe.util.DownloadUtil
 import com.sogukj.pe.util.OpenFileUtil
 import com.sogukj.pe.util.Trace
@@ -57,7 +58,7 @@ class FundBookMoreActivity : ToolbarActivity() {
                 val tvName = convertView.findViewById(R.id.tv_name) as TextView
                 override fun setData(view: View, data: FileListBean, position: Int) {
                     tvSummary.text = data?.doc_title
-                    val strTime = data?.add_time
+                    val strTime = DateUtils.timedate(data.add_time)
                     tvTime.visibility = View.GONE
                     if (!TextUtils.isEmpty(strTime)) {
                         val strs = strTime!!.trim().split(" ")

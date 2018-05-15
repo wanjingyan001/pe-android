@@ -49,25 +49,25 @@ class SoguApi {
                 .build()
 
         //test
-//        val user = Store.store.getUser(context)
-//        var url = ""
-//        if (Utils.getEnvironment() == "ht") {
-//            if(user == null){
-//                url = "http://hts.pewinner.com"
-//            } else {
-//                if(user.phone == "15800421946"){
-//                    url = "http://prehts.pewinner.com"
-//                } else {
-//                    url = "http://hts.pewinner.com"
-//                }
-//            }
-//        } else if(Utils.getEnvironment() == "pe") {
-//            url = "http://pre.pe.stockalert.cn"
-//        }
+        val user = Store.store.getUser(context)
+        var url = ""
+        if (Utils.getEnvironment() == "ht") {
+            if(user == null){
+                url = "http://hts.pewinner.com"
+            } else {
+                if(user.phone == "15800421946"){
+                    url = "http://prehts.pewinner.com"
+                } else {
+                    url = "http://hts.pewinner.com"
+                }
+            }
+        } else if(Utils.getEnvironment() == "pe") {
+            url = "http://prehts.pewinner.com"
+        }
 
         val retrofit = Retrofit.Builder()
-                .baseUrl(Consts.HTTP_HOST)
-                //.baseUrl(url)
+                //.baseUrl(Consts.HTTP_HOST)
+                .baseUrl(url)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(client)

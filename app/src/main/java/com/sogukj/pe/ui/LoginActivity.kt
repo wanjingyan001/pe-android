@@ -129,6 +129,12 @@ class LoginActivity : BaseActivity() {
         }
         Timer().scheduleAtFixedRate(LoginTimer(60, Handler(), tv_code), 0, 1000);
         val phone = et_name.text.toString()
+
+        //test
+        var user = UserBean()
+        user.phone = phone
+        Store.store.setUser(context, user)
+
         SoguApi.getService(application)
                 .sendVerifyCode(phone)
                 .observeOn(AndroidSchedulers.mainThread())

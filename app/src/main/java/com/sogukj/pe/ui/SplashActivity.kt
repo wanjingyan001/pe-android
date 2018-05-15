@@ -20,6 +20,8 @@ import android.view.View
 import android.widget.*
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
+import com.netease.nim.uikit.api.NimUIKit
+import com.netease.nimlib.sdk.NIMClient
 import com.sogukj.pe.util.*
 import kotlinx.android.synthetic.main.activity_splash.*
 import java.util.*
@@ -145,7 +147,7 @@ class SplashActivity : BaseActivity() {
 //                    enterNext()
 //                })
         handler.postDelayed({
-            if (!Store.store.checkLogin(this)) {
+            if (!Store.store.checkLogin(this) || (NIMClient.getStatus().shouldReLogin() && NimUIKit.getAccount().isNullOrEmpty())) {
                 LoginActivity.start(this)
             } else {
                 startActivity(Intent(this, MainActivity::class.java))

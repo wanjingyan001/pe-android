@@ -311,7 +311,7 @@ class FundListFragment : BaseFragment() {
                             Log.d(FundMainFragment.TAG, Gson().toJson(this))
                             list.addAll(this)
                         }
-                        //SortUtil.sortByName(list)
+                        SortUtil.sortByName(list)
                         adapter.dataList.addAll(list)
                         if (offset != 0) {
                             if (payload.payload == null || payload.payload!!.size == 0) {
