@@ -50,6 +50,7 @@ import org.jetbrains.anko.find
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class ApproveFillActivity : ToolbarActivity() {
 
@@ -371,7 +372,6 @@ class ApproveFillActivity : ToolbarActivity() {
     private fun load() {
         checkList.clear()
         ll_up.removeAllViews()
-        //ll_approver.removeAllViews()
         SoguApi.getService(application)
                 .approveInfo(template_id = if (flagEdit) null else paramId!!,
                         sid = if (!flagEdit) null else paramId!!)
@@ -382,8 +382,12 @@ class ApproveFillActivity : ToolbarActivity() {
                         showCustomToast(R.drawable.icon_toast_fail, payload.message)
                         return@subscribe
                     }
+                    var isNeedRequest = true
                     payload.payload?.forEach { bean ->
                         addRow(bean)
+                        if (bean.control == 2 && bean.is_fresh == 1) {
+                            isNeedRequest = false
+                        }
                     }
                     //用印申请
                     hideFields.forEach { field ->
@@ -411,25 +415,17 @@ class ApproveFillActivity : ToolbarActivity() {
                         }
                     }
 
-                    //head_approver.visibility = View.GONE
-                    ll_approver.removeAllViews()
-                    requestLeaveInfo()
-//                    if (judgeIsLeaveBusiness()) {
-//                        head_approver.visibility = View.GONE
-//                        requestLeaveInfo()
-//                    }
+                    if (isNeedRequest) {
+                        requestLeaveInfo()
+                    }
                 }, { e ->
                     Trace.e(e)
                     showCustomToast(R.drawable.icon_toast_common, "暂无可用数据")
                 })
-
-//        if (!judgeIsLeaveBusiness()) {
-//            head_approver.visibility = View.VISIBLE
-//            requestApprove()
-//        }
     }
 
     private fun requestLeaveInfo() {
+        ll_approver.removeAllViews()
         SoguApi.getService(application)
                 .leaveInfo(template_id = if (flagEdit) null else paramId!!,
                         sid = if (!flagEdit) null else paramId!!)
@@ -450,8 +446,12 @@ class ApproveFillActivity : ToolbarActivity() {
                             }
                         }
 
-                        cs!!.add(UserBean())
-                        addCS(cs!!)
+                        if (cs == null) {
+                            addCS(arrayListOf(UserBean()))
+                        } else {
+                            cs!!.add(UserBean())
+                            addCS(cs!!)
+                        }
                     }
                 }, { e ->
                     Trace.e(e)
@@ -702,47 +702,50 @@ class ApproveFillActivity : ToolbarActivity() {
         etValue.setOnClickListener {
             ListSelectorActivity.start(this, bean)
         }
-        if (flagEdit) {
-            if (isOneKey) {
-            } else {
-            }
-            if(bean.is_fresh == 1) {
-                ll_approver.removeAllViews()
-
-                var pro_id = if (bean.fields == "project_id") bean.value_map?.id else null
-                var fund_id = if (bean.fields == "fund_id") bean.value_map?.id else null
-
-                SoguApi.getService(application)
-                        .leaveInfo(template_id = if (flagEdit) null else paramId!!,
-                                project_id = pro_id, fund_id = fund_id,
-                                sid = if (!flagEdit) null else paramId!!)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeOn(Schedulers.io())
-                        .subscribe({ payload ->
-                            if (!payload.isOk) {
-                                showCustomToast(R.drawable.icon_toast_fail, payload.message)
-                                return@subscribe
-                            }
-                            payload.payload?.apply {
-                                addSP(sp!!)
-
-                                mDefaultID.clear()
-                                if (!default.isNullOrEmpty()) {
-                                    default!!.split(",").forEach {
-                                        mDefaultID.add(it.toInt())
-                                    }
-                                }
-
-                                cs!!.add(UserBean())
-                                addCS(cs!!)
-                            }
-                        }, { e ->
-                            Trace.e(e)
-                            showCustomToast(R.drawable.icon_toast_common, "暂无可用数据")
-                        })
-            }
-        } else {
+        //----------------------------------------------------------------------------------------------------------------------------------------------------
+        if (bean.is_fresh == 1) {
+            reloadSPCS(bean, bean.value_map?.id)
         }
+    }
+
+    fun reloadSPCS(bean: CustomSealBean, id: Int? = null) {
+        ll_approver.removeAllViews()
+
+        var pro_id = if (bean.fields == "project_id") id else null
+        var fund_id = if (bean.fields == "fund_id") id else null
+
+        SoguApi.getService(application)
+                .leaveInfo(template_id = if (flagEdit) null else paramId!!,
+                        project_id = pro_id, fund_id = fund_id,
+                        sid = if (!flagEdit) null else paramId!!)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ payload ->
+                    if (!payload.isOk) {
+                        showCustomToast(R.drawable.icon_toast_fail, payload.message)
+                        return@subscribe
+                    }
+                    payload.payload?.apply {
+                        addSP(sp!!)
+
+                        mDefaultID.clear()
+                        if (!default.isNullOrEmpty()) {
+                            default!!.split(",").forEach {
+                                mDefaultID.add(it.toInt())
+                            }
+                        }
+
+                        if (cs == null) {
+                            addCS(arrayListOf(UserBean()))
+                        } else {
+                            cs!!.add(UserBean())
+                            addCS(cs!!)
+                        }
+                    }
+                }, { e ->
+                    Trace.e(e)
+                    showCustomToast(R.drawable.icon_toast_common, "暂无可用数据")
+                })
     }
 
     private fun add3(bean: CustomSealBean) {
@@ -1504,44 +1507,8 @@ class ApproveFillActivity : ToolbarActivity() {
             val bean = data?.getSerializableExtra(Extras.DATA) as CustomSealBean
             val data = data?.getSerializableExtra(Extras.DATA2) as CustomSealBean.ValueBean
             paramMap.put(bean.fields, data.id)
-//            if (paramTitle == "基金用印") {
-//                ll_approver.removeAllViews()
-//                requestApprove(data.id)
-//            }
             if (bean.is_fresh == 1) {
-                ll_approver.removeAllViews()
-
-                var pro_id = if (bean.fields == "project_id") data.id else null
-                var fund_id = if (bean.fields == "fund_id") data.id else null
-
-                SoguApi.getService(application)
-                        .leaveInfo(template_id = if (flagEdit) null else paramId!!,
-                                project_id = pro_id, fund_id = fund_id,
-                                sid = if (!flagEdit) null else paramId!!)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeOn(Schedulers.io())
-                        .subscribe({ payload ->
-                            if (!payload.isOk) {
-                                showCustomToast(R.drawable.icon_toast_fail, payload.message)
-                                return@subscribe
-                            }
-                            payload.payload?.apply {
-                                addSP(sp!!)
-
-                                mDefaultID.clear()
-                                if (!default.isNullOrEmpty()) {
-                                    default!!.split(",").forEach {
-                                        mDefaultID.add(it.toInt())
-                                    }
-                                }
-
-                                cs!!.add(UserBean())
-                                addCS(cs!!)
-                            }
-                        }, { e ->
-                            Trace.e(e)
-                            showCustomToast(R.drawable.icon_toast_common, "暂无可用数据")
-                        })
+                reloadSPCS(bean, data.id)
             }
             refreshListSelector(bean, data)
         } else if (requestCode == SEND && resultCode == Extras.RESULTCODE) {
@@ -1672,7 +1639,7 @@ class ApproveFillActivity : ToolbarActivity() {
         }
         checkList.add {
             var copier = ""
-            for (index in 0 until list.size-1) {
+            for (index in 0 until list.size - 1) {
                 copier = "${copier}${list[index].uid},"
             }
             copier = copier.removeSuffix(",")

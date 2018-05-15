@@ -62,6 +62,8 @@ class SoguApi {
                 }
             }
         } else if(Utils.getEnvironment() == "pe") {
+            //url = "http://dev.ht.stockalert.cn"
+            //url = "http://pre.pe.stockalert.cn"
             url = "http://prehts.pewinner.com"
         }
 
