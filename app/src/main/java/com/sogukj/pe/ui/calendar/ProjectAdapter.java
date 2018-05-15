@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import com.sogukj.pe.Extras;
 import com.sogukj.pe.R;
+import com.sogukj.pe.bean.ProjectMatterCompany;
+import com.sogukj.pe.bean.ProjectMatterMD;
 import com.sogukj.pe.bean.ScheduleBean;
 import com.sogukj.pe.util.Utils;
 

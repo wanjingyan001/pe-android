@@ -1,7 +1,5 @@
 package com.sogukj.pe.bean
 
-import com.sogukj.pe.ui.calendar.TaskModifyBean
-
 /**
  * Created by admin on 2018/5/8.
  */

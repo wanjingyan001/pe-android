@@ -2,9 +2,7 @@ package com.sogukj.pe.ui.calendar
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.support.v7.widget.GridLayoutManager
 import android.util.Log
 import android.view.MenuItem
@@ -18,10 +16,7 @@ import com.google.gson.Gson
 import com.sogukj.pe.Extras
 import com.sogukj.pe.Extras.SCHEDULE_DRAFT
 import com.sogukj.pe.R
-import com.sogukj.pe.bean.CustomSealBean
-import com.sogukj.pe.bean.TaskDraft
-import com.sogukj.pe.bean.UserBean
-import com.sogukj.pe.ui.IM.TeamSelectActivity
+import com.sogukj.pe.bean.*
 import com.sogukj.pe.ui.main.ContactsActivity
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
@@ -29,15 +24,11 @@ import com.sogukj.pe.view.CalendarDingDing
 import com.sogukj.service.SoguApi
 import com.sogukj.util.Store
 import com.sogukj.util.XmlDb
-import com.sougukj.fromJson
 import com.sougukj.noSpace
-import com.sougukj.textStr
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_modify_task.*
-import org.jetbrains.anko.ctx
 import org.jetbrains.anko.find
-import org.jetbrains.anko.info
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList

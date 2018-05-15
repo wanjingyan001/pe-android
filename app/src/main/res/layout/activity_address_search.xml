@@ -11,11 +11,11 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="48dp"
+        android:background="@color/white"
         app:contentInsetEnd="0dp"
         app:contentInsetLeft="0dp"
         app:contentInsetRight="0dp"
         app:contentInsetStart="0dp"
-        android:background="@color/white"
         app:popupTheme="@style/AppTheme.PopupOverlay"
         app:theme="@style/AppTheme.AppBarOverlay">
 
@@ -57,23 +57,23 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="12dp"
                     android:layout_marginTop="6dp"
-                    android:inputType="text"
                     android:layout_weight="1"
                     android:background="@null"
+                    android:gravity="center_vertical"
                     android:hint="@string/search"
                     android:imeOptions="actionSearch"
-                    android:textSize="@dimen/text_size_medium"
+                    android:inputType="text"
                     android:textColor="@color/text_1"
                     android:textColorHint="@color/text_3"
-                    android:gravity="center_vertical" />
+                    android:textSize="@dimen/text_size_medium" />
 
                 <ImageView
                     android:id="@+id/searchClear"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="6dp"
-                    android:visibility="gone"
-                    android:src="@drawable/icon_address_search_clear" />
+                    android:src="@drawable/icon_address_search_clear"
+                    android:visibility="gone" />
             </LinearLayout>
 
 
@@ -92,13 +92,41 @@
         android:id="@+id/searchResultList"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
     </android.support.v7.widget.RecyclerView>
 
+    <LinearLayout
+        android:id="@+id/emptyLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="140dp"
+            android:src="@drawable/icon_address_no_search" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:gravity="center"
+            android:text="你搜索的地点不存在\n或者超出了微调允许的范围"
+            android:textColor="@color/text_3"
+            android:textSize="@dimen/text_size_large" />
+
+    </LinearLayout>
 
 
 </android.support.constraint.ConstraintLayout>

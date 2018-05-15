@@ -2,13 +2,10 @@ package com.sogukj.service
 
 import com.sogukj.pe.bean.*
 import com.sogukj.pe.service.Payload
-import com.sogukj.pe.ui.IM.ChatFileBean
-import com.sogukj.pe.ui.calendar.*
+import com.sogukj.pe.bean.ChatFileBean
 import io.reactivex.Observable
-import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.*
-import java.io.File
 
 /**
  * Created by qinfei on 17/6/2.

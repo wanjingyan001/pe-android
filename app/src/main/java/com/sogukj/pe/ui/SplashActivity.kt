@@ -28,6 +28,7 @@ import java.util.*
 import me.leolin.shortcutbadger.ShortcutBadger
 import org.jetbrains.anko.find
 import org.jetbrains.anko.imageResource
+import org.jetbrains.anko.info
 import java.io.File
 
 /**
@@ -50,13 +51,13 @@ class SplashActivity : BaseActivity() {
                 params.setMargins(0, 0, 0, Utils.dpToPx(this, 40))
                 splash_bg.layoutParams = params
             }
-            "kk" ->{
+            "kk" -> {
                 splash_bg.imageResource = R.drawable.img_logo_splash_kk
                 val params = splash_bg.layoutParams as FrameLayout.LayoutParams
                 params.setMargins(0, 0, 0, Utils.dpToPx(this, 40))
                 splash_bg.layoutParams = params
             }
-            "yge"->{
+            "yge" -> {
                 splash_bg.imageResource = R.drawable.img_logo_splash_yge
                 val params = splash_bg.layoutParams as FrameLayout.LayoutParams
                 params.setMargins(0, 0, 0, Utils.dpToPx(this, 40))

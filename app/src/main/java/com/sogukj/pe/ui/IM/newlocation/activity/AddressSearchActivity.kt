@@ -45,7 +45,7 @@ class AddressSearchActivity : BaseActivity(), TextView.OnEditorActionListener, P
         super.onCreate(savedInstanceState)
         city = intent.getStringExtra(Extras.NAME)
         setContentView(R.layout.activity_address_search)
-        Utils.setWindowStatusBarColor(this,R.color.white)
+        Utils.setWindowStatusBarColor(this, R.color.white)
         mAdapter = RecyclerAdapter(this) { _adapter, parent, _ ->
             val itemView = _adapter.getView(R.layout.item_address_search_list, parent)
             object : RecyclerHolder<PoiItem>(itemView) {
@@ -78,7 +78,7 @@ class AddressSearchActivity : BaseActivity(), TextView.OnEditorActionListener, P
             onTextChanged { charSequence, start, before, count ->
                 if (searchEdt.textStr.isNotEmpty()) {
                     searchClear.setVisible(true)
-                }else{
+                } else {
                     searchClear.setVisible(false)
                 }
             }
@@ -93,7 +93,7 @@ class AddressSearchActivity : BaseActivity(), TextView.OnEditorActionListener, P
                 Utils.closeInput(this, searchEdt)
                 initSearch(searchEdt.textStr)
                 true
-            }else{
+            } else {
                 false
             }
         } else {
@@ -135,7 +135,17 @@ class AddressSearchActivity : BaseActivity(), TextView.OnEditorActionListener, P
                 mAdapter.dataList.clear()
                 mAdapter.dataList.addAll(it.pois)
                 mAdapter.notifyDataSetChanged()
+                if (mAdapter.dataList.isEmpty()) {
+                    searchResultList.setVisible(false)
+                    emptyLayout.setVisible(true)
+                } else {
+                    searchResultList.setVisible(true)
+                    emptyLayout.setVisible(false)
+                }
             }
+        } else {
+            searchResultList.setVisible(false)
+            emptyLayout.setVisible(true)
         }
     }
 }

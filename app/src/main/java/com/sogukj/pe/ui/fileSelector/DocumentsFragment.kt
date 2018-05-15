@@ -1,8 +1,11 @@
 package com.sogukj.pe.ui.fileSelector
 
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.media.ThumbnailUtils
 import android.os.Bundle
 import android.os.Environment
 import android.support.v4.app.Fragment
@@ -19,6 +22,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.netease.nim.uikit.api.NimUIKit
 import com.netease.nim.uikit.common.media.picker.loader.RotateTransformation
+import com.netease.nim.uikit.common.util.media.ImageUtil
+import com.scwang.smartrefresh.layout.footer.ClassicsFooter
 import com.sogukj.pe.Extras
 
 import com.sogukj.pe.R
@@ -36,6 +41,7 @@ import kotlinx.android.synthetic.main.fragment_documents.*
 import kotlinx.android.synthetic.main.layout_empty.*
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.ctx
+import org.jetbrains.anko.support.v4.dip
 import org.jetbrains.anko.support.v4.find
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -55,6 +61,7 @@ class DocumentsFragment : Fragment(), View.OnClickListener {
     lateinit var files: MutableList<File>
     lateinit var fileActivity: FileMainActivity
     lateinit var header: LinearLayout
+    private var page = 0
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -87,39 +94,61 @@ class DocumentsFragment : Fragment(), View.OnClickListener {
         header.find<LinearLayout>(R.id.mVideoManage).setOnClickListener(this)
         header.find<LinearLayout>(R.id.mDocManage).setOnClickListener(this)
         header.find<LinearLayout>(R.id.mZipManage).setOnClickListener(this)
+        initRefresh()
+        getDirectoryFiles()
+        getFiles()
     }
 
-
-    override fun onResume() {
-        super.onResume()
-        refreshList()
+    private fun initRefresh() {
+        refresh.apply {
+            isEnableRefresh = false
+            isEnableLoadMore = true
+            isEnableAutoLoadMore = true
+            isEnableOverScrollBounce = false
+            isEnableScrollContentWhenLoaded = false
+            setEnableFooterTranslationContent(false)
+            setRefreshFooter(ClassicsFooter(ctx), 0, 0)
+            setDisableContentWhenLoading(true)
+            setOnLoadMoreListener {
+                page += 1
+                getFiles()
+            }
+        }
     }
 
-
-    fun refreshList() {
-        AnkoLogger("FileManage").info { type }
-        val dirFiles = getDirectoryFiles()
-        val result = DiffUtil.calculateDiff(DiffCallBack(adapter.dataList, dirFiles))
+    private fun getFiles() {
+        val dirFiles = loadFiles(page)
+        val result = DiffUtil.calculateDiff(DiffCallBack(adapter.dataList, adapter.dataList.plus(dirFiles)))
         result.dispatchUpdatesTo(adapter)
-        if (dirFiles.isEmpty()) {
+        if (adapter.dataList.plus(dirFiles).isEmpty()) {
             header.setVisible(false)
-            documentList.setVisible(false)
+            refresh.setVisible(false)
             iv_empty.setVisible(true)
         } else {
             header.setVisible(true)
-            documentList.setVisible(true)
+            refresh.setVisible(true)
             iv_empty.setVisible(false)
-            adapter.dataList.clear()
+            if (page == 0) {
+                adapter.dataList.clear()
+            }
             adapter.dataList.addAll(dirFiles)
         }
-        val map = FileUtil.getFilesByType(dirFiles)
-        header.find<TextView>(R.id.mPicNum).text = "(${map[FileUtil.FileType.IMAGE]?.size})"
-        header.find<TextView>(R.id.mVideoNum).text = "(${map[FileUtil.FileType.VIDEO]?.size})"
-        header.find<TextView>(R.id.mDocNum).text = "(${map[FileUtil.FileType.DOC]?.size})"
-        header.find<TextView>(R.id.mZipNum).text = "(${map[FileUtil.FileType.ZIP]?.size})"
+        refresh.finishLoadMore()
     }
 
-    private fun getDirectoryFiles(): List<File> {
+    fun deleteFile(selectedFile: List<File>) {
+          selectedFile.forEach {
+              if (files.contains(it) && it.exists()) {
+                  it.delete()
+                  adapter.dataList.remove(it)
+              }
+          }
+        adapter.notifyDataSetChanged()
+        getDirectoryFiles()
+    }
+
+
+    private fun getDirectoryFiles() {
         when (type) {
             PE_LOCAL -> {
                 files = FileUtil.getFiles(FileUtil.getExternalFilesDir(fileActivity.applicationContext)).toMutableList()
@@ -151,7 +180,23 @@ class DocumentsFragment : Fragment(), View.OnClickListener {
         Collections.sort(files) { o1, o2 ->
             o2.lastModified().compareTo(o1.lastModified())
         }
-        return files
+        header.find<TextView>(R.id.mPicNum).text = "(${files.filter { FileUtil.getFileType(it) == FileUtil.FileType.IMAGE }.size})"
+        header.find<TextView>(R.id.mVideoNum).text = "(${files.filter { FileUtil.getFileType(it) == FileUtil.FileType.VIDEO }.size})"
+        header.find<TextView>(R.id.mDocNum).text = "(${files.filter { FileUtil.getFileType(it) == FileUtil.FileType.DOC }.size})"
+        header.find<TextView>(R.id.mZipNum).text = "(${files.filter { FileUtil.getFileType(it) == FileUtil.FileType.ZIP }.size})"
+    }
+
+
+    private fun loadFiles(page: Int): MutableList<File> {
+        val start = 0 + 20 * page
+        val end = if (19 + 20 * page > files.size) files.size - 1 else 19 + 20 * page
+        return if (files.isEmpty()) {
+            mutableListOf()
+        } else if (start > files.size || end < 0) {
+            mutableListOf()
+        } else {
+            files.slice(IntRange(start, end)).toMutableList()
+        }
     }
 
     fun search(searchStr: String) {
@@ -162,8 +207,9 @@ class DocumentsFragment : Fragment(), View.OnClickListener {
             adapter.dataList.clear()
             adapter.dataList.addAll(filter)
         } else {
-            val dirFiles = getDirectoryFiles()
-            if (dirFiles.isEmpty()) {
+            page = 0
+            val dirFiles = loadFiles(page)
+            if (adapter.dataList.plus(dirFiles).isEmpty()) {
                 header.setVisible(false)
                 documentList.setVisible(false)
                 iv_empty.setVisible(true)
@@ -171,9 +217,8 @@ class DocumentsFragment : Fragment(), View.OnClickListener {
                 header.setVisible(true)
                 documentList.setVisible(true)
                 iv_empty.setVisible(false)
-                val result = DiffUtil.calculateDiff(DiffCallBack(adapter.dataList, dirFiles))
+                val result = DiffUtil.calculateDiff(DiffCallBack(adapter.dataList, adapter.dataList.plus(dirFiles)))
                 result.dispatchUpdatesTo(adapter)
-                adapter.dataList.clear()
                 adapter.dataList.addAll(dirFiles)
             }
         }
@@ -243,14 +288,13 @@ class DocumentsFragment : Fragment(), View.OnClickListener {
                 point.visibility = View.GONE
             }
             slector.isSelected = fileActivity.selectedFile.contains(data)
-            if (FileUtil.getFileType(data.absolutePath) != null ) {
+            if (FileUtil.getFileType(data.absolutePath) != null) {
                 Glide.with(context)
                         .load(data.absolutePath)
                         .thumbnail(0.1f)
                         .apply(RequestOptions()
                                 .centerCrop()
-                                .error(R.drawable.icon_pic)
-                                .transform(RotateTransformation(ctx, data.absolutePath)))
+                                .error(R.drawable.icon_pic))
                         .into(icon)
             } else {
                 icon.imageResource = FileTypeUtils.getFileType(data).icon
