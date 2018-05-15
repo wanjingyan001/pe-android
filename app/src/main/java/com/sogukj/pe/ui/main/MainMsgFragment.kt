@@ -745,7 +745,7 @@ class MainMsgFragment : BaseFragment() {
                             .into(msgIcon)
                 }
             } else if (data.sessionType == SessionTypeEnum.Team) {
-                val fromNick = if (data.message.fromNick.isEmpty()) "" else "${data.message.fromNick}:"
+                val fromNick = if (data.message.fromNick.isNullOrEmpty()) "" else "${data.message.fromNick}:"
                 tvTitleMsg.text = Html.fromHtml("$fromNick${content.replace(searchKey, "<font color='#1787fb'>$searchKey</font>")}")
                 val team = NimUIKit.getTeamProvider().getTeamById(data.sessionId)
                 team?.let {
