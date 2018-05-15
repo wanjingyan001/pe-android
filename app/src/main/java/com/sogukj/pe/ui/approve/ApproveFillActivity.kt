@@ -1670,18 +1670,14 @@ class ApproveFillActivity : ToolbarActivity() {
                 }
             }
         }
-        if (flagEdit) {
-
-        } else {
-            checkList.add {
-                var copier = ""
-                for (index in 0 until list.size) {
-                    copier = "${copier}${list[index].uid},"
-                }
-                copier = copier.removeSuffix(",")
-                paramMap.put("copier", copier)
-                true
+        checkList.add {
+            var copier = ""
+            for (index in 0 until list.size-1) {
+                copier = "${copier}${list[index].uid},"
             }
+            copier = copier.removeSuffix(",")
+            paramMap.put("copier", copier)
+            true
         }
 //        checkList.add {
 //            paramMap.put("copier", gson.toJson(list))

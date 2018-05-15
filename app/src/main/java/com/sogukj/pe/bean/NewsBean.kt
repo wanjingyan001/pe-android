@@ -3,6 +3,7 @@ package com.sogukj.pe.bean
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import com.framework.base.BaseActivity

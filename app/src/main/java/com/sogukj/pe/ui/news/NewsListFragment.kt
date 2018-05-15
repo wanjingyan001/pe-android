@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Html
 import android.text.TextUtils
@@ -91,7 +92,7 @@ class NewsListFragment : BaseFragment(), SupportEmptyView {
         val layoutManager = LinearLayoutManager(baseActivity)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         //recycler_view.addItemDecoration(DividerItemDecoration(baseActivity, DividerItemDecoration.VERTICAL))
-        recycler_view.addItemDecoration(SpaceItemDecoration(Utils.dpToPx(context, 10)))
+        //recycler_view.addItemDecoration(SpaceItemDecoration(Utils.dpToPx(context, 10)))
         recycler_view.layoutManager = layoutManager
         recycler_view.adapter = adapter
 

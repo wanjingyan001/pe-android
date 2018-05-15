@@ -7,6 +7,7 @@ import com.sogukj.pe.Consts
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.util.Utils
 import com.sogukj.util.Store
+import com.sogukj.util.XmlDb
 import com.sougukj.service.LoggingInterceptor
 import okhttp3.CacheControl
 import okhttp3.OkHttpClient
@@ -47,8 +48,26 @@ class SoguApi {
                 .connectTimeout(15, TimeUnit.SECONDS)
                 .build()
 
+        //test
+//        val user = Store.store.getUser(context)
+//        var url = ""
+//        if (Utils.getEnvironment() == "ht") {
+//            if(user == null){
+//                url = "http://hts.pewinner.com"
+//            } else {
+//                if(user.phone == "15800421946"){
+//                    url = "http://prehts.pewinner.com"
+//                } else {
+//                    url = "http://hts.pewinner.com"
+//                }
+//            }
+//        } else if(Utils.getEnvironment() == "pe") {
+//            url = "http://pre.pe.stockalert.cn"
+//        }
+
         val retrofit = Retrofit.Builder()
                 .baseUrl(Consts.HTTP_HOST)
+                //.baseUrl(url)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(client)
