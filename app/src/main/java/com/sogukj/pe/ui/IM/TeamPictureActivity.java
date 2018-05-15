@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.sogukj.pe.Extras;
 import com.sogukj.pe.R;
+import com.sogukj.pe.bean.ChatFileBean;
 import com.sogukj.pe.service.Payload;
 import com.sogukj.pe.util.Utils;
 import com.sogukj.service.SoguApi;

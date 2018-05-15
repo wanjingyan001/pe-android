@@ -3,16 +3,12 @@ package com.sogukj.pe.ui.IM
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
-import android.util.Log
-import android.view.MotionEvent
 import android.view.View
 import android.widget.RelativeLayout
 import android.widget.TextView
-import android.widget.Toast
 import cn.finalteam.rxgalleryfinal.RxGalleryFinal
 import cn.finalteam.rxgalleryfinal.imageloader.ImageLoaderType
 import cn.finalteam.rxgalleryfinal.rxbus.RxBusResultDisposable
@@ -20,7 +16,6 @@ import cn.finalteam.rxgalleryfinal.rxbus.event.ImageRadioResultEvent
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
-import com.bumptech.glide.manager.Lifecycle
 import com.bumptech.glide.request.RequestOptions
 import com.framework.base.BaseActivity
 import com.google.gson.Gson
@@ -30,8 +25,6 @@ import com.netease.nim.uikit.common.ui.widget.SwitchButton
 import com.netease.nimlib.sdk.NIMClient
 import com.netease.nimlib.sdk.Observer
 import com.netease.nimlib.sdk.RequestCallback
-import com.netease.nimlib.sdk.RequestCallbackWrapper
-import com.netease.nimlib.sdk.friend.FriendService
 import com.netease.nimlib.sdk.team.TeamService
 import com.netease.nimlib.sdk.team.TeamServiceObserver
 import com.netease.nimlib.sdk.team.constant.TeamFieldEnum
@@ -41,6 +34,7 @@ import com.netease.nimlib.sdk.team.model.TeamMember
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.bean.TeamBean
 import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.ui.main.ContactsActivity
 import com.sogukj.pe.util.Utils

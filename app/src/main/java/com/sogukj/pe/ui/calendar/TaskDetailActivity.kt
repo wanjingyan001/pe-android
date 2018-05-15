@@ -21,6 +21,7 @@ import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.ScheduleBean
+import com.sogukj.pe.bean.TaskDetailBean
 import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.util.Trace
 import com.sogukj.pe.view.CircleImageView

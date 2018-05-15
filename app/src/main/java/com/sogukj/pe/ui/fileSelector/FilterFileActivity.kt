@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.framework.base.BaseActivity
 import com.netease.nim.uikit.common.media.picker.loader.RotateTransformation
+import com.scwang.smartrefresh.layout.footer.ClassicsFooter
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.ui.fileSelector.DocumentsFragment.Companion.ALL_DOC
@@ -34,6 +35,7 @@ import com.sogukj.pe.ui.fileSelector.DocumentsFragment.Companion.WX_DOC_PATH1
 import com.sogukj.pe.ui.fileSelector.DocumentsFragment.Companion.WX_DOC_PATH2
 import com.sogukj.pe.util.FileTypeUtils
 import com.sogukj.pe.util.FileUtil
+import com.sogukj.pe.util.FileUtil.getFiles
 import com.sogukj.pe.util.Utils
 import com.sogukj.pe.view.RecyclerAdapter
 import com.sogukj.pe.view.RecyclerHolder
@@ -60,6 +62,7 @@ class FilterFileActivity : BaseActivity() {
     lateinit var fileType: FileUtil.FileType
     lateinit var mAdapter: RecyclerAdapter<File>
     val selectType = mutableSetOf<String>()
+    private var page = 0
 
     companion object {
         fun start(context: Activity, maxSize: Int = 9, isReplace: Boolean, isForResult: Boolean,
@@ -93,6 +96,7 @@ class FilterFileActivity : BaseActivity() {
             FilterHolder(_adapter.getView(R.layout.item_document_list, parent))
         }
         initData()
+        initRefresh()
         val dialog = initBottomDialog()
         filterImg.setOnClickFastListener {
             dialog.show()
@@ -143,6 +147,7 @@ class FilterFileActivity : BaseActivity() {
                             }
                         }
                         selectedFile.clear()
+                        initData()
                         refreshList(selectType)
                     }
                     .onNegative { dialog, _ ->
@@ -212,20 +217,61 @@ class FilterFileActivity : BaseActivity() {
             else -> {
             }
         }
+        files = files.filter { FileUtil.getFileType(it) == fileType }.toMutableList()
         Collections.sort(files) { o1, o2 ->
             o2.lastModified().compareTo(o1.lastModified())
         }
-        val map = FileUtil.getFilesByType(files)
-        val files = map[fileType]
-        if (files.isNullOrEmpty()) {
-            mFileList.setVisible(false)
+    }
+
+    private fun initRefresh() {
+        refresh.apply {
+            isEnableRefresh = false
+            isEnableLoadMore = true
+            isEnableAutoLoadMore = true
+            isEnableOverScrollBounce = false
+            isEnableScrollContentWhenLoaded = false
+            setEnableFooterTranslationContent(false)
+            setRefreshFooter(ClassicsFooter(ctx), 0, 0)
+            setDisableContentWhenLoading(true)
+            setOnLoadMoreListener {
+                page += 1
+                refreshFileList()
+            }
+        }
+    }
+
+    private fun loadFiles(page: Int): MutableList<File> {
+        val start = 0 + 20 * page
+        val end = if (19 + 20 * page > files.size) files.size - 1 else 19 + 20 * page
+        return if (files.isEmpty()) {
+            mutableListOf()
+        } else if (start > files.size || end < 0) {
+            mutableListOf()
+        } else {
+            files.slice(IntRange(start, end)).toMutableList()
+        }
+    }
+
+    private fun refreshFileList() {
+        val list = loadFiles(page)
+        if (page == 0){
+            mAdapter.dataList.clear()
+        }
+        mAdapter.dataList.addAll(list)
+        if (mAdapter.dataList.isNullOrEmpty()) {
+            refresh.setVisible(false)
             iv_empty.setVisible(true)
         } else {
-            mFileList.setVisible(true)
+            refresh.setVisible(true)
             iv_empty.setVisible(false)
-            mAdapter.dataList.addAll(files!!)
             mAdapter.notifyDataSetChanged()
         }
+        refresh.finishLoadMore()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        refreshFileList()
     }
 
     private fun initBottomDialog(): BottomSheetDialog {

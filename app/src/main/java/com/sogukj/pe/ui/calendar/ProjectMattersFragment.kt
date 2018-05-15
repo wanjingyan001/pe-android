@@ -19,6 +19,7 @@ import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.CustomSealBean
+import com.sogukj.pe.bean.ProjectMatterCompany
 import com.sogukj.pe.bean.ScheduleBean
 import com.sogukj.pe.ui.approve.SealApproveActivity
 import com.sogukj.pe.ui.approve.SignApproveActivity

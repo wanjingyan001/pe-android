@@ -12,7 +12,8 @@ class Consts {
                 "http://zhongdi.pe.stockalert.cn/"//中缔
             }
             "ht" -> {
-                "http://ht.stockalert.cn"
+//                "http://ht.stockalert.cn"
+                "http://hts.pewinner.com"
             }
             "kk" -> {
                 "http://kuake.stockalert.cn/"
@@ -22,7 +23,8 @@ class Consts {
             }
             else -> {
 //                "http://dev.ht.stockalert.cn"
-                "http://pre.pe.stockalert.cn"
+//                "http://pre.pe.stockalert.cn"
+                "http://prehts.pewinner.com"
             }
         }
 

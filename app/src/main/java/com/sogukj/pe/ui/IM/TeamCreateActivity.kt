@@ -25,6 +25,7 @@ import com.netease.nimlib.sdk.team.model.CreateTeamResult
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.CustomSealBean
+import com.sogukj.pe.bean.TeamBean
 import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.ui.calendar.CompanySelectActivity
 import com.sogukj.pe.ui.main.ContactsActivity

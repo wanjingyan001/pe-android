@@ -14,6 +14,7 @@ import android.view.KeyEvent
 import android.widget.AdapterView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
+import com.amap.api.mapcore.util.it
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.ui.partyBuild.PartyUploadActivity
@@ -124,22 +125,19 @@ class FileMainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
                     .negativeText("取消")
                     .onPositive { dialog, _ ->
                         dialog.dismiss()
-                        selectedFile.forEach {
-                            if (it.exists()) {
-                                //通知列表刷新
-                                it.delete()
-                                if (comDocFragment.isVisible) {
-                                    val item = comDocFragment.pagerAdapter.getCurrentItem()
-                                    if (item.files.contains(it)) {
-                                        item.files.remove(it)
-                                    }
-                                    item.refreshList()
-                                }
-                                if (allFileFragment.isVisible) {
-                                    val fragment = allFileFragment.childFragmentManager.findFragmentById(R.id.contentLayout) as StorageFileFragment
-                                    fragment.changeData()
+                        if (comDocFragment.isVisible) {
+                            val item = comDocFragment.pagerAdapter.getCurrentItem()
+                            item.deleteFile(selectedFile)
+                        }
+                        if (allFileFragment.isVisible) {
+                            selectedFile.forEach {
+                                if (it.exists()) {
+                                    //通知列表刷新
+                                    it.delete()
                                 }
                             }
+                            val fragment = allFileFragment.childFragmentManager.findFragmentById(R.id.contentLayout) as StorageFileFragment
+                            fragment.changeData()
                         }
                         selectedFile.clear()
                         showSelectedInfo()

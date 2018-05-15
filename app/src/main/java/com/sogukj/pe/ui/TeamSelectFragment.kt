@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.Html
 import android.text.TextWatcher
-import android.util.Log
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.*
@@ -31,9 +30,8 @@ import com.sogukj.pe.R
 import com.sogukj.pe.bean.DepartmentBean
 import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.ui.IM.PersonalInfoActivity
-import com.sogukj.pe.ui.IM.TeamBean
+import com.sogukj.pe.bean.TeamBean
 import com.sogukj.pe.ui.IM.TeamCreateActivity
-import com.sogukj.pe.ui.IM.TeamSelectActivity
 import com.sogukj.pe.ui.main.ContactsActivity
 import com.sogukj.pe.ui.user.UserActivity
 import com.sogukj.pe.util.MyGlideUrl

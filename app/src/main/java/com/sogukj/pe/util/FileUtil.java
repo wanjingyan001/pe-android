@@ -20,6 +20,10 @@ import com.nbsp.materialfilepicker.utils.FileComparator;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.business.session.viewholder.MsgViewHolderFile;
 import com.sogukj.pe.R;
+import com.sogukj.pe.ui.fileSelector.DocFileFilter;
+import com.sogukj.pe.ui.fileSelector.ImageFileFilter;
+import com.sogukj.pe.ui.fileSelector.VideoFileFilter;
+import com.sogukj.pe.ui.fileSelector.ZipFileFilter;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -43,9 +47,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 
 import static com.sogukj.pe.util.FileTypeUtils.FileType.IMAGE;
@@ -777,6 +783,28 @@ public class FileUtil {
         return vecFile;
     }
 
+    /**
+     * 获取指定目录下的文件地址列表
+     * @param fileAbsolutePath
+     * @return
+     */
+    public static Set<String> getFilePaths(String fileAbsolutePath){
+        Set<String> paths = new HashSet<>();
+        File file = new File(fileAbsolutePath);
+        if (file.exists()) {
+            File[] subFile = file.listFiles();
+            if (subFile != null && subFile.length > 0) {
+                for (File aSubFile : subFile) {
+                    // 判断是否为文件夹
+                    if (!aSubFile.isDirectory()) {
+                        paths.add(aSubFile.getAbsolutePath());
+                    }
+                }
+            }
+        }
+        return paths;
+    }
+
     public static List<File> getFileListByDirPath(String path, FileFilter filter) {
         File directory = new File(path);
         File[] files = directory.listFiles(filter);
@@ -894,4 +922,93 @@ public class FileUtil {
         bitmap = MediaStore.Images.Thumbnails.getThumbnail(context.getContentResolver(), imageIdLong, MediaStore.Images.Thumbnails.MINI_KIND, options);
         return bitmap;
     }
+
+    /**
+     * 获取指定目录下的图片文件
+     * @param fileAbsolutePath
+     * @return
+     */
+    public static List<File> getImageFile(String fileAbsolutePath){
+        List<File> iamges = new ArrayList<>();
+        File file = new File(fileAbsolutePath);
+        if (file.exists()) {
+            File[] subFile = file.listFiles(new ImageFileFilter());
+            if (subFile != null && subFile.length > 0) {
+                for (File aSubFile : subFile) {
+                    // 判断是否为文件夹
+                    if (!aSubFile.isDirectory()) {
+                        iamges.add(aSubFile);
+                    }
+                }
+            }
+        }
+        return iamges;
+    }
+
+    /**
+     * 获取指定目录下的视频文件
+     * @param fileAbsolutePath
+     * @return
+     */
+    public static List<File> getVideoFile(String fileAbsolutePath){
+        List<File> videos = new ArrayList<>();
+        File file = new File(fileAbsolutePath);
+        if (file.exists()) {
+            File[] subFile = file.listFiles(new VideoFileFilter());
+            if (subFile != null && subFile.length > 0) {
+                for (File aSubFile : subFile) {
+                    // 判断是否为文件夹
+                    if (!aSubFile.isDirectory()) {
+                        videos.add(aSubFile);
+                    }
+                }
+            }
+        }
+        return videos;
+    }
+
+    /**
+     *  获取指定目录下的文档文件
+     * @param fileAbsolutePath
+     * @return
+     */
+    public static List<File> getDocFile(String fileAbsolutePath){
+        List<File> docs = new ArrayList<>();
+        File file = new File(fileAbsolutePath);
+        if (file.exists()) {
+            File[] subFile = file.listFiles(new DocFileFilter());
+            if (subFile != null && subFile.length > 0) {
+                for (File aSubFile : subFile) {
+                    // 判断是否为文件夹
+                    if (!aSubFile.isDirectory()) {
+                        docs.add(aSubFile);
+                    }
+                }
+            }
+        }
+        return docs;
+    }
+
+    /**
+     * 获取指定目录下的压缩包文件
+     * @param fileAbsolutePath
+     * @return
+     */
+    public static List<File> getZipFile(String fileAbsolutePath){
+        List<File> zips = new ArrayList<>();
+        File file = new File(fileAbsolutePath);
+        if (file.exists()) {
+            File[] subFile = file.listFiles(new ZipFileFilter());
+            if (subFile != null && subFile.length > 0) {
+                for (File aSubFile : subFile) {
+                    // 判断是否为文件夹
+                    if (!aSubFile.isDirectory()) {
+                        zips.add(aSubFile);
+                    }
+                }
+            }
+        }
+        return zips;
+    }
+
 }

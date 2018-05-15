@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
+import com.sogukj.pe.bean.ProjectMatterCompany
 import kotlinx.android.synthetic.main.activity_matter_dateil.*
 
 class MatterDetailActivity : ToolbarActivity() {

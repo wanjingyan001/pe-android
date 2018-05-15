@@ -2,7 +2,6 @@ package com.sogukj.pe.ui.IM;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.LinearGradient;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +21,7 @@ import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.sogukj.pe.Extras;
 import com.sogukj.pe.R;
+import com.sogukj.pe.bean.ChatFileBean;
 import com.sogukj.pe.service.Payload;
 import com.sogukj.pe.util.FileTypeUtils;
 import com.sogukj.pe.util.Utils;
@@ -35,7 +35,6 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import qdx.stickyheaderdecoration.GridDecoration;
 import qdx.stickyheaderdecoration.NormalDecoration;
 
 public class TeamHistoryFileActivity extends AppCompatActivity implements TeamMenuWindow.onItemClickListener {

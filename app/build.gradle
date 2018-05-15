@@ -42,10 +42,23 @@ android {
     buildTypes {
 
         release {
-            minifyEnabled false
-//            shrinkResources true  // 移除无用资源
+            minifyEnabled true
+            // Zipalign优化
+//            zipAlignEnabled true
+            // 移除无用的resource文件
+//            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
+
+            applicationVariants.all { variant ->
+                variant.outputs.all { output ->
+                    def outputFile = output.outputFile
+                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                        def fileName = "app-${defaultConfig.versionName}-beta1-${releaseTime()}.apk"
+                        outputFileName = fileName
+                    }
+                }
+            }
         }
         debug {
             minifyEnabled false
@@ -151,18 +164,16 @@ android {
         checkReleaseBuilds false
         abortOnError false
     }
-//    applicationVariants.all { variant ->
-//        variant.outputs.each { output ->
-//            output.outputFile = new File(output.outputFile.parent,
-//                    "pe-${variant.buildType.name}-v${defaultConfig.versionName}-${defaultConfig.versionCode}-${variant.productFlavors[0].name}.apk".toLowerCase())
-//        }
-//    }
 }
 repositories {
     maven {
         url "http://dl.bintray.com/lukaville/maven"
     }
     mavenCentral()
+}
+
+static def releaseTime() {
+    return new Date().format("yyyy.MM.dd", TimeZone.getTimeZone("UTC"))
 }
 
 dependencies {
@@ -228,7 +239,7 @@ dependencies {
     compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
     compile project(':stack-layout')
     implementation project(':library')
-    compile 'com.tencent.bugly:crashreport:latest.release'
+    compile 'com.tencent.bugly:crashreport:2.6.6.1'
 
     compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.5.1'
     compile 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.5.1'

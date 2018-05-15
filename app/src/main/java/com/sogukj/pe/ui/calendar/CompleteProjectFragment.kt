@@ -9,6 +9,7 @@ import android.view.View
 import com.framework.base.BaseFragment
 import com.google.gson.Gson
 import com.sogukj.pe.R
+import com.sogukj.pe.bean.TodoYear
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
 import io.reactivex.android.schedulers.AndroidSchedulers
