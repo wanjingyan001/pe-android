@@ -82,7 +82,18 @@ class TeamSelectFragment : BaseFragment() {
         } else {
             Glide.with(context)
                     .load(MyGlideUrl(user?.url))
-                    .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
+                    .listener(object : RequestListener<Drawable> {
+                        override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                            header.setImageDrawable(resource)
+                            return true
+                        }
+
+                        override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                            val ch = user?.name?.first()
+                            header.setChar(ch)
+                            return true
+                        }
+                    })
                     .into(header)
         }
     }
