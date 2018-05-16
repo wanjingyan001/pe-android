@@ -42,40 +42,42 @@ android {
     buildTypes {
 
         release {
-            minifyEnabled true
+//            混淆规则坑太多,先不用了
+            minifyEnabled false
             // Zipalign优化
-//            zipAlignEnabled true
-            // 移除无用的resource文件
-//            shrinkResources true
+            zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
-
-            applicationVariants.all { variant ->
-                variant.outputs.all { output ->
-                    def outputFile = output.outputFile
-                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
-                        def fileName = "app-${defaultConfig.versionName}-beta1-${releaseTime()}.apk"
-                        outputFileName = fileName
-                    }
-                }
-            }
         }
         debug {
             minifyEnabled false
-//            shrinkResources true  // 移除无用资源
             debuggable true
             jniDebuggable true
             signingConfig signingConfigs.release
+
+        }
+        applicationVariants.all { variant ->
+            def buildName
+            variant.outputs.all { output ->
+                def outputFile = output.outputFile
+                if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                    variant.productFlavors.each { product ->
+                        buildName = product.name
+                    }
+                    def fileName = "${buildName}_${variant.buildType.name}_${defaultConfig.versionName}-${releaseTime()}.apk"
+                    outputFileName = fileName
+                }
+            }
         }
     }
     lintOptions {
         checkReleaseBuilds false
     }
     dexOptions {
-//        incremental true
-        preDexLibraries = false
-        javaMaxHeapSize "4g"
-        maxProcessCount 4
+        dexInProcess true
+        preDexLibraries true
+        javaMaxHeapSize "4g"//越大越好
+        incremental true
     }
     flavorDimensions "default"
     productFlavors {
@@ -85,6 +87,7 @@ android {
             resValue "string", "app_name", "海通创新"
             resValue "bool", "isrRank", 'true'
             buildConfigField "String", "ENVIRONMENT", '"pe"'
+            buildConfigField "String", "FILEPROVIDER", '"com.sogukj.pe.fileProvider"'
             manifestPlaceholders = [appId               : "com.sogukj.pe",
                                     app_icon            : "@mipmap/ic_launcher_pe",
                                     AMAP_KEY            : "9204f7dcdd8c2beba10c94dbe96bd062",
@@ -101,6 +104,7 @@ android {
             resValue "string", "app_name", "中缔资本"
             resValue "bool", "isrRank", 'true'
             buildConfigField "String", "ENVIRONMENT", '"civc"'
+            buildConfigField "String", "FILEPROVIDER", '"com.sougukj.civc.fileProvider"'
             manifestPlaceholders = [appId               : "com.sougukj.civc",
                                     app_icon            : "@mipmap/ic_launcher_zd",
                                     AMAP_KEY            : "36f1dcf32ce10480534b61fbfa1cebff",
@@ -117,8 +121,9 @@ android {
             resValue "string", "app_name", "海通创新"
             resValue "bool", "isrRank", 'true'
             buildConfigField "String", "ENVIRONMENT", '"ht"'
+            buildConfigField "String", "FILEPROVIDER", '"com.sogukj.pe.ht.fileProvider"'
             manifestPlaceholders = [appId               : "com.sogukj.pe.ht",
-                                    app_icon            : "@mipmap/ic_launcher_ht",
+                                    app_icon            : "@mipmap/ic_launcher",
                                     AMAP_KEY            : "9204f7dcdd8c2beba10c94dbe96bd062",
                                     IM_KEY              : "5d8ada31fe2ba9cb419b5f63a95e8756",
                                     Umeng_KEY           : "59ddf11e8f4a9d7c4b000116",
@@ -133,6 +138,7 @@ android {
             resValue "string", "app_name", "夸克"
             resValue "bool", "isrRank", 'true'
             buildConfigField "String", "ENVIRONMENT", '"kk"'
+            buildConfigField "String", "FILEPROVIDER", '"com.sogukj.pe.fileProvider"'
             manifestPlaceholders = [appId               : "com.sogukj.pe",
                                     app_icon            : "@drawable/img_logo_splash_kk",
                                     AMAP_KEY            : "9204f7dcdd8c2beba10c94dbe96bd062",
@@ -149,6 +155,7 @@ android {
             resValue "string", "app_name", "雅戈尔"
             resValue "bool", "isrRank", 'true'
             buildConfigField "String", "ENVIRONMENT", '"yge"'
+            buildConfigField "String", "FILEPROVIDER", '"com.sogukj.pe.fileProvider"'
             manifestPlaceholders = [appId               : "com.sogukj.pe",
                                     app_icon            : "@drawable/img_logo_splash_yge",
                                     AMAP_KEY            : "9204f7dcdd8c2beba10c94dbe96bd062",
@@ -234,6 +241,7 @@ dependencies {
     compile project(':shareSDK')
     compile project(':calendar')
     compile project(':uikit')
+    compile project(':easyPhotos')
     compile files('libs/umeng-analytics-v5.5.3.jar')
     compile files('libs/libammsdk.jar')
     compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'

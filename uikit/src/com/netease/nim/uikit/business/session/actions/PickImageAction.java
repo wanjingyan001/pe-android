@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import com.huantansheng.easyphotos.EasyPhotos;
+import com.huantansheng.easyphotos.models.album.entity.Photo;
+import com.netease.nim.uikit.BuildConfig;
 import com.netease.nim.uikit.R;
 import com.netease.nim.uikit.business.session.constant.Extras;
 import com.netease.nim.uikit.business.session.constant.RequestCode;
@@ -16,8 +19,12 @@ import com.netease.nim.uikit.common.util.media.ImageUtil;
 import com.netease.nim.uikit.common.util.storage.StorageType;
 import com.netease.nim.uikit.common.util.storage.StorageUtil;
 import com.netease.nim.uikit.common.util.string.StringUtil;
+import com.netease.nim.uikit.support.glide.GlideEngine;
 
 import java.io.File;
+import java.util.ArrayList;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by zhoujianghua on 2015/7/31.
@@ -32,6 +39,7 @@ public abstract class PickImageAction extends BaseAction {
 
     private boolean multiSelect;
     private boolean crop = false;
+    private int requestCode;
 
     protected abstract void onPicked(File file);
 
@@ -42,7 +50,7 @@ public abstract class PickImageAction extends BaseAction {
 
     @Override
     public void onClick() {
-        int requestCode = makeRequestCode(RequestCode.PICK_IMAGE);
+        requestCode = makeRequestCode(RequestCode.PICK_IMAGE);
         showSelector(getTitleId(), requestCode, multiSelect, tempFile());
     }
 
@@ -56,27 +64,47 @@ public abstract class PickImageAction extends BaseAction {
      */
     private void showSelector(int titleId, final int requestCode, final boolean multiSelect, final String outPath) {
         PickImageHelper.PickImageOption option = new PickImageHelper.PickImageOption();
-        option.titleResId = titleId;
-        option.multiSelect = multiSelect;
-        option.multiSelectMaxCount = PICK_IMAGE_COUNT;
-        option.crop = crop;
-        option.cropOutputImageWidth = PORTRAIT_IMAGE_WIDTH;
-        option.cropOutputImageHeight = PORTRAIT_IMAGE_WIDTH;
-        option.outputPath = outPath;
-        PickImageActivity.start(getActivity(), requestCode, PickImageActivity.FROM_LOCAL,
-                option.outputPath, option.multiSelect,
-                option.multiSelectMaxCount, true, false, 0, 0);
+//        option.titleResId = titleId;
+//        option.multiSelect = multiSelect;
+//        option.multiSelectMaxCount = PICK_IMAGE_COUNT;
+//        option.crop = crop;
+//        option.cropOutputImageWidth = PORTRAIT_IMAGE_WIDTH;
+//        option.cropOutputImageHeight = PORTRAIT_IMAGE_WIDTH;
+//        option.outputPath = outPath;
+//        PickImageActivity.start(getActivity(), requestCode, PickImageActivity.FROM_LOCAL,
+//                option.outputPath, option.multiSelect,
+//                option.multiSelectMaxCount, true, false, 0, 0);
+
+        EasyPhotos.createAlbum(getActivity(), true, GlideEngine.getInstance())
+                .setFileProviderAuthority(getActivity().getApplicationInfo().packageName + ".fileProvider")
+                .setPuzzleMenu(false)
+                .setCount(option.multiSelectMaxCount)
+                .setOriginalMenu(true, true, null)
+                .start(requestCode);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case RequestCode.PICK_IMAGE:
-                onPickImageActivityResult(requestCode, data);
-                break;
-            case RequestCode.PREVIEW_IMAGE_FROM_CAMERA:
-                onPreviewImageActivityResult(requestCode, data);
-                break;
+//        switch (requestCode) {
+//            case RequestCode.PICK_IMAGE:
+//                onPickImageActivityResult(requestCode, data);
+//                break;
+//            case RequestCode.PREVIEW_IMAGE_FROM_CAMERA:
+//                onPreviewImageActivityResult(requestCode, data);
+//                break;
+//        }
+        if (data != null && requestCode == RequestCode.PICK_IMAGE && resultCode == RESULT_OK) {
+            //返回对象集合：如果你需要了解图片的宽、高、大小、用户是否选中原图选项等信息，可以用这个
+            ArrayList<Photo> resultPhotos = data.getParcelableArrayListExtra(EasyPhotos.RESULT_PHOTOS);
+            for (Photo photo : resultPhotos) {
+                new SendImageHelper.SendImageTask(getActivity(), photo.selectedOriginal, photo.path, new SendImageHelper.Callback() {
+
+                    @Override
+                    public void sendImage(File file, boolean isOrig) {
+                        onPicked(file);
+                    }
+                }).execute();
+            }
         }
     }
 
