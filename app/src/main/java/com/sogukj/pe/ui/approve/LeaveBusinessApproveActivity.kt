@@ -428,13 +428,13 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
                         .listener(object : RequestListener<Drawable> {
                             override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
                                 ivUser.setImageDrawable(resource)
-                                return true
+                                return false
                             }
 
                             override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
                                 val ch = v.name?.first()
                                 ivUser.setChar(ch)
-                                return true
+                                return false
                             }
                         })
                         .into(ivUser)
@@ -536,13 +536,13 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
                     .listener(object : RequestListener<Drawable> {
                         override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
                             ivUser.setImageDrawable(resource)
-                            return true
+                            return false
                         }
 
                         override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
                             val ch = data.name?.first()
                             ivUser.setChar(ch)
-                            return true
+                            return false
                         }
                     })
                     .into(ivUser)
@@ -599,13 +599,13 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
                     .listener(object : RequestListener<Drawable> {
                         override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
                             iv_user.setImageDrawable(resource)
-                            return true
+                            return false
                         }
 
                         override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
                             val ch = fixation.name?.first()
                             iv_user.setChar(ch)
-                            return true
+                            return false
                         }
                     })
                     .into(iv_user)
@@ -689,13 +689,13 @@ class LeaveBusinessApproveActivity : ToolbarActivity() {
                         .listener(object : RequestListener<Drawable> {
                             override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
                                 viewHolder.icon?.setImageDrawable(resource)
-                                return true
+                                return false
                             }
 
                             override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
                                 val ch = list[position].name?.first()
                                 viewHolder.icon?.setChar(ch)
-                                return true
+                                return false
                             }
                         })
                         .into(viewHolder.icon)
