@@ -344,8 +344,8 @@ class MainProjectFragment : BaseFragment() {
         view_pager.adapter = adapter
         view_pager.offscreenPageLimit = fragments.size
 
-        tabs.getTabAt(2)?.select()
-        view_pager?.currentItem = 2
+//        tabs.getTabAt(2)?.select()
+//        view_pager?.currentItem = 2
 
         tabs?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab?) {
@@ -399,6 +399,10 @@ class MainProjectFragment : BaseFragment() {
             }
 
         })
+
+        tabs.getTabAt(2)?.select()
+        view_pager?.currentItem = 2
+
         hisAdapter.dataList.clear()
         hisAdapter.dataList.addAll(search)
         hisAdapter.notifyDataSetChanged()

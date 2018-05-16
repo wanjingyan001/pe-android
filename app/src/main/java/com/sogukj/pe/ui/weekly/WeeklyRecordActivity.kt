@@ -81,6 +81,11 @@ class WeeklyRecordActivity : BaseActivity() {
             if (tag == "EDIT") {
                 finish()
             } else {
+                var script = et_des.text.toString().trim()
+                if (script == "") {
+                    finish()
+                    return@setOnClickListener
+                }
                 saveScript()
             }
         }
@@ -201,6 +206,11 @@ class WeeklyRecordActivity : BaseActivity() {
         if (tag == "EDIT") {
             super.onBackPressed()
         } else {
+            var script = et_des.text.toString().trim()
+            if (script == "") {
+                super.onBackPressed()
+                return
+            }
             saveScript()
         }
     }
@@ -218,9 +228,6 @@ class WeeklyRecordActivity : BaseActivity() {
     fun saveScript() {
         var key = "${Store.store.getUser(context)?.uid}+$tag+${week.start_time}+${week.end_time}"
         var script = et_des.text.toString().trim()
-        if (script == "") {
-            return
-        }
         var mDialog = MaterialDialog.Builder(this@WeeklyRecordActivity)
                 .theme(Theme.LIGHT)
                 .canceledOnTouchOutside(true)
