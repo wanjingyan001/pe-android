@@ -119,6 +119,13 @@ class SignApproveActivity : ToolbarActivity() {
 
                         if (status != null && status > 1) {
                             iv_state_signed.visibility = View.VISIBLE
+                            //3=>审批完成  4=>签字通过
+                            if (status == 3) {
+                                iv_state_signed.imageResource = R.drawable.ic_flow_state_agree
+                            }
+                            if (status == 4) {
+                                iv_state_signed.imageResource = R.drawable.ic_flow_state_signed
+                            }
                             if (status == 5) {
                                 iv_state_signed.imageResource = R.drawable.ic_flow_state_chexiao
                             }
