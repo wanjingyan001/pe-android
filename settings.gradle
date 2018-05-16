@@ -1,3 +1,3 @@
-include ':app', ':calendar', ':stack-layout', ':uikit', ':library', 'zxingLib'
+include ':app', ':calendar', ':stack-layout', ':uikit', ':library', 'zxingLib', ':easyPhotos'
 include ':PushSDK'
 include ':shareSDK'

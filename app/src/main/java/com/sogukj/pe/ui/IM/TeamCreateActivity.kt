@@ -14,6 +14,7 @@ import cn.finalteam.rxgalleryfinal.rxbus.event.ImageRadioResultEvent
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.framework.base.ActivityHelper
+import com.huantansheng.easyphotos.EasyPhotos
 import com.netease.nim.uikit.api.NimUIKit
 import com.netease.nim.uikit.business.team.helper.TeamHelper
 import com.netease.nim.uikit.common.ui.dialog.DialogMaker
@@ -22,6 +23,7 @@ import com.netease.nimlib.sdk.RequestCallback
 import com.netease.nimlib.sdk.team.TeamService
 import com.netease.nimlib.sdk.team.constant.*
 import com.netease.nimlib.sdk.team.model.CreateTeamResult
+import com.sogukj.pe.BuildConfig
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.CustomSealBean
@@ -29,6 +31,7 @@ import com.sogukj.pe.bean.TeamBean
 import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.ui.calendar.CompanySelectActivity
 import com.sogukj.pe.ui.main.ContactsActivity
+import com.sogukj.pe.util.GlideEngine
 import com.sogukj.pe.util.Utils
 import com.sougukj.clickWithTrigger
 import com.sougukj.textStr
@@ -73,23 +76,10 @@ class TeamCreateActivity : AppCompatActivity() {
             createTeam()
         }
         team_logo.clickWithTrigger {
-            RxGalleryFinal.with(this)
-                    .image()
-                    .radio()
-                    .imageLoader(ImageLoaderType.GLIDE)
-                    .subscribe(object : RxBusResultDisposable<ImageRadioResultEvent>() {
-                        override fun onEvent(t: ImageRadioResultEvent?) {
-//                            path = t?.result?.originalPath
-                            path = t?.result?.thumbnailSmallPath
-                            if (!path.isNullOrEmpty()) {
-                                Glide.with(this@TeamCreateActivity)
-                                        .load(path)
-                                        .apply(RequestOptions().error(R.drawable.invalid_name2))
-                                        .into(team_logo)
-                            }
-                        }
-                    })
-                    .openGallery()
+            EasyPhotos.createAlbum(this, true, GlideEngine.getInstance())
+                    .setFileProviderAuthority(BuildConfig.FILEPROVIDER)
+                    .setPuzzleMenu(false)
+                    .start(Extras.requestCode1)
         }
         teamNameLayout.clickWithTrigger {
             team_name.isFocusable = true
@@ -221,6 +211,12 @@ class TeamCreateActivity : AppCompatActivity() {
                     }
                 }
             }
+        } else if (requestCode == Extras.requestCode1 && data != null && resultCode == Activity.RESULT_OK) {
+            val resultPaths = data.getStringArrayListExtra(EasyPhotos.RESULT_PATHS)
+            Glide.with(this@TeamCreateActivity)
+                    .load(resultPaths[0])
+                    .apply(RequestOptions().error(R.drawable.invalid_name2))
+                    .into(team_logo)
         }
     }
 

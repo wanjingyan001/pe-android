@@ -1,0 +1,42 @@
+[
+    {
+        "merged": "/Users/admin/dev/proj/pe3.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/mipmap-xxhdpi-v4/ic_controller_easy_photos.png",
+        "source": "/Users/admin/dev/proj/pe3.1/pe-android/easyPhotos/build/intermediates/bundles/debug/res/mipmap-xxhdpi-v4/ic_controller_easy_photos.png"
+    },
+    {
+        "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/mipmap-xxhdpi-v4/ic_controller_easy_photos.png",
+        "source": "/Users/sogubaby/pe-v2/pe-android/easyPhotos/build/intermediates/bundles/debug/res/mipmap-xxhdpi-v4/ic_controller_easy_photos.png"
+    },
+    {
+        "merged": "/Users/admin/dev/proj/pe3.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/mipmap-xxhdpi-v4/ic_rotate_easy_photos.png",
+        "source": "/Users/admin/dev/proj/pe3.1/pe-android/easyPhotos/build/intermediates/bundles/debug/res/mipmap-xxhdpi-v4/ic_rotate_easy_photos.png"
+    },
+    {
+        "merged": "/Users/admin/dev/proj/pe3.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/mipmap-xxhdpi-v4/ic_delete_easy_photos.png",
+        "source": "/Users/admin/dev/proj/pe3.1/pe-android/easyPhotos/build/intermediates/bundles/debug/res/mipmap-xxhdpi-v4/ic_delete_easy_photos.png"
+    },
+    {
+        "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/mipmap-xxhdpi-v4/ic_editor_easy_photos.png",
+        "source": "/Users/sogubaby/pe-v2/pe-android/easyPhotos/build/intermediates/bundles/debug/res/mipmap-xxhdpi-v4/ic_editor_easy_photos.png"
+    },
+    {
+        "merged": "/Users/admin/dev/proj/pe3.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/mipmap-xxhdpi-v4/ic_mirror_easy_photos.png",
+        "source": "/Users/admin/dev/proj/pe3.1/pe-android/easyPhotos/build/intermediates/bundles/debug/res/mipmap-xxhdpi-v4/ic_mirror_easy_photos.png"
+    },
+    {
+        "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/mipmap-xxhdpi-v4/ic_mirror_easy_photos.png",
+        "source": "/Users/sogubaby/pe-v2/pe-android/easyPhotos/build/intermediates/bundles/debug/res/mipmap-xxhdpi-v4/ic_mirror_easy_photos.png"
+    },
+    {
+        "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/mipmap-xxhdpi-v4/ic_rotate_easy_photos.png",
+        "source": "/Users/sogubaby/pe-v2/pe-android/easyPhotos/build/intermediates/bundles/debug/res/mipmap-xxhdpi-v4/ic_rotate_easy_photos.png"
+    },
+    {
+        "merged": "/Users/sogubaby/pe-v2/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/mipmap-xxhdpi-v4/ic_delete_easy_photos.png",
+        "source": "/Users/sogubaby/pe-v2/pe-android/easyPhotos/build/intermediates/bundles/debug/res/mipmap-xxhdpi-v4/ic_delete_easy_photos.png"
+    },
+    {
+        "merged": "/Users/admin/dev/proj/pe3.1/pe-android/uikit/build/intermediates/res/merged/androidTest/debug/mipmap-xxhdpi-v4/ic_editor_easy_photos.png",
+        "source": "/Users/admin/dev/proj/pe3.1/pe-android/easyPhotos/build/intermediates/bundles/debug/res/mipmap-xxhdpi-v4/ic_editor_easy_photos.png"
+    }
+]

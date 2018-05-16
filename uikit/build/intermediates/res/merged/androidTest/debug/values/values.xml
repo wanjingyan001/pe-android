@@ -169,6 +169,9 @@
     <color name="accent_material_light">@color/material_deep_teal_500</color>
     <color name="action_bar_black_title_1f1f1f">#1f1f1f</color>
     <color name="action_bar_black_title_color">#252525</color>
+    <color name="album_item_count_easy_photos">#4f5555</color>
+    <color name="album_item_name_easy_photos">#3e4145</color>
+    <color name="album_items_background_easy_photos">#FFFFFF</color>
     <color name="background_floating_material_dark">@color/material_grey_800</color>
     <color name="background_floating_material_light">@android:color/white</color>
     <color name="background_material_dark">@color/material_grey_850</color>
@@ -184,7 +187,7 @@
     <color name="button_material_light">#ffd6d7d7</color>
     <color name="colorAccent">?colorAccent</color>
     <color name="colorPrimary">?colorPrimary</color>
-    <color name="colorPrimaryDark">?colorPrimaryDark</color>
+    <color name="colorPrimaryDark">#303135</color>
     <color name="color_aaaaaa_content_text">#ffaaaaaa</color>
     <color name="color_activity_blue_bg">#f7389fff</color>
     <color name="color_b3b3b3">#b3b3b3</color>
@@ -235,6 +238,14 @@
     <color name="dim_foreground_disabled_material_light">#80323232</color>
     <color name="dim_foreground_material_dark">#ffbebebe</color>
     <color name="dim_foreground_material_light">#ff323232</color>
+    <color name="easy_photos_bar_primary">#393a3f</color>
+    <color name="easy_photos_bar_primary_dark">#303135</color>
+    <color name="easy_photos_bar_primary_translation">#eb212123</color>
+    <color name="easy_photos_bg_primary">#000000</color>
+    <color name="easy_photos_fg_accent">#00AA00</color>
+    <color name="easy_photos_fg_primary">#ffffff</color>
+    <color name="easy_photos_fg_primary_dark">#9b9b9b</color>
+    <color name="easy_photos_status_bar">#393a3f</color>
     <color name="empty_directory_hint">#c7c7c7</color>
     <color name="foreground_material_dark">@android:color/white</color>
     <color name="foreground_material_light">@android:color/black</color>
@@ -262,6 +273,7 @@
     <color name="material_grey_800">#ff424242</color>
     <color name="material_grey_850">#ff303030</color>
     <color name="material_grey_900">#ff212121</color>
+    <color name="menu_text_easy_photos">#FFFFFF</color>
     <color name="notification_action_color_filter">#ffffffff</color>
     <color name="notification_icon_bg_color">#ff9e9e9e</color>
     <color name="notification_material_background_media_default_color">#ff424242</color>
@@ -287,9 +299,23 @@
     <color name="switch_thumb_disabled_material_light">#ffbdbdbd</color>
     <color name="switch_thumb_normal_material_dark">#ffbdbdbd</color>
     <color name="switch_thumb_normal_material_light">#fff1f1f1</color>
+    <color name="text_sticker_black_easy_photos">#000000</color>
+    <color name="text_sticker_blue_easy_photos">#4a90e2</color>
+    <color name="text_sticker_cyan_easy_photos">#50e3c2</color>
+    <color name="text_sticker_editor_fragment_bar_easy_photos">#393a3f</color>
+    <color name="text_sticker_editor_fragment_bg_easy_photos">#2c2e30</color>
+    <color name="text_sticker_gray_easy_photos">#4a4a4a</color>
+    <color name="text_sticker_green_easy_photos">#7ed321</color>
+    <color name="text_sticker_orange_easy_photos">#f5a623</color>
+    <color name="text_sticker_purple_easy_photos">#9013fe</color>
+    <color name="text_sticker_red_easy_photos">#d0021b</color>
+    <color name="text_sticker_white_easy_photos">#ffffff</color>
+    <color name="text_sticker_yellow_easy_photos">#f8e71c</color>
     <color name="title_color_01d9ae">#01D9AE</color>
     <color name="transparent">#00000000</color>
+    <color name="transparent_easy_photos">#00000000</color>
     <color name="white">#FFFFFF</color>
+    <color name="white_easy_photos">#FFFFFF</color>
     <declare-styleable name="ActionBar"><attr name="navigationMode">
             
             <enum name="normal" value="0"/>
@@ -355,6 +381,7 @@
             
             <enum name="auto" value="-1"/>
         </attr><attr format="boolean" name="behavior_hideable"/><attr format="boolean" name="behavior_skipCollapsed"/></declare-styleable>
+    <declare-styleable name="ButtonBarContainerTheme"><attr format="reference" name="metaButtonBarStyle"/><attr format="reference" name="metaButtonBarButtonStyle"/></declare-styleable>
     <declare-styleable name="ButtonBarLayout"><attr format="boolean" name="allowStacking"/></declare-styleable>
     <declare-styleable name="CircleImageView"><attr format="dimension" name="civ_border_width"/><attr format="color" name="civ_border_color"/><attr format="boolean" name="civ_border_overlay"/><attr format="color" name="civ_fill_color"/></declare-styleable>
     <declare-styleable name="CollapsingToolbarLayout"><attr format="dimension" name="expandedTitleMargin"/><attr format="dimension" name="expandedTitleMarginStart"/><attr format="dimension" name="expandedTitleMarginTop"/><attr format="dimension" name="expandedTitleMarginEnd"/><attr format="dimension" name="expandedTitleMarginBottom"/><attr format="reference" name="expandedTitleTextAppearance"/><attr format="reference" name="collapsedTitleTextAppearance"/><attr format="color" name="contentScrim"/><attr format="color" name="statusBarScrim"/><attr format="reference" name="toolbarId"/><attr format="dimension" name="scrimVisibleHeightTrigger"/><attr format="integer" name="scrimAnimationDuration"/><attr name="collapsedTitleGravity">
@@ -525,6 +552,7 @@
     <declare-styleable name="NavigationView"><attr name="android:background"/><attr name="android:fitsSystemWindows"/><attr name="android:maxWidth"/><attr name="elevation"/><attr format="reference" name="menu"/><attr format="color" name="itemIconTint"/><attr format="color" name="itemTextColor"/><attr format="reference" name="itemBackground"/><attr format="reference" name="itemTextAppearance"/><attr format="reference" name="headerLayout"/></declare-styleable>
     <declare-styleable name="PopupWindow"><attr format="boolean" name="overlapAnchor"/><attr name="android:popupBackground"/><attr name="android:popupAnimationStyle"/></declare-styleable>
     <declare-styleable name="PopupWindowBackgroundState"><attr format="boolean" name="state_above_anchor"/></declare-styleable>
+    <declare-styleable name="PuzzleView"><attr format="integer" name="line_size"/><attr format="color" name="line_color"/><attr format="color" name="selected_line_color"/><attr format="color" name="handle_bar_color"/><attr format="boolean" name="need_draw_line"/><attr format="boolean" name="need_draw_outer_line"/><attr format="dimension" name="piece_padding"/><attr format="integer" name="animation_duration"/><attr format="float" name="radian"/></declare-styleable>
     <declare-styleable name="RecycleListView"><attr format="dimension" name="paddingBottomNoButtons"/><attr format="dimension" name="paddingTopNoTitle"/></declare-styleable>
     <declare-styleable name="RecyclerView"><attr format="string" name="layoutManager"/><attr name="android:orientation"/><attr name="android:descendantFocusability"/><attr format="integer" name="spanCount"/><attr format="boolean" name="reverseLayout"/><attr format="boolean" name="stackFromEnd"/></declare-styleable>
     <declare-styleable name="ScrimInsetsFrameLayout"><attr format="color|reference" name="insetForeground"/></declare-styleable>
@@ -811,6 +839,7 @@
     <dimen name="sp_16">16sp</dimen>
     <dimen name="split_one_dip">1dip</dimen>
     <dimen name="split_one_pixels">1px</dimen>
+    <dimen name="sticker_text_size_easy_photos">16sp</dimen>
     <dimen name="text_size_10">10sp</dimen>
     <dimen name="text_size_11">11sp</dimen>
     <dimen name="text_size_12">12sp</dimen>
@@ -836,6 +865,7 @@
     <dimen name="text_size_9">9sp</dimen>
     <dimen name="text_small_size_ten_sp">10sp</dimen>
     <dimen name="thick_line_size">2px</dimen>
+    <dimen name="toolbar_size_easy_photos">42dp</dimen>
     <dimen name="very_samll_text_size">9sp</dimen>
     <drawable name="notification_template_icon_bg">#3333B5E5</drawable>
     <drawable name="notification_template_icon_low_bg">#0cffffff</drawable>
@@ -865,6 +895,7 @@
     <integer name="cancel_button_image_alpha">127</integer>
     <integer name="design_snackbar_text_max_lines">2</integer>
     <integer name="hide_password_duration">320</integer>
+    <integer name="photos_columns_easy_photos">3</integer>
     <integer name="show_password_duration">200</integer>
     <integer name="status_bar_notification_info_maxnum">999</integer>
     <string name="abc_action_bar_home_description">Navigate home</string>
@@ -905,7 +936,9 @@
     <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
     <string name="black_list_send_tip">消息已发送，但对方拒收</string>
     <string name="bottom_sheet_behavior" translatable="false">android.support.design.widget.BottomSheetBehavior</string>
+    <string name="camera_temp_file_error_easy_photos">图片错误</string>
     <string name="cancel">取消</string>
+    <string name="cancel_easy_photos">取消</string>
     <string name="cancel_team_admin">取消管理员</string>
     <string name="capture_video_size_in_kb">视频文件大小为: %1$dKB,</string>
     <string name="capture_video_size_in_mb">视频文件大小为: %1$.2fMB,</string>
@@ -929,13 +962,16 @@
     <string name="dismiss_team">解散本群</string>
     <string name="dismiss_team_failed">解散群失败</string>
     <string name="dismiss_team_success">群已解散</string>
+    <string name="done_easy_photos">完成</string>
     <string name="download_picture_fail">图片下载失败</string>
     <string name="download_progress_description">%1$s（%2$s/%3$s）</string>
     <string name="download_video">正在下载视频</string>
     <string name="download_video_fail">视频下载失败,请重试</string>
     <string name="edit">编辑</string>
+    <string name="edit_easy_photos">编辑</string>
     <string name="empty"/>
     <string name="empty_directory_hint">Empty directory</string>
+    <string name="empty_easy_photos">清空</string>
     <string name="file_picker_app_name" translatable="false">MaterialFilePicker</string>
     <string name="file_transfer_state_downloaded">已下载</string>
     <string name="file_transfer_state_undownload">未下载</string>
@@ -944,6 +980,7 @@
     <string name="fts_enable">全文检索(FTS4)</string>
     <string name="fts_prefix_hit">前缀匹配高亮检索结果</string>
     <string name="gallery_invalid">你的手机没有图库程序</string>
+    <string name="gif_easy_photos">动图</string>
     <string name="iknow">知道了</string>
     <string name="im_choose_pic">请选择JPG PNG BMP GIF格式的图片文件</string>
     <string name="im_choose_video">请选择3GP MP4格式的视频文件</string>
@@ -973,6 +1010,7 @@
     <string name="menu">菜单</string>
     <string name="message_search_no_result">无结果</string>
     <string name="message_search_title">查看聊天内容</string>
+    <string name="msg_no_camera_easy_photos">无法启动相机！</string>
     <string name="msg_search">全文检索</string>
     <string name="msg_search_limit">全文检索显示条数</string>
     <string name="msg_type_audio">语音</string>
@@ -982,6 +1020,7 @@
     <string name="my_team_card">我的群名片</string>
     <string name="network_is_not_available">网络连接失败，请检查你的网络设置</string>
     <string name="no_permission">没有权限</string>
+    <string name="no_photos_easy_photos">没有符合要求的图片，拍一张吧</string>
     <string name="normal_team">讨论组</string>
     <string name="normal_team_invalid_tip">您已退出该讨论组</string>
     <string name="normal_team_name">讨论组名称</string>
@@ -990,6 +1029,7 @@
     <string name="now_allow_space">不能含有空格</string>
     <string name="ok">确定</string>
     <string name="open">开启</string>
+    <string name="original_easy_photos">原图</string>
     <string name="over_team_capacity">创建失败，创建群数量达到限制</string>
     <string name="over_team_member_capacity">邀请失败，成员人数上限为%1$d人</string>
     <string name="password_toggle_content_description">Toggle password visibility</string>
@@ -997,6 +1037,8 @@
     <string name="path_password_eye_mask_strike_through" translatable="false">M2,4.27 L19.73,22 L22.27,19.46 L4.54,1.73 L4.54,1 L23,1 L23,23 L1,23 L1,4.27 Z</string>
     <string name="path_password_eye_mask_visible" translatable="false">M2,4.27 L2,4.27 L4.54,1.73 L4.54,1.73 L4.54,1 L23,1 L23,23 L1,23 L1,4.27 Z</string>
     <string name="path_password_strike_through" translatable="false">M3.27,4.27 L19.74,20.74</string>
+    <string name="permissions_again_easy_photos">请点击并允许相关权限</string>
+    <string name="permissions_die_easy_photos">请点击并在设置中允许相关权限</string>
     <string name="pic_and_video">图片和视频</string>
     <string name="picker_image_album_empty">相册中没有图片！</string>
     <string name="picker_image_album_loading">相册加载中…</string>
@@ -1011,6 +1053,9 @@
     <string name="picker_image_send_select">完成（%d）</string>
     <string name="picture_save_fail">图片保存失败</string>
     <string name="picture_save_to">图片已保存到手机</string>
+    <string name="picture_selection_easy_photos">图片选择</string>
+    <string name="preview_current_number_easy_photos">%1$d/%2$d</string>
+    <string name="puzzle_easy_photos">拼一张</string>
     <string name="quit_normal_team">退出讨论组</string>
     <string name="quit_normal_team_failed">退出讨论组失败</string>
     <string name="quit_normal_team_success">您已经退出讨论组</string>
@@ -1045,6 +1090,15 @@
     <string name="search_join_team">搜索加入群组</string>
     <string name="search_menu_title">Search</string>
     <string name="select_file">文件传输</string>
+    <string name="select_puzzle_photos">请选择2 \- 9张照片</string>
+    <string name="selector_action_done_easy_photos">完成(%1$d/%2$d)</string>
+    <string name="selector_easy_photos">选择</string>
+    <string name="selector_folder_all_easy_photos">所有图片</string>
+    <string name="selector_image_size_error_easy_photos">图片的宽度必须大于%1$d,高度必须大于%2$d</string>
+    <string name="selector_image_type_error_easy_photos">不支持此图片格式</string>
+    <string name="selector_permission_error_easy_photos">权限错误，无法正常工作！</string>
+    <string name="selector_preview_easy_photos">预览</string>
+    <string name="selector_reach_max_image_hint_easy_photos">最多只能选择%d张图片</string>
     <string name="send">发送</string>
     <string name="set_head_image">设置头像</string>
     <string name="set_team_admin">设为管理员</string>
@@ -1101,6 +1155,11 @@
     <string name="team_transfer_without_member">没有可转移的群成员</string>
     <string name="team_update_cancel">取消更新</string>
     <string name="team_update_failed">群头像设置失败</string>
+    <string name="template_easy_photos">模板</string>
+    <string name="text_sticker_date_easy_photos">日期</string>
+    <string name="text_sticker_easy_photos">文字</string>
+    <string name="text_sticker_hint_easy_photos">双击编辑</string>
+    <string name="text_sticker_hint_name_easy_photos">自定义</string>
     <string name="timer_default">00:00</string>
     <string name="trans_voice_failed">语音转化失败</string>
     <string name="transfer_team">转让群</string>
@@ -2190,6 +2249,13 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+    <style name="EasyPhotosFullscreenTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowBackground">@null</item>
+        <item name="metaButtonBarStyle">?android:attr/buttonBarStyle</item>
+        <item name="metaButtonBarButtonStyle">?android:attr/buttonBarButtonStyle</item>
+    </style>
+    <style name="EasyPhotosTheme" parent="Theme.AppCompat.Light.NoActionBar"/>
     <style name="MFP_BaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>

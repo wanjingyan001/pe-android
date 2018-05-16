@@ -8,10 +8,10 @@ package qdx.stickyheaderdecoration;
 
 public final class R {
     public static final class attr {
-        public static int layoutManager = 0x7f0400a1;
-        public static int reverseLayout = 0x7f04010a;
-        public static int spanCount = 0x7f04011a;
-        public static int stackFromEnd = 0x7f040120;
+        public static int layoutManager = 0x7f0400a3;
+        public static int reverseLayout = 0x7f040114;
+        public static int spanCount = 0x7f040125;
+        public static int stackFromEnd = 0x7f04012b;
     }
     public static final class dimen {
         public static int item_touch_helper_max_drag_scroll_per_frame = 0x7f0800aa;
@@ -19,10 +19,10 @@ public final class R {
         public static int item_touch_helper_swipe_escape_velocity = 0x7f0800ac;
     }
     public static final class id {
-        public static int item_touch_helper_previous_elevation = 0x7f0c00bd;
+        public static int item_touch_helper_previous_elevation = 0x7f0c00c7;
     }
     public static final class styleable {
-        public static int[] RecyclerView = { 0x010100f1, 0x010100c4, 0x7f0400a1, 0x7f04010a, 0x7f04011a, 0x7f040120 };
+        public static int[] RecyclerView = { 0x010100f1, 0x010100c4, 0x7f0400a3, 0x7f040114, 0x7f040125, 0x7f04012b };
         public static int RecyclerView_android_descendantFocusability = 0;
         public static int RecyclerView_android_orientation = 1;
         public static int RecyclerView_layoutManager = 2;

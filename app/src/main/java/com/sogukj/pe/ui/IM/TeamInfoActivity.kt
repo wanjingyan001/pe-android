@@ -1,5 +1,6 @@
 package com.sogukj.pe.ui.IM
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -19,6 +20,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.framework.base.BaseActivity
 import com.google.gson.Gson
+import com.huantansheng.easyphotos.EasyPhotos
 import com.netease.nim.uikit.api.NimUIKit
 import com.netease.nim.uikit.business.team.helper.TeamHelper
 import com.netease.nim.uikit.common.ui.widget.SwitchButton
@@ -32,11 +34,13 @@ import com.netease.nimlib.sdk.team.constant.TeamMessageNotifyTypeEnum
 import com.netease.nimlib.sdk.team.model.Team
 import com.netease.nimlib.sdk.team.model.TeamMember
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo
+import com.sogukj.pe.BuildConfig
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.TeamBean
 import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.ui.main.ContactsActivity
+import com.sogukj.pe.util.GlideEngine
 import com.sogukj.pe.util.Utils
 import com.sogukj.util.Store
 import com.sougukj.textStr
@@ -140,13 +144,13 @@ class TeamInfoActivity : BaseActivity(), View.OnClickListener, SwitchButton.OnCh
         team_name.setText(it.name)
         if (it.introduce != "这是群介绍") {
             teamIntroduction.setText(it.introduce)
-        }else{
+        } else {
             teamIntroduction.hint = "暂无介绍"
         }
         isMyTeam = it.creator == mine?.accid
         if (isMyTeam) {
             exit_team.text = "转让群组"
-        }else{
+        } else {
             exit_team.text = "退出群组"
         }
         getTeamMember(team.id)
@@ -211,46 +215,18 @@ class TeamInfoActivity : BaseActivity(), View.OnClickListener, SwitchButton.OnCh
                 startActivity(intent)
             }
             R.id.team_logo -> {
-                RxGalleryFinal.with(this)
-                        .image()
-                        .radio()
-                        .imageLoader(ImageLoaderType.GLIDE)
-                        .subscribe(object : RxBusResultDisposable<ImageRadioResultEvent>() {
-                            override fun onEvent(t: ImageRadioResultEvent?) {
-                                val path = t?.result?.originalPath
-                                if (!path.isNullOrEmpty()) {
-                                    Glide.with(this@TeamInfoActivity)
-                                            .load(path)
-                                            .apply(RequestOptions().error(R.drawable.invalid_name2))
-                                            .into(team_logo)
-                                    NIMClient.getService(TeamService::class.java)
-                                            .updateTeam(sessionId, TeamFieldEnum.ICON, path)
-                                            .setCallback(object : RequestCallback<Void> {
-                                                override fun onFailed(code: Int) {
-                                                    showCustomToast(R.drawable.icon_toast_fail, "修改群头像失败")
-                                                }
-
-                                                override fun onSuccess(param: Void?) {
-                                                    showCustomToast(R.drawable.icon_toast_success, "修改群头像成功")
-                                                }
-
-                                                override fun onException(exception: Throwable?) {
-                                                    showCustomToast(R.drawable.icon_toast_common, "修改群头像失败")
-                                                }
-                                            })
-                                }
-                            }
-                        })
-                        .openGallery()
+                EasyPhotos.createAlbum(this, true, GlideEngine.getInstance())
+                        .setFileProviderAuthority(BuildConfig.FILEPROVIDER)
+                        .setPuzzleMenu(false)
+                        .start(Extras.requestCode1)
             }
             R.id.team_layout -> {
-//                TeamSelectActivity.startForResult(this, true, teamMembers, false, canRemoveMember = false)
                 MemberEditActivity.start(this, teamMembers, team)
             }
             R.id.exit_team -> {
-                if (isMyTeam){
-                    MemberEditActivity.start(this, teamMembers, team,true)
-                }else{
+                if (isMyTeam) {
+                    MemberEditActivity.start(this, teamMembers, team, true)
+                } else {
                     exitTeam()
                 }
             }
@@ -269,7 +245,7 @@ class TeamInfoActivity : BaseActivity(), View.OnClickListener, SwitchButton.OnCh
         }
     }
 
-    private fun exitTeam(){
+    private fun exitTeam() {
         MaterialDialog.Builder(this)
                 .theme(Theme.LIGHT)
                 .title("确定退出?")
@@ -339,7 +315,7 @@ class TeamInfoActivity : BaseActivity(), View.OnClickListener, SwitchButton.OnCh
         if (team.introduce != teamIntroduction.textStr) {
             map.put(TeamFieldEnum.Introduce, teamIntroduction.textStr)
         }
-        if(map.isNotEmpty()){
+        if (map.isNotEmpty()) {
             NIMClient.getService(TeamService::class.java).updateTeamFields(sessionId, map)
         }
     }
@@ -395,6 +371,27 @@ class TeamInfoActivity : BaseActivity(), View.OnClickListener, SwitchButton.OnCh
                             })
                 }
             }
+        } else if (requestCode == Extras.requestCode1 && resultCode == Activity.RESULT_OK && data != null) {
+            val resultPaths = data.getStringArrayListExtra(EasyPhotos.RESULT_PATHS)
+            Glide.with(this@TeamInfoActivity)
+                    .load(resultPaths[0])
+                    .apply(RequestOptions().error(R.drawable.invalid_name2))
+                    .into(team_logo)
+            NIMClient.getService(TeamService::class.java)
+                    .updateTeam(sessionId, TeamFieldEnum.ICON, resultPaths[0])
+                    .setCallback(object : RequestCallback<Void> {
+                        override fun onFailed(code: Int) {
+                            showCustomToast(R.drawable.icon_toast_fail, "修改群头像失败")
+                        }
+
+                        override fun onSuccess(param: Void?) {
+                            showCustomToast(R.drawable.icon_toast_success, "修改群头像成功")
+                        }
+
+                        override fun onException(exception: Throwable?) {
+                            showCustomToast(R.drawable.icon_toast_common, "修改群头像失败")
+                        }
+                    })
         }
     }
 

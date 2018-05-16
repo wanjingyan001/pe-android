@@ -76,7 +76,7 @@ public class SendImageHelper {
         }
 
         for (PhotoInfo photoInfo : photos) {
-            new SendImageTask(context, isOrig, photoInfo, new Callback() {
+            new SendImageTask(context, isOrig, photoInfo.getAbsolutePath(), new Callback() {
 
                 @Override
                 public void sendImage(File file, boolean isOrig) {
@@ -93,14 +93,14 @@ public class SendImageHelper {
 
         private Context context;
         private boolean isOrig;
-        private PhotoInfo info;
+        private String photoPath;
         private Callback callback;
 
-        public SendImageTask(Context context, boolean isOrig, PhotoInfo info,
+        public SendImageTask(Context context, boolean isOrig, String path,
                              Callback callback) {
             this.context = context;
             this.isOrig = isOrig;
-            this.info = info;
+            this.photoPath = path;
             this.callback = callback;
         }
 
@@ -111,14 +111,13 @@ public class SendImageHelper {
 
         @Override
         protected File doInBackground(Void... params) {
-            String photoPath = info.getAbsolutePath();
-            if (TextUtils.isEmpty(photoPath))
+            if (TextUtils.isEmpty(photoPath)) {
                 return null;
+            }
             String extension = FileUtil.getExtensionName(photoPath);
             // gif 强制设置成原图
             boolean gif = ImageUtil.isGif(extension);
             isOrig |= gif;
-            Log.d("WJY","相册是否发送原图"+isOrig);
             if (isOrig) {
                 // 把原图按md5存放
                 String origMD5 = MD5.getStreamMD5(photoPath);

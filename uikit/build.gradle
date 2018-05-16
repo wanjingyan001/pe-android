@@ -27,6 +27,8 @@ android {
         }
     }
 
+    flavorDimensions "default"
+
     compileOptions {
         sourceCompatibility rootProject.ext.appSourceCompatibility
         targetCompatibility rootProject.ext.appTargetCompatibility
@@ -49,6 +51,7 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.2.0'
     api('jp.wasabeef:glide-transformations:3.0.1')
     api('com.nbsp:library:1.8')
+    compile project(':easyPhotos')
     api('com.github.qdxxxx:StickyHeaderDecoration:1.0.1')
     api("com.netease.nimlib:basesdk:$nimlib_version")
     api("com.netease.nimlib:lucene:$nimlib_version")

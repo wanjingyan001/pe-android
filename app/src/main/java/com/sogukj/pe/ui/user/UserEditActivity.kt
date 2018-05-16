@@ -26,11 +26,15 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.framework.base.ToolbarActivity
 import com.google.gson.JsonSyntaxException
+import com.huantansheng.easyphotos.EasyPhotos
+import com.mob.commons.filesys.FileUploader.uploadAvatar
+import com.sogukj.pe.BuildConfig
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
 import com.sogukj.pe.bean.DepartmentBean
 import com.sogukj.pe.bean.UserBean
 import com.sogukj.pe.ui.score.*
+import com.sogukj.pe.util.GlideEngine
 import com.sogukj.pe.util.MyGlideUrl
 import com.sogukj.pe.util.Trace
 import com.sogukj.service.SoguApi
@@ -90,20 +94,10 @@ class UserEditActivity : ToolbarActivity() {
             pvOptions.show()
         }
         tr_icon.setOnClickListener {
-            RxGalleryFinal
-                    .with(this@UserEditActivity)
-                    .image()
-                    .radio()
-                    .imageLoader(ImageLoaderType.GLIDE)
-                    .subscribe(object : RxBusResultDisposable<ImageRadioResultEvent>() {
-                        override fun onEvent(event: ImageRadioResultEvent?) {
-//                            val path = event?.result?.originalPath
-                            val path = event?.result?.thumbnailSmallPath
-                            if (!TextUtils.isEmpty(path))
-                                doUpload(path!!)
-                        }
-                    })
-                    .openGallery()
+            EasyPhotos.createAlbum(this, true, GlideEngine.getInstance())
+                    .setFileProviderAuthority(BuildConfig.FILEPROVIDER)
+                    .setPuzzleMenu(false)
+                    .start(Extras.REQUESTCODE)
         }
 
         //-1=>隐藏入口 0=>未开启  1=>进入评分中心，2=>进入填写页面
@@ -137,29 +131,19 @@ class UserEditActivity : ToolbarActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (data != null) {
-            if (requestCode == POSITION) {
-                tv_posotion.text = data.getStringExtra(Extras.DATA)
-            } else if (requestCode == E_MAIL) {
-                tv_email.text = data.getStringExtra(Extras.DATA)
-            } else if (requestCode == NOTE) {
-                tv_note.text = data.getStringExtra(Extras.DATA)
+            when (requestCode) {
+                POSITION -> tv_posotion.text = data.getStringExtra(Extras.DATA)
+                E_MAIL -> tv_email.text = data.getStringExtra(Extras.DATA)
+                NOTE -> tv_note.text = data.getStringExtra(Extras.DATA)
+                Extras.REQUESTCODE ->{
+                    if(resultCode == RESULT_OK){
+                        val resultPaths = data.getStringArrayListExtra(EasyPhotos.RESULT_PATHS)
+                        doUpload(resultPaths[0])
+                    }
+                }
             }
         }
     }
-
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        if (resultCode == RESULT_OK && requestCode == 0x001) {
-//            var uri = data?.getData()
-//            var cursor = getContentResolver().query(uri, null, null, null, null);
-//            if (cursor != null && cursor.moveToFirst()) {
-//                var path = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA))
-//                Log.e("path", path)
-//                doUpload(path)
-//            }
-//        }
-//
-//    }
 
     private val mHandler = object : Handler() {
 
