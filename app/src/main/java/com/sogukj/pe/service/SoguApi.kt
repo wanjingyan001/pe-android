@@ -68,8 +68,8 @@ class SoguApi {
         }
 
         val retrofit = Retrofit.Builder()
-                //.baseUrl(Consts.HTTP_HOST)
-                .baseUrl(url)
+                .baseUrl(Consts.HTTP_HOST)
+//                .baseUrl(url)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(client)
