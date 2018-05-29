@@ -277,6 +277,7 @@
 # Ignore annotation used for build tooling.
 -dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
 
+-ignorewarnings
 #EasyPhotos
 -keep class com.huantansheng.easyphotos.models.** { *; }
 

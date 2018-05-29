@@ -15,7 +15,9 @@ import com.sogukj.pe.ui.IM.newlocation.activity.IMLocationActivity;
 import com.sogukj.pe.ui.IM.newlocation.activity.LocationMessageActivity;
 
 /**
- * Created by admin on 2018/2/6.
+ *
+ * @author admin
+ * @date 2018/2/6
  */
 
 public class NimDemoLocationProvider implements LocationProvider {
@@ -50,17 +52,11 @@ public class NimDemoLocationProvider implements LocationProvider {
             alertDialog.show();
             return;
         }
-//        LocationAmapActivity.start(context, callback);
         IMLocationActivity.Companion.start(context,callback);
     }
 
     @Override
     public void openMap(Context context, double longitude, double latitude, String address) {
-//        Intent intent = new Intent(context, NavigationAmapActivity.class);
-//        intent.putExtra(LocationExtras.LONGITUDE, longitude);
-//        intent.putExtra(LocationExtras.LATITUDE, latitude);
-//        intent.putExtra(LocationExtras.ADDRESS, address);
-//        context.startActivity(intent);
         LocationMessageActivity.Companion.start(context, latitude, longitude, address);
     }
 }

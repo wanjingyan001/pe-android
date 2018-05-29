@@ -36,13 +36,23 @@ public class DateUtils {
         if (diff > year) {
             r = diff / year;
             if (r > 1) {
-                return Utils.getTime(date, "yyyy-MM-dd HH:ss");
+                String str = Utils.getTime(date, "yyyy-MM-dd HH:ss");
+                if(str.endsWith("00:00")) {
+                    return str.split(" ")[0];
+                } else {
+                    return str;
+                }
             } else {
                 return Utils.getTime(date, "yyyy");
             }
         }
         if (diff > month) {
-            return Utils.getTime(date, "MM-dd HH:ss");
+            String str = Utils.getTime(date, "MM-dd HH:ss");
+            if(str.endsWith("00:00")) {
+                return str.split(" ")[0];
+            } else {
+                return str;
+            }
         }
         if (diff > day) {
             if(Utils.IsToday(Utils.getTime(date, "yyyy-MM-dd HH:ss"))){
@@ -50,7 +60,12 @@ public class DateUtils {
             } else if(Utils.IsYesterday(Utils.getTime(date, "yyyy-MM-dd HH:ss"))){
                 return "昨天";
             } else {
-                return Utils.getTime(date, "MM-dd HH:ss");
+                String str = Utils.getTime(date, "MM-dd HH:ss");
+                if(str.endsWith("00:00")) {
+                    return str.split(" ")[0];
+                } else {
+                    return str;
+                }
             }
         }
         if (diff > hour) {

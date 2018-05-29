@@ -210,6 +210,7 @@ class CircleImageView : android.support.v7.widget.AppCompatImageView {
         if (null == ch) return
         this.mChar = ch!!
         this.mBitmap = null
+        invalidate()
     }
 
     override fun setColorFilter(cf: ColorFilter) {

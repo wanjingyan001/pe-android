@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.Html
 import android.text.TextUtils
@@ -18,7 +19,11 @@ import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.Theme
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import com.framework.base.ToolbarActivity
 import com.sogukj.pe.Extras
 import com.sogukj.pe.R
@@ -427,6 +432,18 @@ class SealApproveActivity : ToolbarActivity() {
             } else {
                 Glide.with(this)
                         .load(MyGlideUrl(v.url))
+                        .listener(object :RequestListener<Drawable> {
+                            override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                                ivUser.setImageDrawable(resource)
+                                return false
+                            }
+
+                            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                                val ch = v.name?.first()
+                                ivUser.setChar(ch)
+                                return false
+                            }
+                        })
                         .into(ivUser)
             }
         }
@@ -479,6 +496,18 @@ class SealApproveActivity : ToolbarActivity() {
             } else {
                 Glide.with(this)
                         .load(MyGlideUrl(v.url))
+                        .listener(object :RequestListener<Drawable> {
+                            override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                                ivUser.setImageDrawable(resource)
+                                return false
+                            }
+
+                            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                                val ch = v.name?.first()
+                                ivUser.setChar(ch)
+                                return false
+                            }
+                        })
                         .into(ivUser)
             }
 
@@ -580,6 +609,18 @@ class SealApproveActivity : ToolbarActivity() {
         } else {
             Glide.with(this)
                     .load(MyGlideUrl(data.url))
+                    .listener(object :RequestListener<Drawable> {
+                        override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                            ivUser.setImageDrawable(resource)
+                            return false
+                        }
+
+                        override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                            val ch = data.name?.first()
+                            ivUser.setChar(ch)
+                            return false
+                        }
+                    })
                     .into(ivUser)
         }
 
@@ -624,11 +665,26 @@ class SealApproveActivity : ToolbarActivity() {
 
     private fun initUser(fixation: ApproveViewBean.FromBean?) {
         if (null == fixation) return
-        val ch = fixation.name?.first()
-        iv_user.setChar(ch)
-        Glide.with(this)
-                .load(fixation.url)
-                .into(iv_user)
+        if(fixation.url.isNullOrEmpty()){
+            val ch = fixation.name?.first()
+            iv_user.setChar(ch)
+        } else {
+            Glide.with(this)
+                    .load(fixation.url)
+                    .listener(object :RequestListener<Drawable> {
+                        override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                            iv_user.setImageDrawable(resource)
+                            return false
+                        }
+
+                        override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                            val ch = fixation.name?.first()
+                            iv_user.setChar(ch)
+                            return false
+                        }
+                    })
+                    .into(iv_user)
+        }
         tv_name.text = fixation.name
         tv_num.text = "审批编号:${fixation.number}"
     }
@@ -703,7 +759,18 @@ class SealApproveActivity : ToolbarActivity() {
             } else {
                 Glide.with(context)
                         .load(MyGlideUrl(list[position].url))
-                        .apply(RequestOptions().error(R.drawable.nim_avatar_default).fallback(R.drawable.nim_avatar_default))
+                        .listener(object :RequestListener<Drawable> {
+                            override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                                viewHolder.icon?.setImageDrawable(resource)
+                                return false
+                            }
+
+                            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                                val ch = list[position].name?.first()
+                                viewHolder.icon?.setChar(ch)
+                                return false
+                            }
+                        })
                         .into(viewHolder.icon)
             }
             viewHolder.name?.text = list[position].name

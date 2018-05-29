@@ -152,7 +152,11 @@ class ProjectNewsActivity : ToolbarActivity() {
 //                    e.printStackTrace()
 //                }
 //                tv_time.text = strs.getOrNull(1)
-                tv_date.text = DateUtils.getTimeFormatText(strTime)
+                try {
+                    tv_date.text = DateUtils.getTimeFormatText(strTime)
+                } catch (e: Exception) {
+                    tv_date.text = DateUtils.getTimeFormatText("${strTime} 00:00")
+                }
             }
             tv_from.text = data?.source
             if(data.source.isNullOrEmpty()){
