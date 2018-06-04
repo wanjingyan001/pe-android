@@ -106,7 +106,7 @@ fun BottomNavigationItem.initNavTextColor(): BottomNavigationItem =
         setActiveColorResource(R.color.main_bottom_bar_color)
                 .setInActiveColorResource(R.color.text_3)
 
-fun BottomNavigationItem.initNavTextColor1():BottomNavigationItem =
+fun BottomNavigationItem.initNavTextColor1(): BottomNavigationItem =
         setActiveColorResource(R.color.white)
                 .setInActiveColorResource(R.color.text_3)
 
@@ -130,6 +130,11 @@ fun ViewGroup.childEdtGetFocus() {
             }
 }
 
+fun CharSequence.replaceLast(old: String, new: String): String {
+    val reversed = this.reversed()
+    val s = reversed.replaceFirst(Regex(old), new)
+    return s.reversed()
+}
 
 /***
  * 设置延迟时间的View扩展

@@ -11,9 +11,11 @@ import cn.finalteam.rxgalleryfinal.RxGalleryFinal
 import cn.finalteam.rxgalleryfinal.imageloader.ImageLoaderType
 import cn.finalteam.rxgalleryfinal.rxbus.RxBusResultDisposable
 import cn.finalteam.rxgalleryfinal.rxbus.event.ImageRadioResultEvent
+import com.amap.api.mapcore.util.it
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.framework.base.ActivityHelper
+import com.framework.base.BaseActivity
 import com.huantansheng.easyphotos.EasyPhotos
 import com.netease.nim.uikit.api.NimUIKit
 import com.netease.nim.uikit.business.team.helper.TeamHelper
@@ -33,14 +35,19 @@ import com.sogukj.pe.ui.calendar.CompanySelectActivity
 import com.sogukj.pe.ui.main.ContactsActivity
 import com.sogukj.pe.util.GlideEngine
 import com.sogukj.pe.util.Utils
+import com.sogukj.service.SoguApi
 import com.sougukj.clickWithTrigger
+import com.sougukj.execute
+import com.sougukj.replaceLast
 import com.sougukj.textStr
 import kotlinx.android.synthetic.main.activity_team_create.*
+import org.jetbrains.anko.info
 import org.jetbrains.anko.toast
 import java.io.Serializable
+import kotlin.properties.Delegates
 
-class TeamCreateActivity : AppCompatActivity() {
-    lateinit var teamMember: ArrayList<UserBean>
+class TeamCreateActivity : BaseActivity() {
+    private lateinit var teamMember: ArrayList<UserBean>
     lateinit var adapter: MemberAdapter
     private var path: String? = null
     var bean: CustomSealBean.ValueBean? = null
@@ -57,6 +64,7 @@ class TeamCreateActivity : AppCompatActivity() {
         } else {
             ArrayList()
         }
+        getTeamHeader(teamMember)
         adapter = MemberAdapter(this, teamMember)
         adapter.onItemClick = { v, position ->
             ContactsActivity.start(this, teamMember, true, true, Extras.REQUESTCODE)
@@ -69,7 +77,7 @@ class TeamCreateActivity : AppCompatActivity() {
 
         team_number.text = "${teamMember.size}人"
         team_name.filters = Utils.getFilter(this)
-        related_items_layout.setOnClickListener {
+        related_items_layout.clickWithTrigger {
             CompanySelectActivity.start(this)
         }
         exit_team.clickWithTrigger {
@@ -121,6 +129,27 @@ class TeamCreateActivity : AppCompatActivity() {
             nameStr = nameStr.removePrefix("、")
         }
         return nameStr
+    }
+
+    private fun getTeamHeader(teamMember: ArrayList<UserBean>) {
+        if (teamMember.isNotEmpty()){
+            val uids = StringBuilder()
+            teamMember.forEach { user ->
+                uids.append("${user.uid},")
+            }
+            info { uids.replaceLast(",", "") }
+            SoguApi.getService(application).getTeamGroupHeader(uids.substring(0, uids.lastIndexOf(",")))
+                    .execute {
+                        onNext { payload ->
+                            payload.payload?.let {
+                                Glide.with(this@TeamCreateActivity)
+                                        .load(it)
+                                        .apply(RequestOptions().error(R.drawable.invalid_name2))
+                                        .into(team_logo)
+                            }
+                        }
+                    }
+        }
     }
 
     /**
@@ -208,6 +237,7 @@ class TeamCreateActivity : AppCompatActivity() {
                         teamMember.addAll(it)
                         adapter.notifyDataSetChanged()
                         team_number.text = "${teamMember.size}人"
+                        getTeamHeader(teamMember)
                     }
                 }
             }

@@ -645,7 +645,8 @@
         <activity android:name=".ui.IM.PersonalInfoActivity" />
         <activity
             android:name=".ui.IM.TeamCreateActivity"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"
+            android:launchMode="singleTop"/>
         <activity android:name=".ui.IM.DisplayMessageActivity" />
         <activity android:name=".ui.IM.location.activity.LocationAmapActivity" />
         <activity android:name=".ui.IM.location.activity.NavigationAmapActivity" />

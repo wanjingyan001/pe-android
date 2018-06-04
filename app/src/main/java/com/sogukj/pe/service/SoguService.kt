@@ -1343,4 +1343,11 @@ interface SoguService {
 
     @POST("/api/Listinformation/uploadArchives")
     fun uploadArchives(@Body body: RequestBody): Observable<Payload<UploadFileBean>>
+
+    /**
+     * 创建群组时获取群头像
+     */
+    @FormUrlEncoded
+    @POST("/api/Message/groupImage")
+    fun getTeamGroupHeader(@Field("uids")uids:String) :Observable<Payload<String>>
 }
